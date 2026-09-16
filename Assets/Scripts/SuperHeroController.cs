@@ -6,6 +6,7 @@ public sealed class SuperHeroController : MonoBehaviour
     CharacterController controller;
     Camera view;
     float verticalVelocity;
+    float airbornePeakHeight;
     float flightFuel = PrototypeTuning.FlightDuration;
     float cooldown;
     float chargeTimer;
@@ -16,8 +17,11 @@ public sealed class SuperHeroController : MonoBehaviour
     public string LastPunchResult { get; private set; } = "Ready";
     public int LastAffectedBodies { get; private set; }
     public float LastForce { get; private set; }
+    public HeroPresentationState PresentationState { get; private set; }
+    public event System.Action PunchStarted;
+    public event System.Action<float> Landed;
 
-    void Awake() { controller = GetComponent<CharacterController>(); view = Camera.main; }
+    void Awake() { controller = GetComponent<CharacterController>(); view = Camera.main; airbornePeakHeight = transform.position.y; }
     void Update()
     {
         if (view == null) view = Camera.main;
@@ -37,7 +41,16 @@ public sealed class SuperHeroController : MonoBehaviour
             flightFuel = Mathf.Max(0f, flightFuel - Time.deltaTime);
         }
         else verticalVelocity -= PrototypeTuning.Gravity * Time.deltaTime;
+        bool wasGrounded = controller.isGrounded;
+        airbornePeakHeight = wasGrounded ? transform.position.y : Mathf.Max(airbornePeakHeight, transform.position.y);
+        float impactSpeed = Mathf.Max(0f, -verticalVelocity);
         controller.Move((move * speed + Vector3.up * verticalVelocity) * Time.deltaTime);
+        PresentationState = new HeroPresentationState(transform.InverseTransformDirection(controller.velocity),
+            controller.isGrounded, flying && !controller.isGrounded);
+        // CharacterController can alternate ground contact for sub-skin-width moves.
+        // Report actual falls, not those resting contact transitions; this does not alter motion.
+        if (!wasGrounded && controller.isGrounded && airbornePeakHeight - transform.position.y > controller.skinWidth)
+            Landed?.Invoke(impactSpeed);
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.E)) TryPunch();
     }
     void TickResources(float dt, bool grounded)
@@ -67,6 +80,7 @@ public sealed class SuperHeroController : MonoBehaviour
             LastAffectedBodies++;
         }
         LastPunchResult = $"PUNCH: {LastAffectedBodies} bodies hit @ {LastForce:0} N";
+        PunchStarted?.Invoke();
         return true;
     }
     // Used by deterministic test and the in-game verification harness.

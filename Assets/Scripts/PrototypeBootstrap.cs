@@ -11,12 +11,46 @@ public static class PrototypeBootstrap
         GameObject hero = new GameObject("Overpowered Hero");
         hero.transform.position = new Vector3(0, 1.1f, -10f);
         CharacterController cc = hero.AddComponent<CharacterController>(); cc.height = 1.8f; cc.radius = .38f; cc.center = new Vector3(0, .9f, 0);
-        hero.AddComponent<SuperHeroController>();
-        GameObject body = GameObject.CreatePrimitive(PrimitiveType.Capsule); body.transform.SetParent(hero.transform); body.transform.localPosition = new Vector3(0, .9f, 0); body.transform.localScale = new Vector3(.75f, 1f, .75f); Object.Destroy(body.GetComponent<Collider>()); body.GetComponent<Renderer>().material.color = new Color(.1f, .32f, .9f);
+        SuperHeroController controller = hero.AddComponent<SuperHeroController>();
+        BuildHeroVisuals(hero, controller);
         GameObject camera = new GameObject("Player Camera"); camera.tag = "MainCamera"; camera.AddComponent<Camera>(); camera.AddComponent<AudioListener>(); camera.AddComponent<ThirdPersonCamera>().target = hero.transform;
         BuildProps();
         new GameObject("Prototype HUD").AddComponent<PrototypeHUD>();
         new GameObject("Verification Harness").AddComponent<VerificationHarness>();
+    }
+    static void BuildHeroVisuals(GameObject hero, SuperHeroController controller)
+    {
+        Transform visuals = new GameObject("Hero Visuals (presentation only)").transform;
+        visuals.SetParent(hero.transform, false);
+        Color blue = new Color(.1f, .32f, .9f);
+        VisualPrimitive("Capsule Body", PrimitiveType.Capsule, visuals,
+            new Vector3(0f, 1f, 0f), new Vector3(.75f, 1f, .75f), blue);
+        Transform punchShoulder = null;
+        for (int side = -1; side <= 1; side += 2)
+        {
+            Transform shoulder = new GameObject(side > 0 ? "Punch Shoulder" : "Left Shoulder").transform;
+            shoulder.SetParent(visuals, false);
+            shoulder.localPosition = new Vector3(side * .48f, 1.45f, 0f);
+            VisualPrimitive("Arm", PrimitiveType.Capsule, shoulder,
+                new Vector3(0f, -.3f, 0f), new Vector3(.22f, .32f, .22f), blue);
+            VisualPrimitive("Fist", PrimitiveType.Cube, shoulder,
+                new Vector3(0f, -.62f, 0f), Vector3.one * .28f, new Color(1f, .65f, .12f));
+            if (side > 0) punchShoulder = shoulder;
+        }
+        var tuning = Resources.Load<ProceduralAnimationTuning>("ProceduralAnimationTuning");
+        hero.AddComponent<ProceduralHeroAnimation>().Initialize(controller, visuals, punchShoulder, tuning);
+    }
+    static void VisualPrimitive(string name, PrimitiveType type, Transform parent, Vector3 position, Vector3 scale, Color color)
+    {
+        GameObject part = GameObject.CreatePrimitive(type);
+        part.name = name;
+        part.transform.SetParent(parent, false);
+        part.transform.localPosition = position;
+        part.transform.localScale = scale;
+        Collider collider = part.GetComponent<Collider>();
+        collider.enabled = false;
+        Object.Destroy(collider);
+        part.GetComponent<Renderer>().material.color = color;
     }
     static void MakeGround()
     {

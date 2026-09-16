@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0978b18dba0d4af1a4184797d3659e93, type: 3}
+  m_Name: ProceduralAnimationTuning
+  m_EditorClassIdentifier:
+  PunchAttackSeconds: 0.065
+  PunchRecoverSeconds: 0.24
+  PunchArmDegrees: -100
+  PunchBodyPitchDegrees: 12
+  PunchBodyYawDegrees: -18
+  PunchReach: 0.18
+  FlightPitchDegrees: 48
+  FlightFullLeanSpeed: 12
+  PoseResponse: 12
+  RunFullLeanSpeed: 9
+  RunLeanDegrees: 10
+  BobHeight: 0.045
+  BobCyclesPerMetre: 0.65
+  BobResponse: 14
+  LandMinimumImpactSpeed: 3
+  LandFullImpactSpeed: 16
+  LandCompressSeconds: 0.055
+  LandRecoverSeconds: 0.24
+  LandSquash: 0.22
+  LandWiden: 0.1
+  LandBackTiltDegrees: 13
