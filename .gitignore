@@ -44,6 +44,10 @@
 ExportedObj/
 .consulo/
 *.csproj
+!/Overpowered.Build.csproj
+/bin/
+/Verification/City/*.json*
+/Verification/Animation/*.json*
 *.unityproj
 *.sln
 *.slnx

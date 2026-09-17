@@ -1,6 +1,6 @@
 using UnityEngine;
 
-/// All feel-critical values live here. Tune these while the prototype is running.
+/// Legacy defaults retained in place. Live tuning uses GameTuning and PowerDefinition assets.
 public static class PrototypeTuning
 {
     public const float WalkSpeed = 5.2f;

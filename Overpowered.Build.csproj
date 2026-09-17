@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <LangVersion>latest</LangVersion>
+    <DefineConstants>UNITY_EDITOR;UNITY_EDITOR_OSX;UNITY_6000_6_OR_NEWER</DefineConstants>
+    <UnityEditorPath Condition="'$(UnityEditorPath)' == ''">/Applications/Unity/Hub/Editor/6000.6.0f1/Unity.app</UnityEditorPath>
+    <UnityManaged>$(UnityEditorPath)/Contents/Resources/Scripting/Managed</UnityManaged>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Assets/Scripts/**/*.cs" />
+    <Compile Include="Assets/Editor/**/*.cs" />
+    <Reference Include="$(UnityManaged)/UnityEngine/*.dll" />
+  </ItemGroup>
+  <Target Name="CheckUnity" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(UnityManaged)/UnityEngine/UnityEngine.CoreModule.dll')" Text="Set UnityEditorPath to your Unity 6000.6.0f1 Unity.app directory." />
+  </Target>
+</Project>

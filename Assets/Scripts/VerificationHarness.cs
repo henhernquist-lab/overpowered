@@ -7,7 +7,7 @@ public sealed class VerificationHarness : MonoBehaviour
     void Update() { if (Input.GetKeyDown(KeyCode.V)) StartCoroutine(Run()); }
     IEnumerator Run()
     {
-        hero = Object.FindFirstObjectByType<SuperHeroController>();
+        hero = Object.FindAnyObjectByType<SuperHeroController>();
         Debug.Log("[VERIFY] START — configured flight duration=6.000s, recharge=2.500/s");
         hero.DebugSetResources(6f, 3); Debug.Log($"[VERIFY] Flight sample start: {hero.FlightFuel:0.000}s");
         hero.DebugSimulateFlight(2f); Debug.Log($"[VERIFY] Flight sample after 2.000s held: {hero.FlightFuel:0.000}s");

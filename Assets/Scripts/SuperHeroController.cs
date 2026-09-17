@@ -7,13 +7,11 @@ public sealed class SuperHeroController : MonoBehaviour
     Camera view;
     float verticalVelocity;
     float airbornePeakHeight;
-    float flightFuel = PrototypeTuning.FlightDuration;
-    float cooldown;
-    float chargeTimer;
-    int charges = PrototypeTuning.PunchMaxCharges;
-    public float FlightFuel => flightFuel;
-    public int Charges => charges;
-    public float Cooldown => cooldown;
+    PowerUser powers;
+    MovementSettings movement;
+    public float FlightFuel => powers?.Flight?.Fuel ?? 0f;
+    public int Charges => powers?.Strength?.Charges ?? 0;
+    public float Cooldown => powers?.Strength?.Cooldown ?? 0f;
     public string LastPunchResult { get; private set; } = "Ready";
     public int LastAffectedBodies { get; private set; }
     public float LastForce { get; private set; }
@@ -22,25 +20,29 @@ public sealed class SuperHeroController : MonoBehaviour
     public event System.Action<float> Landed;
 
     void Awake() { controller = GetComponent<CharacterController>(); view = Camera.main; airbornePeakHeight = transform.position.y; }
+    public void Initialize(PowerUser user, MovementSettings settings) { powers = user; movement = settings; }
+    public void ResetMotion() { verticalVelocity = 0f; airbornePeakHeight = transform.position.y; }
     void Update()
     {
+        if (powers == null) return;
         if (view == null) view = Camera.main;
-        TickResources(Time.deltaTime, controller.isGrounded);
+        if (view == null) return;
+        powers.Tick(Time.deltaTime, controller.isGrounded);
+        bool acceptsInput = !WorldSession.Instance.MenuOpen && !WorldSession.Instance.PlayerDead;
         Vector3 forward = Vector3.Scale(view.transform.forward, new Vector3(1, 0, 1)).normalized;
-        Vector3 right = view.transform.right;
-        Vector3 move = (forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal")).normalized;
-        bool flying = !controller.isGrounded && Input.GetKey(KeyCode.F) && flightFuel > 0f;
-        if (move.sqrMagnitude > .01f) transform.forward = Vector3.Slerp(transform.forward, move, Time.deltaTime * 14f);
-        float speed = Input.GetKey(KeyCode.LeftShift) ? PrototypeTuning.RunSpeed : PrototypeTuning.WalkSpeed;
-        if (controller.isGrounded && verticalVelocity < 0f) verticalVelocity = -2f;
-        if (controller.isGrounded && Input.GetButtonDown("Jump")) verticalVelocity = PrototypeTuning.JumpSpeed;
+        Vector3 right = Vector3.Scale(view.transform.right, new Vector3(1,0,1)).normalized;
+        Vector3 move = acceptsInput ? (forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal")).normalized : Vector3.zero;
+        bool flying = acceptsInput && !controller.isGrounded && Input.GetKey(KeyCode.F) && powers.ConsumeFlight(Time.deltaTime);
+        if (move.sqrMagnitude > 0f) transform.forward = Vector3.Slerp(transform.forward, move, Time.deltaTime * movement.TurnResponse);
+        float speed = Input.GetKey(KeyCode.LeftShift) ? movement.RunSpeed : movement.WalkSpeed;
+        if (controller.isGrounded && verticalVelocity < 0f) verticalVelocity = -movement.GroundStickSpeed;
+        if (acceptsInput && controller.isGrounded && Input.GetButtonDown("Jump")) verticalVelocity = movement.JumpSpeed;
         if (flying)
         {
-            verticalVelocity = Mathf.MoveTowards(verticalVelocity, Input.GetKey(KeyCode.Space) ? PrototypeTuning.FlightLift : 0f, PrototypeTuning.FlightLift * 3f * Time.deltaTime);
-            move *= PrototypeTuning.FlightForwardBoost;
-            flightFuel = Mathf.Max(0f, flightFuel - Time.deltaTime);
+            verticalVelocity = Mathf.MoveTowards(verticalVelocity, Input.GetKey(KeyCode.Space) ? movement.FlightLift : 0f, movement.FlightLift * movement.FlightResponse * Time.deltaTime);
+            move *= movement.FlightForwardBoost;
         }
-        else verticalVelocity -= PrototypeTuning.Gravity * Time.deltaTime;
+        else verticalVelocity -= movement.Gravity * Time.deltaTime;
         bool wasGrounded = controller.isGrounded;
         airbornePeakHeight = wasGrounded ? transform.position.y : Mathf.Max(airbornePeakHeight, transform.position.y);
         float impactSpeed = Mathf.Max(0f, -verticalVelocity);
@@ -51,38 +53,29 @@ public sealed class SuperHeroController : MonoBehaviour
         // Report actual falls, not those resting contact transitions; this does not alter motion.
         if (!wasGrounded && controller.isGrounded && airbornePeakHeight - transform.position.y > controller.skinWidth)
             Landed?.Invoke(impactSpeed);
-        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.E)) TryPunch();
+        if (!acceptsInput) return;
+        if (Input.GetKeyDown(KeyCode.E)) TryPunch();
+        if (Input.GetMouseButtonDown(0)) powers.Use(powers.Selected);
+        for (int i = 0; i < Mathf.Min(9, powers.Powers.Count); i++)
+            if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha1 + i))) powers.Select(powers.Powers[i]);
     }
-    void TickResources(float dt, bool grounded)
-    {
-        cooldown = Mathf.Max(0f, cooldown - dt);
-        if (grounded) flightFuel = Mathf.Min(PrototypeTuning.FlightDuration, flightFuel + PrototypeTuning.FlightRechargePerSecond * dt);
-        if (charges < PrototypeTuning.PunchMaxCharges)
-        {
-            chargeTimer += dt;
-            if (chargeTimer >= PrototypeTuning.PunchChargeRecharge) { charges++; chargeTimer = 0f; }
-        }
-    }
-    public void DebugSimulateFlight(float seconds) { flightFuel = Mathf.Max(0f, flightFuel - seconds); }
-    public void DebugSimulateGround(float seconds) { TickResources(seconds, true); }
+    public void DebugSimulateFlight(float seconds) { powers.ConsumeFlight(seconds); }
+    public void DebugSimulateGround(float seconds) { powers.Tick(seconds, true); }
     public bool TryPunch()
     {
-        if (cooldown > 0f) { LastPunchResult = "Punch blocked: cooldown"; return false; }
-        if (charges <= 0) { LastPunchResult = "Punch blocked: 0 charges"; return false; }
-        charges--; cooldown = PrototypeTuning.PunchCooldown; chargeTimer = 0f; LastForce = PrototypeTuning.PunchForce;
-        LastAffectedBodies = 0;
-        foreach (Collider hit in Physics.OverlapSphere(transform.position + transform.forward * 1.7f, PrototypeTuning.PunchRadius))
-        {
-            Rigidbody body = hit.attachedRigidbody;
-            if (body == null || body.isKinematic) continue;
-            body.AddExplosionForce(PrototypeTuning.PunchForce, transform.position + transform.forward * 1.7f, PrototypeTuning.PunchRadius, PrototypeTuning.PunchUpwardForce, ForceMode.Impulse);
-            var breakable = body.GetComponent<BreakableProp>(); if (breakable != null) breakable.HitByPunch();
-            LastAffectedBodies++;
-        }
-        LastPunchResult = $"PUNCH: {LastAffectedBodies} bodies hit @ {LastForce:0} N";
+        bool fired = powers.Use(powers.Strength);
+        if (!fired) LastPunchResult = powers.Message;
+        return fired;
+    }
+    public void PerformPunch(PowerDefinition definition, PowerStats stats)
+    {
+        LastForce = stats.Force;
+        LastAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * definition.OriginHeight + transform.forward * definition.OriginOffset,
+            stats.Radius, stats.Force, stats.Damage, definition.UpwardForce);
+        LastPunchResult = $"PUNCH: {LastAffectedBodies} bodies hit @ {LastForce:0} N·s";
         PunchStarted?.Invoke();
-        return true;
     }
     // Used by deterministic test and the in-game verification harness.
-    public void DebugSetResources(float fuel, int newCharges, float newCooldown = 0f) { flightFuel = fuel; charges = newCharges; cooldown = newCooldown; }
+    public void DebugSetResources(float fuel, int newCharges, float newCooldown = 0f)
+    { powers.Flight.Fuel = fuel; powers.Strength.Charges = newCharges; powers.Strength.Cooldown = newCooldown; }
 }

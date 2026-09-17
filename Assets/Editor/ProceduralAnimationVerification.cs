@@ -29,6 +29,12 @@ public static class ProceduralAnimationVerification
         SessionState.SetBool(SessionKey, true);
         EditorApplication.isPlaying = true;
     }
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void IsolateSave()
+    {
+        if (SessionState.GetBool(SessionKey, false))
+            WorldSession.VerificationSavePath = Path.GetFullPath("Verification/Animation/save-" + Guid.NewGuid().ToString("N") + ".json");
+    }
     static void Tick()
     {
         if (!SessionState.GetBool(SessionKey, false) || !EditorApplication.isPlaying) return;
@@ -53,7 +59,7 @@ public static class ProceduralAnimationVerification
                 animation.enabled = true;
                 CharacterController cc = hero.GetComponent<CharacterController>();
                 cc.enabled = false;
-                hero.transform.position = new Vector3(12f, 5f, -10f);
+                hero.transform.position = WorldSession.Instance.City.Spawn + Vector3.up * 5f;
                 cc.enabled = true;
                 hero.Landed += OnLanding;
                 hero.enabled = true;

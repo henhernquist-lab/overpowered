@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7e10a87e21934ad5b3483d61d828e61, type: 3}
+  m_Name: strength
+  m_EditorClassIdentifier: Assembly-CSharp::PowerDefinition
+  Id: strength
+  DisplayName: Super Strength
+  Description: Punch nearby physics objects and enemies. E always punches.
+  Effect: {fileID: 11400000, guid: ee22ee5a50edd4de2901e78166e57f3a, type: 2}
+  InitiallyUnlocked: 1
+  UnlockCost: 1
+  Charges: 3
+  Cooldown: 0.45
+  ChargeRecharge: 1.25
+  ResourceCost: 0
+  Damage: 35
+  Force: 1350
+  Radius: 3.3
+  Range: 20
+  Duration: 4
+  GroundRecharge: 2.5
+  OriginOffset: 1.7
+  OriginHeight: 1
+  UpwardForce: 0.28
+  ProjectileSpeed: 28
+  ProjectileSize: 0.35
+  HoldDistance: 3
+  HoldSpring: 35
+  HoldDamping: 10
+  HoldMaxMass: 500
+  Color: {r: 1, g: 0.25, b: 0.03, a: 1}
+  Upgrades:
+  - Name: Upgrade
+    PointCost: 1
+    ExtraCharges: 1
+    ForceMultiplier: 1.4
+    DamageMultiplier: 1.4
+    DurationMultiplier: 1.3
+    RangeMultiplier: 1.15
+    CooldownMultiplier: 0.9
+  - Name: Upgrade
+    PointCost: 1
+    ExtraCharges: 1
+    ForceMultiplier: 1.4
+    DamageMultiplier: 1.4
+    DurationMultiplier: 1.3
+    RangeMultiplier: 1.15
+    CooldownMultiplier: 0.9

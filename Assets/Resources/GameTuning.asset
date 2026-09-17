@@ -1,0 +1,148 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bd1bde3a7662419dac17bd0c42249ce, type: 3}
+  m_Name: GameTuning
+  m_EditorClassIdentifier: Assembly-CSharp::GameTuning
+  Movement:
+    WalkSpeed: 5.2
+    RunSpeed: 9
+    JumpSpeed: 8.5
+    Gravity: 24
+    FlightLift: 16
+    FlightForwardBoost: 8
+    TurnResponse: 14
+    GroundStickSpeed: 2
+    FlightResponse: 3
+    Health: 100
+    RespawnDelay: 3
+    Energy: 100
+    EnergyRecharge: 12
+    KillPlane: -30
+    Height: 1.8
+    Radius: 0.38
+  City:
+    Seed: 2409
+    Blocks: 3
+    BlockSize: 30
+    StreetWidth: 10
+    SidewalkWidth: 3
+    SidewalkHeight: 0.12
+    BuildingHeight: {x: 6, y: 17}
+    LandmarkHeight: 28
+    BuildingWidth: 10
+    BuildingDepth: 10
+    FloorThickness: 1
+    Civilians: 24
+    RooftopPickups: 5
+    RooftopPickupRadius: 2
+    RooftopPickupSize: 0.8
+    RoofMarkerHeight: 1
+    RoadColor: {r: 0.09, g: 0.12, b: 0.16, a: 1}
+    SidewalkColor: {r: 0.38, g: 0.4, b: 0.43, a: 1}
+    BuildingColor: {r: 0.26, g: 0.37, b: 0.48, a: 1}
+    RoofColor: {r: 0.55, g: 0.65, b: 0.68, a: 1}
+  Npcs:
+    CivilianSpeed: 1.8
+    FleeSpeed: 5
+    CopSpeed: 5.5
+    HeroSpeed: 8
+    CivilianHealth: 25
+    CopHealth: 65
+    HeroHealth: 200
+    HealthPerStar: 18
+    AttackDamage: 8
+    HeroDamage: 18
+    DamagePerStar: 2
+    AttackRange: 2
+    AttackCooldown: 1
+    RepathSeconds: 0.35
+    WanderSeconds: 3
+    FleeSeconds: 7
+    FleeDistance: 16
+    AlarmRadius: 28
+    Height: 1.8
+    Radius: 0.35
+    Acceleration: 20
+    AngularSpeed: 360
+    NavSampleRadius: 5
+    DestroyDelay: 1.5
+    MinimumWanderDistance: 2
+    DetectionRange: 100
+    CivilianColor: {r: 0.9, g: 0.75, b: 0.32, a: 1}
+    CopColor: {r: 0.08, g: 0.2, b: 0.65, a: 1}
+    HeroColor: {r: 0.85, g: 0.15, b: 0.15, a: 1}
+  Progression:
+    BaseLevelXp: 100
+    PointsPerLevel: 1
+    EnemyXp: 35
+    CivilianXp: 10
+    DestructionXp: 12
+    CrimeXp: 60
+    RooftopXp: 25
+    LevelXpGrowth: 1.35
+    SideSwitchCooldown: 10
+    SaveFilename: overpowered-progression.json
+  Heat:
+    MaximumStars: 5
+    FriendlyPatrolCount: 2
+    CopsPerStar: 2
+    HeroThreshold: 4
+    DestructionHeat: 0.35
+    AssaultHeat: 0.25
+    DefeatHeat: 0.5
+    CrimeHeat: 1
+    CrimeReduction: 1
+    DecayDelay: 10
+    DecayPerSecond: 0.07
+    ResponseInterval: 2
+    SpawnDistance: 25
+  Crimes:
+    MaximumActive: 3
+    SpawnInterval: 12
+    ResolveRadius: 3
+    MarkerHeight: 2.5
+    MarkerSize: 1.2
+    ChaosTarget: 4
+    FireResolutionSeconds: 2
+    CrimeColor: {r: 1, g: 0.3, b: 0.04, a: 1}
+  Props:
+    HitsToBreak: 3
+    ShardCount: 5
+    Health: 80
+    CrateMass: 45
+    BarrelMass: 65
+    CarMass: 400
+    FurnitureMass: 80
+    ShardMass: 0.35
+    ShardSize: 0.25
+    ShardSpread: 0.35
+    ShardLifetime: 7
+    ShardImpulseFraction: 0.01
+    ShardRadius: 2.5
+    ShardLift: 0.2
+    CleanupBelow: -40
+    CrateSize: {x: 1.1, y: 1.1, z: 1.1}
+    BarrelSize: {x: 0.85, y: 0.75, z: 0.85}
+    CarSize: {x: 2, y: 1.3, z: 4}
+    BenchSize: {x: 2, y: 0.6, z: 0.7}
+    TrashSize: {x: 0.6, y: 0.5, z: 0.6}
+    LampSize: {x: 0.18, y: 2, z: 0.18}
+  Camera:
+    Sensitivity: 3.5
+    Pitch: 16
+    MinimumPitch: -10
+    MaximumPitch: 65
+    LookHeight: 1.05
+    Offset: {x: 0, y: 2.6, z: -6.5}
+    CollisionRadius: 0.2
+    CollisionInset: 0.1
+    FieldOfView: 65
