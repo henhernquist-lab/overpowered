@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c6b231f5fd8c48279455176ffeef720, type: 3}
+  m_Name: free-play
+  m_EditorClassIdentifier: Assembly-CSharp::GameModeDefinition
+  Id: free-play
+  DisplayName: Free Play
+  Description: More ways to play are on the way.
+  MenuOrder: 2
+  Playable: 0
+  Side: 0
+  Rules: {fileID: 0}
+  Encounters:
+  - {fileID: 11400000, guid: b5f7d59d2adc34c0d9c63191babbcaa9, type: 2}
+  - {fileID: 11400000, guid: 8e74e698b47ed40e0a42c2ca852d5d09, type: 2}
+  - {fileID: 11400000, guid: ad1d7c1d903ba458aaf9d96dfd705231, type: 2}
+  Hud: 31
+  SuccessGoal: 5
+  FailureLimit: 3
+  DefeatLimit: 3
+  SessionSeconds: 900
+  Civilians: 24
+  InitialEncounters: 1
+  MaximumEncounters: 2
+  SpawnPolice: 1
+  SpawnInterval: 50
+  SiteSeparation: 28
+  SuccessScore: 100
+  FailureScorePenalty: 25
+  RescueScore: 20
+  PropScore: 5
+  SuccessXp: 60
+  SuccessHeat: 0
+  FailureHeat: 0.75

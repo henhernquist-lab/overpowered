@@ -32,6 +32,7 @@ public static class CityVerification
     static void Configure()
     {
         string mode=SessionState.GetString(Key,""); if(string.IsNullOrEmpty(mode)) return;
+        GameFlow.VerificationSandbox=true;
         string output=Path.GetFullPath("Verification/City"); Directory.CreateDirectory(output);
         WorldSession.VerificationSavePath=Path.Combine(output,"test-save.json");
         if(mode=="first" && File.Exists(WorldSession.VerificationSavePath))

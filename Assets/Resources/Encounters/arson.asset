@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54c6128b47f14475a9915d0f4dcf039a, type: 3}
+  m_Name: arson
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterDefinition
+  DisplayName: Arson attack
+  Kind: 2
+  Robbers: 3
+  Civilians: 2
+  RespondingCops: 2
+  Cars: 2
+  LooseProps: 4
+  Loot: 2
+  Hazards: 2
+  DestructionGoal: 3
+  Deadline: 210
+  RunForExitAfter: 45
+  CivilianDangerAfter: 90
+  CivilianDamagePerSecond: 1
+  RunnerSpeed: 3
+  RunnerEscapeDistance: 40
+  PlayerEscapeDistance: 22
+  EscapeReach: 2
+  Spacing: 3
+  BlockadeOffset: 4.5
+  PropMoveDistance: 2
+  InteractRadius: 3
+  HoldSeconds: 1.2
+  CopSuppressSeconds: 0.6
+  CopSuppressDamage: 2
+  MarkerSize: 0.65
+  MarkerHeight: 1
+  LootColor: {r: 1, g: 0.8, b: 0.1, a: 1}
+  RescueColor: {r: 0, g: 1, b: 1, a: 1}
+  HazardColor: {r: 1, g: 0.25, b: 0.04, a: 1}

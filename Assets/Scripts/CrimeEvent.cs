@@ -5,11 +5,13 @@ public sealed class CrimeEvent : MonoBehaviour
     public CrimeKind Kind;
     public bool Resolved { get; private set; }
     public CityNpc Criminal;
+    public CrimeEncounter Encounter;
     public float Suppression { get; private set; }
-    public string Prompt => Kind==CrimeKind.Fire ? "Hold R: extinguish (Hero) / fuel fire (Villain)" :
+    public string Prompt => Encounter!=null ? Encounter.Objective+"\n"+Encounter.InteractionHint : Kind==CrimeKind.Fire ? "Hold R: extinguish (Hero) / fuel fire (Villain)" :
         "R: rescue/report (Hero) / join crime (Villain); or defeat criminal as Hero";
     void Update()
     {
+        if(Encounter!=null) return;
         var w=WorldSession.Instance; if (w==null || Resolved || w.MenuOpen || w.PlayerDead) return;
         if (Vector3.Distance(w.Hero.transform.position,transform.position-Vector3.up*w.Tuning.Crimes.MarkerHeight)>w.Tuning.Crimes.ResolveRadius) return;
         if (Kind==CrimeKind.Fire)
@@ -21,6 +23,7 @@ public sealed class CrimeEvent : MonoBehaviour
     }
     public bool Resolve()
     {
+        if(Encounter!=null) return Encounter.TryComplete();
         if (Resolved) return false;
         Resolved=true;
         var world=WorldSession.Instance;
@@ -32,4 +35,5 @@ public sealed class CrimeEvent : MonoBehaviour
     {
         if (WorldSession.Instance.Progression.Data.Side==PlayerSide.Hero) Resolve();
     }
+    public void MarkEncounterFinished() { Resolved=true; }
 }

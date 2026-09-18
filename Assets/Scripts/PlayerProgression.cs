@@ -11,6 +11,8 @@ public enum PlayerSide { Hero, Villain }
     public PlayerSide Side;
     public List<PowerOwnership> Powers = new List<PowerOwnership>();
     public List<string> Rooftops = new List<string>();
+    public int SessionsPlayed, SessionsWon, BestSessionScore, LastSessionXp;
+    public string LastModeId;
 }
 public sealed class PlayerProgression : MonoBehaviour
 {
@@ -19,6 +21,8 @@ public sealed class PlayerProgression : MonoBehaviour
     public string LastError { get; private set; }
     public float SwitchRemaining { get; private set; }
     public event Action Changed;
+    public event Action<int> XpAwarded;
+    public bool SideLocked { get; private set; }
     ProgressionSettings config;
     PowerDefinition[] definitions;
     public int RequiredXp => Mathf.Max(1, Mathf.RoundToInt(config.BaseLevelXp * Mathf.Pow(config.LevelXpGrowth, Data.Level - 1)));
@@ -32,9 +36,9 @@ public sealed class PlayerProgression : MonoBehaviour
     public bool Owns(PowerDefinition definition) => Tier(definition) >= 0;
     public void AddXp(int amount)
     {
-        Data.Xp += Mathf.Max(0, amount);
+        amount=Mathf.Max(0,amount); Data.Xp += amount;
         while (Data.Xp >= RequiredXp) { Data.Xp -= RequiredXp; Data.Level++; Data.Points += config.PointsPerLevel; }
-        Save(); Changed?.Invoke();
+        Save(); Changed?.Invoke(); XpAwarded?.Invoke(amount);
     }
     public bool Buy(PowerDefinition definition)
     {
@@ -49,11 +53,17 @@ public sealed class PlayerProgression : MonoBehaviour
     }
     public bool SwitchSide()
     {
-        if (SwitchRemaining > 0f) return false;
+        if (SideLocked || SwitchRemaining > 0f) return false;
         Data.Side = Data.Side == PlayerSide.Hero ? PlayerSide.Villain : PlayerSide.Hero;
         SwitchRemaining = config.SideSwitchCooldown; Save(); Changed?.Invoke(); return true;
     }
     void Update() { SwitchRemaining = Mathf.Max(0f, SwitchRemaining - Time.deltaTime); }
+    public void SetModeSide(PlayerSide side) { SideLocked=true; Data.Side=side; Save(); Changed?.Invoke(); }
+    public void RecordSession(string mode,bool won,int score,int xp)
+    {
+        Data.SessionsPlayed++; if(won) Data.SessionsWon++;
+        Data.BestSessionScore=Mathf.Max(Data.BestSessionScore,score); Data.LastSessionXp=xp; Data.LastModeId=mode; Save();
+    }
     public bool ClaimRoof(string id)
     {
         if (Data.Rooftops.Contains(id)) return false;

@@ -1,6 +1,84 @@
 # Prototype Status
 
-## City and progression expansion (current)
+## Home and game-mode sessions (current)
+
+Built a mode wrapper around the existing city, controller, five powers, progression/save, Heat/police, HUD and procedural presentation. No replacement controller, combat system, city generator or animation system was introduced.
+
+- **Startup and flow:** `Home` is the first build scene. OVERPOWERED lists Hero and Villain as playable; Free Play and Endless Fight say COMING SOON and reject selection. Selecting a definition loads `Prototype`; a completed/failed/timed-out session loads `Results`, with score, XP earned, outcomes and counts. Results returns to Home. Starting Play directly in Prototype also redirects to Home unless an isolated legacy verification explicitly requests the sandbox.
+- **Mode architecture:** `GameModeDefinition` assets supply side, reusable `ModeRules`, encounter pool, spawn cadence/population, win/fail/defeat/time limits, rewards and HUD flags. The menu discovers assets; no mode-ID registry/switch was added. `GameModeSession` owns the session lifecycle; the existing Hero/Villain crime entry points route into `CrimeEncounter` and the selected rules. A new mode can reuse rules or provide its own rule subclass/asset without editing abilities, city, save or menu code.
+- **Hero:** neutral police pursue/suppress robbers. Stop every robber by capture (held R) or combat, physically displace/destroy blockades, hold R to rescue cyan civilians, and extinguish fire nodes in arson events. Resolving just the marker or one actor is insufficient. Civilian death or any escaped robber fails the event.
+- **Villain:** the same city and encounter population; cops attack the player through existing Heat AI. Steal gold loot, wreck at least three encounter props, interact with sabotage/fire nodes where present, then escape beyond 22m. Robbers are allies. Destruction earns existing XP and Heat; Heat-driven reinforcements and the pursuing Hero remain intact. Vertical flight escape is intentionally allowed.
+- **Set-pieces:** bank break-out, street ambush and arson definitions. Each spawns three robbers with different exit routes, two endangered civilians, two responding cops, two throwable cars, four supply crates, two rescue blockades and two loot nodes. Arson adds two fire nodes. Cars/crates use real Rigidbodies and the existing force/damage/shard system. Encounters appear at separated street intersections; actors use the existing NavMesh. Scenario objects are removed when the event ends or the city unloads; temporary physical shards retain their existing lifetime.
+- **Feedback/UI:** live objective sub-counts, distances/bearings, world markers, deadlines, success/failure feedback, session score/XP/counts. Escape is a true pause with resume, results or return-home actions; Tab remains the live power-upgrade menu. H cannot change sides mid-session. Mode HUD flags control health, powers, progression, Heat and objectives.
+- **Save extension:** earned XP and purchased powers remain shared across modes. Added session/win counts, best score, last mode and last-session XP to the existing atomic JSON save. Old version-1 files remain compatible with zero-initialized session fields. Rewards save immediately; session outcomes save once. Transient city state, health, Heat, resources and active encounters still reset between sessions.
+
+### Session choices and consequences
+
+Both shipping modes are **objective-count based: five completed encounters wins**, not an enforced 10–15-minute survival session. A **900s / 15-minute cap** produces timeout results. **Three failed encounters or three player defeats loses**; the first two defeats use the existing respawn behavior. These limits can be disabled with zero or edited per mode in the Inspector.
+
+One event starts immediately; another can spawn every **50s**, up to **two active**. Each has a **210s deadline**. Robbers scatter locally, then try their city exits after **45s**. Unrescued civilians begin taking **1 damage/s after 90s**. Hero failure on escape/death/timeout adds **0.75 Heat**, removes **25 score** (floor zero), and counts toward the loss limit; it does not remove earned XP. Success grants **100 score / 60 XP**, plus existing combat rewards; civilian rescue gives **20 score**. Hero completion lowers Heat by **1**. Villain completion adds **1 Heat**, wrecked encounter props give **5 score** each, and existing destruction XP is retained. Villain deadline failure also adds 0.75 Heat and counts against the session. Physics collateral can kill a civilian: rescue requires care with blast direction, not indiscriminate area attacks.
+
+All of those numbers and population counts live in the mode/encounter assets. Powers, props, movement and animation retain their existing authoritative tuning assets.
+
+### Explicit cuts / prototype limits
+
+- **Not implemented by design:** Free Play and Endless Fight gameplay. Their disabled catalog definitions are present; no fake playable buttons.
+- **No art pass:** primitive actors/cars/crates and basic IMGUI screens. Bank/ambush share the common encounter choreography; they are not authored bank interiors or vehicle-driving missions. Arson has extra interactive fire nodes, not a spreading-fire simulation. Civilians are immobilized by a gameplay blockade condition until rescued, not physically pinned/ragdolled. Cop support uses navigation/suppression/damage, not firearms.
+- **Not claimed:** human keyboard/mouse feel acceptance, a 15-minute hands-on balance run, native-resolution player-build FPS, or a standalone distribution build. Automated completion controls position the player and supply hold/damage inputs directly to gameplay methods; they do not prove navigation/input ergonomics or difficulty. The physics rescue check uses an actual charged punch.
+- UI button callbacks and real scene transitions are exercised via the same flow methods in batch Play Mode, not automated mouse clicks. World rendering is captured separately; no batch screenshot of IMGUI menus is claimed.
+- The original expansion notes below are historical. Their H-switch, single-step crimes, repeating Villain chaos goal, and non-pausing Escape behavior are superseded by these modes. Legacy sandbox paths remain only for isolated regression checks.
+
+### Mode verification
+
+Reproducible checks: `ModeVerification.Run` followed by `ModeVerification.Reload` in a **separate Unity process**, using a temporary project copy and isolated save paths. The first run temporarily creates a third definition reusing Hero rules/encounters, with a one-encounter goal; the runtime discovers it without new system code. The definition is removed after testing; a copy is retained as evidence under `Verification/Modes/`.
+
+Actual final Unity Play Mode output (`Verification/Modes/results.txt`; process exit 0):
+
+```text
+PASS Startup HOME, no city or player spawned.
+PASS free-play COMING SOON CONTROL refuses launch.
+PASS endless-fight COMING SOON CONTROL refuses launch.
+PASS Populated event: 3 robbers, 2 trapped civilians, 2 responders, 8 real Rigidbody props (2 cars, 4 supplies, 2 blockades), 2 loot nodes.
+PASS Untouched marker CONTROL does not resolve encounter.
+PASS Blocked civilian CONTROL refuses rescue before blockade is moved/broken.
+PASS Rescue physics: actual punch AddExplosionForce(1350 N·s, Impulse), mass=45kg; displacement=10.000m.
+PASS Hero police CONTROL: neutral cop in attack range does not damage player.
+PASS Pause freezes session clock and encounter simulation.
+PASS Ignored Hero event: failures=1, Heat 1.75 -> 2.50 (+0.75).
+PASS Hero PLAY -> RESULTS: Won, success=5, failure=1, score=700, XP=825.
+PASS Hero RESULTS -> HOME; city unloaded.
+PASS Hero/Villain regenerated the SAME seeded city layout.
+PASS Mode-switch persistence: level=5, XP=162, points=4, wins=1.
+PASS Earned points purchase strength upgrade; tier=1 must survive restart.
+PASS Villain live cop AI attacked: health 100 -> 76.
+PASS Existing Heat escalation retained: cops 4 -> 10 at Heat 3.00.
+PASS Configured spawn-clock interval adds second multi-part encounter.
+PASS Population-cap CONTROL refuses a third simultaneous encounter.
+PASS Villain escape CONTROL: loot/destruction alone cannot resolve while inside scene.
+PASS Villain PLAY -> RESULTS: Won, success=5, score=700, XP=780.
+PASS Villain RESULTS -> HOME; city unloaded.
+PASS Third mode discovered/selected from a definition ONLY; same rule and encounter assets, goal=1, no registry changes.
+PASS Data-only third mode loaded, ran, and won at its configured single-encounter goal.
+PASS Failure-limit CONTROL: third failed encounter produces LOST results.
+PASS Timeout CONTROL: configured 900 seconds produces TIMED OUT results.
+PASS Defeat CONTROL: two respawns allowed; actual third player death produces LOST results.
+MEASURED populated events: civilians=28, cops=12, events=2; 1280x720 rendered Editor Play Mode; frames=1237, seconds=5.007, FPS=247.08, p95=6.48ms; Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz; AMD Radeon Pro 5300.
+```
+
+The FPS sample renders a dedicated top-down 1280×720 camera every sampled frame while live world/NavMesh/NPC updates continue, with two active encounters, six robbers, 28 civilians and 12 cops. The player is held airborne for test safety. It measures wall-clock Editor throughput, **not a standalone or hands-on combat FPS guarantee**. The captured frame is `Verification/Modes/populated-event.png`. Police neutrality is tested away from hostile robbers to avoid attributing their attacks to the cop. Timers/interaction durations are advanced through runtime methods; the test does not wait 15 real minutes. `dotnet build Overpowered.Build.csproj --no-restore -p:UseSharedCompilation=false` passes with **0 warnings / 0 errors** (`Verification/Modes/build.txt`). Unity's existing `UnityEditor.Search` startup indexing exception appeared but did not prevent the completed tests.
+
+Separate-process reload (`Verification/Modes/reload.txt`; exit 0):
+
+```text
+PASS SECOND UNITY PROCESS exact reload: level=7, XP=327, points=5, sessions=6, wins=3, best score=700; all power tiers/rooftops retained.
+PASS Fresh-save CONTROL in second process: level=1, XP=0, points=0, sessions=0.
+```
+
+The saved Strength upgrade was tier 1; the comparison covers the full progression JSON, not just the printed fields. The three wins are Hero, Villain and the temporary third mode; the other three outcomes cover failed encounters, timeout and defeats.
+
+Existing city/power and procedural-animation regressions also exited 0 after this change. Their current output is retained separately as `Verification/Modes/city-regression.txt` and `animation-regression.txt`, without overwriting the earlier milestone's evidence. The city regression rechecked flight draining **6 → 4 → 0**, grounded recharge, normal punch/cooldown/zero-charge/recharge controls, seventh-power physics, Heat/police, Telekinesis, Ice and progression. The 20 animation checks include the actual controller fall and recovery. Those tests deliberately use the legacy isolated sandbox; the mode suite above independently exercises the new shipping flow.
+
+## City and progression expansion (previous milestone)
 
 Implemented all six systems from the attached expansion brief, extending the existing controller and retaining procedural animation:
 

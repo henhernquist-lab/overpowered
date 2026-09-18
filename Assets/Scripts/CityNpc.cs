@@ -12,6 +12,7 @@ public sealed class CityNpc : MonoBehaviour
         (Role == NpcRole.Cop || Role == NpcRole.PursuingHero) && world.Progression.Data.Side == PlayerSide.Villain;
     public NavMeshAgent Agent { get; private set; }
     public CrimeEvent Crime;
+    public CrimeEncounter Encounter;
     WorldSession world; float nextPath, nextAttack, fleeUntil, frozenUntil; Vector3 alarm; int waypoint;
     public static CityNpc Spawn(WorldSession world, Vector3 position, NpcRole role)
     {
@@ -35,16 +36,16 @@ public sealed class CityNpc : MonoBehaviour
     {
         if (Dead || amount <= 0f) return;
         Health = Mathf.Max(0f, Health-amount);
-        world.OnAssault(this);
+        if(source!=null) world.OnAssault(this);
         if (!Dead) return;
         Agent.enabled=false; GetComponent<Collider>().enabled=false;
-        world.OnDefeat(this); Crime?.CriminalDefeated();
+        if(source!=null) world.OnDefeat(this); Crime?.CriminalDefeated();
         transform.rotation=Quaternion.Euler(0,0,90);
         Destroy(gameObject,world.Tuning.Npcs.DestroyDelay);
     }
     void Update()
     {
-        if (world==null || Dead || !Agent.isOnNavMesh) return;
+        if (world==null || Dead || !Agent.isOnNavMesh || (world.Mode!=null&&(world.Mode.Ended||world.Mode.Paused))) return;
         var c=world.Tuning.Npcs;
         Agent.isStopped=Time.time<frozenUntil || world.PlayerDead;
         if (Agent.isStopped) return;
@@ -55,6 +56,7 @@ public sealed class CityNpc : MonoBehaviour
             nextAttack=Time.time+c.AttackCooldown;
             world.DamagePlayer((Role==NpcRole.PursuingHero ? c.HeroDamage : c.AttackDamage)+world.Stars*c.DamagePerStar);
         }
+        if(Encounter!=null&&Encounter.Drive(this)) return;
         if (Time.time<nextPath) return;
         nextPath=Time.time+(Hostile || Fleeing ? c.RepathSeconds : c.WanderSeconds);
         Vector3 destination;
@@ -68,4 +70,11 @@ public sealed class CityNpc : MonoBehaviour
         if (NavMesh.SamplePosition(destination,out var hit,c.NavSampleRadius,NavMesh.AllAreas)) Agent.SetDestination(hit.position);
     }
     void OnDestroy() { if (world!=null) world.Npcs.Remove(this); }
+    public void DirectTo(Vector3 destination,float speed)
+    {
+        Agent.speed=speed;
+        if(Time.time<nextPath) return;
+        nextPath=Time.time+world.Tuning.Npcs.RepathSeconds;
+        if(NavMesh.SamplePosition(destination,out var hit,world.Tuning.Npcs.NavSampleRadius,NavMesh.AllAreas)) Agent.SetDestination(hit.position);
+    }
 }

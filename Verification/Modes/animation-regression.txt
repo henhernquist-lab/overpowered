@@ -1,0 +1,20 @@
+PASS: Serialized tuning asset and visual component loaded.
+PASS: Normal charged punch accepted.
+PASS: Punch at 0.065s: arm rotation from rest=100.000 degrees (configured X=-100.000).
+PASS: Cooldown rejection emits no new animation event.
+PASS: Punch eased back to rest.
+PASS: Zero-charge rejection emits no new animation event.
+PASS: Moving flight: body pitch=48.000 degrees.
+PASS: Hover / vertical ascent levels body to 0 degrees.
+PASS: Diagonal run: pitch=7.071, roll=-7.071 degrees.
+PASS: Run bob sampled over 120 steps: 0.0000–0.0450 m.
+PASS: Idle control: bob fades to zero.
+PASS: Small contact control: no landing squash.
+PASS: Full impact: scale=(1.100, 0.780, 1.100); backward tilt=-13.000 degrees.
+PASS: Landing fully recovered.
+PASS: All sampled poses left the physics root position/rotation/scale untouched.
+PASS: Disabling presentation restores bind pose for replacement by an Animator adapter.
+PASS: Real 5m fall: landing event count=1; impact=13.354 m/s.
+PASS: Actual landing squash observed: minimum visual Y scale=0.816.
+PASS: Actual landing recovered to scale 1.000.
+PASS: Controller collider height remains 1.800m.

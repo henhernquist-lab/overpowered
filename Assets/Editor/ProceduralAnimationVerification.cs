@@ -33,7 +33,10 @@ public static class ProceduralAnimationVerification
     static void IsolateSave()
     {
         if (SessionState.GetBool(SessionKey, false))
+        {
+            GameFlow.VerificationSandbox=true;
             WorldSession.VerificationSavePath = Path.GetFullPath("Verification/Animation/save-" + Guid.NewGuid().ToString("N") + ".json");
+        }
     }
     static void Tick()
     {

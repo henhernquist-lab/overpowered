@@ -26,6 +26,7 @@ public sealed class BreakableProp : MonoBehaviour
     void Break()
     {
         if (broken) return; broken = true;
+        GetComponent<EncounterProp>()?.Broken();
         WorldSession.Instance?.OnDestruction(transform.position);
         GetComponent<Collider>().enabled = false;
         Rigidbody original = GetComponent<Rigidbody>();

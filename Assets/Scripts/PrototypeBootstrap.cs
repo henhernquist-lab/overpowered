@@ -2,8 +2,7 @@ using UnityEngine;
 
 public static class PrototypeBootstrap
 {
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void BuildArena()
+    public static void BuildCity()
     {
         if (Object.FindAnyObjectByType<SuperHeroController>() != null) return;
         var tuning = Resources.Load<GameTuning>("GameTuning");

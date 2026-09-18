@@ -10,6 +10,7 @@ public sealed class WorldSession : MonoBehaviour
     public SuperHeroController Hero { get; private set; }
     public PlayerProgression Progression { get; private set; }
     public PowerUser Powers { get; private set; }
+    public GameModeSession Mode { get; private set; }
     public readonly List<CityNpc> Npcs = new List<CityNpc>();
     public readonly List<CrimeEvent> Crimes = new List<CrimeEvent>();
     public float Heat { get; private set; }
@@ -29,16 +30,26 @@ public sealed class WorldSession : MonoBehaviour
         Progression.Initialize(tuning.Progression,definitions,VerificationSavePath);
         Powers=hero.gameObject.AddComponent<PowerUser>(); Powers.Initialize(hero,Progression,definitions,tuning.Movement);
         hero.Initialize(Powers,tuning.Movement);
-        for (int i=0;i<tuning.City.Civilians;i++) CityNpc.Spawn(this,city.Sidewalks[i%city.Sidewalks.Count],NpcRole.Civilian);
+        if(GameFlow.Instance!=null&&GameFlow.Instance.ActiveMode!=null)
+        { Mode=gameObject.AddComponent<GameModeSession>(); Mode.Initialize(this,GameFlow.Instance.ActiveMode); Message=Mode.Definition.Description; }
+        int civilians=Mode==null?tuning.City.Civilians:Mode.Definition.Civilians;
+        for (int i=0;i<civilians;i++) CityNpc.Spawn(this,city.Sidewalks[i%city.Sidewalks.Count],NpcRole.Civilian);
         ReconcilePolice();
-        for (int i=0;i<tuning.Crimes.MaximumActive;i++) SpawnCrime((CrimeKind)(i%3),city.Sidewalks[(i*7)%city.Sidewalks.Count]);
+        if(Mode!=null) Mode.Begin();
+        else for (int i=0;i<tuning.Crimes.MaximumActive;i++) SpawnCrime((CrimeKind)(i%3),city.Sidewalks[(i*7)%city.Sidewalks.Count]);
     }
     void Update()
     {
         if (Tuning==null) return;
+        if(Mode!=null)
+        {
+            if(Mode.Ended) return;
+            if(Input.GetKeyDown(KeyCode.Escape)) Mode.SetPaused(!Mode.Paused);
+            if(Mode.Paused) return;
+        }
         if (Input.GetKeyDown(KeyCode.Tab)) { MenuOpen=!MenuOpen; Cursor.lockState=MenuOpen?CursorLockMode.None:CursorLockMode.Locked; Cursor.visible=MenuOpen; }
-        if (Input.GetKeyDown(KeyCode.Escape)) { MenuOpen=true; Cursor.lockState=CursorLockMode.None; Cursor.visible=true; }
-        if (!MenuOpen && Input.GetKeyDown(KeyCode.H)) Message=Progression.SwitchSide()?"Side changed. Your powers and character are unchanged.":"Side switch cooling down";
+        if (Mode==null&&Input.GetKeyDown(KeyCode.Escape)) { MenuOpen=true; Cursor.lockState=CursorLockMode.None; Cursor.visible=true; }
+        if (!MenuOpen && Input.GetKeyDown(KeyCode.H)) Message=Mode!=null?"Side is set by this mode. Return home to choose another mode.":Progression.SwitchSide()?"Side changed. Your powers and character are unchanged.":"Side switch cooling down";
         if (!PlayerDead && Hero.transform.position.y<Tuning.Movement.KillPlane) DamagePlayer(Health);
         if (PlayerDead)
         {
@@ -53,7 +64,7 @@ public sealed class WorldSession : MonoBehaviour
         responseTimer+=Time.deltaTime; crimeTimer+=Time.deltaTime;
         if (responseTimer>=Tuning.Heat.ResponseInterval) { responseTimer=0; ReconcilePolice(); }
         Crimes.RemoveAll(c=>c==null || c.Resolved);
-        if (crimeTimer>=Tuning.Crimes.SpawnInterval && Crimes.Count<Tuning.Crimes.MaximumActive)
+        if (Mode==null && crimeTimer>=Tuning.Crimes.SpawnInterval && Crimes.Count<Tuning.Crimes.MaximumActive)
         { crimeTimer=0; SpawnCrime((CrimeKind)Random.Range(0,3),City.Sidewalks[Random.Range(0,City.Sidewalks.Count)]); }
     }
     public void TickHeat(float dt)
@@ -69,10 +80,11 @@ public sealed class WorldSession : MonoBehaviour
     }
     public void OnDestruction(Vector3 position)
     {
+        if(Mode!=null&&Mode.Ended) return;
         Alarm(position); AddHeat(Tuning.Heat.DestructionHeat);
         if (Progression.Data.Side!=PlayerSide.Villain) return;
         Progression.AddXp(Tuning.Progression.DestructionXp); ChaosProgress++;
-        if (ChaosProgress>=Tuning.Crimes.ChaosTarget) { ChaosProgress=0; Progression.AddXp(Tuning.Progression.CrimeXp); Message="Chaos objective complete: XP earned"; }
+        if (Mode==null && ChaosProgress>=Tuning.Crimes.ChaosTarget) { ChaosProgress=0; Progression.AddXp(Tuning.Progression.CrimeXp); Message="Chaos objective complete: XP earned"; }
     }
     public void OnAssault(CityNpc npc)
     {
@@ -81,14 +93,16 @@ public sealed class WorldSession : MonoBehaviour
     }
     public void OnDefeat(CityNpc npc)
     {
+        if(Mode!=null&&Mode.Ended) return;
         if ((Progression.Data.Side==PlayerSide.Hero && npc.Role==NpcRole.Criminal) ||
             (Progression.Data.Side==PlayerSide.Villain && npc.Role!=NpcRole.Criminal))
             Progression.AddXp(npc.Role==NpcRole.Civilian?Tuning.Progression.CivilianXp:Tuning.Progression.EnemyXp);
         if (npc.Role!=NpcRole.Criminal) AddHeat(Tuning.Heat.DefeatHeat);
     }
-    public void DamagePlayer(float damage) { if (!PlayerDead) { Health=Mathf.Max(0,Health-damage); if (PlayerDead) Powers.Release(false); } }
+    public void DamagePlayer(float damage) { if (!PlayerDead && (Mode==null||!Mode.Ended)) { Health=Mathf.Max(0,Health-damage); if (PlayerDead) {Powers.Release(false);Mode?.PlayerDefeated();} } }
     public void ResolveCrime(CrimeEvent crime)
     {
+        if(Mode!=null) {crime.Encounter?.TryComplete(); return;}
         bool hero=Progression.Data.Side==PlayerSide.Hero;
         AddHeat(hero?-Tuning.Heat.CrimeReduction:Tuning.Heat.CrimeHeat);
         Progression.AddXp(Tuning.Progression.CrimeXp);
@@ -96,6 +110,11 @@ public sealed class WorldSession : MonoBehaviour
     }
     public CrimeEvent SpawnCrime(CrimeKind kind,Vector3 position)
     {
+        if(Mode!=null)
+        {
+            var definition=System.Array.Find(Mode.Definition.Encounters,e=>e.Kind==kind)??Mode.Definition.Encounters[0];
+            return SpawnEncounter(definition,position);
+        }
         var marker=GameObject.CreatePrimitive(PrimitiveType.Sphere); marker.name=kind+" event";
         marker.transform.position=position+Vector3.up*Tuning.Crimes.MarkerHeight; marker.transform.localScale=Vector3.one*Tuning.Crimes.MarkerSize;
         marker.GetComponent<Collider>().enabled=false; marker.GetComponent<Renderer>().material.color=Tuning.Crimes.CrimeColor;
@@ -103,10 +122,21 @@ public sealed class WorldSession : MonoBehaviour
         if (kind!=CrimeKind.Fire) { crime.Criminal=CityNpc.Spawn(this,position,NpcRole.Criminal); if(crime.Criminal!=null) crime.Criminal.Crime=crime; }
         return crime;
     }
+    public CrimeEvent SpawnEncounter(EncounterDefinition definition,Vector3 position)
+    {
+        var marker=GameObject.CreatePrimitive(PrimitiveType.Sphere); marker.name=definition.DisplayName;
+        marker.transform.position=position+Vector3.up*Tuning.Crimes.MarkerHeight;
+        marker.transform.localScale=Vector3.one*Tuning.Crimes.MarkerSize;
+        marker.GetComponent<Collider>().enabled=false; marker.GetComponent<Renderer>().material.color=Tuning.Crimes.CrimeColor;
+        var crime=marker.AddComponent<CrimeEvent>(); crime.Kind=definition.Kind; Crimes.Add(crime);
+        crime.Encounter=marker.AddComponent<CrimeEncounter>(); crime.Encounter.Initialize(this,crime,definition,position);
+        return crime;
+    }
     public void ReconcilePolice()
     {
+        if(Mode!=null&&!Mode.Definition.SpawnPolice) return;
         int count=0; CityNpc hunter=null;
-        foreach(var npc in Npcs) if(npc!=null&&!npc.Dead) { if(npc.Role==NpcRole.Cop) count++; if(npc.Role==NpcRole.PursuingHero) hunter=npc; }
+        foreach(var npc in Npcs) if(npc!=null&&!npc.Dead) { if(npc.Role==NpcRole.Cop&&npc.Encounter==null) count++; if(npc.Role==NpcRole.PursuingHero) hunter=npc; }
         int desired=Tuning.Heat.FriendlyPatrolCount+Stars*Tuning.Heat.CopsPerStar;
         while(count<desired)
         {
@@ -114,7 +144,7 @@ public sealed class WorldSession : MonoBehaviour
             if(CityNpc.Spawn(this,City.NearestSidewalk(from),NpcRole.Cop)==null) break;
             count++;
         }
-        for(int i=Npcs.Count-1;i>=0&&count>desired;i--) if(Npcs[i]!=null&&!Npcs[i].Dead&&Npcs[i].Role==NpcRole.Cop) { var npc=Npcs[i]; Npcs.RemoveAt(i); Destroy(npc.gameObject); count--; }
+        for(int i=Npcs.Count-1;i>=0&&count>desired;i--) if(Npcs[i]!=null&&!Npcs[i].Dead&&Npcs[i].Role==NpcRole.Cop&&Npcs[i].Encounter==null) { var npc=Npcs[i]; Npcs.RemoveAt(i); Destroy(npc.gameObject); count--; }
         if(Stars>=Tuning.Heat.HeroThreshold&&hunter==null) CityNpc.Spawn(this,City.NearestSidewalk(Hero.transform.position+Vector3.forward*Tuning.Heat.SpawnDistance),NpcRole.PursuingHero);
         if(Stars<Tuning.Heat.HeroThreshold&&hunter!=null) Destroy(hunter.gameObject);
     }

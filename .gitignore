@@ -48,6 +48,8 @@ ExportedObj/
 /bin/
 /Verification/City/*.json*
 /Verification/Animation/*.json*
+/Verification/Modes/*.json*
+/Verification/Modes/save-path.txt
 *.unityproj
 *.sln
 *.slnx
