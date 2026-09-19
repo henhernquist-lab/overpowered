@@ -11,6 +11,7 @@ public sealed class PowerUser : MonoBehaviour
     public PowerRuntime Selected { get; private set; }
     public float Energy { get; private set; }
     public string Message = "Ready";
+    public event System.Action<PowerDefinition> Activated;
     public Rigidbody HeldBody { get; private set; }
     public Vector3 AimOrigin => transform.position + Vector3.up * (Selected?.Definition.OriginHeight ?? 1f);
     public Vector3 AimDirection
@@ -82,6 +83,7 @@ public sealed class PowerUser : MonoBehaviour
         if (!power.Definition.Effect.Execute(this, power)) return false;
         power.Charges--; power.Cooldown = Stats(power).Cooldown; power.ChargeTimer = 0f;
         Energy -= power.Definition.ResourceCost; Message = power.Definition.DisplayName + " activated";
+        Activated?.Invoke(power.Definition);
         WorldSession.Instance?.Alarm(transform.position);
         return true;
     }

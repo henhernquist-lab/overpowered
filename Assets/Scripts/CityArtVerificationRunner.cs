@@ -98,7 +98,9 @@ public sealed class CityArtVerificationRunner : MonoBehaviour
         var body=prop.GetComponent<Rigidbody>();Check(body!=null&&prop.GetComponent<BreakableProp>()!=null&&prop.GetComponents<BreakableProp>().Length==1,"New newspaper box uses the EXISTING BreakableProp and one real Rigidbody, no parallel damage implementation.");
         // Isolate a generated prop above a clear road; measure only movement AFTER the actual punch.
         body.position=W.City.Spawn+Vector3.up*7;body.linearVelocity=Vector3.zero;MovePlayer(body.position+Vector3.back*3-Vector3.up*.2f);
-        Vector3 before=body.position;Check(W.Hero.TryPunch()&&W.Hero.LastAffectedBodies>0,"Real charged punch strikes the newly styled newspaper box.");
+        Vector3 before=body.position;Check(W.Hero.TryPunch(),"Real charged punch accepted against the newly styled newspaper box.");
+        yield return new WaitForSeconds(W.Hero.PunchWindupSeconds+.05f);
+        Check(W.Hero.LastAffectedBodies>0,"Animated punch strikes the newly styled newspaper box after windup.");
         for(int i=0;i<20;i++)yield return new WaitForFixedUpdate();
         float displacement=Vector3.Distance(before,body.position);Check(displacement>1,$"New prop physics: mass={body.mass}kg, punch={W.Hero.LastForce} N·s, displacement={displacement:F3}m, velocity={body.linearVelocity.magnitude:F3}m/s.");
         prop.GetComponent<BreakableProp>().TakeDamage(10000,W.Powers);yield return null;

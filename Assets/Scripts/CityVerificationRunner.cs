@@ -86,9 +86,12 @@ public sealed class CityVerificationRunner : MonoBehaviour
         w.Powers.Tick(1,true); Check(w.Powers.Flight.Fuel==2.5f,"Ground recharge after 1s=2.5s.");
         w.Hero.DebugSetResources(6,3); Check(w.Hero.TryPunch(),"Charged punch normal CONTROL fires.");
         Check(!w.Hero.TryPunch(),"Punch cooldown rejects immediate retry.");
-        w.Powers.Tick(.5f,false); w.Hero.TryPunch(); w.Powers.Tick(.5f,false); w.Hero.TryPunch(); w.Powers.Tick(.5f,false);
+        yield return new WaitForSeconds(w.Hero.PunchWindupSeconds+.05f);
+        w.Powers.Tick(.5f,false); w.Hero.TryPunch();yield return new WaitForSeconds(w.Hero.PunchWindupSeconds+.05f);
+        w.Powers.Tick(.5f,false); w.Hero.TryPunch();yield return new WaitForSeconds(w.Hero.PunchWindupSeconds+.05f);w.Powers.Tick(.5f,false);
         Check(w.Hero.Charges==0&&!w.Hero.TryPunch(),"Three punches exhausted charges; zero-charge fire rejected.");
         w.Powers.Tick(1,true); Check(w.Hero.Charges>0&&w.Hero.TryPunch(),"Time-driven recharge restored a working punch.");
+        yield return new WaitForSeconds(w.Hero.PunchWindupSeconds+.05f);
 
         // Buy additional powers through earned levels, never inject ownership or tier state.
         for(int i=0;i<3;i++) w.Progression.AddXp(w.Progression.RequiredXp);

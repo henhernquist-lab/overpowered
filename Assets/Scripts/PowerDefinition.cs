@@ -22,6 +22,7 @@ public sealed class PowerDefinition : ScriptableObject
     public float ProjectileSpeed = 28f, ProjectileSize = .35f, HoldDistance = 3f, HoldSpring = 35f, HoldDamping = 10f, HoldMaxMass = 500f;
     public Color Color = new Color(1f,.25f,.03f);
     public CityColor PaletteColor = CityColor.Fire;
+    public bool CastingPresentation;
     public PowerTier[] Upgrades = { new PowerTier(), new PowerTier() };
     public PowerStats GetStats(int tier)
     {

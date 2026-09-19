@@ -17,6 +17,11 @@ public sealed class SuperHeroController : MonoBehaviour
     public float LastForce { get; private set; }
     public HeroPresentationState PresentationState { get; private set; }
     public event System.Action PunchStarted;
+    public event System.Action Jumped;
+    public event System.Action PunchImpacted;
+    public float PunchWindupSeconds { get; set; }
+    public float LastImpactTime { get; private set; }=-1;
+    public int LastImpactFrame { get; private set; }=-1;
     public event System.Action<float> Landed;
 
     void Awake() { controller = GetComponent<CharacterController>(); view = Camera.main; airbornePeakHeight = transform.position.y; }
@@ -36,7 +41,7 @@ public sealed class SuperHeroController : MonoBehaviour
         if (move.sqrMagnitude > 0f) transform.forward = Vector3.Slerp(transform.forward, move, Time.deltaTime * movement.TurnResponse);
         float speed = Input.GetKey(KeyCode.LeftShift) ? movement.RunSpeed : movement.WalkSpeed;
         if (controller.isGrounded && verticalVelocity < 0f) verticalVelocity = -movement.GroundStickSpeed;
-        if (acceptsInput && controller.isGrounded && Input.GetButtonDown("Jump")) verticalVelocity = movement.JumpSpeed;
+        if (acceptsInput && controller.isGrounded && Input.GetButtonDown("Jump")) TryJump();
         if (flying)
         {
             verticalVelocity = Mathf.MoveTowards(verticalVelocity, Input.GetKey(KeyCode.Space) ? movement.FlightLift : 0f, movement.FlightLift * movement.FlightResponse * Time.deltaTime);
@@ -69,11 +74,27 @@ public sealed class SuperHeroController : MonoBehaviour
     }
     public void PerformPunch(PowerDefinition definition, PowerStats stats)
     {
+        PunchStarted?.Invoke();
+        if(PunchWindupSeconds>0)StartCoroutine(PunchAfterWindup(definition,stats,PunchWindupSeconds));
+        else ApplyPunch(definition,stats);
+    }
+    System.Collections.IEnumerator PunchAfterWindup(PowerDefinition definition,PowerStats stats,float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if(WorldSession.Instance!=null&&!WorldSession.Instance.PlayerDead&&(WorldSession.Instance.Mode==null||!WorldSession.Instance.Mode.Ended))ApplyPunch(definition,stats);
+    }
+    void ApplyPunch(PowerDefinition definition,PowerStats stats)
+    {
         LastForce = stats.Force;
         LastAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * definition.OriginHeight + transform.forward * definition.OriginOffset,
             stats.Radius, stats.Force, stats.Damage, definition.UpwardForce);
         LastPunchResult = $"PUNCH: {LastAffectedBodies} bodies hit @ {LastForce:0} N·s";
-        PunchStarted?.Invoke();
+        LastImpactTime=Time.time;LastImpactFrame=Time.frameCount;PunchImpacted?.Invoke();
+    }
+    public bool TryJump()
+    {
+        if(!controller.isGrounded)return false;
+        verticalVelocity=movement.JumpSpeed;Jumped?.Invoke();return true;
     }
     // Used by deterministic test and the in-game verification harness.
     public void DebugSetResources(float fuel, int newCharges, float newCooldown = 0f)

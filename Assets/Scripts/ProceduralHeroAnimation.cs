@@ -3,6 +3,7 @@ using UnityEngine;
 /// Writes only the visual child hierarchy. Never moves the controller or affects abilities.
 public sealed class ProceduralHeroAnimation : MonoBehaviour
 {
+    public bool HumanoidSquashOnly;
     [SerializeField] ProceduralAnimationTuning tuning;
     [SerializeField] Transform visualRoot;
     [SerializeField] Transform punchShoulder;
@@ -24,8 +25,7 @@ public sealed class ProceduralHeroAnimation : MonoBehaviour
         restPosition = visuals.localPosition;
         restRotation = visuals.localRotation;
         restScale = visuals.localScale;
-        shoulderPosition = shoulder.localPosition;
-        shoulderRotation = shoulder.localRotation;
+        if(shoulder!=null){shoulderPosition = shoulder.localPosition;shoulderRotation = shoulder.localRotation;}
         if (isActiveAndEnabled) Subscribe();
     }
 
@@ -72,9 +72,15 @@ public sealed class ProceduralHeroAnimation : MonoBehaviour
     // Explicit state/time input permits repeatable pose tests without faking gameplay resources.
     public void Advance(HeroPresentationState state, float dt)
     {
-        if (tuning == null || visualRoot == null || punchShoulder == null || dt <= 0f) return;
+        if (tuning == null || visualRoot == null || (!HumanoidSquashOnly && punchShoulder == null) || dt <= 0f) return;
         punchTime += dt;
         landTime += dt;
+        if(HumanoidSquashOnly)
+        {
+            float squash=Pulse(landTime,tuning.LandCompressSeconds,tuning.LandRecoverSeconds)*landStrength;
+            visualRoot.localScale=Vector3.Scale(restScale,new Vector3(1+squash*tuning.LandWiden,1-squash*tuning.LandSquash,1+squash*tuning.LandWiden));
+            return;
+        }
         Vector3 horizontal = new Vector3(state.LocalVelocity.x, 0f, state.LocalVelocity.z);
         float speed = horizontal.magnitude;
         Vector3 direction = speed > 0f ? horizontal / speed : Vector3.zero;

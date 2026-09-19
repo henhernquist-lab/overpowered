@@ -1,6 +1,10 @@
 # Overpowered
 
-A Unity/C# superhero blockout: a compact city, physical combat, five upgradeable powers, Hero/Villain objectives, and escalating police response. Procedural character animation is retained; no animation clips or Animator controller are required.
+Humanoid presentation uses the supplied Mixamo FBXs in `Assets/Animations`, one shared `Resources/SharedHumanoid.controller`, and Inspector tuning in `Resources/HumanoidAnimationTuning.asset`. Run **Overpowered → Animation → Build shared humanoid presentation** only when intentionally rebuilding the generated controller; the separate batch-import menu sets every supplied FBX to Humanoid. Normal play needs no setup command. Landing squash retains its existing `ProceduralAnimationTuning.asset`; Animator clips and procedural bones never move the physics root. See STATUS for ownership, punch timing and measured performance.
+
+Current animation verification: Unity `-batchmode -projectPath <isolated-copy> -executeMethod HumanoidVerification.Run -logFile <log>` (omit `-quit`). Evidence is in `Verification/Humanoid/`. The old capsule-hierarchy animation verifier is historical.
+
+A Unity/C# superhero prototype: a stylized compact city, physical combat, five upgradeable powers, Hero/Villain sessions, escalating police response, and shared Mixamo Humanoid animation with procedural flight/panic.
 
 ## Play
 
@@ -25,7 +29,7 @@ Select these Project assets; no code edits are needed for numeric gameplay tunin
 
 - `Assets/Resources/GameTuning.asset`: movement, city seed/dimensions, NPCs, progression, Heat, crime timing, prop physics, and camera settings, grouped by system.
 - `Assets/Resources/Powers/*.asset`: each power's costs, charges, cooldown, resource use, force/damage, range/duration, and upgrade tiers.
-- `Assets/Resources/ProceduralAnimationTuning.asset`: punch, flight, run, and landing visuals.
+- `Assets/Resources/HumanoidAnimationTuning.asset`: shared clips, locomotion, punch timing, flight and panic. `ProceduralAnimationTuning.asset` retains landing squash and legacy placeholder settings.
 - `Assets/Resources/CityPalette.asset`: the single named color palette for all generated materials (including existing actors, markers, projectiles and shards). Swatch changes propagate live during Play.
 - `Assets/Resources/CityArtSettings.asset`: building archetypes, facade/roof dimensions, prop dimensions/masses, normalized placement anchors/chances/jitter, and mesh combining. Art stays inside existing seeded building bounds; `CityLayout` remains the layout authority.
 - `Assets/Resources/Modes/*.asset`: mode catalog, side, rules, encounter pools, HUD flags, session limits, population, score/XP/Heat rewards.
@@ -59,7 +63,7 @@ Run these Unity commands **against a temporary copy of the project**, with the e
 ```sh
 Unity -batchmode -projectPath /path/to/copy -executeMethod CityVerification.Run -logFile /path/to/city.log
 Unity -batchmode -projectPath /path/to/copy -executeMethod CityVerification.Reload -logFile /path/to/reload.log
-Unity -batchmode -projectPath /path/to/copy -executeMethod ProceduralAnimationVerification.Run -logFile /path/to/animation.log
+Unity -batchmode -projectPath /path/to/copy -executeMethod HumanoidVerification.Run -logFile /path/to/animation.log
 Unity -batchmode -projectPath /path/to/copy -executeMethod ModeVerification.Run -logFile /path/to/modes.log
 Unity -batchmode -projectPath /path/to/copy -executeMethod ModeVerification.Reload -logFile /path/to/modes-reload.log
 Unity -batchmode -projectPath /path/to/copy -executeMethod CityArtVerification.Run -logFile /path/to/art.log

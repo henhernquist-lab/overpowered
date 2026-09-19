@@ -92,7 +92,9 @@ public sealed class ModeVerificationRunner : MonoBehaviour
         Check(!e.Interact(e.Definition.HoldSeconds+.1f)&&e.Rescued==0,"Blocked civilian CONTROL refuses rescue before blockade is moved/broken.");
         var blockade=e.Civilians[0].Blockade;Vector3 before=blockade.position;
         float mass=blockade.mass;Move(new Vector3(blockade.position.x,.1f,blockade.position.z-3f));W.Hero.transform.forward=Vector3.forward;
-        Check(W.Hero.TryPunch()&&W.Hero.LastAffectedBodies>0,"Real charged E-punch hit encounter physics blockade.");
+        Check(W.Hero.TryPunch(),"Real charged E-punch accepted against encounter physics blockade.");
+        yield return new WaitForSeconds(W.Hero.PunchWindupSeconds+.05f);
+        Check(W.Hero.LastAffectedBodies>0,"Animated punch impact hit encounter physics blockade after windup.");
         float impulse=W.Hero.LastForce;
         for(int i=0;i<30;i++)yield return new WaitForFixedUpdate();
         Check(blockade==null||Vector3.Distance(before,blockade.position)>=e.Definition.PropMoveDistance,

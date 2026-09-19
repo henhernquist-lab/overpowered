@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4de0c250a28d4acfbadcf0385ae8ac2, type: 3}
+  m_Name: HumanoidAnimationTuning
+  m_EditorClassIdentifier: Assembly-CSharp::HumanoidAnimationTuning
+  Model: {fileID: 919132149155446097, guid: ed152317b748045198b07297110945ad, type: 3}
+  Controller: {fileID: 9100000, guid: e4311d7ff3ea44b2fadda00e08c18ef3, type: 2}
+  Idle: {fileID: -203655887218126122, guid: ed152317b748045198b07297110945ad, type: 3}
+  Walk: {fileID: -203655887218126122, guid: 849dedbeb722747a984ad026cedacc54, type: 3}
+  Jog: {fileID: -203655887218126122, guid: 3e5d482bc8c7f4b5094d1fcb2f956198, type: 3}
+  Run: {fileID: -203655887218126122, guid: 468d36d861d5144efbd85cdde97a7591, type: 3}
+  Back: {fileID: -203655887218126122, guid: 1b769406b2a134a629f806cc56bf6086, type: 3}
+  Jump: {fileID: -203655887218126122, guid: d14b2618f8a934017a6923f2e9c43908, type: 3}
+  Land: {fileID: -203655887218126122, guid: cdb9c306bf7ce4f8eb945dd27927a5d3, type: 3}
+  Punch: {fileID: -203655887218126122, guid: 1b9338ecf74944b0d8e165d3e3a89f5f, type: 3}
+  Hit: {fileID: -203655887218126122, guid: 19962126ff58a46c39492daaac257a34, type: 3}
+  Death: {fileID: -203655887218126122, guid: 8421889c79ea04a8eaddd2d0f803997a, type: 3}
+  Cast: {fileID: -203655887218126122, guid: b7faf8d20a197453e944bffae56e7cdb, type: 3}
+  ArmedRun: {fileID: -203655887218126122, guid: 2419ec150647a47d6808503b4f90b1d4, type: 3}
+  Shoot: {fileID: -203655887218126122, guid: 5ba18b6d686e64222acff98afaf6f136, type: 3}
+  Backflip: {fileID: -203655887218126122, guid: 8b58aaf65e0644e9fa34f0604c0ac00a, type: 3}
+  HurricaneKick: {fileID: -203655887218126122, guid: cb3c34e7eb2ab4bdbbe1ac14c9cf6095, type: 3}
+  WalkThreshold: 1.8
+  JogThreshold: 5
+  RunThreshold: 9
+  SpeedDamping: 0.1
+  TransitionSeconds: 0.12
+  BackThreshold: -0.5
+  JumpPlayback: 1
+  LandPlayback: 1.2
+  ActionPlayback: 1
+  HitPlayback: 3
+  CastPlayback: 3
+  ShootPlayback: 1.5
+  ShootStartSeconds: 1.25
+  ShootEndSeconds: 2.5
+  ShootVisualYaw: 90
+  PunchStartSeconds: 0.36666667
+  PunchImpactSeconds: 0.56666666
+  PunchPlayback: 1.6
+  FlightPitch: 78
+  FlightFullSpeed: 10
+  FlightBlendResponse: 6
+  PoseResponse: 10
+  HoverBobAmplitude: 0.065
+  HoverBobFrequency: 0.7
+  HoverArmOut: 0.4
+  HoverArmForward: 0.12
+  HoverElbowForward: 0.5
+  FlightArmSpread: 0.12
+  FlightHeadLift: 65
+  HoverKneeBend: 12
+  PanicPlayback: 1.45
+  PanicLean: 24
+  PanicResponse: 8
+  PanicArmRaise: 0.8
+  PanicArmOut: 0.7
+  PanicFlailDegrees: 28
+  PanicFlailFrequency: 2.7
+  PanicForearmOut: 0.2
+  PanicForearmForward: 0.5
+  PanicSidePhase: 0.25
+  PanicLookBackDegrees: 72
+  PanicLookBackFrequency: 0.65
+  PanicPathDeviation: 1.5
+  PanicPathFrequency: 0.75
+  GroundLean: 6
+  GroundLeanFullSpeed: 9

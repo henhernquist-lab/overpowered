@@ -14,7 +14,7 @@ public static class PrototypeBootstrap
         hero.transform.position = city.Spawn + Vector3.up * tuning.Movement.Height;
         CharacterController cc = hero.AddComponent<CharacterController>(); cc.height = tuning.Movement.Height; cc.radius = tuning.Movement.Radius; cc.center = Vector3.up * cc.height * .5f;
         SuperHeroController controller = hero.AddComponent<SuperHeroController>();
-        BuildHeroVisuals(hero, controller);
+        HumanoidPresentation.Create(hero,cc.height,controller);
         Camera camera = GameCamera.Ensure(hero.scene,true);
         var follow=camera.GetComponent<ThirdPersonCamera>() ?? camera.gameObject.AddComponent<ThirdPersonCamera>();
         follow.target=hero.transform;camera.fieldOfView=tuning.Camera.FieldOfView;
@@ -23,40 +23,6 @@ public static class PrototypeBootstrap
         RenderSettings.ambientLight = new Color(.45f,.5f,.6f);
         if (!Application.isBatchMode) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; }
         new GameObject("Prototype HUD").AddComponent<PrototypeHUD>();
-    }
-    static void BuildHeroVisuals(GameObject hero, SuperHeroController controller)
-    {
-        Transform visuals = new GameObject("Hero Visuals (presentation only)").transform;
-        visuals.SetParent(hero.transform, false);
-        CityColor blue = CityColor.Blue;
-        VisualPrimitive("Capsule Body", PrimitiveType.Capsule, visuals,
-            new Vector3(0f, 1f, 0f), new Vector3(.75f, 1f, .75f), blue);
-        Transform punchShoulder = null;
-        for (int side = -1; side <= 1; side += 2)
-        {
-            Transform shoulder = new GameObject(side > 0 ? "Punch Shoulder" : "Left Shoulder").transform;
-            shoulder.SetParent(visuals, false);
-            shoulder.localPosition = new Vector3(side * .48f, 1.45f, 0f);
-            VisualPrimitive("Arm", PrimitiveType.Capsule, shoulder,
-                new Vector3(0f, -.3f, 0f), new Vector3(.22f, .32f, .22f), blue);
-            VisualPrimitive("Fist", PrimitiveType.Cube, shoulder,
-                new Vector3(0f, -.62f, 0f), Vector3.one * .28f, CityColor.Amber);
-            if (side > 0) punchShoulder = shoulder;
-        }
-        var tuning = Resources.Load<ProceduralAnimationTuning>("ProceduralAnimationTuning");
-        hero.AddComponent<ProceduralHeroAnimation>().Initialize(controller, visuals, punchShoulder, tuning);
-    }
-    static void VisualPrimitive(string name, PrimitiveType type, Transform parent, Vector3 position, Vector3 scale, CityColor color)
-    {
-        GameObject part = GameObject.CreatePrimitive(type);
-        part.name = name;
-        part.transform.SetParent(parent, false);
-        part.transform.localPosition = position;
-        part.transform.localScale = scale;
-        Collider collider = part.GetComponent<Collider>();
-        collider.enabled = false;
-        Object.Destroy(collider);
-        part.GetComponent<Renderer>().sharedMaterial = CityMaterials.Get(color);
     }
 }
 

@@ -17,6 +17,8 @@ public sealed class WorldSession : MonoBehaviour
     public int Stars => Mathf.Clamp(Mathf.CeilToInt(Heat),0,Tuning.Heat.MaximumStars);
     public float Health { get; private set; }
     public bool PlayerDead => Health<=0;
+    public event System.Action<bool> PlayerDamaged;
+    public event System.Action PlayerRespawned;
     public bool MenuOpen;
     public string Message = "Explore rooftops, stop crimes, or press H to switch sides.";
     public int ChaosProgress { get; private set; }
@@ -58,6 +60,7 @@ public sealed class WorldSession : MonoBehaviour
             {
                 var cc=Hero.GetComponent<CharacterController>(); cc.enabled=false; Hero.transform.position=City.Spawn+Vector3.up*Tuning.Movement.Height; cc.enabled=true;
                 Hero.ResetMotion(); Health=Tuning.Movement.Health; deathTimer=0; Heat=0; ReconcilePolice();
+                PlayerRespawned?.Invoke();
             }
         }
         TickHeat(Time.deltaTime);
@@ -99,7 +102,7 @@ public sealed class WorldSession : MonoBehaviour
             Progression.AddXp(npc.Role==NpcRole.Civilian?Tuning.Progression.CivilianXp:Tuning.Progression.EnemyXp);
         if (npc.Role!=NpcRole.Criminal) AddHeat(Tuning.Heat.DefeatHeat);
     }
-    public void DamagePlayer(float damage) { if (!PlayerDead && (Mode==null||!Mode.Ended)) { Health=Mathf.Max(0,Health-damage); if (PlayerDead) {Powers.Release(false);Mode?.PlayerDefeated();} } }
+    public void DamagePlayer(float damage) { if (damage>0&&!PlayerDead && (Mode==null||!Mode.Ended)) { Health=Mathf.Max(0,Health-damage); PlayerDamaged?.Invoke(PlayerDead); if (PlayerDead) {Powers.Release(false);Mode?.PlayerDefeated();} } }
     public void ResolveCrime(CrimeEvent crime)
     {
         if(Mode!=null) {crime.Encounter?.TryComplete(); return;}

@@ -1,0 +1,5 @@
+PASS Home camera retained.
+PASS Death-during-windup CONTROL starts a real paid punch.
+PASS Death clip overrides punch and cancels pending force.
+PASS Actual respawn releases death presentation.
+PASS Post-respawn damage CONTROL plays Hit; canceled punch leaves no stale deferred animation.

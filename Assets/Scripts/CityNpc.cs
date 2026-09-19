@@ -11,6 +11,9 @@ public sealed class CityNpc : MonoBehaviour
     public bool Hostile => Role == NpcRole.Criminal ? world.Progression.Data.Side == PlayerSide.Hero :
         (Role == NpcRole.Cop || Role == NpcRole.PursuingHero) && world.Progression.Data.Side == PlayerSide.Villain;
     public NavMeshAgent Agent { get; private set; }
+    public event System.Action<bool> Damaged;
+    public event System.Action Attacked;
+    HumanoidAnimationTuning animationTuning;
     public CrimeEvent Crime;
     public CrimeEncounter Encounter;
     WorldSession world; float nextPath, nextAttack, fleeUntil, frozenUntil; Vector3 alarm; int waypoint;
@@ -20,14 +23,11 @@ public sealed class CityNpc : MonoBehaviour
         if (!NavMesh.SamplePosition(position, out var hit, c.NavSampleRadius, NavMesh.AllAreas)) return null;
         var root = new GameObject(role.ToString()); root.transform.position = hit.position;
         var capsule = root.AddComponent<CapsuleCollider>(); capsule.height=c.Height; capsule.radius=c.Radius; capsule.center=Vector3.up*c.Height*.5f;
-        var body = GameObject.CreatePrimitive(PrimitiveType.Capsule); body.transform.SetParent(root.transform,false);
-        body.transform.localPosition=Vector3.up*c.Height*.5f; body.transform.localScale=new Vector3(c.Radius*2,c.Height*.5f,c.Radius*2);
-        body.GetComponent<Collider>().enabled=false; Destroy(body.GetComponent<Collider>());
-        body.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(role==NpcRole.Civilian?CityColor.Amber:role==NpcRole.Cop?CityColor.Blue:CityColor.Red);
         var npc = root.AddComponent<CityNpc>(); npc.world=world; npc.Role=role;
         npc.Health = role==NpcRole.Civilian ? c.CivilianHealth : role==NpcRole.PursuingHero ? c.HeroHealth : c.CopHealth + world.Stars*c.HealthPerStar;
         npc.Agent=root.AddComponent<NavMeshAgent>(); npc.Agent.height=c.Height; npc.Agent.radius=c.Radius; npc.Agent.acceleration=c.Acceleration; npc.Agent.angularSpeed=c.AngularSpeed;
         npc.Agent.stoppingDistance=c.AttackRange*.5f;
+        npc.animationTuning=HumanoidPresentation.Create(root,c.Height,null,npc).Tuning;
         world.Npcs.Add(npc); return npc;
     }
     public void Alarm(Vector3 position) { alarm=position; fleeUntil=Time.time+world.Tuning.Npcs.FleeSeconds; nextPath=0; }
@@ -36,12 +36,12 @@ public sealed class CityNpc : MonoBehaviour
     {
         if (Dead || amount <= 0f) return;
         Health = Mathf.Max(0f, Health-amount);
+        Damaged?.Invoke(Dead);
         if(source!=null) world.OnAssault(this);
         if (!Dead) return;
         Agent.enabled=false; GetComponent<Collider>().enabled=false;
         if(source!=null) world.OnDefeat(this); Crime?.CriminalDefeated();
-        transform.rotation=Quaternion.Euler(0,0,90);
-        Destroy(gameObject,world.Tuning.Npcs.DestroyDelay);
+        Destroy(gameObject,Mathf.Max(world.Tuning.Npcs.DestroyDelay,animationTuning.Death.length/animationTuning.ActionPlayback));
     }
     void Update()
     {
@@ -54,6 +54,7 @@ public sealed class CityNpc : MonoBehaviour
         if (Hostile && distance<c.AttackRange && Time.time>=nextAttack)
         {
             nextAttack=Time.time+c.AttackCooldown;
+            Attacked?.Invoke();
             world.DamagePlayer((Role==NpcRole.PursuingHero ? c.HeroDamage : c.AttackDamage)+world.Stars*c.DamagePerStar);
         }
         if(Encounter!=null&&Encounter.Drive(this)) return;
@@ -61,7 +62,7 @@ public sealed class CityNpc : MonoBehaviour
         nextPath=Time.time+(Hostile || Fleeing ? c.RepathSeconds : c.WanderSeconds);
         Vector3 destination;
         if (Hostile && distance<c.DetectionRange) destination=world.Hero.transform.position;
-        else if (Fleeing) destination=transform.position+(transform.position-alarm).normalized*c.FleeDistance;
+        else if (Fleeing) destination=PanicDestination(transform.position+(transform.position-alarm).normalized*c.FleeDistance);
         else
         {
             if (!Agent.hasPath || Agent.remainingDistance<c.MinimumWanderDistance) waypoint=Random.Range(0,world.City.Sidewalks.Count);
@@ -72,9 +73,15 @@ public sealed class CityNpc : MonoBehaviour
     void OnDestroy() { if (world!=null) world.Npcs.Remove(this); }
     public void DirectTo(Vector3 destination,float speed)
     {
+        if(Role==NpcRole.Civilian&&Fleeing)destination=PanicDestination(destination);
         Agent.speed=speed;
         if(Time.time<nextPath) return;
         nextPath=Time.time+world.Tuning.Npcs.RepathSeconds;
         if(NavMesh.SamplePosition(destination,out var hit,world.Tuning.Npcs.NavSampleRadius,NavMesh.AllAreas)) Agent.SetDestination(hit.position);
+    }
+    public Vector3 PanicDestination(Vector3 destination)
+    {
+        Vector3 side=Vector3.Cross(Vector3.up,(destination-transform.position).normalized);
+        return destination+side*(Mathf.Sin((Time.time*animationTuning.PanicPathFrequency+(GetEntityId().GetHashCode()%1000)*.013f)*Mathf.PI*2)*animationTuning.PanicPathDeviation);
     }
 }
