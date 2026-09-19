@@ -51,6 +51,7 @@ public static class ModeDataSetup
         if(File.Exists(path))return;
         var original=UnityEngine.SceneManagement.SceneManager.GetActiveScene();
         var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Additive);
+        GameCamera.Ensure(scene,false);
         EditorSceneManager.SaveScene(scene,path);EditorSceneManager.CloseScene(scene,true);
         UnityEngine.SceneManagement.SceneManager.SetActiveScene(original);
     }

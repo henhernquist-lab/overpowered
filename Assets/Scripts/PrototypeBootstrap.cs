@@ -15,8 +15,9 @@ public static class PrototypeBootstrap
         CharacterController cc = hero.AddComponent<CharacterController>(); cc.height = tuning.Movement.Height; cc.radius = tuning.Movement.Radius; cc.center = Vector3.up * cc.height * .5f;
         SuperHeroController controller = hero.AddComponent<SuperHeroController>();
         BuildHeroVisuals(hero, controller);
-        GameObject camera = new GameObject("Player Camera"); camera.tag = "MainCamera"; camera.AddComponent<Camera>(); camera.AddComponent<AudioListener>(); camera.AddComponent<ThirdPersonCamera>().target = hero.transform;
-        camera.GetComponent<Camera>().fieldOfView = tuning.Camera.FieldOfView;
+        Camera camera = GameCamera.Ensure(hero.scene,true);
+        var follow=camera.GetComponent<ThirdPersonCamera>() ?? camera.gameObject.AddComponent<ThirdPersonCamera>();
+        follow.target=hero.transform;camera.fieldOfView=tuning.Camera.FieldOfView;
         new GameObject("World Session").AddComponent<WorldSession>().Initialize(tuning, city, controller);
         var sun = new GameObject("Sun").AddComponent<Light>(); sun.type = LightType.Directional; sun.intensity = 1.2f; sun.transform.rotation = Quaternion.Euler(45,-35,0);
         RenderSettings.ambientLight = new Color(.45f,.5f,.6f);

@@ -1,5 +1,17 @@
 # Prototype Status
 
+## Camera diagnosis and repair
+
+The saved Home, Prototype and Results scenes had **zero GameObjects and zero Cameras**. The mode refactor relied on `GameFlow.SceneReady` to create menu cameras and `PrototypeBootstrap.BuildCity` to create the player camera at runtime. No disabled scene camera was found. The `Prototype` heading is a scene container, not a newly introduced parent GameObject; the saved scene contained no such parent. A Project search result is not evidence of a Camera instance in the loaded scene.
+
+Read the actual open editor's `Logs/Editor.log`: it contains earlier `CS1061` errors (`WorldSession.Mode` / `SpawnEncounter` missing) from the incomplete refactor, followed by successful assembly reloads. The clean baseline renders Home and both gameplay modes successfully; **a runtime camera-factory failure was not reproduced**. The reproducible “No cameras rendering” condition is the camera-less edit-time scene. The baseline's error check also caught the existing `ArgumentOutOfRangeException` in `UnityEditor.Search.SearchDatabase.EnumerateAll`, not in camera/gameplay code. The verifier records this specific editor exception separately, without hiding other errors. No claim is made that a disabled Project-search hit was repaired or that the Search package exception was fixed.
+
+Repair: each of the three scenes now saves one enabled, top-level **Main Camera**, tagged MainCamera, with an AudioListener and `GameCamera` component. Runtime setup reuses that camera, explicitly restores Display 1/full viewport/enabled state, configures menus to clear their background, and attaches the existing third-person follow logic in Hero/Villain. It no longer needs to invent an invisible-to-the-editor camera from scratch. Newly created menu scenes also receive a camera. `Overpowered → Repair scene cameras` is an explicit repair utility, not an automatic scene rewrite. The city still generates only after Play/mode selection; a camera alone does not generate an edit-time city preview.
+
+Verification uses `CameraVerification.Baseline`, `Verify`, and `DirectPrototype` in an isolated Unity project. The disabled-camera control checks that a disabled camera drops out of Unity's rendering camera list. Pixel captures render the **actual scene camera**, not an extra verification camera, at 640×360, then restore the Display target. Menu captures show the camera background, not IMGUI; batch rendering does not certify mouse interaction or Game View repaint cadence. The historical baseline output is retained even though its blanket error check failed on the unrelated Search exception.
+
+Fixed flow and direct-Prototype startup both passed (exit 0): Home, Hero, Hero pause/results/Home, Villain, Villain pause/results/Home each had exactly one active enabled camera on Display 1. All captures overwrote **230,400 / 230,400** pixels; gameplay images contained many colors and the camera followed the current hero. Each saved scene now reports `roots=1, cameras=1, enabled=1` before Play. The disabled-camera controls passed. Full output and actual-camera captures are in `Verification/Cameras/`. `dotnet build` passed with **0 warnings, 0 errors**.
+
 ## Home and game-mode sessions (current)
 
 Built a mode wrapper around the existing city, controller, five powers, progression/save, Heat/police, HUD and procedural presentation. No replacement controller, combat system, city generator or animation system was introduced.

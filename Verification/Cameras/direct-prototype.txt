@@ -1,0 +1,56 @@
+EDITOR-ONLY (not camera code): ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <0e19fd8bd8e94908bba2ee4f803bc6a7>:0)
+UnityEditor.Search.SearchDatabase+<EnumerateAll>d__78.MoveNext () (at /Users/bokken/build/output/unity/unity/Modules/QuickSearch/Editor/Indexing/SearchDatabase.cs:351)
+System.Linq.Enumerable.TryGetFirst[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Boolean& found) (at <1b6d7e99e5414d05b29c34e3609a3284>:0)
+System.Linq.Enumerable.First[TSource] (System.Collections.Generic.IEnumerable`1[T] source) (at <1b6d7e99e5414d05b29c34e3609a3284>:0)
+UnityEditor.Search.SearchDatabase.GetDefaultSearchDatabase () (at /Users/bokken/build/output/unity/unity/Modules/QuickSearch/Editor/Indexing/SearchDatabase.cs:325)
+UnityEditor.Search.SearchInit.IndexationOnStartup () (at /Users/bokken/build/output/unity/unity/Modules/QuickSearch/Editor/SearchInit.cs:109)
+UnityEditor.EditorApplication.Internal_CallDelayFunctions () (at /Users/bokken/build/output/unity/unity/Editor/Mono/EditorApplication.cs:428)
+UnityEngine.StackTraceUtility:ExtractStringFromExceptionInternal(Object, String&, String&) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:50)
+
+PASS home: exactly one enabled scene Game camera; count=1.
+PASS home: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+PASS home: actual camera rendered 230400/230400 pixels; quantized colors=1, natural render callbacks before capture=0.
+PASS home: disabled-camera CONTROL excluded from rendering camera list.
+PASS Home -> hero selection accepted.
+PASS hero: exactly one enabled scene Game camera; count=1.
+PASS hero: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+PASS hero: MainCamera follows the current player (not a verification camera).
+PASS hero: actual camera rendered 230400/230400 pixels; quantized colors=1063, natural render callbacks before capture=0.
+PASS hero: disabled-camera CONTROL excluded from rendering camera list.
+PASS Correct live mode: hero.
+PASS hero-paused: exactly one enabled scene Game camera; count=1.
+PASS hero-paused: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+PASS hero-paused: MainCamera follows the current player (not a verification camera).
+PASS hero-paused: actual camera rendered 230400/230400 pixels; quantized colors=1069, natural render callbacks before capture=1.
+PASS hero-paused: disabled-camera CONTROL excluded from rendering camera list.
+PASS hero-results: exactly one enabled scene Game camera; count=1.
+PASS hero-results: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+PASS hero-results: actual camera rendered 230400/230400 pixels; quantized colors=1, natural render callbacks before capture=0.
+PASS hero-results: disabled-camera CONTROL excluded from rendering camera list.
+PASS hero-return-home: exactly one enabled scene Game camera; count=1.
+PASS hero-return-home: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+PASS hero-return-home: actual camera rendered 230400/230400 pixels; quantized colors=1, natural render callbacks before capture=0.
+PASS hero-return-home: disabled-camera CONTROL excluded from rendering camera list.
+PASS Home -> villain selection accepted.
+PASS villain: exactly one enabled scene Game camera; count=1.
+PASS villain: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+PASS villain: MainCamera follows the current player (not a verification camera).
+PASS villain: actual camera rendered 230400/230400 pixels; quantized colors=1070, natural render callbacks before capture=0.
+PASS villain: disabled-camera CONTROL excluded from rendering camera list.
+PASS Correct live mode: villain.
+PASS villain-paused: exactly one enabled scene Game camera; count=1.
+PASS villain-paused: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+PASS villain-paused: MainCamera follows the current player (not a verification camera).
+PASS villain-paused: actual camera rendered 230400/230400 pixels; quantized colors=1067, natural render callbacks before capture=1.
+PASS villain-paused: disabled-camera CONTROL excluded from rendering camera list.
+PASS villain-results: exactly one enabled scene Game camera; count=1.
+PASS villain-results: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+PASS villain-results: actual camera rendered 230400/230400 pixels; quantized colors=1, natural render callbacks before capture=0.
+PASS villain-results: disabled-camera CONTROL excluded from rendering camera list.
+PASS villain-return-home: exactly one enabled scene Game camera; count=1.
+PASS villain-return-home: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+PASS villain-return-home: actual camera rendered 230400/230400 pixels; quantized colors=1, natural render callbacks before capture=0.
+PASS villain-return-home: disabled-camera CONTROL excluded from rendering camera list.
+PASS No game-code errors/exceptions during camera flow (Editor Search errors recorded separately).

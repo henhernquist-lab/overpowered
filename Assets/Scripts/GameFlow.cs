@@ -33,7 +33,7 @@ public sealed class GameFlow : MonoBehaviour
             PrototypeBootstrap.BuildCity(); return;
         }
         Cursor.lockState=CursorLockMode.None; Cursor.visible=true;
-        var camera=new GameObject("Menu camera").AddComponent<Camera>(); camera.clearFlags=CameraClearFlags.SolidColor; camera.backgroundColor=new Color(.035f,.05f,.08f);
+        GameCamera.Ensure(scene,false);
         new GameObject("Menu").AddComponent<ModeScreens>();
     }
     public bool Select(GameModeDefinition definition)
