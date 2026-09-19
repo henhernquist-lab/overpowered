@@ -117,7 +117,7 @@ public sealed class WorldSession : MonoBehaviour
         }
         var marker=GameObject.CreatePrimitive(PrimitiveType.Sphere); marker.name=kind+" event";
         marker.transform.position=position+Vector3.up*Tuning.Crimes.MarkerHeight; marker.transform.localScale=Vector3.one*Tuning.Crimes.MarkerSize;
-        marker.GetComponent<Collider>().enabled=false; marker.GetComponent<Renderer>().material.color=Tuning.Crimes.CrimeColor;
+        marker.GetComponent<Collider>().enabled=false; marker.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Fire);
         var crime=marker.AddComponent<CrimeEvent>(); crime.Kind=kind; Crimes.Add(crime);
         if (kind!=CrimeKind.Fire) { crime.Criminal=CityNpc.Spawn(this,position,NpcRole.Criminal); if(crime.Criminal!=null) crime.Criminal.Crime=crime; }
         return crime;
@@ -127,7 +127,7 @@ public sealed class WorldSession : MonoBehaviour
         var marker=GameObject.CreatePrimitive(PrimitiveType.Sphere); marker.name=definition.DisplayName;
         marker.transform.position=position+Vector3.up*Tuning.Crimes.MarkerHeight;
         marker.transform.localScale=Vector3.one*Tuning.Crimes.MarkerSize;
-        marker.GetComponent<Collider>().enabled=false; marker.GetComponent<Renderer>().material.color=Tuning.Crimes.CrimeColor;
+        marker.GetComponent<Collider>().enabled=false; marker.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Fire);
         var crime=marker.AddComponent<CrimeEvent>(); crime.Kind=definition.Kind; Crimes.Add(crime);
         crime.Encounter=marker.AddComponent<CrimeEncounter>(); crime.Encounter.Initialize(this,crime,definition,position);
         return crime;

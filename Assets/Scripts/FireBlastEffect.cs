@@ -9,7 +9,7 @@ public sealed class FireBlastEffect : PowerEffect
         shot.name = d.DisplayName + " projectile";
         shot.transform.position = user.AimOrigin + user.AimDirection * d.OriginOffset;
         shot.transform.localScale = Vector3.one * d.ProjectileSize;
-        shot.GetComponent<Renderer>().material.color = d.Color;
+        shot.GetComponent<Renderer>().sharedMaterial = CityMaterials.Get(d.PaletteColor);
         Rigidbody rb = shot.AddComponent<Rigidbody>(); rb.useGravity = false; rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         rb.linearVelocity = user.AimDirection * d.ProjectileSpeed;
         Physics.IgnoreCollision(shot.GetComponent<Collider>(), user.GetComponent<CharacterController>());

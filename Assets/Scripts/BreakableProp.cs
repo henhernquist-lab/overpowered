@@ -33,6 +33,7 @@ public sealed class BreakableProp : MonoBehaviour
         for (int i = 0; i < config.ShardCount; i++)
         {
             GameObject shard = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            shard.GetComponent<Renderer>().sharedMaterial=GetComponentInChildren<Renderer>()?.sharedMaterial ?? CityMaterials.Get(CityColor.Wood);
             shard.transform.position = transform.position + Random.insideUnitSphere * config.ShardSpread;
             shard.transform.localScale = Vector3.one * config.ShardSize;
             Rigidbody rb = shard.AddComponent<Rigidbody>(); rb.mass = config.ShardMass; rb.linearVelocity = original.linearVelocity;

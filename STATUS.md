@@ -1,5 +1,54 @@
 # Prototype Status
 
+## Stylized city art pass (current)
+
+Camera prerequisite was completed and committed first as **16fd426**. This pass keeps that scene-camera flow, the existing `CityLayout` seed/placement algorithm, movement/abilities, mode rules and progression.
+
+### Added
+
+- **Four coherent building archetypes:** brick warehouses, sandstone terraces, teal offices and slate towers. They vary footprint proportions and upper-storey setbacks inside the existing building slots. Original seeded heights and the three taller landmarks remain authoritative. Floors have geometric trim/banding, repeated dark/amber windows, actual recessed ground-floor entrance pockets, shop canopies and abstract sign glyphs. No building interiors or new layout algorithm.
+- **Rooftop traversal layer:** every building has a roof deck, low physical parapets, HVAC unit, vent and roof-access structure. Seeded rules add water tanks on legs, antennae and occasional billboards. The center stays available for landing and existing rooftop XP discoveries; real collision geometry supports the decks/terraces. Roof equipment is physical and mostly destructible; structural decks/parapets/access structures are not. Rooftop access doors are visible but do not open.
+- **Street level:** cream curbs, zebra crossings and amber lane dashes; matched lamps with shape-based street signs, benches, trash cans, hydrants, bus shelters, newspaper boxes, blocky planted shrubs and parked cars with cabins, wheels, lights and bumpers. Crime-event throwable cars reuse the same car model; crates/barrels remain simple matching wooden primitives. No real-word signage, traffic/bus simulation or texture assets.
+- **One material palette:** `Assets/Resources/CityPalette.asset` is the sole source for generated material colors. A named-swatch Inspector exposes Road, Pavement, Cream, Brick, Sand, Teal, Slate, Roof, Glass, Amber, Metal, Wood, Leaf, Red, Blue, Cyan and Fire. The palette uses warm masonry, cool teal/navy, cream trim, dark roads and amber accents. Materials are shared and updated live when a swatch changes; no per-object material instances. The existing player/NPCs, crime markers, projectile visuals and debris also use these slots so the new city does not clash with the old prototype. Projectile definitions expose a palette slot for future data-driven color selection. Existing legacy color fields remain serialized but no longer control generated material colors.
+- **Authoring data:** `Assets/Resources/CityArtSettings.asset` holds styles, facade/roof dimensions, prop sizes/masses/destructibility, normalized placement anchors, probabilities, jitter and mesh combining. Rules use a separate deterministic PRNG derived from the existing city seed; they do not perturb `CityLayout`. `Overpowered → Bake current art placements to editable data` records kind, base position, yaw and rooftop flag, then enables authored placement mode. Those records override generation, so manual edits survive subsequent runs. Roof placement receives a 0.1m starting clearance over its recorded base. If building heights/layout change after baking, re-bake or move those anchors yourself.
+- **Destruction reused:** every new destructible prop has one Rigidbody and the existing `BreakableProp`. Compound visual parts are children of one proxy BoxCollider; the old hit/health/force/shard path handles breaking. Shards inherit the parent palette material. No second destruction/health/reward system. Structural building geometry remains indestructible.
+
+### Rendering decisions, limits and explicit omissions
+
+Low-poly primitive geometry with opaque, low-smoothness Standard materials, not realism. Window/sign detail is geometry, not texture maps. Meshes are combined per building/material and per prop/material **from the outset**; this is an Inspector option, not a post-benchmark content cut. Uncombined geometry can be inspected by disabling `Combine Meshes`. A ProBuilder conversion/export tool is **not implemented**; baked placement data is the supported hand-authoring boundary. Facade composition and prop silhouette ratios are code-defined recipes; placement rules, scale, mass, colors and building proportions are data.
+
+Furniture uses simple bounding-box collision, including bus shelters (not walk-in interiors) and water tanks. Lamp heads/windows use palette colors, not extra point lights or a night-light simulation. No LOD/culling authoring, occlusion bake, art-quality lighting replacement, standalone build benchmark, or human traversal/feel acceptance is claimed. The existing directional sun (1.2 intensity, 45/-35 orientation), ambient color and Built-in rendering pipeline remain unchanged. There was **no active post-processing Volume** to preserve; none was introduced. Graphics/Quality project settings were not edited.
+
+**Performance regression is significant.** Initial measurements were 41.91 / 52.04 FPS for the two seeds, with 2,046 / 2,080 draw calls, versus the recorded 155 FPS baseline. That first harness used an extra capture camera; its complete output is preserved in `Verification/Art/initial-two-camera-run.txt`. A matched-camera repeat (the existing camera, follow temporarily disabled, as in the historical harness) measured 36.25 / 47.12 FPS and 2,054 / 2,088 draw calls (`first-matched-camera-run.txt`). No detail was removed or runtime performance tuning applied in response. Final shipping-content measurements follow below. This remains a substantial performance cost to address in a dedicated profiling pass, not a claimed 155-FPS visual upgrade.
+
+### Art verification
+
+`CityArtVerification.Run` builds both seeds in real Hero sessions, renders street/roof/whole-city captures, tests shared palette changes/restoration, compares deterministic and authored placement controls, punches an actual generated newspaper box, checks lighting, and samples FPS plus Unity's actual draw-call/SetPass counters with civilians/cops active. Saves are isolated. Captures and raw outputs are under `Verification/Art/`. FPS uses a 1280×720 RenderTexture, wall-clock timings and the historical camera position (-65,60,-80), looking at the origin; the player is held airborne. This is Editor throughput, not a standalone-player or hands-on combat guarantee. The historical baseline had 24 civilians; these mode runs have 26 (including two encounter civilians) and 10 active/on-NavMesh cops. Hardware remains Intel i9-10910 / Radeon Pro 5300. Current and historical runs are not a controlled dedicated-machine GPU benchmark.
+
+Final Unity run exited 0. Seed **2409** produced **247 new props (159 rooftop / 88 street)** and 9 of each building style. Seed **3226** produced **253 (163 rooftop / 90 street)**: 10 sandstone, 9 teal, 8 slate and 9 brick. The second seed had 9 rather than 7 bus stops, 27 rather than 24 antennae, and 13 rather than 12 billboards; heights, style assignments and street jitter also changed. Both had 36 HVAC units, 36 vents, 36 roof access structures, 15 water towers and 18 parked cars. Placement JSON for each seed is retained, with same-seed exact-repeat and authored-placement controls.
+
+Selected **real output** (complete output: `Verification/Art/results.txt`):
+
+```text
+PASS Layout CONTROL: original CityLayout placements/heights/reward records are unchanged by art generation.
+PASS ALL live renderers use shared materials from CityPalette; unregistered material count=0.
+PASS Palette CONTROL: changed ONE Amber swatch RGBA(1.000, 0.700, 0.260, 1.000) -> RGBA(0.310, 0.860, 0.800, 1.000); 115 renderers sharing it updated (windows, lamps, vehicle lights, actors).
+PASS Palette restore CONTROL returns all shared Amber surfaces to the original swatch.
+PASS New newspaper box uses the EXISTING BreakableProp and one real Rigidbody, no parallel damage implementation.
+PASS New prop physics: mass=45kg, punch=1350 N·s, displacement=8.978m, velocity=23.008m/s.
+PASS Existing sun intensity=1.2, rotation=(45,-35,0), ambient=(.45,.5,.6) unchanged.
+PASS Existing Built-in render pipeline retained; no active post-processing Volume was present/added.
+MEASURED seed=2409: 1280x720 Editor actual renders, frames=252, seconds=5.015, FPS=50.25, p95=30.45ms, draw calls median/max=2074/2074, SetPass median=88; vs recorded 155 FPS=-67.6%; GPU=AMD Radeon Pro 5300.
+MEASURED seed=3226: 1280x720 Editor actual renders, frames=268, seconds=5.011, FPS=53.48, p95=24.53ms, draw calls median/max=2108/2108, SetPass median=80; vs recorded 155 FPS=-65.5%; GPU=AMD Radeon Pro 5300.
+PASS Camera repair retained through both seeded mode runs and return Home.
+```
+
+**Final performance is still 65.5–67.6% below the recorded baseline.** Both initial and matched-camera runs are preserved; the last run also includes the matching crime-event car models. No LOD/content cut was made. The force test relocates one generated newspaper box above a clear road to isolate it, then measures motion only after a real charged punch; final destruction goes through existing damage/shard code. Rendered street, rooftop and city images were visually inspected. `dotnet build Overpowered.Build.csproj --no-restore -p:UseSharedCompilation=false` is clean: **0 warnings, 0 errors** (`Verification/Art/build.txt`). The editor's pre-existing Search indexing exception still appears independently of gameplay.
+
+The full mode regression after the art changes passed (Unity exit 0): Home → Hero → Results → Home, then Villain → Results → Home, plus a definition-only third mode and failure/timeout/defeat controls (`Verification/Art/mode-regression.txt`). This pass did not run a standalone build or certify hands-on balance. The recorded high draw-call cost remains an explicit unresolved limitation, not a hidden cut.
+
+An initial regression attempt was interrupted by a delayed editor assembly reload during Play, which cleared runtime singleton references and caused `ThirdPersonCamera.LateUpdate` null-reference errors. It was stopped and is **not** counted as a passing run (`Verification/Art/interrupted-regression.txt`). The camera now safely handles a temporarily unavailable world, and the mode verifier locks assembly reloads until test completion. Full live recompilation/restoration of the generated world is not supported by this change: restart Play after code recompilation. Unrelated animation assets added to the workspace during this task are not part of the art implementation or commit.
+
 ## Camera diagnosis and repair
 
 The saved Home, Prototype and Results scenes had **zero GameObjects and zero Cameras**. The mode refactor relied on `GameFlow.SceneReady` to create menu cameras and `PrototypeBootstrap.BuildCity` to create the player camera at runtime. No disabled scene camera was found. The `Prototype` heading is a scene container, not a newly introduced parent GameObject; the saved scene contained no such parent. A Project search result is not evidence of a Camera instance in the loaded scene.

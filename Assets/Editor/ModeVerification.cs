@@ -32,6 +32,7 @@ public static class ModeVerification
     static void Configure()
     {
         if(SessionState.GetString(Key,"")=="")return;
+        EditorApplication.LockReloadAssemblies();
         GameFlow.VerificationSandbox=false;
         WorldSession.VerificationSavePath=SessionState.GetString(Key+"save","");
         deadline=EditorApplication.timeSinceStartup+240;
@@ -50,6 +51,7 @@ public static class ModeVerification
         EditorApplication.isPlaying=false;
         EditorApplication.delayCall+=()=>{
             if(SessionState.GetBool(Key+"owns",false)){AssetDatabase.DeleteAsset(TestAsset);SessionState.EraseBool(Key+"owns");}
+            EditorApplication.UnlockReloadAssemblies();
             EditorApplication.Exit(code);
         };
     }

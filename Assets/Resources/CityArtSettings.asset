@@ -1,0 +1,212 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2f468359173849c8bae55127905b9d9, type: 3}
+  m_Name: CityArtSettings
+  m_EditorClassIdentifier: Assembly-CSharp::CityArtSettings
+  Palette: {fileID: 11400000, guid: 6c2db8d117de94442ba7bb997287b05d, type: 2}
+  CombineMeshes: 1
+  FloorHeight: 3.2
+  WindowSpacing: 2.4
+  WindowWidth: 1.1
+  WindowHeight: 1.45
+  BandHeight: 0.12
+  EntranceWidth: 2
+  EntranceDepth: 0.65
+  ParapetHeight: 0.6
+  ParapetThickness: 0.18
+  CurbHeight: 0.18
+  CurbWidth: 0.22
+  RoadDashLength: 2.5
+  RoadDashSpacing: 5
+  CrosswalkStripe: 0.45
+  CrosswalkStripes: 7
+  Styles:
+  - Name: Brick warehouse
+    Wall: 3
+    Footprint: {x: 1, y: 0.94}
+    SetbackAt: 0.65
+    UpperWidth: 1
+  - Name: Sandstone terraces
+    Wall: 4
+    Footprint: {x: 0.92, y: 1}
+    SetbackAt: 0.65
+    UpperWidth: 0.72
+  - Name: Teal offices
+    Wall: 5
+    Footprint: {x: 0.88, y: 0.9}
+    SetbackAt: 0.48
+    UpperWidth: 0.84
+  - Name: Slate tower
+    Wall: 6
+    Footprint: {x: 0.9, y: 0.82}
+    SetbackAt: 0.78
+    UpperWidth: 0.76
+  Shapes:
+  - Kind: 0
+    Size: {x: 0.7, y: 4.2, z: 0.7}
+    Destructible: 1
+    Mass: 80
+  - Kind: 1
+    Size: {x: 2.2, y: 0.95, z: 0.8}
+    Destructible: 1
+    Mass: 80
+  - Kind: 2
+    Size: {x: 0.65, y: 0.95, z: 0.65}
+    Destructible: 1
+    Mass: 80
+  - Kind: 3
+    Size: {x: 0.7, y: 0.85, z: 0.5}
+    Destructible: 1
+    Mass: 65
+  - Kind: 4
+    Size: {x: 1.2, y: 2.8, z: 3.8}
+    Destructible: 1
+    Mass: 250
+  - Kind: 5
+    Size: {x: 0.65, y: 1.1, z: 0.6}
+    Destructible: 1
+    Mass: 45
+  - Kind: 6
+    Size: {x: 1.4, y: 1.4, z: 1.4}
+    Destructible: 1
+    Mass: 100
+  - Kind: 7
+    Size: {x: 1.8, y: 1.5, z: 4}
+    Destructible: 1
+    Mass: 400
+  - Kind: 8
+    Size: {x: 1.5, y: 1, z: 1.2}
+    Destructible: 1
+    Mass: 80
+  - Kind: 9
+    Size: {x: 0.6, y: 1.2, z: 0.6}
+    Destructible: 1
+    Mass: 45
+  - Kind: 10
+    Size: {x: 2, y: 3.8, z: 2}
+    Destructible: 1
+    Mass: 300
+  - Kind: 11
+    Size: {x: 1, y: 3, z: 1}
+    Destructible: 1
+    Mass: 45
+  - Kind: 12
+    Size: {x: 1.8, y: 2.2, z: 1.8}
+    Destructible: 0
+    Mass: 80
+  - Kind: 13
+    Size: {x: 2.8, y: 2.8, z: 0.5}
+    Destructible: 1
+    Mass: 100
+  Rules:
+  - Kind: 0
+    Rooftop: 0
+    Chance: 1
+    Anchors:
+    - {x: -0.44, y: -0.44}
+    - {x: 0.44, y: 0.44}
+    Yaw: 0
+    Jitter: 0.25
+  - Kind: 1
+    Rooftop: 0
+    Chance: 1
+    Anchors:
+    - {x: 0, y: -0.45}
+    Yaw: 0
+    Jitter: 0.25
+  - Kind: 2
+    Rooftop: 0
+    Chance: 1
+    Anchors:
+    - {x: 0.17, y: -0.45}
+    Yaw: 0
+    Jitter: 0.25
+  - Kind: 3
+    Rooftop: 0
+    Chance: 1
+    Anchors:
+    - {x: 0.44, y: -0.2}
+    Yaw: 0
+    Jitter: 0.25
+  - Kind: 4
+    Rooftop: 0
+    Chance: 0.85
+    Anchors:
+    - {x: -0.45, y: -0.25}
+    Yaw: 0
+    Jitter: 0.25
+  - Kind: 5
+    Rooftop: 0
+    Chance: 1
+    Anchors:
+    - {x: -0.45, y: 0.2}
+    Yaw: 0
+    Jitter: 0.25
+  - Kind: 6
+    Rooftop: 0
+    Chance: 1
+    Anchors:
+    - {x: 0.44, y: 0.2}
+    Yaw: 0
+    Jitter: 0.25
+  - Kind: 7
+    Rooftop: 0
+    Chance: 1
+    Anchors:
+    - {x: 0.56, y: -0.16}
+    - {x: -0.56, y: 0.16}
+    Yaw: 0
+    Jitter: 0.2
+  - Kind: 8
+    Rooftop: 1
+    Chance: 1
+    Anchors:
+    - {x: -0.32, y: -0.32}
+    Yaw: 0
+    Jitter: 0
+  - Kind: 9
+    Rooftop: 1
+    Chance: 1
+    Anchors:
+    - {x: -0.32, y: 0.12}
+    Yaw: 0
+    Jitter: 0
+  - Kind: 10
+    Rooftop: 1
+    Chance: 0.45
+    Anchors:
+    - {x: 0.32, y: 0.32}
+    Yaw: 0
+    Jitter: 0
+  - Kind: 11
+    Rooftop: 1
+    Chance: 0.7
+    Anchors:
+    - {x: 0.32, y: -0.32}
+    Yaw: 0
+    Jitter: 0
+  - Kind: 12
+    Rooftop: 1
+    Chance: 1
+    Anchors:
+    - {x: -0.32, y: 0.32}
+    Yaw: 0
+    Jitter: 0
+  - Kind: 13
+    Rooftop: 1
+    Chance: 0.28
+    Anchors:
+    - {x: 0.015, y: -0.36}
+    Yaw: 0
+    Jitter: 0
+  UseAuthoredPlacements: 0
+  AuthoredPlacements: []

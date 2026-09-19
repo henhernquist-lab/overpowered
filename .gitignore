@@ -51,6 +51,7 @@ ExportedObj/
 /Verification/Modes/*.json*
 /Verification/Modes/save-path.txt
 /Verification/Cameras/*.json*
+/Verification/Art/save-*.json*
 *.unityproj
 *.sln
 *.slnx

@@ -1,0 +1,10 @@
+An initial mode-regression attempt was interrupted by a Unity assembly reload during Play.
+Relevant actual log output:
+Reloading assemblies after finishing script compilation.
+Reloading assemblies after forced synchronous recompile.
+Begin MonoManager ReloadAssembly
+Scripting: successfully reloaded assembly
+NullReferenceException: Object reference not set to an instance of an object
+  at ThirdPersonCamera.LateUpdate () [0x0000f] in /private/tmp/overpowered-animation-m3Zl0B/Assets/Scripts/PrototypeBootstrap.cs:71
+
+The interrupted attempt was stopped, not counted as a passing regression. ModeVerification now locks assembly reloads for its Play run and unlocks before exit. ThirdPersonCamera now checks for an unavailable world before dereferencing it. Full editor hot-reload restoration of a generated world is not claimed; restart Play after recompilation.

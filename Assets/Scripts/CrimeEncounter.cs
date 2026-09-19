@@ -51,14 +51,14 @@ public sealed class CrimeEncounter : MonoBehaviour
             var npc=Actor(site+Vector3.back*(i+1)*definition.Spacing,NpcRole.Civilian);
             var barrier=Prop("Rescue blockade",npc.transform.position+Vector3.right*definition.BlockadeOffset,world.Tuning.Props.CrateSize,world.Tuning.Props.CrateMass);
             Civilians.Add(new EncounterActor {Npc=npc,Exit=ExitPoint(i+definition.Robbers),Blockade=barrier,BlockadeStart=barrier.position});
-            npc.GetComponentInChildren<Renderer>().material.color=definition.RescueColor;
+            npc.GetComponentInChildren<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Cyan);
         }
         if(world.Mode.Definition.SpawnPolice) for(int i=0;i<definition.RespondingCops;i++)
             Responders.Add(Actor(site+Vector3.right*(i+1)*definition.Spacing,NpcRole.Cop));
         for(int i=0;i<definition.Cars;i++) Prop("Encounter throwable car",site+Vector3.left*(i+1)*definition.Spacing,world.Tuning.Props.CarSize,world.Tuning.Props.CarMass);
         for(int i=0;i<definition.LooseProps;i++) Prop("Encounter supply crate",site+new Vector3((i%2==0?1:-1)*definition.Spacing,0,(i+1)*definition.Spacing),world.Tuning.Props.CrateSize,world.Tuning.Props.CrateMass);
-        for(int i=0;i<definition.Loot;i++) Loot.Add(Node("Loot — hold R",site+new Vector3(-definition.Spacing,0,-(i+1)*definition.Spacing),definition.LootColor));
-        for(int i=0;i<definition.Hazards;i++) Hazards.Add(Node("Fire — hold R",site+new Vector3(definition.Spacing,0,-(i+1)*definition.Spacing),definition.HazardColor));
+        for(int i=0;i<definition.Loot;i++) Loot.Add(Node("Loot — hold R",site+new Vector3(-definition.Spacing,0,-(i+1)*definition.Spacing),CityColor.Amber));
+        for(int i=0;i<definition.Hazards;i++) Hazards.Add(Node("Fire — hold R",site+new Vector3(definition.Spacing,0,-(i+1)*definition.Spacing),CityColor.Fire));
         World.Alarm(site);
     }
     CityNpc Actor(Vector3 position,NpcRole role)
@@ -76,16 +76,22 @@ public sealed class CrimeEncounter : MonoBehaviour
     }
     Rigidbody Prop(string name,Vector3 ground,Vector3 size,float mass)
     {
+        if(name=="Encounter throwable car")
+        {
+            var car=World.City.Art.CreateProp(new ArtPlacement{Kind=CityPropKind.Car,Position=ground});
+            car.name=name;car.transform.SetParent(transform,true);var rb=car.GetComponent<Rigidbody>();rb.mass=mass;
+            car.AddComponent<EncounterProp>().Owner=this;Props.Add(rb);return rb;
+        }
         var go=GameObject.CreatePrimitive(PrimitiveType.Cube); go.name=name; go.transform.position=ground+Vector3.up*size.y*.5f;
         go.transform.localScale=size; go.transform.SetParent(transform,true);
-        go.GetComponent<Renderer>().material.color=new Color(.6f,.3f,.1f);
+        go.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Wood);
         var body=go.AddComponent<Rigidbody>(); body.mass=mass; body.interpolation=RigidbodyInterpolation.Interpolate; body.collisionDetectionMode=CollisionDetectionMode.ContinuousDynamic;
         go.AddComponent<BreakableProp>().Configure(World.Tuning.Props); go.AddComponent<EncounterProp>().Owner=this; Props.Add(body); return body;
     }
-    EncounterNode Node(string name,Vector3 ground,Color color)
+    EncounterNode Node(string name,Vector3 ground,CityColor color)
     {
         var go=GameObject.CreatePrimitive(PrimitiveType.Cube); go.name=name; go.transform.position=ground+Vector3.up*Definition.MarkerHeight; go.transform.localScale=Vector3.one*Definition.MarkerSize;
-        go.transform.SetParent(transform,true); go.GetComponent<Collider>().enabled=false; go.GetComponent<Renderer>().material.color=color;
+        go.transform.SetParent(transform,true); go.GetComponent<Collider>().enabled=false; go.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(color);
         return new EncounterNode {Visual=go};
     }
     void Update()
@@ -151,7 +157,7 @@ public sealed class CrimeEncounter : MonoBehaviour
             if(Civilians.Contains(chosen)) { chosen.Saved=true; World.Mode.AddScore(World.Mode.Definition.RescueScore); }
             else {chosen.Captured=true;chosen.Npc.gameObject.SetActive(false);}
         }
-        else if(candidate is EncounterNode node) {node.Done=true;node.Visual.GetComponent<Renderer>().material.color=Color.green;}
+        else if(candidate is EncounterNode node) {node.Done=true;node.Visual.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Leaf);}
         hold=0; interaction=null; TryComplete(); return true;
     }
     public bool Drive(CityNpc npc)

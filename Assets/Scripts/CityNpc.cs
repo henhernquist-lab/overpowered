@@ -23,7 +23,7 @@ public sealed class CityNpc : MonoBehaviour
         var body = GameObject.CreatePrimitive(PrimitiveType.Capsule); body.transform.SetParent(root.transform,false);
         body.transform.localPosition=Vector3.up*c.Height*.5f; body.transform.localScale=new Vector3(c.Radius*2,c.Height*.5f,c.Radius*2);
         body.GetComponent<Collider>().enabled=false; Destroy(body.GetComponent<Collider>());
-        body.GetComponent<Renderer>().material.color= role==NpcRole.Civilian ? c.CivilianColor : role==NpcRole.Cop ? c.CopColor : c.HeroColor;
+        body.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(role==NpcRole.Civilian?CityColor.Amber:role==NpcRole.Cop?CityColor.Blue:CityColor.Red);
         var npc = root.AddComponent<CityNpc>(); npc.world=world; npc.Role=role;
         npc.Health = role==NpcRole.Civilian ? c.CivilianHealth : role==NpcRole.PursuingHero ? c.HeroHealth : c.CopHealth + world.Stars*c.HealthPerStar;
         npc.Agent=root.AddComponent<NavMeshAgent>(); npc.Agent.height=c.Height; npc.Agent.radius=c.Radius; npc.Agent.acceleration=c.Acceleration; npc.Agent.angularSpeed=c.AngularSpeed;

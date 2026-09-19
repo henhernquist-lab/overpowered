@@ -26,11 +26,15 @@ Select these Project assets; no code edits are needed for numeric gameplay tunin
 - `Assets/Resources/GameTuning.asset`: movement, city seed/dimensions, NPCs, progression, Heat, crime timing, prop physics, and camera settings, grouped by system.
 - `Assets/Resources/Powers/*.asset`: each power's costs, charges, cooldown, resource use, force/damage, range/duration, and upgrade tiers.
 - `Assets/Resources/ProceduralAnimationTuning.asset`: punch, flight, run, and landing visuals.
+- `Assets/Resources/CityPalette.asset`: the single named color palette for all generated materials (including existing actors, markers, projectiles and shards). Swatch changes propagate live during Play.
+- `Assets/Resources/CityArtSettings.asset`: building archetypes, facade/roof dimensions, prop dimensions/masses, normalized placement anchors/chances/jitter, and mesh combining. Art stays inside existing seeded building bounds; `CityLayout` remains the layout authority.
 - `Assets/Resources/Modes/*.asset`: mode catalog, side, rules, encounter pools, HUD flags, session limits, population, score/XP/Heat rewards.
 - `Assets/Resources/Encounters/*.asset`: actor/prop counts, escape/rescue/destruction requirements, timings and interaction distances. `ModeRules/` holds the reusable Hero/Villain rule assets.
 - `Assets/Resources/CityLayout.asset`: optional authored building placements. **Overpowered → Bake generated buildings into layout data** captures the seeded placements for editing. Change the seed and restart Play Mode to regenerate; disable `Use Authored Buildings` to return to seeded generation. Building positions/sizes remain separate from generation logic for a later hand-built/ProBuilder environment.
 
 Existing constants remain in `PrototypeTuning.cs` as legacy defaults. Runtime balance now comes from the Inspector assets. Avoid editing definitions' stable `Id` values after players have saved progression.
+
+**Overpowered → Bake current art placements to editable data** records the current seed's art placement list and enables `Use Authored Placements`. Edit each record's kind, world position and yaw in that asset; future runs use those exact placements instead of regenerating them. Undo supports the bake; disable authored placements explicitly to regenerate. If you later change the building layout, rebake or adjust rooftop heights yourself. `Combine Meshes` can be disabled for individually inspectable geometry; a ProBuilder mesh-conversion/export workflow is not included. Legacy color fields in GameTuning, PowerDefinition and EncounterDefinition remain serialized for compatibility but are superseded visually by CityPalette.
 
 To add another power using existing behavior, create/duplicate a PowerDefinition asset under `Resources/Powers`, give it a unique ID, assign one of the existing effect assets, and tune it. Catalog discovery, selection UI, cooldowns, upgrades, and persistence are generic. A genuinely new behavior requires one new PowerEffect subclass and its asset, not changes to registries or switches.
 
@@ -58,6 +62,7 @@ Unity -batchmode -projectPath /path/to/copy -executeMethod CityVerification.Relo
 Unity -batchmode -projectPath /path/to/copy -executeMethod ProceduralAnimationVerification.Run -logFile /path/to/animation.log
 Unity -batchmode -projectPath /path/to/copy -executeMethod ModeVerification.Run -logFile /path/to/modes.log
 Unity -batchmode -projectPath /path/to/copy -executeMethod ModeVerification.Reload -logFile /path/to/modes-reload.log
+Unity -batchmode -projectPath /path/to/copy -executeMethod CityArtVerification.Run -logFile /path/to/art.log
 ```
 
 The city test creates two temporary data-only projectile variants, exercises the seventh in Play Mode, then removes those assets. It isolates progression saves from normal play. The reload command must follow the first command in the same copy; it launches a fresh editor process and compares the saved values. Rendering must remain enabled for the FPS measurement and screenshots.

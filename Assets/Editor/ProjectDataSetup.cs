@@ -20,7 +20,7 @@ public static class ProjectDataSetup
         Define("telekinesis","Telekinesis",grab,false,d=> { d.Charges=2; d.Force=1800; d.Duration=6; d.Description="Aim at a prop and click to grab. Click again to hurl; hold expires safely."; });
         Define("fire","Fire Blast",fire,false,d=> { d.Charges=3; d.Damage=45; d.Description="Launch an explosive physics projectile at the crosshair."; });
         Define("ice","Ice",ice,false,d=> { d.Charges=2; d.Damage=5; d.Color=Color.cyan; d.Description="Aim at an NPC or rigidbody to freeze it temporarily."; });
-        ModeDataSetup.Create();
+        ModeDataSetup.Create();CityArtSetup.Create();
         AssetDatabase.SaveAssets(); AssetDatabase.Refresh();
     }
     static T Asset<T>(string path) where T:ScriptableObject
