@@ -19,7 +19,7 @@ public sealed class GameCamera : MonoBehaviour
         var camera=rig.GetComponent<Camera>();camera.enabled=true;
         camera.targetTexture=null;camera.targetDisplay=0;camera.rect=new Rect(0,0,1,1);
         camera.clearFlags=gameplay?CameraClearFlags.Skybox:CameraClearFlags.SolidColor;
-        camera.backgroundColor=new Color(.035f,.05f,.08f);camera.cullingMask=gameplay?~0:0;
+        camera.backgroundColor=Resources.Load<CityPalette>("CityPalette").Colors[(int)CityColor.UiNavy];camera.cullingMask=gameplay?~0:0;
         return camera;
     }
 }

@@ -1,0 +1,4 @@
+/* Palette colors and responsive layout are supplied by ModeScreens. No default gray theme. */
+.overpowered-menu {
+    flex-grow: 1;
+}

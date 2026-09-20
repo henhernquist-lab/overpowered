@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CityColor { Road, Pavement, Cream, Brick, Sand, Teal, Slate, Roof, Glass, Amber, Metal, Wood, Leaf, Red, Blue, Cyan, Fire }
+public enum CityColor { Road, Pavement, Cream, Brick, Sand, Teal, Slate, Roof, Glass, Amber, Metal, Wood, Leaf, Red, Blue, Cyan, Fire, UiNavy, UiPanel, UiMuted, UiInk, HeroAccent, VillainAccent, UiPurple }
 [CreateAssetMenu(menuName="Overpowered/City Palette")]
 public sealed class CityPalette : ScriptableObject
 {
@@ -10,7 +10,9 @@ public sealed class CityPalette : ScriptableObject
         new Color(.65f,.29f,.23f),new Color(.79f,.63f,.40f),new Color(.19f,.48f,.47f),new Color(.30f,.39f,.52f),
         new Color(.22f,.29f,.34f),new Color(.08f,.23f,.32f),new Color(1f,.70f,.26f),new Color(.19f,.23f,.28f),
         new Color(.43f,.27f,.19f),new Color(.34f,.53f,.31f),new Color(.80f,.23f,.22f),new Color(.13f,.36f,.72f),
-        new Color(.31f,.86f,.80f),new Color(1f,.39f,.12f)};
+        new Color(.31f,.86f,.80f),new Color(1f,.39f,.12f),
+        new Color(.045f,.055f,.14f),new Color(.095f,.105f,.23f),new Color(.61f,.67f,.80f),new Color(.96f,.96f,.91f),
+        new Color(.12f,.78f,1f),new Color(1f,.29f,.16f),new Color(.24f,.15f,.40f)};
     [Range(0,1)] public float Smoothness=.08f;
 }
 

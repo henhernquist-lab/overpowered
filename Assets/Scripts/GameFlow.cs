@@ -8,6 +8,9 @@ public sealed class SessionResult
     public SessionOutcome Outcome;
     public int Score, Xp, Successes, Failures, Defeats;
     public float Seconds;
+    public PlayerSide Side;
+    public int Rescues, StartLevel, StartXp, EndLevel, EndXp;
+    public float PeakHeat, TimeLimit;
 }
 public sealed class GameFlow : MonoBehaviour
 {

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28370ba1b21f345d4bc394ba8415745c, type: 3}
+  m_Name: MenuPresentationTuning
+  m_EditorClassIdentifier: Assembly-CSharp::MenuPresentationTuning
+  HoverLift: 8
+  HoverResponse: 12
+  XpFillSeconds: 1.8
+  LevelPopSeconds: 0.45
+  LevelPopScale: 0.15
+  AmbientCount: 28
+  AmbientDrift: 12
+  AmbientSway: 12
+  AmbientSize: 2.2
+  SkylineWidth: 768
+  SkylineHeight: 432
+  SkylineCamera: {x: -22, y: 7, z: -138}
+  SkylineLook: {x: 0, y: 27, z: 0}
+  SkylineFieldOfView: 32
+  SkylineTint: 0.52

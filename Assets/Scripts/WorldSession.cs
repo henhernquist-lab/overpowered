@@ -76,7 +76,7 @@ public sealed class WorldSession : MonoBehaviour
         float decayTime=Mathf.Max(0,troubleAgo-Tuning.Heat.DecayDelay)-Mathf.Max(0,before-Tuning.Heat.DecayDelay);
         Heat=Mathf.Max(0,Heat-decayTime*Tuning.Heat.DecayPerSecond);
     }
-    public void AddHeat(float amount) { Heat=Mathf.Clamp(Heat+amount,0,Tuning.Heat.MaximumStars); if (amount>0) troubleAgo=0; }
+    public void AddHeat(float amount) { Heat=Mathf.Clamp(Heat+amount,0,Tuning.Heat.MaximumStars); Mode?.ObserveHeat(Heat); if (amount>0) troubleAgo=0; }
     public void Alarm(Vector3 position)
     {
         foreach (var npc in Npcs) if (npc!=null && npc.Role==NpcRole.Civilian && Vector3.Distance(position,npc.transform.position)<Tuning.Npcs.AlarmRadius) npc.Alarm(position);

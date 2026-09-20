@@ -1,6 +1,142 @@
 # Prototype Status
 
-## Shared humanoid / Mixamo presentation (current)
+## Performance diagnosis, menu completion and agent handoff — 2026-09-20 (current)
+
+Planning/architecture pass. **No optimization was implemented.** This entry records a measured
+diagnosis, the completion of the interrupted menu work, and two delegated work packets.
+
+### State verification against this document
+
+All 6 local commits through `42b62da` are real and consistent with what this file claims, and
+all 64 previously referenced verification artifacts exist and are git-tracked. **No stale or
+fabricated claim was found in STATUS.md.** Two corrections belong to the surrounding tooling,
+not to this document:
+
+- **`dotnet` is not installed on this machine.** The `dotnet build Overpowered.Build.csproj
+  --no-restore -p:UseSharedCompilation=false` gate named in AGENTS.md and throughout this file
+  **cannot currently be run** (no `dotnet`, `mono` or `msbuild` on PATH or in standard locations).
+  `bin/`, `obj/` and `Verification/Humanoid/build.txt` show it worked on Sep 16 and is now gone.
+  **Unity's own batch-mode compile is the build gate** until that is restored.
+- **There is no outline Renderer Feature and no URP in this project.** A briefing to this pass
+  asserted one existed and was toggleable, and asked for it as a performance control. Confirmed
+  at runtime: `GraphicsSettings.currentRenderPipeline == null`, no URP package in
+  `Packages/manifest.json`, no pipeline asset, zero custom shaders, `Shader.Find("Standard")`
+  throughout. **That control could not be run because the thing does not exist.** It is recorded
+  here so the claim does not resurface.
+
+### Measured FPS diagnosis
+
+New diagnostic harness, `Assets/Editor/PerformanceProfile.cs` + `Assets/Scripts/PerformanceProfileRunner.cs`.
+Reverts every control; changes nothing permanently. Run with
+`-executeMethod PerformanceProfile.Run`. Exit 0. Full output and the attribution table are in
+`Verification/Performance/results.txt`; capture in `city.png` / `city-uncombined.png`.
+
+```text
+POPULATION: buildings=36 (234 renderers), props=247 (772 renderers), civilians=26, cops=10, animators=40, skinnedRenderers=80, propRigidbodies=211, totalRenderers=1140
+SETTINGS: qualityLevel=5 'Ultra', shadows=All, pixelLightCount=4, lodBias=2, shadowDistance=150, GPU=AMD Radeon Pro 5300, CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz
+MATERIALS: palette materials=17, enableInstancing=true on 17 of them, shader=Standard
+MESHES: 1060 MeshFilters reference 1021 DISTINCT sharedMeshes.
+```
+
+**The mesh-combining optimization is the primary cost, not a mitigation.** `CityArt.Combine`
+merges per root and per material, producing 1,021 distinct meshes from 1,060 MeshFilters — a
+~1:1 ratio, so static batching and GPU instancing cannot merge anything. `enableInstancing=true`
+on all 17 palette materials was doing nothing. Disabling the existing `CombineMeshes` toggle and
+rebuilding drops the city to **3 distinct shared primitive meshes**:
+
+| Sample | draw calls | batches | FPS |
+|---|---|---|---|
+| 00 baseline, combining ON (as shipped) | 2,222 | 2,058 | 37.68 |
+| 13 rebuild, combining OFF | **266** | **102** | **45.28** (+20.2%) |
+
+**Draw calls are nevertheless not the bottleneck.** An 88% draw-call reduction buys only +20%,
+while disabling prop *renderers* (control 02) removes fewer draw calls and gains **+47.3%**. The
+dominant cost is per-renderer CPU work — culling, sorting and submission across ~1,140
+renderers — which batching does not remove. Second load source: the shared humanoid mesh is
+**28,374 vertices × 40 actors ≈ 1.13M of the 1.24M single-render vertices (91%)**.
+
+**Hypotheses the data did NOT support.** The drift control re-measured baseline at **+7.9%**
+against its own 8% tolerance, which sets the noise floor. At or below it, and therefore
+**unmeasured rather than measured-as-zero**: shadows off +5.6%, `updateWhenOffscreen=false`
++6.3%, `AnimatorCullingMode.CullUpdateTransforms` +6.6%, NPC animators disabled +8.9%, prop
+Rigidbody `Discrete` −0.2%. Shadows were predicted to roughly double cost and did not, at
+`Ultra` with `shadowDistance=150`. The one modest confirmed win is `CityMaterials.LateUpdate`'s
+unconditional per-frame `Apply()` at **+12.7%**.
+
+**A measurement artifact affects every recorded number in this file.** All benchmark harnesses
+set `camera.targetTexture` on a still-enabled camera *and* call `camera.Render()` in the sample
+loop, rendering the scene **twice per sampled frame**. Removing it measures **+32.0%** (37.68 →
+49.73 FPS). The 155 FPS baseline carried the same artifact, so the *regression* comparison
+stands, but absolute throughput has been understated by roughly a third throughout.
+
+Ranked by impact-to-effort for the next pass, against these numbers as the before-baseline:
+(1) stop combining into unique meshes — share one mesh per prop kind so instancing applies;
+(2) reduce live renderer count / cull distant props, which is where the +47% actually sits;
+(3) reduce humanoid vertex count or add character LOD; (4) make `CityMaterials.Apply()` event-driven;
+(5) fix the double-render in the harnesses so future numbers are real.
+
+**Limits:** Editor Play Mode at 1280×720, fixed camera, player parked airborne. Not a
+standalone-player or hands-on figure. City population is not static across the run (NPCs die
+during controls), which contributes to the 7.9% drift; sub-10% effects need a tighter re-run to
+resolve. Two `MissingReferenceException` crashes from destroyed NPCs were fixed by re-filtering
+to live objects; **no control was weakened or removed** to obtain a pass.
+
+### Menu presentation completed and verified
+
+The interrupted home/results rebuild is finished. The only change was the backdrop capture in
+`Assets/Resources/MenuPresentationTuning.asset`, reached over 4 rendered iterations:
+`SkylineCamera (-65,22,-105) → (-22,7,-138)`, `SkylineLook (0,19,0) → (0,27,0)`, and
+`SkylineFieldOfView 48 → 32`. The FOV change was load-bearing: at 48 the city subtends too small
+an angle and reads as a low band of boxes regardless of camera position. No code was changed.
+
+`MenuPresentationVerification.Run` exits **0** with **38 PASS / 0 FAIL**
+(`Verification/Menus/results.txt`), covering both Hero and Villain Home → Play → Results → Home
+flows, the disabled Coming Soon modes under both a submit-event and a flow-guard control, and
+the real upgrade purchase routed through the existing `PlayerProgression.Buy`
+(`Strength tier 0→1, points 1→0, force 1350→1890`) with a zero-point repeat-purchase rejection
+control. UI throughput, A/B/B/A:
+
+```text
+MEASURED home static A: FPS=2152.17, mean=0.464ms, p95=0.559ms, drawCalls=2.0
+MEASURED home animated B: FPS=906.77, mean=1.103ms, p95=1.284ms, drawCalls=4.0
+MEASURED home animated B2: FPS=900.63, mean=1.110ms, p95=1.303ms, drawCalls=4.0
+MEASURED home static A2: FPS=2261.26, mean=0.442ms, p95=0.515ms, drawCalls=2.0
+MEASURED villain results animated: FPS=894.27, mean=1.118ms, p95=1.309ms, drawCalls=5.0
+```
+
+The repeats are tight, so motion's ~2.4× cost is a real effect, not drift. All eight captures
+were visually inspected. The backdrop now genuinely reads as a **street-level city view** — no
+building top faces, sky above the rooflines, road receding to a vanishing point. **Honest limit:
+it is a low-rise street, not a dramatic high-rise skyline, because the source buildings are only
+6–28m.** A towering skyline would require taller buildings in `CityLayout`, which was not changed.
+
+Two defects found and recorded, not fixed:
+- **Latent:** `MenuSkyline.Get` calls `art.Initialize()`, reassigning the global
+  `CityMaterials.Current`, then destroys that root — whose `OnDestroy` destroys every palette
+  material and nulls `Current`. Safe today because it only runs in Home/Results with no live
+  city, but it would corrupt a live city's materials if a capture ever ran during gameplay.
+- **Cosmetic:** on the results screen the "YOUR PROGRESS IS SAVED." label collides with the
+  bottom edge of the XP panel.
+
+### Delegation and repo state
+
+Two standalone work packets are in `handoff/`, with non-overlapping exclusive file scopes:
+`grok-audio.md` (branch `feat/audio` — the whole audio system, sourcing CC0 clips included; the
+game currently has zero audio) and `glm-content-docs.md` (branch `feat/content-docs` — encounter
+and mode-rule data plus a README accuracy pass). GLM's packet forbids touching
+`CityArtSettings.asset` / `CityLayout.asset` or raising any spawn count, so new content cannot
+fight the performance work above.
+
+**The 6 outstanding commits were NOT pushed.** `git push origin main` fails with
+`could not read Username for 'https://github.com': Device not configured` — HTTPS remote, no
+`gh` CLI, no SSH keys, and the `osxkeychain` helper has no credential available to a
+non-interactive shell. The commits are intact and ready; the push requires a human.
+
+**No human playtest has been performed.** Nothing in this entry claims gameplay feel, audio
+quality, encounter balance, or standalone-player performance.
+
+
+## Shared humanoid / Mixamo presentation (previous milestone)
 
 Prerequisites committed: camera repair **16fd426**, city art **a5f8278**. The capsule visuals are replaced by the supplied Mixamo Beta humanoid (`Idle.fbx` model, two skinned meshes / 28,374 vertices). Player, cops, civilians, criminals and the pursuing Hero instantiate the **same model and `Assets/Resources/SharedHumanoid.controller`**, not copied controllers. Surface/joint materials use the existing city palette (blue player, amber civilians, teal cops, red other NPCs, dark metal joints); no imported material instances or texture pipeline were introduced.
 

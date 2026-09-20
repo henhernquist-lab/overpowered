@@ -14,16 +14,22 @@ public sealed class GameModeSession : MonoBehaviour
     public bool Ended { get; private set; }
     public bool Paused { get; private set; }
     public string Feedback { get; private set; }
+    public int Rescues {get;private set;}
+    public float PeakHeat {get;private set;}
+    int startLevel,startXp;
     float spawnClock; int nextEncounter;
     public void Initialize(WorldSession world,GameModeDefinition definition)
     {
         World=world; Definition=definition; world.Progression.SetModeSide(definition.Side);
+        startLevel=world.Progression.Data.Level;startXp=world.Progression.Data.Xp;PeakHeat=world.Heat;
         world.Progression.XpAwarded+=Awarded;
         Feedback=definition.Description;
     }
     public void Begin() { for(int i=0;i<Definition.InitialEncounters;i++) SpawnNext(); }
     void Awarded(int amount) { if(!Ended) XpEarned+=amount; }
     public void AddScore(int value) { if(!Ended) Score=Mathf.Max(0,Score+value); }
+    public void RecordRescue(){if(!Ended)Rescues++;}
+    public void ObserveHeat(float heat){if(!Ended)PeakHeat=Mathf.Max(PeakHeat,heat);}
     public void Tick(float dt)
     {
         if(Ended||Paused) return;
@@ -79,7 +85,8 @@ public sealed class GameModeSession : MonoBehaviour
         if(Ended) return;
         Ended=true; World.MenuOpen=true; World.Powers.Release(false);
         World.Progression.RecordSession(Definition.Id,outcome==SessionOutcome.Won,Score,XpEarned);
-        GameFlow.Instance.Results(new SessionResult {ModeId=Definition.Id,ModeName=Definition.DisplayName,Outcome=outcome,Reason=reason,Score=Score,Xp=XpEarned,Successes=Successes,Failures=Failures,Defeats=Defeats,Seconds=Elapsed},home);
+        GameFlow.Instance.Results(new SessionResult {ModeId=Definition.Id,ModeName=Definition.DisplayName,Outcome=outcome,Reason=reason,Score=Score,Xp=XpEarned,Successes=Successes,Failures=Failures,Defeats=Defeats,Seconds=Elapsed,
+            Side=Definition.Side,Rescues=Rescues,PeakHeat=PeakHeat,TimeLimit=Definition.SessionSeconds,StartLevel=startLevel,StartXp=startXp,EndLevel=World.Progression.Data.Level,EndXp=World.Progression.Data.Xp},home);
     }
     void OnDestroy() { if(World!=null&&World.Progression!=null) World.Progression.XpAwarded-=Awarded; Time.timeScale=1; }
 }

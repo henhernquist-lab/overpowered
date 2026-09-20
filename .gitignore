@@ -53,6 +53,8 @@ ExportedObj/
 /Verification/Cameras/*.json*
 /Verification/Art/save-*.json*
 /Verification/Humanoid/save-*.json*
+/Verification/Performance/save-*.json*
+/Verification/Menus/save-*.json*
 *.unityproj
 *.sln
 *.slnx

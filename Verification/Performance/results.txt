@@ -1,0 +1,40 @@
+PASS RENDER PIPELINE: Built-in confirmed (currentRenderPipeline==null). No URP, no ScriptableRendererFeature, no outline feature exists in this project, so the requested outline on/off control CANNOT be run.
+LIMIT: the briefed 'outline Renderer Feature' control is not applicable. Packages/manifest.json has no URP package; GraphicsSettings has no pipeline asset; the project has zero custom shaders and uses Shader.Find("Standard").
+POPULATION: buildings=36 (234 renderers), props=247 (772 renderers), civilians=26, cops=10, animators=40, skinnedRenderers=80, propRigidbodies=211, totalRenderers=1140
+SETTINGS: qualityLevel=5 'Ultra', shadows=All, pixelLightCount=4, lodBias=2, shadowDistance=150, GPU=AMD Radeon Pro 5300, CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz
+MATERIALS: palette materials=17, enableInstancing=true on 17 of them, shader=Standard
+MESHES: 1060 MeshFilters reference 1021 DISTINCT sharedMeshes. A ratio near 1:1 means instancing and static batching cannot merge anything.
+MEASURED 00 baseline (as shipped, double-render like all recorded history): FPS=37.68, mean=26.54ms, p95=29.46ms, frames=152, renderers=1140, drawCalls=2222, batches=2058, setPass=106, staticBatched=0, dynamicBatched=0, instanced=2120, tris=4060420, verts=2484348
+MEASURED 01 baseline SINGLE-render (camera.enabled=false; quantifies harness double-render cost): FPS=49.73, mean=20.11ms, p95=21.15ms, frames=199, renderers=1140, drawCalls=1111, batches=1029, setPass=53, staticBatched=0, dynamicBatched=0, instanced=1060, tris=2030210, verts=1242174
+MEASURED 02 city PROP renderers disabled: FPS=55.50, mean=18.02ms, p95=18.94ms, frames=222, renderers=368, drawCalls=678, batches=514, setPass=72, staticBatched=0, dynamicBatched=0, instanced=576, tris=3996340, verts=2393340
+MEASURED 03 BUILDING renderers disabled: FPS=43.84, mean=22.81ms, p95=23.95ms, frames=176, renderers=906, drawCalls=1754, batches=1590, setPass=96, staticBatched=0, dynamicBatched=0, instanced=1652, tris=4015036, verts=2393580
+MEASURED 04 SHADOWS off (QualitySettings.shadows=Disable): FPS=39.79, mean=25.13ms, p95=27.24ms, frames=160, renderers=1140, drawCalls=2218, batches=2058, setPass=104, staticBatched=0, dynamicBatched=0, instanced=2120, tris=3962196, verts=2427600
+MEASURED 05 city geometry stops CASTING shadows (receives only): FPS=40.31, mean=24.81ms, p95=26.28ms, frames=162, renderers=1136, drawCalls=2214, batches=2058, setPass=104, staticBatched=0, dynamicBatched=0, instanced=2120, tris=3863972, verts=2370852
+MEASURED 06 NPC Animators disabled (37 of 40): FPS=41.03, mean=24.37ms, p95=25.60ms, frames=165, renderers=1136, drawCalls=2214, batches=2058, setPass=104, staticBatched=0, dynamicBatched=0, instanced=2120, tris=3863972, verts=2370852
+MEASURED 07 skinned updateWhenOffscreen=false (80 renderers): FPS=40.05, mean=24.97ms, p95=26.52ms, frames=161, renderers=1134, drawCalls=2214, batches=2058, setPass=104, staticBatched=0, dynamicBatched=0, instanced=2120, tris=3863972, verts=2370852
+MEASURED 08 Animator cullingMode=CullUpdateTransforms (was AlwaysAnimate): FPS=40.15, mean=24.91ms, p95=27.90ms, frames=161, renderers=1130, drawCalls=2202, batches=2058, setPass=104, staticBatched=0, dynamicBatched=0, instanced=2120, tris=3569300, verts=2200608
+MEASURED 09 CityMaterials per-frame Apply() disabled: FPS=42.45, mean=23.56ms, p95=24.69ms, frames=170, renderers=1130, drawCalls=2202, batches=2058, setPass=105, staticBatched=0, dynamicBatched=0, instanced=2120, tris=3569300, verts=2200608
+MEASURED 10 prop Rigidbodies -> CollisionDetectionMode.Discrete (211 bodies): FPS=37.61, mean=26.59ms, p95=31.43ms, frames=151, renderers=1163, drawCalls=2246, batches=2078, setPass=110, staticBatched=0, dynamicBatched=0, instanced=2158, tris=4161988, verts=2544590
+MEASURED 11 COMBINED: shadows off + prop renderers off: FPS=57.49, mean=17.39ms, p95=19.70ms, frames=230, renderers=360, drawCalls=652, batches=512, setPass=74, staticBatched=0, dynamicBatched=0, instanced=576, tris=3406996, verts=2052852
+MEASURED 12 baseline RE-MEASURE (drift control; compare to 00): FPS=40.67, mean=24.59ms, p95=25.95ms, frames=163, renderers=1132, drawCalls=2204, batches=2056, setPass=106, staticBatched=0, dynamicBatched=0, instanced=2120, tris=3667524, verts=2257356
+REBUILD CombineMeshes=false: renderers=3481, distinct sharedMeshes=3 (primitive cubes/cylinders are SHARED meshes, so batching CAN apply here)
+MEASURED 13 CombineMeshes=FALSE rebuild (uncombined primitives, shared meshes): FPS=45.28, mean=22.08ms, p95=23.43ms, frames=182, renderers=3481, drawCalls=266, batches=102, setPass=102, staticBatched=0, dynamicBatched=0, instanced=6796, tris=4060348, verts=2484204
+LIMIT: Editor Play Mode throughput at 1280x720 with a fixed camera and the player parked airborne. Not a standalone-player or hands-on FPS figure. Controls toggle renderers/components in place, so each isolates its own subsystem while all other simulation keeps running.
+
+=== ATTRIBUTION vs sample 00 baseline (37.68 FPS, 2222 draw calls) ===
+control | FPS | dFPS% | drawCalls | dDraws | batches | tris
+00 baseline (as shipped, double-render like all recorded history) | 37.68 | 0.0% | 2222 | 0 | 2058 | 4060420
+01 baseline SINGLE-render (camera.enabled=false; quantifies harness double-render cost) | 49.73 | +32.0% | 1111 | -1111 | 1029 | 2030210
+02 city PROP renderers disabled | 55.50 | +47.3% | 678 | -1544 | 514 | 3996340
+03 BUILDING renderers disabled | 43.84 | +16.4% | 1754 | -468 | 1590 | 4015036
+04 SHADOWS off (QualitySettings.shadows=Disable) | 39.79 | +5.6% | 2218 | -4 | 2058 | 3962196
+05 city geometry stops CASTING shadows (receives only) | 40.31 | +7.0% | 2214 | -8 | 2058 | 3863972
+06 NPC Animators disabled (37 of 40) | 41.03 | +8.9% | 2214 | -8 | 2058 | 3863972
+07 skinned updateWhenOffscreen=false (80 renderers) | 40.05 | +6.3% | 2214 | -8 | 2058 | 3863972
+08 Animator cullingMode=CullUpdateTransforms (was AlwaysAnimate) | 40.15 | +6.6% | 2202 | -20 | 2058 | 3569300
+09 CityMaterials per-frame Apply() disabled | 42.45 | +12.7% | 2202 | -20 | 2058 | 3569300
+10 prop Rigidbodies -> CollisionDetectionMode.Discrete (211 bodies) | 37.61 | -0.2% | 2246 | +24 | 2078 | 4161988
+11 COMBINED: shadows off + prop renderers off | 57.49 | +52.6% | 652 | -1570 | 512 | 3406996
+12 baseline RE-MEASURE (drift control; compare to 00) | 40.67 | +7.9% | 2204 | -18 | 2056 | 3667524
+13 CombineMeshes=FALSE rebuild (uncombined primitives, shared meshes) | 45.28 | +20.2% | 266 | -1956 | 102 | 4060348
+DRIFT CONTROL: re-measured baseline is 7.9% from the opening baseline. Within tolerance; per-control deltas above are trustworthy.

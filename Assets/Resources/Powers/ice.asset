@@ -38,7 +38,9 @@ MonoBehaviour:
   HoldDamping: 10
   HoldMaxMass: 500
   Color: {r: 0, g: 1, b: 1, a: 1}
+  PaletteColor: 16
   CastingPresentation: 1
+  MenuIcon: 5
   Upgrades:
   - Name: Upgrade
     PointCost: 1

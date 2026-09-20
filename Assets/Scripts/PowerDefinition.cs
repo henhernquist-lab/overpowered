@@ -23,6 +23,7 @@ public sealed class PowerDefinition : ScriptableObject
     public Color Color = new Color(1f,.25f,.03f);
     public CityColor PaletteColor = CityColor.Fire;
     public bool CastingPresentation;
+    public MenuGlyph MenuIcon=MenuGlyph.Star;
     public PowerTier[] Upgrades = { new PowerTier(), new PowerTier() };
     public PowerStats GetStats(int tier)
     {

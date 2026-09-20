@@ -154,7 +154,7 @@ public sealed class CrimeEncounter : MonoBehaviour
         if(hold<Definition.HoldSeconds) return false;
         if(candidate is EncounterActor chosen)
         {
-            if(Civilians.Contains(chosen)) { chosen.Saved=true; World.Mode.AddScore(World.Mode.Definition.RescueScore); }
+            if(Civilians.Contains(chosen)) { chosen.Saved=true; World.Mode.RecordRescue(); World.Mode.AddScore(World.Mode.Definition.RescueScore); }
             else {chosen.Captured=true;chosen.Npc.gameObject.SetActive(false);}
         }
         else if(candidate is EncounterNode node) {node.Done=true;node.Visual.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Leaf);}
