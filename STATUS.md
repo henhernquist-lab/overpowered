@@ -88,6 +88,11 @@ p95=25.85ms` — within the run-to-run spread of previous samples, no population
   Neither issue is caused by this packet's content; both are recorded so they are not
   rediscovered. The repo's own README already mandates running verifiers on a copy.
 
+- `git push -u origin feat/content-docs` fails with the same credential error recorded in the
+  2026-09-20 entry (`could not read Username for 'https://github.com'`) — HTTPS remote, no
+  `gh` CLI, no SSH keys. **This branch's work is committed locally (`7dadc51`) and ready;
+  pushing it requires a human.**
+
 ### Not verified / limits (explicit)
 
 - **No human has playtested the new encounters.** Balance numbers (deadlines, runner speeds,
