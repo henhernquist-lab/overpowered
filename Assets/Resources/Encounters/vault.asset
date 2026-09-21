@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54c6128b47f14475a9915d0f4dcf039a, type: 3}
+  m_Name: vault
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterDefinition
+  DisplayName: Vault run
+  Kind: 1
+  Robbers: 3
+  Civilians: 1
+  RespondingCops: 2
+  Cars: 1
+  LooseProps: 5
+  Loot: 3
+  Hazards: 0
+  DestructionGoal: 4
+  Deadline: 180
+  RunForExitAfter: 35
+  CivilianDangerAfter: 80
+  CivilianDamagePerSecond: 1
+  RunnerSpeed: 3.5
+  RunnerEscapeDistance: 36
+  PlayerEscapeDistance: 20
+  EscapeReach: 2
+  Spacing: 3.5
+  BlockadeOffset: 4
+  PropMoveDistance: 2
+  InteractRadius: 3
+  HoldSeconds: 1.2
+  CopSuppressSeconds: 0.6
+  CopSuppressDamage: 2
+  MarkerSize: 0.65
+  MarkerHeight: 1
+  LootColor: {r: 1, g: 0.8, b: 0.1, a: 1}
+  RescueColor: {r: 0, g: 1, b: 1, a: 1}
+  HazardColor: {r: 1, g: 0.25, b: 0.04, a: 1}

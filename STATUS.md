@@ -1,6 +1,109 @@
 # Prototype Status
 
-## Performance diagnosis, menu completion and agent handoff — 2026-09-20 (current)
+## Content data and documentation accuracy pass — 2026-09-21 (current)
+
+Content/docs packet (`feat/content-docs`). Data-only encounter content plus a README accuracy
+pass. **No C# was written or changed**; no tuning asset owned by another packet was touched.
+Nothing here raises any spawn or population count.
+
+### Content added (all inside the existing encounter envelope)
+
+Three new `EncounterDefinition` assets in `Assets/Resources/Encounters/`, plus `.meta` files.
+They reuse only existing `CrimeKind` semantics and existing `ModeRules` — no new mechanics,
+matching the count envelope of `bank`/`convoy`/`arson` (2–3 actors per list, 1–2 cars, 1–3
+loot nodes, ≤2 hazards; total live objects per encounter does not exceed the shipping set):
+
+- **`vault.asset` — Vault run** (Kind 1 Robbery): multi-loot heist — 3 robbers / 1 civilian /
+  2 cops / 1 car / 5 crates / **3 loot** / 0 fire; 180 s deadline, robbers run at 35 s.
+  Hero framing: one fast hostage, three stops. Villain framing: three-loot sweep, escape 20 m.
+- **`siege.asset` — Cop siege** (Kind 0 Mugging): rescue-heavy standoff — 2 robbers /
+  **3 civilians** / 3 cops / 1 car / 5 crates / 1 loot; 240 s deadline, slow runners (2.5 m/s),
+  runners wait 55 s. Hero framing: three rescues against a big police presence. Villain
+  framing: longest escape (24 m).
+- **`blackout.asset` — Blackout blitz** (Kind 2 Fire): hazard sweep — 2 robbers / 2 civilians /
+  2 cops / 1 car / 5 crates / 1 loot / **2 fire**; 180 s deadline, robbers run at 30 s,
+  civilians endangered at 75 s. Hero framing: two simultaneous fires plus fast runners.
+  Villain framing: sabotage-plus-escape.
+
+Both shipping mode definitions (`Assets/Resources/Modes/hero.asset`, `villain.asset`) now
+reference all six encounters in their `Encounters` pools. The three pre-existing encounters
+remain first in pool order, so pool-cycling sequences and the first-spawn encounter are
+unchanged. `free-play`/`endless-fight` (not playable) were not modified.
+
+### Documentation
+
+- **`README.md` rewritten** against the code as it exists today. Corrections: the build gate
+  (see environment note below), an explicit Built-in Render Pipeline section (no URP/HDRP
+  package, `m_CustomRenderPipeline: {fileID: 0}`, zero `.shader` files, Standard shader only —
+  there is no pipeline asset or Renderer Feature to configure), the performance section now
+  states the measured **~26–40 FPS Editor** range and that the quoted 155 FPS was a different,
+  much simpler gray-box city (with the harness double-render caveat), every `Overpowered →`
+  menu item re-checked against `Assets/Editor/` (added the existing
+  `Create menu presentation data` item), mode-limits wording matched the data (SuccessGoal 5,
+  3 failures/defeats, 900 s), encounter timing ranges stated as ranges, and the power-menu
+  select keys described correctly. `Assets/Resources/Effects/` and `ModeRules/` asset paths
+  verified to exist and are now listed.
+- **`docs/architecture.md`** (new): per-system table of code/data ownership, flow, extension
+  points, and the performance diagnosis summary. Every path in it was checked.
+- **`docs/agent-scope.md`** (new): exclusive file-ownership map for the concurrent agent
+  packets (content-docs / audio / performance), shared-source rules, append-only STATUS rule,
+  and the conflict protocol.
+
+### Verification (real output)
+
+Ran per the repo's own instructions — an isolated project copy, editor closed, **without
+`-quit`** (each verification exits itself; the packet's suggested command included `-quit`,
+which contradicts the repo docs — noted as a correction):
+
+```sh
+Unity -batchmode -projectPath /tmp/op-content-verify -executeMethod ModeVerification.Run \
+  -logFile .../Verification/Content/unity-run.log
+```
+
+**Exit code 0. 80 PASS / 0 FAIL** (`Verification/Content/mode-results.txt`, copied from the
+run's `Verification/Modes/results.txt`; the raw log stays in `Verification/Content/` and is
+excluded by the project's global `*.log` ignore rule). Controls all passed, including the
+pre-existing-content ones this packet must not regress: the first populated event is still
+`bank` (`3 robbers, 2 civilians, 2 responders, 8 props, 2 loot`), COMING SOON refusal,
+population cap, failure/timeout/defeat limits, third data-only mode, and both shipping-mode
+flows. All three new encounter GUIDs appear in the import log (confirmed loaded, not silently
+dropped). Benchmark sample from the same run: `civilians=28, cops=12, events=2 … FPS=45.82,
+p95=25.85ms` — within the run-to-run spread of previous samples, no population increase.
+
+### Environment notes (checked, honestly)
+
+- **`dotnet` is not on PATH** (previous entry's claim holds), **but** the Unity-bundled SDK at
+  `…/Unity.app/Contents/Resources/Scripting/DotNetSdk/dotnet` **does exist** and compiling with
+  it by full path works today: `dotnet build Overpowered.Build.csproj --no-restore
+  -p:UseSharedCompilation=false` → **0 errors, 16 pre-existing CS0618 warnings**. The previous
+  entry's "cannot currently be run" is therefore stale in one respect: the command needs the
+  full path (or `dotnet` restored to PATH), and the README now documents exactly that.
+- **Batch-mode Unity on the main project path currently fails to reach compile**: every run
+  stalls/exits at `ILPPTrigger: Can't find file /tmp/ilpp.sock-…` retries. Root cause traced:
+  an ILPP runner (injected by `com.unity.ai.assistant`, added to the manifest on Sep 20) leaves
+  `Library/ilpp.pid`; after any killed editor session subsequent runs loop on the dead socket.
+  Clearing `Library/ilpp.pid` + `Library/Bee` did not clear it on the main path this session;
+  the successful run above used a fresh copy. Also: three unrelated Unity editors have been
+  running at ~100% CPU on other projects for days (load average ~8), which slows everything.
+  Neither issue is caused by this packet's content; both are recorded so they are not
+  rediscovered. The repo's own README already mandates running verifiers on a copy.
+
+### Not verified / limits (explicit)
+
+- **No human has playtested the new encounters.** Balance numbers (deadlines, runner speeds,
+  loot counts, escape distances) are design judgment inside the existing envelope; nothing
+  claims they are fun or correctly tuned. Hero-mode failure risk is real in `siege`
+  (3 rescues, 240 s) and `blackout` (fast runners + fires) — unmeasured.
+- The automated flow exercises the pool's first three spawns per session; later-cycle
+  weighting of the six-encounter pool is not separately verified.
+- The main-project ILPP failure above is diagnosed, not fixed — fixing it would mean touching
+  tooling/library state outside this packet's scope. The successful verification was obtained
+  on an isolated copy, which the repo docs already require.
+- `siege`/`blackout`/`vault` have not been exercised individually end-to-end by the harness
+  (it drives the shipping first-spawn encounter and completes events generically); they were
+  loaded, pooled, and the full suite passed with them present.
+
+## Performance diagnosis, menu completion and agent handoff — 2026-09-20
 
 Planning/architecture pass. **No optimization was implemented.** This entry records a measured
 diagnosis, the completion of the interrupted menu work, and two delegated work packets.
