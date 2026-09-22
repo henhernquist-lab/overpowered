@@ -56,6 +56,9 @@ ExportedObj/
 /Verification/Abilities/save-*.json*
 /Verification/Performance/save-*.json*
 /Verification/Menus/save-*.json*
+/Verification/Audio/save-*.json*
+/Verification/ModeExpansion/save-*.json*
+/Verification/Combat/save-*.json*
 *.unityproj
 *.sln
 *.slnx
