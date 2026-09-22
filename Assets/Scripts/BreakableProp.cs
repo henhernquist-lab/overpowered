@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public sealed class BreakableProp : MonoBehaviour
 {
+    public static event System.Action<Vector3> Destroyed;
     [SerializeField] int hitsToBreak = 3;
     int hits;
     PropSettings config = new PropSettings();
@@ -26,6 +27,7 @@ public sealed class BreakableProp : MonoBehaviour
     void Break()
     {
         if (broken) return; broken = true;
+        Destroyed?.Invoke(transform.position);
         GetComponent<EncounterProp>()?.Broken();
         WorldSession.Instance?.OnDestruction(transform.position);
         GetComponent<Collider>().enabled = false;

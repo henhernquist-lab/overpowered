@@ -1,5 +1,205 @@
 # Prototype Status
 
+## Pooled audio — 2026-09-22 (feat/audio)
+
+### Built and ownership
+
+- Automatic persistent AudioDirector: 24 preallocated AudioSources, four reserved for city/siren/flight/music beds and 20 round-robin one-shots. Per-cue caps, pitch/volume variation, distance culling, positional mono world cues and 2D UI/music. Saturated requests are dropped, not allocated. Audio randomness does not change the gameplay seed.
+- 18 cue types / 21 real CC0 clips: punch, three footsteps, flight start/loop, landing, destruction, fire, ice, telekinesis, gunshot, hit, death, jump, UI click/hover, city/siren beds and music. Every file's source URL, author, licence and download date is in Assets/Audio/ATTRIBUTION.md; original Kenney licences retained in Assets/Audio/Licenses. Offline conversion is reproducible with prepare_clips.py. All positional files are mono; all files are Ogg Vorbis; music streams.
+- Inspector tuning: Assets/Resources/AudioTuning.asset owns clips, levels, jitter, pitch, caps, distances/rolloff, pool budget, actor cadence, footstep spacing, fades and Heat response. Assets/Audio/Overpowered.mixer routes Master -> Music/SFX/UI/Ambient; all five volume parameters are exposed. Overpowered/Audio/Create missing audio assets authors missing assets without overwriting existing tuning.
+- Existing events only: powers, player damage/death/respawn, jump/landing, punch impact and NPC attacks. Footsteps use measured speed plus a central distance accumulator; NPC hit/death counters are sampled centrally. No new per-NPC Update or per-sound objects. Registry refresh is once per second; state sampling every 50ms; actor capacity 128.
+- Important hook corrections to the packet: holding Flight does NOT emit PowerUser.Activated, so start/loop follow the existing Flying presentation state and actual fuel remains gameplay-owned. Punch audio subscribes to PunchImpacted, not activation, preserving the configured 125ms windup. Strength costs zero energy, so its refusal control is zero charges; Fire/Ice/Telekinesis use real zero-energy controls, Flight uses empty fuel.
+- The ONLY existing gameplay edit is two additive lines in BreakableProp: static Destroyed event and invocation where Break actually succeeds. No damage, health, shards, physics, power, character, menu or progression logic changed.
+- UI callbacks are delegated from the existing panel root (including dynamically added buttons); disabled buttons are ignored. Scene/disable cleanup unsubscribes hooks and stops world audio; music/UI tails can survive transitions. Heat 0..5 drives calm vs siren/tension, not a new wanted system.
+- Branch isolation: based on 9c3c67f. Another agent changed the shared checkout to feat/backflip-hurricane-kick, so delivery uses a separate feat/audio worktree; that agent's branch/commit is untouched and is NOT merged here. Original shared-checkout audio working files are retained, not discarded.
+
+### Judgment calls, cuts and verification limits
+
+No human has heard or judged this mix. Source playback/DSP cursors are verified, not speaker output, loudness balance or perceived sound quality. Flight is an engine/wind-like texture; ice/telekinesis are electronic power textures; death is a descending feedback tone, not a human vocal. City is the source's near-seamless loop; music repeats a full track with edge fades, not a musically seamless composition. Cop audio uses the existing contact-range attack event: this does not implement ranged combat.
+
+Flight and footsteps are controlled at the public presentation boundary after real fuel controls; jump/landing use real CharacterController motion. No physical F-key input automation. UI home/disabled controls and Hero/Villain scene transitions were exercised; a full results/upgrade-button listening pass was not. NPC registration can lag by one second and ignores actors beyond 128; no large-crowd saturation benchmark beyond the recorded population. No allocation-profiler measurement was made (bounded, centralized design is not a measured zero-GC claim). No volume-options UI or saved preferences added.
+
+The original Tabasco gunshot archive was rejected: its CC0 page conflicts with an included CC-BY licence. The shipped 1911 report instead comes from the explicitly CC0 Free Firearm Sound Library (four authors recorded in attribution).
+
+### Build and measured verification
+
+Unity 6000.6.0f1 isolated project /private/tmp/op-audio-verify-6s0bUo, shipping city/assets plus this packet. Both AudioVerification.Run and AudioVerification.Reload exited **0** in separate processes. Isolation avoids shared-project Editor/ILPP locks; no existing Library or Logs were deleted. Tested audio source/assets match the delivery worktree byte-for-byte.
+
+Commands (no -quit; each runner exits itself):
+
+```sh
+Unity -batchmode -projectPath /private/tmp/op-audio-verify-6s0bUo -executeMethod AudioVerification.Run -logFile /private/tmp/op-audio-run3.log
+Unity -batchmode -projectPath /private/tmp/op-audio-verify-6s0bUo -executeMethod AudioVerification.Reload -logFile /private/tmp/op-audio-reload.log
+```
+
+Unity compile/runtime checks passed. The logs are NOT error-free: UnityEditor.Search.SearchDatabase threw an indexing ArgumentOutOfRangeException during startup, and licensing refresh logged token/entitlement errors before succeeding; neither is an audio/runtime assertion failure. Earlier verification attempts exposed test mistakes (a zero-energy Strength control despite its zero cost; checking footsteps during a still-playing cast). These were corrected to valid controls, not replaced with bookkeeping assertions.
+
+A bundled dotnet SDK was found inside Unity; none was installed. Supplemental build in the delivery worktree succeeded: **0 errors, 16 pre-existing CS0618 warnings in PerformanceProfileRunner.cs** (untouched). Full compiler output: Verification/Audio/build.txt. Thus this is not advertised as a warning-free build.
+
+ABBA samples: 26 civilians + 14 cops, one enabled 1280x720 camera, 6s per segment, actual beds and SFX active in enabled samples (8–9 simultaneous sources), zero playing sources when disabled. Paired mean: disabled **34.39 FPS**, enabled **34.33 FPS**; reported loss **0.07 FPS**, frame-time difference **0.058ms**. This is within noise, not proof of a precise 0.058ms cost. No >2 FPS regression observed in this run. Editor throughput only, not standalone performance; draw calls ~1115–1119, slight population/activity drift remains.
+
+Verbatim main output (also Verification/Audio/results.txt):
+
+```text
+PASS Single automatic director, exactly 24 preallocated AudioSources.
+PASS Punch references real clips and a mixer group.
+PASS punch-1 positional mono.
+PASS punch-2 positional mono.
+PASS Footstep references real clips and a mixer group.
+PASS step-1 positional mono.
+PASS step-2 positional mono.
+PASS step-3 positional mono.
+PASS FlightStart references real clips and a mixer group.
+PASS flight-start positional mono.
+PASS FlightLoop references real clips and a mixer group.
+PASS flight-loop positional mono.
+PASS Land references real clips and a mixer group.
+PASS land positional mono.
+PASS Destruction references real clips and a mixer group.
+PASS debris positional mono.
+PASS Fire references real clips and a mixer group.
+PASS fire positional mono.
+PASS Ice references real clips and a mixer group.
+PASS ice positional mono.
+PASS Telekinesis references real clips and a mixer group.
+PASS telekinesis positional mono.
+PASS Gunshot references real clips and a mixer group.
+PASS gunshot positional mono.
+PASS Hit references real clips and a mixer group.
+PASS hit positional mono.
+PASS Death references real clips and a mixer group.
+PASS death positional mono.
+PASS Jump references real clips and a mixer group.
+PASS jump positional mono.
+PASS UiClick references real clips and a mixer group.
+PASS UiHover references real clips and a mixer group.
+PASS CityBed references real clips and a mixer group.
+PASS SirenBed references real clips and a mixer group.
+PASS Music references real clips and a mixer group.
+PASS All 18 cue types / 21 clip assignments populated (no silent placeholders).
+PASS Exposed mixer parameter MasterVolume is valid.
+PASS Exposed mixer parameter MusicVolume is valid.
+PASS Exposed mixer parameter SFXVolume is valid.
+PASS Exposed mixer parameter UIVolume is valid.
+PASS Exposed mixer parameter AmbientVolume is valid.
+PASS Music: actual AudioSource.isPlaying, assigned clip=music, volume=0.072, group=Music, spatialBlend=0.
+PASS Music DSP sample cursor advances (not just bookkeeping).
+PASS Disabled UI CONTROL emits no click and launches nothing.
+PASS UiHover: actual AudioSource.isPlaying, assigned clip=ui-hover, volume=0.160, group=UI, spatialBlend=0.
+PASS UiClick: actual AudioSource.isPlaying, assigned clip=ui-click, volume=0.600, group=UI, spatialBlend=0.
+PASS Director binds shipping world without gameplay/bootstrap edits.
+PASS Undamaged player CONTROL has no Hit source.
+PASS Hit: actual AudioSource.isPlaying, assigned clip=hit, volume=0.522, group=SFX, spatialBlend=1.
+PASS Real paid punch accepted.
+PASS Windup CONTROL: no punch-impact audio at activation.
+PASS Punch: actual AudioSource.isPlaying, assigned clip=punch-2, volume=0.617, group=SFX, spatialBlend=1.
+TIMING accepted=1.6305, actual impact=1.7628, source timeSamples=969; configured windup=125.0ms; audio callback is PunchImpacted.
+PASS Zero-charge punch refused.
+PASS Zero-charge CONTROL plays no punch cue after windup.
+PASS Shipping Strength costs 0 energy: its rejection CONTROL is charges/cooldown, not energy. Flight uses fuel; Fire/Ice/Telekinesis energy controls follow.
+PASS Damaged-but-unbroken prop CONTROL emits no destruction.
+PASS Destruction: actual AudioSource.isPlaying, assigned clip=debris, volume=0.556, group=SFX, spatialBlend=1.
+PASS Fire Blast paid activation succeeds.
+PASS Fire: actual AudioSource.isPlaying, assigned clip=fire, volume=0.585, group=SFX, spatialBlend=1.
+PASS Fire Blast no-energy activation refused.
+PASS Fire Blast no-energy CONTROL emits no cue.
+PASS Ice paid activation succeeds.
+PASS Ice: actual AudioSource.isPlaying, assigned clip=ice, volume=0.440, group=SFX, spatialBlend=1.
+PASS Ice no-energy activation refused.
+PASS Ice no-energy CONTROL emits no cue.
+PASS Telekinesis paid activation succeeds.
+PASS Telekinesis: actual AudioSource.isPlaying, assigned clip=telekinesis, volume=0.361, group=SFX, spatialBlend=1.
+PASS Telekinesis no-energy activation refused.
+PASS Telekinesis no-energy CONTROL emits no cue.
+PASS Real flight resource consumption accepted.
+PASS FlightStart: actual AudioSource.isPlaying, assigned clip=flight-start, volume=0.300, group=SFX, spatialBlend=1.
+PASS FlightLoop: actual AudioSource.isPlaying, assigned clip=flight-loop, volume=0.160, group=SFX, spatialBlend=1.
+PASS Empty-fuel flight CONTROL refuses consumption.
+PASS Not-flying CONTROL fades/stops flight sources.
+PASS Central distance accumulator plays real footstep sources: speed=6.00, state=Locomotion, health=99.0 (waits for prior cast to finish).
+PASS Stationary CONTROL has no footsteps.
+PASS Land: actual AudioSource.isPlaying, assigned clip=land, volume=0.525, group=SFX, spatialBlend=1.
+PASS Real grounded jump accepted.
+PASS Jump: actual AudioSource.isPlaying, assigned clip=jump, volume=0.177, group=SFX, spatialBlend=1.
+PASS Death: actual AudioSource.isPlaying, assigned clip=death, volume=0.384, group=SFX, spatialBlend=1.
+PASS Heat 0 CONTROL: calm bed playing, siren stopped at volume 0.
+PASS SirenBed: actual AudioSource.isPlaying, assigned clip=siren-bed, volume=0.240, group=Ambient, spatialBlend=0.
+PASS Heat 0->5: city 0.3500->0.1925, siren 0.0000->0.2400; intensity=1.0000.
+PASS Concurrency CONTROL: 13 simultaneous requests, exactly 3 actual sources playing (cap 3); pool remains 24.
+PASS Near spatial CONTROL plays.
+PASS Far spatial CONTROL does not consume a voice.
+BENCH population civilians=26, cops=14; single enabled camera rendering 1280x720 (no manual Camera.Render double-render).
+MEASURED audio disabled A: frames=201, seconds=6.007, FPS=33.47, p95=38.611ms, drawCalls=1119.0, peak playing sources=0.
+PASS Disabled benchmark CONTROL has zero playing sources.
+MEASURED audio enabled B: frames=210, seconds=6.016, FPS=34.91, p95=36.455ms, drawCalls=1119.0, peak playing sources=9.
+PASS Enabled benchmark includes actual beds and simultaneous SFX.
+MEASURED audio enabled B2: frames=203, seconds=6.016, FPS=33.74, p95=39.785ms, drawCalls=1119.0, peak playing sources=8.
+PASS Enabled benchmark includes actual beds and simultaneous SFX.
+MEASURED audio disabled A2: frames=212, seconds=6.003, FPS=35.32, p95=34.922ms, drawCalls=1114.6, peak playing sources=0.
+PASS Disabled benchmark CONTROL has zero playing sources.
+AUDIO COST paired means: disabled=34.39 FPS, enabled=34.33 FPS, loss=0.07 FPS; frame-time delta=0.058ms. Within requested ~2 FPS budget in this run; noise/Editor limits apply.
+PASS Return Home keeps one pool; no stale world/flight/city audio.
+PASS Gunshot: actual AudioSource.isPlaying, assigned clip=gunshot, volume=0.601, group=SFX, spatialBlend=1.
+PASS Cop gunshot is driven by a real hostile NPC attack/damage event.
+PASS Mode switch CONTROL retains exactly one director/pool.
+LIMIT: no human has heard or judged the mix. Tests assert real source playback, clips, volumes and routing, not audible-device capture. Flight state is controlled at the public presentation boundary after real fuel checks; no hardware F-key automation. FPS is Editor throughput, not standalone performance.
+```
+
+Verbatim separate-process asset reload (also Verification/Audio/reload.txt):
+
+```text
+PASS Single automatic director, exactly 24 preallocated AudioSources.
+PASS Punch references real clips and a mixer group.
+PASS punch-1 positional mono.
+PASS punch-2 positional mono.
+PASS Footstep references real clips and a mixer group.
+PASS step-1 positional mono.
+PASS step-2 positional mono.
+PASS step-3 positional mono.
+PASS FlightStart references real clips and a mixer group.
+PASS flight-start positional mono.
+PASS FlightLoop references real clips and a mixer group.
+PASS flight-loop positional mono.
+PASS Land references real clips and a mixer group.
+PASS land positional mono.
+PASS Destruction references real clips and a mixer group.
+PASS debris positional mono.
+PASS Fire references real clips and a mixer group.
+PASS fire positional mono.
+PASS Ice references real clips and a mixer group.
+PASS ice positional mono.
+PASS Telekinesis references real clips and a mixer group.
+PASS telekinesis positional mono.
+PASS Gunshot references real clips and a mixer group.
+PASS gunshot positional mono.
+PASS Hit references real clips and a mixer group.
+PASS hit positional mono.
+PASS Death references real clips and a mixer group.
+PASS death positional mono.
+PASS Jump references real clips and a mixer group.
+PASS jump positional mono.
+PASS UiClick references real clips and a mixer group.
+PASS UiHover references real clips and a mixer group.
+PASS CityBed references real clips and a mixer group.
+PASS SirenBed references real clips and a mixer group.
+PASS Music references real clips and a mixer group.
+PASS All 18 cue types / 21 clip assignments populated (no silent placeholders).
+PASS Exposed mixer parameter MasterVolume is valid.
+PASS Exposed mixer parameter MusicVolume is valid.
+PASS Exposed mixer parameter SFXVolume is valid.
+PASS Exposed mixer parameter UIVolume is valid.
+PASS Exposed mixer parameter AmbientVolume is valid.
+PASS Music: actual AudioSource.isPlaying, assigned clip=music, volume=0.072, group=Music, spatialBlend=0.
+PASS Music DSP sample cursor advances (not just bookkeeping).
+PASS Disabled UI CONTROL emits no click and launches nothing.
+PASS UiHover: actual AudioSource.isPlaying, assigned clip=ui-hover, volume=0.160, group=UI, spatialBlend=0.
+PASS UiClick: actual AudioSource.isPlaying, assigned clip=ui-click, volume=0.600, group=UI, spatialBlend=0.
+PASS Director binds shipping world without gameplay/bootstrap edits.
+PASS CityBed: actual AudioSource.isPlaying, assigned clip=city-bed, volume=0.350, group=Ambient, spatialBlend=0.
+PASS SECOND PROCESS loads persisted mixer with all five groups.
+SECOND PROCESS asset/reference reload passed; fresh isolated save used.
+```
+
 ## Content data and documentation accuracy pass — 2026-09-21 (current)
 
 Content/docs packet (`feat/content-docs`). Data-only encounter content plus a README accuracy
