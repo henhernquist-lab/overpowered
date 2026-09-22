@@ -2,6 +2,10 @@
 
 ## Pooled audio — 2026-09-22 (feat/audio)
 
+### Delivery
+
+Implementation commit: ebf7d46 on feat/audio. Push was attempted with `git push -u origin feat/audio` and failed (exit 128): `fatal: could not read Username for 'https://github.com': Device not configured`. Local commits are retained; a human must authenticate GitHub and retry the push. Nothing was merged to main. Delivery worktree: /private/tmp/op-audio-delivery; the original checkout remains on the other agent's abilities branch. Authored code/docs pass the whitespace check; untouched Unity-generated YAML and original licence bytes retain their source whitespace.
+
 ### Built and ownership
 
 - Automatic persistent AudioDirector: 24 preallocated AudioSources, four reserved for city/siren/flight/music beds and 20 round-robin one-shots. Per-cue caps, pitch/volume variation, distance culling, positional mono world cues and 2D UI/music. Saturated requests are dropped, not allocated. Audio randomness does not change the gameplay seed.
