@@ -109,7 +109,7 @@ public sealed class PerformanceProfileRunner : MonoBehaviour
         }
         watch.Stop(); cam.enabled = true;
         var sorted = new List<double>(times); sorted.Sort();
-        int live = FindObjectsByType<Renderer>(FindObjectsSortMode.None).Count(r => r.enabled && r.gameObject.activeInHierarchy);
+        int live = FindObjectsByType<Renderer>().Count(r => r.enabled && r.gameObject.activeInHierarchy);
         var s = new Sample
         {
             Label = label,
@@ -162,21 +162,21 @@ public sealed class PerformanceProfileRunner : MonoBehaviour
         var props = W.City.GetComponentsInChildren<CityArtProp>();
         int civilians = W.Npcs.Count(n => n != null && !n.Dead && n.Role == NpcRole.Civilian);
         int cops = W.Npcs.Count(n => n != null && !n.Dead && n.Role == NpcRole.Cop);
-        var animators = FindObjectsByType<Animator>(FindObjectsSortMode.None);
-        var skins = FindObjectsByType<SkinnedMeshRenderer>(FindObjectsSortMode.None);
+        var animators = FindObjectsByType<Animator>();
+        var skins = FindObjectsByType<SkinnedMeshRenderer>();
         var buildingRenderers = buildings.SelectMany(b => b.GetComponentsInChildren<Renderer>()).ToArray();
         var propRenderers = props.SelectMany(p => p.GetComponentsInChildren<Renderer>()).ToArray();
         var propBodies = props.SelectMany(p => p.GetComponentsInChildren<Rigidbody>()).ToArray();
         Log($"POPULATION: buildings={buildings.Length} ({buildingRenderers.Length} renderers), props={props.Length} ({propRenderers.Length} renderers), " +
             $"civilians={civilians}, cops={cops}, animators={animators.Length}, skinnedRenderers={skins.Length}, propRigidbodies={propBodies.Length}, " +
-            $"totalRenderers={FindObjectsByType<Renderer>(FindObjectsSortMode.None).Length}");
+            $"totalRenderers={FindObjectsByType<Renderer>().Length}");
         Log($"SETTINGS: qualityLevel={QualitySettings.GetQualityLevel()} '{QualitySettings.names[QualitySettings.GetQualityLevel()]}', shadows={QualitySettings.shadows}, " +
             $"pixelLightCount={QualitySettings.pixelLightCount}, lodBias={QualitySettings.lodBias}, shadowDistance={QualitySettings.shadowDistance}, " +
             $"GPU={SystemInfo.graphicsDeviceName}, CPU={SystemInfo.processorType}");
         int instancedMaterials = CityMaterials.Current.All.Count(m => m.enableInstancing);
         Log($"MATERIALS: palette materials={CityMaterials.Current.All.Count()}, enableInstancing=true on {instancedMaterials} of them, shader={CityMaterials.Get(CityColor.Road).shader.name}");
-        int uniqueMeshes = FindObjectsByType<MeshFilter>(FindObjectsSortMode.None).Select(f => f.sharedMesh).Where(m => m != null).Distinct().Count();
-        int meshFilters = FindObjectsByType<MeshFilter>(FindObjectsSortMode.None).Length;
+        int uniqueMeshes = FindObjectsByType<MeshFilter>().Select(f => f.sharedMesh).Where(m => m != null).Distinct().Count();
+        int meshFilters = FindObjectsByType<MeshFilter>().Length;
         Log($"MESHES: {meshFilters} MeshFilters reference {uniqueMeshes} DISTINCT sharedMeshes. A ratio near 1:1 means instancing and static batching cannot merge anything.");
 
         // 0 — reference
@@ -248,8 +248,8 @@ public sealed class PerformanceProfileRunner : MonoBehaviour
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));
         yield return Scene(GameFlow.CityScene);
         yield return Stage();
-        int rawRenderers = FindObjectsByType<Renderer>(FindObjectsSortMode.None).Length;
-        int rawUnique = FindObjectsByType<MeshFilter>(FindObjectsSortMode.None).Select(f => f.sharedMesh).Where(m => m != null).Distinct().Count();
+        int rawRenderers = FindObjectsByType<Renderer>().Length;
+        int rawUnique = FindObjectsByType<MeshFilter>().Select(f => f.sharedMesh).Where(m => m != null).Distinct().Count();
         Log($"REBUILD CombineMeshes=false: renderers={rawRenderers}, distinct sharedMeshes={rawUnique} (primitive cubes/cylinders are SHARED meshes, so batching CAN apply here)");
         yield return Measure("13 CombineMeshes=FALSE rebuild (uncombined primitives, shared meshes)");
         Save("city-uncombined");
