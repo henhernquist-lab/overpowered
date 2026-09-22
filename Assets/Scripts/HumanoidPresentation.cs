@@ -20,12 +20,14 @@ public sealed class HumanoidPresentation : MonoBehaviour
     public int DeathCount { get; private set; }
     public float LastAnimationImpactTime { get; private set; }=-1;
     public int LastAnimationImpactFrame { get; private set; }=-1;
+    public float LastKickAnimationImpactTime { get; private set; }=-1;
+    public int LastKickAnimationImpactFrame { get; private set; }=-1;
 #if UNITY_EDITOR
     public HeroPresentationState? VerificationState;
 #endif
     SuperHeroController hero;CityNpc npc;
     WorldSession world;PowerUser powers;Vector3 neutralHipsPosition;
-    float actionUntil, phase, lean, actionYaw;bool dead, punchMarkerPending, deferredHit;
+    float actionUntil, phase, lean, actionYaw;bool dead, punchMarkerPending, kickMarkerPending, deferredHit;
     readonly Dictionary<Transform,Quaternion> neutral=new Dictionary<Transform,Quaternion>();
     public static HumanoidPresentation Create(GameObject owner,float height,SuperHeroController hero=null,CityNpc npc=null)
     {
@@ -60,8 +62,9 @@ public sealed class HumanoidPresentation : MonoBehaviour
         presentation.phase=(owner.GetEntityId().GetHashCode()%1000)*.013f;
         if(hero!=null)
         {
-            hero.PunchWindupSeconds=tuning.PunchWindup;
+            hero.PunchWindupSeconds=tuning.PunchWindup;hero.KickWindupSeconds=tuning.KickWindup;
             hero.PunchStarted+=presentation.Punch;hero.Jumped+=presentation.Jump;hero.Landed+=presentation.Land;
+            hero.BackflipStarted+=presentation.Backflip;hero.HurricaneKickStarted+=presentation.HurricaneKick;
             var procedural=owner.AddComponent<ProceduralHeroAnimation>();procedural.HumanoidSquashOnly=true;
             procedural.Initialize(hero,squash,null,Resources.Load<ProceduralAnimationTuning>("ProceduralAnimationTuning"));
         }
@@ -72,7 +75,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
     {
         if(world!=null){world.PlayerDamaged-=Damage;world.PlayerRespawned-=Revive;}
         if(powers!=null)powers.Activated-=PowerActivated;
-        if(hero!=null){hero.PunchStarted-=Punch;hero.Jumped-=Jump;hero.Landed-=Land;}
+        if(hero!=null){hero.PunchStarted-=Punch;hero.Jumped-=Jump;hero.Landed-=Land;hero.BackflipStarted-=Backflip;hero.HurricaneKickStarted-=HurricaneKick;}
         if(npc!=null){npc.Damaged-=Damage;npc.Attacked-=Attack;}
     }
     void Start()
@@ -95,8 +98,14 @@ public sealed class HumanoidPresentation : MonoBehaviour
     }
     void Punch(){punchMarkerPending=true;Action("Punch",Tuning.Punch,Tuning.PunchPlayback,Tuning.PunchStartSeconds,true);}
     void Jump(){Action("Jump",Tuning.Jump,Tuning.JumpPlayback);}
+    // The backflip clip is fitted to the dash window exactly, so the two cannot drift apart.
+    float BackflipRate=>Mathf.Max(.01f,(Tuning.Backflip.length-Tuning.BackflipStartSeconds)/Mathf.Max(.01f,HeroAbilityTuning.BackflipSeconds));
+    void Backflip(){Action("Backflip",Tuning.Backflip,BackflipRate,Tuning.BackflipStartSeconds,true);}
+    void HurricaneKick(){kickMarkerPending=true;Action("Hurricane Kick",Tuning.HurricaneKick,Tuning.KickPlayback,Tuning.KickStartSeconds,true);}
     void Land(float impact)
     {
+        // A backflip owns the pose through its own landing; the shared Land clip is not layered over it.
+        if(State=="Backflip"&&Time.time<actionUntil)return;
         if(impact>=Resources.Load<ProceduralAnimationTuning>("ProceduralAnimationTuning").LandMinimumImpactSpeed)Action("Land",Tuning.Land,Tuning.LandPlayback);
     }
     public void Cast(){Action("Cast",Tuning.Cast,Tuning.CastPlayback);}
@@ -114,11 +123,12 @@ public sealed class HumanoidPresentation : MonoBehaviour
         actionUntil=Time.time+Mathf.Max(.01f,Tuning.ShootEndSeconds-Tuning.ShootStartSeconds)/Tuning.ShootPlayback;
     }
     public void AnimationImpact(){LastAnimationImpactTime=Time.time;LastAnimationImpactFrame=Time.frameCount;}
+    public void KickAnimationImpact(){LastKickAnimationImpactTime=Time.time;LastKickAnimationImpactFrame=Time.frameCount;}
     void Update()
     {
         if(Animator==null)return;
         if(deferredHit&&!punchMarkerPending){deferredHit=false;Action("Hit",Tuning.Hit,Tuning.HitPlayback,0,true);}
-        if(hero!=null)hero.PunchWindupSeconds=Tuning.PunchWindup;
+        if(hero!=null){hero.PunchWindupSeconds=Tuning.PunchWindup;hero.KickWindupSeconds=Tuning.KickWindup;}
         HeroPresentationState state=ReadState();MeasuredSpeed=new Vector2(state.LocalVelocity.x,state.LocalVelocity.z).magnitude;
         Animator.SetFloat("Speed",MeasuredSpeed,Tuning.SpeedDamping,Time.deltaTime);
         float smooth=Animator.GetFloat("Speed");
@@ -142,6 +152,8 @@ public sealed class HumanoidPresentation : MonoBehaviour
         if(Animator==null)return;
         if(punchMarkerPending&&Animator.GetCurrentAnimatorStateInfo(0).IsName("Punch")&&Animator.GetCurrentAnimatorStateInfo(0).normalizedTime*Tuning.Punch.length>=Tuning.PunchImpactSeconds)
         {AnimationImpact();punchMarkerPending=false;}
+        if(kickMarkerPending&&Animator.GetCurrentAnimatorStateInfo(0).IsName("Hurricane Kick")&&Animator.GetCurrentAnimatorStateInfo(0).normalizedTime*Tuning.HurricaneKick.length>=Tuning.KickImpactSeconds)
+        {KickAnimationImpact();kickMarkerPending=false;}
         ApplyPose(ReadState(),npc!=null&&npc.Fleeing&&!npc.Dead,Time.deltaTime);
     }
     // Verification supplies recorded states through this same overlay path.

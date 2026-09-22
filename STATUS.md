@@ -1,6 +1,116 @@
 # Prototype Status
 
-## Content data and documentation accuracy pass — 2026-09-21 (current)
+## Backflip and Hurricane Kick gestures — 2026-09-21 (current)
+
+Abilities packet (`feat/backflip-hurricane-kick`). Wires the two supplied animation clips that
+the humanoid pass imported and deliberately left unused. Both gestures are additive and
+self-contained: no new power type, resource, data asset category, or dodge/invulnerability
+system, and the power architecture (Flight/Strength/Telekinesis/Fire/Ice) is untouched.
+
+### What was added
+
+- **Backflip — `Q`.** A short backward dash/hop: 4.2 m over 0.90 s plus a 5.5 m/s upward launch
+  handled by the **existing** gravity arc (`verticalVelocity`), i.e. the same
+  `CharacterController`/`Move` path walking and jumping already use. Its own cooldown constant
+  (`HeroAbilityTuning.BackflipCooldown = 2.5 s`), grounded only, and it never rotates the physics
+  root. It is repositioning only — there are no i-frames and no dodge state. `Q` was chosen
+  because it is the only sensible unused movement key: `WASD/Shift/Space/F/E/R/H/Tab/Esc`, LMB,
+  digits 1–9 and the harness's `V` are all taken.
+- **Hurricane Kick — right mouse button.** A secondary melee gesture beside the `E` punch. It is
+  paid for by the **existing Super Strength runtime**: `TryHurricaneKick` sets a pending flag and
+  calls the same `PowerUser.Use(Strength)`, so the charge pool, 0.45 s cooldown, energy gate and
+  `Blocked: …` messages are the shipping ones. `PerformPunch` routes a pending activation to the
+  kick instead of the punch, which is why there is no new `PowerEffect` subclass, no new power
+  asset and no new HUD entry. **Decision: shared charge pool rather than its own count** — it
+  cannot desynchronise from progression tiers, energy or the HUD's charge display, and it needed
+  zero edits inside `PowerUser` (the shared ability script most likely to collide with another
+  packet). Consequence: a kick and a punch cannot be thrown inside the same 0.45 s cooldown.
+- **Kick strength** is expressed as multipliers on the already-tier-scaled Strength stats
+  (`x1.50` force, `x1.70` damage) plus an absolute wider radius (4.6 m vs the punch's 3.3 m) and
+  a flat 1.4 m origin offset, so an upgraded Super Strength keeps improving the kick instead of
+  the kick falling behind. All of it lives in `Assets/Scripts/HeroAbilityTuning.cs` (new).
+- **Clip dispatch** uses the existing presentation-event pattern: `HumanoidPresentation`
+  subscribes to `hero.BackflipStarted` / `hero.HurricaneKickStarted` and plays the states, with
+  a backflip-specific guard so the shared `Land` clip is not layered over a flip that is still
+  finishing. The backflip's playback rate is derived so the clip ends exactly when the dash does.
+- **Timing is sampled, not guessed.** `BackflipHurricaneVerification.Sample` re-uses the
+  importer's technique (`Clip.SampleAnimation`, per-frame bone positions) and wrote
+  `Verification/Abilities/clip-sample.txt`: the backflip launches near frame 18 of 65 and lands
+  near frame 40, and the hurricane kick's striking (left) leg lifts near frame 10 and peaks at
+  frame 28 of 55 — hence clip start 0.600 s / 0.333 s and impact 0.933 s.
+- **State rename.** The controller's two `Unwired …` states are now `Backflip` and
+  `Hurricane Kick`; `HumanoidSetup.Build` was updated in the same change so a later rebuild of
+  `Assets/Resources/SharedHumanoid.controller` reproduces the same names.
+
+### Shared-code edits, called out (small and deliberate)
+
+`Assets/Scripts/SuperHeroController.cs` (2 added input lines in `Update`, one added early-return
+line at the top of `PerformPunch`), `Assets/Scripts/HumanoidPresentation.cs` (event subscribe/
+unsubscribe, `Land` guard, kick marker), `Assets/Scripts/PrototypeHUD.cs` (control-legend
+string), `Assets/Editor/HumanoidSetup.cs` (the two state names). Everything else is new files or
+the animation tuning asset.
+
+### Verification (real output)
+
+```sh
+Unity -batchmode -projectPath /tmp/op-abilities-verify \
+  -executeMethod BackflipHurricaneVerification.Run -logFile .../Verification/Abilities/run.log
+Unity -batchmode -projectPath /tmp/op-abilities-verify \
+  -executeMethod HumanoidVerification.Run          -logFile .../Verification/Humanoid/run.log
+```
+
+Isolated project copy, editor closed, **no `-quit`** (each verifier exits itself).
+
+- **New abilities suite: exit 0, 63 PASS / 0 FAIL** (`Verification/Abilities/results.txt`).
+  Backflip: accepted from the ground, dispatches the renamed state, moved the hero **-4.22 m**
+  backward against a configured 4.2 m, hop peak **+0.595 m**, physics root not rotated, then
+  refused with `Blocked: cooldown` (**1.43 s of 2.50 s still remaining**, 1 use, no second
+event) and refused while airborne (`Blocked: airborne`), and after the cooldown elapsed it
+  fired again (use 2) and returned the presentation to locomotion. Kick: `PUNCH force=1350 N·s,
+  1 body, 2.8 m target 22.270 m/s, 5.6 m target 0.000 m/s` versus `HURRICANE KICK force=2025
+  N·s, 2 bodies, 2.8 m target 30.203 m/s, 5.6 m target 5.181 m/s` — the punch's 5.00 m reach
+  versus the kick's 6.00 m. NPC damage on same-role cops: punch **35.0**, kick **59.5**
+  (**1.70x**). Shared pool: 3 → 2 → 1 charges, kick refused immediately after a punch with
+  `Blocked: cooldown`, `Blocked: 0 charges` at zero, and the existing 1.25 s recharge restored
+  the pool. Kick force landed on the **same rendered frame** as its evaluated clip impact marker
+  (offset 0.00 ms, 0 frames), matching the punch's contract.
+- **Pre-existing control suite: exit 0, 46 PASS / 0 FAIL** (movement, punch, charges, recharge,
+  flight fuel, landing, panic, casting, cop behaviour all unchanged — e.g. `Real force=1350 N·s,
+  mass=45kg, velocity=17.192m/s`).
+- `dotnet build Overpowered.Build.csproj` via the Unity-bundled SDK: **0 errors, 16 pre-existing
+  CS0618 warnings** (unchanged from the previous entry's baseline).
+
+### Two test faults found and fixed (recorded so they are not re-derived)
+
+- The first width control placed targets in the street: the punch also pushed the far target
+  (city props were in the sphere), so the comparison proved nothing. The measurement now runs
+  200 m up in clean air with 0.5 m cubes at 2.8 m/5.6 m — outside the punch's 5.00 m reach and
+  inside the kick's 6.00 m reach — and the punch control scores exactly 1 body / 0.000 m/s.
+- At that altitude the hero free-falls at ~36 m/s, so the 300 ms kick windup moved the origin
+  far below the targets (first run: kick `bodies=0`). Both measurements now start from a freshly
+  reset position, so the only difference between them is the gesture's own windup.
+
+### Not verified / limits (explicit)
+
+- **No human has played either gesture.** Balance (2.5 s cooldown, 4.2 m dash, x1.5/x1.7, 4.6 m
+  radius) and especially *feel* are design judgment; nothing here claims the flip reads correctly
+  in motion. The measured hop (0.595 m) lands slightly before the sampled clip's feet touch, so a
+  small visual mismatch is possible; the clip was never watched by a human.
+- Visual/CameraQA of the two clips was not performed — verification covers state dispatch, timing
+  alignment, physics and resources, not whether the animation looks right on screen.
+- `Q`/RMB are wired through the real input loop but were not driven through a synthetic
+  `Input` device; the verification calls `TryBackflip`/`TryHurricaneKick`, the same entry points
+  the input lines call.
+- **Blocker for a human: `feat/audio` has no commits of its own.** Its audio work exists only as
+  uncommitted files in the shared working tree (`Assets/Audio/`, `Assets/Scripts/Audio/`,
+  `Assets/Editor/AudioSetup.cs`, `AudioVerification.cs`, `Assets/Resources/AudioTuning.asset`,
+  and a 2-line `BreakableProp.cs` edit) on top of this branch's base commit. Collision check per
+  the packet: that edit is in the destructible-prop script, **not** the attack/movement/input
+  script this packet touches, so work continued — but nothing was pushed, because the branch
+  situation is unresolved. This branch is committed locally only; pushing still needs a human
+  (same HTTPS credential failure as the Sep 20/21 entries).
+
+## Content data and documentation accuracy pass — 2026-09-21 (earlier)
 
 Content/docs packet (`feat/content-docs`). Data-only encounter content plus a README accuracy
 pass. **No C# was written or changed**; no tuning asset owned by another packet was touched.

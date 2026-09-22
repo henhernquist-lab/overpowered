@@ -22,6 +22,8 @@ Open this folder with Unity 6000.6.0f1, open `Assets/Scenes/Home.unity`, and pre
 - WASD move, Left Shift run, Space jump.
 - Hold F while airborne to fly; Space ascends, release directional input to hover. Fuel recharges on the ground.
 - E always punches. Left mouse uses the selected power. Number keys select the powers listed in the power menu.
+- **Q backflips:** a short backward dash/hop with its own 2.5 s cooldown, grounded only. It is repositioning only — there are no invincibility frames and no separate dodge state.
+- **Right mouse throws a Hurricane Kick:** a heavier, wider melee sweep than the punch, paid for from the *same* Super Strength charges, cooldown and energy as `E`. It is not a separate power and does not appear in the power menu.
 - Tab opens the power/unlock/upgrade menu (world continues). Escape truly pauses and offers resume, results, or return home.
 - Telekinesis: aim at a prop, click to grab, click again to hurl. Changing powers or reaching the hold timeout releases it.
 - Hero: stop all fleeing robbers (capture with held R or defeat), punch/throw the brown blockades away from cyan civilians, then hold R nearby to rescue. Hold R at orange fire markers to extinguish arson.
@@ -38,7 +40,7 @@ Select these Project assets; no code edits are needed for numeric gameplay tunin
 
 - `Assets/Resources/GameTuning.asset`: movement, city seed/dimensions, NPCs, progression, Heat, crime timing, prop physics, and camera settings, grouped by system.
 - `Assets/Resources/Powers/*.asset`: each power's costs, charges, cooldown, resource use, force/damage, range/duration, and upgrade tiers. Effect behavior lives in `Assets/Resources/Effects/*.asset`.
-- `Assets/Resources/HumanoidAnimationTuning.asset`: shared clips, locomotion, punch timing, flight and panic. `ProceduralAnimationTuning.asset` retains landing squash and legacy placeholder settings.
+- `Assets/Resources/HumanoidAnimationTuning.asset`: shared clips, locomotion, punch/backflip/hurricane-kick timing, flight and panic. `ProceduralAnimationTuning.asset` retains landing squash and legacy placeholder settings. Force/damage/radius for the punch stay in `Assets/Resources/Powers/strength.asset`; the kick's multipliers, radius and the backflip's distance/cooldown are tunable constants in `Assets/Scripts/HeroAbilityTuning.cs`.
 - `Assets/Resources/CityPalette.asset`: the single named color palette for all generated materials (including existing actors, markers, projectiles and shards). Swatch changes propagate live during Play.
 - `Assets/Resources/CityArtSettings.asset`: building archetypes, facade/roof dimensions, prop dimensions/masses, normalized placement anchors/chances/jitter, and mesh combining. Art stays inside existing seeded building bounds; `CityLayout` remains the layout authority.
 - `Assets/Resources/Modes/*.asset`: mode catalog, side, rules, encounter pools, HUD flags, session limits, population, score/XP/Heat rewards.
@@ -84,6 +86,8 @@ Unity batch mode is the build gate (see Requirements). Run the functional checks
 Unity -batchmode -projectPath /path/to/copy -executeMethod CityVerification.Run -logFile /path/to/city.log
 Unity -batchmode -projectPath /path/to/copy -executeMethod CityVerification.Reload -logFile /path/to/reload.log
 Unity -batchmode -projectPath /path/to/copy -executeMethod HumanoidVerification.Run -logFile /path/to/animation.log
+Unity -batchmode -projectPath /path/to/copy -executeMethod BackflipHurricaneVerification.Run -logFile /path/to/abilities.log
+Unity -batchmode -projectPath /path/to/copy -executeMethod BackflipHurricaneVerification.Sample -logFile /path/to/abilities-sample.log
 Unity -batchmode -projectPath /path/to/copy -executeMethod ModeVerification.Run -logFile /path/to/modes.log
 Unity -batchmode -projectPath /path/to/copy -executeMethod ModeVerification.Reload -logFile /path/to/modes-reload.log
 Unity -batchmode -projectPath /path/to/copy -executeMethod CityArtVerification.Run -logFile /path/to/art.log

@@ -47,6 +47,10 @@ MonoBehaviour:
   PunchStartSeconds: 0.36666667
   PunchImpactSeconds: 0.56666666
   PunchPlayback: 1.6
+  BackflipStartSeconds: 0.6
+  KickStartSeconds: 0.333
+  KickImpactSeconds: 0.933
+  KickPlayback: 2
   FlightPitch: 78
   FlightFullSpeed: 10
   FlightBlendResponse: 6

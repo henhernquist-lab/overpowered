@@ -80,7 +80,7 @@ public static class HumanoidSetup
         Add("Back",t.Back,"GaitRate");Add("Armed",t.ArmedRun,"GaitRate");Add("Panic",t.Run,"GaitRate");
         Add("Air",t.Jump,"GaitRate");Add("Fly",t.Idle,"GaitRate");
         Add("Jump",t.Jump,"ActionRate");Add("Land",t.Land,"ActionRate");Add("Punch",t.Punch,"ActionRate");Add("Cast",t.Cast,"ActionRate");Add("Hit",t.Hit,"ActionRate");Add("Death",t.Death,"ActionRate");Add("Shoot",t.Shoot,"ActionRate");
-        Add("Unwired Backflip",t.Backflip,"ActionRate");Add("Unwired Hurricane Kick",t.HurricaneKick,"ActionRate");
+        Add("Backflip",t.Backflip,"ActionRate");Add("Hurricane Kick",t.HurricaneKick,"ActionRate");
         t.Controller=controller;EditorUtility.SetDirty(t);EditorUtility.SetDirty(controller);
         foreach(var power in Resources.LoadAll<PowerDefinition>("Powers"))if(power.Effect is FireBlastEffect||power.Effect is IceEffect){power.CastingPresentation=true;EditorUtility.SetDirty(power);}
         AssetDatabase.SaveAssets();
