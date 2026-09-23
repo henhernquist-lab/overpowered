@@ -17,11 +17,15 @@ public sealed class CityPalette : ScriptableObject
 }
 
 // Materials are shared, owned by the generated city and updated live from the palette asset.
+// Palette edits (inspector or code) are picked up by change detection; material properties are only
+// written when a swatch or the smoothness actually differs from what was last applied.
 public sealed class CityMaterials : MonoBehaviour
 {
     public static CityMaterials Current {get;private set;}
     public CityPalette Palette {get;private set;}
     readonly Dictionary<CityColor,Material> materials=new Dictionary<CityColor,Material>();
+    readonly Dictionary<CityColor,Color> applied=new Dictionary<CityColor,Color>();
+    float appliedSmoothness=float.NaN;
     public IEnumerable<Material> All=>materials.Values;
     public void Initialize(CityPalette palette) {Current=this;Palette=palette;}
     public static Material Get(CityColor color)
@@ -37,8 +41,15 @@ public sealed class CityMaterials : MonoBehaviour
     public void Apply()
     {
         foreach(var pair in materials)
-        {pair.Value.color=Palette.Colors[(int)pair.Key];pair.Value.SetFloat("_Glossiness",Palette.Smoothness);}
+        {var color=Palette.Colors[(int)pair.Key];pair.Value.color=color;pair.Value.SetFloat("_Glossiness",Palette.Smoothness);applied[pair.Key]=color;}
+        appliedSmoothness=Palette.Smoothness;
     }
-    void LateUpdate(){Apply();}
+    bool Changed()
+    {
+        if(!appliedSmoothness.Equals(Palette.Smoothness))return true;
+        foreach(var pair in materials)if(!applied.TryGetValue(pair.Key,out var color)||!color.Equals(Palette.Colors[(int)pair.Key]))return true;
+        return false;
+    }
+    void LateUpdate(){if(Changed())Apply();}
     void OnDestroy(){foreach(var mat in materials.Values)Destroy(mat);if(Current==this)Current=null;}
 }

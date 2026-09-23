@@ -9,22 +9,40 @@ public sealed class CityArt : MonoBehaviour
 {
     public CityArtSettings Settings {get;private set;}
     public readonly List<ArtPlacement> Placements=new List<ArtPlacement>();
+    // Modes are read once so every prop (including runtime CreateProp calls) matches the rest of this city.
+    public PropMeshMode PropMode {get;private set;}
+    public StaticGeometryMode StaticMode {get;private set;}
+    public double BuildMilliseconds {get;private set;}
+    public double StaticFinalizeMilliseconds {get;private set;}
+    public int SharedPropMeshes=>sharedProps.Count;
+    /// Renderers that draw buildings and streets in the current mode (combined children, pieces or city meshes).
+    public IEnumerable<Renderer> StaticGeometryRenderers=>staticRoots.Where(r=>r!=null).SelectMany(r=>r.GetComponentsInChildren<Renderer>()).Concat(cityRenderers.Where(r=>r!=null));
     readonly List<Mesh> ownedMeshes=new List<Mesh>();
+    readonly List<GameObject> staticRoots=new List<GameObject>(), pendingStatic=new List<GameObject>();
+    readonly List<Renderer> cityRenderers=new List<Renderer>();
+    readonly Dictionary<string,SharedProp> sharedProps=new Dictionary<string,SharedProp>();
+    readonly System.Diagnostics.Stopwatch buildWatch=new System.Diagnostics.Stopwatch();
+    static readonly Dictionary<PrimitiveType,Mesh> primitives=new Dictionary<PrimitiveType,Mesh>();
     GameTuning tuning;
+    struct PropPiece { public string Name; public PrimitiveType Type; public Vector3 Position, Size; public Quaternion Rotation; public CityColor Color; }
+    sealed class SharedProp { public Mesh Mesh; public Mesh[] Parts; public Material[] Materials; }
     public void Initialize(GameTuning config)
     {
+        buildWatch.Restart();
         tuning=config;Settings=Resources.Load<CityArtSettings>("CityArtSettings");
         if(Settings==null||Settings.Palette==null)throw new System.InvalidOperationException("Create city art assets via Overpowered > Create missing city art assets.");
+        PropMode=Settings.PropMeshes;StaticMode=Settings.StaticGeometry;
         gameObject.AddComponent<CityMaterials>().Initialize(Settings.Palette);
     }
     public static GameObject Piece(Transform parent,string name,Vector3 position,Vector3 size,CityColor color,bool solid=false,PrimitiveType type=PrimitiveType.Cube)
     {
         var go=GameObject.CreatePrimitive(type);go.name=name;go.transform.SetParent(parent,false);go.transform.localPosition=position;
-        go.transform.localScale=new Vector3(size.x,size.y*(type==PrimitiveType.Cylinder?.5f:1),size.z);
+        go.transform.localScale=PieceScale(size,type);
         go.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(color);
         if(!solid){go.GetComponent<Collider>().enabled=false;Object.Destroy(go.GetComponent<Collider>());}
         return go;
     }
+    static Vector3 PieceScale(Vector3 size,PrimitiveType type)=>new Vector3(size.x,size.y*(type==PrimitiveType.Cylinder?.5f:1),size.z);
     public void Building(BuildingPlacement b,int index)
     {
         int styleIndex=Settings.StyleIndex(tuning.City.Seed,index);var style=Settings.Styles[styleIndex];
@@ -53,7 +71,7 @@ public sealed class CityArt : MonoBehaviour
         Piece(root.transform,"Shop canopy",new Vector3(0,entry,-d*.5f-.3f),new Vector3(w*.6f,.25f,.7f),CityColor.Teal);
         Piece(root.transform,"Shop sign",new Vector3(0,entry-.5f,-d*.5f-.36f),new Vector3(w*.5f,.65f,.12f),CityColor.Brick);
         for(int i=0;i<3;i++)Piece(root.transform,"Abstract shop glyph",new Vector3((i-1)*w*.13f,entry-.5f,-d*.5f-.44f),new Vector3(w*.09f,.16f,.035f),CityColor.Cream);
-        Combine(root);
+        StaticRoot(root);
     }
     void Facade(Transform root,float w,float d,float bottom,float top,int seed)
     {
@@ -107,19 +125,84 @@ public sealed class CityArt : MonoBehaviour
                 }
             }
         }
-        Combine(root);
+        StaticRoot(root);
+    }
+    void StaticRoot(GameObject root)
+    {
+        staticRoots.Add(root);
+        if(StaticMode==StaticGeometryMode.PerRootCombine)Combine(root);else pendingStatic.Add(root);
+    }
+    /// Call once all buildings and streets exist (and before any capture render). Batches or merges the
+    /// never-moving geometry for StaticBatching/CityCombine; a no-op for the per-root and uncombined modes.
+    public void FinishStaticGeometry()
+    {
+        if(pendingStatic.Count==0)return;
+        var watch=System.Diagnostics.Stopwatch.StartNew();
+        var filters=pendingStatic.Where(r=>r!=null).SelectMany(r=>r.GetComponentsInChildren<MeshFilter>()).Where(f=>f.sharedMesh!=null&&f.GetComponent<MeshRenderer>()!=null).ToArray();
+        pendingStatic.Clear();
+        if(StaticMode==StaticGeometryMode.StaticBatching&&filters.Length>0)
+        {
+            var source=new HashSet<Mesh>(filters.Select(f=>f.sharedMesh));
+            StaticBatchingUtility.Combine(filters.Select(f=>f.gameObject).ToArray(),gameObject);
+            // The batch meshes Unity creates here belong to this city; release them with it.
+            foreach(var mesh in filters.Select(f=>f.sharedMesh).Distinct())if(mesh!=null&&!source.Contains(mesh))ownedMeshes.Add(mesh);
+        }
+        else if(StaticMode==StaticGeometryMode.CityCombine)
+        {
+            foreach(var group in filters.GroupBy(f=>f.GetComponent<Renderer>().sharedMaterial))
+            {
+                var parts=group.ToArray();var mesh=new Mesh{name="City static / "+group.Key.name,indexFormat=IndexFormat.UInt32};
+                mesh.CombineMeshes(parts.Select(f=>new CombineInstance{mesh=f.sharedMesh,transform=transform.worldToLocalMatrix*f.transform.localToWorldMatrix}).ToArray(),true,true);
+                var combined=new GameObject("City static geometry / "+group.Key.name){layer=parts[0].gameObject.layer};combined.transform.SetParent(transform,false);
+                combined.AddComponent<MeshFilter>().sharedMesh=mesh;var renderer=combined.AddComponent<MeshRenderer>();renderer.sharedMaterial=group.Key;
+                ownedMeshes.Add(mesh);cityRenderers.Add(renderer);
+                // Piece GameObjects stay (the solid ones keep their colliders); only their drawing moves.
+                foreach(var part in parts){var old=part.GetComponent<Renderer>();old.enabled=false;Destroy(old);Destroy(part);}
+            }
+        }
+        StaticFinalizeMilliseconds+=watch.Elapsed.TotalMilliseconds;
     }
     public void Populate(List<BuildingPlacement> buildings)
-    {Placements.AddRange(Settings.Generate(tuning.City,buildings));foreach(var placement in Placements)CreateProp(placement);}
+    {
+        Placements.AddRange(Settings.Generate(tuning.City,buildings));foreach(var placement in Placements)CreateProp(placement);
+        BuildMilliseconds=buildWatch.Elapsed.TotalMilliseconds;
+    }
     public GameObject CreateProp(ArtPlacement placement)
     {
         var shape=System.Array.Find(Settings.Shapes,s=>s.Kind==placement.Kind);
         var root=new GameObject("City "+placement.Kind);root.transform.SetParent(transform,false);root.transform.position=placement.Position+Vector3.up*(placement.Rooftop?.1f:0);
         root.transform.rotation=Quaternion.Euler(0,placement.Yaw,0);
         var tag=root.AddComponent<CityArtProp>();tag.Kind=placement.Kind;tag.Rooftop=placement.Rooftop;
-        Vector3 s=shape.Size;
-        System.Action<string,Vector3,Vector3,CityColor> box=(name,p,size,color)=>Piece(root.transform,name,Vector3.Scale(p,s),Vector3.Scale(size,s),color);
-        System.Action<string,Vector3,Vector3,CityColor> cylinder=(name,p,size,color)=>Piece(root.transform,name,Vector3.Scale(p,s),Vector3.Scale(size,s),color,false,PrimitiveType.Cylinder);
+        Vector3 s=shape.Size;var pieces=PropRecipe(placement,s);
+        bool shared=PropMode==PropMeshMode.SharedPerKind||PropMode==PropMeshMode.SharedPerKindPerMaterial;
+        if(!shared)foreach(var p in pieces){var go=Piece(root.transform,p.Name,p.Position,p.Size,p.Color,false,p.Type);if(p.Rotation!=Quaternion.identity)go.transform.localRotation=p.Rotation;}
+        var collider=root.AddComponent<BoxCollider>();collider.center=Vector3.up*s.y*.5f;collider.size=s;
+        if(shape.Destructible)
+        {
+            var body=root.AddComponent<Rigidbody>();body.mass=shape.Mass;body.interpolation=RigidbodyInterpolation.Interpolate;body.collisionDetectionMode=CollisionDetectionMode.ContinuousDynamic;
+            root.AddComponent<BreakableProp>().Configure(tuning.Props);
+        }
+        if(shared)
+        {
+            var mesh=SharedPropMesh(placement.Kind,s,pieces);
+            if(PropMode==PropMeshMode.SharedPerKind)
+            {root.AddComponent<MeshFilter>().sharedMesh=mesh.Mesh;root.AddComponent<MeshRenderer>().sharedMaterials=mesh.Materials;}
+            else for(int i=0;i<mesh.Parts.Length;i++)
+            {
+                var child=new GameObject(mesh.Materials[i].name);child.transform.SetParent(root.transform,false);
+                child.AddComponent<MeshFilter>().sharedMesh=mesh.Parts[i];child.AddComponent<MeshRenderer>().sharedMaterial=mesh.Materials[i];
+            }
+        }
+        else if(PropMode==PropMeshMode.PerPropCombine)Combine(root);
+        return root;
+    }
+    // Piece list for one prop in root-local space. Pure data: identical for every mode.
+    static List<PropPiece> PropRecipe(ArtPlacement placement,Vector3 s)
+    {
+        var pieces=new List<PropPiece>();
+        void Add(string name,PrimitiveType type,Vector3 position,Vector3 size,CityColor color,Quaternion rotation)=>pieces.Add(new PropPiece{Name=name,Type=type,Position=position,Size=size,Color=color,Rotation=rotation});
+        void box(string name,Vector3 p,Vector3 size,CityColor color)=>Add(name,PrimitiveType.Cube,Vector3.Scale(p,s),Vector3.Scale(size,s),color,Quaternion.identity);
+        void cylinder(string name,Vector3 p,Vector3 size,CityColor color)=>Add(name,PrimitiveType.Cylinder,Vector3.Scale(p,s),Vector3.Scale(size,s),color,Quaternion.identity);
         switch(placement.Kind)
         {
             case CityPropKind.Lamp:
@@ -147,7 +230,7 @@ public sealed class CityArt : MonoBehaviour
                     box("Bumper",new Vector3(0,.23f,side*.49f),new Vector3(.95f,.12f,.02f),CityColor.Metal);
                     box("Lights",new Vector3(0,.42f,side*.49f),new Vector3(.65f,.08f,.03f),CityColor.Amber);
                     foreach(float end in new[]{-1f,1f})
-                    {var wheel=Piece(root.transform,"Wheel",new Vector3(side*s.x*.44f,s.y*.22f,end*s.z*.3f),new Vector3(s.y*.4f,s.x*.16f,s.y*.4f),CityColor.Metal,false,PrimitiveType.Cylinder);wheel.transform.localRotation=Quaternion.Euler(0,0,90);}
+                        Add("Wheel",PrimitiveType.Cylinder,new Vector3(side*s.x*.44f,s.y*.22f,end*s.z*.3f),new Vector3(s.y*.4f,s.x*.16f,s.y*.4f),CityColor.Metal,Quaternion.Euler(0,0,90));
                 }break;
             case CityPropKind.BusStop:
                 box("Shelter roof",new Vector3(0,.96f,0),new Vector3(1,.08f,1),CityColor.Teal);
@@ -166,7 +249,7 @@ public sealed class CityArt : MonoBehaviour
                 box("Cross pipe",new Vector3(0,.6f,0),new Vector3(1,.22f,.25f),CityColor.Metal);break;
             case CityPropKind.Planter:
                 box("Planter",new Vector3(0,.25f,0),new Vector3(.85f,.5f,.85f),CityColor.Sand);
-                var shrub=Piece(root.transform,"Low poly shrub",new Vector3(0,s.y*.65f,0),s*.65f,CityColor.Leaf);shrub.transform.localRotation=Quaternion.Euler(0,25,0);break;
+                Add("Low poly shrub",PrimitiveType.Cube,new Vector3(0,s.y*.65f,0),s*.65f,CityColor.Leaf,Quaternion.Euler(0,25,0));break;
             case CityPropKind.Billboard:
                 foreach(float side in new[]{-1f,1f})box("Sign support",new Vector3(side*.35f,.35f,0),new Vector3(.06f,.7f,.3f),CityColor.Metal);
                 box("Billboard",new Vector3(0,.72f,0),new Vector3(1,.56f,.3f),CityColor.Teal);
@@ -179,17 +262,38 @@ public sealed class CityArt : MonoBehaviour
                 else box(placement.Kind==CityPropKind.RoofAccess?"Access door":"Inset panel",new Vector3(0,.5f,-.47f),new Vector3(.6f,.7f,.03f),CityColor.Glass);
                 break;
         }
-        var collider=root.AddComponent<BoxCollider>();collider.center=Vector3.up*s.y*.5f;collider.size=s;
-        if(shape.Destructible)
+        return pieces;
+    }
+    // One mesh per recipe signature (kind + the material of every piece), built once and shared by every instance,
+    // so identical props present the same Mesh and GPU instancing can draw them together.
+    SharedProp SharedPropMesh(CityPropKind kind,Vector3 size,List<PropPiece> pieces)
+    {
+        string key=kind+" "+size.ToString("R")+":"+string.Join(",",pieces.Select(p=>p.Color));
+        if(sharedProps.TryGetValue(key,out var shared))return shared;
+        var colors=pieces.Select(p=>p.Color).Distinct().ToArray(); // first-appearance order = legacy child order
+        shared=new SharedProp{Parts=new Mesh[colors.Length],Materials=colors.Select(CityMaterials.Get).ToArray()};
+        for(int i=0;i<colors.Length;i++)
         {
-            var body=root.AddComponent<Rigidbody>();body.mass=shape.Mass;body.interpolation=RigidbodyInterpolation.Interpolate;body.collisionDetectionMode=CollisionDetectionMode.ContinuousDynamic;
-            root.AddComponent<BreakableProp>().Configure(tuning.Props);
+            var part=new Mesh{name="Prop "+key+" / "+colors[i]};
+            part.CombineMeshes(pieces.Where(p=>p.Color==colors[i]).Select(p=>new CombineInstance{mesh=Primitive(p.Type),transform=Matrix4x4.TRS(p.Position,p.Rotation,PieceScale(p.Size,p.Type))}).ToArray(),true,true);
+            shared.Parts[i]=part;ownedMeshes.Add(part);
         }
-        Combine(root);return root;
+        if(PropMode==PropMeshMode.SharedPerKind)
+        {
+            shared.Mesh=new Mesh{name="Prop "+key};
+            shared.Mesh.CombineMeshes(shared.Parts.Select(p=>new CombineInstance{mesh=p,transform=Matrix4x4.identity}).ToArray(),false,false);
+            ownedMeshes.Add(shared.Mesh);
+        }
+        sharedProps.Add(key,shared);return shared;
+    }
+    static Mesh Primitive(PrimitiveType type)
+    {
+        if(primitives.TryGetValue(type,out var mesh)&&mesh!=null)return mesh;
+        var probe=GameObject.CreatePrimitive(type);probe.SetActive(false);mesh=probe.GetComponent<MeshFilter>().sharedMesh;Destroy(probe);
+        primitives[type]=mesh;return mesh;
     }
     void Combine(GameObject root)
     {
-        if(!Settings.CombineMeshes)return;
         var filters=root.GetComponentsInChildren<MeshFilter>();
         foreach(var group in filters.GroupBy(f=>f.GetComponent<Renderer>().sharedMaterial))
         {
@@ -199,5 +303,5 @@ public sealed class CityArt : MonoBehaviour
             foreach(var part in parts){var renderer=part.GetComponent<Renderer>();renderer.enabled=false;Destroy(renderer);Destroy(part);}
         }
     }
-    void OnDestroy(){foreach(var mesh in ownedMeshes)Destroy(mesh);}
+    void OnDestroy(){foreach(var mesh in ownedMeshes)if(mesh!=null)Destroy(mesh);}
 }

@@ -41,7 +41,7 @@ public sealed class CityDistrict : MonoBehaviour
                 marker.AddComponent<RooftopDiscovery>().Id = c.Seed + ":roof:" + i;
             }
         }
-        Art.Streets();Art.Populate(Buildings);
+        Art.Streets();Art.FinishStaticGeometry();Art.Populate(Buildings);
         var sources = new List<NavMeshBuildSource>();
         NavMeshBuilder.CollectSources(transform, ~0, NavMeshCollectGeometry.PhysicsColliders, 0, new List<NavMeshBuildMarkup>(), sources);
         sources.RemoveAll(s => s.component != null && s.component.GetComponent<Rigidbody>() != null);

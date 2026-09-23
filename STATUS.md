@@ -1,6 +1,116 @@
 # Prototype Status
 
-## Pooled audio — 2026-09-22 (merged to main 2026-09-22)
+## Integration of parallel branches + city batching FPS fix — 2026-09-22 (current)
+
+### Step 0: ground truth and merge
+- `feat/content-docs` (GLM) was **never pushed** despite being reported as pushed; `origin` held only `main`.
+- `feat/audio` (Codex) was reported as "out of usage mid-task". In fact Codex was **live** and committed its audio
+  work (`ebf7d46`, `4032699`) while this pass was inspecting its worktree at `/private/tmp/op-audio-delivery`.
+  Merging waited until the worktree was quiet (HEAD unchanged, no file writes, nothing uncommitted for 60s).
+- `feat/backflip-hurricane-kick` was built on top of `feat/content-docs`. Main fast-forwarded to it (bringing content
+  + abilities), then merged `feat/audio` (`6ac3422`). The only conflict was this file: both agents appended at the same
+  place. Both entries were kept; a line-by-line check confirmed only the three relabelled headings differ.
+- A stray uncommitted copy of the audio work in the main working tree was byte-compared (63/63 files identical to
+  `4032699`) and stashed, not deleted.
+- **Integration defect fixed:** audio played the punch cue only on `PunchImpacted`, but the kick fires its own
+  `HurricaneKickImpacted`, so kicks were silent after the merge. Kick impact → punch cue, backflip start → jump cue
+  (`cc1a3b7`). Merge gate: audio 109/109 PASS (94 prior + 15 new, including windup, zero-charge and cooldown refusal
+  controls that must stay silent), abilities 63/63 PASS.
+- **Correction to the 2026-09-20 entry:** `dotnet` IS available. Unity bundles it at
+  `/Applications/Unity/Hub/Editor/6000.6.0f1/Unity.app/Contents/Resources/Scripting/DotNetSdk/dotnet`, and
+  `dotnet build Overpowered.Build.csproj -p:UseSharedCompilation=false` works with it: **0 errors, 0 warnings**.
+  The earlier "cannot currently be run" was overstated.
+- Five unrelated Unity editors (other projects, some running 6–20 days, one a hung `-createproject`) were pegging
+  ~100% CPU each and distorting every FPS sample. They were terminated with the user's permission before the
+  measurements below. Earlier numbers in this file were taken under unknown background load.
+
+### Step 1: the fix
+**Root cause (measured 2026-09-20):** `CityArt.Combine` built a NEW mesh per building root and per prop root, per
+material: 1,021 distinct meshes from 1,060 MeshFilters. Static batching, GPU instancing and dynamic batching could
+never merge anything; `enableInstancing` on the palette materials was inert. **The defect was never combining — it was
+producing a unique mesh per instance.**
+
+- **Props** (Rigidbody physics bodies — they move, so they can never be static-batched): each prop kind's geometry is
+  built ONCE into a shared mesh, cached per city and keyed by kind + size + each piece's colour (a teal car and a red
+  car are separate entries). One renderer per prop with one submesh per material. 15 shared meshes serve all 247
+  props, and runtime encounter cars (`CrimeEncounter`) share the same cache. **Built-in RP does instance
+  multi-submesh renderers** (measured), so the per-material fallback was unnecessary. Prop renderers: 772 → 247.
+- **Buildings and streets** (never move, unique per seed): kept as primitive pieces and static-batched once via `StaticBatchingUtility` (**S1, the shipped default**).
+  A whole-city per-material combine (**S2**, `StaticGeometry: 2`) was implemented and measured head-to-head. At the
+  real gameplay (street) camera the two are a statistical tie: S1 won 2 of 3 paired rounds, and in the profiled
+  samples S2 was slightly slower. S1 also culls per piece, so it scales better at street level as the city grows, and
+  it is what the user specified. S2 is cheaper in elevated/flight views (overview rendering 2.1 vs 3.3 ms), so it
+  remains a one-line switch. A per-block chunked combine would likely capture both, but it is not implemented.
+- `CityMaterials` no longer writes every material every frame; it applies only when a palette colour or smoothness
+  actually changes. Live palette editing still works (control: 400 renderers updated within 2 frames).
+- `CombineMeshes` is replaced by `PropMeshMode` / `StaticGeometryMode` in `CityArtSettings.asset`. Both legacy
+  behaviours stay selectable, which is what allowed before/after to be measured in one process.
+  `CityArt.FinishStaticGeometry()` runs after streets in `CityDistrict.Build` and before the menu skyline capture.
+
+### Results — measured at THREE cameras, including the real gameplay view
+Every earlier benchmark in this file used a god's-eye overview camera, where the whole city is in view. Players never
+see that. This pass added the real `ThirdPersonCamera` placement at street level (hero on a sidewalk) and on a
+mid-height rooftop. Same seed and population (26 civilians, 10 cops), the hero stationary, LEGACY/candidates
+interleaved over 3 rounds in one process, machine idle (`Verification/Performance/comparison-gameplay.txt`).
+
+| View (single-render, the true figure) | LEGACY | **Shipped: shared props + static batching** | Alt: city combine |
+|---|---|---|---|
+| **Street — gameplay camera** | 67.8 FPS | **70.4 (+6%)** | 73.1 (+10%, carried by one outlier round) |
+| Rooftop / flight | 54.0 | **58.7 (+9%)** | 60.8 (+13%) |
+| Overview (historical benchmark view) | 50.2 | **56.4 (+13%)** | 55.3 (+11%) |
+
+Draw calls in the overview: **1,111 → 201** per render (−82%). Batches 1,029 → 121. The earlier 5-round
+overview run measured the shipped config at **1.20× LEGACY single-render and 1.31× on the historical double-render
+harness** (37.2 → 48.4 FPS double). Build time for the city art dropped 199 → 116 ms.
+
+**The honest reframe:** the "26–40 FPS" regression recorded earlier was mostly how it was measured — an overview
+camera that sees the whole city, through a harness that renders every frame twice. At the gameplay camera, the
+legacy build was already ~68 FPS single-render; street level culls most of the city. The batching defect was real
+and mattered most in elevated/flight views, which is where this fix recovers +9–13%.
+
+**Where the remaining frame time goes — measured directly** with `ProfilerRecorder` (street view, ~14 ms/frame).
+This is the first per-system timing in this project; earlier attribution came only from on/off toggles.
+| Phase | ms | Share |
+|---|---|---|
+| `PostLateUpdate.BatchModeUpdate` — **batch-mode editor overhead, not the game** | 5.8 | 41% |
+| CPU skinning of the 40 humanoids (`PostLateUpdate.UpdateAllSkinnedMeshes`) | 3.1 | 22% |
+| Rendering: culling + draw submission | 1.9 | 14% |
+| Animators (`Director.PrepareFrameJob` + `ProcessFrame`) | 1.2 | 9% |
+| Scripts (Update + presentation LateUpdate), NavMesh AI, physics | ~1.2 | 9% |
+| GPU frame time (`FrameTimingManager`) | ~2 | GPU mostly idle |
+
+Consequences: (1) **Every FPS figure in this file includes ~5.8 ms of batch-mode overhead** that a player build does
+not run; the game's own cost is roughly 8 ms/frame at street level. (2) The frame is **completely CPU-bound**, so
+triangle count is not the constraint on this machine. (3) The largest remaining real cost is **CPU skinning of the
+humanoids (~0.1 ms per character)**. That sets the per-enemy budget for Endless Fight, and it is the next lever
+(GPU/compute skinning), but it is not attempted here. In the overview, rendering work fell 5.1 → 3.3 ms (shipped) /
+2.1 ms (alt).
+
+Recorder names vary by Unity version. The ones that actually exist in 6000.6 are listed in
+`Verification/Performance/profiler-available.txt`.
+
+### Visual identity — proven, not asserted
+Captures from 4 fixed views (overview, street, rooftop, menu skyline) with all humanoids hidden and props frozen on
+frame 0. **Noise-floor control: two separate LEGACY builds differ by 0 pixels.** LEGACY vs the new default differs by
+**5 pixels out of ~3.1 million** (overview 3, roof 2, street 0, skyline 0). Each is a place where two faces share one
+plane (parapet vs roof-deck edge, billboard post vs panel), so draw order decides which shows — a pre-existing
+geometry quirk that batching reorders. These numbers were independently re-derived by the lead with a separate PNG
+decoder, and they match exactly. Captures and amplified diffs: `Verification/Performance/identity/`.
+
+### Regression (new default)
+CityArtVerification 31/31, CityVerification 39/39, ModeVerification 80/80 (incl. 2 runtime `CreateProp` cars),
+MenuPresentationVerification 38/38 — all exit 0. Run in an APFS clone of the working tree so that tracked
+`Verification/{Art,City,Modes,Menus}` files were not overwritten; the clone was confirmed byte-identical to the final
+code, and its results post-date the last source edit. Logs: `Verification/Performance/regression/`.
+
+### Measurement notes
+- Every historical benchmark renders the scene **twice** per sampled frame (enabled camera with a `targetTexture`
+  plus a manual `Render()`). Both numbers are reported: SINGLE is the true figure, and DOUBLE is comparable with the
+  155/50/40 FPS history.
+- FPS is Editor Play Mode throughput on an Intel i9-10910 / Radeon Pro 5300, not a standalone-player figure. No human
+  has played on the new build.
+
+## Pooled audio — 2026-09-22 (merged to main 2026-09-22; previous)
 
 ### Delivery
 
@@ -204,7 +314,7 @@ PASS SECOND PROCESS loads persisted mixer with all five groups.
 SECOND PROCESS asset/reference reload passed; fresh isolated save used.
 ```
 
-## Backflip and Hurricane Kick gestures — 2026-09-21 (merged to main 2026-09-22)
+## Backflip and Hurricane Kick gestures — 2026-09-21 (merged to main 2026-09-22; previous)
 
 Abilities packet (`feat/backflip-hurricane-kick`). Wires the two supplied animation clips that
 the humanoid pass imported and deliberately left unused. Both gestures are additive and

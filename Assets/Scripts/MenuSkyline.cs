@@ -18,6 +18,7 @@ public sealed class MenuSkyline : MonoBehaviour
         var art=root.AddComponent<CityArt>();art.Initialize(tuning);
         var buildings=Resources.Load<CityLayout>("CityLayout").Generate(tuning.City);BuildingCount=buildings.Count;
         for(int i=0;i<buildings.Count;i++)art.Building(buildings[i],i);
+        art.FinishStaticGeometry();
         // Extended neutral ground is a backdrop only: no floating diorama edge or new city layout.
         CityArt.Piece(root.transform,"City backdrop ground",new Vector3(0,-1,0),new Vector3(1000,1,1000),CityColor.Road);
         foreach(var transform in root.GetComponentsInChildren<Transform>())transform.gameObject.layer=31;

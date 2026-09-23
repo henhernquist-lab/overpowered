@@ -1,0 +1,110 @@
+COMPARISON: same seed (2409), one process, GPU=AMD Radeon Pro 5300, CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz, quality='Ultra', shadows=All
+CONFIGS: LEGACY=PerPropCombine+PerRootCombine; P2=SharedPerKind (one renderer per prop, submesh per material); P1=SharedPerKindPerMaterial (child renderer per material); S0=PerRootCombine; S1=StaticBatching; S2=CityCombine
+SKYLINE legacy-a (LEGACY): buildings=36, capture=211.2ms, 768x432
+IDENTITY CAPTURE legacy-a (LEGACY): settled after 3.93s, awake bodies=0/229, hidden non-city renderers=21, city renderers=1041
+SKYLINE legacy-b (LEGACY): buildings=36, capture=100.9ms, 768x432
+IDENTITY CAPTURE legacy-b (LEGACY): settled after 4.06s, awake bodies=0/229, hidden non-city renderers=21, city renderers=1041
+SKYLINE P2S0 (P2+S0): buildings=36, capture=99.6ms, 768x432
+IDENTITY CAPTURE P2S0 (P2+S0): settled after 3.88s, awake bodies=0/229, hidden non-city renderers=13, city renderers=516
+SKYLINE P2S1 (P2+S1): buildings=36, capture=83.4ms, 768x432
+IDENTITY CAPTURE P2S1 (P2+S1): settled after 3.80s, awake bodies=0/229, hidden non-city renderers=13, city renderers=2409
+SKYLINE P2S2 (P2+S2): buildings=36, capture=77.1ms, 768x432
+IDENTITY CAPTURE P2S2 (P2+S2): settled after 4.17s, awake bodies=0/229, hidden non-city renderers=13, city renderers=288
+SKYLINE P1S1 (P1+S1): buildings=36, capture=81.8ms, 768x432
+IDENTITY CAPTURE P1S1 (P1+S1): settled after 3.76s, awake bodies=0/229, hidden non-city renderers=21, city renderers=2934
+IDENTITY NOISE FLOOR (LEGACY build 1 vs LEGACY build 2) [overview]: pixels with max channel delta>8/255 = 17 (0.0018%), any delta = 76 (0.0082%), max delta = 115/255, >8 region(top-left origin) x=383..827, y=318..559; diff-legacy-a-vs-legacy-b-overview.png
+IDENTITY NOISE FLOOR (LEGACY build 1 vs LEGACY build 2) [street]: pixels with max channel delta>8/255 = 178 (0.0193%), any delta = 627 (0.0680%), max delta = 153/255, >8 region(top-left origin) x=596..997, y=245..361; diff-legacy-a-vs-legacy-b-street.png
+IDENTITY NOISE FLOOR (LEGACY build 1 vs LEGACY build 2) [roof]: pixels with max channel delta>8/255 = 0 (0.0000%), any delta = 0 (0.0000%), max delta = 0/255, >8 region(top-left origin) none; diff-legacy-a-vs-legacy-b-roof.png
+IDENTITY NOISE FLOOR (LEGACY build 1 vs LEGACY build 2) [skyline]: pixels with max channel delta>8/255 = 0 (0.0000%), any delta = 0 (0.0000%), max delta = 0/255, >8 region(top-left origin) none; diff-legacy-a-vs-legacy-b-skyline.png
+IDENTITY LEGACY vs P2+S0 [overview]: pixels with max channel delta>8/255 = 134 (0.0145%), any delta = 151 (0.0164%), max delta = 170/255, >8 region(top-left origin) x=296..827, y=318..559; diff-legacy-a-vs-P2S0-overview.png
+IDENTITY LEGACY vs P2+S0 [street]: pixels with max channel delta>8/255 = 245 (0.0266%), any delta = 721 (0.0782%), max delta = 152/255, >8 region(top-left origin) x=596..997, y=245..361; diff-legacy-a-vs-P2S0-street.png
+IDENTITY LEGACY vs P2+S0 [roof]: pixels with max channel delta>8/255 = 2 (0.0002%), any delta = 2 (0.0002%), max delta = 32/255, >8 region(top-left origin) x=934..935, y=296..299; diff-legacy-a-vs-P2S0-roof.png
+IDENTITY LEGACY vs P2+S0 [skyline]: pixels with max channel delta>8/255 = 0 (0.0000%), any delta = 0 (0.0000%), max delta = 0/255, >8 region(top-left origin) none; diff-legacy-a-vs-P2S0-skyline.png
+IDENTITY LEGACY vs P2+S1 [overview]: pixels with max channel delta>8/255 = 25 (0.0027%), any delta = 61 (0.0066%), max delta = 115/255, >8 region(top-left origin) x=379..827, y=244..559; diff-legacy-a-vs-P2S1-overview.png
+IDENTITY LEGACY vs P2+S1 [street]: pixels with max channel delta>8/255 = 190 (0.0206%), any delta = 647 (0.0702%), max delta = 153/255, >8 region(top-left origin) x=596..997, y=245..361; diff-legacy-a-vs-P2S1-street.png
+IDENTITY LEGACY vs P2+S1 [roof]: pixels with max channel delta>8/255 = 2 (0.0002%), any delta = 2 (0.0002%), max delta = 32/255, >8 region(top-left origin) x=934..935, y=296..299; diff-legacy-a-vs-P2S1-roof.png
+IDENTITY LEGACY vs P2+S1 [skyline]: pixels with max channel delta>8/255 = 0 (0.0000%), any delta = 0 (0.0000%), max delta = 0/255, >8 region(top-left origin) none; diff-legacy-a-vs-P2S1-skyline.png
+IDENTITY LEGACY vs P2+S2 [overview]: pixels with max channel delta>8/255 = 21 (0.0023%), any delta = 80 (0.0087%), max delta = 115/255, >8 region(top-left origin) x=383..827, y=244..559; diff-legacy-a-vs-P2S2-overview.png
+IDENTITY LEGACY vs P2+S2 [street]: pixels with max channel delta>8/255 = 163 (0.0177%), any delta = 635 (0.0689%), max delta = 153/255, >8 region(top-left origin) x=596..997, y=245..361; diff-legacy-a-vs-P2S2-street.png
+IDENTITY LEGACY vs P2+S2 [roof]: pixels with max channel delta>8/255 = 2 (0.0002%), any delta = 2 (0.0002%), max delta = 32/255, >8 region(top-left origin) x=934..935, y=296..299; diff-legacy-a-vs-P2S2-roof.png
+IDENTITY LEGACY vs P2+S2 [skyline]: pixels with max channel delta>8/255 = 0 (0.0000%), any delta = 0 (0.0000%), max delta = 0/255, >8 region(top-left origin) none; diff-legacy-a-vs-P2S2-skyline.png
+IDENTITY LEGACY vs P1+S1 [overview]: pixels with max channel delta>8/255 = 21 (0.0023%), any delta = 44 (0.0048%), max delta = 115/255, >8 region(top-left origin) x=383..827, y=244..559; diff-legacy-a-vs-P1S1-overview.png
+IDENTITY LEGACY vs P1+S1 [street]: pixels with max channel delta>8/255 = 172 (0.0187%), any delta = 622 (0.0675%), max delta = 153/255, >8 region(top-left origin) x=596..997, y=245..361; diff-legacy-a-vs-P1S1-street.png
+IDENTITY LEGACY vs P1+S1 [roof]: pixels with max channel delta>8/255 = 2 (0.0002%), any delta = 2 (0.0002%), max delta = 32/255, >8 region(top-left origin) x=934..935, y=296..299; diff-legacy-a-vs-P1S1-roof.png
+IDENTITY LEGACY vs P1+S1 [skyline]: pixels with max channel delta>8/255 = 0 (0.0000%), any delta = 0 (0.0000%), max delta = 0/255, >8 region(top-left origin) none; diff-legacy-a-vs-P1S1-skyline.png
+LOADAVG at start of FPS phase: { 3.89 3.91 5.89 }
+BUILD LEGACY round 1: modes=PerPropCombine/PerRootCombine, cityArtBuild=252.1ms (static finalize 0.0ms), renderers=1128, propRenderers=772, staticRenderers=236, staticBatchedRenderers=0, meshFilters=1060, distinctMeshes=1021, sharedPropMeshes=0
+MEASURED LEGACY r1 SINGLE: FPS=35.42, mean=28.23ms, p95=44.85ms, frames=142, renderers=1140, drawCalls=1110, batches=1028, setPass=52, staticBatched=0, dynamicBatched=0, instanced=1059, instancedBatches=1028, staticBatches=0, tris=2030198, verts=1242150
+MEASURED LEGACY r1 DOUBLE: FPS=36.36, mean=27.50ms, p95=29.29ms, frames=146, renderers=1140, drawCalls=2220, batches=2056, setPass=102, staticBatched=0, dynamicBatched=0, instanced=2118, instancedBatches=2056, staticBatches=0, tris=4060396, verts=2484300
+BUILD P2+S0 round 1: modes=SharedPerKind/PerRootCombine, cityArtBuild=120.4ms (static finalize 0.0ms), renderers=595, propRenderers=247, staticRenderers=236, staticBatchedRenderers=0, meshFilters=527, distinctMeshes=254, sharedPropMeshes=15
+MEASURED P2+S0 r1 SINGLE: FPS=48.31, mean=20.70ms, p95=27.47ms, frames=194, renderers=607, drawCalls=431, batches=349, setPass=47, staticBatched=0, dynamicBatched=0, instanced=1060, instancedBatches=349, staticBatches=0, tris=2030210, verts=1242174
+MEASURED P2+S0 r1 DOUBLE: FPS=43.52, mean=22.98ms, p95=27.61ms, frames=175, renderers=607, drawCalls=862, batches=698, setPass=94, staticBatched=0, dynamicBatched=0, instanced=2120, instancedBatches=698, staticBatches=0, tris=4060420, verts=2484348
+BUILD P2+S1 round 1: modes=SharedPerKind/StaticBatching, cityArtBuild=117.6ms (static finalize 12.0ms), renderers=2488, propRenderers=247, staticRenderers=2129, staticBatchedRenderers=2129, meshFilters=2420, distinctMeshes=19, sharedPropMeshes=15
+MEASURED P2+S1 r1 SINGLE: FPS=51.79, mean=19.31ms, p95=23.81ms, frames=208, renderers=2500, drawCalls=203, batches=121, setPass=51, staticBatched=2129, dynamicBatched=0, instanced=824, instancedBatches=113, staticBatches=8, tris=2030210, verts=1242174
+MEASURED P2+S1 r1 DOUBLE: FPS=44.77, mean=22.34ms, p95=25.45ms, frames=180, renderers=2500, drawCalls=406, batches=242, setPass=102, staticBatched=4258, dynamicBatched=0, instanced=1648, instancedBatches=226, staticBatches=16, tris=4060420, verts=2484348
+BUILD P2+S2 round 1: modes=SharedPerKind/CityCombine, cityArtBuild=108.3ms (static finalize 9.2ms), renderers=367, propRenderers=247, staticRenderers=8, staticBatchedRenderers=0, meshFilters=299, distinctMeshes=26, sharedPropMeshes=15
+MEASURED P2+S2 r1 SINGLE: FPS=59.54, mean=16.80ms, p95=17.78ms, frames=239, renderers=379, drawCalls=203, batches=121, setPass=51, staticBatched=0, dynamicBatched=0, instanced=832, instancedBatches=121, staticBatches=0, tris=2030210, verts=1242174
+MEASURED P2+S2 r1 DOUBLE: FPS=50.61, mean=19.76ms, p95=23.41ms, frames=203, renderers=379, drawCalls=406, batches=242, setPass=102, staticBatched=0, dynamicBatched=0, instanced=1664, instancedBatches=242, staticBatches=0, tris=4060420, verts=2484348
+BUILD P1+S1 round 1: modes=SharedPerKindPerMaterial/StaticBatching, cityArtBuild=126.5ms (static finalize 12.1ms), renderers=3021, propRenderers=772, staticRenderers=2129, staticBatchedRenderers=2129, meshFilters=2953, distinctMeshes=53, sharedPropMeshes=15
+MEASURED P1+S1 r1 SINGLE: FPS=53.35, mean=18.74ms, p95=20.09ms, frames=214, renderers=3033, drawCalls=206, batches=124, setPass=61, staticBatched=2129, dynamicBatched=0, instanced=820, instancedBatches=116, staticBatches=8, tris=2030138, verts=1242030
+MEASURED P1+S1 r1 DOUBLE: FPS=45.66, mean=21.90ms, p95=24.07ms, frames=183, renderers=3033, drawCalls=412, batches=248, setPass=122, staticBatched=4258, dynamicBatched=0, instanced=1640, instancedBatches=232, staticBatches=16, tris=4060276, verts=2484060
+BUILD LEGACY round 2: modes=PerPropCombine/PerRootCombine, cityArtBuild=190.5ms (static finalize 0.0ms), renderers=1128, propRenderers=772, staticRenderers=236, staticBatchedRenderers=0, meshFilters=1060, distinctMeshes=1021, sharedPropMeshes=0
+MEASURED LEGACY r2 SINGLE: FPS=43.97, mean=22.74ms, p95=31.95ms, frames=176, renderers=1140, drawCalls=1111, batches=1029, setPass=57, staticBatched=0, dynamicBatched=0, instanced=1060, instancedBatches=1029, staticBatches=0, tris=2030210, verts=1242174
+MEASURED LEGACY r2 DOUBLE: FPS=36.81, mean=27.17ms, p95=28.63ms, frames=148, renderers=1140, drawCalls=2222, batches=2058, setPass=114, staticBatched=0, dynamicBatched=0, instanced=2120, instancedBatches=2058, staticBatches=0, tris=4060420, verts=2484348
+BUILD P2+S0 round 2: modes=SharedPerKind/PerRootCombine, cityArtBuild=124.6ms (static finalize 0.0ms), renderers=595, propRenderers=247, staticRenderers=236, staticBatchedRenderers=0, meshFilters=527, distinctMeshes=254, sharedPropMeshes=15
+MEASURED P2+S0 r2 SINGLE: FPS=55.02, mean=18.18ms, p95=19.57ms, frames=221, renderers=607, drawCalls=431, batches=349, setPass=49, staticBatched=0, dynamicBatched=0, instanced=1060, instancedBatches=349, staticBatches=0, tris=2030210, verts=1242174
+MEASURED P2+S0 r2 DOUBLE: FPS=46.82, mean=21.36ms, p95=23.55ms, frames=188, renderers=607, drawCalls=862, batches=698, setPass=98, staticBatched=0, dynamicBatched=0, instanced=2120, instancedBatches=698, staticBatches=0, tris=4060420, verts=2484348
+BUILD P2+S1 round 2: modes=SharedPerKind/StaticBatching, cityArtBuild=123.1ms (static finalize 14.7ms), renderers=2488, propRenderers=247, staticRenderers=2129, staticBatchedRenderers=2129, meshFilters=2420, distinctMeshes=19, sharedPropMeshes=15
+MEASURED P2+S1 r2 SINGLE: FPS=53.95, mean=18.53ms, p95=19.84ms, frames=216, renderers=2500, drawCalls=203, batches=121, setPass=53, staticBatched=2129, dynamicBatched=0, instanced=824, instancedBatches=113, staticBatches=8, tris=2030210, verts=1242174
+MEASURED P2+S1 r2 DOUBLE: FPS=44.17, mean=22.64ms, p95=30.62ms, frames=177, renderers=2500, drawCalls=406, batches=242, setPass=106, staticBatched=4258, dynamicBatched=0, instanced=1648, instancedBatches=226, staticBatches=16, tris=4060420, verts=2484348
+BUILD P2+S2 round 2: modes=SharedPerKind/CityCombine, cityArtBuild=112.6ms (static finalize 9.3ms), renderers=367, propRenderers=247, staticRenderers=8, staticBatchedRenderers=0, meshFilters=299, distinctMeshes=26, sharedPropMeshes=15
+MEASURED P2+S2 r2 SINGLE: FPS=57.80, mean=17.30ms, p95=18.41ms, frames=232, renderers=379, drawCalls=203, batches=121, setPass=47, staticBatched=0, dynamicBatched=0, instanced=832, instancedBatches=121, staticBatches=0, tris=2030210, verts=1242174
+MEASURED P2+S2 r2 DOUBLE: FPS=51.50, mean=19.42ms, p95=20.84ms, frames=207, renderers=379, drawCalls=406, batches=242, setPass=94, staticBatched=0, dynamicBatched=0, instanced=1664, instancedBatches=242, staticBatches=0, tris=4060420, verts=2484348
+BUILD P1+S1 round 2: modes=SharedPerKindPerMaterial/StaticBatching, cityArtBuild=133.6ms (static finalize 15.1ms), renderers=3021, propRenderers=772, staticRenderers=2129, staticBatchedRenderers=2129, meshFilters=2953, distinctMeshes=53, sharedPropMeshes=15
+MEASURED P1+S1 r2 SINGLE: FPS=53.10, mean=18.83ms, p95=20.09ms, frames=213, renderers=3033, drawCalls=206, batches=124, setPass=61, staticBatched=2129, dynamicBatched=0, instanced=823, instancedBatches=116, staticBatches=8, tris=2030198, verts=1242150
+MEASURED P1+S1 r2 DOUBLE: FPS=45.38, mean=22.04ms, p95=23.80ms, frames=182, renderers=3033, drawCalls=412, batches=248, setPass=122, staticBatched=4258, dynamicBatched=0, instanced=1646, instancedBatches=232, staticBatches=16, tris=4060396, verts=2484300
+BUILD LEGACY round 3: modes=PerPropCombine/PerRootCombine, cityArtBuild=200.2ms (static finalize 0.0ms), renderers=1128, propRenderers=772, staticRenderers=236, staticBatchedRenderers=0, meshFilters=1060, distinctMeshes=1021, sharedPropMeshes=0
+MEASURED LEGACY r3 SINGLE: FPS=38.73, mean=25.82ms, p95=43.09ms, frames=155, renderers=1140, drawCalls=1110, batches=1028, setPass=56, staticBatched=0, dynamicBatched=0, instanced=1059, instancedBatches=1028, staticBatches=0, tris=2030198, verts=1242150
+MEASURED LEGACY r3 DOUBLE: FPS=36.43, mean=27.45ms, p95=29.59ms, frames=146, renderers=1140, drawCalls=2220, batches=2056, setPass=112, staticBatched=0, dynamicBatched=0, instanced=2118, instancedBatches=2056, staticBatches=0, tris=4060396, verts=2484300
+BUILD P2+S0 round 3: modes=SharedPerKind/PerRootCombine, cityArtBuild=119.8ms (static finalize 0.0ms), renderers=595, propRenderers=247, staticRenderers=236, staticBatchedRenderers=0, meshFilters=527, distinctMeshes=254, sharedPropMeshes=15
+MEASURED P2+S0 r3 SINGLE: FPS=53.20, mean=18.80ms, p95=20.67ms, frames=213, renderers=607, drawCalls=431, batches=349, setPass=49, staticBatched=0, dynamicBatched=0, instanced=1060, instancedBatches=349, staticBatches=0, tris=2030210, verts=1242174
+MEASURED P2+S0 r3 DOUBLE: FPS=45.78, mean=21.84ms, p95=24.74ms, frames=184, renderers=607, drawCalls=862, batches=698, setPass=98, staticBatched=0, dynamicBatched=0, instanced=2120, instancedBatches=698, staticBatches=0, tris=4060420, verts=2484348
+BUILD P2+S1 round 3: modes=SharedPerKind/StaticBatching, cityArtBuild=113.1ms (static finalize 14.6ms), renderers=2488, propRenderers=247, staticRenderers=2129, staticBatchedRenderers=2129, meshFilters=2420, distinctMeshes=19, sharedPropMeshes=15
+MEASURED P2+S1 r3 SINGLE: FPS=53.10, mean=18.83ms, p95=21.49ms, frames=213, renderers=2500, drawCalls=203, batches=121, setPass=53, staticBatched=2129, dynamicBatched=0, instanced=824, instancedBatches=113, staticBatches=8, tris=2030210, verts=1242174
+MEASURED P2+S1 r3 DOUBLE: FPS=47.62, mean=21.00ms, p95=22.45ms, frames=191, renderers=2500, drawCalls=406, batches=242, setPass=106, staticBatched=4258, dynamicBatched=0, instanced=1648, instancedBatches=226, staticBatches=16, tris=4060420, verts=2484348
+BUILD P2+S2 round 3: modes=SharedPerKind/CityCombine, cityArtBuild=108.0ms (static finalize 8.3ms), renderers=367, propRenderers=247, staticRenderers=8, staticBatchedRenderers=0, meshFilters=299, distinctMeshes=26, sharedPropMeshes=15
+MEASURED P2+S2 r3 SINGLE: FPS=57.97, mean=17.25ms, p95=19.42ms, frames=232, renderers=379, drawCalls=203, batches=121, setPass=47, staticBatched=0, dynamicBatched=0, instanced=832, instancedBatches=121, staticBatches=0, tris=2030210, verts=1242174
+MEASURED P2+S2 r3 DOUBLE: FPS=51.79, mean=19.31ms, p95=20.75ms, frames=208, renderers=379, drawCalls=406, batches=242, setPass=94, staticBatched=0, dynamicBatched=0, instanced=1664, instancedBatches=242, staticBatches=0, tris=4060420, verts=2484348
+BUILD P1+S1 round 3: modes=SharedPerKindPerMaterial/StaticBatching, cityArtBuild=128.7ms (static finalize 13.6ms), renderers=3021, propRenderers=772, staticRenderers=2129, staticBatchedRenderers=2129, meshFilters=2953, distinctMeshes=53, sharedPropMeshes=15
+MEASURED P1+S1 r3 SINGLE: FPS=53.62, mean=18.65ms, p95=21.15ms, frames=215, renderers=3033, drawCalls=206, batches=124, setPass=61, staticBatched=2129, dynamicBatched=0, instanced=824, instancedBatches=116, staticBatches=8, tris=2030210, verts=1242174
+MEASURED P1+S1 r3 DOUBLE: FPS=46.88, mean=21.33ms, p95=22.76ms, frames=188, renderers=3033, drawCalls=408, batches=248, setPass=122, staticBatched=4258, dynamicBatched=0, instanced=1648, instancedBatches=232, staticBatches=16, tris=3962196, verts=2427600
+BUILD LEGACY round 4: modes=PerPropCombine/PerRootCombine, cityArtBuild=192.7ms (static finalize 0.0ms), renderers=1128, propRenderers=772, staticRenderers=236, staticBatchedRenderers=0, meshFilters=1060, distinctMeshes=1021, sharedPropMeshes=0
+MEASURED LEGACY r4 SINGLE: FPS=40.47, mean=24.71ms, p95=33.84ms, frames=162, renderers=1140, drawCalls=1110, batches=1028, setPass=56, staticBatched=0, dynamicBatched=0, instanced=1059, instancedBatches=1028, staticBatches=0, tris=2030198, verts=1242150
+MEASURED LEGACY r4 DOUBLE: FPS=36.52, mean=27.38ms, p95=33.31ms, frames=147, renderers=1140, drawCalls=2220, batches=2056, setPass=112, staticBatched=0, dynamicBatched=0, instanced=2118, instancedBatches=2056, staticBatches=0, tris=4060396, verts=2484300
+LOADAVG at end of FPS phase: { 10.61 7.68 7.14 }
+
+=== BUILD / STRUCTURE per configuration (deterministic; every round listed) ===
+config | rounds | cityArtBuild ms mean (min..max) | static finalize ms | renderers | prop renderers | static renderers | static-batched renderers | MeshFilters | distinct meshes | shared prop meshes
+LEGACY | 4 | 208.9 (190.5..252.1) | 0.0 | 1128 | 772 | 236 | 0 | 1060 | 1021 | 0
+P2+S0 | 3 | 121.6 (119.8..124.6) | 0.0 | 595 | 247 | 236 | 0 | 527 | 254 | 15
+P2+S1 | 3 | 117.9 (113.1..123.1) | 13.8 | 2488 | 247 | 2129 | 2129 | 2420 | 19 | 15
+P2+S2 | 3 | 109.7 (108.0..112.6) | 8.9 | 367 | 247 | 8 | 0 | 299 | 26 | 15
+P1+S1 | 3 | 129.6 (126.5..133.6) | 13.6 | 3021 | 772 | 2129 | 2129 | 2953 | 53 | 15
+
+=== SINGLE-render (camera disabled + one Render per frame; the TRUE number) ===
+config | FPS per round | FPS mean | ratio vs same-round LEGACY per round | ratio mean (min..max) | mean ms | p95 ms | drawCalls | batches | setPass | instanced draws | instanced batches | static-batched draws | static batches | tris | live renderers
+LEGACY | 35.42 / 43.97 / 38.73 / 40.47 | 39.65 | - | - | 25.38 | 38.43 | 1110 | 1028 | 56 | 1059 | 1028 | 0 | 0 | 2030198 | 1140
+P2+S0 | 48.31 / 55.02 / 53.20 | 52.18 | 1.364 / 1.251 / 1.373 | 1.330 (1.251..1.373) | 19.22 | 22.57 | 431 | 349 | 49 | 1060 | 349 | 0 | 0 | 2030210 | 607
+P2+S1 | 51.79 / 53.95 / 53.10 | 52.95 | 1.462 / 1.227 / 1.371 | 1.353 (1.227..1.462) | 18.89 | 21.71 | 203 | 121 | 53 | 824 | 113 | 2129 | 8 | 2030210 | 2500
+P2+S2 | 59.54 / 57.80 / 57.97 | 58.44 | 1.681 / 1.315 / 1.497 | 1.497 (1.315..1.681) | 17.12 | 18.54 | 203 | 121 | 47 | 832 | 121 | 0 | 0 | 2030210 | 379
+P1+S1 | 53.35 / 53.10 / 53.62 | 53.36 | 1.506 / 1.208 / 1.384 | 1.366 (1.208..1.506) | 18.74 | 20.44 | 206 | 124 | 61 | 823 | 116 | 2129 | 8 | 2030198 | 3033
+LEGACY drift across rounds (single): 35.42 / 43.97 / 38.73 / 40.47 FPS; spread 24.1%
+
+=== DOUBLE-render (historical harness; comparable with 155/50/40 history) ===
+config | FPS per round | FPS mean | ratio vs same-round LEGACY per round | ratio mean (min..max) | mean ms | p95 ms | drawCalls | batches | setPass | instanced draws | instanced batches | static-batched draws | static batches | tris | live renderers
+LEGACY | 36.36 / 36.81 / 36.43 / 36.52 | 36.53 | - | - | 27.37 | 30.20 | 2220 | 2056 | 112 | 2118 | 2056 | 0 | 0 | 4060396 | 1140
+P2+S0 | 43.52 / 46.82 / 45.78 | 45.37 | 1.197 / 1.272 / 1.256 | 1.242 (1.197..1.272) | 22.06 | 25.30 | 862 | 698 | 98 | 2120 | 698 | 0 | 0 | 4060420 | 607
+P2+S1 | 44.77 / 44.17 / 47.62 | 45.52 | 1.231 / 1.200 / 1.307 | 1.246 (1.200..1.307) | 21.99 | 26.18 | 406 | 242 | 106 | 1648 | 226 | 4258 | 16 | 4060420 | 2500
+P2+S2 | 50.61 / 51.50 / 51.79 | 51.30 | 1.392 / 1.399 / 1.421 | 1.404 (1.392..1.421) | 19.49 | 21.67 | 406 | 242 | 94 | 1664 | 242 | 0 | 0 | 4060420 | 379
+P1+S1 | 45.66 / 45.38 / 46.88 | 45.97 | 1.256 / 1.233 / 1.287 | 1.258 (1.233..1.287) | 21.76 | 23.54 | 412 | 248 | 122 | 1646 | 232 | 4258 | 16 | 4060396 | 3033
+LEGACY drift across rounds (double): 36.36 / 36.81 / 36.43 / 36.52 FPS; spread 1.2%

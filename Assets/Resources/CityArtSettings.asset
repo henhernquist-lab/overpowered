@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: CityArtSettings
   m_EditorClassIdentifier: Assembly-CSharp::CityArtSettings
   Palette: {fileID: 11400000, guid: 6c2db8d117de94442ba7bb997287b05d, type: 2}
-  CombineMeshes: 1
+  PropMeshes: 1
+  StaticGeometry: 1
   FloorHeight: 3.2
   WindowSpacing: 2.4
   WindowWidth: 1.1

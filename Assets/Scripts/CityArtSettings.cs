@@ -3,6 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum CityPropKind { Lamp, Bench, Trash, Hydrant, BusStop, Newspaper, Planter, Car, HVAC, Vent, WaterTower, Antenna, RoofAccess, Billboard }
+// How prop geometry becomes renderers. Props are Rigidbodies, so they can be instanced but never static-batched.
+public enum PropMeshMode
+{
+    PerPropCombine,           // legacy (old CombineMeshes=true): a NEW mesh per prop per material, so nothing can batch
+    SharedPerKind,            // one mesh per recipe shared by every instance; one renderer per prop, one submesh per material
+    SharedPerKindPerMaterial, // shared per recipe and material; one child renderer per material (legacy hierarchy)
+    Uncombined                // legacy (old CombineMeshes=false): one primitive renderer per piece
+}
+// How buildings and streets (never moving, unique per seed) are drawn; applied by CityArt.FinishStaticGeometry.
+public enum StaticGeometryMode
+{
+    PerRootCombine, // legacy (old CombineMeshes=true): per building/street root, per material
+    StaticBatching, // primitive pieces kept, StaticBatchingUtility over the whole static set
+    CityCombine,    // one mesh per material across the whole static set
+    Uncombined      // legacy (old CombineMeshes=false): one primitive renderer per piece
+}
 [Serializable] public sealed class BuildingStyle
 {
     public string Name;
@@ -33,7 +49,8 @@ public enum CityPropKind { Lamp, Bench, Trash, Hydrant, BusStop, Newspaper, Plan
 public sealed class CityArtSettings : ScriptableObject
 {
     public CityPalette Palette;
-    public bool CombineMeshes=true;
+    public PropMeshMode PropMeshes=PropMeshMode.SharedPerKind;
+    public StaticGeometryMode StaticGeometry=StaticGeometryMode.StaticBatching;
     public float FloorHeight=3.2f, WindowSpacing=2.4f, WindowWidth=1.1f, WindowHeight=1.45f, BandHeight=.12f;
     public float EntranceWidth=2f, EntranceDepth=.65f, ParapetHeight=.6f, ParapetThickness=.18f;
     public float CurbHeight=.18f, CurbWidth=.22f, RoadDashLength=2.5f, RoadDashSpacing=5f, CrosswalkStripe=.45f;

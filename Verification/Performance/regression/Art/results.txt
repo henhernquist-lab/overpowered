@@ -1,0 +1,33 @@
+PASS Seed 2409: 36 buildings, all four archetypes; distribution=Brick warehouse=9,Sandstone terraces=9,Teal offices=9,Slate tower=9
+PASS Seed 2409: props=247, rooftop=159, street=88; Lamp=18,Bench=9,Trash=9,Hydrant=9,BusStop=7,Newspaper=9,Planter=9,Car=18,HVAC=36,Vent=36,WaterTower=15,Antenna=24,RoofAccess=36,Billboard=12
+PASS Existing seeded height/layout variety retained.
+PASS Layout CONTROL: original CityLayout placements/heights/reward records are unchanged by art generation.
+PASS Same-seed CONTROL regenerates exact placement records.
+PASS Authored placement CONTROL preserves explicit position/yaw instead of regenerating over edits.
+PASS ALL live renderers use shared materials from CityPalette; unregistered material count=0.
+PASS Palette CONTROL: changed ONE Amber swatch RGBA(1.000, 0.700, 0.260, 1.000) -> RGBA(0.310, 0.860, 0.800, 1.000); 400 renderers sharing it updated (windows, lamps, vehicle lights, actors).
+PASS Palette restore CONTROL returns all shared Amber surfaces to the original swatch.
+PASS Existing sun intensity=1.2, rotation=(45,-35,0), ambient=(.45,.5,.6) unchanged.
+PASS Existing Built-in render pipeline retained; no active post-processing Volume was present/added.
+PASS Populated benchmark: civilians=26, on-NavMesh cops=10.
+MEASURED seed=2409: 1280x720 Editor actual renders, frames=217, seconds=5.022, FPS=43.21, p95=26.68ms, draw calls median/max=406/406, SetPass median=102; vs recorded 155 FPS=-72.1%; GPU=AMD Radeon Pro 5300.
+PASS New newspaper box uses the EXISTING BreakableProp and one real Rigidbody, no parallel damage implementation.
+PASS Real charged punch accepted against the newly styled newspaper box.
+PASS Animated punch strikes the newly styled newspaper box after windup.
+PASS New prop physics: mass=45kg, punch=1350 N·s, displacement=10.536m, velocity=25.119m/s.
+PASS Existing break/shard path removes the damaged compound prop (not an extra prop implementation).
+PASS Seed 3226: 36 buildings, all four archetypes; distribution=Sandstone terraces=10,Teal offices=9,Slate tower=8,Brick warehouse=9
+PASS Seed 3226: props=253, rooftop=163, street=90; Lamp=18,Bench=9,Trash=9,Hydrant=9,BusStop=9,Newspaper=9,Planter=9,Car=18,HVAC=36,Vent=36,WaterTower=15,Antenna=27,RoofAccess=36,Billboard=13
+PASS Existing seeded height/layout variety retained.
+PASS Layout CONTROL: original CityLayout placements/heights/reward records are unchanged by art generation.
+PASS Same-seed CONTROL regenerates exact placement records.
+PASS Different-seed CONTROL changes styles, rooftop equipment selection, street jitter and existing heights.
+PASS Authored placement CONTROL preserves explicit position/yaw instead of regenerating over edits.
+PASS ALL live renderers use shared materials from CityPalette; unregistered material count=0.
+PASS Palette CONTROL: changed ONE Amber swatch RGBA(1.000, 0.700, 0.260, 1.000) -> RGBA(0.310, 0.860, 0.800, 1.000); 409 renderers sharing it updated (windows, lamps, vehicle lights, actors).
+PASS Palette restore CONTROL returns all shared Amber surfaces to the original swatch.
+PASS Existing sun intensity=1.2, rotation=(45,-35,0), ambient=(.45,.5,.6) unchanged.
+PASS Existing Built-in render pipeline retained; no active post-processing Volume was present/added.
+PASS Populated benchmark: civilians=26, on-NavMesh cops=10.
+MEASURED seed=3226: 1280x720 Editor actual renders, frames=229, seconds=5.014, FPS=45.67, p95=24.31ms, draw calls median/max=400/400, SetPass median=104; vs recorded 155 FPS=-70.5%; GPU=AMD Radeon Pro 5300.
+PASS Camera repair retained through both seeded mode runs and return Home.

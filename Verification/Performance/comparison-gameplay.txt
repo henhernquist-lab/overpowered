@@ -1,0 +1,292 @@
+COMPARISON: same seed (2409), one process, GPU=AMD Radeon Pro 5300, CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz, quality='Ultra', shadows=All
+CONFIGS: LEGACY=PerPropCombine+PerRootCombine; P2=SharedPerKind (one renderer per prop, submesh per material); P1=SharedPerKindPerMaterial (child renderer per material); S0=PerRootCombine; S1=StaticBatching; S2=CityCombine
+RUN: candidates=P2+S1,P2+S2, rounds=3, views=street,rooftop,overview, identity phase=SKIPPED
+LIMIT: ProfilerRecorder values are per-frame sums of each marker across ALL threads (ProfilerRecorderOptions.Default). Top-level PlayerLoop phase markers only run on the main thread; job/render-thread markers (culling jobs, skinning, Gfx waits) can include other threads. Profiled samples are separate from the FPS samples.
+LOADAVG at start of FPS phase: { 3.11 4.11 4.74 }
+LOADAVG at start of round 1: { 3.11 4.11 4.74 }
+BUILD LEGACY round 1: modes=PerPropCombine/PerRootCombine, cityArtBuild=265.8ms (static finalize 0.0ms), renderers=1128, propRenderers=772, staticRenderers=236, staticBatchedRenderers=0, meshFilters=1060, distinctMeshes=1021, sharedPropMeshes=0
+VIEW street (LEGACY): hero at (-14.00, 0.12, 0.00) on sidewalk beside the centre of the x=-20 street; camera (-14.00, 4.41, -5.53) looking (0.00, -0.51, 0.86); ThirdPersonCamera ENABLED (real placement)
+MEASURED LEGACY r1 STREET SINGLE: FPS=66.36, mean=15.07ms, p95=16.63ms, frames=266, renderers=1140, drawCalls=207, batches=177, setPass=50, staticBatched=0, dynamicBatched=0, instanced=183, instancedBatches=177, staticBatches=0, tris=705778, verts=433032, visibleRenderers=213
+MEASURED LEGACY r1 STREET DOUBLE: FPS=60.72, mean=16.47ms, p95=17.74ms, frames=243, renderers=1140, drawCalls=402, batches=354, setPass=100, staticBatched=0, dynamicBatched=0, instanced=366, instancedBatches=354, staticBatches=0, tris=1116884, verts=695820, visibleRenderers=201
+PROFILER: 4570 recorder handles available (full list: profiler-available.txt); recording 191 of them.
+PROFILER top-level PlayerLoop markers found: TimeUpdate.WaitForLastPresentationAndUpdateTime, Initialization.UpdateCameraMotionVectors, Initialization.DirectorSampleTime, Initialization.AsyncUploadTimeSlicedUpdate, Initialization.SynchronizeInputs, Initialization.SynchronizeState, Initialization.XREarlyUpdate, EarlyUpdate.PollPlayerConnection, EarlyUpdate.GpuTimestamp, EarlyUpdate.AnalyticsCoreStatsUpdate, EarlyUpdate.UnityWebRequestUpdate, EarlyUpdate.ExecuteMainThreadJobs, EarlyUpdate.ProcessMouseInWindow, EarlyUpdate.ClearIntermediateRenderers, EarlyUpdate.ClearLines, EarlyUpdate.ResetFrameStatsAfterPresent, EarlyUpdate.UpdateAsyncInstantiate, EarlyUpdate.UpdateAsyncReadbackManager, EarlyUpdate.UpdateStreamingManager, EarlyUpdate.UpdateTextureStreamingManager, EarlyUpdate.UpdatePreloading, EarlyUpdate.RendererNotifyInvisible, EarlyUpdate.PlayerCleanupCachedData, EarlyUpdate.UpdateMainGameViewRect, EarlyUpdate.UpdateCanvasRectTransform, EarlyUpdate.XRUpdate, EarlyUpdate.UpdateInputManager, EarlyUpdate.ProcessRemoteInput, EarlyUpdate.ScriptRunDelayedStartupFrame, EarlyUpdate.DispatchEventQueueEvents, EarlyUpdate.PhysicsCore2DEarlyUpdate, EarlyUpdate.Physics2DEarlyUpdate, EarlyUpdate.PhysicsResetInterpolatedTransformPosition, EarlyUpdate.SpriteAtlasManagerUpdate, EarlyUpdate.PerformanceAnalyticsUpdate, EarlyUpdate.TilemapRendererEarlyUpdate, FixedUpdate.ClearLines, FixedUpdate.NewInputFixedUpdate, FixedUpdate.DirectorFixedSampleTime, FixedUpdate.AudioFixedUpdate, FixedUpdate.ScriptRunBehaviourFixedUpdate, FixedUpdate.DirectorFixedUpdate, FixedUpdate.LegacyFixedAnimationUpdate, FixedUpdate.XRFixedUpdate, FixedUpdate.PhysicsFixedUpdate, FixedUpdate.PhysicsCore2DFixedUpdate, FixedUpdate.Physics2DFixedUpdate, FixedUpdate.PhysicsClothFixedUpdate, FixedUpdate.DirectorFixedUpdatePostPhysics, FixedUpdate.ScriptRunDelayedFixedFrameRate, PreUpdate.PhysicsUpdate, PreUpdate.PhysicsCore2DUpdate, PreUpdate.Physics2DUpdate, PreUpdate.CheckTexFieldInput, PreUpdate.IMGUISendQueuedEvents, PreUpdate.NewInputUpdate, PreUpdate.InputForUIUpdate, PreUpdate.SendMouseEvents, PreUpdate.AIUpdate, PreUpdate.WindUpdate, PreUpdate.UpdateVideo, Update.ScriptRunBehaviourUpdate, Update.ScriptRunDelayedDynamicFrameRate, Update.ScriptRunDelayedTasks, Update.DirectorUpdate, PreLateUpdate.AIUpdatePostScript, PreLateUpdate.DirectorUpdateAnimationBegin, PreLateUpdate.LegacyAnimationUpdate, PreLateUpdate.DirectorUpdateAnimationEnd, PreLateUpdate.DirectorDeferredEvaluate, PreLateUpdate.AccessibilityUpdate, PreLateUpdate.UIElementsUpdatePanels, PreLateUpdate.EndGraphicsJobsAfterScriptUpdate, PreLateUpdate.ConstraintManagerUpdate, PreLateUpdate.ParticleSystemBeginUpdateAll, PreLateUpdate.PhysicsCore2DLateUpdate, PreLateUpdate.Physics2DLateUpdate, PreLateUpdate.PhysicsLateUpdate, PreLateUpdate.ScriptRunBehaviourLateUpdate, PostLateUpdate.DirectorLateUpdate, PostLateUpdate.ScriptRunDelayedDynamicFrameRate, PostLateUpdate.PhysicsSkinnedClothBeginUpdate, PostLateUpdate.UpdateRectTransform, PostLateUpdate.PlayerUpdateCanvases, PostLateUpdate.AccessibilityLateUpdate, PostLateUpdate.UpdateAudio, PostLateUpdate.VFXUpdate, PostLateUpdate.ParticleSystemEndUpdateAll, PostLateUpdate.EndGraphicsJobsAfterScriptLateUpdate, PostLateUpdate.UpdateCustomRenderTextures, PostLateUpdate.XRPostLateUpdate, PostLateUpdate.UpdateAllRenderers, PostLateUpdate.UpdateAllSkinnedMeshes, PostLateUpdate.SortingGroupsUpdate, PostLateUpdate.RenderAs2DUpdate, PostLateUpdate.UpdateVideoTextures, PostLateUpdate.UpdateVideo, PostLateUpdate.DirectorRenderImage, PostLateUpdate.PhysicsSkinnedClothFinishUpdate, PostLateUpdate.BatchModeUpdate, PostLateUpdate.UpdateCaptureScreenshot, PostLateUpdate.InputEndFrame, PostLateUpdate.TriggerEndOfFrameCallbacks, PostLateUpdate.GUIClearEvents, PostLateUpdate.ShaderHandleErrors, PostLateUpdate.ResetInputAxis, PostLateUpdate.MemoryFrameMaintenance, PostLateUpdate.XRPreEndFrame, PostLateUpdate.ProfilerEndFrame, PostLateUpdate.UIElementsRepaintPanels, PostLateUpdate.UIElementsRenderBatchModeOffscreen
+PROFILER frame/extra markers found: Gfx.WaitForGfxCommandWriteSpace [TimeNanoseconds], Gfx.WaitForGfxCommandsFromMainThread [TimeNanoseconds], Gfx.WaitForRenderThread [TimeNanoseconds], Gfx.WaitForPresentOnGfxThread [TimeNanoseconds], Director.ProcessFrame [TimeNanoseconds], Director.PrepareFrameJob [TimeNanoseconds], Director.PrepareFrame [TimeNanoseconds], MeshSkinning.ComputeBlendShape [TimeNanoseconds], MeshSkinning.ComputeSkinning [TimeNanoseconds], Main Thread [TimeNanoseconds], PlayerLoop [TimeNanoseconds], MeshSkinning.Skin [TimeNanoseconds], MeshSkinning.GPUBatchedSkinInPlace [TimeNanoseconds], MeshSkinning.GPUBatchedSkin [TimeNanoseconds], MeshSkinning.GPUBatchedBlendShape [TimeNanoseconds], MeshSkinning.GPUBatchedCopy [TimeNanoseconds], MeshSkinning.CalcMatrices [TimeNanoseconds], MeshSkinning.SkinOnGPUNonBatched [TimeNanoseconds], MeshSkinning.SkinOnGPU [TimeNanoseconds], MeshSkinning.WaitForSkinThreads [TimeNanoseconds], MeshSkinning.Render [TimeNanoseconds], MeshSkinning.Prepare [TimeNanoseconds], MeshSkinning.UpdateImmediate [TimeNanoseconds], MeshSkinning.Update [TimeNanoseconds], LateBehaviourUpdate [TimeNanoseconds], FixedBehaviourUpdate [TimeNanoseconds], BehaviourUpdate [TimeNanoseconds], RenderForward.RenderLoopJob [TimeNanoseconds], Render.OpaqueGeometry [TimeNanoseconds], CullingGroupSendEvents [TimeNanoseconds], ScheduleCullingGroups [TimeNanoseconds], Camera.Render [TimeNanoseconds], Shadows.CullingCallbacks [TimeNanoseconds], SplitSceneCulling [TimeNanoseconds], SceneCulling [TimeNanoseconds], PrepareSceneCullingParameters [TimeNanoseconds], Culling [TimeNanoseconds], Shadows.RenderShadowMap [TimeNanoseconds], Physics.Simulate [TimeNanoseconds], Physics.FetchResults [TimeNanoseconds], TilemapRenderer.CalculateChunkCullingBounds [TimeNanoseconds], Animators.SortWriteJob [TimeNanoseconds], Animators.WriteJob [TimeNanoseconds], Animators.IKAndTwistBoneJob [TimeNanoseconds], Animators.RetargeterJob [TimeNanoseconds], Animators.ProcessAnimationsJob [TimeNanoseconds], Animators.ProcessGraphJob [TimeNanoseconds], Animators.PrepareSecondPass [TimeNanoseconds], Animators.PrepareFirstPass [TimeNanoseconds], Animators.WriteProperties [TimeNanoseconds], Animators.FireAnimationEventsAndBehaviours [TimeNanoseconds], Animators.ApplyOnAnimatorMove [TimeNanoseconds], Animators.Update [TimeNanoseconds], MeshSkinning.CalculateSkinningMatrices [TimeNanoseconds], NavMeshManager.UnloadData [TimeNanoseconds], NavMeshManager.LoadData [TimeNanoseconds], NavMeshManager.SyncTileIndices [TimeNanoseconds], NavMeshManager.NotifyNavMeshCleanup [TimeNanoseconds], NavMeshManager.NotifyNavMeshAdded [TimeNanoseconds], NavMeshManager [TimeNanoseconds], Terrain.Trees.RayTracingCulling [TimeNanoseconds], Terrain.Heightmap.RayTracingCullingStep3 [TimeNanoseconds], Terrain.Heightmap.RayTracingCullingStep2 [TimeNanoseconds], Terrain.Heightmap.RayTracingCullingStep1 [TimeNanoseconds], UpdateCulling [TimeNanoseconds], IssuePVRSetCullingJob [TimeNanoseconds], EditorLoop [TimeNanoseconds], CPU Total Frame Time [TimeNanoseconds], CPU Main Thread Frame Time [TimeNanoseconds], CPU Render Thread Frame Time [TimeNanoseconds], GPU Frame Time [TimeNanoseconds], Inl_XR Occlusion Mesh [TimeNanoseconds], Inl_XR Visible Mesh [TimeNanoseconds], CullingJob [TimeNanoseconds], CullingJob (Burst) [TimeNanoseconds], CullingJob (Cleanup) [TimeNanoseconds], Inl_StpSetup [TimeNanoseconds], Inl_StpPreTaa [TimeNanoseconds], Inl_StpTaa [TimeNanoseconds], afterCullingOutputReady.Invoke [TimeNanoseconds]
+PROFILER requested-but-absent exact names: Render Thread
+FRAMETIMING: FrameTimingManager.IsFeatureEnabled()=True, GPU timer frequency=1000000000
+MEASURED LEGACY r1 STREET PROFILED SINGLE (ProfilerRecorder attached; FPS not used for comparison): FPS=68.34, mean=14.63ms, p95=16.23ms, frames=274, renderers=1140, drawCalls=199, batches=177, setPass=48, staticBatched=0, dynamicBatched=0, instanced=183, instancedBatches=177, staticBatches=0, tris=509330, verts=319536, visibleRenderers=203
+VIEW CHECK LEGACY r1 street: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.48, civilians=26, cops=10, camera=(-14.00, 4.41, -5.53) fwd=(0.00, -0.51, 0.86)
+VIEW rooftop (LEGACY): hero at (-7.50, 13.93, -47.50) on roof of building 12 (height 13.7m, median of the southern-half buildings, no rooftop pickup); camera (-7.50, 16.65, -50.35) looking (0.00, -0.51, 0.86); ThirdPersonCamera ENABLED (real placement)
+MEASURED LEGACY r1 ROOFTOP SINGLE: FPS=51.58, mean=19.39ms, p95=22.07ms, frames=207, renderers=1140, drawCalls=791, batches=719, setPass=79, staticBatched=0, dynamicBatched=0, instanced=738, instancedBatches=719, staticBatches=0, tris=1765210, verts=1072420, visibleRenderers=806
+MEASURED LEGACY r1 ROOFTOP DOUBLE: FPS=41.75, mean=23.95ms, p95=26.75ms, frames=167, renderers=1140, drawCalls=1578, batches=1438, setPass=158, staticBatched=0, dynamicBatched=0, instanced=1476, instancedBatches=1438, staticBatches=0, tris=3432196, verts=2088092, visibleRenderers=806
+VIEW CHECK LEGACY r1 rooftop: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-7.50, 16.65, -50.35) fwd=(0.00, -0.51, 0.86)
+VIEW overview (LEGACY): hero at (-20.00, 35.12, -40.00) on airborne over spawn (historical); camera (-65.00, 60.00, -80.00) looking (0.54, -0.50, 0.67); ThirdPersonCamera disabled (fixed camera)
+MEASURED LEGACY r1 OVERVIEW SINGLE: FPS=48.96, mean=20.42ms, p95=22.18ms, frames=196, renderers=1138, drawCalls=1110, batches=1028, setPass=53, staticBatched=0, dynamicBatched=0, instanced=1059, instancedBatches=1028, staticBatches=0, tris=2030198, verts=1242150, visibleRenderers=1137
+MEASURED LEGACY r1 OVERVIEW DOUBLE: FPS=37.41, mean=26.73ms, p95=35.84ms, frames=150, renderers=1138, drawCalls=2216, batches=2056, setPass=106, staticBatched=0, dynamicBatched=0, instanced=2118, instancedBatches=2056, staticBatches=0, tris=3962172, verts=2427552, visibleRenderers=1137
+MEASURED LEGACY r1 OVERVIEW PROFILED SINGLE (ProfilerRecorder attached; FPS not used for comparison): FPS=49.65, mean=20.14ms, p95=21.27ms, frames=199, renderers=1138, drawCalls=1106, batches=1028, setPass=53, staticBatched=0, dynamicBatched=0, instanced=1059, instancedBatches=1028, staticBatches=0, tris=1931974, verts=1185402, visibleRenderers=1137
+VIEW CHECK LEGACY r1 overview: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.48, civilians=26, cops=10, camera=(-65.00, 60.00, -80.00) fwd=(0.54, -0.50, 0.67)
+BUILD P2+S1 round 1: modes=SharedPerKind/StaticBatching, cityArtBuild=116.0ms (static finalize 12.0ms), renderers=2488, propRenderers=247, staticRenderers=2129, staticBatchedRenderers=2129, meshFilters=2420, distinctMeshes=19, sharedPropMeshes=15
+VIEW street (P2+S1): hero at (-14.00, 0.12, 0.00) on sidewalk beside the centre of the x=-20 street; camera (-14.00, 4.41, -5.53) looking (0.00, -0.51, 0.86); ThirdPersonCamera ENABLED (real placement)
+MEASURED P2+S1 r1 STREET SINGLE: FPS=68.98, mean=14.50ms, p95=15.52ms, frames=276, renderers=2500, drawCalls=319, batches=75, setPass=55, staticBatched=385, dynamicBatched=0, instanced=110, instancedBatches=69, staticBatches=6, tris=648902, verts=389130, visibleRenderers=451
+MEASURED P2+S1 r1 STREET DOUBLE: FPS=62.76, mean=15.93ms, p95=16.67ms, frames=252, renderers=2500, drawCalls=634, batches=150, setPass=110, staticBatched=770, dynamicBatched=0, instanced=220, instancedBatches=138, staticBatches=12, tris=1199580, verts=721512, visibleRenderers=445
+MEASURED P2+S1 r1 STREET PROFILED SINGLE (ProfilerRecorder attached; FPS not used for comparison): FPS=71.40, mean=14.00ms, p95=15.34ms, frames=286, renderers=2500, drawCalls=309, batches=75, setPass=52, staticBatched=385, dynamicBatched=0, instanced=110, instancedBatches=69, staticBatches=6, tris=403342, verts=247260, visibleRenderers=441
+VIEW CHECK P2+S1 r1 street: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.49, civilians=26, cops=10, camera=(-14.00, 4.41, -5.53) fwd=(0.00, -0.51, 0.86)
+VIEW rooftop (P2+S1): hero at (-7.50, 13.93, -47.50) on roof of building 12 (height 13.7m, median of the southern-half buildings, no rooftop pickup); camera (-7.50, 16.65, -50.35) looking (0.00, -0.51, 0.86); ThirdPersonCamera ENABLED (real placement)
+MEASURED P2+S1 r1 ROOFTOP SINGLE: FPS=58.45, mean=17.11ms, p95=18.97ms, frames=234, renderers=2500, drawCalls=434, batches=181, setPass=72, staticBatched=1533, dynamicBatched=0, instanced=562, instancedBatches=173, staticBatches=8, tris=1566530, verts=954460, visibleRenderers=1795
+MEASURED P2+S1 r1 ROOFTOP DOUBLE: FPS=50.96, mean=19.62ms, p95=20.50ms, frames=204, renderers=2500, drawCalls=868, batches=362, setPass=146, staticBatched=3066, dynamicBatched=0, instanced=1124, instancedBatches=346, staticBatches=16, tris=3133060, verts=1908920, visibleRenderers=1799
+VIEW CHECK P2+S1 r1 rooftop: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-7.50, 16.65, -50.35) fwd=(0.00, -0.51, 0.86)
+VIEW overview (P2+S1): hero at (-20.00, 35.12, -40.00) on airborne over spawn (historical); camera (-65.00, 60.00, -80.00) looking (0.54, -0.50, 0.67); ThirdPersonCamera disabled (fixed camera)
+MEASURED P2+S1 r1 OVERVIEW SINGLE: FPS=56.99, mean=17.55ms, p95=18.49ms, frames=228, renderers=2498, drawCalls=203, batches=121, setPass=52, staticBatched=2129, dynamicBatched=0, instanced=824, instancedBatches=113, staticBatches=8, tris=2030210, verts=1242174, visibleRenderers=2498
+MEASURED P2+S1 r1 OVERVIEW DOUBLE: FPS=50.01, mean=20.00ms, p95=20.92ms, frames=201, renderers=2498, drawCalls=402, batches=242, setPass=104, staticBatched=4258, dynamicBatched=0, instanced=1648, instancedBatches=226, staticBatches=16, tris=3962196, verts=2427600, visibleRenderers=2498
+MEASURED P2+S1 r1 OVERVIEW PROFILED SINGLE (ProfilerRecorder attached; FPS not used for comparison): FPS=54.22, mean=18.44ms, p95=21.77ms, frames=217, renderers=2498, drawCalls=201, batches=121, setPass=52, staticBatched=2129, dynamicBatched=0, instanced=824, instancedBatches=113, staticBatches=8, tris=1981098, verts=1213800, visibleRenderers=2498
+VIEW CHECK P2+S1 r1 overview: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.48, civilians=26, cops=10, camera=(-65.00, 60.00, -80.00) fwd=(0.54, -0.50, 0.67)
+BUILD P2+S2 round 1: modes=SharedPerKind/CityCombine, cityArtBuild=115.3ms (static finalize 10.2ms), renderers=367, propRenderers=247, staticRenderers=8, staticBatchedRenderers=0, meshFilters=299, distinctMeshes=26, sharedPropMeshes=15
+VIEW street (P2+S2): hero at (-14.00, 0.12, 0.00) on sidewalk beside the centre of the x=-20 street; camera (-14.00, 4.41, -5.53) looking (0.00, -0.51, 0.86); ThirdPersonCamera ENABLED (real placement)
+MEASURED P2+S2 r1 STREET SINGLE: FPS=68.12, mean=14.68ms, p95=17.37ms, frames=273, renderers=379, drawCalls=106, batches=76, setPass=51, staticBatched=0, dynamicBatched=0, instanced=117, instancedBatches=76, staticBatches=0, tris=718390, verts=458256, visibleRenderers=76
+MEASURED P2+S2 r1 STREET DOUBLE: FPS=60.46, mean=16.54ms, p95=20.23ms, frames=242, renderers=379, drawCalls=212, batches=152, setPass=100, staticBatched=0, dynamicBatched=0, instanced=234, instancedBatches=152, staticBatches=0, tris=1436780, verts=916512, visibleRenderers=74
+MEASURED P2+S2 r1 STREET PROFILED SINGLE (ProfilerRecorder attached; FPS not used for comparison): FPS=57.14, mean=17.50ms, p95=24.86ms, frames=229, renderers=379, drawCalls=106, batches=76, setPass=51, staticBatched=0, dynamicBatched=0, instanced=117, instancedBatches=76, staticBatches=0, tris=718390, verts=458256, visibleRenderers=74
+VIEW CHECK P2+S2 r1 street: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.48, civilians=26, cops=10, camera=(-14.00, 4.41, -5.53) fwd=(0.00, -0.51, 0.86)
+VIEW rooftop (P2+S2): hero at (-7.50, 13.93, -47.50) on roof of building 12 (height 13.7m, median of the southern-half buildings, no rooftop pickup); camera (-7.50, 16.65, -50.35) looking (0.00, -0.51, 0.86); ThirdPersonCamera ENABLED (real placement)
+MEASURED P2+S2 r1 ROOFTOP SINGLE: FPS=57.71, mean=17.33ms, p95=20.57ms, frames=231, renderers=379, drawCalls=251, batches=181, setPass=68, staticBatched=0, dynamicBatched=0, instanced=570, instancedBatches=181, staticBatches=0, tris=1721018, verts=1053886, visibleRenderers=274
+MEASURED P2+S2 r1 ROOFTOP DOUBLE: FPS=54.74, mean=18.27ms, p95=20.11ms, frames=219, renderers=379, drawCalls=498, batches=362, setPass=136, staticBatched=0, dynamicBatched=0, instanced=1140, instancedBatches=362, staticBatches=0, tris=3343812, verts=2051024, visibleRenderers=274
+VIEW CHECK P2+S2 r1 rooftop: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-7.50, 16.65, -50.35) fwd=(0.00, -0.51, 0.86)
+VIEW overview (P2+S2): hero at (-20.00, 35.12, -40.00) on airborne over spawn (historical); camera (-65.00, 60.00, -80.00) looking (0.54, -0.50, 0.67); ThirdPersonCamera disabled (fixed camera)
+MEASURED P2+S2 r1 OVERVIEW SINGLE: FPS=59.03, mean=16.94ms, p95=18.98ms, frames=237, renderers=377, drawCalls=201, batches=121, setPass=47, staticBatched=0, dynamicBatched=0, instanced=832, instancedBatches=121, staticBatches=0, tris=1981098, verts=1213800, visibleRenderers=375
+MEASURED P2+S2 r1 OVERVIEW DOUBLE: FPS=56.05, mean=17.84ms, p95=18.91ms, frames=225, renderers=377, drawCalls=402, batches=242, setPass=94, staticBatched=0, dynamicBatched=0, instanced=1664, instancedBatches=242, staticBatches=0, tris=3962196, verts=2427600, visibleRenderers=377
+MEASURED P2+S2 r1 OVERVIEW PROFILED SINGLE (ProfilerRecorder attached; FPS not used for comparison): FPS=61.79, mean=16.18ms, p95=17.10ms, frames=248, renderers=377, drawCalls=201, batches=121, setPass=47, staticBatched=0, dynamicBatched=0, instanced=832, instancedBatches=121, staticBatches=0, tris=1981098, verts=1213800, visibleRenderers=377
+VIEW CHECK P2+S2 r1 overview: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.48, civilians=26, cops=10, camera=(-65.00, 60.00, -80.00) fwd=(0.54, -0.50, 0.67)
+LOADAVG at start of round 2: { 9.80 5.96 5.35 }
+BUILD LEGACY round 2: modes=PerPropCombine/PerRootCombine, cityArtBuild=195.3ms (static finalize 0.0ms), renderers=1128, propRenderers=772, staticRenderers=236, staticBatchedRenderers=0, meshFilters=1060, distinctMeshes=1021, sharedPropMeshes=0
+MEASURED LEGACY r2 STREET DOUBLE: FPS=60.86, mean=16.43ms, p95=18.38ms, frames=244, renderers=1140, drawCalls=410, batches=354, setPass=98, staticBatched=0, dynamicBatched=0, instanced=366, instancedBatches=354, staticBatches=0, tris=1313332, verts=809316, visibleRenderers=209
+MEASURED LEGACY r2 STREET SINGLE: FPS=68.87, mean=14.52ms, p95=17.06ms, frames=276, renderers=1140, drawCalls=203, batches=177, setPass=49, staticBatched=0, dynamicBatched=0, instanced=183, instancedBatches=177, staticBatches=0, tris=607554, verts=376284, visibleRenderers=205
+MEASURED LEGACY r2 STREET PROFILED SINGLE (ProfilerRecorder attached; FPS not used for comparison): FPS=73.33, mean=13.64ms, p95=14.46ms, frames=294, renderers=1140, drawCalls=205, batches=177, setPass=51, staticBatched=0, dynamicBatched=0, instanced=183, instancedBatches=177, staticBatches=0, tris=656666, verts=404658, visibleRenderers=209
+VIEW CHECK LEGACY r2 street: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.48, civilians=26, cops=10, camera=(-14.00, 4.41, -5.53) fwd=(0.00, -0.51, 0.86)
+MEASURED LEGACY r2 ROOFTOP DOUBLE: FPS=46.41, mean=21.55ms, p95=23.40ms, frames=186, renderers=1140, drawCalls=1590, batches=1438, setPass=158, staticBatched=0, dynamicBatched=0, instanced=1476, instancedBatches=1438, staticBatches=0, tris=3726868, verts=2258336, visibleRenderers=812
+MEASURED LEGACY r2 ROOFTOP SINGLE: FPS=54.61, mean=18.31ms, p95=19.21ms, frames=219, renderers=1140, drawCalls=795, batches=719, setPass=79, staticBatched=0, dynamicBatched=0, instanced=738, instancedBatches=719, staticBatches=0, tris=1863434, verts=1129168, visibleRenderers=812
+VIEW CHECK LEGACY r2 rooftop: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-7.50, 16.65, -50.35) fwd=(0.00, -0.51, 0.86)
+MEASURED LEGACY r2 OVERVIEW DOUBLE: FPS=39.70, mean=25.19ms, p95=27.45ms, frames=159, renderers=1138, drawCalls=2220, batches=2056, setPass=112, staticBatched=0, dynamicBatched=0, instanced=2118, instancedBatches=2056, staticBatches=0, tris=4060396, verts=2484300, visibleRenderers=1137
+MEASURED LEGACY r2 OVERVIEW SINGLE: FPS=51.05, mean=19.59ms, p95=20.88ms, frames=205, renderers=1138, drawCalls=1108, batches=1028, setPass=56, staticBatched=0, dynamicBatched=0, instanced=1059, instancedBatches=1028, staticBatches=0, tris=1981086, verts=1213776, visibleRenderers=1137
+VIEW CHECK LEGACY r2 overview: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-65.00, 60.00, -80.00) fwd=(0.54, -0.50, 0.67)
+BUILD P2+S1 round 2: modes=SharedPerKind/StaticBatching, cityArtBuild=106.7ms (static finalize 11.5ms), renderers=2488, propRenderers=247, staticRenderers=2129, staticBatchedRenderers=2129, meshFilters=2420, distinctMeshes=19, sharedPropMeshes=15
+MEASURED P2+S1 r2 STREET DOUBLE: FPS=64.41, mean=15.52ms, p95=17.23ms, frames=258, renderers=2500, drawCalls=634, batches=150, setPass=108, staticBatched=770, dynamicBatched=0, instanced=220, instancedBatches=138, staticBatches=12, tris=1199580, verts=721512, visibleRenderers=453
+MEASURED P2+S1 r2 STREET SINGLE: FPS=72.52, mean=13.79ms, p95=15.08ms, frames=291, renderers=2500, drawCalls=317, batches=75, setPass=53, staticBatched=385, dynamicBatched=0, instanced=110, instancedBatches=69, staticBatches=6, tris=599790, verts=360756, visibleRenderers=451
+MEASURED P2+S1 r2 STREET PROFILED SINGLE (ProfilerRecorder attached; FPS not used for comparison): FPS=69.15, mean=14.46ms, p95=16.37ms, frames=277, renderers=2500, drawCalls=317, batches=75, setPass=55, staticBatched=385, dynamicBatched=0, instanced=110, instancedBatches=69, staticBatches=6, tris=599790, verts=360756, visibleRenderers=449
+VIEW CHECK P2+S1 r2 street: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.49, civilians=26, cops=10, camera=(-14.00, 4.41, -5.53) fwd=(0.00, -0.51, 0.86)
+MEASURED P2+S1 r2 ROOFTOP DOUBLE: FPS=51.10, mean=19.57ms, p95=20.64ms, frames=205, renderers=2500, drawCalls=868, batches=362, setPass=144, staticBatched=3066, dynamicBatched=0, instanced=1124, instancedBatches=346, staticBatches=16, tris=3133060, verts=1908920, visibleRenderers=1795
+MEASURED P2+S1 r2 ROOFTOP SINGLE: FPS=58.64, mean=17.05ms, p95=18.85ms, frames=235, renderers=2500, drawCalls=430, batches=181, setPass=72, staticBatched=1533, dynamicBatched=0, instanced=562, instancedBatches=173, staticBatches=8, tris=1468306, verts=897712, visibleRenderers=1791
+VIEW CHECK P2+S1 r2 rooftop: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-7.50, 16.65, -50.35) fwd=(0.00, -0.51, 0.86)
+MEASURED P2+S1 r2 OVERVIEW DOUBLE: FPS=48.44, mean=20.64ms, p95=22.31ms, frames=194, renderers=2498, drawCalls=402, batches=242, setPass=102, staticBatched=4258, dynamicBatched=0, instanced=1648, instancedBatches=226, staticBatches=16, tris=3962196, verts=2427600, visibleRenderers=2496
+MEASURED P2+S1 r2 OVERVIEW SINGLE: FPS=55.44, mean=18.04ms, p95=20.22ms, frames=222, renderers=2498, drawCalls=201, batches=121, setPass=51, staticBatched=2129, dynamicBatched=0, instanced=824, instancedBatches=113, staticBatches=8, tris=1981098, verts=1213800, visibleRenderers=2498
+VIEW CHECK P2+S1 r2 overview: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-65.00, 60.00, -80.00) fwd=(0.54, -0.50, 0.67)
+BUILD P2+S2 round 2: modes=SharedPerKind/CityCombine, cityArtBuild=114.7ms (static finalize 8.8ms), renderers=367, propRenderers=247, staticRenderers=8, staticBatchedRenderers=0, meshFilters=299, distinctMeshes=26, sharedPropMeshes=15
+MEASURED P2+S2 r2 STREET DOUBLE: FPS=58.68, mean=17.04ms, p95=22.17ms, frames=235, renderers=379, drawCalls=216, batches=152, setPass=98, staticBatched=0, dynamicBatched=0, instanced=234, instancedBatches=152, staticBatches=0, tris=1535004, verts=973260, visibleRenderers=76
+MEASURED P2+S2 r2 STREET SINGLE: FPS=69.04, mean=14.49ms, p95=15.79ms, frames=277, renderers=379, drawCalls=106, batches=76, setPass=48, staticBatched=0, dynamicBatched=0, instanced=117, instancedBatches=76, staticBatches=0, tris=718390, verts=458256, visibleRenderers=76
+MEASURED P2+S2 r2 STREET PROFILED SINGLE (ProfilerRecorder attached; FPS not used for comparison): FPS=69.31, mean=14.43ms, p95=15.69ms, frames=278, renderers=379, drawCalls=104, batches=76, setPass=50, staticBatched=0, dynamicBatched=0, instanced=117, instancedBatches=76, staticBatches=0, tris=669278, verts=429882, visibleRenderers=72
+VIEW CHECK P2+S2 r2 street: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.49, civilians=26, cops=10, camera=(-14.00, 4.41, -5.53) fwd=(0.00, -0.51, 0.86)
+MEASURED P2+S2 r2 ROOFTOP DOUBLE: FPS=54.11, mean=18.48ms, p95=20.02ms, frames=217, renderers=379, drawCalls=486, batches=362, setPass=134, staticBatched=0, dynamicBatched=0, instanced=1140, instancedBatches=362, staticBatches=0, tris=3049140, verts=1880780, visibleRenderers=268
+MEASURED P2+S2 r2 ROOFTOP SINGLE: FPS=60.11, mean=16.63ms, p95=17.95ms, frames=241, renderers=379, drawCalls=243, batches=181, setPass=67, staticBatched=0, dynamicBatched=0, instanced=570, instancedBatches=181, staticBatches=0, tris=1524570, verts=940390, visibleRenderers=268
+VIEW CHECK P2+S2 r2 rooftop: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-7.50, 16.65, -50.35) fwd=(0.00, -0.51, 0.86)
+MEASURED P2+S2 r2 OVERVIEW DOUBLE: FPS=45.60, mean=21.93ms, p95=27.48ms, frames=183, renderers=377, drawCalls=406, batches=242, setPass=90, staticBatched=0, dynamicBatched=0, instanced=1664, instancedBatches=242, staticBatches=0, tris=4060420, verts=2484348, visibleRenderers=377
+MEASURED P2+S2 r2 OVERVIEW SINGLE: FPS=42.47, mean=23.55ms, p95=42.96ms, frames=170, renderers=377, drawCalls=201, batches=121, setPass=44, staticBatched=0, dynamicBatched=0, instanced=832, instancedBatches=121, staticBatches=0, tris=1981098, verts=1213800, visibleRenderers=377
+VIEW CHECK P2+S2 r2 overview: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-65.00, 60.00, -80.00) fwd=(0.54, -0.50, 0.67)
+LOADAVG at start of round 3: { 9.51 7.06 5.86 }
+BUILD LEGACY round 3: modes=PerPropCombine/PerRootCombine, cityArtBuild=221.4ms (static finalize 0.0ms), renderers=1128, propRenderers=772, staticRenderers=236, staticBatchedRenderers=0, meshFilters=1060, distinctMeshes=1021, sharedPropMeshes=0
+MEASURED LEGACY r3 STREET SINGLE: FPS=64.33, mean=15.54ms, p95=17.61ms, frames=258, renderers=1140, drawCalls=207, batches=177, setPass=49, staticBatched=0, dynamicBatched=0, instanced=183, instancedBatches=177, staticBatches=0, tris=705778, verts=433032, visibleRenderers=213
+MEASURED LEGACY r3 STREET DOUBLE: FPS=55.51, mean=18.01ms, p95=21.58ms, frames=223, renderers=1140, drawCalls=418, batches=354, setPass=102, staticBatched=0, dynamicBatched=0, instanced=366, instancedBatches=354, staticBatches=0, tris=1509780, verts=922812, visibleRenderers=215
+MEASURED LEGACY r3 STREET PROFILED SINGLE (ProfilerRecorder attached; FPS not used for comparison): FPS=71.95, mean=13.90ms, p95=17.47ms, frames=288, renderers=1140, drawCalls=205, batches=177, setPass=50, staticBatched=0, dynamicBatched=0, instanced=183, instancedBatches=177, staticBatches=0, tris=656666, verts=404658, visibleRenderers=207
+VIEW CHECK LEGACY r3 street: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.48, civilians=26, cops=10, camera=(-14.00, 4.41, -5.53) fwd=(0.00, -0.51, 0.86)
+MEASURED LEGACY r3 ROOFTOP SINGLE: FPS=55.36, mean=18.06ms, p95=20.27ms, frames=222, renderers=1140, drawCalls=788, batches=722, setPass=77, staticBatched=0, dynamicBatched=0, instanced=741, instancedBatches=722, staticBatches=0, tris=1618254, verts=987770, visibleRenderers=801
+MEASURED LEGACY r3 ROOFTOP DOUBLE: FPS=44.61, mean=22.42ms, p95=24.02ms, frames=179, renderers=1140, drawCalls=1568, batches=1444, setPass=156, staticBatched=0, dynamicBatched=0, instanced=1482, instancedBatches=1444, staticBatches=0, tris=3040060, verts=1862044, visibleRenderers=801
+VIEW CHECK LEGACY r3 rooftop: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-7.50, 16.65, -50.35) fwd=(0.00, -0.51, 0.86)
+MEASURED LEGACY r3 OVERVIEW SINGLE: FPS=49.62, mean=20.15ms, p95=21.20ms, frames=199, renderers=1138, drawCalls=1111, batches=1029, setPass=51, staticBatched=0, dynamicBatched=0, instanced=1060, instancedBatches=1029, staticBatches=0, tris=2030210, verts=1242174, visibleRenderers=1138
+MEASURED LEGACY r3 OVERVIEW DOUBLE: FPS=39.61, mean=25.25ms, p95=27.37ms, frames=159, renderers=1138, drawCalls=2218, batches=2058, setPass=104, staticBatched=0, dynamicBatched=0, instanced=2120, instancedBatches=2058, staticBatches=0, tris=3962196, verts=2427600, visibleRenderers=1138
+VIEW CHECK LEGACY r3 overview: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-65.00, 60.00, -80.00) fwd=(0.54, -0.50, 0.67)
+BUILD P2+S1 round 3: modes=SharedPerKind/StaticBatching, cityArtBuild=116.2ms (static finalize 13.4ms), renderers=2488, propRenderers=247, staticRenderers=2129, staticBatchedRenderers=2129, meshFilters=2420, distinctMeshes=19, sharedPropMeshes=15
+MEASURED P2+S1 r3 STREET SINGLE: FPS=69.73, mean=14.34ms, p95=15.66ms, frames=279, renderers=2500, drawCalls=327, batches=75, setPass=63, staticBatched=385, dynamicBatched=0, instanced=106, instancedBatches=69, staticBatches=6, tris=845278, verts=502482, visibleRenderers=460
+MEASURED P2+S1 r3 STREET DOUBLE: FPS=63.39, mean=15.78ms, p95=16.59ms, frames=254, renderers=2500, drawCalls=646, batches=150, setPass=123, staticBatched=770, dynamicBatched=0, instanced=212, instancedBatches=138, staticBatches=12, tris=1494108, verts=891468, visibleRenderers=452
+MEASURED P2+S1 r3 STREET PROFILED SINGLE (ProfilerRecorder attached; FPS not used for comparison): FPS=70.29, mean=14.23ms, p95=15.83ms, frames=282, renderers=2500, drawCalls=315, batches=75, setPass=58, staticBatched=385, dynamicBatched=0, instanced=106, instancedBatches=69, staticBatches=6, tris=550606, verts=332238, visibleRenderers=448
+VIEW CHECK P2+S1 r3 street: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.49, civilians=26, cops=10, camera=(-14.00, 4.41, -5.53) fwd=(0.00, -0.51, 0.86)
+MEASURED P2+S1 r3 ROOFTOP SINGLE: FPS=58.89, mean=16.98ms, p95=18.54ms, frames=236, renderers=2500, drawCalls=438, batches=181, setPass=81, staticBatched=1533, dynamicBatched=0, instanced=562, instancedBatches=173, staticBatches=8, tris=1664754, verts=1011208, visibleRenderers=1799
+MEASURED P2+S1 r3 ROOFTOP DOUBLE: FPS=49.68, mean=20.13ms, p95=21.25ms, frames=199, renderers=2500, drawCalls=876, batches=362, setPass=162, staticBatched=3066, dynamicBatched=0, instanced=1124, instancedBatches=346, staticBatches=16, tris=3329508, verts=2022416, visibleRenderers=1799
+VIEW CHECK P2+S1 r3 rooftop: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-7.50, 16.65, -50.35) fwd=(0.00, -0.51, 0.86)
+MEASURED P2+S1 r3 OVERVIEW SINGLE: FPS=56.69, mean=17.64ms, p95=19.92ms, frames=227, renderers=2498, drawCalls=203, batches=121, setPass=58, staticBatched=2129, dynamicBatched=0, instanced=824, instancedBatches=113, staticBatches=8, tris=2030210, verts=1242174, visibleRenderers=2498
+MEASURED P2+S1 r3 OVERVIEW DOUBLE: FPS=49.93, mean=20.03ms, p95=21.42ms, frames=200, renderers=2498, drawCalls=402, batches=242, setPass=112, staticBatched=4258, dynamicBatched=0, instanced=1648, instancedBatches=226, staticBatches=16, tris=3962196, verts=2427600, visibleRenderers=2498
+VIEW CHECK P2+S1 r3 overview: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-65.00, 60.00, -80.00) fwd=(0.54, -0.50, 0.67)
+BUILD P2+S2 round 3: modes=SharedPerKind/CityCombine, cityArtBuild=121.6ms (static finalize 11.3ms), renderers=367, propRenderers=247, staticRenderers=8, staticBatchedRenderers=0, meshFilters=299, distinctMeshes=26, sharedPropMeshes=15
+MEASURED P2+S2 r3 STREET SINGLE: FPS=82.13, mean=12.18ms, p95=13.32ms, frames=329, renderers=379, drawCalls=100, batches=76, setPass=49, staticBatched=0, dynamicBatched=0, instanced=117, instancedBatches=76, staticBatches=0, tris=571054, verts=373134, visibleRenderers=70
+MEASURED P2+S2 r3 STREET DOUBLE: FPS=74.43, mean=13.44ms, p95=14.12ms, frames=298, renderers=379, drawCalls=200, batches=152, setPass=94, staticBatched=0, dynamicBatched=0, instanced=234, instancedBatches=152, staticBatches=0, tris=1142108, verts=746268, visibleRenderers=70
+MEASURED P2+S2 r3 STREET PROFILED SINGLE (ProfilerRecorder attached; FPS not used for comparison): FPS=81.52, mean=12.27ms, p95=13.58ms, frames=327, renderers=379, drawCalls=96, batches=76, setPass=48, staticBatched=0, dynamicBatched=0, instanced=117, instancedBatches=76, staticBatches=0, tris=472830, verts=316386, visibleRenderers=68
+VIEW CHECK P2+S2 r3 street: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.49, civilians=26, cops=10, camera=(-14.00, 4.41, -5.53) fwd=(0.00, -0.51, 0.86)
+MEASURED P2+S2 r3 ROOFTOP SINGLE: FPS=64.56, mean=15.49ms, p95=16.48ms, frames=259, renderers=379, drawCalls=257, batches=185, setPass=74, staticBatched=0, dynamicBatched=0, instanced=574, instancedBatches=185, staticBatches=0, tris=1770190, verts=1082380, visibleRenderers=273
+MEASURED P2+S2 r3 ROOFTOP DOUBLE: FPS=57.06, mean=17.52ms, p95=19.00ms, frames=229, renderers=379, drawCalls=506, batches=370, setPass=142, staticBatched=0, dynamicBatched=0, instanced=1148, instancedBatches=370, staticBatches=0, tris=3343932, verts=2051264, visibleRenderers=277
+VIEW CHECK P2+S2 r3 rooftop: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-7.50, 16.65, -50.35) fwd=(0.00, -0.51, 0.86)
+MEASURED P2+S2 r3 OVERVIEW SINGLE: FPS=64.32, mean=15.55ms, p95=16.33ms, frames=258, renderers=377, drawCalls=203, batches=121, setPass=49, staticBatched=0, dynamicBatched=0, instanced=832, instancedBatches=121, staticBatches=0, tris=2030210, verts=1242174, visibleRenderers=377
+MEASURED P2+S2 r3 OVERVIEW DOUBLE: FPS=58.20, mean=17.18ms, p95=18.35ms, frames=233, renderers=377, drawCalls=402, batches=242, setPass=96, staticBatched=0, dynamicBatched=0, instanced=1664, instancedBatches=242, staticBatches=0, tris=3962196, verts=2427600, visibleRenderers=377
+VIEW CHECK P2+S2 r3 overview: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-65.00, 60.00, -80.00) fwd=(0.54, -0.50, 0.67)
+BUILD LEGACY round 4: modes=PerPropCombine/PerRootCombine, cityArtBuild=207.6ms (static finalize 0.0ms), renderers=1128, propRenderers=772, staticRenderers=236, staticBatchedRenderers=0, meshFilters=1060, distinctMeshes=1021, sharedPropMeshes=0
+MEASURED LEGACY r4 STREET DOUBLE: FPS=63.04, mean=15.86ms, p95=16.90ms, frames=253, renderers=1140, drawCalls=356, batches=290, setPass=112, staticBatched=0, dynamicBatched=0, instanced=300, instancedBatches=290, staticBatches=0, tris=1558596, verts=939158, visibleRenderers=181
+MEASURED LEGACY r4 STREET SINGLE: FPS=71.75, mean=13.94ms, p95=14.95ms, frames=288, renderers=1140, drawCalls=170, batches=145, setPass=53, staticBatched=0, dynamicBatched=0, instanced=150, instancedBatches=145, staticBatches=0, tris=582850, verts=356083, visibleRenderers=169
+MEASURED LEGACY r4 STREET PROFILED SINGLE (ProfilerRecorder attached; FPS not used for comparison): FPS=72.68, mean=13.76ms, p95=14.63ms, frames=291, renderers=1140, drawCalls=166, batches=145, setPass=54, staticBatched=0, dynamicBatched=0, instanced=150, instancedBatches=145, staticBatches=0, tris=484626, verts=299335, visibleRenderers=173
+VIEW CHECK LEGACY r4 street: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.48, civilians=26, cops=10, camera=(-14.00, 2.94, -3.02) fwd=(0.00, -0.51, 0.86)
+MEASURED LEGACY r4 ROOFTOP DOUBLE: FPS=45.01, mean=22.21ms, p95=23.35ms, frames=181, renderers=1140, drawCalls=1570, batches=1438, setPass=154, staticBatched=0, dynamicBatched=0, instanced=1476, instancedBatches=1438, staticBatches=0, tris=3235748, verts=1974596, visibleRenderers=802
+MEASURED LEGACY r4 ROOFTOP SINGLE: FPS=54.56, mean=18.33ms, p95=19.72ms, frames=219, renderers=1140, drawCalls=787, batches=719, setPass=77, staticBatched=0, dynamicBatched=0, instanced=738, instancedBatches=719, staticBatches=0, tris=1666986, verts=1015672, visibleRenderers=802
+VIEW CHECK LEGACY r4 rooftop: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-7.50, 16.65, -50.35) fwd=(0.00, -0.51, 0.86)
+MEASURED LEGACY r4 OVERVIEW DOUBLE: FPS=39.77, mean=25.14ms, p95=26.58ms, frames=160, renderers=1138, drawCalls=2218, batches=2058, setPass=110, staticBatched=0, dynamicBatched=0, instanced=2120, instancedBatches=2058, staticBatches=0, tris=3962196, verts=2427600, visibleRenderers=1136
+MEASURED LEGACY r4 OVERVIEW SINGLE: FPS=51.01, mean=19.60ms, p95=20.43ms, frames=205, renderers=1138, drawCalls=1109, batches=1029, setPass=55, staticBatched=0, dynamicBatched=0, instanced=1060, instancedBatches=1029, staticBatches=0, tris=1981098, verts=1213800, visibleRenderers=1138
+VIEW CHECK LEGACY r4 overview: hero moved 0.000m during samples, playerDead=False, health=100, heat=2.81, civilians=26, cops=10, camera=(-65.00, 60.00, -80.00) fwd=(0.54, -0.50, 0.67)
+LOADAVG at end of FPS phase: { 9.45 7.90 6.42 }
+
+=== BUILD / STRUCTURE per configuration (deterministic; every round listed) ===
+config | rounds | cityArtBuild ms mean (min..max) | static finalize ms | renderers | prop renderers | static renderers | static-batched renderers | MeshFilters | distinct meshes | shared prop meshes
+LEGACY | 4 | 222.5 (195.3..265.8) | 0.0 | 1128 | 772 | 236 | 0 | 1060 | 1021 | 0
+P2+S1 | 3 | 113.0 (106.7..116.2) | 12.3 | 2488 | 247 | 2129 | 2129 | 2420 | 19 | 15
+P2+S2 | 3 | 117.2 (114.7..121.6) | 10.1 | 367 | 247 | 8 | 0 | 299 | 26 | 15
+
+=== VIEW STREET — SINGLE-render (camera disabled + one Render per frame; the TRUE number) ===
+config | FPS per round | FPS mean | ratio vs same-round LEGACY per round | ratio mean (min..max) | mean ms | p95 ms | drawCalls | batches | setPass | instanced draws | instanced batches | static-batched draws | static batches | tris | live renderers | visible renderers (isVisible, incl. shadow casters)
+LEGACY | 66.36 / 68.87 / 64.33 / 71.75 | 67.83 | - | - | 14.77 | 16.56 | 207 | 177 | 49 | 183 | 177 | 0 | 0 | 705778 | 1140 | 213
+P2+S1 | 68.98 / 72.52 / 69.73 | 70.41 | 1.040 / 1.053 / 1.084 | 1.059 (1.040..1.084) | 14.21 | 15.42 | 317 | 75 | 53 | 110 | 69 | 385 | 6 | 599790 | 2500 | 451
+P2+S2 | 68.12 / 69.04 / 82.13 | 73.09 | 1.027 / 1.002 / 1.277 | 1.102 (1.002..1.277) | 13.78 | 15.49 | 106 | 76 | 48 | 117 | 76 | 0 | 0 | 718390 | 379 | 76
+LEGACY drift across rounds (single): 66.36 / 68.87 / 64.33 / 71.75 FPS; spread 11.5%
+PAIRED S2/S1 (street, single): 0.987 / 0.952 / 1.178; mean 1.039; S2 faster in 1/3 rounds
+
+=== VIEW STREET — DOUBLE-render (historical harness; comparable with 155/50/40 history) ===
+config | FPS per round | FPS mean | ratio vs same-round LEGACY per round | ratio mean (min..max) | mean ms | p95 ms | drawCalls | batches | setPass | instanced draws | instanced batches | static-batched draws | static batches | tris | live renderers | visible renderers (isVisible, incl. shadow casters)
+LEGACY | 60.72 / 60.86 / 55.51 / 63.04 | 60.03 | - | - | 16.69 | 18.65 | 418 | 354 | 102 | 366 | 354 | 0 | 0 | 1509780 | 1140 | 215
+P2+S1 | 62.76 / 64.41 / 63.39 | 63.52 | 1.034 / 1.058 / 1.142 | 1.078 (1.034..1.142) | 15.74 | 16.83 | 634 | 150 | 108 | 220 | 138 | 770 | 12 | 1199580 | 2500 | 453
+P2+S2 | 60.46 / 58.68 / 74.43 | 64.52 | 0.996 / 0.964 / 1.341 | 1.100 (0.964..1.341) | 15.67 | 18.84 | 216 | 152 | 98 | 234 | 152 | 0 | 0 | 1535004 | 379 | 76
+LEGACY drift across rounds (double): 60.72 / 60.86 / 55.51 / 63.04 FPS; spread 13.6%
+PAIRED S2/S1 (street, double): 0.963 / 0.911 / 1.174; mean 1.016; S2 faster in 1/3 rounds
+
+=== VIEW ROOFTOP — SINGLE-render (camera disabled + one Render per frame; the TRUE number) ===
+config | FPS per round | FPS mean | ratio vs same-round LEGACY per round | ratio mean (min..max) | mean ms | p95 ms | drawCalls | batches | setPass | instanced draws | instanced batches | static-batched draws | static batches | tris | live renderers | visible renderers (isVisible, incl. shadow casters)
+LEGACY | 51.58 / 54.61 / 55.36 / 54.56 | 54.03 | - | - | 18.52 | 20.32 | 788 | 722 | 77 | 741 | 722 | 0 | 0 | 1618254 | 1140 | 801
+P2+S1 | 58.45 / 58.64 / 58.89 | 58.66 | 1.133 / 1.074 / 1.064 | 1.090 (1.064..1.133) | 17.05 | 18.79 | 430 | 181 | 72 | 562 | 173 | 1533 | 8 | 1468306 | 2500 | 1791
+P2+S2 | 57.71 / 60.11 / 64.56 | 60.80 | 1.119 / 1.101 / 1.166 | 1.129 (1.101..1.166) | 16.48 | 18.33 | 243 | 181 | 67 | 570 | 181 | 0 | 0 | 1524570 | 379 | 268
+LEGACY drift across rounds (single): 51.58 / 54.61 / 55.36 / 54.56 FPS; spread 7.3%
+PAIRED S2/S1 (rooftop, single): 0.987 / 1.025 / 1.096; mean 1.036; S2 faster in 2/3 rounds
+
+=== VIEW ROOFTOP — DOUBLE-render (historical harness; comparable with 155/50/40 history) ===
+config | FPS per round | FPS mean | ratio vs same-round LEGACY per round | ratio mean (min..max) | mean ms | p95 ms | drawCalls | batches | setPass | instanced draws | instanced batches | static-batched draws | static batches | tris | live renderers | visible renderers (isVisible, incl. shadow casters)
+LEGACY | 41.75 / 46.41 / 44.61 / 45.01 | 44.44 | - | - | 22.53 | 24.38 | 1568 | 1444 | 156 | 1482 | 1444 | 0 | 0 | 3040060 | 1140 | 801
+P2+S1 | 50.96 / 51.10 / 49.68 | 50.58 | 1.221 / 1.101 / 1.114 | 1.145 (1.101..1.221) | 19.77 | 20.80 | 868 | 362 | 144 | 1124 | 346 | 3066 | 16 | 3133060 | 2500 | 1795
+P2+S2 | 54.74 / 54.11 / 57.06 | 55.31 | 1.311 / 1.166 / 1.279 | 1.252 (1.166..1.311) | 18.09 | 19.71 | 486 | 362 | 134 | 1140 | 362 | 0 | 0 | 3049140 | 379 | 268
+LEGACY drift across rounds (double): 41.75 / 46.41 / 44.61 / 45.01 FPS; spread 11.2%
+PAIRED S2/S1 (rooftop, double): 1.074 / 1.059 / 1.149; mean 1.094; S2 faster in 3/3 rounds
+
+=== VIEW OVERVIEW — SINGLE-render (camera disabled + one Render per frame; the TRUE number) ===
+config | FPS per round | FPS mean | ratio vs same-round LEGACY per round | ratio mean (min..max) | mean ms | p95 ms | drawCalls | batches | setPass | instanced draws | instanced batches | static-batched draws | static batches | tris | live renderers | visible renderers (isVisible, incl. shadow casters)
+LEGACY | 48.96 / 51.05 / 49.62 / 51.01 | 50.16 | - | - | 19.94 | 21.17 | 1111 | 1029 | 51 | 1060 | 1029 | 0 | 0 | 2030210 | 1138 | 1138
+P2+S1 | 56.99 / 55.44 / 56.69 | 56.37 | 1.164 / 1.086 / 1.143 | 1.131 (1.086..1.164) | 17.74 | 19.54 | 201 | 121 | 51 | 824 | 113 | 2129 | 8 | 1981098 | 2498 | 2498
+P2+S2 | 59.03 / 42.47 / 64.32 | 55.27 | 1.206 / 0.832 / 1.296 | 1.111 (0.832..1.296) | 18.68 | 26.09 | 201 | 121 | 44 | 832 | 121 | 0 | 0 | 1981098 | 377 | 377
+LEGACY drift across rounds (single): 48.96 / 51.05 / 49.62 / 51.01 FPS; spread 4.3%
+PAIRED S2/S1 (overview, single): 1.036 / 0.766 / 1.135; mean 0.979; S2 faster in 2/3 rounds
+
+=== VIEW OVERVIEW — DOUBLE-render (historical harness; comparable with 155/50/40 history) ===
+config | FPS per round | FPS mean | ratio vs same-round LEGACY per round | ratio mean (min..max) | mean ms | p95 ms | drawCalls | batches | setPass | instanced draws | instanced batches | static-batched draws | static batches | tris | live renderers | visible renderers (isVisible, incl. shadow casters)
+LEGACY | 37.41 / 39.70 / 39.61 / 39.77 | 39.12 | - | - | 25.58 | 29.31 | 2218 | 2058 | 104 | 2120 | 2058 | 0 | 0 | 3962196 | 1138 | 1138
+P2+S1 | 50.01 / 48.44 / 49.93 | 49.46 | 1.337 / 1.220 / 1.261 | 1.273 (1.220..1.337) | 20.22 | 21.55 | 402 | 242 | 102 | 1648 | 226 | 4258 | 16 | 3962196 | 2498 | 2496
+P2+S2 | 56.05 / 45.60 / 58.20 | 53.28 | 1.498 / 1.149 / 1.469 | 1.372 (1.149..1.498) | 18.99 | 21.58 | 406 | 242 | 90 | 1664 | 242 | 0 | 0 | 4060420 | 377 | 377
+LEGACY drift across rounds (double): 37.41 / 39.70 / 39.61 / 39.77 FPS; spread 6.3%
+PAIRED S2/S1 (overview, double): 1.121 / 0.941 / 1.166; mean 1.076; S2 faster in 2/3 rounds
+
+=== PROFILER STREET — per-frame average, SINGLE-render, separate profiled sample; rounds averaged: LEGACY x4, P2+S1 x3, P2+S2 x3 ===
+profiled-sample FPS: LEGACY=71.58, P2+S1=70.28, P2+S2=69.33
+marker / counter (ms unless marked) | LEGACY | P2+S1 | P2+S2
+[FrameTimingManager] frames with data (count/raw) | 286.8 | 281.7 | 278.0
+[wall clock] frame time (this harness) | 13.981 | 14.231 | 14.731
+[FrameTimingManager] cpuFrameTime | 14.039 | 14.198 | 14.713
+[FrameTimingManager] cpuMainThreadFrameTime | 13.418 | 13.586 | 14.092
+[FrameTimingManager] frames with gpuFrameTime>0 (count/raw) | 9.0 | 8.7 | 9.0
+[FrameTimingManager] gpuFrameTime | 1.928 | 1.784 | 2.042
+[FrameTimingManager] cpuRenderThreadFrameTime | 0.000 | 0.000 | 0.000
+MeshSkinning.Skin | 114.608 | 117.753 | 120.426
+CPU Total Frame Time | 14.027 | 14.183 | 14.708
+Main Thread | 13.889 | 14.137 | 14.625
+CPU Main Thread Frame Time | 13.405 | 13.567 | 14.087
+PlayerLoop | 13.287 | 13.542 | 14.022
+PostLateUpdate.BatchModeUpdate | 5.791 | 6.005 | 6.264
+PostLateUpdate.UpdateAllSkinnedMeshes | 3.110 | 3.409 | 3.597
+MeshSkinning.Update | 3.101 | 3.401 | 3.589
+Update.ScriptRunDelayedDynamicFrameRate | 1.904 | 1.733 | 1.554
+Render.OpaqueGeometry | 1.288 | 1.095 | 0.952
+RenderForward.RenderLoopJob | 1.231 | 0.974 | 0.906
+Director.PrepareFrameJob | 0.845 | 0.840 | 0.749
+PreLateUpdate.ScriptRunBehaviourLateUpdate | 0.580 | 0.563 | 0.592
+LateBehaviourUpdate | 0.579 | 0.563 | 0.591
+Director.ProcessFrame | 0.404 | 0.412 | 0.480
+Animators.Update | 0.402 | 0.409 | 0.475
+PreLateUpdate.DirectorUpdateAnimationEnd | 0.288 | 0.292 | 0.355
+Update.ScriptRunBehaviourUpdate | 0.347 | 0.300 | 0.311
+BehaviourUpdate | 0.346 | 0.299 | 0.310
+PreUpdate.AIUpdate | 0.272 | 0.265 | 0.289
+NavMeshManager | 0.270 | 0.264 | 0.287
+FixedUpdate.PhysicsFixedUpdate | 0.213 | 0.211 | 0.236
+PreLateUpdate.DirectorUpdateAnimationBegin | 0.200 | 0.203 | 0.210
+MeshSkinning.CalcMatrices | 0.181 | 0.187 | 0.185
+Physics.Simulate | 0.110 | 0.110 | 0.126
+Animators.WriteJob | 0.089 | 0.092 | 0.117
+PostLateUpdate.UpdateAllRenderers | 0.105 | 0.099 | 0.110
+Director.PrepareFrame | 0.085 | 0.086 | 0.090
+MeshSkinning.Render | 0.084 | 0.064 | 0.089
+Culling | 0.068 | 0.077 | 0.064
+Animators.ProcessGraphJob | 0.069 | 0.073 | 0.077
+PreUpdate.PhysicsUpdate | 0.068 | 0.062 | 0.062
+GPU Frame Time | 0.060 | 0.055 | 0.066
+Animators.ProcessAnimationsJob | 0.057 | 0.056 | 0.064
+PostLateUpdate.UpdateAudio | 0.056 | 0.055 | 0.060
+SceneCulling | 0.048 | 0.057 | 0.043
+FixedBehaviourUpdate | 0.003 | 0.003 | 0.003
+Camera.Render | 0.000 | 0.000 | 0.000
+EditorLoop | 0.000 | 0.000 | 0.000
+CPU Render Thread Frame Time | 0.000 | 0.000 | 0.000
+
+=== PROFILER OVERVIEW — per-frame average, SINGLE-render, separate profiled sample; rounds averaged: LEGACY x1, P2+S1 x1, P2+S2 x1 ===
+profiled-sample FPS: LEGACY=49.65, P2+S1=54.22, P2+S2=61.79
+marker / counter (ms unless marked) | LEGACY | P2+S1 | P2+S2
+[FrameTimingManager] frames with data (count/raw) | 199.0 | 217.0 | 248.0
+[wall clock] frame time (this harness) | 20.140 | 18.443 | 16.184
+[FrameTimingManager] cpuFrameTime | 20.005 | 18.347 | 16.130
+[FrameTimingManager] cpuMainThreadFrameTime | 19.378 | 17.711 | 15.504
+[FrameTimingManager] frames with gpuFrameTime>0 (count/raw) | 7.0 | 7.0 | 8.0
+[FrameTimingManager] gpuFrameTime | 3.182 | 3.743 | 3.617
+[FrameTimingManager] cpuRenderThreadFrameTime | 0.000 | 0.000 | 0.000
+MeshSkinning.Skin | 113.894 | 126.794 | 115.570
+CPU Total Frame Time | 19.962 | 18.310 | 16.114
+Main Thread | 19.889 | 18.218 | 15.997
+CPU Main Thread Frame Time | 19.336 | 17.675 | 15.488
+PlayerLoop | 19.278 | 17.599 | 15.388
+PostLateUpdate.BatchModeUpdate | 8.473 | 8.359 | 7.653
+Update.ScriptRunDelayedDynamicFrameRate | 5.115 | 3.286 | 2.136
+Render.OpaqueGeometry | 4.291 | 2.259 | 1.482
+RenderForward.RenderLoopJob | 4.010 | 1.503 | 1.249
+PostLateUpdate.UpdateAllSkinnedMeshes | 3.103 | 3.516 | 3.254
+MeshSkinning.Update | 3.087 | 3.510 | 3.247
+Director.PrepareFrameJob | 0.750 | 0.675 | 0.793
+PreLateUpdate.ScriptRunBehaviourLateUpdate | 0.547 | 0.558 | 0.540
+LateBehaviourUpdate | 0.546 | 0.558 | 0.540
+Director.ProcessFrame | 0.427 | 0.412 | 0.408
+Animators.Update | 0.424 | 0.409 | 0.405
+Update.ScriptRunBehaviourUpdate | 0.350 | 0.306 | 0.301
+FixedUpdate.PhysicsFixedUpdate | 0.350 | 0.301 | 0.240
+BehaviourUpdate | 0.349 | 0.305 | 0.299
+PreUpdate.AIUpdate | 0.311 | 0.278 | 0.272
+NavMeshManager | 0.310 | 0.276 | 0.270
+PreLateUpdate.DirectorUpdateAnimationEnd | 0.300 | 0.289 | 0.294
+PreLateUpdate.DirectorUpdateAnimationBegin | 0.215 | 0.203 | 0.196
+MeshSkinning.Render | 0.193 | 0.196 | 0.196
+Physics.Simulate | 0.182 | 0.165 | 0.121
+MeshSkinning.CalcMatrices | 0.160 | 0.159 | 0.153
+GPU Frame Time | 0.112 | 0.121 | 0.117
+Culling | 0.080 | 0.102 | 0.065
+Animators.WriteJob | 0.096 | 0.092 | 0.092
+PostLateUpdate.UpdateAllRenderers | 0.096 | 0.095 | 0.079
+Director.PrepareFrame | 0.089 | 0.081 | 0.083
+SceneCulling | 0.059 | 0.081 | 0.044
+Animators.ProcessGraphJob | 0.078 | 0.075 | 0.069
+Animators.ProcessAnimationsJob | 0.056 | 0.055 | 0.055
+PostLateUpdate.UpdateAudio | 0.049 | 0.052 | 0.048
+PreUpdate.PhysicsUpdate | 0.024 | 0.037 | 0.050
+FixedBehaviourUpdate | 0.004 | 0.003 | 0.003
+Camera.Render | 0.000 | 0.000 | 0.000
+EditorLoop | 0.000 | 0.000 | 0.000
+CPU Render Thread Frame Time | 0.000 | 0.000 | 0.000

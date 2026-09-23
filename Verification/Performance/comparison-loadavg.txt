@@ -1,0 +1,2 @@
+loadavg before: { 3.02 5.64 6.40 } 17:56:56
+loadavg after: { 4.88 5.93 6.40 } 18:01:09 exit=0
