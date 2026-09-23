@@ -1,0 +1,5 @@
+PASS Startup HOME, no city or player spawned.
+FAIL System.Exception: free-play COMING SOON CONTROL refuses launch.
+  at ModeVerificationRunner.Check (System.Boolean condition, System.String text) [0x0001b] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/ModeVerificationRunner.cs:33 
+  at ModeVerificationRunner+<Checks>d__18.MoveNext () [0x00125] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/ModeVerificationRunner.cs:81 
+  at ModeVerificationRunner+<Start>d__9.MoveNext () [0x00057] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/ModeVerificationRunner.cs:25 

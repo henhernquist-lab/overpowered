@@ -1,6 +1,83 @@
 # Prototype Status
 
-## Integration of parallel branches + city batching FPS fix — 2026-09-22 (current)
+## Free Play and Endless Fight — 2026-09-22 (current)
+
+Both former "Coming Soon" placeholders are real modes, built by EXTENDING the data-driven architecture. There are
+no mode-ID switches in gameplay code (checked mechanically); every difference is data on the mode assets.
+
+### Architecture additions (defaults preserve every existing mode exactly)
+- `GameModeDefinition`: `SideFromProfile`, `AllowSideSwitch`, `ShowResults` (default true),
+  `Results` (Objectives | Survival) and `Director`.
+- `ModeDirector` is a strategy asset, following the `ModeRules` pattern. It holds tuning ONLY. `Begin()` adds a runtime
+  `ModeDirectorState` component that owns all run state, so nothing leaks between Editor play sessions. It is ticked
+  only through `GameModeSession.Tick`, so pause/end handling stays in one place.
+- `GameFlow.Select` requires Rules + Encounters only when a mode actually spawns encounters.
+- `WorldSession.RequestSideSwitch()` is the H-key action; it is blocked unless the definition sets `AllowSideSwitch`.
+- `PlayerProgression`: `ModeRecords` hold per-mode BestScore/BestWave/Runs, additively. `BestSessionScore` keeps
+  its global meaning. Old saves load with an empty list.
+- `CityNpc` (additive): `MaxHealth`, `AlwaysAggro`, `SetCombatStats`, `ContactDamage`. Without explicit stats,
+  `ContactDamage` returns exactly the old Heat formula.
+
+### Free Play (`free-play.asset`)
+No objectives, no timer, no defeat limit, no encounters. **Heat stays active (lead's call):** Heat/police is the
+city's only reactive system, and without it Free Play is a dead diorama. It gives consequence without failure: you
+always respawn and the session never ends by itself. It uses the saved profile side; H / the Tab menu switch sides
+in-session. The pause menu offers only Resume and Return home.
+
+### Endless Fight (`endless-fight.asset` Hero → Criminals; `endless-fight-villain.asset` Villain → Cops)
+Both share ONE tuning asset, `Resources/ModeDirectors/EndlessWaves.asset`, which holds every escalation constant:
+- 3 enemies + 2 per wave
+- `MaxAlive` 12 (the rest arrive as reinforcements)
+- health 65 × (1 + 0.15·(wave−1)), damage 8 × (1 + 0.10·(wave−1)), set explicitly per enemy — **Heat stars never
+  scale them**
+- 4 s intermission; spawn ring 22 m, ≥ 12 m from the player
+- score = 10·wave per kill + 50·wave per cleared wave
+
+The arena is the intersection nearest the city centre; all four are equidistant, so the one nearest the spawn wins,
+at (−20, 0, −20). No civilians and no police. One life: death ends the run and shows the Survival results screen
+(WAVE / ENEMIES DEFEATED / SCORE / BEST, "NEW BEST" when earned). Best scores persist per variant. `Compose()` is
+the marked extension point for enemy types.
+
+### Verification — `ModeExpansionVerification.Run` 111 PASS / 0 FAIL; separate-process `Reload` 10 PASS / 0 FAIL
+- **Free Play:** 150 s of accelerated time (3× Hero's spawn interval) → 0 encounters. **CONTROL:** Hero mode, same
+  150 s → 2 encounters. 4 deaths → 4 respawns, session never ends. A real prop break raises Heat and police go
+  2 → 4 in real time. Switching sides flips hostility (criminals hostile → 4/4 cops hostile). **CONTROLS:** the cooldown
+  refuses an immediate re-switch; Hero mode still blocks switching; the relaxed launch guard still rejects an
+  encounter mode with no rules and still rejects unplayable modes.
+- **Endless escalation matched the formula exactly — with 3 Heat stars active at wave 5:**
+  wave 1 → 3 alive, 65 health, 8 damage; wave 5 → 11 alive, 104 health, 11.2 damage. The Heat formula would have given
+  119 / 14. Real enemy hits took exactly 8.00 and 11.20. **CONTROLS:** with one enemy alive for 12 s the wave does not
+  advance; the MaxAlive cap holds, with a reinforcement after a kill; a lower-scoring replay (10) keeps the best
+  (2120). A real wave-6 crowd killed the hero → "WAVE 6 REACHED / NEW BEST".
+- **Separate Unity process:** both variants' bests reloaded (2120 / 80), and the in-game HUD showed BEST 2120. A REAL
+  save written on 2026-09-20 (no `ModeRecords` field) loaded and upgraded in place. **CONTROL:** a version-2 save is
+  still rejected.
+- **FPS at the real gameplay camera:** wave 1 (4 humanoids) 196 FPS → wave 5 (12 humanoids) **99 FPS** single-render;
+  a second process measured 126 → 79. Skinning ≈ 0.04–0.05 ms per added humanoid.
+- **Regressions:** MenuPresentationVerification 42/42 (real tree; its obsolete "Coming Soon" assertions were replaced
+  with the new truth). ModeVerification 79 PASS + Reload 2 PASS, exit 0. Its line 81 still asserted Free Play/Endless
+  refuse to launch; it now asserts that an unplayable COPY of a mode is refused — the same guarantee, stated truthfully.
+  AudioVerification line 61's disabled-button control now uses a genuinely disabled button whose callback WOULD launch
+  Free Play, which is stronger than before. dotnet 0 errors / 0 warnings.
+- **AudioVerification could not be re-verified in this pass.** After the Mac entered maintenance sleep at 22:21,
+  every Unity process logged `FMOD failed to initialize the output device` and fell back to no-sound output, so
+  `Music DSP sample cursor advances` fails. **CONTROL:** HEAD 8774aee, before any Step 2–3 code, fails identically at
+  the same check. A further re-run with the Mac held awake (23:30) failed identically, 42 PASS then the same FAIL,
+  still logging `FMOD failed to initialize the output device`. **The Mac's CoreAudio output has been broken since the
+  sleep; this is a machine-state problem, not a code regression.** Resetting it needs admin rights
+  (`sudo killall coreaudiod` or a reboot), after which AudioVerification must be re-run. That earlier run took
+  48 min because the Mac slept mid-run; later runs took 85–100 s.
+
+### For a human playtest — not verifiable in batch mode
+- **Endless Fight is currently the biggest XP faucet in the game.** Enemy defeats still award the existing EnemyXp
+  (35), so a wave-6 run (37 kills) is ~1,300 XP — several levels per run. This is a progression-balance decision, not
+  tuned here.
+- The three new modes sit in small "extras" pills under the two large side cards. They work, but they are easy to miss.
+- Enemies converge on one point and ring the hero (see `endless-wave-5-gameplay-camera.png`). Combat depth, the next
+  step, addresses this.
+- Real keyboard/mouse: H and the pause buttons were exercised by calling the same methods the input handlers call.
+
+## Integration of parallel branches + city batching FPS fix — 2026-09-22 (previous)
 
 ### Step 0: ground truth and merge
 - `feat/content-docs` (GLM) was **never pushed** despite being reported as pushed; `origin` held only `main`.

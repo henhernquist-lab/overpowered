@@ -16,16 +16,22 @@ public sealed class GameModeSession : MonoBehaviour
     public string Feedback { get; private set; }
     public int Rescues {get;private set;}
     public float PeakHeat {get;private set;}
+    public ModeDirectorState Director {get;private set;}
     int startLevel,startXp;
     float spawnClock; int nextEncounter;
     public void Initialize(WorldSession world,GameModeDefinition definition)
     {
-        World=world; Definition=definition; world.Progression.SetModeSide(definition.Side);
+        World=world; Definition=definition;
+        world.Progression.SetModeSide(definition.SideFromProfile?world.Progression.Data.Side:definition.Side,!definition.AllowSideSwitch);
         startLevel=world.Progression.Data.Level;startXp=world.Progression.Data.Xp;PeakHeat=world.Heat;
         world.Progression.XpAwarded+=Awarded;
         Feedback=definition.Description;
     }
-    public void Begin() { for(int i=0;i<Definition.InitialEncounters;i++) SpawnNext(); }
+    public void Begin()
+    {
+        if(Definition.Director!=null) Director=Definition.Director.Begin(this);
+        for(int i=0;i<Definition.InitialEncounters;i++) SpawnNext();
+    }
     void Awarded(int amount) { if(!Ended) XpEarned+=amount; }
     public void AddScore(int value) { if(!Ended) Score=Mathf.Max(0,Score+value); }
     public void RecordRescue(){if(!Ended)Rescues++;}
@@ -36,12 +42,13 @@ public sealed class GameModeSession : MonoBehaviour
         Elapsed+=dt; spawnClock+=dt;
         if(Definition.SessionSeconds>0 && Elapsed>=Definition.SessionSeconds) { Finish(SessionOutcome.TimedOut,"Session time limit reached."); return; }
         if(spawnClock>=Definition.SpawnInterval) { spawnClock=0; SpawnNext(); }
+        if(Director!=null) Director.Tick(dt);
     }
     void Update() { Tick(Time.deltaTime); }
     public CrimeEvent SpawnNext()
     {
         World.Crimes.RemoveAll(c=>c==null||c.Resolved);
-        if(Ended||World.Crimes.Count>=Definition.MaximumEncounters) return null;
+        if(Ended||World.Crimes.Count>=Definition.MaximumEncounters||Definition.Encounters==null||Definition.Encounters.Length==0) return null;
         // Place set-pieces at street intersections, leaving space for physics cars and escape routes.
         var sites=new List<Vector3>();
         var city=World.Tuning.City; float pitch=city.BlockSize+city.StreetWidth;
@@ -84,9 +91,18 @@ public sealed class GameModeSession : MonoBehaviour
     {
         if(Ended) return;
         Ended=true; World.MenuOpen=true; World.Powers.Release(false);
-        World.Progression.RecordSession(Definition.Id,outcome==SessionOutcome.Won,Score,XpEarned);
-        GameFlow.Instance.Results(new SessionResult {ModeId=Definition.Id,ModeName=Definition.DisplayName,Outcome=outcome,Reason=reason,Score=Score,Xp=XpEarned,Successes=Successes,Failures=Failures,Defeats=Defeats,Seconds=Elapsed,
-            Side=Definition.Side,Rescues=Rescues,PeakHeat=PeakHeat,TimeLimit=Definition.SessionSeconds,StartLevel=startLevel,StartXp=startXp,EndLevel=World.Progression.Data.Level,EndXp=World.Progression.Data.Xp},home);
+        home|=!Definition.ShowResults;
+        var result=new SessionResult {ModeId=Definition.Id,ModeName=Definition.DisplayName,Outcome=outcome,Reason=reason,Score=Score,Xp=XpEarned,Successes=Successes,Failures=Failures,Defeats=Defeats,Seconds=Elapsed,
+            Side=World.Progression.Data.Side,Rescues=Rescues,PeakHeat=PeakHeat,TimeLimit=Definition.SessionSeconds,StartLevel=startLevel,StartXp=startXp,Layout=Definition.Results};
+        if(Director!=null) Director.Describe(result);
+        int previousBest=World.Progression.BestScore(Definition.Id);
+        World.Progression.RecordSession(Definition.Id,outcome==SessionOutcome.Won,Score,XpEarned,result.Wave);
+        result.BestScore=Mathf.Max(previousBest,Score); result.NewBest=Score>previousBest;
+        result.EndLevel=World.Progression.Data.Level; result.EndXp=World.Progression.Data.Xp;
+        GameFlow.Instance.Results(result,home);
     }
+    /// Pause-menu actions (PrototypeHUD draws these; verification calls the same methods).
+    public void EndToResults() { Finish(SessionOutcome.Abandoned,"Returned from pause menu."); }
+    public void ReturnHome() { Finish(SessionOutcome.Abandoned,"Returned home.",true); }
     void OnDestroy() { if(World!=null&&World.Progression!=null) World.Progression.XpAwarded-=Awarded; Time.timeScale=1; }
 }

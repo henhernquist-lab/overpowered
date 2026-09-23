@@ -58,7 +58,7 @@ public sealed class AudioVerificationRunner : MonoBehaviour
         Check(A.Tuning.Cues.Length==Enum.GetValues(typeof(AudioCue)).Length,$"All {A.Tuning.Cues.Length} cue types / {count} clip assignments populated (no silent placeholders).");
         foreach(var key in new[]{"MasterVolume","MusicVolume","SFXVolume","UIVolume","AmbientVolume"})Check(A.Tuning.Mixer.GetFloat(key,out float value),$"Exposed mixer parameter {key} is valid.");
         SourceCheck(AudioCue.Music);Check(PlayingSource(AudioCue.Music).timeSamples>0,"Music DSP sample cursor advances (not just bookkeeping).");
-        var menu=FindAnyObjectByType<ModeScreens>();A.StopAll();Submit(menu.ModeButtons["free-play"]);Check(Playing(AudioCue.UiClick)==0&&!GameFlow.Instance.Loading,"Disabled UI CONTROL emits no click and launches nothing.");
+        var menu=FindAnyObjectByType<ModeScreens>();var disabledButton=new Button(()=>GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/free-play"))){name="verification-disabled"};disabledButton.SetEnabled(false);menu.Root.Add(disabledButton);yield return null;A.StopAll();Submit(disabledButton);Check(Playing(AudioCue.UiClick)==0&&!GameFlow.Instance.Loading,"Disabled UI CONTROL emits no click and launches nothing.");
         using(var hover=PointerOverEvent.GetPooled()){hover.target=menu.ModeButtons["hero"];menu.ModeButtons["hero"].SendEvent(hover);}SourceCheck(AudioCue.UiHover);
         Submit(menu.ModeButtons["hero"]);SourceCheck(AudioCue.UiClick);yield return Scene(GameFlow.CityScene);
         W.Hero.enabled=false;Move(new Vector3(0,100,0));camera=Camera.main;camera.GetComponent<ThirdPersonCamera>().enabled=false;camera.transform.position=W.Hero.transform.position+new Vector3(0,1,-8);camera.transform.forward=Vector3.forward;

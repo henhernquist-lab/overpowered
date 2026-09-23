@@ -1,0 +1,4 @@
+81c81
+<         foreach(string id in new[]{"free-play","endless-fight"})Check(!Flow.Select(catalog.First(m=>m.Id==id)),id+" COMING SOON CONTROL refuses launch.");
+---
+>         {var hidden=UnityEngine.Object.Instantiate(catalog.First(m=>m.Id=="free-play"));hidden.Playable=false;Check(!Flow.Select(hidden)&&!Flow.Loading,"Non-playable definition CONTROL refuses launch (free-play/endless-fight are playable since Step 2-3).");UnityEngine.Object.Destroy(hidden);}

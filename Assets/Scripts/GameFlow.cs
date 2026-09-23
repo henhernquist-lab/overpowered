@@ -11,6 +11,9 @@ public sealed class SessionResult
     public PlayerSide Side;
     public int Rescues, StartLevel, StartXp, EndLevel, EndXp;
     public float PeakHeat, TimeLimit;
+    public ResultsLayout Layout;
+    public int Wave, EnemiesDefeated, BestScore;
+    public bool NewBest;
 }
 public sealed class GameFlow : MonoBehaviour
 {
@@ -41,7 +44,10 @@ public sealed class GameFlow : MonoBehaviour
     }
     public bool Select(GameModeDefinition definition)
     {
-        if(Loading||definition==null||!definition.Playable||definition.Rules==null||definition.Encounters==null||definition.Encounters.Length==0) return false;
+        if(Loading||definition==null||!definition.Playable) return false;
+        // Rules and encounters are only required when the definition actually spawns encounters.
+        bool spawnsEncounters=definition.InitialEncounters>0||definition.MaximumEncounters>0;
+        if(spawnsEncounters&&(definition.Rules==null||definition.Encounters==null||definition.Encounters.Length==0)) return false;
         ActiveMode=definition; Result=null; Load(CityScene); return true;
     }
     public void Results(SessionResult result,bool home=false) { if(Loading) return; Result=result; if(home) ActiveMode=null; Load(home?HomeScene:ResultsScene); }

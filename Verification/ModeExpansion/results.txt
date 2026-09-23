@@ -1,0 +1,126 @@
+PASS Menu component exists in Home
+PASS Fresh isolated save CONTROL: level 1, 0 sessions, 0 mode records.
+PASS Home shows ENABLED 'free-play' in the data-driven extras row below the side cards (rect (x:86.63, y:599.63, width:123.75, height:29.25)).
+PASS Home shows ENABLED 'endless-fight' in the data-driven extras row below the side cards (rect (x:222.75, y:599.63, width:235.13, height:29.25)).
+PASS Home shows ENABLED 'endless-fight-villain' in the data-driven extras row below the side cards (rect (x:470.25, y:599.63, width:252.00, height:29.25)).
+PASS No COMING SOON placeholder remains on Home.
+CAPTURE home-extras.png (actual render target)
+PASS Real Home button -> GameFlow.Select launched Free Play with Rules=null and 0 encounter definitions.
+PASS Free Play takes the profile side (Hero) and does NOT lock it.
+PASS Population: 24 civilians, 2 patrol cops.
+PASS Advanced 150s (3x Hero SpawnInterval 50s): crimes=0, CrimeEvent objects=0, CrimeEncounter objects=0, criminals=0; session not ended.
+PASS HUD: no objective/timer lines, no director line; Heat shown.
+PASS Death 1: player actually dead (health 0).
+PASS Death 1 -> respawned at full health 100; session NOT ended (defeats=1, DefeatLimit=0).
+PASS Death 2: player actually dead (health 0).
+PASS Death 2 -> respawned at full health 100; session NOT ended (defeats=2, DefeatLimit=0).
+PASS Death 3: player actually dead (health 0).
+PASS Death 3 -> respawned at full health 100; session NOT ended (defeats=3, DefeatLimit=0).
+PASS Death 4: player actually dead (health 0).
+PASS Death 4 -> respawned at full health 100; session NOT ended (defeats=4, DefeatLimit=0).
+PASS Real BreakableProp break -> WorldSession.OnDestruction: Heat 0.00 -> 0.35 (1 star).
+PASS Police respond in real time: cops 2 -> 4 (= patrol 2 + 1 star x 2).
+PASS Before switch (Hero): criminal hostile, 0/4 cops hostile, 0 civilians hostile.
+PASS H action: 'Side changed. Your powers and character are unchanged.' -> Data.Side=Villain, saved to disk.
+PASS After switch (Villain): criminal NOT hostile, 4/4 cops hostile.
+PASS Immediate second switch refused by the existing cooldown CONTROL.
+PASS Free Play pause menu offers exactly: Resume | Return home (keep earned XP)
+PASS Pause 'Return home' reached the Home scene; city unloaded.
+PASS Free Play relaunch accepted by GameFlow.Select.
+PASS Relaunch starts as Villain: the side comes from the saved profile.
+PASS ShowResults=false: an explicit results request lands on Home, not Results.
+PASS Hero mode selected.
+PASS Hero CONTROL: same 150s advance -> encounters 1 at start, 2 spawned in total; CrimeEncounter objects=2.
+PASS Hero CONTROL: side switch BLOCKED ('Side is set by this mode. Return home to choose another mode.'); side stays Hero although the saved profile side was Villain.
+PASS Hero CONTROL: HUD shows the objective/timer lines.
+PASS Hero CONTROL: pause menu keeps the results option: Resume | End session / Results | Return home (keep earned XP)
+PASS Guard CONTROL: an encounter-spawning definition with no Rules/Encounters is still rejected.
+PASS Guard CONTROL: Playable=false is still rejected.
+PASS Menu component exists in Home
+PASS endless-fight and endless-fight-villain reference the ONE Resources/ModeDirectors/EndlessWaves asset.
+PASS Endless definitions are pure data: Survival layout, DefeatLimit 1, 0 civilians, no police.
+PASS Real Home button launched Endless Fight (Hero): EndlessWaveState runtime component created by the director; side Hero, locked.
+PASS Before wave 1: 0 NPCs (no civilians, no police), 0 encounters; arena centre (-20.00, 0.11, -20.00).
+PASS Wave 0 is in its intermission (4.0s).
+PASS Intermission elapsed -> wave 1 started.
+RECORD WAVE 1: wave=1, alive=3, per-enemy health=65.00 (max 65.00), contact damage=8.00, role=Criminal, Heat stars=0; spawn distances from player 23.5,22.3,26.6m; ring radii 22.0,22.0,22.0m.
+PASS Wave 1 = FirstWaveCount 3 Criminals at base health 65 / damage 8.
+PASS HUD line: WAVE 1 · LEFT 3 · SCORE 0 · BEST 0
+PROFILER recorders found: PostLateUpdate.UpdateAllSkinnedMeshes, PostLateUpdate.BatchModeUpdate, PlayerLoop (requested: PostLateUpdate.UpdateAllSkinnedMeshes, PostLateUpdate.BatchModeUpdate, PlayerLoop)
+CAPTURE endless-wave-1-gameplay-camera.png (actual render target)
+MEASURED Endless wave 1: single-render FPS=196.33, mean=5.09ms, p95=5.53ms, frames=786; humanoids=4 (enemies alive 3 + hero), visible renderers=998; profiled 568 frames: PostLateUpdate.UpdateAllSkinnedMeshes=0.203ms, PostLateUpdate.BatchModeUpdate=1.120ms, PlayerLoop=4.960ms; camera (-20.00, 7.60, -33.53) fwd (0.00, -0.51, 0.86), hero hovering at (-20.00, 3.31, -28.00); 1280x720 Editor Play Mode, Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz, AMD Radeon Pro 5300.
+PASS Hovering hero unreachable during the sample (no deaths, no kills).
+PASS Wave 1 contact damage: real Criminal contact attack took 8.00 health (100.00 -> 92.00); explicit per-wave damage 8.00.
+PASS Real E-punch accepted.
+PASS Real punch impact damaged a wave-1 Criminal: health 65.0 -> 30.0.
+PASS Wave 1 cleared: 3 kills = WaveSize; score 80.
+PASS Score after wave 1 = 80 (kills x KillScore x wave + WaveClearBonus x wave).
+PASS Wave 1 is in its intermission (4.0s).
+PASS Intermission elapsed -> wave 2 started.
+PASS Advance CONTROL: one wave-2 enemy alive after 12s -> still wave 2, LEFT 1, no intermission.
+PASS Last enemy defeated -> intermission begins.
+PASS Wave 2 is in its intermission (4.0s).
+PASS Intermission elapsed -> wave 3 started.
+PASS Wave 3 spawned 7 = FirstWaveCount + 2*EnemiesPerWave.
+PASS Wave 3 cleared: 7 kills = WaveSize; score 640.
+PASS Wave 3 is in its intermission (3.9s).
+PASS Intermission elapsed -> wave 4 started.
+PASS SpawnPolice=0 CONTROL: 3 Heat stars for 2.6s -> 0 police, 0 pursuing hero.
+PASS Wave 4 cleared: 9 kills = WaveSize; score 1200.
+PASS Wave 4 is in its intermission (4.0s).
+PASS Intermission elapsed -> wave 5 started.
+RECORD WAVE 5: wave=5, alive=11, per-enemy health=104.00 (max 104.00), contact damage=11.20, role=Criminal, Heat stars=3; spawn distances from player 14.1,26.8,30.0,29.9,14.2,29.9,27.5,16.2,18.5,26.6,15.0m; ring radii 22.0,22.0,22.0,22.0,22.0,22.0,22.0,22.0,22.0,22.0,22.0m.
+PASS Alive count escalates exactly: wave 1 3 -> wave 5 11 (= 3 + 2 x 4, under MaxAlive 12).
+PASS Health escalates exactly: 65.00 -> 104.00 (x1.60); Heat-star formula would have given 119.00.
+PASS Damage escalates exactly: 8.00 -> 11.20 (x1.40); Heat-star formula would have given 14.00.
+CAPTURE endless-wave-5-gameplay-camera.png (actual render target)
+MEASURED Endless wave 5: single-render FPS=99.08, mean=10.09ms, p95=13.88ms, frames=397; humanoids=12 (enemies alive 11 + hero), visible renderers=1014; profiled 329 frames: PostLateUpdate.UpdateAllSkinnedMeshes=0.543ms, PostLateUpdate.BatchModeUpdate=3.359ms, PlayerLoop=8.613ms; camera (-20.00, 7.60, -33.53) fwd (0.00, -0.51, 0.86), hero hovering at (-20.00, 3.31, -28.00); 1280x720 Editor Play Mode, Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz, AMD Radeon Pro 5300.
+FPS SUMMARY gameplay camera: wave 1 (4 humanoids) 196.33 FPS / skinning 0.203ms / batch-mode overhead 1.120ms  ->  wave 5 (12 humanoids) 99.08 FPS / skinning 0.543ms / batch-mode overhead 3.359ms; skinning per added humanoid 0.043ms.
+PASS Wave 5 contact damage (3 Heat stars active): real Criminal contact attack took 11.20 health (92.00 -> 80.80); explicit per-wave damage 11.20.
+PASS Wave 5 cleared: 11 kills = WaveSize; score 2000.
+PASS Wave 5 is in its intermission (4.0s).
+PASS Intermission elapsed -> wave 6 started.
+PASS MaxAlive cap: wave 6 size 13, alive 12, spawned 12.
+PASS Reinforcement after a kill: alive 12, spawned 13/13.
+PASS Whole wave spawned: no further reinforcements (alive 11, LEFT 11).
+PASS Score 2120 = sum(kills x 10 x wave) + sum(50 x cleared wave); 37 enemies defeated.
+PASS Real wave-6 NPC attacks defeated the player; DefeatLimit 1 ended the run.
+PASS Menu component exists in Results
+PASS Result: layout=Survival, outcome=Lost, wave=6, defeated=37, score=2120, best=2120, newBest=True.
+PASS Survival headline 'WAVE 6 REACHED / NEW BEST' in the Hero accent.
+PASS Exactly 4 stats in order: 6 WAVE / 37 ENEMIES DEFEATED / 2120 SCORE / 2120 BEST.
+PASS PLAY AGAIN and HOME enabled.
+PASS Saved per-mode record endless-fight: best 2120, best wave 6, runs 1; global BestSessionScore 2120.
+CAPTURE endless-results-new-best.png (actual render target)
+PASS PLAY AGAIN relaunched Endless Fight (Hero) at wave 0.
+PASS Wave 0 is in its intermission (4.0s).
+PASS Intermission elapsed -> wave 1 started.
+PASS HUD shows the saved best during the next run: WAVE 1 · LEFT 2 · SCORE 10 · BEST 2120
+PASS Menu component exists in Results
+PASS Lower run CONTROL: score 10 < best 2120; newBest=False.
+PASS Survival headline 'WAVE 1 REACHED' in the Hero accent.
+PASS Exactly 4 stats in order: 1 WAVE / 1 ENEMIES DEFEATED / 10 SCORE / 2120 BEST.
+PASS PLAY AGAIN and HOME enabled.
+PASS Lower run did NOT overwrite the saved best: best 2120, best wave 6, runs 2.
+CAPTURE endless-results-lower-score.png (actual render target)
+PASS Menu component exists in Home
+PASS HOME button returned to Home.
+PASS Real Home button launched Endless Fight (Villain): side Villain, locked, same director asset.
+PASS Wave 0 is in its intermission (4.0s).
+PASS Intermission elapsed -> wave 1 started.
+RECORD VILLAIN WAVE 1: wave=1, alive=3, per-enemy health=65.00 (max 65.00), contact damage=8.00, role=Cop, Heat stars=0; spawn distances from player 16.1,15.0,21.3m; ring radii 22.0,22.0,22.0m.
+PASS Villain enemies are 3 hostile Cops; 0 criminals, 0 civilians.
+PASS Villain wave 1 contact damage: real Cop contact attack took 8.00 health (100.00 -> 92.00); explicit per-wave damage 8.00.
+PASS Defeating cops raised Heat to 1.50 (2 stars) but SpawnPolice=0 spawned no police (only the 1 remaining enemy cop exists).
+PASS Wave 1 cleared: 3 kills = WaveSize; score 80.
+PASS Wave 1 is in its intermission (4.0s).
+PASS Intermission elapsed -> wave 2 started.
+PASS Menu component exists in Results
+PASS Villain result: wave 2, score 80, newBest=True.
+PASS Survival headline 'WAVE 2 REACHED / NEW BEST' in the Villain accent.
+PASS Exactly 4 stats in order: 2 WAVE / 3 ENEMIES DEFEATED / 80 SCORE / 80 BEST.
+PASS PLAY AGAIN and HOME enabled.
+CAPTURE endless-villain-results.png (actual render target)
+PASS Best scores are per definition id: endless-fight 2120, endless-fight-villain 80.
+SAVE for second-process reload: {"Version":1,"Level":6,"Xp":440,"Points":5,"Side":1,"Powers":[{"Id":"flight","Tier":0},{"Id":"strength","Tier":0}],"Rooftops":[],"SessionsPlayed":6,"SessionsWon":0,"BestSessionScore":2120,"LastSessionXp":105,"LastModeId":"endless-fight-villain","ModeRecords":[{"Id":"free-play","BestScore":0,"BestWave":0,"Runs":2},{"Id":"hero","BestScore":0,"BestWave":0,"Runs":1},{"Id":"endless-fight","BestScore":2120,"BestWave":6,"Runs":2},{"Id":"endless-fight-villain","BestScore":80,"BestWave":2,"Runs":1}]}
+LIMIT: no hardware keyboard/mouse in batch mode. H key = WorldSession.RequestSideSwitch (the method the H handler calls); pause buttons = PrototypeHUD.ChoosePause (the method the IMGUI buttons call). Session time is accelerated via GameModeSession.Tick; NPC AI, attacks, respawn and police response run in real frames.

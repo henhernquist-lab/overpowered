@@ -111,9 +111,11 @@ public sealed class ModeScreens : MonoBehaviour
         var accent=ColorFor(result.Side);bool hero=result.Side==PlayerSide.Hero,won=result.Outcome==SessionOutcome.Won;
         var kicker=Text(result.ModeName.ToUpperInvariant()+" / "+(won?"COMPLETE":"SESSION ENDED"),12,C(CityColor.UiMuted),true);Place(kicker,7,7,86,4);Root.Add(kicker);
         var icon=new MenuIcon(hero?MenuGlyph.Shield:MenuGlyph.Flame,accent);Place(icon,6,12,9,15);Root.Add(icon);
-        Headline=Text(hero?(won?"CITY SAVED":"MISSION FAILED"):(won?"ESCAPED THE HEAT":"CAUGHT"),58,accent,true);Place(Headline,17,13,77,13);Root.Add(Headline);
+        bool survival=result.Layout==ResultsLayout.Survival;
+        Headline=Text(survival?$"WAVE {result.Wave} REACHED"+(result.NewBest?" / NEW BEST":""):hero?(won?"CITY SAVED":"MISSION FAILED"):(won?"ESCAPED THE HEAT":"CAUGHT"),58,accent,true);Place(Headline,17,13,77,13);Root.Add(Headline);
         var stats=Row();Place(stats,7,31,86,11);Root.Add(stats);
-        if(hero){Stat(stats,result.Successes.ToString(),"CRIMES STOPPED",accent);Stat(stats,result.Rescues.ToString(),"CIVILIANS SAVED",accent);Stat(stats,"+"+result.Xp,"XP EARNED",accent);Stat(stats,TimeSpan.FromSeconds(Mathf.Max(0,result.TimeLimit-result.Seconds)).ToString(@"mm\:ss"),"TIME LEFT",accent);}
+        if(survival){Stat(stats,result.Wave.ToString(),"WAVE",accent);Stat(stats,result.EnemiesDefeated.ToString(),"ENEMIES DEFEATED",accent);Stat(stats,result.Score.ToString(),"SCORE",accent);Stat(stats,result.BestScore.ToString(),"BEST",accent);}
+        else if(hero){Stat(stats,result.Successes.ToString(),"CRIMES STOPPED",accent);Stat(stats,result.Rescues.ToString(),"CIVILIANS SAVED",accent);Stat(stats,"+"+result.Xp,"XP EARNED",accent);Stat(stats,TimeSpan.FromSeconds(Mathf.Max(0,result.TimeLimit-result.Seconds)).ToString(@"mm\:ss"),"TIME LEFT",accent);}
         else{Stat(stats,result.Successes.ToString(),"HEISTS COMPLETED",accent);Stat(stats,result.Score.ToString(),"CHAOS SCORE",accent);Stat(stats,result.PeakHeat.ToString("0.0")+" / 5","PEAK HEAT",accent);Stat(stats,"+"+result.Xp,"XP EARNED",accent);}
         var xpPanel=new VisualElement();Place(xpPanel,7,47,86,11);PanelBox(xpPanel);Root.Add(xpPanel);
         level=Text("",20,C(CityColor.UiInk),true);level.style.position=Position.Absolute;level.style.left=22;level.style.top=13;xpPanel.Add(level);

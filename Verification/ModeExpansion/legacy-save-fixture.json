@@ -1,0 +1,23 @@
+{
+    "Version": 1,
+    "Level": 2,
+    "Xp": 70,
+    "Points": 0,
+    "Side": 1,
+    "Powers": [
+        {
+            "Id": "flight",
+            "Tier": 0
+        },
+        {
+            "Id": "strength",
+            "Tier": 1
+        }
+    ],
+    "Rooftops": [],
+    "SessionsPlayed": 4,
+    "SessionsWon": 2,
+    "BestSessionScore": 420,
+    "LastSessionXp": 0,
+    "LastModeId": "villain"
+}

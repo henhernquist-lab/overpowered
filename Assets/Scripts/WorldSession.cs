@@ -51,7 +51,7 @@ public sealed class WorldSession : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Tab)) { MenuOpen=!MenuOpen; Cursor.lockState=MenuOpen?CursorLockMode.None:CursorLockMode.Locked; Cursor.visible=MenuOpen; }
         if (Mode==null&&Input.GetKeyDown(KeyCode.Escape)) { MenuOpen=true; Cursor.lockState=CursorLockMode.None; Cursor.visible=true; }
-        if (!MenuOpen && Input.GetKeyDown(KeyCode.H)) Message=Mode!=null?"Side is set by this mode. Return home to choose another mode.":Progression.SwitchSide()?"Side changed. Your powers and character are unchanged.":"Side switch cooling down";
+        if (!MenuOpen && Input.GetKeyDown(KeyCode.H)) RequestSideSwitch();
         if (!PlayerDead && Hero.transform.position.y<Tuning.Movement.KillPlane) DamagePlayer(Health);
         if (PlayerDead)
         {
@@ -69,6 +69,12 @@ public sealed class WorldSession : MonoBehaviour
         Crimes.RemoveAll(c=>c==null || c.Resolved);
         if (Mode==null && crimeTimer>=Tuning.Crimes.SpawnInterval && Crimes.Count<Tuning.Crimes.MaximumActive)
         { crimeTimer=0; SpawnCrime((CrimeKind)Random.Range(0,3),City.Sidewalks[Random.Range(0,City.Sidewalks.Count)]); }
+    }
+    /// The H-key action. Modes lock the side unless their definition sets AllowSideSwitch.
+    public string RequestSideSwitch()
+    {
+        if (Mode!=null && !Mode.Definition.AllowSideSwitch) return Message="Side is set by this mode. Return home to choose another mode.";
+        return Message=Progression.SwitchSide()?"Side changed. Your powers and character are unchanged.":"Side switch cooling down";
     }
     public void TickHeat(float dt)
     {

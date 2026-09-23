@@ -6,6 +6,15 @@ public sealed class CityNpc : MonoBehaviour
 {
     public NpcRole Role { get; private set; }
     public float Health { get; private set; }
+    public float MaxHealth { get; private set; }
+    /// Chase the player at any distance (ignores DetectionRange). Set by Endless waves.
+    public bool AlwaysAggro;
+    float explicitDamage = -1f;
+    /// Damage of one contact attack: the explicit per-spawn value when set, otherwise the original Heat-star formula.
+    public float ContactDamage => explicitDamage >= 0f ? explicitDamage :
+        (Role==NpcRole.PursuingHero ? world.Tuning.Npcs.HeroDamage : world.Tuning.Npcs.AttackDamage)+world.Stars*world.Tuning.Npcs.DamagePerStar;
+    /// Explicit combat stats for this NPC, replacing the Heat-star spawn formula (health) and attack formula (damage).
+    public void SetCombatStats(float health, float damage) { Health = MaxHealth = Mathf.Max(1f, health); explicitDamage = Mathf.Max(0f, damage); }
     public bool Dead => Health <= 0f;
     public bool Fleeing => Time.time < fleeUntil;
     public bool Hostile => Role == NpcRole.Criminal ? world.Progression.Data.Side == PlayerSide.Hero :
@@ -25,6 +34,7 @@ public sealed class CityNpc : MonoBehaviour
         var capsule = root.AddComponent<CapsuleCollider>(); capsule.height=c.Height; capsule.radius=c.Radius; capsule.center=Vector3.up*c.Height*.5f;
         var npc = root.AddComponent<CityNpc>(); npc.world=world; npc.Role=role;
         npc.Health = role==NpcRole.Civilian ? c.CivilianHealth : role==NpcRole.PursuingHero ? c.HeroHealth : c.CopHealth + world.Stars*c.HealthPerStar;
+        npc.MaxHealth = npc.Health;
         npc.Agent=root.AddComponent<NavMeshAgent>(); npc.Agent.height=c.Height; npc.Agent.radius=c.Radius; npc.Agent.acceleration=c.Acceleration; npc.Agent.angularSpeed=c.AngularSpeed;
         npc.Agent.stoppingDistance=c.AttackRange*.5f;
         npc.animationTuning=HumanoidPresentation.Create(root,c.Height,null,npc).Tuning;
@@ -55,13 +65,13 @@ public sealed class CityNpc : MonoBehaviour
         {
             nextAttack=Time.time+c.AttackCooldown;
             Attacked?.Invoke();
-            world.DamagePlayer((Role==NpcRole.PursuingHero ? c.HeroDamage : c.AttackDamage)+world.Stars*c.DamagePerStar);
+            world.DamagePlayer(ContactDamage);
         }
         if(Encounter!=null&&Encounter.Drive(this)) return;
         if (Time.time<nextPath) return;
         nextPath=Time.time+(Hostile || Fleeing ? c.RepathSeconds : c.WanderSeconds);
         Vector3 destination;
-        if (Hostile && distance<c.DetectionRange) destination=world.Hero.transform.position;
+        if (Hostile && (AlwaysAggro || distance<c.DetectionRange)) destination=world.Hero.transform.position;
         else if (Fleeing) destination=PanicDestination(transform.position+(transform.position-alarm).normalized*c.FleeDistance);
         else
         {

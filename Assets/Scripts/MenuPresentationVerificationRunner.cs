@@ -68,16 +68,23 @@ public sealed class MenuPresentationVerificationRunner : MonoBehaviour
         Check(hero.worldBound.xMax<villain.worldBound.xMin&&Mathf.Abs(hero.worldBound.y-villain.worldBound.y)<1,"Hero/Villain cards are genuinely side by side.");
         Check(hero.Query<MenuIcon>().ToList().Any(i=>i.Glyph==MenuGlyph.Shield&&i.Ink==ui.ColorFor(PlayerSide.Hero))&&villain.Query<MenuIcon>().ToList().Any(i=>i.Glyph==MenuGlyph.Flame&&i.Ink==ui.ColorFor(PlayerSide.Villain)),"Original shield/city and angular flame use distinct shared Hero/Villain palette colors.");
         Check(ui.Profile.Data.Level==1&&ui.Profile.Data.Xp==0&&ui.Profile.Data.Points==0,"Fresh-save CONTROL starts level 1 / XP 0 / points 0.");
-        foreach(var id in new[]{"free-play","endless-fight"})
+        // Free Play and both Endless Fight variants are now playable data-defined modes (intentional change, Step 2-3):
+        // the extras row shows them ENABLED below the side cards, and no Coming Soon placeholder remains.
+        foreach(var id in new[]{"free-play","endless-fight","endless-fight-villain"})
         {
-            var button=ui.ModeButtons[id];Check(!button.enabledInHierarchy&&button.worldBound.width>0,"Visible disabled "+id);Submit(button);yield return null;
-            Check(!GameFlow.Instance.Loading&&SceneManager.GetActiveScene().name==GameFlow.HomeScene&&!GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/"+id)),id+" submit-event + flow-guard CONTROL do not launch.");
+            var button=ui.ModeButtons[id];
+            Check(Resources.Load<GameModeDefinition>("Modes/"+id).Playable&&button.enabledInHierarchy&&button.worldBound.width>0&&button.worldBound.yMin>hero.worldBound.yMax,"Visible ENABLED extras-row button "+id+" below the side cards.");
         }
+        Check(ui.Root.Query<Label>().ToList().All(l=>l.text!="COMING SOON"),"Coming Soon strip is empty: no non-playable mode definitions remain.");
+        var hidden=UnityEngine.Object.Instantiate(Resources.Load<GameModeDefinition>("Modes/free-play"));hidden.Playable=false;
+        Check(!GameFlow.Instance.Select(hidden)&&!GameFlow.Instance.Loading&&SceneManager.GetActiveScene().name==GameFlow.HomeScene,"Flow-guard CONTROL: a Playable=false definition still does not launch.");Destroy(hidden);
         Capture("home");
         using(var enter=PointerEnterEvent.GetPooled()){enter.target=hero;hero.SendEvent(enter);}yield return new WaitForSecondsRealtime(.4f);
         Check(hero.style.translate.value.y.value<-7,$"Hover lifts Hero card {hero.style.translate.value.y.value:F2} logical pixels; configured -8.");Capture("home-hover");
         var skyline=GameFlow.Instance.GetComponent<MenuSkyline>();Check(skyline.BuildingCount==36&&skyline.Texture.IsCreated(),$"Skyline uses {skyline.BuildingCount} actual seeded buildings; one-time capture {skyline.CaptureMilliseconds:F1}ms; cached {skyline.Texture.width}x{skyline.Texture.height}.");
         yield return Benchmark(false,"home static A");yield return Benchmark(true,"home animated B");yield return Benchmark(true,"home animated B2");yield return Benchmark(false,"home static A2");ui.MotionEnabled=true;
+        Submit(ui.ModeButtons["free-play"]);yield return Scene(GameFlow.CityScene);Check(W.Mode.Definition.Id=="free-play"&&!W.Progression.SideLocked,"Actual Free Play extras-button submit loads Free Play (side not locked).");
+        GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);yield return Menu();hero=ui.ModeButtons["hero"];
         Submit(hero);yield return Scene(GameFlow.CityScene);Check(W.Mode.Definition.Side==PlayerSide.Hero,"Actual Hero card submit loads Hero gameplay.");
         W.Mode.AddScore(240);W.AddHeat(2);W.Mode.RecordRescue();W.Progression.AddXp(W.Progression.RequiredXp+40);W.Mode.Finish(SessionOutcome.Won,"UI verification accelerated completion");
         yield return Scene(GameFlow.ResultsScene);yield return Menu();

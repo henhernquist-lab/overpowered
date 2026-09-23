@@ -1,0 +1,4 @@
+61c61
+<         var menu=FindAnyObjectByType<ModeScreens>();A.StopAll();Submit(menu.ModeButtons["free-play"]);Check(Playing(AudioCue.UiClick)==0&&!GameFlow.Instance.Loading,"Disabled UI CONTROL emits no click and launches nothing.");
+---
+>         var menu=FindAnyObjectByType<ModeScreens>();var disabledButton=new Button(()=>GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/free-play"))){name="verification-disabled"};disabledButton.SetEnabled(false);menu.Root.Add(disabledButton);yield return null;A.StopAll();Submit(disabledButton);Check(Playing(AudioCue.UiClick)==0&&!GameFlow.Instance.Loading,"Disabled UI CONTROL emits no click and launches nothing.");

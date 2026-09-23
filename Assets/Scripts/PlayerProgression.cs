@@ -5,6 +5,8 @@ using UnityEngine;
 
 public enum PlayerSide { Hero, Villain }
 [Serializable] public sealed class PowerOwnership { public string Id; public int Tier; }
+/// Per-mode personal records (e.g. Endless Fight best score). Saves written before this field existed load with an empty list.
+[Serializable] public sealed class ModeRecord { public string Id; public int BestScore, BestWave, Runs; }
 [Serializable] public sealed class ProgressSave
 {
     public int Version = 1, Level = 1, Xp, Points;
@@ -13,6 +15,7 @@ public enum PlayerSide { Hero, Villain }
     public List<string> Rooftops = new List<string>();
     public int SessionsPlayed, SessionsWon, BestSessionScore, LastSessionXp;
     public string LastModeId;
+    public List<ModeRecord> ModeRecords = new List<ModeRecord>();
 }
 public sealed class PlayerProgression : MonoBehaviour
 {
@@ -58,12 +61,24 @@ public sealed class PlayerProgression : MonoBehaviour
         SwitchRemaining = config.SideSwitchCooldown; Save(); Changed?.Invoke(); return true;
     }
     void Update() { SwitchRemaining = Mathf.Max(0f, SwitchRemaining - Time.deltaTime); }
-    public void SetModeSide(PlayerSide side) { SideLocked=true; Data.Side=side; Save(); Changed?.Invoke(); }
-    public void RecordSession(string mode,bool won,int score,int xp)
+    public void SetModeSide(PlayerSide side) { SetModeSide(side,true); }
+    /// locked=false lets SwitchSide work during the session (modes with AllowSideSwitch).
+    public void SetModeSide(PlayerSide side,bool locked) { SideLocked=locked; Data.Side=side; Save(); Changed?.Invoke(); }
+    public void RecordSession(string mode,bool won,int score,int xp) { RecordSession(mode,won,score,xp,0); }
+    /// BestSessionScore keeps its global meaning; the per-mode record is kept alongside it.
+    public void RecordSession(string mode,bool won,int score,int xp,int wave)
     {
         Data.SessionsPlayed++; if(won) Data.SessionsWon++;
-        Data.BestSessionScore=Mathf.Max(Data.BestSessionScore,score); Data.LastSessionXp=xp; Data.LastModeId=mode; Save();
+        Data.BestSessionScore=Mathf.Max(Data.BestSessionScore,score); Data.LastSessionXp=xp; Data.LastModeId=mode;
+        if(!string.IsNullOrEmpty(mode))
+        {
+            var record=Record(mode); if(record==null) Data.ModeRecords.Add(record=new ModeRecord{Id=mode});
+            record.Runs++; record.BestScore=Mathf.Max(record.BestScore,score); record.BestWave=Mathf.Max(record.BestWave,wave);
+        }
+        Save();
     }
+    public ModeRecord Record(string mode) => Data.ModeRecords.Find(r => r.Id == mode);
+    public int BestScore(string mode) => Record(mode)?.BestScore ?? 0;
     public bool ClaimRoof(string id)
     {
         if (Data.Rooftops.Contains(id)) return false;
@@ -93,6 +108,7 @@ public sealed class PlayerProgression : MonoBehaviour
                 var loaded = JsonUtility.FromJson<ProgressSave>(File.ReadAllText(SavePath));
                 if (loaded == null || loaded.Version != 1 || loaded.Level < 1 || loaded.Xp < 0 || loaded.Points < 0 || loaded.Powers == null || loaded.Rooftops == null)
                     throw new InvalidDataException("Invalid progression save.");
+                if (loaded.ModeRecords == null) loaded.ModeRecords = new List<ModeRecord>();
                 Data = loaded;
             }
             catch (Exception e) { LastError = e.Message; Debug.LogWarning("Save unreadable; fresh progression in memory: " + e.Message); }

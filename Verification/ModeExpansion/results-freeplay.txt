@@ -1,0 +1,40 @@
+PASS Menu component exists in Home
+PASS Fresh isolated save CONTROL: level 1, 0 sessions, 0 mode records.
+PASS Home shows ENABLED 'free-play' in the data-driven extras row below the side cards (rect (x:86.63, y:599.63, width:123.75, height:29.25)).
+PASS Home shows ENABLED 'endless-fight' in the data-driven extras row below the side cards (rect (x:222.75, y:599.63, width:235.13, height:29.25)).
+PASS Home shows ENABLED 'endless-fight-villain' in the data-driven extras row below the side cards (rect (x:470.25, y:599.63, width:252.00, height:29.25)).
+PASS No COMING SOON placeholder remains on Home.
+CAPTURE home-extras.png (actual render target)
+PASS Real Home button -> GameFlow.Select launched Free Play with Rules=null and 0 encounter definitions.
+PASS Free Play takes the profile side (Hero) and does NOT lock it.
+PASS Population: 24 civilians, 2 patrol cops.
+PASS Advanced 150s (3x Hero SpawnInterval 50s): crimes=0, CrimeEvent objects=0, CrimeEncounter objects=0, criminals=0; session not ended.
+PASS HUD: no objective/timer lines, no director line; Heat shown.
+PASS Death 1: player actually dead (health 0).
+PASS Death 1 -> respawned at full health 100; session NOT ended (defeats=1, DefeatLimit=0).
+PASS Death 2: player actually dead (health 0).
+PASS Death 2 -> respawned at full health 100; session NOT ended (defeats=2, DefeatLimit=0).
+PASS Death 3: player actually dead (health 0).
+PASS Death 3 -> respawned at full health 100; session NOT ended (defeats=3, DefeatLimit=0).
+PASS Death 4: player actually dead (health 0).
+PASS Death 4 -> respawned at full health 100; session NOT ended (defeats=4, DefeatLimit=0).
+PASS Real BreakableProp break -> WorldSession.OnDestruction: Heat 0.00 -> 0.35 (1 star).
+PASS Police respond in real time: cops 2 -> 4 (= patrol 2 + 1 star x 2).
+PASS Before switch (Hero): criminal hostile, 0/4 cops hostile, 0 civilians hostile.
+PASS H action: 'Side changed. Your powers and character are unchanged.' -> Data.Side=Villain, saved to disk.
+PASS After switch (Villain): criminal NOT hostile, 4/4 cops hostile.
+PASS Immediate second switch refused by the existing cooldown CONTROL.
+PASS Free Play pause menu offers exactly: Resume | Return home (keep earned XP)
+PASS Pause 'Return home' reached the Home scene; city unloaded.
+PASS Free Play relaunch accepted by GameFlow.Select.
+PASS Relaunch starts as Villain: the side comes from the saved profile.
+PASS ShowResults=false: an explicit results request lands on Home, not Results.
+PASS Hero mode selected.
+PASS Hero CONTROL: same 150s advance -> encounters 1 at start, 2 spawned in total; CrimeEncounter objects=2.
+PASS Hero CONTROL: side switch BLOCKED ('Side is set by this mode. Return home to choose another mode.'); side stays Hero although the saved profile side was Villain.
+PASS Hero CONTROL: HUD shows the objective/timer lines.
+PASS Hero CONTROL: pause menu keeps the results option: Resume | End session / Results | Return home (keep earned XP)
+PASS Guard CONTROL: an encounter-spawning definition with no Rules/Encounters is still rejected.
+PASS Guard CONTROL: Playable=false is still rejected.
+PASS Menu component exists in Home
+LIMIT: no hardware keyboard/mouse in batch mode. H key = WorldSession.RequestSideSwitch (the method the H handler calls); pause buttons = PrototypeHUD.ChoosePause (the method the IMGUI buttons call). Session time is accelerated via GameModeSession.Tick; NPC AI, attacks, respawn and police response run in real frames.

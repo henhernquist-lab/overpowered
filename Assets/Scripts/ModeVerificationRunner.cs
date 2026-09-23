@@ -78,7 +78,7 @@ public sealed class ModeVerificationRunner : MonoBehaviour
         yield return Scene(GameFlow.HomeScene);
         Check(W==null&&UnityEngine.Object.FindAnyObjectByType<ModeScreens>()!=null,"Startup HOME, no city or player spawned.");
         var catalog=Resources.LoadAll<GameModeDefinition>("Modes");
-        foreach(string id in new[]{"free-play","endless-fight"})Check(!Flow.Select(catalog.First(m=>m.Id==id)),id+" COMING SOON CONTROL refuses launch.");
+        {var hidden=UnityEngine.Object.Instantiate(catalog.First(m=>m.Id=="free-play"));hidden.Playable=false;Check(!Flow.Select(hidden)&&!Flow.Loading,"Non-playable definition CONTROL refuses launch (free-play/endless-fight are playable since Step 2-3).");UnityEngine.Object.Destroy(hidden);}
         var hero=catalog.First(m=>m.Id=="hero");var villain=catalog.First(m=>m.Id=="villain");
         Check(Flow.Select(hero),"Home -> shipping Hero definition selected.");yield return Scene(GameFlow.CityScene);
         Check(W.Progression.Data.Level==1&&W.Progression.Data.Points==0&&W.Progression.Data.SessionsPlayed==0,"Fresh-save CONTROL: level=1, XP=0, points=0, sessions=0.");
