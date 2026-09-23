@@ -1,0 +1,5 @@
+DIAG t=45.748 f=2806 CHOSEN cop hostile=True lastRelease t=-1.000 f=-1 hit=False margin=0.00 windupStart=45.402 phase=Windup dist=0.67 health=100
+DIAG t=45.748 f=2806 cop hostile=True lastRelease t=45.044 f=2746 hit=False margin=0.69 windupStart=44.335 phase=Recover dist=34.58 health=100
+DIAG t=45.748 f=2806 cop hostile=True lastRelease t=45.044 f=2746 hit=False margin=0.69 windupStart=44.335 phase=Recover dist=9.90 health=100
+DIAG t=45.748 f=2806 cop hostile=True lastRelease t=45.748 f=2806 hit=False margin=11.20 windupStart=45.044 phase=Recover dist=12.18 health=100
+FAIL System.Exception: Cop gunshot is driven by a real hostile NPC attack/damage event.

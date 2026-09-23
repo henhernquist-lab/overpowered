@@ -213,16 +213,18 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
     {
         var s=State;var alive=s.Alive;var first=alive[0];
         var role=W.Progression.Data.Side==PlayerSide.Hero?waves.HeroSideEnemy:waves.VillainSideEnemy;
+        // Step 4: per-enemy stats = the wave's explicit health/damage x that enemy's archetype multipliers (still Heat-independent).
+        float waveHealth=first.MaxHealth/first.Archetype.HealthMultiplier,waveDamage=first.ContactDamage/first.Archetype.DamageMultiplier;
         foreach(var npc in alive)
         {
-            if(npc.Role!=role||!npc.Hostile||!npc.AlwaysAggro||npc.Health!=npc.MaxHealth||!Mathf.Approximately(npc.MaxHealth,first.MaxHealth)||!Mathf.Approximately(npc.ContactDamage,first.ContactDamage))
-                throw new Exception($"{label}: inconsistent enemy {npc.name} role={npc.Role} hostile={npc.Hostile} health={npc.Health}/{npc.MaxHealth} damage={npc.ContactDamage}");
+            if(npc.Role!=role||!npc.Hostile||!npc.AlwaysAggro||npc.Archetype==null||npc.Health!=npc.MaxHealth||Mathf.Abs(npc.MaxHealth-waveHealth*npc.Archetype.HealthMultiplier)>.001f||Mathf.Abs(npc.ContactDamage-waveDamage*npc.Archetype.DamageMultiplier)>.001f)
+                throw new Exception($"{label}: inconsistent enemy {npc.name} role={npc.Role} archetype={(npc.Archetype!=null?npc.Archetype.name:"none")} hostile={npc.Hostile} health={npc.Health}/{npc.MaxHealth} damage={npc.ContactDamage}");
             if(Flat(npc.transform.position,W.Hero.transform.position)<waves.MinSpawnDistanceFromPlayer-.01f)throw new Exception($"{label}: {npc.name} spawned {Flat(npc.transform.position,W.Hero.transform.position):F2}m from the player");
             float ring=Flat(npc.transform.position,s.Arena);
             if(ring>waves.SpawnRadius+W.Tuning.Npcs.NavSampleRadius+.01f)throw new Exception($"{label}: {npc.name} {ring:F1}m from arena centre");
         }
-        var sample=new WaveSample{Wave=s.Wave,Alive=alive.Count,Health=first.Health,MaxHealth=first.MaxHealth,Damage=first.ContactDamage};
-        Log($"RECORD {label}: wave={sample.Wave}, alive={sample.Alive}, per-enemy health={sample.Health:F2} (max {sample.MaxHealth:F2}), contact damage={sample.Damage:F2}, role={first.Role}, Heat stars={W.Stars}; spawn distances from player {string.Join(",",alive.Select(n=>Flat(n.transform.position,W.Hero.transform.position).ToString("F1")))}m; ring radii {string.Join(",",alive.Select(n=>Flat(n.transform.position,s.Arena).ToString("F1")))}m.");
+        var sample=new WaveSample{Wave=s.Wave,Alive=alive.Count,Health=waveHealth,MaxHealth=waveHealth,Damage=waveDamage};
+        Log($"RECORD {label}: wave={sample.Wave}, alive={sample.Alive}, wave health={sample.MaxHealth:F2}, wave damage={sample.Damage:F2} (per enemy x archetype: {string.Join(", ",alive.Select(n=>$"{n.Archetype.name} {n.MaxHealth:F1}/{n.ContactDamage:F2}"))}), role={first.Role}, Heat stars={W.Stars}; spawn distances from player {string.Join(",",alive.Select(n=>Flat(n.transform.position,W.Hero.transform.position).ToString("F1")))}m; ring radii {string.Join(",",alive.Select(n=>Flat(n.transform.position,s.Arena).ToString("F1")))}m.");
         return sample;
     }
     /// One real NPC contact attack against the player; returns health lost.
@@ -248,9 +250,11 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         var cam=Camera.main;var follow=cam.GetComponent<ThirdPersonCamera>();follow.enabled=true;
         if(gameTarget==null){gameTarget=new RenderTexture(1280,720,24){name="Endless 1280x720"};gameTarget.Create();}
         cam.targetTexture=gameTarget;cam.enabled=false;
-        var warm=System.Diagnostics.Stopwatch.StartNew();while(warm.Elapsed.TotalSeconds<2){cam.Render();yield return null;}
+        // Step 4: Gunners reach the hovering hero; keep it alive (reflection) so DefeatLimit 1 cannot end the run mid-sample.
+        void Heal()=>typeof(WorldSession).GetProperty("Health").SetValue(W,W.Tuning.Movement.Health);
+        var warm=System.Diagnostics.Stopwatch.StartNew();while(warm.Elapsed.TotalSeconds<2){Heal();cam.Render();yield return null;}
         var times=new List<double>();var watch=System.Diagnostics.Stopwatch.StartNew();double prior=0;
-        while(watch.Elapsed.TotalSeconds<4){cam.Render();yield return null;double now=watch.Elapsed.TotalSeconds;times.Add((now-prior)*1000);prior=now;}
+        while(watch.Elapsed.TotalSeconds<4){Heal();cam.Render();yield return null;double now=watch.Elapsed.TotalSeconds;times.Add((now-prior)*1000);prior=now;}
         watch.Stop();
         timing.Frames=times.Count;timing.Fps=times.Count/watch.Elapsed.TotalSeconds;timing.Mean=times.Average();var sorted=times.OrderBy(t=>t).ToList();timing.P95=sorted[Mathf.Min(sorted.Count-1,(int)(sorted.Count*.95f))];
         timing.Humanoids=FindObjectsByType<HumanoidPresentation>().Length;timing.Visible=FindObjectsByType<Renderer>().Count(r=>r.isVisible);
@@ -265,7 +269,7 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         var recorders=handles.Select(h=>new Recorded{Name=ProfilerRecorderHandle.GetDescription(h).Name,Recorder=new ProfilerRecorder(h,1,ProfilerRecorderOptions.Default)}).ToList();
         foreach(var r in recorders)if(!r.Recorder.IsRunning)r.Recorder.Start();
         int frames=0;var profiled=System.Diagnostics.Stopwatch.StartNew();
-        while(profiled.Elapsed.TotalSeconds<3){cam.Render();yield return null;foreach(var r in recorders)if(r.Recorder.Valid)r.Sum+=r.Recorder.LastValue;frames++;}
+        while(profiled.Elapsed.TotalSeconds<3){Heal();cam.Render();yield return null;foreach(var r in recorders)if(r.Recorder.Valid)r.Sum+=r.Recorder.LastValue;frames++;}
         foreach(var r in recorders)r.Recorder.Dispose();
         double Ms(string name){var r=recorders.Find(x=>x.Name==name);return r!=null&&frames>0?r.Sum/frames/1e6:double.NaN;}
         timing.Skinning=Ms("PostLateUpdate.UpdateAllSkinnedMeshes");timing.BatchMode=Ms("PostLateUpdate.BatchModeUpdate");timing.PlayerLoop=Ms("PlayerLoop");

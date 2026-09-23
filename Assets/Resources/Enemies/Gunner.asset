@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f015f545089243d6a30ca23a272a1bc3, type: 3}
+  m_Name: Gunner
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyArchetype
+  DisplayName: Gunner
+  MoveSpeed: 5.5
+  HealthMultiplier: 1
+  DamageMultiplier: 1
+  Kind: 1
+  TriggerDistance: 22
+  Reach: 0
+  Radius: 0.6
+  Range: 22
+  MuzzleHeight: 1.35
+  MaxHitHeight: 1.2
+  WindupSeconds: 0.7
+  CooldownSeconds: 1.8
+  Knockback: 0
+  KnockbackSeconds: 0.25
+  PreferredDistance: 10
+  PreferredBand: 2
+  TelegraphWidth: 0.12
+  TelegraphStartFraction: 0.2
+  VisualScale: 1
+  Accent: 15

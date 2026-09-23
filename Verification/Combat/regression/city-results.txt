@@ -1,0 +1,40 @@
+PASS World bootstrapped with city, powers, and progression.
+PASS Seeded city: 36 solid buildings; civilians=24
+PASS Same seed reproduced layout samples.
+PASS NavMesh has complete sidewalk-to-sidewalk route.
+PASS Fresh progression: level=1, points=0.
+PASS Unspent CONTROL: level=2, points=1, force unchanged=1350.
+PASS Spent one point on strength.
+PASS Upgraded strength: force=1890, max charges=4, points=0.
+PASS Zero-point upgrade CONTROL rejected.
+PASS Seventh power discovered from DATA only; exact same projectile effect asset as Fire Blast.
+PASS Seventh power activated via normal selected-power path.
+PASS Seventh projectile hit real Rigidbody: impulse setting=200 N·s; displacement=12.992m; velocity=32.672m/s.
+PASS Real flight resource path: start=6, after 2s=4, after 6s=0; empty rejects.
+PASS Ground recharge after 1s=2.5s.
+PASS Charged punch normal CONTROL fires.
+PASS Punch cooldown rejects immediate retry.
+PASS Three punches exhausted charges; zero-charge fire rejected.
+PASS Time-driven recharge restored a working punch.
+PASS Earned points unlock Telekinesis and Ice.
+PASS Telekinesis grabs the aimed Rigidbody.
+PASS Second activation hurls the already-paid grab.
+PASS Telekinesis hurl velocity=444.154m/s.
+PASS Ice freezes a targeted Rigidbody.
+PASS Ice expires and restores original physics constraints.
+PASS Real prop destruction: Heat=3.50; police 4 -> 10; high-tier max HP=137.
+PASS High Heat spawns one pursuing Hero NPC.
+PASS Civilians react to nearby destruction by fleeing.
+PASS Lay-low decay: 3.50 -> 2.80 after configured delay plus 10s.
+PASS Hero resolves fire event.
+PASS Hero fire outcome: Heat delta=-1.00, XP awarded=60.
+PASS Side switched through normal cooldown-controlled action.
+PASS Immediate repeat switch CONTROL rejected.
+PASS Same fire event as Villain: Heat delta=1.00; opposite Hero outcome; same character=Overpowered Hero.
+PASS Cops become hostile on side switch; owned strength tier remains 1
+PASS Existing patrol cop placed in attack range on NavMesh.
+PASS Hostile cop attacked through live AI: player HP 100 -> 72.
+PASS Defeating cop as Villain awards XP and disables dead NPC navigation.
+PASS Performance population: civilians=24, cops=10, on-NavMesh cops=10.
+MEASURED 1280x720 rendered Editor Play Mode: frames=189; seconds=5.025; FPS=37.61; p95 frame ms=28.95; GPU=AMD Radeon Pro 5300; CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz.
+PASS Saved level=5, strength tier=1; will verify in a separate Unity process.

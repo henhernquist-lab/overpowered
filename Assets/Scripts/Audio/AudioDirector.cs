@@ -42,7 +42,7 @@ public sealed class AudioDirector : MonoBehaviour
         Sources=new AudioSource[Mathf.Max(Reserved+4,Tuning.PoolSize)];playing=new AudioCue[Sources.Length];actors=new Actor[Mathf.Max(1,Tuning.MaximumTrackedActors)];
         for(int i=0;i<Sources.Length;i++){var go=new GameObject("Voice "+i);go.transform.SetParent(transform,false);var s=go.AddComponent<AudioSource>();s.playOnAwake=false;s.dopplerLevel=0;Sources[i]=s;}
     }
-    void OnEnable(){SceneManager.sceneLoaded+=SceneChanged;BreakableProp.Destroyed+=PropDestroyed;}
+    void OnEnable(){SceneManager.sceneLoaded+=SceneChanged;BreakableProp.Destroyed+=PropDestroyed;CityNpc.Spawned+=NpcSpawned;}
     void Start(){ApplyMixerVolumes();}
     public void ApplyMixerVolumes()
     {
@@ -89,7 +89,7 @@ public sealed class AudioDirector : MonoBehaviour
             if(found||empty<0)continue;
             var pose=npc.GetComponent<HumanoidPresentation>();if(pose==null)continue;
             var actor=new Actor{Npc=npc,Pose=pose,Hits=pose.HitCount,Deaths=pose.DeathCount};
-            actor.Attack=()=>{if(actor.Npc!=null)Play(actor.Npc.Role==NpcRole.Cop?AudioCue.Gunshot:AudioCue.Punch,actor.Npc.transform.position);};npc.Attacked+=actor.Attack;actors[empty]=actor;
+            actor.Attack=()=>{if(actor.Npc!=null)Play(AttackCue(actor.Npc),actor.Npc.transform.position);};npc.Attacked+=actor.Attack;actors[empty]=actor;
         }
     }
     float Jitter(float min,float max)=>Mathf.Lerp(min,max,(float)random.NextDouble());
@@ -157,6 +157,11 @@ public sealed class AudioDirector : MonoBehaviour
     }
     void PowerActivated(PowerDefinition definition)
     {if(definition.Effect is PunchEffect)return;foreach(var binding in Tuning.Powers)if(binding.Effect==definition.Effect){Play(binding.Cue,world.Hero.transform.position);return;}}
+    static AudioCue AttackCue(CityNpc npc)=>npc.Archetype!=null?(npc.Archetype.Kind==AttackKind.Ranged?AudioCue.Gunshot:AudioCue.Punch):(npc.Role==NpcRole.Cop?AudioCue.Gunshot:AudioCue.Punch);
+    // Without this, an enemy attacking within one ActorRefreshInterval of spawning was silent (Endless gunners can).
+    void NpcSpawned(CityNpc npc){Bind();RefreshActors();}
+    /// True when this director is listening to the NPC's attacks.
+    public bool Tracks(CityNpc npc){foreach(var a in actors)if(a!=null&&a.Npc==npc)return true;return false;}
     void Punch(){Play(AudioCue.Punch,world.Hero.transform.position);}
     void Jump(){Play(AudioCue.Jump,world.Hero.transform.position);}
     void Land(float speed){if(speed>=Tuning.MinimumLandingSpeed)Play(AudioCue.Land,world.Hero.transform.position);}
@@ -174,6 +179,6 @@ public sealed class AudioDirector : MonoBehaviour
     void UiOver(PointerOverEvent evt){var b=ButtonAt(evt.target);if(b!=null&&b.enabledInHierarchy)Play(AudioCue.UiHover,Vector3.zero);}
     void UiFocus(FocusInEvent evt){var b=ButtonAt(evt.target);if(b!=null&&b.enabledInHierarchy)Play(AudioCue.UiHover,Vector3.zero);}
     public void StopAll(){if(Sources!=null)foreach(var source in Sources)source.Stop();}
-    void OnDisable(){SceneManager.sceneLoaded-=SceneChanged;BreakableProp.Destroyed-=PropDestroyed;Unbind();StopAll();}
+    void OnDisable(){SceneManager.sceneLoaded-=SceneChanged;BreakableProp.Destroyed-=PropDestroyed;CityNpc.Spawned-=NpcSpawned;Unbind();StopAll();}
     void OnDestroy(){if(Instance==this)Instance=null;}
 }

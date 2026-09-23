@@ -51,6 +51,9 @@ MonoBehaviour:
   KickStartSeconds: 0.333
   KickImpactSeconds: 0.933
   KickPlayback: 2
+  EnemyPunchStartSeconds: 0.1
+  ShootImpactSeconds: 1.8
+  SlamStartSeconds: 0.333
   FlightPitch: 78
   FlightFullSpeed: 10
   FlightBlendResponse: 6

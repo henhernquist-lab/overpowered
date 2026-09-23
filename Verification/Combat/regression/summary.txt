@@ -1,0 +1,12 @@
+humanoid | HumanoidVerification.Run | patched=none | exit 0 | PASS 46 |  | bytecompare-diffs        0
+city | CityVerification.Run | patched=none | exit 0 | PASS 39 |  | bytecompare-diffs        0
+backflip | BackflipHurricaneVerification.Run | patched=none | exit 0 | PASS 63 |  | bytecompare-diffs        0
+mode-UNMODIFIED | ModeVerification.Run | patched=none | exit 1 | PASS 46 | FAIL System.Exception: Held interaction accepted at valid objective. | bytecompare-diffs        0
+mode-PATCHED | ModeVerification.Run | patched=ModeVerificationRunner | exit 0 | PASS 79 |  | bytecompare-diffs        1
+mode-PATCHED-reload | ModeVerification.Reload | patched=ModeVerificationRunner | exit 0 | PASS 2 |  | bytecompare-diffs        1
+audio-UNMODIFIED | AudioVerification.Run | patched=none | exit 1 | PASS 107 | FAIL System.Exception: Cop gunshot is driven by a real hostile NPC attack/damage event. | bytecompare-diffs        0
+audio-PATCHED | AudioVerification.Run | patched=AudioVerificationRunner | exit 0 | PASS 109 |  | bytecompare-diffs        1
+modeexp-UNMODIFIED | ModeExpansionVerification.Run | patched=none | exit 1 | PASS 44 | FAIL System.Exception: Wave 1 = FirstWaveCount 3 Criminals at base health 65 / damage 8. | bytecompare-diffs        0
+modeexp-PATCHED | ModeExpansionVerification.Run | patched=ModeExpansionVerificationRunner | exit 0 | PASS 111 |  | bytecompare-diffs        1
+modeexp-PATCHED-reload | ModeExpansionVerification.Reload | patched=ModeExpansionVerificationRunner | exit 0 | PASS 10 |  | bytecompare-diffs        1
+DONE

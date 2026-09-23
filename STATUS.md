@@ -1,6 +1,105 @@
 # Prototype Status
 
-## Free Play and Endless Fight — 2026-09-22 (current)
+## Combat depth: telegraphed attacks, enemy archetypes, crowd rhythm — 2026-09-23 (current)
+
+Before this pass, a hostile NPC in range damaged the player THE SAME FRAME: instant, unavoidable contact damage
+("punch until dead"). That is replaced, for every hostile NPC in every mode, by a telegraphed attack.
+
+### Design
+- **Three archetypes as data** (`Resources/Enemies/{Rusher,Gunner,Brute}.asset`). **Role decides hostility and
+  colour; the archetype decides behaviour.** `EnemyRoster.asset` maps Criminal → Rusher, Cop → Gunner,
+  PursuingHero → Brute, and holds the crowd tuning.
+  - **Rusher:** 7 m/s, 0.6× health, 0.75× damage; short melee, 0.45 s windup, 0.8 s cooldown; visual 0.9×, amber accent.
+  - **Gunner:** 5.5 m/s; holds 10 ± 2 m; 0.7 s windup; **aim locked at windup start**; 22 m line check with line of
+    sight (buildings, props and cars block shots); cyan accent.
+  - **Brute:** 3 m/s, 3× health, 2.25× damage; ground slam locked 1.8 m ahead, radius 3.2 m, 0.9 s windup, 2.5 m
+    knockback; visual 1.3×, purple accent.
+- **Attack cycle** (`CityNpc`): Approach → Engage → Windup (stopped, shape locked, telegraph shown) → Release → Recover.
+  At release the COMMITTED shape is re-checked against the player's CURRENT position. Damage lands only if the player
+  is still inside it, and `Attacked` fires either way. Death, freeze (Ice), pause, session end, disable and side switch
+  all cancel a windup, so **a killed or frozen enemy never lands its hit**.
+- **Attack-token budget:** at most 2 enemies may be winding up at once, and the rest circle on a 4.5 m ring,
+  spread by angle. The pool drops dead or destroyed NPCs before every grant, so a dead enemy can't deadlock the crowd.
+- **Telegraphs:** one pooled renderer per NPC, shared Fire palette material, no collider or shadow — a growing ground
+  disc for melee and slam, a line for shots. The attack clip starts at windup with playback FITTED so its impact frame
+  lands on the release frame (0 frames of offset, measured for all three).
+- **Backflip deliberately has NO i-frames; dodging is geometric.** A backflip carries you out of melee reach and slam
+  radius, but NOT off a Gunner's locked aim line — backing straight away keeps you on it. Strafing beats Gunners.
+- **Endless** mixes archetypes via a composition table on `EndlessWaves.asset` (rushers from wave 1, gunners from 2,
+  brutes from 3). Each enemy's stats are the wave value × its archetype multiplier, still Heat-independent.
+
+### Verification — `CombatVerification.Run` 170 PASS / 0 FAIL, identical on two back-to-back runs
+Per archetype, a real enemy against the real player, measured rather than read from config:
+- **Distinct behaviour:** approach speeds 6.99 / 5.50 / 3.00 m/s (Rusher / Gunner / Brute). The Gunner held
+  9.77–12.00 m for 6 s and never closed to melee. Spawned health 39 : 65 : 195. Measured windups 450.3 / 701.0 /
+  900.1 ms against 450 / 700 / 900 configured.
+- **Hit if you stand still, miss if you move:** standing inside each attack takes EXACTLY its damage at release
+  (6 / 8 / 18), and zero damage on every windup frame before it. Backflip at windup start → no damage from the Rusher
+  (1.22 m clear) or the Brute (1.62 m clear). A 3.6 m strafe → no damage from the Gunner (2.66 m clear).
+- **CONTROLS:**
+  - **Asymmetry:** backflipping straight away from a Gunner is STILL hit (−0.98 m).
+  - **Late:** a backflip after release cannot undo the hit.
+  - **Death:** killing an enemy at 50% of its windup → no damage, telegraph hidden, token returned.
+  - **Budget:** with budget 2, the observed max was 2 simultaneous windups over 10 s (19 releases by 9 enemies), and
+    waiting enemies stayed at a mean 4.57 m against the 4.5 m ring. Raising the budget to 99 → up to 7 simultaneous.
+  - **Leaked token:** another enemy receives the token within milliseconds of a holder's death.
+  - Engage timeout, freeze, pause and session end all return the token.
+- Hero and Villain sessions map roles to the roster. The cop gunshot sounds AT the releasing cop on its release
+  frame. Endless wave 5 composition is 5 Rusher / 4 Gunner / 2 Brute.
+- Combat adds no measurable per-frame managed allocation (crowd active vs frozen: −18.5 B/frame).
+- **Wave-5 FPS at the gameplay camera, grounded hero in the real fight:** 99.8–142.1 across four runs.
+
+### Integration fixes by the lead
+- The NPC attack SOUND now follows the attack kind (Ranged → gunshot, otherwise punch). Before, it followed role, so
+  a Criminal Gunner "shot" with a punch sound.
+- **Newly spawned enemies were silent for up to 1 s.** `AudioDirector` discovered NPCs by polling every
+  `ActorRefreshInterval`, and Endless Gunners can fire within a second of spawning. `CityNpc.Spawned` (additive
+  static event) now lets audio register an NPC the moment it spawns. A new AudioVerification assertion proves an NPC
+  is tracked in the SAME call stack as its `Spawn`, where the periodic refresh cannot have run.
+- Three existing runners encoded pre-combat assumptions; each was corrected without weakening what it proves:
+  - **ModeVerification:** the police stand-off height rises 15 → 30 m. 15 m was chosen for 2 m contact damage, and
+    Gunners reach 22 m.
+  - **AudioVerification:** the cop-gunshot check now waits for THAT cop's release and requires the shot there, a hit,
+    and a health drop. It previously accepted any gunshot, which a different cop's miss could satisfy — strictly
+    stronger.
+  - **ModeExpansionVerification:** per-enemy stats = wave value × archetype multiplier (the new truth). A logged
+    test-only health restore keeps one-life Endless alive through its FPS sample.
+
+### Final regression sweep — every suite, on the finished code (`Verification/Combat/regression/final-sweep-summary.txt`)
+Run after all of the lead's fixes, sequentially, in an APFS clone byte-verified against the working tree (30 changed
+or new files, 0 mismatches). CombatVerification ran in the real tree. Mac held awake with `caffeinate`.
+
+| Suite | Exit | PASS | Suite | Exit | PASS |
+|---|---|---|---|---|---|
+| AudioVerification | 0 | 111 | AudioVerification.Reload (2nd process) | 0 | 49 |
+| ModeVerification | 0 | 79 | ModeVerification.Reload (2nd process) | 0 | 2 |
+| ModeExpansionVerification | 0 | 111 | ModeExpansionVerification.Reload (2nd process) | 0 | 10 |
+| HumanoidVerification | 0 | 46 | CityVerification | 0 | 39 |
+| CityVerification.Reload (2nd process) | 0 | 5 | BackflipHurricaneVerification | 0 | 63 |
+| CityArtVerification | 0 | 31 | MenuPresentationVerification | 0 | 42 |
+| **CombatVerification** | 0 | **170** | | | |
+
+13 of 13 runs exit 0, with zero FAIL lines. dotnet build: 0 errors, 0 warnings.
+
+**AudioVerification now passes IN FULL, resolving the open item in the Free Play/Endless entry below.** The Mac's
+CoreAudio output recovered, and `Music DSP sample cursor advances` passes again. On the idle machine the audio
+system costs **0.59 FPS** (57.63 → 57.04). That settles the earlier 6.6–9.1 FPS reading as contention noise from the
+runaway editors.
+
+### For a human playtest
+- **Readability is partial.** The Brute is clearly bigger, but the Rusher and Gunner read as nearly the same
+  silhouette at mid-range; only their small amber/cyan accents differ. A bolder differentiator (headgear, weapon,
+  colour band) needs art beyond the palette.
+- **The pursuing superhero is now a Brute:** 3 m/s instead of 8 m/s. Thematically a fast chaser became a slow tank;
+  retune in `Brute.asset`, or give PursuingHero its own archetype, if that's wrong.
+- **Existing-mode balance changed:** Hero-mode robbers (Rushers) have 39 HP instead of 65, and Villain-mode cops now
+  shoot from 10 m instead of touching at 2 m. Whether Villain mode is now harder or easier needs hands-on play.
+- **Reaction windows are unproven against human reflexes:** 0.45 s for Rushers is short. All windups, reaches and
+  the token budget are Inspector tunables.
+- No audio telegraph plays at windup start; there is no clip for it. It's a cheap readability win once one is sourced.
+- A Gunner's line of sight is cached for 0.35 s. It can commit on a stale view, but it re-checks at release.
+
+## Free Play and Endless Fight — 2026-09-22 (previous; its AudioVerification gap is resolved above)
 
 Both former "Coming Soon" placeholders are real modes, built by EXTENDING the data-driven architecture. There are
 no mode-ID switches in gameplay code (checked mechanically); every difference is data on the mode assets.

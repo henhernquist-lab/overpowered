@@ -22,12 +22,20 @@ public sealed class HumanoidPresentation : MonoBehaviour
     public int LastAnimationImpactFrame { get; private set; }=-1;
     public float LastKickAnimationImpactTime { get; private set; }=-1;
     public int LastKickAnimationImpactFrame { get; private set; }=-1;
+    /// NPC telegraphed attack: clip state started at windup start, the fitted playback rate, and when the clip's
+    /// impact marker was actually evaluated (compare with CityNpc.LastReleaseTime/Frame).
+    public string AttackState { get; private set; }
+    public float AttackFittedRate { get; private set; }
+    public float LastAttackImpactTime { get; private set; }=-1;
+    public int LastAttackImpactFrame { get; private set; }=-1;
+    /// "Landing squash (visual only)": the visual root. Archetype silhouette scale lives here, never on the physics root.
+    public Transform VisualRoot { get; private set; }
 #if UNITY_EDITOR
     public HeroPresentationState? VerificationState;
 #endif
     SuperHeroController hero;CityNpc npc;
     WorldSession world;PowerUser powers;Vector3 neutralHipsPosition;
-    float actionUntil, phase, lean, actionYaw;bool dead, punchMarkerPending, kickMarkerPending, deferredHit;
+    float actionUntil, phase, lean, actionYaw, attackImpactSeconds, attackEndSeconds, attackFollowRate;bool dead, punchMarkerPending, kickMarkerPending, attackMarkerPending, deferredHit;AnimationClip attackClip;string attackMarkerState;
     readonly Dictionary<Transform,Quaternion> neutral=new Dictionary<Transform,Quaternion>();
     public static HumanoidPresentation Create(GameObject owner,float height,SuperHeroController hero=null,CityNpc npc=null)
     {
@@ -51,11 +59,15 @@ public sealed class HumanoidPresentation : MonoBehaviour
         model.transform.localPosition-=Vector3.up*(bounds.min.y-pose.position.y)*scale;
         foreach(var r in renderers)
         {
-            var mats=r.sharedMaterials;for(int i=0;i<mats.Length;i++)mats[i]=CityMaterials.Get(r.name.Contains("Joints")?CityColor.Metal:npc==null?CityColor.Blue:npc.Role==NpcRole.Civilian?CityColor.Amber:npc.Role==NpcRole.Cop?CityColor.Teal:CityColor.Red);
+            // Role sets the body colour; the archetype (if any) sets the joints accent so it reads at a glance.
+            var accent=npc!=null&&npc.Archetype!=null?npc.Archetype.Accent:CityColor.Metal;
+            var mats=r.sharedMaterials;for(int i=0;i<mats.Length;i++)mats[i]=CityMaterials.Get(r.name.Contains("Joints")?accent:npc==null?CityColor.Blue:npc.Role==NpcRole.Civilian?CityColor.Amber:npc.Role==NpcRole.Cop?CityColor.Teal:CityColor.Red);
             r.sharedMaterials=mats;r.updateWhenOffscreen=true;
         }
         var presentation=owner.AddComponent<HumanoidPresentation>();presentation.hero=hero;presentation.npc=npc;presentation.Tuning=tuning;presentation.Animator=animator;presentation.PoseRoot=pose;
-        presentation.ReferenceMeshHeight=bounds.size.y;presentation.ModelScale=scale;
+        presentation.ReferenceMeshHeight=bounds.size.y;presentation.ModelScale=scale;presentation.VisualRoot=squash;
+        // Silhouette: scale the visual root about the feet (the fit above is unchanged). CityNpc.Spawn scales the collider/agent to match.
+        if(npc!=null&&npc.Archetype!=null)squash.localScale=Vector3.one*npc.Archetype.VisualScale;
         for(int i=0;i<(int)HumanBodyBones.LastBone;i++){var bone=animator.GetBoneTransform((HumanBodyBones)i);if(bone!=null)presentation.neutral[bone]=bone.localRotation;}
         presentation.neutralHipsPosition=animator.GetBoneTransform(HumanBodyBones.Hips).localPosition;
         animator.runtimeAnimatorController=tuning.Controller;animator.applyRootMotion=false;animator.cullingMode=AnimatorCullingMode.AlwaysAnimate;animator.enabled=true;
@@ -68,7 +80,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
             var procedural=owner.AddComponent<ProceduralHeroAnimation>();procedural.HumanoidSquashOnly=true;
             procedural.Initialize(hero,squash,null,Resources.Load<ProceduralAnimationTuning>("ProceduralAnimationTuning"));
         }
-        if(npc!=null){npc.Damaged+=presentation.Damage;npc.Attacked+=presentation.Attack;}
+        if(npc!=null){npc.Damaged+=presentation.Damage;npc.Attacked+=presentation.Attack;npc.AttackWindupStarted+=presentation.AttackWindup;npc.AttackCanceled+=presentation.AttackCanceled;}
         presentation.Change("Locomotion",true);return presentation;
     }
     void OnDestroy()
@@ -76,7 +88,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
         if(world!=null){world.PlayerDamaged-=Damage;world.PlayerRespawned-=Revive;}
         if(powers!=null)powers.Activated-=PowerActivated;
         if(hero!=null){hero.PunchStarted-=Punch;hero.Jumped-=Jump;hero.Landed-=Land;hero.BackflipStarted-=Backflip;hero.HurricaneKickStarted-=HurricaneKick;}
-        if(npc!=null){npc.Damaged-=Damage;npc.Attacked-=Attack;}
+        if(npc!=null){npc.Damaged-=Damage;npc.Attacked-=Attack;npc.AttackWindupStarted-=AttackWindup;npc.AttackCanceled-=AttackCanceled;}
     }
     void Start()
     {
@@ -112,13 +124,49 @@ public sealed class HumanoidPresentation : MonoBehaviour
     public void Damage(bool lethal)
     {
         if(dead)return;
-        if(lethal){punchMarkerPending=false;deferredHit=false;Action("Death",Tuning.Death,Tuning.ActionPlayback,0,true);dead=true;DeathCount++;}
-        else{if(punchMarkerPending)deferredHit=true;else Action("Hit",Tuning.Hit,Tuning.HitPlayback,0,true);HitCount++;}
+        if(lethal){punchMarkerPending=false;attackMarkerPending=false;deferredHit=false;Action("Death",Tuning.Death,Tuning.ActionPlayback,0,true);dead=true;DeathCount++;}
+        else{if(punchMarkerPending||attackMarkerPending)deferredHit=true;else Action("Hit",Tuning.Hit,Tuning.HitPlayback,0,true);HitCount++;}
     }
     public void Revive(){dead=false;punchMarkerPending=false;deferredHit=false;actionUntil=0;Change("Locomotion",true);}
+    bool Ranged=>npc!=null&&(npc.Archetype!=null?npc.Archetype.Kind==AttackKind.Ranged:npc.Role==NpcRole.Cop);
+    // Telegraphed NPC attack: the clip starts at WINDUP START and its playback is fitted so the clip's impact marker lands
+    // exactly at release (same fitted-playback pattern as the Backflip). Rusher=Punch, Gunner=Shoot, Brute=Hurricane Kick.
+    void AttackWindup()
+    {
+        if(dead||npc==null||npc.Archetype==null)return;
+        var t=Tuning;
+        switch(npc.Archetype.Kind)
+        {
+            case AttackKind.Ranged:FitAttack("Shoot",t.Shoot,t.ShootStartSeconds,t.ShootImpactSeconds,t.ShootEndSeconds,t.ShootPlayback);break;
+            case AttackKind.Slam:FitAttack("Hurricane Kick",t.HurricaneKick,t.SlamStartSeconds,t.KickImpactSeconds,t.HurricaneKick.length,t.KickPlayback);break;
+            default:FitAttack("Punch",t.Punch,t.EnemyPunchStartSeconds,t.PunchImpactSeconds,t.Punch.length,t.PunchPlayback);break;
+        }
+    }
+    void FitAttack(string state,AnimationClip clip,float start,float impact,float end,float followRate)
+    {
+        float windup=Mathf.Max(.01f,npc.WindupSeconds);
+        AttackFittedRate=Mathf.Max(.01f,(impact-start)/windup);
+        attackClip=clip;attackImpactSeconds=impact;attackEndSeconds=Mathf.Max(impact,end);attackFollowRate=Mathf.Max(.01f,followRate);
+        Action(state,clip,AttackFittedRate,start,true);AttackState=attackMarkerState=state;attackMarkerPending=true;
+        // Hold the gesture through release; Attack() then plays the follow-through at the clip's normal playback.
+        actionUntil=Time.time+windup+(attackEndSeconds-impact)/AttackFittedRate;
+    }
+    void AttackCanceled()
+    {
+        if(AttackState==null)return;
+        attackMarkerPending=false;AttackState=null;if(!dead)actionUntil=0; // Update() returns to locomotion
+    }
     void Attack()
     {
-        if(npc.Role!=NpcRole.Cop){Action("Punch",Tuning.Punch,Tuning.PunchPlayback);return;}
+        if(dead)return;
+        if(AttackState!=null&&State==AttackState)
+        {
+            // Release: the fitted clip has just reached its impact; finish the gesture at normal playback.
+            Animator.SetFloat("ActionRate",attackFollowRate);actionUntil=Time.time+(attackEndSeconds-attackImpactSeconds)/attackFollowRate;AttackState=null;
+            return;
+        }
+        // Legacy (no windup was presented): play the gesture at the strike.
+        if(!Ranged){Action("Punch",Tuning.Punch,Tuning.PunchPlayback);return;}
         Action("Shoot",Tuning.Shoot,Tuning.ShootPlayback,Tuning.ShootStartSeconds);
         actionUntil=Time.time+Mathf.Max(.01f,Tuning.ShootEndSeconds-Tuning.ShootStartSeconds)/Tuning.ShootPlayback;
     }
@@ -127,7 +175,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
     void Update()
     {
         if(Animator==null)return;
-        if(deferredHit&&!punchMarkerPending){deferredHit=false;Action("Hit",Tuning.Hit,Tuning.HitPlayback,0,true);}
+        if(deferredHit&&!punchMarkerPending&&!attackMarkerPending){deferredHit=false;Action("Hit",Tuning.Hit,Tuning.HitPlayback,0,true);}
         if(hero!=null){hero.PunchWindupSeconds=Tuning.PunchWindup;hero.KickWindupSeconds=Tuning.KickWindup;}
         HeroPresentationState state=ReadState();MeasuredSpeed=new Vector2(state.LocalVelocity.x,state.LocalVelocity.z).magnitude;
         Animator.SetFloat("Speed",MeasuredSpeed,Tuning.SpeedDamping,Time.deltaTime);
@@ -137,7 +185,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
         bool panic=npc!=null&&npc.Role==NpcRole.Civilian&&npc.Fleeing&&!npc.Dead;
         Animator.SetFloat("GaitRate",panic?Tuning.PanicPlayback:1);
         if(dead)return;
-        if(Time.time>=actionUntil)Change(state.Flying?"Fly":!state.Grounded?"Air":panic?"Panic":state.LocalVelocity.z<Tuning.BackThreshold?"Back":npc!=null&&npc.Role==NpcRole.Cop&&MeasuredSpeed>.1f?"Armed":"Locomotion");
+        if(Time.time>=actionUntil)Change(state.Flying?"Fly":!state.Grounded?"Air":panic?"Panic":state.LocalVelocity.z<Tuning.BackThreshold?"Back":Ranged&&MeasuredSpeed>.1f?"Armed":"Locomotion");
     }
     HeroPresentationState ReadState()
     {
@@ -154,6 +202,8 @@ public sealed class HumanoidPresentation : MonoBehaviour
         {AnimationImpact();punchMarkerPending=false;}
         if(kickMarkerPending&&Animator.GetCurrentAnimatorStateInfo(0).IsName("Hurricane Kick")&&Animator.GetCurrentAnimatorStateInfo(0).normalizedTime*Tuning.HurricaneKick.length>=Tuning.KickImpactSeconds)
         {KickAnimationImpact();kickMarkerPending=false;}
+        if(attackMarkerPending&&attackClip!=null&&Animator.GetCurrentAnimatorStateInfo(0).IsName(attackMarkerState)&&Animator.GetCurrentAnimatorStateInfo(0).normalizedTime*attackClip.length>=attackImpactSeconds)
+        {LastAttackImpactTime=Time.time;LastAttackImpactFrame=Time.frameCount;attackMarkerPending=false;}
         ApplyPose(ReadState(),npc!=null&&npc.Fleeing&&!npc.Dead,Time.deltaTime);
     }
     // Verification supplies recorded states through this same overlay path.

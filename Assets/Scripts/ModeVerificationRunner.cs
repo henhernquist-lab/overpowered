@@ -125,7 +125,8 @@ public sealed class ModeVerificationRunner : MonoBehaviour
         cop=e.Responders[0];health=W.Health;Move(cop.transform.position+Vector3.forward*.7f);
         yield return new WaitForSeconds(1.2f);
         Check(cop.Hostile&&W.Health<health,$"Villain live cop AI attacked: health {health:F0} -> {W.Health:F0}.");
-        Move(e.Site+Vector3.up*15);int policeBefore=W.Npcs.Count(n=>n!=null&&n.Role==NpcRole.Cop);
+        // Stand-off above the Gunner range (22 m): 15 m was chosen when police attacks were 2 m contact damage.
+        Move(e.Site+Vector3.up*30);int policeBefore=W.Npcs.Count(n=>n!=null&&n.Role==NpcRole.Cop);
         W.AddHeat(3);W.ReconcilePolice();int policeAfter=W.Npcs.Count(n=>n!=null&&n.Role==NpcRole.Cop);
         Check(policeAfter>policeBefore,$"Existing Heat escalation retained: cops {policeBefore} -> {policeAfter} at Heat {W.Heat:F2}.");
         W.Mode.Tick(W.Mode.Definition.SpawnInterval);

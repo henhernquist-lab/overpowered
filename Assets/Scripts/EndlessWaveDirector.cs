@@ -29,6 +29,11 @@ public class EndlessWaveDirector : ModeDirector
     [Header("Enemy role by player side (a role must be hostile to that side)")]
     public NpcRole HeroSideEnemy=NpcRole.Criminal;
     public NpcRole VillainSideEnemy=NpcRole.Cop;
+    [Header("Archetype composition (independent of role, so both sides get the full mix)")]
+    [Tooltip("From FromWave on, each archetype joins the wave with its Weight. Enemies are dealt by a deterministic smooth " +
+             "weighted round-robin over spawn order, so a wave's mix is exact and repeatable. Health/damage = wave value x the " +
+             "archetype's multipliers. Empty = the role's roster archetype for every enemy.")]
+    public ArchetypeShare[] Composition = new ArchetypeShare[0];
 
     public int WaveSize(int wave) => Mathf.Max(0, FirstWaveCount + EnemiesPerWave * (wave - 1));
     public int AliveTarget(int wave) => Mathf.Min(Mathf.Max(1, MaxAlive), WaveSize(wave));
@@ -40,12 +45,39 @@ public class EndlessWaveDirector : ModeDirector
     // ---------------------------------------------------------------------------------------------
     // EXTENSION POINT — enemy TYPE composition per wave.
     // Every enemy of every wave is created from the EnemySpec returned here (index = 0-based spawn order within the
-    // wave). Today every enemy is the side's basic melee role at the wave's health/damage. To add archetypes, add a
-    // serialized composition table to this asset (e.g. per-wave weights or "from wave N, every Kth enemy is X") and
-    // pick from it here, or subclass and override. Keep health/damage explicit so the escalation curve stays exact.
+    // wave). The role comes from the player's side (hostility/colour); the archetype (behaviour) comes from the
+    // Composition table above. Health/damage stay explicit: the wave's exact escalation value x archetype multipliers.
     // ---------------------------------------------------------------------------------------------
-    public virtual EnemySpec Compose(int wave, int index, PlayerSide side) =>
-        new EnemySpec { Role = side == PlayerSide.Hero ? HeroSideEnemy : VillainSideEnemy, Health = HealthFor(wave), Damage = DamageFor(wave) };
+    public virtual EnemySpec Compose(int wave, int index, PlayerSide side)
+    {
+        var role = side == PlayerSide.Hero ? HeroSideEnemy : VillainSideEnemy;
+        var archetype = ArchetypeFor(wave, index);
+        if (archetype == null && EnemyRoster.Current != null) archetype = EnemyRoster.Current.For(role);
+        float health = archetype != null ? archetype.HealthMultiplier : 1f, damage = archetype != null ? archetype.DamageMultiplier : 1f;
+        return new EnemySpec { Role = role, Archetype = archetype, Health = HealthFor(wave) * health, Damage = DamageFor(wave) * damage };
+    }
+
+    /// Smooth weighted round-robin over the archetypes eligible in this wave (FromWave <= wave, Weight > 0), replayed
+    /// from the wave's first spawn to `index`: deterministic, interleaved, and proportional to the weights.
+    public EnemyArchetype ArchetypeFor(int wave, int index)
+    {
+        if (Composition == null || Composition.Length == 0) return null;
+        var current = new int[Composition.Length]; EnemyArchetype pick = null;
+        for (int step = 0; step <= Mathf.Max(0, index); step++)
+        {
+            int total = 0, best = -1;
+            for (int i = 0; i < Composition.Length; i++)
+            {
+                var share = Composition[i];
+                if (share.Archetype == null || share.Weight <= 0 || wave < share.FromWave) continue;
+                current[i] += share.Weight; total += share.Weight;
+                if (best < 0 || current[i] > current[best]) best = i;
+            }
+            if (best < 0) return null;
+            current[best] -= total; pick = Composition[best].Archetype;
+        }
+        return pick;
+    }
 
     public override ModeDirectorState Begin(GameModeSession session)
     {
@@ -55,7 +87,8 @@ public class EndlessWaveDirector : ModeDirector
     }
 }
 
-public struct EnemySpec { public NpcRole Role; public float Health, Damage; }
+public struct EnemySpec { public NpcRole Role; public EnemyArchetype Archetype; public float Health, Damage; }
+[System.Serializable] public struct ArchetypeShare { public EnemyArchetype Archetype; [Min(1)] public int FromWave; [Min(0)] public int Weight; }
 
 /// Runtime wave state for EndlessWaveDirector (lives on the session object, destroyed with the city scene).
 public sealed class EndlessWaveState : ModeDirectorState
@@ -144,7 +177,7 @@ public sealed class EndlessWaveState : ModeDirectorState
             // Ground only: a rooftop NavMesh island would strand the enemy.
             if (!NavMesh.CalculatePath(hit.position, Arena, NavMesh.AllAreas, path) || path.status != NavMeshPathStatus.PathComplete) continue;
             var spec = Tuning.Compose(Wave, Spawned, World.Progression.Data.Side);
-            var npc = CityNpc.Spawn(World, hit.position, spec.Role);
+            var npc = CityNpc.Spawn(World, hit.position, spec.Role, spec.Archetype);
             if (npc == null) continue;
             npc.SetCombatStats(spec.Health, spec.Damage);
             npc.AlwaysAggro = true;

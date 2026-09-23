@@ -1,0 +1,50 @@
+PASS Menu component exists in Home
+PASS Fresh isolated save CONTROL: level 1, 0 sessions, 0 mode records.
+PASS Home shows ENABLED 'free-play' in the data-driven extras row below the side cards (rect (x:86.63, y:599.63, width:123.75, height:29.25)).
+PASS Home shows ENABLED 'endless-fight' in the data-driven extras row below the side cards (rect (x:222.75, y:599.63, width:235.13, height:29.25)).
+PASS Home shows ENABLED 'endless-fight-villain' in the data-driven extras row below the side cards (rect (x:470.25, y:599.63, width:252.00, height:29.25)).
+PASS No COMING SOON placeholder remains on Home.
+CAPTURE home-extras.png (actual render target)
+PASS Real Home button -> GameFlow.Select launched Free Play with Rules=null and 0 encounter definitions.
+PASS Free Play takes the profile side (Hero) and does NOT lock it.
+PASS Population: 24 civilians, 2 patrol cops.
+PASS Advanced 150s (3x Hero SpawnInterval 50s): crimes=0, CrimeEvent objects=0, CrimeEncounter objects=0, criminals=0; session not ended.
+PASS HUD: no objective/timer lines, no director line; Heat shown.
+PASS Death 1: player actually dead (health 0).
+PASS Death 1 -> respawned at full health 100; session NOT ended (defeats=1, DefeatLimit=0).
+PASS Death 2: player actually dead (health 0).
+PASS Death 2 -> respawned at full health 100; session NOT ended (defeats=2, DefeatLimit=0).
+PASS Death 3: player actually dead (health 0).
+PASS Death 3 -> respawned at full health 100; session NOT ended (defeats=3, DefeatLimit=0).
+PASS Death 4: player actually dead (health 0).
+PASS Death 4 -> respawned at full health 100; session NOT ended (defeats=4, DefeatLimit=0).
+PASS Real BreakableProp break -> WorldSession.OnDestruction: Heat 0.00 -> 0.35 (1 star).
+PASS Police respond in real time: cops 2 -> 4 (= patrol 2 + 1 star x 2).
+PASS Before switch (Hero): criminal hostile, 0/4 cops hostile, 0 civilians hostile.
+PASS H action: 'Side changed. Your powers and character are unchanged.' -> Data.Side=Villain, saved to disk.
+PASS After switch (Villain): criminal NOT hostile, 4/4 cops hostile.
+PASS Immediate second switch refused by the existing cooldown CONTROL.
+PASS Free Play pause menu offers exactly: Resume | Return home (keep earned XP)
+PASS Pause 'Return home' reached the Home scene; city unloaded.
+PASS Free Play relaunch accepted by GameFlow.Select.
+PASS Relaunch starts as Villain: the side comes from the saved profile.
+PASS ShowResults=false: an explicit results request lands on Home, not Results.
+PASS Hero mode selected.
+PASS Hero CONTROL: same 150s advance -> encounters 1 at start, 2 spawned in total; CrimeEncounter objects=2.
+PASS Hero CONTROL: side switch BLOCKED ('Side is set by this mode. Return home to choose another mode.'); side stays Hero although the saved profile side was Villain.
+PASS Hero CONTROL: HUD shows the objective/timer lines.
+PASS Hero CONTROL: pause menu keeps the results option: Resume | End session / Results | Return home (keep earned XP)
+PASS Guard CONTROL: an encounter-spawning definition with no Rules/Encounters is still rejected.
+PASS Guard CONTROL: Playable=false is still rejected.
+PASS Menu component exists in Home
+PASS endless-fight and endless-fight-villain reference the ONE Resources/ModeDirectors/EndlessWaves asset.
+PASS Endless definitions are pure data: Survival layout, DefeatLimit 1, 0 civilians, no police.
+PASS Real Home button launched Endless Fight (Hero): EndlessWaveState runtime component created by the director; side Hero, locked.
+PASS Before wave 1: 0 NPCs (no civilians, no police), 0 encounters; arena centre (-20.00, 0.11, -20.00).
+PASS Wave 0 is in its intermission (4.0s).
+PASS Intermission elapsed -> wave 1 started.
+RECORD WAVE 1: wave=1, alive=3, per-enemy health=39.00 (max 39.00), contact damage=6.00, role=Criminal, Heat stars=0; spawn distances from player 20.0,29.6,23.2m; ring radii 22.0,22.0,22.0m.
+FAIL System.Exception: Wave 1 = FirstWaveCount 3 Criminals at base health 65 / damage 8.
+  at ModeExpansionVerificationRunner.Check (System.Boolean valid, System.String text) [0x0001b] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/ModeExpansionVerificationRunner.cs:47 
+  at ModeExpansionVerificationRunner+<EndlessHero>d__53.MoveNext () [0x002c4] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/ModeExpansionVerificationRunner.cs:288 
+  at ModeExpansionVerificationRunner+<Start>d__20.MoveNext () [0x000a0] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/ModeExpansionVerificationRunner.cs:39 

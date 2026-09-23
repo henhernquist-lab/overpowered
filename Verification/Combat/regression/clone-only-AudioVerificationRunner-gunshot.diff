@@ -1,0 +1,11 @@
+--- /Users/melaniehernquist/Documents/ChatGPT/op/Assets/Scripts/AudioVerificationRunner.cs	2026-09-22 23:29:08
++++ Assets/Scripts/AudioVerificationRunner.cs	2026-09-23 06:19:47
+@@ -110,7 +110,7 @@
+         A.enabled=true;yield return new WaitForSecondsRealtime(1.1f);GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);Check(A.Sources.Length==24&&A.BoundWorld==null&&Playing(AudioCue.FlightLoop)==0&&Playing(AudioCue.CityBed)==0,"Return Home keeps one pool; no stale world/flight/city audio.");
+         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/villain"));yield return Scene(GameFlow.CityScene);W.Hero.enabled=false;
+         var cop=W.Npcs.First(n=>n!=null&&n.Role==NpcRole.Cop&&!n.Dead);Move(cop.transform.position+Vector3.forward*.6f);camera=Camera.main;camera.GetComponent<ThirdPersonCamera>().enabled=false;camera.transform.position=W.Hero.transform.position+new Vector3(0,2,-5);
+-        A.StopAll();float shotDeadline=Time.time+4;while(Playing(AudioCue.Gunshot)==0&&Time.time<shotDeadline)yield return null;SourceCheck(AudioCue.Gunshot);Check(W.Health<W.Tuning.Movement.Health,"Cop gunshot is driven by a real hostile NPC attack/damage event.");
++        A.StopAll();int shots=cop.Releases;float shotDeadline=Time.time+4;while(cop.Releases==shots&&Time.time<shotDeadline)yield return null;SourceCheck(AudioCue.Gunshot);var shotClips=A.Tuning.Find(AudioCue.Gunshot).Clips;Check(A.Sources.Any(s=>s.isPlaying&&shotClips.Contains(s.clip)&&Vector3.Distance(s.transform.position,cop.transform.position)<.5f)&&cop.LastReleaseHit&&W.Health<W.Tuning.Movement.Health,$"Cop gunshot is driven by a real hostile NPC attack/damage event (gunshot source at the releasing cop; health {W.Health:F0}).");
+         GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);Check(FindObjectsByType<AudioDirector>().Length==1,"Mode switch CONTROL retains exactly one director/pool.");
+         Log("LIMIT: no human has heard or judged the mix. Tests assert real source playback, clips, volumes and routing, not audible-device capture. Flight state is controlled at the public presentation boundary after real fuel checks; no hardware F-key automation. FPS is Editor throughput, not standalone performance.");
+     }

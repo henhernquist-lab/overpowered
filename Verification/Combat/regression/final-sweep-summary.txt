@@ -1,0 +1,15 @@
+START 07:16:19 load { 3.31 5.21 5.77 }
+audio | exit=0 | PASS=111 | 69s | no FAIL
+audio-reload | exit=0 | PASS=49 | 18s | no FAIL
+mode | exit=0 | PASS=79 | 35s | no FAIL
+mode-reload | exit=0 | PASS=2 | 18s | no FAIL
+modeexp | exit=0 | PASS=111 | 65s | no FAIL
+modeexp-reload | exit=0 | PASS=10 | 17s | no FAIL
+humanoid | exit=0 | PASS=46 | 40s | no FAIL
+city | exit=0 | PASS=39 | 29s | no FAIL
+city-reload | exit=0 | PASS=5 | 17s | no FAIL
+abilities | exit=0 | PASS=63 | 26s | no FAIL
+cityart | exit=0 | PASS=31 | 30s | no FAIL
+menus | exit=0 | PASS=42 | 50s | no FAIL
+combat-realtree | exit=0 | PASS=170 | 126s | no FAIL
+DONE 07:25:19

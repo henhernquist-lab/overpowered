@@ -13,6 +13,8 @@ public sealed class WorldSession : MonoBehaviour
     public GameModeSession Mode { get; private set; }
     public readonly List<CityNpc> Npcs = new List<CityNpc>();
     public readonly List<CrimeEvent> Crimes = new List<CrimeEvent>();
+    /// Attack-token budget shared by every hostile NPC of this city (tuning: Resources/Enemies/EnemyRoster.asset).
+    public readonly AttackTokenPool AttackTokens = new AttackTokenPool();
     public float Heat { get; private set; }
     public int Stars => Mathf.Clamp(Mathf.CeilToInt(Heat),0,Tuning.Heat.MaximumStars);
     public float Health { get; private set; }

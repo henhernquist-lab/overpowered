@@ -23,6 +23,13 @@ public sealed class HumanoidAnimationTuning : ScriptableObject
     public float BackflipStartSeconds=.6f;
     [Header("Hurricane Kick timing: source clip start / impact, seconds")]
     public float KickStartSeconds=.333f, KickImpactSeconds=.933f, KickPlayback=2f;
+    // NPC telegraphed attacks start their clip at WINDUP START with playback fitted so the impact below lands at release
+    // (rate = (impact - start) / archetype windup). Rusher=Punch, Gunner=Shoot, Brute=Hurricane Kick as a slam.
+    // After release the gesture finishes at the clip's normal playback (PunchPlayback / ShootPlayback / KickPlayback).
+    [Header("Enemy telegraphed attacks: source clip start / impact, seconds")]
+    [Tooltip("Punch source start for enemies (impact = PunchImpactSeconds); earlier than the hero's start so the guard-to-jab reads.")] public float EnemyPunchStartSeconds=.1f;
+    [Tooltip("Shooting Gun: moment the shot fires (the arm is extended at 1.5-1.75s and recoils up by 2.0s). Start = ShootStartSeconds, end = ShootEndSeconds.")] public float ShootImpactSeconds=1.8f;
+    [Tooltip("Hurricane Kick used as the Brute slam: source start (impact = KickImpactSeconds).")] public float SlamStartSeconds=.333f;
     [Header("Flight: model-space pose, applied after Animator")]
     public float FlightPitch=78f, FlightFullSpeed=10f, FlightBlendResponse=6f, PoseResponse=10f;
     public float HoverBobAmplitude=.065f, HoverBobFrequency=.7f;
@@ -48,5 +55,7 @@ public sealed class HumanoidAnimationTuning : ScriptableObject
         KickPlayback=Mathf.Max(.01f,KickPlayback);
         BackflipStartSeconds=Mathf.Max(0,BackflipStartSeconds);
         KickStartSeconds=Mathf.Max(0,KickStartSeconds);KickImpactSeconds=Mathf.Max(KickStartSeconds,KickImpactSeconds);
+        EnemyPunchStartSeconds=Mathf.Clamp(EnemyPunchStartSeconds,0,PunchImpactSeconds);SlamStartSeconds=Mathf.Clamp(SlamStartSeconds,0,KickImpactSeconds);
+        ShootImpactSeconds=Mathf.Clamp(ShootImpactSeconds,ShootStartSeconds,Mathf.Max(ShootStartSeconds,ShootEndSeconds));
     }
 }

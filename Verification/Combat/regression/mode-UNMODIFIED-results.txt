@@ -1,0 +1,52 @@
+PASS Startup HOME, no city or player spawned.
+PASS Non-playable definition CONTROL refuses launch (free-play/endless-fight are playable since Step 2-3).
+PASS Home -> shipping Hero definition selected.
+PASS Fresh-save CONTROL: level=1, XP=0, points=0, sessions=0.
+PASS Hero side locked; H cannot bypass the mode.
+PASS Populated event: 3 robbers, 2 trapped civilians, 2 responders, 8 real Rigidbody props (2 cars, 4 supplies, 2 blockades), 2 loot nodes.
+PASS Untouched marker CONTROL does not resolve encounter.
+PASS Blocked civilian CONTROL refuses rescue before blockade is moved/broken.
+PASS Real charged E-punch accepted against encounter physics blockade.
+PASS Animated punch impact hit encounter physics blockade after windup.
+PASS Rescue physics: actual punch AddExplosionForce(1350 N·s, Impulse), mass=45kg; displacement=9.078m.
+PASS Held interaction accepted at valid objective.
+PASS Moved blockade permits real rescue interaction.
+PASS Hero police CONTROL: neutral cop in attack range does not damage player.
+PASS Pause freezes session clock and encounter simulation.
+PASS Ignored Hero event: failures=1, Heat 1.75 -> 2.50 (+0.75).
+PASS Held interaction accepted at valid objective.
+PASS Held interaction accepted at valid objective.
+PASS All multi-part encounter objectives resolved.
+PASS Held interaction accepted at valid objective.
+PASS Held interaction accepted at valid objective.
+PASS Held interaction accepted at valid objective.
+PASS Held interaction accepted at valid objective.
+PASS All multi-part encounter objectives resolved.
+PASS Held interaction accepted at valid objective.
+PASS All multi-part encounter objectives resolved.
+PASS Held interaction accepted at valid objective.
+PASS Held interaction accepted at valid objective.
+PASS Held interaction accepted at valid objective.
+PASS All multi-part encounter objectives resolved.
+PASS Held interaction accepted at valid objective.
+PASS Held interaction accepted at valid objective.
+PASS Held interaction accepted at valid objective.
+PASS Held interaction accepted at valid objective.
+PASS All multi-part encounter objectives resolved.
+PASS Hero PLAY -> RESULTS: Won, success=5, failure=1, score=700, XP=755.
+PASS Hero RESULTS -> HOME; city unloaded.
+PASS Home -> shipping Villain definition selected.
+PASS Hero/Villain regenerated the SAME seeded city layout.
+PASS Mode-switch persistence: level=5, XP=92, points=4, wins=1.
+PASS Earned points purchase strength upgrade; tier=1 must survive restart.
+PASS Same encounter systems, opposite Villain loot/destruction/escape goals.
+PASS Villain live cop AI attacked: health 100 -> 92.
+PASS Existing Heat escalation retained: cops 4 -> 10 at Heat 3.00.
+PASS Configured spawn-clock interval adds second multi-part encounter.
+PASS Population-cap CONTROL refuses a third simultaneous encounter.
+MEASURED populated events: civilians=28, cops=12, events=2; 1280x720 rendered Editor Play Mode; frames=215, seconds=5.008, FPS=42.93, p95=25.59ms; Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz; AMD Radeon Pro 5300.
+FAIL System.Exception: Held interaction accepted at valid objective.
+  at ModeVerificationRunner.Check (System.Boolean condition, System.String text) [0x0001b] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/ModeVerificationRunner.cs:33 
+  at ModeVerificationRunner.Hold (CrimeEncounter e, UnityEngine.Vector3 position) [0x00013] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/ModeVerificationRunner.cs:48 
+  at ModeVerificationRunner+<Complete>d__17.MoveNext () [0x001bb] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/ModeVerificationRunner.cs:64 
+  at ModeVerificationRunner+<Start>d__9.MoveNext () [0x00057] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/ModeVerificationRunner.cs:25 

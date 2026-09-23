@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f015f545089243d6a30ca23a272a1bc3, type: 3}
+  m_Name: Brute
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyArchetype
+  DisplayName: Brute
+  MoveSpeed: 3
+  HealthMultiplier: 3
+  DamageMultiplier: 2.25
+  Kind: 2
+  TriggerDistance: 2.8
+  Reach: 1.8
+  Radius: 3.2
+  Range: 22
+  MuzzleHeight: 1.35
+  MaxHitHeight: 1.2
+  WindupSeconds: 0.9
+  CooldownSeconds: 2.2
+  Knockback: 2.5
+  KnockbackSeconds: 0.3
+  PreferredDistance: 10
+  PreferredBand: 2
+  TelegraphWidth: 0.12
+  TelegraphStartFraction: 0.2
+  VisualScale: 1.3
+  Accent: 23

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f797eef34f5a4d33b54ef9573ba2cccb, type: 3}
+  m_Name: EnemyRoster
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyRoster
+  Criminal: {fileID: 11400000, guid: 1d334c48aa174f13a7467013e21ed45a, type: 2}
+  Cop: {fileID: 11400000, guid: 5c4548189b514982a60622ee54f14bbc, type: 2}
+  PursuingHero: {fileID: 11400000, guid: 8849d95f3b6842299eb95540af7b454b, type: 2}
+  MaxConcurrentAttackers: 2
+  EngageTimeoutSeconds: 2.5
+  RetrySeconds: 0.5
+  WaitRingRadius: 4.5
+  RingSlack: 1
+  RingSpacing: 1.8
+  CircleSpeed: 1.2
+  CircleLeadDegrees: 25

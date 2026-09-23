@@ -1,0 +1,2 @@
+PASS Held interaction accepted at valid objective. [DIAG playerDead=False health=100.0 defeats=0 hostileCops=0 heroPos=(-16.50, 1.00, -27.00)]
+FAIL System.Exception: Held interaction accepted at valid objective. [DIAG playerDead=True health=0.0 defeats=1 hostileCops=12 heroPos=(-23.00, 1.00, -23.00)]

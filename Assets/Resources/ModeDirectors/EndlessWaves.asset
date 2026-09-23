@@ -27,3 +27,13 @@ MonoBehaviour:
   WaveClearBonus: 50
   HeroSideEnemy: 3
   VillainSideEnemy: 1
+  Composition:
+  - Archetype: {fileID: 11400000, guid: 1d334c48aa174f13a7467013e21ed45a, type: 2}
+    FromWave: 1
+    Weight: 3
+  - Archetype: {fileID: 11400000, guid: 5c4548189b514982a60622ee54f14bbc, type: 2}
+    FromWave: 2
+    Weight: 2
+  - Archetype: {fileID: 11400000, guid: 8849d95f3b6842299eb95540af7b454b, type: 2}
+    FromWave: 3
+    Weight: 1
