@@ -1,0 +1,41 @@
+PASS Three selectable data-defined heroes.
+PASS Home button opens Forge in existing panel.
+PASS Character preview render texture exists.
+PASS Duplicate-pair CONTROL rejected by save API.
+PASS Locked-power CONTROL rejected by Forge.
+PASS Existing progression unlock fire
+PASS Existing progression unlock ice
+PASS Existing progression unlock telekinesis
+PASS Select NOVA definition.
+PASS Suit palette roles saved.
+PASS Slot 1 collision repairs slot 2 immediately.
+PASS Slot 2 UI excludes duplicate.
+PASS Select Fire + Ice.
+PASS Pair lookup is order-independent.
+PASS Enter Hero with saved build.
+PASS Gameplay receives exact equipped pair.
+PASS Unequipped flight CONTROL refuses real fuel API.
+PASS Unequipped Strength CONTROL cannot be selected or fired directly.
+PASS Basic punch remains available without Strength.
+PASS Basic melee force is reduced, not hidden super strength: 160 N.s.
+PASS Live loadout mutation CONTROL refused.
+PASS Selected humanoid model instantiated.
+PASS Save TITAN reverse Sonic pair.
+PASS Sonic Slam accepted on valid ground.
+PASS Active/cooldown CONTROL refuses immediate spam.
+PASS Sonic Slam rises then collides with actual ground exactly once.
+PASS Sonic force moves real 45kg Rigidbody.
+PASS Outside-radius CONTROL has no horizontal launch.
+MEASURED Sonic peak=154.356m, force=2600.0 N.s, bodies=1, near velocity=34.052m/s, displacement=0.672m; cooldown=9.601s.
+PASS Cooldown still blocks after animation ends.
+PASS Actual pooled ParticleSystem / ring emitted once.
+PASS Equipped Flight positive control consumes configured fuel.
+PASS Equipped Strength uses existing paid punch.
+PASS Shared punch/kick cooldown still rejects kick.
+PASS Equipped Strength preserves original force.
+PASS Zero Strength charges still reject Hurricane Kick.
+PASS Backflip remains available.
+PASS Backflip CONTROL has no invincibility.
+PASS Save final loadout for separate-process test.
+PASS Villain mode switch preserves build and progression.
+LIMIT: no human feel test; real gameplay entry points, not hardware key injection. Free Play/Endless Fight remain disabled existing definitions.

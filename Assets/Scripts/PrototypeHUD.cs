@@ -26,7 +26,11 @@ public sealed class PrototypeHUD : MonoBehaviour
         Rect bar=GUILayoutUtility.GetRect(460,12); GUI.Box(bar,""); GUI.Box(new Rect(bar.x,bar.y,bar.width*progress.Data.Xp/progress.RequiredXp,bar.height),"");
         }
         if((hud&ModeHud.Powers)!=0) {
-        GUILayout.Label($"Flight {p.Flight.Fuel:F2}/{p.Stats(p.Flight).Duration:F2}s (ground recharge)");
+        if(p.IsEquipped(p.Flight.Definition))GUILayout.Label($"Flight {p.Flight.Fuel:F2}/{p.Stats(p.Flight).Duration:F2}s (ground recharge)");
+        if(p.Forge!=null){
+            GUILayout.Label($"{p.HeroDefinition.DisplayName} / {p.EquippedA.DisplayName} + {p.EquippedB.DisplayName}");
+            GUILayout.Label($"{p.Forge.SynergyKey}: {p.Synergy?.DisplayName??"No synergy"} / {p.SynergyRunner.Cooldown:F1}s — {p.SynergyRunner.Feedback}");
+        }
         if(current!=null) GUILayout.Label($"{current.Definition.DisplayName} {current.Charges}/{p.Stats(current).Charges} charges | cooldown {current.Cooldown:F2}s");
         }
         GUILayout.Label(p.Message); GUILayout.Label(w.Hero.LastPunchResult); GUILayout.Label(w.Message);
@@ -71,7 +75,7 @@ public sealed class PrototypeHUD : MonoBehaviour
             GUILayout.Label($"{p.Powers.IndexOf(power)+1}. {d.DisplayName} · {(tier<0?"LOCKED":"Tier "+tier)}");
             GUILayout.Label(d.Description);
             GUILayout.Label($"Charges {s.Charges} · cooldown {s.Cooldown:F2}s · force {s.Force:F0} N·s\nDamage {s.Damage:F0} · duration {s.Duration:F1}s · range {s.Range:F1}m · energy {d.ResourceCost:F0}");
-            GUILayout.BeginHorizontal(); GUI.enabled=tier>=0;
+            GUILayout.BeginHorizontal(); GUI.enabled=tier>=0&&p.IsEquipped(d);
             if(GUILayout.Button("Select")) p.Select(power);
             int cost=tier<0?d.UnlockCost:tier<d.Upgrades.Length?d.Upgrades[tier].PointCost:0;
             GUI.enabled=tier<d.Upgrades.Length && progress.Data.Points>=cost;

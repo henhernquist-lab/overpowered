@@ -1,5 +1,210 @@
 # Prototype Status
 
+## Hero Forge — 2026-09-23
+
+### Delivery and flow
+
+Implemented on isolated branch `codex/hero-forge`, based on main `cc1a3b7`, in /private/tmp/op-hero-forge. The original checkout's unrelated city/performance/combat work is untouched. At final handoff that checkout is clean at `8854e95` (telegraphed archetype combat), having advanced independently during this work. Those later changes are not included or integration-tested here; merging them requires a separate reconciliation pass. This feature is not merged into that checkout. Local delivery only; no new push attempted.
+
+Home -> Hero Forge / Select Hero -> hero, two palette suit colors, two distinct owned powers -> Save & Back -> existing Hero/Villain mode cards. Changes persist immediately through the existing PlayerProgression save. In play, **C / joystick button 5** activates the pair synergy; a second press releases either orbit early. The HUD shows pair, synergy, cooldown and refusal feedback. Bindings and basic melee/VFX budgets are editable in Resources/ForgeCatalog.asset.
+
+Three definitions (VECTOR, TITAN, NOVA), ten unordered pair definitions and ten reusable effect configurations ship in Resources/Forge. The roster UI and pair resolver read assets, not hero/pair-ID switches. Existing PowerDefinition assets are reused, not duplicated. Gameplay caches the equipped pair for a session and rejects unequipped abilities in PowerUser, including actual flight fuel calls. Live loadout mutation is refused. ProgressSave.Loadout is additive to version 1; older/fresh saves repair to an owned starter pair. Separate-process persistence and fresh-save controls passed.
+
+Sonic Slam was built and verified first (39 passing controls, Verification/Forge/sonic-first.txt) before adding the remaining effects progressively. All ten now have real gameplay implementations: Sonic Slam, Phoenix Dive, Frostwake, Orbit Throw, Thermal Shock, Meteor Punch, Inferno Orbit, Glacier Fist, Cryo Crush and Meteor Slam. docs/hero-forge.md contains the full file inventory, pair mechanics, ownership, tuning, and recipes for adding heroes/synergies. No Inspector/scene wiring is needed; missing assets can be authored with Overpowered > Forge > Create missing assets.
+
+### Judgments, integration and explicit limits
+
+- Retained existing unlock economy. Fresh saves own Flight/Strength; selecting a hero never grants locked powers. Unlock buttons call existing PlayerProgression.Buy with existing points. Locked hero defaults fall back to two owned powers. All three starter silhouettes therefore initially share the starter pair.
+- All heroes reuse the existing humanoid mannequin (widths 1.0, 1.2, 0.92) with shared-palette suits. These are placeholder variations, not three unique models. Normalized height remains 1.8m; no CharacterController dimensions or movement stats changed. Future definitions can reference unique Humanoid prefabs/animation tuning. No licensed character/logo assets were introduced.
+- Without Strength, E/RMB still work as weaker basic melee: 160 N.s / 8 base damage, 0.65s shared cooldown before kick multipliers. Equipped Strength preserves original charges, cooldown, upgrades and impact windup. Backflip remains a spatial dodge without invulnerability.
+- Synergies have their own default 10s cooldown. Frostwake additionally uses real flight fuel. Meteor Punch requires ready charged Strength but does not spend a normal charge; other synergies do not consume base-power energy/charges. This is explicit prototype balance, not final tuning.
+- Existing Animator/procedural ownership is retained. Ability motion uses CharacterController.Move and emits landing presentation for audio/squash; no animated teleport of the physics root. Pause freezes motion/cooldown and refuses activation; death/disable restores held-body gravity and temporary actor-collision settings.
+- Reused CombatImpact, ThrownProp and BreakableProp. Physical NPC reactions use a temporary navigation-to-Rigidbody handoff, not ragdolls. Navigation recovery samples nearby NavMesh and may fall back to the prior valid NPC position. Props are never teleported or made static. Fire's timed burning marker enables Thermal Shock bonus; no new damage-over-time system.
+- Built-in Particle System module enabled; no URP/Shader Graph/volume dependency. Six scene-lifetime pooled slots, each with a 40-point ring and at most 28 mesh particles. Every slot shares one built-in cube mesh and existing palette materials. No per-cast mesh/material creation; existing combat allocations and first-use components remain. No zero-GC claim.
+- VFX are geometric placeholders, not polished fire/ice art. Camera feedback is a 3-degree, 0.16s FOV kick, not global hit-stop or long shake. Visual inspection caught inflated opaque particles; Shape scaling plus shared mesh particles fixed this. Tests now prove particles move over real frames and share their mesh.
+- Free Play / Endless Fight are STILL DISABLED Coming Soon definitions. Forge integrates at the shared city bootstrap; this packet does not implement those missing modes. Hero and Villain loadout transitions were exercised. No claim that all historical user requests are complete.
+- Tests drive real gameplay/UI event entry points, not physical keyboard/controller input. No human feel test, full-length session or hardware-controller test. Historical all-powers-at-once verifiers need explicit loadout setup now; they were not all rerun. Current controls cover original punch/kick charge refusal, original force, backflip damage vulnerability, flight fuel and mode/save integration.
+
+### Verification and measured performance
+
+Unity 6000.6.0f1 isolated test project /private/tmp/op-audio-verify-6s0bUo. Final HeroForgeVerification.Run and separate-process HeroForgeVerification.Reload both exited 0. **131 gameplay/UI/physics controls + 3 reload controls passed.** Final supplemental dotnet build: **0 warnings, 0 errors** (Verification/Forge/build.txt). Tested Forge source matches the delivery source.
+
+Commands (runner exits itself; no -quit):
+
+```sh
+Unity -batchmode -projectPath /private/tmp/op-audio-verify-6s0bUo -executeMethod HeroForgeVerification.Run -logFile /private/tmp/op-forge-complete.log
+Unity -batchmode -projectPath /private/tmp/op-audio-verify-6s0bUo -executeMethod HeroForgeVerification.Reload -logFile /private/tmp/op-forge-complete-reload.log
+dotnet build Overpowered.Build.csproj --no-restore -p:UseSharedCompilation=false
+```
+
+Actual populated-city ABBA test: 26 civilians + 14 cops, one 1280x720 camera, effects emitted every 100ms for stress phases. Idle **49.44 FPS**, repeated FX **49.08 FPS**, reported delta **0.37 FPS / 0.152ms** (rounding from unrounded samples). Draw calls about **1118 idle / 1127 stress**. This is Editor wall-clock throughput and within likely noise, not a GPU-time or allocation measurement. It is well below the historical 155 FPS number, but that old benchmark is not the same population/assets/test setup; no performance recovery is claimed and no content was cut to conceal cost. Another task's later city/performance work is excluded from this feature.
+
+Captures: Verification/Forge/forge-menu.png, forge-preview.png, sonic-impact.png. Inspected actual rendering: cyan/navy Forge panel, mannequin suit colors, five selector rows and automatic synergy label; Sonic ground ring, small particles and a launched physical cube. Captures are evidence of rendering, not proof of human-perceived feel.
+
+Console is NOT wholly error-free: the known UnityEditor.Search.SearchDatabase startup ArgumentOutOfRangeException appears in both final runs. No Forge gameplay errors were reported by the runtime error gate. Earlier failed runs exposed a real MissingComponentException caused by Unity's fake-null Rigidbody wrapper with ??; explicit Unity null checking fixed it. The particle module omission and oversized particles were also corrected rather than hidden. Older progressive output remains labelled in Verification/Forge; results.txt is authoritative final output.
+
+Verbatim final output:
+
+```text
+PASS Three selectable data-defined heroes.
+PASS Home button opens Forge in existing panel.
+PASS Character preview render texture exists.
+PASS Duplicate-pair CONTROL rejected by save API.
+PASS Locked-power CONTROL rejected by Forge.
+PASS Existing progression unlock fire
+PASS Existing progression unlock ice
+PASS Existing progression unlock telekinesis
+PASS Select NOVA definition.
+PASS Suit palette roles saved.
+PASS Slot 1 collision repairs slot 2 immediately.
+PASS Slot 2 UI excludes duplicate.
+PASS Select Fire + Ice.
+PASS Pair lookup is order-independent.
+PASS Enter Hero with saved build.
+PASS Gameplay receives exact equipped pair.
+PASS Unequipped flight CONTROL refuses real fuel API.
+PASS Unequipped Strength CONTROL cannot be selected or fired directly.
+PASS Basic punch remains available without Strength.
+PASS Basic melee force is reduced, not hidden super strength: 160 N.s.
+PASS Live loadout mutation CONTROL refused.
+PASS Selected humanoid model instantiated.
+PASS Save TITAN reverse Sonic pair.
+PASS Sonic Slam accepted on valid ground.
+PASS Active/cooldown CONTROL refuses immediate spam.
+PASS Pause CONTROL freezes synergy motion/cooldown and rejects activation.
+PASS Sonic Slam rises then collides with actual ground exactly once.
+PASS Sonic force moves real 45kg Rigidbody.
+PASS Outside-radius CONTROL has no horizontal launch.
+MEASURED Sonic peak=154.340m, force=2600.0 N.s, bodies=1, near velocity=34.052m/s, displacement=0.672m; cooldown=9.591s.
+PASS Cooldown still blocks after animation ends.
+PASS Actual pooled ParticleSystem / ring emitted once.
+PASS Real ParticleSystem contains bounded live particles.
+PASS Particle positions advance over real frames (not a frozen emission counter).
+PASS All six VFX slots share the same particle mesh.
+PASS Equipped Flight positive control consumes configured fuel.
+PASS Equipped Strength uses existing paid punch.
+PASS Shared punch/kick cooldown still rejects kick.
+PASS Equipped Strength preserves original force.
+PASS Zero Strength charges still reject Hurricane Kick.
+PASS Backflip remains available.
+PASS Backflip CONTROL has no invincibility.
+PASS Save final loadout for separate-process test.
+PASS Villain mode switch preserves build and progression.
+PASS All ten unordered pairs have effect assets.
+PASS Unique symmetric pair fire + flight
+PASS Unique symmetric pair fire + ice
+PASS Unique symmetric pair fire + strength
+PASS Unique symmetric pair fire + telekinesis
+PASS Unique symmetric pair flight + ice
+PASS Unique symmetric pair flight + strength
+PASS Unique symmetric pair flight + telekinesis
+PASS Unique symmetric pair ice + strength
+PASS Unique symmetric pair ice + telekinesis
+PASS Unique symmetric pair strength + telekinesis
+PASS Equip Phoenix Dive
+PASS Phoenix Dive activation accepted.
+PASS Phoenix Dive completes within bounded duration.
+PASS Phoenix Dive cooldown remains after action.
+PASS Phoenix Dive reaches forward ground target and impacts.
+PASS Phoenix Dive emits bounded pooled effects.
+SYNERGY Phoenix Dive: impacts=1, VFX emissions=1, cooldown=9.40
+PASS Equip Frostwake
+PASS Frostwake empty-fuel CONTROL.
+PASS Frostwake activation accepted.
+PASS Frostwake completes within bounded duration.
+PASS Frostwake cooldown remains after action.
+PASS Frostwake moves, drains fuel, hits nearby actor; far actor untouched.
+PASS Frostwake emits bounded pooled effects.
+SYNERGY Frostwake: impacts=0, VFX emissions=8, cooldown=8.89
+PASS Equip Orbit Throw
+PASS Orbit Throw empty-area CONTROL costs no cooldown.
+PASS Orbit Throw activation accepted.
+PASS Orbit Throw only movable in-budget prop captured; heavy CONTROL excluded.
+PASS Orbit Throw orbit uses real force displacement.
+PASS Second C-equivalent requests volley, not another paid activation.
+PASS Orbit Throw completes within bounded duration.
+PASS Orbit Throw cooldown remains after action.
+PASS Thrown prop restores gravity and receives a real forward launch impulse.
+PASS Heavy prop CONTROL has no launch impulse.
+PASS Orbit cancellation setup accepted.
+PASS Orbit cancellation setup actually holds body.
+PASS Death CONTROL cancels orbit and restores held-body gravity.
+PASS Orbit Throw emits bounded pooled effects.
+SYNERGY Orbit Throw: impacts=0, VFX emissions=4, cooldown=9.99
+PASS Equip Thermal Shock
+PASS Thermal Shock activation accepted.
+PASS Thermal Shock completes within bounded duration.
+PASS Thermal Shock cooldown remains after action.
+PASS Thermal affected-target bonus CONTROL: 42.5 vs clean 25
+PASS Thermal Shock emits bounded pooled effects.
+SYNERGY Thermal Shock: impacts=1, VFX emissions=1, cooldown=9.69
+PASS Equip Meteor Punch
+PASS Meteor Punch zero-charge eligibility CONTROL.
+PASS Meteor Punch activation accepted.
+PASS Meteor Punch completes within bounded duration.
+PASS Meteor Punch cooldown remains after action.
+PASS Meteor Punch is heavier than Hurricane Kick: 3400 N.s
+PASS Meteor Punch emits bounded pooled effects.
+SYNERGY Meteor Punch: impacts=1, VFX emissions=5, cooldown=9.24
+PASS Equip Inferno Orbit
+PASS Inferno Orbit empty-area CONTROL costs no cooldown.
+PASS Inferno Orbit activation accepted.
+PASS Inferno Orbit only movable in-budget prop captured; heavy CONTROL excluded.
+PASS Inferno Orbit orbit uses real force displacement.
+PASS Second C-equivalent requests volley, not another paid activation.
+PASS Inferno Orbit completes within bounded duration.
+PASS Inferno Orbit cooldown remains after action.
+PASS Thrown prop restores gravity and receives a real forward launch impulse.
+PASS Heavy prop CONTROL has no launch impulse.
+PASS Inferno projectile collision causes a real fiery blast.
+PASS Orbit cancellation setup accepted.
+PASS Orbit cancellation setup actually holds body.
+PASS Death CONTROL cancels orbit and restores held-body gravity.
+PASS Inferno Orbit emits bounded pooled effects.
+SYNERGY Inferno Orbit: impacts=1, VFX emissions=5, cooldown=9.99
+PASS Equip Glacier Fist
+PASS Glacier Fist activation accepted.
+PASS Glacier buff leaves normal melee available.
+PASS Glacier empowered punch uses existing charge gate.
+PASS Glacier impact raises force and applies freeze.
+PASS Glacier Fist completes within bounded duration.
+PASS Glacier Fist cooldown remains after action.
+PASS Glacier Fist emits bounded pooled effects.
+SYNERGY Glacier Fist: impacts=0, VFX emissions=5, cooldown=9.67
+PASS Equip Cryo Crush
+PASS Cryo Crush no-enemy CONTROL.
+PASS Cryo Crush activation accepted.
+PASS Cryo Crush completes within bounded duration.
+PASS Cryo Crush cooldown remains after action.
+PASS Cryo Crush physically lifts enemy and hits ground; peak=156.01
+PASS Cryo Crush emits bounded pooled effects.
+SYNERGY Cryo Crush: impacts=1, VFX emissions=8, cooldown=8.48
+PASS Equip Meteor Slam
+PASS Meteor Slam no-target CONTROL.
+PASS Meteor Slam activation accepted.
+PASS Meteor Slam completes within bounded duration.
+PASS Meteor Slam cooldown remains after action.
+PASS Meteor Slam lifts a prop and produces collision-driven shockwave.
+PASS Meteor Slam emits bounded pooled effects.
+SYNERGY Meteor Slam: impacts=1, VFX emissions=9, cooldown=8.56
+BENCH population civilians=26, cops=14; 1280x720 single camera.
+MEASURED Forge idle phase=0: FPS=49.16, draws=1118.9, pool=6.
+MEASURED Forge FX stress phase=1: FPS=48.86, draws=1126.8, pool=6.
+MEASURED Forge FX stress phase=2: FPS=49.29, draws=1126.7, pool=6.
+MEASURED Forge idle phase=3: FPS=49.73, draws=1118.1, pool=6.
+FORGE COST paired means: idle=49.44 FPS, repeated pooled FX=49.08 FPS, difference=0.37 FPS, frame delta=0.152ms. Stress emits every 100ms; not a standalone GPU-time measurement.
+LIMIT: no human feel test; real gameplay entry points, not hardware key injection. Free Play/Endless Fight remain disabled existing definitions.
+```
+
+Separate-process reload:
+
+```text
+PASS Three selectable data-defined heroes.
+PASS SECOND PROCESS restores exact hero, pair and suit roles.
+PASS Fresh save CONTROL starts level 1 / default pair.
+```
+
+
 ## Pooled audio — 2026-09-22 (merged to main 2026-09-22)
 
 ### Delivery

@@ -29,13 +29,13 @@ public sealed class HumanoidPresentation : MonoBehaviour
     WorldSession world;PowerUser powers;Vector3 neutralHipsPosition;
     float actionUntil, phase, lean, actionYaw;bool dead, punchMarkerPending, kickMarkerPending, deferredHit;
     readonly Dictionary<Transform,Quaternion> neutral=new Dictionary<Transform,Quaternion>();
-    public static HumanoidPresentation Create(GameObject owner,float height,SuperHeroController hero=null,CityNpc npc=null)
+    public static HumanoidPresentation Create(GameObject owner,float height,SuperHeroController hero=null,CityNpc npc=null,HeroDefinition definition=null)
     {
-        var tuning=Resources.Load<HumanoidAnimationTuning>("HumanoidAnimationTuning");
+        var tuning=definition!=null&&definition.Animation!=null?definition.Animation:Resources.Load<HumanoidAnimationTuning>("HumanoidAnimationTuning");
         if(tuning==null||tuning.Model==null||tuning.Controller==null)throw new System.InvalidOperationException("Run Overpowered > Animation > Build shared humanoid presentation first.");
         var squash=new GameObject("Landing squash (visual only)").transform;squash.SetParent(owner.transform,false);
         var pose=new GameObject("Humanoid pose (visual only)").transform;pose.SetParent(squash,false);
-        var model=Instantiate(tuning.Model,pose);model.name="Shared Mixamo humanoid";
+        var model=Instantiate(definition!=null&&definition.CharacterPrefab!=null?definition.CharacterPrefab:tuning.Model,pose);model.name=definition!=null?definition.DisplayName:"Shared Mixamo humanoid";
         var animator=model.GetComponent<Animator>();animator.enabled=false;
         var renderers=model.GetComponentsInChildren<SkinnedMeshRenderer>();
         // Skin bounds are conservative animation envelopes, not actual character proportions.
@@ -49,9 +49,11 @@ public sealed class HumanoidPresentation : MonoBehaviour
         }
         float scale=height/bounds.size.y;model.transform.localScale*=scale;
         model.transform.localPosition-=Vector3.up*(bounds.min.y-pose.position.y)*scale;
+        if(definition!=null)model.transform.localScale=Vector3.Scale(model.transform.localScale,definition.VisualScale);
         foreach(var r in renderers)
         {
-            var mats=r.sharedMaterials;for(int i=0;i<mats.Length;i++)mats[i]=CityMaterials.Get(r.name.Contains("Joints")?CityColor.Metal:npc==null?CityColor.Blue:npc.Role==NpcRole.Civilian?CityColor.Amber:npc.Role==NpcRole.Cop?CityColor.Teal:CityColor.Red);
+            var loadout=definition!=null?WorldSession.Instance.Progression.Data.Loadout:null;
+            var mats=r.sharedMaterials;for(int i=0;i<mats.Length;i++)mats[i]=CityMaterials.Get(loadout!=null?(r.name.Contains("Joints")?loadout.Secondary:loadout.Primary):r.name.Contains("Joints")?CityColor.Metal:npc==null?CityColor.Blue:npc.Role==NpcRole.Civilian?CityColor.Amber:npc.Role==NpcRole.Cop?CityColor.Teal:CityColor.Red);
             r.sharedMaterials=mats;r.updateWhenOffscreen=true;
         }
         var presentation=owner.AddComponent<HumanoidPresentation>();presentation.hero=hero;presentation.npc=npc;presentation.Tuning=tuning;presentation.Animator=animator;presentation.PoseRoot=pose;

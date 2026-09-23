@@ -38,6 +38,25 @@ public sealed class SuperHeroController : MonoBehaviour
     public int LastKickImpactFrame { get; private set; }=-1;
     float backflipUntil=-1f, backflipReadyAt=-1f;
     bool hurricaneKickPending;
+    float basicReadyAt;
+    public bool AbilityDriving=>powers?.SynergyRunner!=null&&powers.SynergyRunner.DrivesMotion;
+    public CollisionFlags MoveAbility(Vector3 velocity,bool flying)
+    {
+        verticalVelocity=0;
+        bool grounded=controller.isGrounded;
+        var flags=controller.Move(velocity*Time.deltaTime);
+        PresentationState=new HeroPresentationState(transform.InverseTransformDirection(controller.velocity),controller.isGrounded,flying&&!controller.isGrounded);
+        if(!grounded&&(flags&CollisionFlags.Below)!=0&&velocity.y<0)Landed?.Invoke(-velocity.y);
+        return flags;
+    }
+    PowerStats BasicStats()=>new PowerStats{Damage=powers.Forge.BasicDamage,Force=powers.Forge.BasicForce,Radius=powers.Forge.BasicRadius};
+    bool BasicMelee(bool kick)
+    {
+        if(Time.time<basicReadyAt||powers.SynergyRunner.Busy)return false;
+        basicReadyAt=Time.time+powers.Forge.BasicCooldown;
+        if(kick)PerformHurricaneKick(BasicStats());else PerformPunch(powers.Strength.Definition,BasicStats());
+        return true;
+    }
 
     void Awake() { controller = GetComponent<CharacterController>(); view = Camera.main; airbornePeakHeight = transform.position.y; }
     public void Initialize(PowerUser user, MovementSettings settings) { powers = user; movement = settings; }
@@ -48,6 +67,7 @@ public sealed class SuperHeroController : MonoBehaviour
         if (view == null) view = Camera.main;
         if (view == null) return;
         powers.Tick(Time.deltaTime, controller.isGrounded);
+        if(AbilityDriving)return;
         bool acceptsInput = !WorldSession.Instance.MenuOpen && !WorldSession.Instance.PlayerDead;
         Vector3 forward = Vector3.Scale(view.transform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 right = Vector3.Scale(view.transform.right, new Vector3(1,0,1)).normalized;
@@ -85,6 +105,7 @@ public sealed class SuperHeroController : MonoBehaviour
     public void DebugSimulateGround(float seconds) { powers.Tick(seconds, true); }
     public bool TryPunch()
     {
+        if(powers.Forge!=null&&!powers.IsEquipped(powers.Strength.Definition))return BasicMelee(false);
         bool fired = powers.Use(powers.Strength);
         if (!fired) LastPunchResult = powers.Message;
         return fired;
@@ -98,6 +119,7 @@ public sealed class SuperHeroController : MonoBehaviour
         if(PunchWindupSeconds>0)StartCoroutine(PunchAfterWindup(definition,stats,PunchWindupSeconds));
         else ApplyPunch(definition,stats);
     }
+    public void PresentPunch(){PunchStarted?.Invoke();}
     System.Collections.IEnumerator PunchAfterWindup(PowerDefinition definition,PowerStats stats,float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -105,6 +127,7 @@ public sealed class SuperHeroController : MonoBehaviour
     }
     void ApplyPunch(PowerDefinition definition,PowerStats stats)
     {
+        if(powers.SynergyRunner!=null)stats=powers.SynergyRunner.ModifyMelee(stats,transform.position+Vector3.up*definition.OriginHeight+transform.forward*definition.OriginOffset);
         LastForce = stats.Force;
         LastAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * definition.OriginHeight + transform.forward * definition.OriginOffset,
             stats.Radius, stats.Force, stats.Damage, definition.UpwardForce);
@@ -115,6 +138,7 @@ public sealed class SuperHeroController : MonoBehaviour
     // gravity arc. Repositioning only: no invincibility window, i-frames or dodge state is added.
     public bool TryBackflip()
     {
+        if(powers?.SynergyRunner!=null&&powers.SynergyRunner.Busy){LastBackflipResult="Blocked: synergy";return false;}
         if (powers == null || controller == null) { LastBackflipResult = "Blocked: no hero"; return false; }
         if (Time.time < backflipUntil) { LastBackflipResult = "Blocked: already flipping"; return false; }
         if (!controller.isGrounded) { LastBackflipResult = "Blocked: airborne"; return false; }
@@ -143,6 +167,7 @@ public sealed class SuperHeroController : MonoBehaviour
     public bool TryHurricaneKick()
     {
         if (powers == null || powers.Strength == null) { LastKickResult = "Power locked"; return false; }
+        if(powers.Forge!=null&&!powers.IsEquipped(powers.Strength.Definition))return BasicMelee(true);
         hurricaneKickPending = true;
         bool accepted = powers.Use(powers.Strength);
         // PerformPunch consumes the flag synchronously when the gesture is actually dispatched.
@@ -164,6 +189,8 @@ public sealed class SuperHeroController : MonoBehaviour
     }
     void ApplyHurricaneKick(PowerStats stats)
     {
+        stats.Radius=HeroAbilityTuning.KickRadius;
+        if(powers.SynergyRunner!=null)stats=powers.SynergyRunner.ModifyMelee(stats,transform.position+Vector3.up*HeroAbilityTuning.KickOriginHeight+transform.forward*HeroAbilityTuning.KickOriginOffset);
         LastKickForce = stats.Force * HeroAbilityTuning.KickForceMultiplier;
         LastKickAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * HeroAbilityTuning.KickOriginHeight + transform.forward * HeroAbilityTuning.KickOriginOffset,
             HeroAbilityTuning.KickRadius, LastKickForce, stats.Damage * HeroAbilityTuning.KickDamageMultiplier, HeroAbilityTuning.KickUpwardForce);

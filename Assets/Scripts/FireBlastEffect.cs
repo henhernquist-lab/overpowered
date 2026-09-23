@@ -24,7 +24,7 @@ public sealed class PowerProjectile : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         if (exploded) return; exploded = true;
-        CombatImpact.Blast(owner, transform.position, stats.Radius, stats.Force, stats.Damage, definition.UpwardForce);
+        CombatImpact.Blast(owner, transform.position, stats.Radius, stats.Force, stats.Damage, definition.UpwardForce,stats.Duration);
         Destroy(gameObject);
     }
 }

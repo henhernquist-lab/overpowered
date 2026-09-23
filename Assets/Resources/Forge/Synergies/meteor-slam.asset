@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6439bcadf27604138888fd7ef6af365c, type: 3}
+  m_Name: meteor-slam
+  m_EditorClassIdentifier: Assembly-CSharp::PowerSynergyDefinition
+  Id: meteor-slam
+  DisplayName: Meteor Slam
+  Description: Lift an enemy or prop. Slam it down with a shockwave.
+  PowerA: {fileID: 11400000, guid: cf8bf79c81570416f835a3043495579d, type: 2}
+  PowerB: {fileID: 11400000, guid: 8dbf8910c4e3b45fda1e445661b0290c, type: 2}
+  Icon: 6
+  Effect: {fileID: 11400000, guid: 43099469611214515b70ed8df466f063, type: 2}
+  Cooldown: 10
+  Duration: 3
+  Damage: 50
+  Force: 2800
+  Radius: 7
+  Range: 24
+  LiftSpeed: 14
+  LiftSeconds: 1.2
+  DiveSpeed: 42
+  FreezeSeconds: 2
+  MaxMass: 500
+  OrbitRadius: 6
+  Spring: 35
+  Damping: 10
+  LaunchInterval: 0.15
+  BonusMultiplier: 1.7
+  MeleeMultiplier: 1.65
+  BurnSeconds: 0
+  MaxTargets: 4
+  Primary: 9
+  Secondary: 2

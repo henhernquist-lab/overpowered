@@ -15,6 +15,8 @@ public sealed class ModeScreens : MonoBehaviour
     public readonly List<Button> UpgradeButtons=new List<Button>();
     public Button ReplayButton {get;private set;}
     public Button HomeButton {get;private set;}
+    public Button ForgeButton {get;private set;}
+    public HeroForgeScreen ForgeScreen {get;private set;}
     public Label Headline {get;private set;}
     public float DisplayedXpFraction {get;private set;}
     public int DisplayedLevel {get;private set;}
@@ -90,6 +92,14 @@ public sealed class ModeScreens : MonoBehaviour
         {
             var button=new Button(()=>Launch(mode)){name="mode-"+mode.Id};ResetButton(button);button.style.width=172;button.style.height=64;button.style.marginLeft=12;button.style.backgroundColor=Alpha(C(CityColor.UiPurple),.55f);Round(button,9);
             button.Add(Text(mode.DisplayName.ToUpperInvariant(),12,C(CityColor.UiMuted),true));button.Add(Text("COMING SOON",10,C(CityColor.UiMuted)));button.SetEnabled(false);strip.Add(button);ModeButtons.Add(mode.Id,button);
+        }
+        if(Resources.Load<ForgeCatalog>("ForgeCatalog")!=null)
+        {
+            ForgeButton=ActionButton("HERO FORGE / SELECT HERO",()=>{
+                if(ForgeScreen==null){ForgeScreen=gameObject.AddComponent<HeroForgeScreen>();ForgeScreen.Initialize(this);}
+                else ForgeScreen.Open();
+            },C(CityColor.HeroAccent));
+            ForgeButton.name="hero-forge-open";Place(ForgeButton,64,7,30,7);Root.Add(ForgeButton);
         }
     }
     Button ModeCard(GameModeDefinition mode)

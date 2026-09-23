@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6439bcadf27604138888fd7ef6af365c, type: 3}
+  m_Name: sonic-slam
+  m_EditorClassIdentifier: Assembly-CSharp::PowerSynergyDefinition
+  Id: sonic-slam
+  DisplayName: Sonic Slam
+  Description: Rise. Drop. Send the street flying.
+  PowerA: {fileID: 11400000, guid: cf2bcb051324544df9997cb5bf016c10, type: 2}
+  PowerB: {fileID: 11400000, guid: cf8bf79c81570416f835a3043495579d, type: 2}
+  Icon: 6
+  Effect: {fileID: 11400000, guid: d74608e208e9140038a933788a98ff10, type: 2}
+  Cooldown: 10
+  Duration: 3
+  Damage: 40
+  Force: 2600
+  Radius: 7
+  Range: 24
+  LiftSpeed: 14
+  LiftSeconds: 0.3
+  DiveSpeed: 42
+  FreezeSeconds: 2
+  MaxMass: 500
+  OrbitRadius: 2.8
+  Spring: 35
+  Damping: 10
+  LaunchInterval: 0.15
+  BonusMultiplier: 1.7
+  MeleeMultiplier: 1.65
+  MaxTargets: 4
+  Primary: 15
+  Secondary: 2

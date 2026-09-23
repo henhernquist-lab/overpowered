@@ -14,11 +14,11 @@ public static class PrototypeBootstrap
         hero.transform.position = city.Spawn + Vector3.up * tuning.Movement.Height;
         CharacterController cc = hero.AddComponent<CharacterController>(); cc.height = tuning.Movement.Height; cc.radius = tuning.Movement.Radius; cc.center = Vector3.up * cc.height * .5f;
         SuperHeroController controller = hero.AddComponent<SuperHeroController>();
-        HumanoidPresentation.Create(hero,cc.height,controller);
         Camera camera = GameCamera.Ensure(hero.scene,true);
         var follow=camera.GetComponent<ThirdPersonCamera>() ?? camera.gameObject.AddComponent<ThirdPersonCamera>();
         follow.target=hero.transform;camera.fieldOfView=tuning.Camera.FieldOfView;
         new GameObject("World Session").AddComponent<WorldSession>().Initialize(tuning, city, controller);
+        HumanoidPresentation.Create(hero,cc.height,controller,null,WorldSession.Instance.Progression.SelectedHero);
         var sun = new GameObject("Sun").AddComponent<Light>(); sun.type = LightType.Directional; sun.intensity = 1.2f; sun.transform.rotation = Quaternion.Euler(45,-35,0);
         RenderSettings.ambientLight = new Color(.45f,.5f,.6f);
         if (!Application.isBatchMode) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; }
