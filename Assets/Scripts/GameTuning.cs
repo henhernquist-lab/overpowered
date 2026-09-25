@@ -78,4 +78,8 @@ public sealed class GameTuning : ScriptableObject
     public float Sensitivity = 3.5f, Pitch = 16f, MinimumPitch = -10f, MaximumPitch = 65f, LookHeight = 1.05f;
     public Vector3 Offset = new Vector3(0,2.6f,-6.5f);
     public float CollisionRadius = .2f, CollisionInset = .1f, FieldOfView = 65f;
+    public KeyCode ViewToggle = KeyCode.B;
+    public float EyeHeight = 1.62f, FirstPersonNearClip = .03f, EyeCollisionRadius = .15f;
+    public float FirstPersonMinimumPitch = -85f, FirstPersonMaximumPitch = 85f;
+    public float FlightFovIncrease = 5f, FlightFovSpeed = 8f, FlightFovResponse = 5f;
 }

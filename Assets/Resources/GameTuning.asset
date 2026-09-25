@@ -146,3 +146,12 @@ MonoBehaviour:
     CollisionRadius: 0.2
     CollisionInset: 0.1
     FieldOfView: 65
+    ViewToggle: 98
+    EyeHeight: 1.62
+    FirstPersonNearClip: 0.03
+    EyeCollisionRadius: 0.15
+    FirstPersonMinimumPitch: -85
+    FirstPersonMaximumPitch: 85
+    FlightFovIncrease: 5
+    FlightFovSpeed: 8
+    FlightFovResponse: 5

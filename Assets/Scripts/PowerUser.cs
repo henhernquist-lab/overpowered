@@ -20,7 +20,15 @@ public sealed class PowerUser : MonoBehaviour
     public HeroDefinition HeroDefinition {get;private set;}
     public SynergyRunner SynergyRunner {get;private set;}
     public bool IsEquipped(PowerDefinition definition)=>definition!=null&&(Forge==null||definition==EquippedA||definition==EquippedB);
-    public Vector3 AimOrigin => transform.position + Vector3.up * (Selected?.Definition.OriginHeight ?? 1f);
+    public Vector3 AimOrigin
+    {
+        get
+        {
+            var camera=Camera.main;var rig=camera!=null?camera.GetComponent<ThirdPersonCamera>():null;
+            return rig!=null&&rig.isActiveAndEnabled&&rig.FirstPerson?camera.transform.position:
+                transform.position+Vector3.up*(Selected?.Definition.OriginHeight??1f);
+        }
+    }
     public Vector3 AimDirection
     {
         get
@@ -32,7 +40,7 @@ public sealed class PowerUser : MonoBehaviour
             float distance = Selected == null ? Strength.Definition.Range : Stats(Selected).Range;
             Vector3 target = ray.GetPoint(distance);
             foreach (var hit in Physics.RaycastAll(ray, distance))
-                if (hit.collider.transform.root != transform && hit.distance < distance) { distance = hit.distance; target = hit.point; }
+                if (!hit.collider.isTrigger && hit.collider.transform.root != transform && hit.distance < distance) { distance = hit.distance; target = hit.point; }
             return (target - AimOrigin).normalized;
         }
     }
@@ -104,7 +112,7 @@ public sealed class PowerUser : MonoBehaviour
     {
         result = default; float closest = range;
         foreach (var hit in Physics.RaycastAll(AimOrigin, AimDirection, range))
-            if (hit.collider.transform.root != transform && hit.distance < closest) { result = hit; closest = hit.distance; }
+            if (!hit.collider.isTrigger && hit.collider.transform.root != transform && hit.distance < closest) { result = hit; closest = hit.distance; }
         return result.collider != null;
     }
     public void Grab(Rigidbody body, PowerRuntime power)

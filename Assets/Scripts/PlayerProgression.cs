@@ -17,6 +17,7 @@ public enum PlayerSide { Hero, Villain }
     public string LastModeId;
     public List<ModeRecord> ModeRecords = new List<ModeRecord>();
     public HeroLoadout Loadout;
+    public bool FirstPerson;
 }
 public sealed class PlayerProgression : MonoBehaviour
 {
@@ -38,6 +39,7 @@ public sealed class PlayerProgression : MonoBehaviour
     }
     public int Tier(PowerDefinition definition) => Data.Powers.Find(p => p.Id == definition.Id)?.Tier ?? -1;
     public bool Owns(PowerDefinition definition) => Tier(definition) >= 0;
+    public void SetFirstPerson(bool enabled) { Data.FirstPerson = enabled; Save(); }
     public HeroDefinition SelectedHero => Resources.Load<ForgeCatalog>("ForgeCatalog")?.Hero(Data.Loadout?.HeroId);
     public PowerDefinition EquippedA => Array.Find(definitions,p=>p.Id==Data.Loadout?.PowerA);
     public PowerDefinition EquippedB => Array.Find(definitions,p=>p.Id==Data.Loadout?.PowerB);

@@ -20,6 +20,7 @@ A Unity 6000.6 C# superhero prototype: a stylized compact city, physical combat,
 Open this folder with Unity 6000.6.0f1, open `Assets/Scenes/Home.unity`, and press Play. Choose Hero Mode or Villain Mode. Home is first in Build Settings (`Home`, `Prototype`, `Results`, in that order); pressing Play directly in Prototype also redirects to Home. The district, NavMesh, player, and NPCs generate when a mode is selected. Free Play and Endless Fight are visible but disabled (COMING SOON; their `Playable` flag is false and selection is rejected).
 
 - WASD move, Left Shift run, Space jump.
+- **B toggles first-/third-person**, saved with progression. First-person hides the player's model (shadow retained), uses the same crosshair and powers, and adds a small forward-flight FOV increase. Tune the toggle, eye height, near clip, pitch limits and flight FOV under `GameTuning.asset > Camera`.
 - Hold F while airborne to fly; Space ascends, release directional input to hover. Fuel recharges on the ground.
 - E always punches. Left mouse uses the selected power. Number keys select the powers listed in the power menu.
 - **Q backflips:** a short backward dash/hop with its own 2.5 s cooldown, grounded only. It is repositioning only — there are no invincibility frames and no separate dodge state.
