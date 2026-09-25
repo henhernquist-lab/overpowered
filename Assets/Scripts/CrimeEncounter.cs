@@ -34,6 +34,22 @@ public sealed class CrimeEncounter : MonoBehaviour
     public bool Finished { get; private set; }
     public string Objective => World.Mode.Definition.Rules.Objective(this);
     public string InteractionHint { get; private set; }="Move barriers with powers, then hold R near people or supplies.";
+    /// Progress (0-1) of the R hold currently in progress; 0 when nothing is being held (read-only, for the HUD).
+    public float HoldFraction => Definition==null ? 0f : Mathf.Clamp01(hold/Mathf.Max(.0001f,Definition.HoldSeconds));
+    /// Read-only mirror of Interact()'s candidate rules: would holding R at this point act on something right now?
+    public bool InteractableNear(Vector3 point)
+    {
+        if(Finished||World==null||World.Mode==null||World.Mode.Ended) return false;
+        float radius=Definition.InteractRadius; bool hero=World.Mode.Definition.Side==PlayerSide.Hero;
+        if(hero)
+        {
+            foreach(var a in Civilians) if(!a.Saved&&a.Npc!=null&&!a.Npc.Dead&&BarrierCleared(a)&&Vector3.Distance(point,a.Npc.transform.position)<radius) return true;
+            foreach(var a in Robbers) if(!a.Captured&&!a.Escaped&&a.Npc!=null&&!a.Npc.Dead&&Vector3.Distance(point,a.Npc.transform.position)<radius) return true;
+        }
+        foreach(var n in Hazards) if(!n.Done&&n.Visual!=null&&Vector3.Distance(point,n.Visual.transform.position)<radius) return true;
+        if(!hero) foreach(var n in Loot) if(!n.Done&&n.Visual!=null&&Vector3.Distance(point,n.Visual.transform.position)<radius) return true;
+        return false;
+    }
     CrimeEvent crime;
     object interaction;
     float hold, nextSuppression;

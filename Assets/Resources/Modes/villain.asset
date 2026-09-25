@@ -44,3 +44,7 @@ MonoBehaviour:
   SuccessXp: 60
   SuccessHeat: 1
   FailureHeat: 0.75
+  BriefingGoal: Pull off heists across the city.
+  BriefingWin: Complete 5 heists within 15 minutes.
+  BriefingLose: 3 failed heists or 3 knockouts.
+  BriefingSeconds: 7

@@ -43,3 +43,7 @@ MonoBehaviour:
   ShowResults: 0
   Results: 0
   Director: {fileID: 0}
+  BriefingGoal: No rules. Go wild.
+  BriefingWin: 
+  BriefingLose: 
+  BriefingSeconds: 7

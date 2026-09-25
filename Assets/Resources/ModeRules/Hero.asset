@@ -12,3 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b64b140106b82487aaf60dc279765bb1, type: 3}
   m_Name: Hero
   m_EditorClassIdentifier: Assembly-CSharp::HeroModeRules
+  Tasks:
+  - Task: 0
+    Label: STOP THE ROBBERS
+  - Task: 1
+    Label: RESCUE CIVILIANS
+  - Task: 2
+    Label: PUT OUT THE FIRES

@@ -44,3 +44,7 @@ MonoBehaviour:
   SuccessXp: 60
   SuccessHeat: -1
   FailureHeat: 0.75
+  BriefingGoal: Protect the city from crime.
+  BriefingWin: Resolve 5 crimes within 15 minutes.
+  BriefingLose: 3 failed crimes or 3 knockouts.
+  BriefingSeconds: 7

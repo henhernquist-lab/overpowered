@@ -12,3 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7c90f63aa43f432fb1788df186be1b0, type: 3}
   m_Name: Villain
   m_EditorClassIdentifier: Assembly-CSharp::VillainModeRules
+  Tasks:
+  - Task: 3
+    Label: GRAB THE LOOT
+  - Task: 4
+    Label: WRECK PROPS
+  - Task: 2
+    Label: SABOTAGE THE SITE
+  - Task: 5
+    Label: ESCAPE THE SCENE

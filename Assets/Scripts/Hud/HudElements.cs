@@ -80,6 +80,12 @@ public sealed class HudCrosshair : VisualElement
 public static class HudBindings
 {
     public const string FlightKey = "F", StrengthKey = "E", FireSelected = "LMB", BasicMelee = "E / RMB";
+    /// Also hardcoded outside the HUD and mirrored here: Jump is the legacy "Jump" button (Space), backflip is Q in
+    /// SuperHeroController.Update, the encounter hold is R in CrimeEncounter.Update.
+    public const string JumpKey = "SPACE", BackflipKey = "Q", InteractKey = "R";
+    /// The melee key the player actually has: Super Strength's E when equipped, else the basic melee on E / RMB.
+    public static string MeleeKey(PowerUser user) => user != null && user.Strength != null && user.IsEquipped(user.Strength.Definition) ? StrengthKey : BasicMelee;
+    public static bool FlightEquipped(PowerUser user) => user != null && user.Flight != null && user.IsEquipped(user.Flight.Definition);
     public static string PowerKey(PowerUser user, PowerRuntime power)
     {
         if (power.Definition.Effect != null && power.Definition.Effect.IsFlight) return FlightKey;
@@ -100,5 +106,36 @@ public static class HudBindings
             case KeyCode.None: return "";
             default: return key.ToString().ToUpperInvariant();
         }
+    }
+}
+
+/// Arrow pointing UP in its own box (rotate the element to aim it): a filled chevron-headed arrow with a dark outline.
+public sealed class HudArrow : VisualElement
+{
+    public Color Fill, Outline;
+    public HudArrow(Color fill, Color outline) { Fill = fill; Outline = outline; pickingMode = PickingMode.Ignore; generateVisualContent += Draw; }
+    public void SetFill(Color fill) { if (fill == Fill) return; Fill = fill; MarkDirtyRepaint(); }
+    void Draw(MeshGenerationContext context)
+    {
+        var p = context.painter2D; float w = contentRect.width, h = contentRect.height; if (w <= 0 || h <= 0) return;
+        Vector2 P(float x, float y) => new Vector2(x * w, y * h);
+        p.BeginPath(); p.MoveTo(P(.5f, .06f)); p.LineTo(P(.94f, .62f)); p.LineTo(P(.64f, .62f)); p.LineTo(P(.64f, .94f)); p.LineTo(P(.36f, .94f)); p.LineTo(P(.36f, .62f)); p.LineTo(P(.06f, .62f)); p.ClosePath();
+        p.fillColor = Fill; p.Fill(); p.strokeColor = Outline; p.lineWidth = Mathf.Max(1.5f, w * .07f); p.lineJoin = LineJoin.Round; p.Stroke();
+    }
+}
+
+/// Waypoint pin: a diamond with a hollow centre, drawn in the mode accent with a dark outline.
+public sealed class HudDiamond : VisualElement
+{
+    public Color Fill, Outline;
+    public HudDiamond(Color fill, Color outline) { Fill = fill; Outline = outline; pickingMode = PickingMode.Ignore; generateVisualContent += Draw; }
+    public void SetFill(Color fill) { if (fill == Fill) return; Fill = fill; MarkDirtyRepaint(); }
+    void Draw(MeshGenerationContext context)
+    {
+        var p = context.painter2D; var c = contentRect.center; float r = Mathf.Min(contentRect.width, contentRect.height) * .5f - 2f; if (r <= 0) return;
+        void Diamond(float radius) { p.BeginPath(); p.MoveTo(c + new Vector2(0, -radius)); p.LineTo(c + new Vector2(radius, 0)); p.LineTo(c + new Vector2(0, radius)); p.LineTo(c + new Vector2(-radius, 0)); p.ClosePath(); }
+        Diamond(r); p.fillColor = Outline; p.Fill();
+        Diamond(r - 2.5f); p.fillColor = Fill; p.Fill();
+        Diamond(r * .38f); p.fillColor = Outline; p.Fill();
     }
 }

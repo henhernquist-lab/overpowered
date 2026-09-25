@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 /// Scaling: ScaleWithScreenSize + Expand around 1600x900, so the whole reference area fits at every aspect ratio.
 /// Every animation uses unscaled time (hit-pause via timeScale must not freeze the HUD).
 [DefaultExecutionOrder(1000)]
-public sealed class GameHud : MonoBehaviour
+public sealed partial class GameHud : MonoBehaviour
 {
     public static readonly Vector2Int ReferenceResolution = new Vector2Int(1600, 900);
     public const float SafeMargin = 28f, CentreZone = .4f;
@@ -76,11 +76,11 @@ public sealed class GameHud : MonoBehaviour
         Root = Document.rootVisualElement; Root.name = "game-hud"; Root.pickingMode = PickingMode.Ignore;
         Root.style.position = Position.Absolute; Root.style.left = Root.style.right = Root.style.top = Root.style.bottom = 0;
         Root.style.unityFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"); Root.style.color = C(CityColor.UiInk);
-        Build();
+        Build(); BuildOverlay();
     }
 
     /// Shows or hides the whole HUD (the FPS A/B uses this to measure the legacy IMGUI-only frame).
-    public void SetShown(bool shown) { enabled = shown; Root.style.display = shown ? DisplayStyle.Flex : DisplayStyle.None; }
+    public void SetShown(bool shown) { enabled = shown; Root.style.display = shown ? DisplayStyle.Flex : DisplayStyle.None; OverlayRoot.style.display = Root.style.display; }
 
     // ------------------------------------------------------------------ construction helpers (ModeScreens style)
     Label Text(string text, int size, Color color, bool bold = true)
@@ -139,17 +139,18 @@ public sealed class GameHud : MonoBehaviour
         TimerRow = Box("timer-row", FlexDirection.Row); TimerRow.style.alignItems = Align.Center; TimerRow.style.marginTop = 4; HeatGroup.Add(TimerRow);
         TimerRow.Add(Text("TIME LEFT", 12, muted)); TimerValue = Text("00:00", 26, ink); TimerValue.name = "timer-value"; TimerValue.style.marginLeft = 10; TimerRow.Add(TimerValue);
 
-        // ---- top-centre: director stats (e.g. Endless waves) and the objective slot (Phase 2 restyles it)
+        // ---- top-centre: director stats (e.g. Endless waves) and the objective line (Phase 2: Hud/GameHudGuidance.cs)
         TopCentre = Box("hud-top-centre"); Absolute(TopCentre); TopCentre.style.left = Length.Percent(50); TopCentre.style.top = SafeMargin;
         TopCentre.style.translate = new Translate(Length.Percent(-50), 0); TopCentre.style.alignItems = Align.Center; Root.Add(TopCentre);
         DirectorGroup = Box("hud-director"); PanelBox(DirectorGroup); Pad(DirectorGroup, 8, 12); DirectorGroup.style.alignItems = Align.Center; TopCentre.Add(DirectorGroup);
         directorStats = Box("director-stats", FlexDirection.Row); DirectorGroup.Add(directorStats);
         directorCaption = Text("", 12, Accent(PlayerSide.Hero)); directorCaption.style.marginTop = 2; DirectorGroup.Add(directorCaption);
-        ObjectiveGroup = Box("hud-objective"); PanelBox(ObjectiveGroup); Pad(ObjectiveGroup, 9, 16); ObjectiveGroup.style.width = 540; ObjectiveGroup.style.marginTop = 8;
-        ObjectiveGroup.style.borderLeftWidth = 4; accentBorders.Add(ObjectiveGroup); TopCentre.Add(ObjectiveGroup);
-        objectiveHeader = Text("", 12, Accent(PlayerSide.Hero)); ObjectiveGroup.Add(objectiveHeader);
-        ObjectiveBody = Text("", 15, ink); ObjectiveBody.name = "objective-body"; ObjectiveBody.style.whiteSpace = WhiteSpace.Normal; ObjectiveBody.style.marginTop = 4; ObjectiveGroup.Add(ObjectiveBody);
-        objectiveMeta = Text("", 12, muted, false); objectiveMeta.style.marginTop = 3; ObjectiveGroup.Add(objectiveMeta);
+        // Phase 2: a short objective LINE ("STOP THE ROBBERS 2/3") under the encounter name, with a "+N MORE TASKS" hint.
+        ObjectiveGroup = Box("hud-objective"); PanelBox(ObjectiveGroup); Pad(ObjectiveGroup, 8, 20); ObjectiveGroup.style.minWidth = 300; ObjectiveGroup.style.maxWidth = 600; ObjectiveGroup.style.marginTop = 8;
+        ObjectiveGroup.style.alignItems = Align.Center; ObjectiveGroup.style.borderBottomWidth = 3; accentBorders.Add(ObjectiveGroup); TopCentre.Add(ObjectiveGroup);
+        objectiveHeader = Text("", 12, Accent(PlayerSide.Hero)); objectiveHeader.name = "objective-header"; ObjectiveGroup.Add(objectiveHeader);
+        ObjectiveBody = Text("", 22, ink); ObjectiveBody.name = "objective-body"; ObjectiveBody.style.whiteSpace = WhiteSpace.Normal; ObjectiveBody.style.maxWidth = 560; ObjectiveBody.style.unityTextAlign = TextAnchor.MiddleCenter; ObjectiveBody.style.marginTop = 2; ObjectiveGroup.Add(ObjectiveBody);
+        objectiveMeta = Text("", 12, muted, false); objectiveMeta.name = "objective-meta"; objectiveMeta.style.marginTop = 2; ObjectiveGroup.Add(objectiveMeta);
 
         // ---- bottom-left: health + energy
         VitalsGroup = Box("hud-vitals"); Absolute(VitalsGroup); VitalsGroup.style.left = SafeMargin; VitalsGroup.style.bottom = SafeMargin; VitalsGroup.style.width = 330;
@@ -298,8 +299,9 @@ public sealed class GameHud : MonoBehaviour
 
     void Bind(WorldSession w)
     {
-        if (boundWorld == w) return;
+        if (boundWorld == w) { if (w != null) BindHero(w.Hero); return; }
         if (boundWorld != null) boundWorld.PlayerRespawned -= Respawned;
+        BindGuidance(boundWorld, w);
         boundWorld = w; if (w != null) w.PlayerRespawned += Respawned;
     }
     void Respawned() => ShowMessage("RESPAWNED  ·  PROGRESSION KEPT");
@@ -316,7 +318,7 @@ public sealed class GameHud : MonoBehaviour
     void Refresh()
     {
         var w = WorldSession.Instance; Bind(w);
-        if (w == null || w.Tuning == null || w.Powers == null || (w.Mode != null && w.Mode.Ended)) { Show(Root, false); return; }
+        if (w == null || w.Tuning == null || w.Powers == null || (w.Mode != null && w.Mode.Ended)) { Show(Root, false); HideGuidance(); if (w != null && w.Mode != null && w.Mode.Ended) DismissBriefing("session ended"); return; }
         Show(Root, true);
         var definition = w.Mode != null ? w.Mode.Definition : null;
         var hud = definition != null ? definition.Hud : ModeHud.All;
@@ -325,7 +327,7 @@ public sealed class GameHud : MonoBehaviour
         if (shownSide != side)
         {
             shownSide = side; var accent = Accent(side);
-            foreach (var v in accentBorders) { v.style.borderLeftColor = accent; if (v == levelBadge) { Border(v, accent, 2); v.style.backgroundColor = Alpha(accent, .16f); } }
+            foreach (var v in accentBorders) { if (v == ObjectiveGroup) v.style.borderBottomColor = accent; else v.style.borderLeftColor = accent; if (v == levelBadge) { Border(v, accent, 2); v.style.backgroundColor = Alpha(accent, .16f); } }
             XpFill.style.backgroundColor = accent; pointsLabel.style.color = accent; directorCaption.style.color = accent; objectiveHeader.style.color = accent;
         }
 
@@ -363,7 +365,9 @@ public sealed class GameHud : MonoBehaviour
         Show(ObjectiveGroup, objectives);
         ObjectiveGroup.style.marginTop = director != null ? 8 : 0;
         Show(TopCentre, director != null || objectives);
-        if (objectives && now >= nextObjective) { nextObjective = now + .25f; UpdateObjective(w); }
+        if (objectives) UpdateObjectiveState(w, now);
+        if (objectives && now >= nextObjective) { nextObjective = now + .25f; UpdateObjectiveLine(w, now); }
+        if (objectives) PulseObjective(now);
 
         // Vitals (Health)
         Show(VitalsGroup, (hud & ModeHud.Health) != 0);
@@ -382,14 +386,20 @@ public sealed class GameHud : MonoBehaviour
         if (powers) foreach (var slot in Slots) UpdateSlot(slot, user);
 
         // Message line: player-relevant WorldSession messages (side switch, waves, encounter results), respawn, save errors.
-        if (w.Message != lastMessage) { lastMessage = w.Message; ShowMessage(w.Message); }
+        // The session-start message is the mode Description; when the mode has a briefing card, the card replaces it.
+        if (w.Message != lastMessage) { lastMessage = w.Message; if (!(definition != null && definition.HasBriefing && w.Message == definition.Description)) ShowMessage(w.Message); }
         float age = now - messageAt;
-        Show(MessageLine, age < MessageSeconds + MessageFade && !string.IsNullOrEmpty(MessageLine.text));
+        bool message = age < MessageSeconds + MessageFade && !string.IsNullOrEmpty(MessageLine.text);
+        Show(MessageLine, message);
         MessageLine.style.opacity = Mathf.Clamp01(1f - (age - MessageSeconds) / MessageFade);
         if (progress.LastError != lastError) { lastError = progress.LastError; ErrorLine.text = lastError == null ? "" : "SAVE ERROR: " + lastError; }
         Show(ErrorLine, lastError != null);
+        // An empty bottom-centre stack is hidden (e.g. Powers flag off and no message, now that a briefing card
+        // replaces the session-start Description message).
+        Show(BottomStack, powers || message || lastError != null);
 
         Show(Crosshair, !w.PlayerDead && !w.MenuOpen);
+        UpdateGuidance(w, definition, objectives, now);
     }
 
     void UpdateStars(WorldSession w, float now)
@@ -448,29 +458,7 @@ public sealed class GameHud : MonoBehaviour
         Show(directorCaption, shown.Length > 0);
     }
 
-    void UpdateObjective(WorldSession w)
-    {
-        var s = w.Mode; var d = s.Definition;
-        string header = d.DisplayName.ToUpperInvariant() + (d.SuccessGoal > 0 ? $"  ·  {s.Successes}/{d.SuccessGoal} DONE" : "") + (d.FailureLimit > 0 ? $"  ·  {s.Failures}/{d.FailureLimit} FAILED" : "");
-        CrimeEncounter nearest = null; float best = float.MaxValue;
-        foreach (var e in w.Crimes)
-            if (e != null && e.Encounter != null && !e.Resolved)
-            { float distance = Vector3.Distance(w.Hero.transform.position, e.Encounter.Site); if (distance < best) { best = distance; nearest = e.Encounter; } }
-        string body, meta;
-        if (nearest != null)
-        {
-            Vector3 direction = Quaternion.Inverse(w.Hero.transform.rotation) * (nearest.Site - w.Hero.transform.position);
-            body = nearest.Definition.DisplayName.ToUpperInvariant() + ": " + nearest.Objective;
-            meta = $"{best:F0} m {(direction.z >= 0 ? "ahead" : "behind")} / {(direction.x >= 0 ? "right" : "left")}  ·  {Mathf.Max(0, nearest.Definition.Deadline - nearest.Elapsed):F0}s left";
-        }
-        else { body = s.Feedback ?? ""; meta = ""; }
-        if (objectiveHeader.text != header) objectiveHeader.text = header;
-        if (ObjectiveBody.text != body) ObjectiveBody.text = body;
-        if (objectiveMeta.text != meta) objectiveMeta.text = meta;
-        Show(objectiveMeta, meta.Length > 0);
-    }
-
-    void OnDestroy() { Bind(null); if (Panel != null) Destroy(Panel); }
+    void OnDestroy() { Bind(null); BindHero(null); if (Panel != null) Destroy(Panel); if (OverlayPanel != null) Destroy(OverlayPanel); if (overlayHost != null) Destroy(overlayHost); }
 }
 
 /// One power-bar slot and the values it is currently drawing (verification reads these).

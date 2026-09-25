@@ -1,0 +1,11 @@
+reg-hud | HudVerification.Run | exit 1 | PASS 265 | FAIL System.Exception: control-clone-all-flags-off: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 0.0 %). | sync-diffs        0
+reg-mode | ModeVerification.Run | exit 0 | PASS 79 |  | sync-diffs        0
+reg-mode-reload | ModeVerification.Reload | exit 0 | PASS 2 |  | sync-diffs        0
+reg-modeexp | ModeExpansionVerification.Run | exit 0 | PASS 111 |  | sync-diffs        0
+reg-modeexp-reload | ModeExpansionVerification.Reload | exit 0 | PASS 10 |  | sync-diffs        0
+reg-forge | HeroForgeVerification.Run | exit 0 | PASS 132 |  | sync-diffs        0
+reg-forge-reload | HeroForgeVerification.Reload | exit 0 | PASS 3 |  | sync-diffs        0
+reg-combat | CombatVerification.Run | exit 0 | PASS 170 |  | sync-diffs        0
+reg-menus | MenuPresentationVerification.Run | exit 0 | PASS 42 | PASS Hero loss / no-level-up CONTROL: MISSION FAILED, no reward choices. | sync-diffs        0
+reg-audio | AudioVerification.Run | exit 0 | PASS 126 |  | sync-diffs        0
+DONE

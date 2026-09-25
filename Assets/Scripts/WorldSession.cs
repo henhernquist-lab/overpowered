@@ -21,6 +21,8 @@ public sealed class WorldSession : MonoBehaviour
     public bool PlayerDead => Health<=0;
     public event System.Action<bool> PlayerDamaged;
     public event System.Action PlayerRespawned;
+    /// Raised after a mode encounter has been placed and initialised (HUD alerts listen; spawning is unchanged).
+    public event System.Action<CrimeEncounter> EncounterSpawned;
     public bool MenuOpen;
     public string Message = "Explore rooftops, stop crimes, or press H to switch sides.";
     public int ChaosProgress { get; private set; }
@@ -141,6 +143,7 @@ public sealed class WorldSession : MonoBehaviour
         marker.GetComponent<Collider>().enabled=false; marker.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Fire);
         var crime=marker.AddComponent<CrimeEvent>(); crime.Kind=definition.Kind; Crimes.Add(crime);
         crime.Encounter=marker.AddComponent<CrimeEncounter>(); crime.Encounter.Initialize(this,crime,definition,position);
+        EncounterSpawned?.Invoke(crime.Encounter);
         return crime;
     }
     public void ReconcilePolice()

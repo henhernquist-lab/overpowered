@@ -1,6 +1,46 @@
 # Prototype Status
 
-## HUD Phase 1: real in-game HUD — 2026-09-24 (current)
+## HUD Phase 2: make the goal obvious — 2026-09-25 (current)
+
+Built on Phase 1. Modal and world-anchored guidance lives on a second OVERLAY panel (`Hud/GameHudGuidance.cs`), so the
+Phase 1 centre-clear pixel check keeps its meaning for the persistent HUD.
+- **Mission briefing:** a side-coloured card with GOAL / WIN / LOSE. The text is DATA: new `GameModeDefinition`
+  briefing fields, filled for all five mode assets. Free Play reads "No rules. Go wild." It dismisses on input or
+  after 7 s of real, unpaused time.
+- **Objective line:** "STOP THE ROBBERS 0/3" + "+N MORE TASKS" + time left. Task labels moved from hardcoded C# in
+  Hero/VillainModeRules into a `Tasks` list on the ModeRules assets. `Objective()` is built from the same data.
+- **Waypoint:** tracks the nearest unresolved target of the current task, re-picked every frame, with an edge arrow
+  when off-screen (the bearing is correct behind the camera). It is pushed out of a 72 px crosshair radius, with a
+  count of the remaining targets. The Villain escape target is the nearest point on the escape circle.
+- **Alerts:** an additive `WorldSession.EncounterSpawned` event drives a card that slides in with name, direction
+  arrow and distance. The objective line then updates.
+- **First-time prompts:** move/fly, punch, backflip-dodge and hold-R interact. Each hooks the real action; seen state
+  is an additive `SeenHints` list in the existing save, null-guarded.
+
+**Verification — HudPhase2 460 PASS + separate-process Reload 28, all exit 0** (clone; the user's Editor held the tree):
+- briefing text == asset data, in the side colour
+- CONTROLS: empty briefing → no card; dismissal by timeout
+- objective == rules label + progress; CONTROL: editing the label on a CLONED rules asset changes the line
+- edge-arrow angle equals the independently computed bearing (−139.2° / 86.8°)
+- stopping the targeted robber retargets to the next-nearest in ONE frame, and the count goes 3 → 2
+- CONTROL: 30 s idle → 0 alerts; the alert arrow's bearing asserted
+- prompts: once performed, they don't reappear in a SEPARATE process; CONTROL: a fresh save shows them again; the
+  legacy save loads
+- 3-resolution layout re-check clean
+
+Regressions all exit 0: HUD P1 318 (was 319: an EMPTY bottom stack is now hidden rather than drawn as an invisible box,
+and the P1 runner itself is unchanged), Mode 79 + 2, ModeExpansion 111 + 10, HeroForge 132 + 3, Combat 170, Menus 42,
+Audio 126. Evidence: `Verification/Hud/phase2/`.
+
+**For review/playtest:**
+- The waypoint marker and edge arrow are SMALL (34 px arrow, ~10 px label at 720p) and hard to read over busy scenes.
+- For ~4 s during an alert, the objective line and waypoint still point at the OLD encounter even when the new one is
+  nearer. This follows "alert, then objective updates", but may confuse players.
+- Encounters spawned at session start raise no alert (the briefing covers them).
+- Combat keeps running under the briefing; it doesn't pause.
+- The mode Description message is suppressed when a briefing exists.
+
+## HUD Phase 1: real in-game HUD — 2026-09-24 (previous)
 
 The IMGUI developer panel (~40% of the screen, clipped at fullscreen) is replaced by `GameHud` (UI Toolkit, the menus'
 visual language: palette colours, MenuGlyph icons, rounded 0.9-alpha panels). Edges only: level + XP top-left; Heat

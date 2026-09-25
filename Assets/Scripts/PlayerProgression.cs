@@ -17,6 +17,8 @@ public enum PlayerSide { Hero, Villain }
     public string LastModeId;
     public List<ModeRecord> ModeRecords = new List<ModeRecord>();
     public HeroLoadout Loadout;
+    /// First-time control prompts the player has already acted on (HUD). Saves written before this field existed load with an empty list.
+    public List<string> SeenHints = new List<string>();
 }
 public sealed class PlayerProgression : MonoBehaviour
 {
@@ -102,6 +104,14 @@ public sealed class PlayerProgression : MonoBehaviour
         }
         Save();
     }
+    public bool HintSeen(string id) => Data.SeenHints != null && Data.SeenHints.Contains(id);
+    /// Records that the player performed a prompted action; saves immediately. False if already recorded.
+    public bool MarkHintSeen(string id)
+    {
+        if (string.IsNullOrEmpty(id) || HintSeen(id)) return false;
+        if (Data.SeenHints == null) Data.SeenHints = new List<string>();
+        Data.SeenHints.Add(id); Save(); return true;
+    }
     public ModeRecord Record(string mode) => Data.ModeRecords.Find(r => r.Id == mode);
     public int BestScore(string mode) => Record(mode)?.BestScore ?? 0;
     public bool ClaimRoof(string id)
@@ -134,6 +144,7 @@ public sealed class PlayerProgression : MonoBehaviour
                 if (loaded == null || loaded.Version != 1 || loaded.Level < 1 || loaded.Xp < 0 || loaded.Points < 0 || loaded.Powers == null || loaded.Rooftops == null)
                     throw new InvalidDataException("Invalid progression save.");
                 if (loaded.ModeRecords == null) loaded.ModeRecords = new List<ModeRecord>();
+                if (loaded.SeenHints == null) loaded.SeenHints = new List<string>();
                 Data = loaded;
             }
             catch (Exception e) { LastError = e.Message; Debug.LogWarning("Save unreadable; fresh progression in memory: " + e.Message); }

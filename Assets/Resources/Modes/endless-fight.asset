@@ -43,3 +43,7 @@ MonoBehaviour:
   ShowResults: 1
   Results: 1
   Director: {fileID: 11400000, guid: 2e6e905315e140a9b3adad6bd9aa9826, type: 2}
+  BriefingGoal: Survive endless waves of criminals.
+  BriefingWin: Beat your best wave and score.
+  BriefingLose: One knockout ends the run.
+  BriefingSeconds: 7

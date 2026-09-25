@@ -1,0 +1,135 @@
+PASS Single automatic director, exactly 24 preallocated AudioSources.
+PASS Punch references real clips and a mixer group.
+PASS punch-1 positional mono.
+PASS punch-2 positional mono.
+PASS Footstep references real clips and a mixer group.
+PASS step-1 positional mono.
+PASS step-2 positional mono.
+PASS step-3 positional mono.
+PASS FlightStart references real clips and a mixer group.
+PASS flight-start positional mono.
+PASS FlightLoop references real clips and a mixer group.
+PASS flight-loop positional mono.
+PASS Land references real clips and a mixer group.
+PASS land positional mono.
+PASS Destruction references real clips and a mixer group.
+PASS debris positional mono.
+PASS Fire references real clips and a mixer group.
+PASS fire positional mono.
+PASS Ice references real clips and a mixer group.
+PASS ice positional mono.
+PASS Telekinesis references real clips and a mixer group.
+PASS telekinesis positional mono.
+PASS Gunshot references real clips and a mixer group.
+PASS gunshot positional mono.
+PASS Hit references real clips and a mixer group.
+PASS hit positional mono.
+PASS Death references real clips and a mixer group.
+PASS death positional mono.
+PASS Jump references real clips and a mixer group.
+PASS jump positional mono.
+PASS UiClick references real clips and a mixer group.
+PASS UiHover references real clips and a mixer group.
+PASS CityBed references real clips and a mixer group.
+PASS SirenBed references real clips and a mixer group.
+PASS Music references real clips and a mixer group.
+PASS All 18 cue types / 21 clip assignments populated (no silent placeholders).
+PASS Exposed mixer parameter MasterVolume is valid.
+PASS Exposed mixer parameter MusicVolume is valid.
+PASS Exposed mixer parameter SFXVolume is valid.
+PASS Exposed mixer parameter UIVolume is valid.
+PASS Exposed mixer parameter AmbientVolume is valid.
+PASS Music: actual AudioSource.isPlaying, assigned clip=music, volume=0.072, group=Music, spatialBlend=0.
+PASS Music DSP sample cursor advances (not just bookkeeping).
+PASS Disabled UI CONTROL emits no click and launches nothing.
+PASS UiHover: actual AudioSource.isPlaying, assigned clip=ui-hover, volume=0.160, group=UI, spatialBlend=0.
+PASS UiClick: actual AudioSource.isPlaying, assigned clip=ui-click, volume=0.600, group=UI, spatialBlend=0.
+PASS Director binds shipping world without gameplay/bootstrap edits.
+PASS Undamaged player CONTROL has no Hit source.
+PASS Hit: actual AudioSource.isPlaying, assigned clip=hit, volume=0.518, group=SFX, spatialBlend=1.
+PASS Real paid punch accepted.
+PASS Windup CONTROL: no punch-impact audio at activation.
+PASS Punch: actual AudioSource.isPlaying, assigned clip=punch-2, volume=0.614, group=SFX, spatialBlend=1.
+TIMING accepted=1.6138, actual impact=1.7463, source timeSamples=950; configured windup=125.0ms; audio callback is PunchImpacted.
+PASS Zero-charge punch refused.
+PASS Zero-charge CONTROL plays no punch cue after windup.
+PASS Kick setup CONTROL: shared Strength pool refilled to 3 charges and shared cooldown cleared.
+PASS Real paid Hurricane Kick accepted.
+PASS Kick windup CONTROL: no impact audio at kick activation.
+PASS Kick impact really fired after its windup (HurricaneKickImpacted).
+PASS Punch: actual AudioSource.isPlaying, assigned clip=punch-1, volume=0.648, group=SFX, spatialBlend=1.
+TIMING kick accepted=1.9696, actual impact=2.2762, source timeSamples=974; configured windup=300.0ms; audio callback is HurricaneKickImpacted.
+PASS Zero-charge kick refused ('Blocked: 0 charges').
+PASS Zero-charge kick CONTROL plays no punch cue after the kick windup.
+PASS Shipping Strength costs 0 energy: its rejection CONTROL is charges/cooldown, not energy. Flight uses fuel; Fire/Ice/Telekinesis energy controls follow.
+PASS Damaged-but-unbroken prop CONTROL emits no destruction.
+PASS Destruction: actual AudioSource.isPlaying, assigned clip=debris, volume=0.548, group=SFX, spatialBlend=1.
+PASS Fire Blast owned but NOT equipped (session loadout flight + strength).
+PASS CONTROL: unequipped Fire Blast refused by the equip gate ("Power not equipped"); charges 3->3, energy 100->100.
+PASS CONTROL: refused unequipped Fire Blast plays NO Fire cue.
+PASS Ice owned but NOT equipped (session loadout flight + strength).
+PASS CONTROL: unequipped Ice refused by the equip gate ("Power not equipped"); charges 3->3, energy 100->100.
+PASS CONTROL: refused unequipped Ice plays NO Ice cue.
+PASS Telekinesis owned but NOT equipped (session loadout flight + strength).
+PASS CONTROL: unequipped Telekinesis refused by the equip gate ("Power not equipped"); charges 3->3, energy 100->100.
+PASS CONTROL: refused unequipped Telekinesis plays NO Telekinesis cue.
+PASS Owned Fire Blast + Ice equipped through PlayerProgression.SetLoadout before a fresh session.
+PASS Fresh Hero session requested.
+PASS Director rebinds the fresh session (same 24-source pool); session receives fire + ice.
+PASS Fire Blast paid activation succeeds.
+PASS Fire: actual AudioSource.isPlaying, assigned clip=fire, volume=0.536, group=SFX, spatialBlend=1.
+PASS Fire Blast no-energy activation refused.
+PASS Fire Blast no-energy CONTROL emits no cue.
+PASS Ice paid activation succeeds.
+PASS Ice: actual AudioSource.isPlaying, assigned clip=ice, volume=0.457, group=SFX, spatialBlend=1.
+PASS Ice no-energy activation refused.
+PASS Ice no-energy CONTROL emits no cue.
+PASS Owned Telekinesis + Flight equipped through PlayerProgression.SetLoadout before a fresh session.
+PASS Fresh Hero session requested.
+PASS Director rebinds the fresh session (same 24-source pool); session receives telekinesis + flight.
+PASS Telekinesis paid activation succeeds.
+PASS Telekinesis: actual AudioSource.isPlaying, assigned clip=telekinesis, volume=0.360, group=SFX, spatialBlend=1.
+PASS Telekinesis no-energy activation refused.
+PASS Telekinesis no-energy CONTROL emits no cue.
+PASS Real flight resource consumption accepted.
+PASS FlightStart: actual AudioSource.isPlaying, assigned clip=flight-start, volume=0.281, group=SFX, spatialBlend=1.
+PASS FlightLoop: actual AudioSource.isPlaying, assigned clip=flight-loop, volume=0.160, group=SFX, spatialBlend=1.
+PASS Empty-fuel flight CONTROL refuses consumption.
+PASS Not-flying CONTROL fades/stops flight sources.
+PASS Central distance accumulator plays real footstep sources: speed=6.00, state=Locomotion, health=100.0 (waits for prior cast to finish).
+PASS Stationary CONTROL has no footsteps.
+PASS Land: actual AudioSource.isPlaying, assigned clip=land, volume=0.563, group=SFX, spatialBlend=1.
+PASS Real grounded jump accepted.
+PASS Jump: actual AudioSource.isPlaying, assigned clip=jump, volume=0.196, group=SFX, spatialBlend=1.
+PASS Backflip setup CONTROL: hero is genuinely airborne after the 2m teleport (fresh contact state).
+PASS Backflip setup CONTROL: hero has real ground contact.
+PASS Real grounded backflip accepted.
+PASS Jump: actual AudioSource.isPlaying, assigned clip=jump, volume=0.197, group=SFX, spatialBlend=1.
+PASS Immediate second backflip refused ('Blocked: already flipping').
+PASS Refused backflip CONTROL plays no jump cue.
+PASS Grounded backflip inside its cooldown refused ('Blocked: cooldown', 1.44s left).
+PASS Cooldown-refused backflip CONTROL plays no jump cue.
+PASS Death: actual AudioSource.isPlaying, assigned clip=death, volume=0.404, group=SFX, spatialBlend=1.
+PASS Heat 0 CONTROL: calm bed playing, siren stopped at volume 0.
+PASS SirenBed: actual AudioSource.isPlaying, assigned clip=siren-bed, volume=0.240, group=Ambient, spatialBlend=0.
+PASS Heat 0->5: city 0.3500->0.1925, siren 0.0000->0.2400; intensity=1.0000.
+PASS Concurrency CONTROL: 13 simultaneous requests, exactly 3 actual sources playing (cap 3); pool remains 24.
+PASS Near spatial CONTROL plays.
+PASS Far spatial CONTROL does not consume a voice.
+BENCH population civilians=26, cops=14; single enabled camera rendering 1280x720 (no manual Camera.Render double-render).
+MEASURED audio disabled A: frames=339, seconds=6.003, FPS=56.48, p95=19.170ms, drawCalls=211.0, peak playing sources=0.
+PASS Disabled benchmark CONTROL has zero playing sources.
+MEASURED audio enabled B: frames=325, seconds=6.018, FPS=54.01, p95=19.739ms, drawCalls=211.0, peak playing sources=10.
+PASS Enabled benchmark includes actual beds and simultaneous SFX.
+MEASURED audio enabled B2: frames=319, seconds=6.017, FPS=53.01, p95=20.016ms, drawCalls=210.8, peak playing sources=9.
+PASS Enabled benchmark includes actual beds and simultaneous SFX.
+MEASURED audio disabled A2: frames=331, seconds=6.006, FPS=55.11, p95=19.772ms, drawCalls=205.3, peak playing sources=0.
+PASS Disabled benchmark CONTROL has zero playing sources.
+AUDIO COST paired means: disabled=55.80 FPS, enabled=53.51 FPS, loss=2.29 FPS; frame-time delta=0.766ms. EXCEEDS requested ~2 FPS budget; investigation needed.
+PASS Return Home keeps one pool; no stale world/flight/city audio.
+PASS Gunshot: actual AudioSource.isPlaying, assigned clip=gunshot, volume=0.617, group=SFX, spatialBlend=1.
+PASS Cop gunshot is driven by a real hostile NPC attack/damage event (gunshot source at the releasing cop; health 92).
+PASS Fresh cop spawned for the registration check.
+PASS Freshly spawned NPC is tracked in the SAME call stack as its Spawn (periodic refresh interval is 1.00s, so it cannot have run).
+PASS Mode switch CONTROL retains exactly one director/pool.
+LIMIT: no human has heard or judged the mix. Tests assert real source playback, clips, volumes and routing, not audible-device capture. Flight state is controlled at the public presentation boundary after real fuel checks; no hardware F-key automation. FPS is Editor throughput, not standalone performance.

@@ -1,0 +1,13 @@
+fin-hud | HudVerification.Run | exit 0 | PASS 318 |  | sync-diffs        0
+fin-p2 | HudPhase2Verification.Run | exit 0 | PASS 460 |  | sync-diffs        0
+fin-p2-reload | HudPhase2Verification.Reload | exit 0 | PASS 28 |  | sync-diffs        0
+fin-mode | ModeVerification.Run | exit 0 | PASS 79 |  | sync-diffs        0
+fin-mode-reload | ModeVerification.Reload | exit 0 | PASS 2 |  | sync-diffs        0
+fin-modeexp | ModeExpansionVerification.Run | exit 0 | PASS 111 |  | sync-diffs        0
+fin-modeexp-reload | ModeExpansionVerification.Reload | exit 0 | PASS 10 |  | sync-diffs        0
+fin-forge | HeroForgeVerification.Run | exit 0 | PASS 132 |  | sync-diffs        0
+fin-forge-reload | HeroForgeVerification.Reload | exit 0 | PASS 3 |  | sync-diffs        0
+fin-combat | CombatVerification.Run | exit 0 | PASS 170 |  | sync-diffs        0
+fin-menus | MenuPresentationVerification.Run | exit 0 | PASS 42 | PASS Hero loss / no-level-up CONTROL: MISSION FAILED, no reward choices. | sync-diffs        0
+fin-audio | AudioVerification.Run | exit 0 | PASS 126 |  | sync-diffs        0
+DONE

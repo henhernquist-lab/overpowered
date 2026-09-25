@@ -1,0 +1,33 @@
+Separate process: pid 53713, save /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Verification/Hud/phase2/saves/save-prompts.json
+PASS Reloaded prompt save carries SeenHints: move,punch,dodge,interact
+PASS GameFlow.Select launches hero prompt clone
+PASS hero prompt clone: session runs this definition; GameHud + overlay panel exist.
+PASS Seen MOVE prompt does not reappear (grounded 1.5 s).
+Spawned hostile Rusher 5.0 m from the player (aggro False).
+PASS Seen PUNCH prompt does not reappear next to a hostile.
+Spawned hostile Rusher 4.0 m from the player (aggro True).
+PASS Seen DODGE prompt does not reappear during a telegraph.
+PASS Seen INTERACT prompt does not reappear; no prompt shown at all this session.
+PASS Legacy fixture copy has no SeenHints field.
+PASS GameFlow.Select launches hero prompt clone
+PASS hero prompt clone: session runs this definition; GameHud + overlay panel exist.
+PASS Legacy save loads: level 2, XP 70, sessions 4, best 420, SeenHints [] (null-guarded), error none.
+PASS Legacy save: MOVE prompt shows (nothing seen yet) — prompts work in this process.
+PASS Gameplay camera found for reload-legacy-move-prompt-1920x1080
+STATE reload-legacy-move-prompt-1920x1080: hero (-20.0,0.1,-40.0), cam (-20.0,4.4,-45.5) fwd (0.0,-0.5,0.9), waypoint hidden target (0.0,0.0,0.0) at (0.00, 0.00).
+PASS reload-legacy-move-prompt-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+PASS reload-legacy-move-prompt-1920x1080 1920x1080: all 74 visible HUD + overlay elements inside the 28px safe margin.
+PASS reload-legacy-move-prompt-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+PASS reload-legacy-move-prompt-1920x1080 1920x1080: no visible label truncated.
+PASS reload-legacy-move-prompt-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(650,28.3 300x35) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(507.9,705 584.2x166.7) hud-prompt(1155.8,807.5 415.8x64.2)
+PASS reload-legacy-move-prompt-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+PASS reload-legacy-move-prompt-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+PASS reload-legacy-move-prompt-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.0 %).
+PASS reload-legacy-move-prompt-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 98.7 %).
+PASS reload-legacy-move-prompt-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.8 %).
+PASS reload-legacy-move-prompt-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 69.8 %).
+PASS reload-legacy-move-prompt-1920x1080: composite contains hud-prompt (pixels changed vs camera-only: 99.5 %).
+PASS reload-legacy-move-prompt-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+CAPTURE reload-legacy-move-prompt-1920x1080.png 1920x1080 (gameplay camera + HUD + overlay, one target); coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 99 %, hud-vitals 99 %, hud-bottom-centre 70 %, hud-prompt 100 %.
+PASS Real jump.
+PASS Legacy save rewritten with the additive field: SeenHints=move
