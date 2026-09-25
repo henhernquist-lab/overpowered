@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac3cc3dd9f7174499918414514717df6, type: 3}
+  m_Name: ForgeCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::ForgeCatalog
+  Heroes:
+  - {fileID: 11400000, guid: 18d618424df574abeb0e4f46e39f4627, type: 2}
+  - {fileID: 11400000, guid: db8ad85bcb9064da79a0f680fd15fc65, type: 2}
+  - {fileID: 11400000, guid: e958f42469a8e4c2d822266900f1c0f6, type: 2}
+  Synergies:
+  - {fileID: 11400000, guid: 23b2a1b61bf1f48d1a972b690c3ee287, type: 2}
+  - {fileID: 11400000, guid: ebd4c35f3c2c647c3b40b1ff6f0e1d84, type: 2}
+  - {fileID: 11400000, guid: 1f265b1d5767c439ca36466a2c2f51cc, type: 2}
+  - {fileID: 11400000, guid: 0ebd4df9bad7e4247b1d3ba910704a6a, type: 2}
+  - {fileID: 11400000, guid: 8c53d661579f3421bb77a04cf9061e50, type: 2}
+  - {fileID: 11400000, guid: 714895e7a7d3e49d989ed4964ce8c872, type: 2}
+  - {fileID: 11400000, guid: d833036e8d2df4125a2fc47787bc316e, type: 2}
+  - {fileID: 11400000, guid: a8654bf676c254433b340934f5728197, type: 2}
+  - {fileID: 11400000, guid: c7e4b0bf2975d4d12a9d826a52724f4f, type: 2}
+  - {fileID: 11400000, guid: e891203a19656444daeb5de6a8831920, type: 2}
+  SuitColors: 0e0000000f000000050000000d00000009000000170000000a00000002000000i
+  SynergyKey: 99
+  SynergyGamepadButton: 335
+  BasicCooldown: 0.65
+  BasicDamage: 8
+  BasicForce: 160
+  BasicRadius: 1.35
+  FovKick: 3
+  FovSeconds: 0.16
+  ShockwaveSeconds: 0.45
+  ParticleLifetime: 0.4
+  ParticleSize: 0.22
+  EffectPoolSize: 6
+  ParticlesPerBurst: 28

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d9fd3391006948b9a66c11d335da6fa, type: 3}
+  m_Name: nova
+  m_EditorClassIdentifier: Assembly-CSharp::HeroDefinition
+  Id: nova
+  DisplayName: NOVA
+  CharacterPrefab: {fileID: 919132149155446097, guid: ed152317b748045198b07297110945ad, type: 3}
+  Portrait: {fileID: 0}
+  Primary: 23
+  Secondary: 13
+  VisualScale: {x: 0.92, y: 1, z: 0.92}
+  AvailablePowers:
+  - {fileID: 11400000, guid: 47447a4e3bd444764a997e77ec7feb5c, type: 2}
+  - {fileID: 11400000, guid: cf2bcb051324544df9997cb5bf016c10, type: 2}
+  - {fileID: 11400000, guid: b03f599ff1c364029838b1577dec15b7, type: 2}
+  - {fileID: 11400000, guid: cf8bf79c81570416f835a3043495579d, type: 2}
+  - {fileID: 11400000, guid: 8dbf8910c4e3b45fda1e445661b0290c, type: 2}
+  DefaultA: {fileID: 11400000, guid: 47447a4e3bd444764a997e77ec7feb5c, type: 2}
+  DefaultB: {fileID: 11400000, guid: b03f599ff1c364029838b1577dec15b7, type: 2}
+  Animation: {fileID: 0}

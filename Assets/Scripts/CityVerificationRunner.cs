@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.IO;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
+using UnityEditor;
 using Debug=UnityEngine.Debug;
 
 public sealed class CityVerificationRunner : MonoBehaviour
@@ -23,6 +25,8 @@ public sealed class CityVerificationRunner : MonoBehaviour
     }
     IEnumerator Start()
     {
+        // Loadouts are fixed per session; equipping another pair means Home -> SetLoadout -> a new sandbox session.
+        DontDestroyOnLoad(gameObject);
         var run=Run();
         while(true)
         {
@@ -38,9 +42,7 @@ public sealed class CityVerificationRunner : MonoBehaviour
     {
         yield return null; w=WorldSession.Instance;
         Check(w!=null,"World bootstrapped with city, powers, and progression.");
-        w.MenuOpen=true; w.Hero.enabled=false;
-        var camera=Camera.main; camera.GetComponent<ThirdPersonCamera>().enabled=false;
-        PlaceHero(w.City.Spawn); camera.transform.position=w.Hero.transform.position+new Vector3(0,1,-4); camera.transform.rotation=Quaternion.identity;
+        var camera=Prepare();
         if(Mode=="reload")
         {
             var expected=JsonUtility.FromJson<ProgressSave>(File.ReadAllText(Path.Combine(Output,"expected-save.json")));
@@ -70,13 +72,16 @@ public sealed class CityVerificationRunner : MonoBehaviour
         var seventh=w.Powers.Powers.Find(p=>p.Definition.Id=="verification-7");
         Check(w.Powers.Powers.Count==7&&seventh.Definition.Effect==w.Powers.Powers.Find(p=>p.Definition.Id=="fire").Definition.Effect,
             "Seventh power discovered from DATA only; exact same projectile effect asset as Fire Blast.");
-        w.Powers.Select(seventh);
-        var target=Target(w.Powers.AimOrigin+Vector3.forward*8);
-        Vector3 before=target.position;
-        Check(w.Powers.Use(seventh),"Seventh power activated via normal selected-power path.");
+        // Hero Forge gate CONTROL: the owned seventh power is not in the default Flight + Strength loadout, so it is refused.
+        Check(w.Progression.Owns(seventh.Definition)&&!w.Powers.IsEquipped(seventh.Definition),$"Seventh power owned but NOT equipped (session loadout {w.Powers.EquippedA.Id} + {w.Powers.EquippedB.Id}).");
+        var target=Target(w.Powers.AimOrigin+Vector3.forward*8); target.useGravity=false; Physics.SyncTransforms();
+        Vector3 before=target.position; int shots=Projectiles(); int charges=seventh.Charges; float cooldown=seventh.Cooldown, energy=w.Powers.Energy; var selected=w.Powers.Selected;
+        bool selectedSeventh=w.Powers.Select(seventh), usedSeventh=w.Powers.Use(seventh);
+        Check(!selectedSeventh&&!usedSeventh&&w.Powers.Message=="Power not equipped"&&w.Powers.Selected==selected&&seventh.Charges==charges&&seventh.Cooldown==cooldown&&w.Powers.Energy==energy,
+            $"CONTROL: unequipped seventh power refused by the equip gate (Select/Use false, \"{w.Powers.Message}\"); charges {charges}->{seventh.Charges}, cooldown {cooldown:F2}->{seventh.Cooldown:F2}, energy {energy:F2}->{w.Powers.Energy:F2}.");
         yield return new WaitForSeconds(.6f);
-        Check(Vector3.Distance(target.position,before)>1f && target.linearVelocity.magnitude>1f,
-            $"Seventh projectile hit real Rigidbody: impulse setting={seventh.Definition.Force} N·s; displacement={Vector3.Distance(target.position,before):F3}m; velocity={target.linearVelocity.magnitude:F3}m/s.");
+        Check(Projectiles()==shots&&Vector3.Distance(target.position,before)<.001f&&target.linearVelocity.magnitude<.001f,
+            $"CONTROL: refused seventh power spawned no projectile ({shots} before/after) and the target did not move: displacement={Vector3.Distance(target.position,before):F4}m.");
         Destroy(target.gameObject);
 
         w.Powers.Flight.Fuel=w.Powers.Stats(w.Powers.Flight).Duration;
@@ -97,6 +102,44 @@ public sealed class CityVerificationRunner : MonoBehaviour
         for(int i=0;i<3;i++) w.Progression.AddXp(w.Progression.RequiredXp);
         var tk=w.Powers.Powers.Find(p=>p.Definition.Id=="telekinesis"); var ice=w.Powers.Powers.Find(p=>p.Definition.Id=="ice");
         Check(w.Progression.Buy(tk.Definition)&&w.Progression.Buy(ice.Definition),"Earned points unlock Telekinesis and Ice.");
+        {
+            // Hero Forge gate CONTROL: owned but unequipped Telekinesis and Ice are refused before grabbing/freezing anything.
+            var probe=Target(w.Powers.AimOrigin+Vector3.forward*6); probe.useGravity=false; Physics.SyncTransforms();
+            int tkCharges=tk.Charges, iceCharges=ice.Charges; float gateEnergy=w.Powers.Energy;
+            bool tkSelected=w.Powers.Select(tk), tkUsed=w.Powers.Use(tk); string tkMessage=w.Powers.Message;
+            bool iceSelected=w.Powers.Select(ice), iceUsed=w.Powers.Use(ice); string iceMessage=w.Powers.Message;
+            Check(!tkSelected&&!tkUsed&&!iceSelected&&!iceUsed&&tkMessage=="Power not equipped"&&iceMessage=="Power not equipped"&&w.Powers.HeldBody==null&&probe.constraints!=RigidbodyConstraints.FreezeAll&&probe.GetComponent<FrozenBody>()==null&&tk.Charges==tkCharges&&ice.Charges==iceCharges&&w.Powers.Energy==gateEnergy,
+                "CONTROL: unequipped Telekinesis and Ice refused by the equip gate (Select/Use false); nothing grabbed, frozen or charged.");
+            Destroy(probe.gameObject);
+        }
+        var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");
+        // A shipping hero only equips powers on its roster, so the data-only seventh power needs a hero whose roster has it.
+        // That hero exists IN MEMORY ONLY (CreateInstance, DontSave, no asset file) and is appended to the loaded catalog at
+        // runtime; the catalog is never marked dirty and its original array is restored in finally (and again in Finish()).
+        var testHero=TestHero(forge.Heroes[0],seventh.Definition,w.Powers.Strength.Definition);
+        int shippingHeroes=forge.Heroes.Length; Register(forge,testHero);
+        IEnumerator e;
+        try
+        {
+            Check(Array.IndexOf(forge.Heroes,testHero)>=0&&forge.Heroes.Length==shippingHeroes+1&&!EditorUtility.IsDirty(forge)&&!AssetDatabase.Contains(testHero),
+                $"Test hero '{testHero.Id}' registered in memory only (no asset file; catalog not dirty); roster={string.Join("+",Array.ConvertAll(testHero.AvailablePowers,p=>p.Id))}.");
+            e=Equip(testHero,seventh.Definition,w.Powers.Strength.Definition,"seventh power + Strength"); while(e.MoveNext()) yield return e.Current;
+            camera=Prepare(); seventh=w.Powers.Powers.Find(p=>p.Definition.Id=="verification-7");
+            w.Powers.Select(seventh);
+            target=Target(w.Powers.AimOrigin+Vector3.forward*8);
+            before=target.position;
+            Check(w.Powers.Use(seventh),"Seventh power activated via normal selected-power path.");
+            yield return new WaitForSeconds(.6f);
+            Check(Vector3.Distance(target.position,before)>1f && target.linearVelocity.magnitude>1f,
+                $"Seventh projectile hit real Rigidbody: impulse setting={seventh.Definition.Force} N·s; displacement={Vector3.Distance(target.position,before):F3}m; velocity={target.linearVelocity.magnitude:F3}m/s.");
+            Destroy(target.gameObject);
+            e=Equip(forge.Heroes[0],tk.Definition,ice.Definition,"Telekinesis + Ice"); while(e.MoveNext()) yield return e.Current;
+        }
+        finally { RestoreCatalog(); }
+        Check(Array.IndexOf(forge.Heroes,testHero)<0&&forge.Heroes.Length==shippingHeroes&&!EditorUtility.IsDirty(forge),$"Catalog restored to its {forge.Heroes.Length} shipping heroes once the Telekinesis + Ice session started; never marked dirty.");
+        lines.Add("LIMIT: the seventh-power test hero is registered in the loaded ForgeCatalog IN MEMORY ONLY (ScriptableObject.CreateInstance, no asset file, catalog never marked dirty or saved) and removed as soon as the Telekinesis + Ice session (shipping hero vector) has started; the shipping roster itself cannot equip verification-7.");
+        Destroy(testHero);
+        camera=Prepare(); tk=w.Powers.Powers.Find(p=>p.Definition.Id=="telekinesis"); ice=w.Powers.Powers.Find(p=>p.Definition.Id=="ice");
         var held=Target(w.Powers.AimOrigin+Vector3.forward*6); held.useGravity=false;
         w.Powers.Select(tk); Physics.SyncTransforms();
         Check(w.Powers.Use(tk)&&w.Powers.HeldBody==held,"Telekinesis grabs the aimed Rigidbody.");
@@ -165,6 +208,53 @@ public sealed class CityVerificationRunner : MonoBehaviour
         w.Progression.Save(); Check(w.Progression.LastError==null&&File.Exists(w.Progression.SavePath),$"Saved level={w.Progression.Data.Level}, strength tier={w.Progression.Tier(w.Powers.Strength.Definition)}; will verify in a separate Unity process.");
         File.WriteAllText(Path.Combine(Output,"expected-save.json"),JsonUtility.ToJson(w.Progression.Data));
     }
+    Camera Prepare()
+    {
+        w.MenuOpen=true; w.Hero.enabled=false;
+        var camera=Camera.main; camera.GetComponent<ThirdPersonCamera>().enabled=false;
+        PlaceHero(w.City.Spawn); camera.transform.position=w.Hero.transform.position+new Vector3(0,1,-4); camera.transform.rotation=Quaternion.identity;
+        return camera;
+    }
+    // Equips through the REAL pre-session API (Home profile -> PlayerProgression.SetLoadout), then boots a fresh sandbox session
+    // from the same save, exactly as the editor entry starts this suite.
+    IEnumerator Equip(HeroDefinition hero,PowerDefinition a,PowerDefinition b,string label)
+    {
+        var old=w; float end=Time.realtimeSinceStartup+60; ModeScreens menu=null;
+        Check(!w.Progression.SetLoadout(hero,a,b,CityColor.Blue,CityColor.Cyan),"CONTROL: live in-session loadout change refused ("+label+").");
+        GameFlow.Instance.Home();
+        while(GameFlow.Instance.Loading||SceneManager.GetActiveScene().name!=GameFlow.HomeScene||(menu=FindAnyObjectByType<ModeScreens>())==null||menu.Profile==null)
+        { if(Time.realtimeSinceStartup>end) throw new TimeoutException("Home scene timeout"); yield return null; }
+        yield return null;
+        var loadout=menu.Profile.Data.Loadout; var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");
+        var outsider=Array.Find(forge.Heroes,h=>!forge.Allowed(h,a)||!forge.Allowed(h,b));
+        if(outsider!=null) Check(!menu.Profile.SetLoadout(outsider,a,b,loadout.Primary,loadout.Secondary),$"CONTROL: hero {outsider.Id} whose roster lacks the pair cannot equip {label}.");
+        Check(menu.Profile.Owns(a)&&menu.Profile.Owns(b)&&menu.Profile.SetLoadout(hero,a,b,loadout.Primary,loadout.Secondary),$"Equipped owned {label} on {hero.Id} through PlayerProgression.SetLoadout before the session.");
+        SceneManager.LoadScene(GameFlow.CityScene);
+        while(WorldSession.Instance==null||WorldSession.Instance==old||SceneManager.GetActiveScene().name!=GameFlow.CityScene)
+        { if(Time.realtimeSinceStartup>end) throw new TimeoutException("City scene timeout"); yield return null; }
+        yield return null; w=WorldSession.Instance;
+        Check(w.Powers.EquippedA==a&&w.Powers.EquippedB==b&&w.Progression.Data.Level>1,$"New sandbox session receives {w.Powers.EquippedA.Id} + {w.Powers.EquippedB.Id} and keeps progression level={w.Progression.Data.Level}.");
+    }
+    static ForgeCatalog registeredCatalog; static HeroDefinition[] originalHeroes;
+    static HeroDefinition TestHero(HeroDefinition look,PowerDefinition a,PowerDefinition b)
+    {
+        var hero=ScriptableObject.CreateInstance<HeroDefinition>(); hero.hideFlags=HideFlags.DontSave; hero.name="verification-hero";
+        hero.Id="verification-hero"; hero.DisplayName="VERIFICATION HERO"; hero.AvailablePowers=new[]{a,b}; hero.DefaultA=a; hero.DefaultB=b;
+        hero.CharacterPrefab=look.CharacterPrefab; hero.Portrait=look.Portrait; hero.Primary=look.Primary; hero.Secondary=look.Secondary; hero.VisualScale=look.VisualScale; hero.Animation=look.Animation;
+        return hero;
+    }
+    static void Register(ForgeCatalog forge,HeroDefinition hero)
+    {
+        RestoreCatalog(); registeredCatalog=forge; originalHeroes=forge.Heroes;
+        var heroes=new HeroDefinition[originalHeroes.Length+1]; originalHeroes.CopyTo(heroes,0); heroes[heroes.Length-1]=hero; forge.Heroes=heroes; // never SetDirty
+    }
+    /// Restores the loaded catalog's original hero array; safe to call repeatedly (also called by CityVerification.Finish).
+    public static void RestoreCatalog()
+    {
+        if(registeredCatalog!=null&&originalHeroes!=null) registeredCatalog.Heroes=originalHeroes;
+        registeredCatalog=null; originalHeroes=null;
+    }
+    int Projectiles() => FindObjectsByType<PowerProjectile>(FindObjectsInactive.Include).Length;
     void PlaceHero(Vector3 point)
     {
         var cc=w.Hero.GetComponent<CharacterController>(); cc.enabled=false; w.Hero.transform.position=point; w.Hero.transform.rotation=Quaternion.identity; cc.enabled=true; Physics.SyncTransforms();

@@ -1,0 +1,76 @@
+forge-1 | HeroForgeVerification.Run | exit=0 | PASS=132 | 122s | no FAIL
+forge-reload-1 | HeroForgeVerification.Reload | exit=0 | PASS=3 | 24s | no FAIL
+humanoid-1 | HumanoidVerification.Run | exit=0 | PASS=52 | 50s | no FAIL
+city-1 | CityVerification.Run | exit=0 | PASS=50 | 38s | no FAIL
+city-reload-1 | CityVerification.Reload | exit=0 | PASS=5 | 31s | no FAIL
+SWEEP START 19:29:36
+sweep-AudioVerification.Run | AudioVerification.Run | exit=1 | PASS=64 | 31s | FAIL System.Exception: Fire Blast paid activation succeeds.
+sweep-ModeVerification.Run | ModeVerification.Run | exit=0 | PASS=79 | 50s | no FAIL
+sweep-ModeVerification.Reload | ModeVerification.Reload | exit=0 | PASS=2 | 31s | no FAIL
+sweep-ModeExpansionVerification.Run | ModeExpansionVerification.Run | exit=0 | PASS=111 | 83s | no FAIL
+sweep-ModeExpansionVerification.Reload | ModeExpansionVerification.Reload | exit=0 | PASS=10 | 31s | no FAIL
+sweep-HumanoidVerification.Run | HumanoidVerification.Run | exit=1 | PASS=49 | 56s | [HUMANOID VERIFY] FAIL System.Exception: Moving cop actual speed=0.000m/s selects shared Pistol Run.
+sweep-CityVerification.Run | CityVerification.Run | exit=0 | PASS=50 | 48s | no FAIL
+sweep-CityVerification.Reload | CityVerification.Reload | exit=0 | PASS=5 | 26s | no FAIL
+sweep-BackflipHurricaneVerification.Run | BackflipHurricaneVerification.Run | exit=0 | PASS=63 | 35s | no FAIL
+sweep-CityArtVerification.Run | CityArtVerification.Run | exit=0 | PASS=31 | 38s | no FAIL
+sweep-MenuPresentationVerification.Run | MenuPresentationVerification.Run | exit=0 | PASS=42 | 66s | no FAIL
+sweep-CombatVerification.Run | CombatVerification.Run | exit=0 | PASS=170 | 138s | no FAIL
+sweep-HeroForgeVerification.Run | HeroForgeVerification.Run | exit=0 | PASS=132 | 103s | no FAIL
+sweep-HeroForgeVerification.Reload | HeroForgeVerification.Reload | exit=0 | PASS=3 | 26s | no FAIL
+SWEEP DONE 19:42:18
+humanoid-rerun-1 | HumanoidVerification.Run | exit=0 | PASS=52 | 48s | no FAIL
+humanoid-rerun-2 | HumanoidVerification.Run | exit=0 | PASS=52 | 49s | no FAIL
+humanoid-rerun-3 | HumanoidVerification.Run | exit=0 | PASS=52 | 53s | no FAIL
+r2-audio | AudioVerification.Run | exit=1 | PASS=42 | 44s | FAIL System.Exception: Music DSP sample cursor advances (not just bookkeeping).
+r2-humanoid-1 | HumanoidVerification.Run | exit=0 | PASS=52 | 57s | no FAIL
+r2-humanoid-2 | HumanoidVerification.Run | exit=0 | PASS=52 | 58s | no FAIL
+r2-humanoid-3 | HumanoidVerification.Run | exit=0 | PASS=52 | 61s | no FAIL
+r2-humanoid-4 | HumanoidVerification.Run | exit=0 | PASS=52 | 57s | no FAIL
+r2-humanoid-5 | HumanoidVerification.Run | exit=0 | PASS=52 | 58s | no FAIL
+r2-audio-2 | AudioVerification.Run | exit=1 | PASS=42 | 34s | FAIL System.Exception: Music DSP sample cursor advances (not just bookkeeping).
+r2-audio-3 | AudioVerification.Run | exit=1 | PASS=96 | 52s | FAIL System.Exception: Central distance accumulator plays real footstep sources: speed=6.00, state=Locomotion, health=100.0 (waits for prior cast to finish).
+r2-audio-5 | AudioVerification.Run | exit=1 | PASS=42 | 36s | FAIL System.Exception: Music DSP sample cursor advances (not just bookkeeping).
+r2-audio-6 | AudioVerification.Run | exit=1 | PASS=96 | 49s | FAIL System.Exception: Central distance accumulator plays real footstep sources: speed=6.00, state=Locomotion, health=100.0 (waits for prior cast to finish).
+r2-audio-7 | AudioVerification.Run | exit=1 | PASS=96 | 50s | FAIL System.Exception: Central distance accumulator plays real footstep sources: speed=6.00, state=Locomotion, health=100.0 (waits for prior cast to finish).
+r2-audio-diag | AudioVerification.Run | exit=1 | PASS=42 | 40s | FAIL System.Exception: Music DSP sample cursor advances (not just bookkeeping).
+r2-audio-diag2 | AudioVerification.Run | exit=1 | PASS=96 | 47s | FAIL System.Exception: Central distance accumulator plays real footstep sources: speed=6.00, state=Locomotion, health=100.0 (waits for prior cast to finish).
+r2-audio-diagS1 | AudioVerification.Run | exit=1 | PASS=42 | 36s | FAIL System.Exception: Music DSP sample cursor advances (not just bookkeeping).
+r2-audio-diagS2 | AudioVerification.Run | exit=1 | PASS=96 | 45s | FAIL System.Exception: Central distance accumulator plays real footstep sources: speed=6.00, state=Locomotion, health=100.0 (waits for prior cast to finish).
+R2 SWEEP START 20:05:38
+r2sweep-AudioVerification.Run | AudioVerification.Run | exit=1 | PASS=42 | 39s | FAIL System.Exception: Music DSP sample cursor advances (not just bookkeeping).
+r2sweep-ModeVerification.Run | ModeVerification.Run | exit=0 | PASS=79 | 53s | no FAIL
+r2sweep-ModeVerification.Reload | ModeVerification.Reload | exit=0 | PASS=2 | 32s | no FAIL
+r2sweep-ModeExpansionVerification.Run | ModeExpansionVerification.Run | exit=0 | PASS=111 | 83s | no FAIL
+r2sweep-ModeExpansionVerification.Reload | ModeExpansionVerification.Reload | exit=0 | PASS=10 | 29s | no FAIL
+r2sweep-HumanoidVerification.Run | HumanoidVerification.Run | exit=0 | PASS=52 | 53s | no FAIL
+r2sweep-CityVerification.Run | CityVerification.Run | exit=1 | PASS=23 | 38s | [CITY VERIFY] FAIL Equipped owned seventh power + Strength on vector through PlayerProgression.SetLoadout before the session.
+r2sweep-CityVerification.Reload | CityVerification.Reload | exit=1 | PASS=1 | 32s | [CITY VERIFY] FAIL Separate Unity process restored exact save: level=5, XP=0, points=1, side=Hero.
+r2sweep-BackflipHurricaneVerification.Run | BackflipHurricaneVerification.Run | exit=0 | PASS=63 | 41s | no FAIL
+r2sweep-CityArtVerification.Run | CityArtVerification.Run | exit=0 | PASS=31 | 45s | no FAIL
+r2sweep-MenuPresentationVerification.Run | MenuPresentationVerification.Run | exit=0 | PASS=42 | 68s | no FAIL
+r2sweep-CombatVerification.Run | CombatVerification.Run | exit=0 | PASS=170 | 139s | no FAIL
+r2sweep-HeroForgeVerification.Run | HeroForgeVerification.Run | exit=0 | PASS=132 | 108s | no FAIL
+r2sweep-HeroForgeVerification.Reload | HeroForgeVerification.Reload | exit=0 | PASS=3 | 32s | no FAIL
+R2 SWEEP DONE 20:18:50
+r3-city | CityVerification.Run | exit=0 | PASS=53 | 50s | no FAIL
+r3-city-reload | CityVerification.Reload | exit=0 | PASS=5 | 25s | no FAIL
+r3-audio-1 | AudioVerification.Run | exit=0 | PASS=126 | 83s | no FAIL
+r3-audio-2 | AudioVerification.Run | exit=0 | PASS=126 | 80s | no FAIL
+AUDIO-LOOP-DONE
+R3 SWEEP START 20:26:28
+r3sweep-AudioVerification.Run | AudioVerification.Run | exit=0 | PASS=126 | 82s | no FAIL
+r3sweep-ModeVerification.Run | ModeVerification.Run | exit=0 | PASS=79 | 49s | no FAIL
+r3sweep-ModeVerification.Reload | ModeVerification.Reload | exit=0 | PASS=2 | 40s | no FAIL
+r3sweep-ModeExpansionVerification.Run | ModeExpansionVerification.Run | exit=0 | PASS=111 | 78s | no FAIL
+r3sweep-ModeExpansionVerification.Reload | ModeExpansionVerification.Reload | exit=0 | PASS=10 | 25s | no FAIL
+r3sweep-HumanoidVerification.Run | HumanoidVerification.Run | exit=0 | PASS=52 | 48s | no FAIL
+r3sweep-CityVerification.Run | CityVerification.Run | exit=0 | PASS=53 | 45s | no FAIL
+r3sweep-CityVerification.Reload | CityVerification.Reload | exit=0 | PASS=5 | 25s | no FAIL
+r3sweep-BackflipHurricaneVerification.Run | BackflipHurricaneVerification.Run | exit=0 | PASS=63 | 31s | no FAIL
+r3sweep-CityArtVerification.Run | CityArtVerification.Run | exit=0 | PASS=31 | 35s | no FAIL
+r3sweep-MenuPresentationVerification.Run | MenuPresentationVerification.Run | exit=0 | PASS=42 | 55s | no FAIL
+r3sweep-CombatVerification.Run | CombatVerification.Run | exit=0 | PASS=170 | 127s | no FAIL
+r3sweep-HeroForgeVerification.Run | HeroForgeVerification.Run | exit=0 | PASS=132 | 94s | no FAIL
+r3sweep-HeroForgeVerification.Reload | HeroForgeVerification.Reload | exit=0 | PASS=3 | 23s | no FAIL
+R3 SWEEP DONE 20:39:05

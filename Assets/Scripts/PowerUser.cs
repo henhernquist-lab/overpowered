@@ -13,6 +13,13 @@ public sealed class PowerUser : MonoBehaviour
     public string Message = "Ready";
     public event System.Action<PowerDefinition> Activated;
     public Rigidbody HeldBody { get; private set; }
+    public ForgeCatalog Forge {get;private set;}
+    public PowerDefinition EquippedA {get;private set;}
+    public PowerDefinition EquippedB {get;private set;}
+    public PowerSynergyDefinition Synergy {get;private set;}
+    public HeroDefinition HeroDefinition {get;private set;}
+    public SynergyRunner SynergyRunner {get;private set;}
+    public bool IsEquipped(PowerDefinition definition)=>definition!=null&&(Forge==null||definition==EquippedA||definition==EquippedB);
     public Vector3 AimOrigin => transform.position + Vector3.up * (Selected?.Definition.OriginHeight ?? 1f);
     public Vector3 AimDirection
     {
@@ -41,8 +48,12 @@ public sealed class PowerUser : MonoBehaviour
             if (definition.Effect.IsFlight && Flight == null) Flight = runtime;
             if (definition.Id == "strength") Strength = runtime;
         }
-        Selected = Strength; progression.Changed += Refresh;
+        Forge=Resources.Load<ForgeCatalog>("ForgeCatalog");
+        EquippedA=progression.EquippedA;EquippedB=progression.EquippedB;HeroDefinition=progression.SelectedHero;
+        Synergy=Forge?.Resolve(EquippedA,EquippedB);
+        Selected = Powers.Find(p=>IsEquipped(p.Definition)&&!p.Definition.Effect.IsFlight)??Strength; progression.Changed += Refresh;
         Refresh();
+        if(Forge!=null){SynergyRunner=gameObject.AddComponent<SynergyRunner>();SynergyRunner.Initialize(this);}
     }
     public PowerStats Stats(PowerRuntime power) => power.Definition.GetStats(Mathf.Max(0, Progression.Tier(power.Definition)));
     void Refresh()
@@ -51,7 +62,7 @@ public sealed class PowerUser : MonoBehaviour
     }
     public bool Select(PowerRuntime power)
     {
-        if (!Progression.Owns(power.Definition)) return false;
+        if (power==null||!Powers.Contains(power)||!IsEquipped(power.Definition)||!Progression.Owns(power.Definition)) return false;
         Release(false); Selected = power; Message = power.Definition.Description; return true;
     }
     public void Tick(float dt, bool grounded)
@@ -69,11 +80,13 @@ public sealed class PowerUser : MonoBehaviour
     }
     public bool ConsumeFlight(float dt)
     {
-        if (Flight == null || !Progression.Owns(Flight.Definition) || Flight.Fuel <= 0f) return false;
+        if (dt<=0||Flight == null || !IsEquipped(Flight.Definition)||!Progression.Owns(Flight.Definition) || Flight.Fuel <= 0f) return false;
         Flight.Fuel = Mathf.Max(0f, Flight.Fuel - dt * Flight.Definition.ResourceCost); return true;
     }
     public bool Use(PowerRuntime power)
     {
+        if(power==null||!Powers.Contains(power)||!IsEquipped(power.Definition)){Message="Power not equipped";return false;}
+        if(SynergyRunner!=null&&SynergyRunner.Busy){Message="Synergy in progress";return false;}
         if (power == null || !Progression.Owns(power.Definition)) { Message = "Power locked"; return false; }
         if (HeldBody != null && power == heldPower) { Release(true); return true; } // Hurl is the second half of the paid grab.
         if (power.Cooldown > 0f) { Message = "Blocked: cooldown"; return false; }

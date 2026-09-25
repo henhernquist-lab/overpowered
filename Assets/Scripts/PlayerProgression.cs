@@ -16,6 +16,7 @@ public enum PlayerSide { Hero, Villain }
     public int SessionsPlayed, SessionsWon, BestSessionScore, LastSessionXp;
     public string LastModeId;
     public List<ModeRecord> ModeRecords = new List<ModeRecord>();
+    public HeroLoadout Loadout;
 }
 public sealed class PlayerProgression : MonoBehaviour
 {
@@ -37,6 +38,30 @@ public sealed class PlayerProgression : MonoBehaviour
     }
     public int Tier(PowerDefinition definition) => Data.Powers.Find(p => p.Id == definition.Id)?.Tier ?? -1;
     public bool Owns(PowerDefinition definition) => Tier(definition) >= 0;
+    public HeroDefinition SelectedHero => Resources.Load<ForgeCatalog>("ForgeCatalog")?.Hero(Data.Loadout?.HeroId);
+    public PowerDefinition EquippedA => Array.Find(definitions,p=>p.Id==Data.Loadout?.PowerA);
+    public PowerDefinition EquippedB => Array.Find(definitions,p=>p.Id==Data.Loadout?.PowerB);
+    public bool SetLoadout(HeroDefinition hero,PowerDefinition a,PowerDefinition b,CityColor primary,CityColor secondary)
+    {
+        var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");
+        if(forge==null||Array.IndexOf(forge.Heroes,hero)<0||a==b||!forge.Allowed(hero,a)||!forge.Allowed(hero,b)||!Owns(a)||!Owns(b))return false;
+        // Loadouts are chosen before play; changing a live loadout would reset ongoing resource/ability state.
+        if(WorldSession.Instance!=null&&WorldSession.Instance.Progression==this)return false;
+        Data.Loadout=new HeroLoadout{HeroId=hero.Id,PowerA=a.Id,PowerB=b.Id,Primary=forge.ColorOrDefault(primary,hero.Primary),Secondary=forge.ColorOrDefault(secondary,hero.Secondary)};
+        Save();Changed?.Invoke();return true;
+    }
+    void ValidateLoadout()
+    {
+        var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");if(forge==null||forge.Heroes.Length==0)return;
+        var hero=forge.Hero(Data.Loadout?.HeroId);
+        var available=Array.FindAll(hero.AvailablePowers,p=>p!=null&&Owns(p));
+        if(available.Length<2)return;
+        var a=Array.Find(available,p=>p.Id==Data.Loadout?.PowerA)??(Owns(hero.DefaultA)?hero.DefaultA:available[0]);
+        var b=Array.Find(available,p=>p.Id==Data.Loadout?.PowerB&&p!=a)??Array.Find(available,p=>p==hero.DefaultB&&p!=a)??Array.Find(available,p=>p!=a);
+        Data.Loadout=new HeroLoadout{HeroId=hero.Id,PowerA=a.Id,PowerB=b.Id,
+            Primary=forge.ColorOrDefault(Data.Loadout?.Primary??hero.Primary,hero.Primary),
+            Secondary=forge.ColorOrDefault(Data.Loadout?.Secondary??hero.Secondary,hero.Secondary)};
+    }
     public void AddXp(int amount)
     {
         amount=Mathf.Max(0,amount); Data.Xp += amount;
@@ -120,6 +145,7 @@ public sealed class PlayerProgression : MonoBehaviour
             var d = Array.Find(definitions, v => v.Id == p.Id);
             if (d != null) p.Tier = Mathf.Clamp(p.Tier, 0, d.Upgrades.Length);
         }
+        ValidateLoadout();
         Changed?.Invoke();
     }
     void OnApplicationQuit() { Save(); }

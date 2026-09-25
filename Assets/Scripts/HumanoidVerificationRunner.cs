@@ -43,13 +43,17 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
         Check(W.Hero.GetComponent<CharacterController>().height==1.8f&&W.Hero.GetComponent<CharacterController>().radius==.38f,"CONTROL: player collider unchanged: height=1.800m radius=.380m; NPC capsule=1.800m/.350m.");
         Check(W.Hero.GetComponentsInChildren<Collider>().Length==1,$"Reference skinned vertices height={P.ReferenceMeshHeight:F4}m, visual scale={P.ModelScale:F4}, fitted height={P.ReferenceMeshHeight*P.ModelScale:F4}m; exactly one authoritative player collider.");
         Check(W.Npcs.All(n=>n.GetComponent<HumanoidPresentation>().Animator.runtimeAnimatorController==P.Animator.runtimeAnimatorController),$"SAME controller asset on player and all {W.Npcs.Count} civilians/cops/criminals.");
-        yield return Locomotion();yield return Punch();yield return Damage();yield return Flight();yield return Panic();yield return Landing();yield return Casting();yield return Benchmark();
+        yield return Locomotion();yield return Punch();yield return Damage();yield return Flight();yield return Panic();yield return Landing();yield return Casting();yield return Benchmark();yield return EquippedCasting();
         W.Hero.enabled=false;GameFlow.Instance.Home();yield return Scene("Home");
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/villain"));yield return Scene("Prototype");W.Hero.enabled=false;
         Check(P.Animator.runtimeAnimatorController==Resources.Load<HumanoidAnimationTuning>("HumanoidAnimationTuning").Controller&&Camera.main!=null,"Villain mode spawns same humanoid/controller and renders.");
         var cop=W.Npcs.First(n=>n.Role==NpcRole.Cop&&!n.Dead);cop.Agent.Warp(W.City.Spawn);Move(cop.transform.position+Vector3.forward*8);
-        float armedUntil=Time.time+3;while(cop.GetComponent<HumanoidPresentation>().State!="Armed"&&Time.time<armedUntil)yield return null;
-        Check(cop.GetComponent<HumanoidPresentation>().State=="Armed"&&cop.Agent.velocity.magnitude>.1f,$"Moving cop actual speed={cop.Agent.velocity.magnitude:F3}m/s selects shared Pistol Run.");
+        // Gait selection is about a MOVING cop. A Gunner windup stops the agent dead by design (velocity zeroed), so sample only a frame
+        // where the cop is NOT in AttackPhase.Windup and both its agent and measured presentation speed exceed the 0.1 m/s threshold.
+        var copPresentation=cop.GetComponent<HumanoidPresentation>();float armedUntil=Time.time+10;int windupFrames=0;
+        while(!(cop.Phase!=AttackPhase.Windup&&cop.Agent.velocity.magnitude>.1f&&copPresentation.MeasuredSpeed>.1f&&copPresentation.State=="Armed")&&Time.time<armedUntil){if(cop.Phase==AttackPhase.Windup)windupFrames++;yield return null;}
+        Log($"COP gait sample: phase={cop.Phase}, agent speed={cop.Agent.velocity.magnitude:F3}m/s, measured speed={copPresentation.MeasuredSpeed:F3}m/s, state={copPresentation.State}, windup frames skipped={windupFrames}, budget left={armedUntil-Time.time:F2}s of 10s.");
+        Check(cop.Phase!=AttackPhase.Windup&&copPresentation.MeasuredSpeed>.1f&&copPresentation.State=="Armed"&&cop.Agent.velocity.magnitude>.1f,$"Moving cop (phase={cop.Phase}) actual speed={cop.Agent.velocity.magnitude:F3}m/s selects shared Pistol Run.");
         Move(cop.transform.position+Vector3.right);float hp=W.Health;
         float timeout=Time.time+3;while(W.Health==hp&&Time.time<timeout)yield return null;
         yield return null;Check(W.Health<hp&&cop.GetComponent<HumanoidPresentation>().State=="Shoot",$"Live hostile cop attack: HP {hp}->{W.Health}; shared controller plays Shooting Gun.");
@@ -154,12 +158,36 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
         Check(landings==1&&clip&&min<.95f,$"Actual controller fall: {landings} impact at {impact:F3}m/s; Land clip played with single existing squash minY={min:F3}, recovered={P.PoseRoot.parent.localScale.y:F3}; collider={W.Hero.GetComponent<CharacterController>().height:F3}m.");
         Check(W.Hero.TryJump(),"Existing grounded jump accepted.");yield return null;Check(P.State=="Jump","Jump presentation comes from real movement event.");W.Hero.enabled=false;P.VerificationState=new HeroPresentationState(Vector3.zero,true,false);yield return new WaitForSeconds(1);
     }
+    PowerDefinition fireDefinition,iceDefinition;
     IEnumerator Casting()
     {
         // Fire and Ice definitions dispatch the SAME presentation flag, only after successful effects.
         var fire=W.Powers.Powers.First(p=>p.Definition.Effect is FireBlastEffect);var ice=W.Powers.Powers.First(p=>p.Definition.Effect is IceEffect);
+        fireDefinition=fire.Definition;iceDefinition=ice.Definition;
         Check(fire.Definition.CastingPresentation&&ice.Definition.CastingPresentation,"Fire Blast and Ice both configured for shared Casting Spell presentation.");
         W.Progression.AddXp(100000);W.Progression.Buy(fire.Definition);W.Progression.Buy(ice.Definition);
+        Check(W.Progression.Owns(fire.Definition)&&W.Progression.Owns(ice.Definition)&&!W.Powers.IsEquipped(fire.Definition)&&!W.Powers.IsEquipped(ice.Definition),$"Fire Blast and Ice owned through earned points but NOT equipped (session loadout {W.Powers.EquippedA.Id} + {W.Powers.EquippedB.Id}).");
+        // Hero Forge gate CONTROL: an owned but unequipped power is refused before any effect, payment or presentation.
+        Move(W.City.Spawn+Vector3.up*15);int activated=0;Action<PowerDefinition> count=_=>activated++;W.Powers.Activated+=count;
+        var target=GameObject.CreatePrimitive(PrimitiveType.Cube);target.transform.position=W.Powers.AimOrigin+W.Powers.AimDirection*3;target.AddComponent<Rigidbody>().useGravity=false;Physics.SyncTransforms();
+        int shots=FindObjectsByType<PowerProjectile>(FindObjectsInactive.Include).Length,fireCharges=fire.Charges,iceCharges=ice.Charges;float fireCooldown=fire.Cooldown,iceCooldown=ice.Cooldown,energy=W.Powers.Energy;var selected=W.Powers.Selected;
+        bool fireSelected=W.Powers.Select(fire),fireUsed=W.Powers.Use(fire);string fireMessage=W.Powers.Message;
+        bool iceSelected=W.Powers.Select(ice),iceUsed=W.Powers.Use(ice);string iceMessage=W.Powers.Message;
+        Check(!fireSelected&&!fireUsed&&!iceSelected&&!iceUsed&&fireMessage=="Power not equipped"&&iceMessage=="Power not equipped"&&W.Powers.Selected==selected,"CONTROL: unequipped Fire Blast and Ice refused by the equip gate (Select/Use false, \"Power not equipped\").");
+        Check(fire.Charges==fireCharges&&ice.Charges==iceCharges&&fire.Cooldown==fireCooldown&&ice.Cooldown==iceCooldown&&W.Powers.Energy==energy,$"CONTROL: refused unequipped casts charged nothing (Fire charges {fireCharges}->{fire.Charges}, Ice charges {iceCharges}->{ice.Charges}, energy {energy:F2}->{W.Powers.Energy:F2}).");
+        yield return null;
+        Check(activated==0&&FindObjectsByType<PowerProjectile>(FindObjectsInactive.Include).Length==shots&&target.GetComponent<FrozenBody>()==null&&P.State!="Cast",$"CONTROL: refused unequipped casts spawned no projectile ({shots} before/after), froze nothing, raised no Activated event and played no Casting Spell (state={P.State}).");
+        W.Powers.Activated-=count;Destroy(target);
+    }
+    IEnumerator EquippedCasting()
+    {
+        // Loadouts are fixed per session, so equip through the real pre-session API at Home, then start a new Hero session.
+        W.Hero.enabled=false;GameFlow.Instance.Home();yield return Scene("Home");
+        var profile=UnityEngine.Object.FindAnyObjectByType<ModeScreens>().Profile;var loadout=profile.Data.Loadout;
+        Check(profile.Owns(fireDefinition)&&profile.Owns(iceDefinition)&&profile.SetLoadout(profile.SelectedHero,fireDefinition,iceDefinition,loadout.Primary,loadout.Secondary),"Owned Fire Blast + Ice equipped through PlayerProgression.SetLoadout before the session.");
+        GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene("Prototype");W.Hero.enabled=false;W.MenuOpen=true;
+        Check(W.Powers.IsEquipped(fireDefinition)&&W.Powers.IsEquipped(iceDefinition),$"New session receives equipped pair {W.Powers.EquippedA.Id} + {W.Powers.EquippedB.Id}.");
+        var fire=W.Powers.Powers.First(p=>p.Definition==fireDefinition);var ice=W.Powers.Powers.First(p=>p.Definition==iceDefinition);
         Move(W.City.Spawn+Vector3.up*15);W.Powers.Select(fire);Check(W.Powers.Use(fire),"Real Fire Blast activation succeeds.");yield return null;Check(P.State=="Cast","Successful Fire Blast triggers Casting Spell.");
         var target=GameObject.CreatePrimitive(PrimitiveType.Cube);W.Powers.Select(ice);target.transform.position=W.Powers.AimOrigin+W.Powers.AimDirection*3;target.AddComponent<Rigidbody>().useGravity=false;Physics.SyncTransforms();
         Check(W.Powers.Use(ice),"Real Ice activation succeeds.");yield return null;Check(P.State=="Cast"&&target.GetComponent<FrozenBody>()!=null,"Successful Ice triggers same Casting Spell and freezes actual body.");Destroy(target);

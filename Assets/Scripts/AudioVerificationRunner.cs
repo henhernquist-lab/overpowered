@@ -61,8 +61,7 @@ public sealed class AudioVerificationRunner : MonoBehaviour
         var menu=FindAnyObjectByType<ModeScreens>();var disabledButton=new Button(()=>GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/free-play"))){name="verification-disabled"};disabledButton.SetEnabled(false);menu.Root.Add(disabledButton);yield return null;A.StopAll();Submit(disabledButton);Check(Playing(AudioCue.UiClick)==0&&!GameFlow.Instance.Loading,"Disabled UI CONTROL emits no click and launches nothing.");
         using(var hover=PointerOverEvent.GetPooled()){hover.target=menu.ModeButtons["hero"];menu.ModeButtons["hero"].SendEvent(hover);}SourceCheck(AudioCue.UiHover);
         Submit(menu.ModeButtons["hero"]);SourceCheck(AudioCue.UiClick);yield return Scene(GameFlow.CityScene);
-        W.Hero.enabled=false;Move(new Vector3(0,100,0));camera=Camera.main;camera.GetComponent<ThirdPersonCamera>().enabled=false;camera.transform.position=W.Hero.transform.position+new Vector3(0,1,-8);camera.transform.forward=Vector3.forward;
-        foreach(var npc in W.Npcs)if(npc!=null){npc.enabled=false;if(npc.Agent.enabled&&npc.Agent.isOnNavMesh)npc.Agent.isStopped=true;}
+        PrepareSession();
         Check(A.BoundWorld==W,"Director binds shipping world without gameplay/bootstrap edits.");
         if(Reload){SourceCheck(AudioCue.CityBed);Check(A.Tuning.Mixer.FindMatchingGroups("").Length==5,"SECOND PROCESS loads persisted mixer with all five groups.");Log("SECOND PROCESS asset/reference reload passed; fresh isolated save used.");yield break;}
         A.StopAll();yield return new WaitForSeconds(.2f);Check(Playing(AudioCue.Hit)==0,"Undamaged player CONTROL has no Hit source.");W.DamagePlayer(1);SourceCheck(AudioCue.Hit);
@@ -76,13 +75,35 @@ public sealed class AudioVerificationRunner : MonoBehaviour
         Check(W.Powers.Strength.Definition.ResourceCost==0,"Shipping Strength costs 0 energy: its rejection CONTROL is charges/cooldown, not energy. Flight uses fuel; Fire/Ice/Telekinesis energy controls follow.");
         var prop=GameObject.CreatePrimitive(PrimitiveType.Cube);prop.name="Audio damage control";prop.transform.position=W.Hero.transform.position+Vector3.right*3;prop.AddComponent<Rigidbody>().useGravity=false;var breakable=prop.AddComponent<BreakableProp>();breakable.Configure(W.Tuning.Props);A.StopAll();breakable.TakeDamage(1,null);Check(Playing(AudioCue.Destruction)==0,"Damaged-but-unbroken prop CONTROL emits no destruction.");breakable.TakeDamage(10000,null);SourceCheck(AudioCue.Destruction);yield return null;
         W.Progression.AddXp(1000);foreach(var p in W.Powers.Powers)if(!W.Progression.Owns(p.Definition))W.Progression.Buy(p.Definition);
+        // Hero Forge gate CONTROL in the default Flight + Strength session: every owned cue-bound power is refused while
+        // unequipped, with resources ready and a valid target, and emits NO cue and charges nothing.
         foreach(var binding in A.Tuning.Powers)
+        {
+            var power=W.Powers.Powers.First(p=>p.Definition.Effect==binding.Effect);power.Cooldown=0;power.Charges=3;Energy(100);
+            var targetBody=GameObject.CreatePrimitive(PrimitiveType.Cube);targetBody.transform.position=W.Powers.AimOrigin+Vector3.forward*5;targetBody.AddComponent<Rigidbody>().useGravity=false;Physics.SyncTransforms();
+            Check(W.Progression.Owns(power.Definition)&&!W.Powers.IsEquipped(power.Definition),$"{power.Definition.DisplayName} owned but NOT equipped (session loadout {W.Powers.EquippedA.Id} + {W.Powers.EquippedB.Id}).");
+            A.StopAll();bool selected=W.Powers.Select(power),used=W.Powers.Use(power);
+            Check(!selected&&!used&&W.Powers.Message=="Power not equipped"&&power.Charges==3&&power.Cooldown==0&&W.Powers.Energy==100&&W.Powers.HeldBody==null,$"CONTROL: unequipped {power.Definition.DisplayName} refused by the equip gate (\"{W.Powers.Message}\"); charges 3->{power.Charges}, energy 100->{W.Powers.Energy:F0}.");
+            yield return null;Check(Playing(binding.Cue)==0,$"CONTROL: refused unequipped {power.Definition.DisplayName} plays NO {binding.Cue} cue.");Destroy(targetBody);
+        }
+        // Positive checks: equip the cue-bound powers in pairs through PlayerProgression.SetLoadout, each pair in a fresh session.
+        // An odd remainder pairs with Flight so the flight checks below keep an equipped Flight.
+        var pending=A.Tuning.Powers.ToList();
+        while(pending.Count>0)
+        {
+        var batch=pending.Take(2).ToArray();pending.RemoveRange(0,batch.Length);
+        var first=W.Powers.Powers.First(p=>p.Definition.Effect==batch[0].Effect).Definition;
+        var second=batch.Length>1?W.Powers.Powers.First(p=>p.Definition.Effect==batch[1].Effect).Definition:W.Powers.Flight.Definition;
+        yield return EquipSession(first,second);
+        foreach(var binding in batch)
         {
             var power=W.Powers.Powers.First(p=>p.Definition.Effect==binding.Effect);W.Powers.Select(power);power.Cooldown=0;power.Charges=3;Energy(100);
             var targetBody=GameObject.CreatePrimitive(PrimitiveType.Cube);targetBody.transform.position=W.Powers.AimOrigin+Vector3.forward*5;targetBody.AddComponent<Rigidbody>().useGravity=false;Physics.SyncTransforms();
             A.StopAll();Check(W.Powers.Use(power),power.Definition.DisplayName+" paid activation succeeds.");SourceCheck(binding.Cue);W.Powers.Release(false);Destroy(targetBody);yield return null;
             A.StopAll();power.Cooldown=0;power.Charges=3;Energy(0);Check(!W.Powers.Use(power),power.Definition.DisplayName+" no-energy activation refused.");Check(Playing(binding.Cue)==0,power.Definition.DisplayName+" no-energy CONTROL emits no cue.");
         }
+        }
+        if(!W.Powers.IsEquipped(W.Powers.Flight.Definition))yield return EquipSession(W.Powers.Flight.Definition,W.Powers.Strength.Definition);
         // Holding F is not PowerUser.Use: exercise resource consumption, then its public presentation state boundary.
         Energy(100);W.Powers.Flight.Fuel=1;Check(W.Powers.ConsumeFlight(.1f),"Real flight resource consumption accepted.");
         typeof(SuperHeroController).GetProperty("PresentationState").SetValue(W.Hero,new HeroPresentationState(Vector3.forward*4,false,true));A.StopAll();yield return new WaitForSeconds(.12f);SourceCheck(AudioCue.FlightStart);SourceCheck(AudioCue.FlightLoop);
@@ -116,6 +137,21 @@ public sealed class AudioVerificationRunner : MonoBehaviour
         {var fresh=CityNpc.Spawn(W,W.Hero.transform.position+Vector3.forward*8f,NpcRole.Cop);Check(fresh!=null,"Fresh cop spawned for the registration check.");Check(A.Tracks(fresh),$"Freshly spawned NPC is tracked in the SAME call stack as its Spawn (periodic refresh interval is {A.Tuning.ActorRefreshInterval:F2}s, so it cannot have run).");Destroy(fresh.gameObject);yield return null;}
         GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);Check(FindObjectsByType<AudioDirector>().Length==1,"Mode switch CONTROL retains exactly one director/pool.");
         Log("LIMIT: no human has heard or judged the mix. Tests assert real source playback, clips, volumes and routing, not audible-device capture. Flight state is controlled at the public presentation boundary after real fuel checks; no hardware F-key automation. FPS is Editor throughput, not standalone performance.");
+    }
+    void PrepareSession()
+    {
+        W.Hero.enabled=false;Move(new Vector3(0,100,0));camera=Camera.main;camera.GetComponent<ThirdPersonCamera>().enabled=false;camera.transform.position=W.Hero.transform.position+new Vector3(0,1,-8);camera.transform.forward=Vector3.forward;
+        foreach(var npc in W.Npcs)if(npc!=null){npc.enabled=false;if(npc.Agent.enabled&&npc.Agent.isOnNavMesh)npc.Agent.isStopped=true;}
+    }
+    // Loadouts are fixed per session: equip through the real pre-session API at Home, then start a fresh Hero session.
+    IEnumerator EquipSession(PowerDefinition a,PowerDefinition b)
+    {
+        W.Hero.enabled=false;GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);
+        var profile=FindAnyObjectByType<ModeScreens>().Profile;var loadout=profile.Data.Loadout;
+        Check(profile.Owns(a)&&profile.Owns(b)&&profile.SetLoadout(profile.SelectedHero,a,b,loadout.Primary,loadout.Secondary),$"Owned {a.DisplayName} + {b.DisplayName} equipped through PlayerProgression.SetLoadout before a fresh session.");
+        Check(GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero")),"Fresh Hero session requested.");yield return Scene(GameFlow.CityScene);
+        PrepareSession();
+        Check(A.BoundWorld==W&&W.Powers.IsEquipped(a)&&W.Powers.IsEquipped(b)&&A.Sources.Length==24,$"Director rebinds the fresh session (same 24-source pool); session receives {W.Powers.EquippedA.Id} + {W.Powers.EquippedB.Id}.");
     }
     IEnumerator Benchmark(bool enabled,string label,Action<double> done)
     {

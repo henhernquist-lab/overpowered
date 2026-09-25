@@ -48,6 +48,7 @@ public static class CityVerification
     }
     public static void Finish(int code)
     {
+        CityVerificationRunner.RestoreCatalog(); // in-memory test hero must be gone before any asset operation below
         for(int i=6;i<=7;i++)
         {
             string path=$"Assets/Resources/Powers/verification-{i}.asset";

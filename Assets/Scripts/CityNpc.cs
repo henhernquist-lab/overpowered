@@ -23,6 +23,10 @@ public sealed class CityNpc : MonoBehaviour
     /// Explicit combat stats for this NPC, replacing the Heat-star spawn formula (health) and attack formula (damage).
     public void SetCombatStats(float health, float damage) { Health = MaxHealth = Mathf.Max(1f, health); explicitDamage = Mathf.Max(0f, damage); }
     public bool Dead => Health <= 0f;
+    public bool Frozen=>Time.time<frozenUntil;
+    public bool Burning=>Time.time<burningUntil;
+    float burningUntil;
+    public void MarkBurn(float duration){burningUntil=Mathf.Max(burningUntil,Time.time+duration);}
     public bool Fleeing => Time.time < fleeUntil;
     public bool Hostile => Role == NpcRole.Criminal ? world.Progression.Data.Side == PlayerSide.Hero :
         (Role == NpcRole.Cop || Role == NpcRole.PursuingHero) && world.Progression.Data.Side == PlayerSide.Villain;

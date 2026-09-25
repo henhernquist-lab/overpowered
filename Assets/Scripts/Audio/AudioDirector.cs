@@ -70,6 +70,9 @@ public sealed class AudioDirector : MonoBehaviour
             Unbind();world=current;player=world.Hero.GetComponent<HumanoidPresentation>();
             world.Powers.Activated+=PowerActivated;world.PlayerDamaged+=PlayerDamage;world.PlayerRespawned+=Respawn;world.Hero.PunchImpacted+=Punch;world.Hero.HurricaneKickImpacted+=Punch;world.Hero.BackflipStarted+=Jump;world.Hero.Jumped+=Jump;world.Hero.Landed+=Land;
         }
+        // The hero's presentation may be created after the world starts spawning NPCs (Hero Forge bootstrap order),
+        // so a Bind() triggered by an early spawn can see none yet: keep resolving it until it exists.
+        if(world!=null&&player==null)player=world.Hero.GetComponent<HumanoidPresentation>();
         if(listenerCamera==null)listenerCamera=Camera.main;
         if(world==null&&menuRoot==null)
         {
