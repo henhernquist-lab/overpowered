@@ -1,6 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// How one encounter ended (HUD objective banner). Xp = what the success grants from GameModeDefinition.SuccessXp; 0 on failure.
+public readonly struct EncounterOutcome
+{
+    public readonly CrimeEncounter Encounter; public readonly EncounterDefinition Definition; public readonly bool Success; public readonly string Reason; public readonly int Xp; public readonly Vector3 Site;
+    public EncounterOutcome(CrimeEncounter encounter,bool success,string reason,int xp) { Encounter=encounter; Definition=encounter!=null?encounter.Definition:null; Success=success; Reason=reason; Xp=xp; Site=encounter!=null?encounter.Site:Vector3.zero; }
+}
 public sealed class GameModeSession : MonoBehaviour
 {
     public GameModeDefinition Definition { get; private set; }
@@ -17,6 +23,9 @@ public sealed class GameModeSession : MonoBehaviour
     public int Rescues {get;private set;}
     public float PeakHeat {get;private set;}
     public ModeDirectorState Director {get;private set;}
+    /// Raised when an encounter ends, BEFORE its rewards are granted and before the goal/limit checks (so a banner is
+    /// queued ahead of any level-up the reward causes). Additive: scoring and rules are unchanged.
+    public event System.Action<EncounterOutcome> EncounterResolved;
     int startLevel,startXp;
     float spawnClock; int nextEncounter;
     public void Initialize(WorldSession world,GameModeDefinition definition)
@@ -67,9 +76,10 @@ public sealed class GameModeSession : MonoBehaviour
     public void EncounterEnded(CrimeEncounter encounter,bool success,string reason)
     {
         if(Ended) return;
+        EncounterResolved?.Invoke(new EncounterOutcome(encounter,success,reason,success?Mathf.Max(0,Definition.SuccessXp):0));
         if(success)
         {
-            Successes++; AddScore(Definition.SuccessScore); World.Progression.AddXp(Definition.SuccessXp); World.AddHeat(Definition.SuccessHeat);
+            Successes++; AddScore(Definition.SuccessScore); World.Progression.AddXp(Definition.SuccessXp,encounter.Site,"objective"); World.AddHeat(Definition.SuccessHeat);
         }
         else { Failures++; AddScore(-Definition.FailureScorePenalty); World.AddHeat(Definition.FailureHeat); }
         Feedback=(success?"SUCCESS — ":"FAILED — ")+encounter.Definition.DisplayName+": "+reason;

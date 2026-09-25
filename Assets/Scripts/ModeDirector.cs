@@ -24,6 +24,16 @@ public abstract class ModeDirectorState : MonoBehaviour
     public virtual string HudCaption => null;
     /// Adds director-owned facts (wave, enemies defeated) to the result before it is recorded.
     public virtual void Describe(SessionResult result) { }
+    /// Director milestones worth a HUD banner (e.g. a cleared wave), with text built from the director's own values.
+    public event System.Action<DirectorAnnouncement> Announced;
+    protected void Announce(string eyebrow, string title, string reward) { Announced?.Invoke(new DirectorAnnouncement(eyebrow, title, reward)); }
+}
+
+/// One director milestone for the HUD banner: small eyebrow, title, reward chip (any may be empty).
+public readonly struct DirectorAnnouncement
+{
+    public readonly string Eyebrow, Title, Reward;
+    public DirectorAnnouncement(string eyebrow, string title, string reward) { Eyebrow = eyebrow; Title = title; Reward = reward; }
 }
 
 /// One labelled HUD value supplied by a ModeDirectorState (label is shown uppercase under the value).

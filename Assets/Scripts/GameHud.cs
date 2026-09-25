@@ -76,7 +76,7 @@ public sealed partial class GameHud : MonoBehaviour
         Root = Document.rootVisualElement; Root.name = "game-hud"; Root.pickingMode = PickingMode.Ignore;
         Root.style.position = Position.Absolute; Root.style.left = Root.style.right = Root.style.top = Root.style.bottom = 0;
         Root.style.unityFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"); Root.style.color = C(CityColor.UiInk);
-        Build(); BuildOverlay();
+        Build(); BuildOverlay(); BuildFeedback();
     }
 
     /// Shows or hides the whole HUD (the FPS A/B uses this to measure the legacy IMGUI-only frame).
@@ -299,9 +299,10 @@ public sealed partial class GameHud : MonoBehaviour
 
     void Bind(WorldSession w)
     {
+        BindFeedback(w);   // progression / session / director can appear after the world (cheap reference checks)
         if (boundWorld == w) { if (w != null) BindHero(w.Hero); return; }
         if (boundWorld != null) boundWorld.PlayerRespawned -= Respawned;
-        BindGuidance(boundWorld, w);
+        BindGuidance(boundWorld, w); BindHeat(boundWorld, w);
         boundWorld = w; if (w != null) w.PlayerRespawned += Respawned;
     }
     void Respawned() => ShowMessage("RESPAWNED  ·  PROGRESSION KEPT");
@@ -338,15 +339,16 @@ public sealed partial class GameHud : MonoBehaviour
             shownLevel = progress.Data.Level; shownXp = progress.Data.Xp; shownPoints = progress.Data.Points;
             LevelValue.text = shownLevel.ToString(); xpLabel.text = $"{shownXp} / {progress.RequiredXp} XP";
             XpFill.style.width = Length.Percent(100f * Mathf.Clamp01(shownXp / (float)progress.RequiredXp));
-            pointsLabel.text = shownPoints > 0 ? $"{shownPoints} UPGRADE POINT{(shownPoints == 1 ? "" : "S")}  ·  TAB" : "";
+            pointsLabel.text = shownPoints > 0 ? $"{shownPoints} UPGRADE POINT{(shownPoints == 1 ? "" : "S")}  ·  {HudBindings.KeyName(HudBindings.MenuKey)}" : "";
             Show(pointsLabel, shownPoints > 0);
         }
+        UpdateLevelBurst(now, Accent(side));
 
         // Heat stars (Heat) + timer (SessionSeconds > 0)
         bool heat = (hud & ModeHud.Heat) != 0, timer = definition != null && definition.SessionSeconds > 0;
         Show(StarsRow, heat); Show(TimerRow, timer); Show(HeatGroup, heat || timer);
         TimerRow.style.marginTop = heat ? 4 : 0;
-        UpdateStars(w, now);
+        UpdateStars(w, now); UpdateHeatFlash(now, heat);
         if (timer)
         {
             int seconds = Mathf.CeilToInt(Mathf.Max(0f, definition.SessionSeconds - w.Mode.Elapsed));
@@ -387,7 +389,8 @@ public sealed partial class GameHud : MonoBehaviour
 
         // Message line: player-relevant WorldSession messages (side switch, waves, encounter results), respawn, save errors.
         // The session-start message is the mode Description; when the mode has a briefing card, the card replaces it.
-        if (w.Message != lastMessage) { lastMessage = w.Message; if (!(definition != null && definition.HasBriefing && w.Message == definition.Description)) ShowMessage(w.Message); }
+        // Phase 3: an encounter result or a director milestone already has its own banner, so its message line is not repeated.
+        if (w.Message != lastMessage) { lastMessage = w.Message; if (!(definition != null && definition.HasBriefing && w.Message == definition.Description)) { if (BannerCovers(w)) messageAt = -100f; else ShowMessage(w.Message); } }
         float age = now - messageAt;
         bool message = age < MessageSeconds + MessageFade && !string.IsNullOrEmpty(MessageLine.text);
         Show(MessageLine, message);
@@ -414,7 +417,7 @@ public sealed partial class GameHud : MonoBehaviour
         int lit = Mathf.Clamp(w.Stars, 0, maximum);
         if (lit != ShownStars)
         {
-            if (ShownStars >= 0) { for (int i = Mathf.Min(lit, ShownStars); i < Mathf.Max(lit, ShownStars); i++) starPopAt[i] = now; LastHeatChange = now; }
+            if (ShownStars >= 0) { for (int i = Mathf.Min(lit, ShownStars); i < Mathf.Max(lit, ShownStars); i++) starPopAt[i] = now; LastHeatChange = now; StarsChanged(ShownStars, lit, now); }
             ShownStars = lit;
             for (int i = 0; i < maximum; i++) stars[i].Set(i < lit ? C(CityColor.Amber) : Alpha(C(CityColor.UiNavy), .7f), i < lit ? Alpha(C(CityColor.UiInk), .9f) : Alpha(C(CityColor.UiMuted), .45f));
         }

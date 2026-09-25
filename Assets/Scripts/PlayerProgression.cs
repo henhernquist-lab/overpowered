@@ -20,6 +20,12 @@ public enum PlayerSide { Hero, Villain }
     /// First-time control prompts the player has already acted on (HUD). Saves written before this field existed load with an empty list.
     public List<string> SeenHints = new List<string>();
 }
+/// One XP grant as the player received it: the amount actually added, where it happened (if anywhere) and why.
+public readonly struct XpGrant
+{
+    public readonly int Amount; public readonly bool HasPosition; public readonly Vector3 Position; public readonly string Reason;
+    public XpGrant(int amount, bool hasPosition, Vector3 position, string reason) { Amount = amount; HasPosition = hasPosition; Position = position; Reason = reason; }
+}
 public sealed class PlayerProgression : MonoBehaviour
 {
     public ProgressSave Data { get; private set; } = new ProgressSave();
@@ -28,6 +34,10 @@ public sealed class PlayerProgression : MonoBehaviour
     public float SwitchRemaining { get; private set; }
     public event Action Changed;
     public event Action<int> XpAwarded;
+    /// Raised for EVERY grant (both AddXp overloads), right after XpAwarded, with the same amount (HUD popups).
+    public event Action<XpGrant> XpGranted;
+    /// Raised when a grant raises the level: (level before, level after). Raised after XpGranted.
+    public event Action<int, int> LevelUp;
     public bool SideLocked { get; private set; }
     ProgressionSettings config;
     PowerDefinition[] definitions;
@@ -64,11 +74,16 @@ public sealed class PlayerProgression : MonoBehaviour
             Primary=forge.ColorOrDefault(Data.Loadout?.Primary??hero.Primary,hero.Primary),
             Secondary=forge.ColorOrDefault(Data.Loadout?.Secondary??hero.Secondary,hero.Secondary)};
     }
-    public void AddXp(int amount)
+    public void AddXp(int amount) { Grant(amount, false, default, null); }
+    /// Same grant as AddXp(amount), additionally telling listeners where it happened and why (HUD "+XP" popups).
+    public void AddXp(int amount, Vector3 where, string reason) { Grant(amount, true, where, reason); }
+    void Grant(int amount, bool hasPosition, Vector3 where, string reason)
     {
-        amount=Mathf.Max(0,amount); Data.Xp += amount;
+        amount=Mathf.Max(0,amount); Data.Xp += amount; int levelBefore = Data.Level;
         while (Data.Xp >= RequiredXp) { Data.Xp -= RequiredXp; Data.Level++; Data.Points += config.PointsPerLevel; }
         Save(); Changed?.Invoke(); XpAwarded?.Invoke(amount);
+        XpGranted?.Invoke(new XpGrant(amount, hasPosition, where, reason));
+        if (Data.Level > levelBefore) LevelUp?.Invoke(levelBefore, Data.Level);
     }
     public bool Buy(PowerDefinition definition)
     {

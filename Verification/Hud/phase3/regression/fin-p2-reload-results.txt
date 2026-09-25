@@ -1,0 +1,5 @@
+Separate process: pid 58591, save /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Verification/Hud/phase2/saves/save-prompts.json
+FAIL System.Exception: Reloaded prompt save carries SeenHints: move,punch,dodge
+  at HudPhase2VerificationRunner.Check (System.Boolean valid, System.String text) [0x0001b] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/HudPhase2VerificationRunner.cs:43 
+  at HudPhase2VerificationRunner+<ReloadChecks>d__61.MoveNext () [0x000c1] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/HudPhase2VerificationRunner.cs:565 
+  at HudPhase2VerificationRunner+<Start>d__21.MoveNext () [0x0006f] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/HudPhase2VerificationRunner.cs:35 

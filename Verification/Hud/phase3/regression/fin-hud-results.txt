@@ -1,0 +1,346 @@
+PASS Menu component exists in Home
+PASS Fresh isolated save CONTROL: level 1, no sessions.
+Default loadout from the fresh save: vector / flight + strength.
+PASS GameFlow.Select launches hero
+PASS Hero Mode: session runs this definition; GameHud + PrototypeHUD exist.
+PASS Hero: health/energy SHOWN (data: Hud=All).
+PASS Hero: power bar SHOWN (data: Hud=All).
+PASS Hero: level/XP SHOWN (data: Hud=All).
+PASS Hero: heat stars SHOWN (data: Hud=All).
+PASS Hero: session timer SHOWN (data: SessionSeconds=900).
+PASS Hero: objective slot SHOWN (data: Hud=All).
+PASS Hero: director panel HIDDEN (data: Director=none).
+PASS Hero: timer shows remaining time 14:59 (SessionSeconds 900, elapsed 1.9).
+PASS Hero: 3 of 5 Heat stars lit = WorldSession.Stars 3 (Heat 2.20).
+PASS Hero: objective slot text: "STOP THE ROBBERS 0/3"
+PASS Debug key is F3.
+PASS Debug panel HIDDEN by default.
+PASS Hidden debug panel: its IMGUI draw path ran 0 times over 20 frames (0 IMGUI repaint events reached PrototypeHUD.OnGUI).
+PASS CONTROL: ToggleDebug (the F3 handler's method) SHOWS the debug panel.
+LIMIT: batch mode dispatched 0 IMGUI repaint events in 20 frames, so the debug draw is proven by its gate (DebugVisible) and counters, not by pixels.
+PASS CONTROL: toggling again HIDES the debug panel.
+PASS Hidden again: debug draw path idle.
+PASS Gameplay camera found for hero-1280x720
+PASS hero-1280x720 1280x720: Expand scaling -> panel 1600x900 logical (expected 1600x900, scale 0.8); the 1600x900 reference area fits.
+PASS hero-1280x720 1280x720: all 65 visible HUD elements lie inside the panel with the 28px safe margin.
+PASS hero-1280x720 1280x720: no HUD element except the crosshair intersects the centre 40%x40% zone (480,270 640x360).
+PASS hero-1280x720 1280x720: no visible label text is truncated (measured text fits its box).
+PASS hero-1280x720 1280x720: HUD groups do not overlap each other: hud-level(27.5,27.5 285x77.5) hud-heat(1367.5,27.5 205x81.3) hud-top-centre(635.6,27.5 328.8x76.3) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,757.5 378.8x115)
+PASS hero-1280x720 1280x720: crosshair centre at 640,360 px vs screen centre 640,360 (|d| 0 px <= 1) — the aim ray is ViewportPointToRay(.5,.5).
+PASS hero-1280x720: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.6 %).
+PASS hero-1280x720: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 99.1 %).
+PASS hero-1280x720: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 98.9 %).
+PASS hero-1280x720: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 99.7 %).
+PASS hero-1280x720: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.2 %).
+PASS hero-1280x720: crosshair drawn into the composite (32.2 % of its box changed).
+PASS hero-1280x720: PIXEL centre-clear — 146780 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE hero-1280x720.png 1280x720 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 99 %, hud-vitals 100 %, hud-bottom-centre 99 %.
+PASS Gameplay camera found for hero-1920x1080
+PASS hero-1920x1080 1920x1080: Expand scaling -> panel 1600x900 logical (expected 1600x900, scale 1.2); the 1600x900 reference area fits.
+PASS hero-1920x1080 1920x1080: all 65 visible HUD elements lie inside the panel with the 28px safe margin.
+PASS hero-1920x1080 1920x1080: no HUD element except the crosshair intersects the centre 40%x40% zone (480,270 640x360).
+PASS hero-1920x1080 1920x1080: no visible label text is truncated (measured text fits its box).
+PASS hero-1920x1080 1920x1080: HUD groups do not overlap each other: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(636.2,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5)
+PASS hero-1920x1080 1920x1080: crosshair centre at 960,540 px vs screen centre 960,540 (|d| 0 px <= 1) — the aim ray is ViewportPointToRay(.5,.5).
+PASS hero-1920x1080: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
+PASS hero-1920x1080: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 99.1 %).
+PASS hero-1920x1080: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.2 %).
+PASS hero-1920x1080: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.8 %).
+PASS hero-1920x1080: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS hero-1920x1080: crosshair drawn into the composite (32.7 % of its box changed).
+PASS hero-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE hero-1920x1080.png 1920x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 99 %, hud-vitals 99 %, hud-bottom-centre 99 %.
+PASS Gameplay camera found for hero-2560x1080
+PASS hero-2560x1080 2560x1080: Expand scaling -> panel 2133.3x900 logical (expected 2133.3x900, scale 1.2); the 1600x900 reference area fits.
+PASS hero-2560x1080 2560x1080: all 65 visible HUD elements lie inside the panel with the 28px safe margin.
+PASS hero-2560x1080 2560x1080: no HUD element except the crosshair intersects the centre 40%x40% zone (640,270 853.3x360).
+PASS hero-2560x1080 2560x1080: no visible label text is truncated (measured text fits its box).
+PASS hero-2560x1080 2560x1080: HUD groups do not overlap each other: hud-level(28.3,28.3 283.3x75) hud-heat(1903.3,28.3 201.7x78.3) hud-top-centre(902.9,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,759.2 377.5x112.5)
+PASS hero-2560x1080 2560x1080: crosshair centre at 1280,540 px vs screen centre 1280,540 (|d| 0 px <= 1) — the aim ray is ViewportPointToRay(.5,.5).
+PASS hero-2560x1080: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
+PASS hero-2560x1080: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 99.3 %).
+PASS hero-2560x1080: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.2 %).
+PASS hero-2560x1080: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.8 %).
+PASS hero-2560x1080: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS hero-2560x1080: crosshair drawn into the composite (32.7 % of its box changed).
+PASS hero-2560x1080: PIXEL centre-clear — 441072 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE hero-2560x1080.png 2560x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 99 %, hud-vitals 99 %, hud-bottom-centre 99 %.
+PASS Default loadout bar: flight[F] | strength[E] | sonic-slam[C] = EquippedA flight + EquippedB strength + synergy sonic-slam.
+PASS Strength equipped -> no unslotted basic-melee hint.
+PASS Flight slot shows fuel 100 % instead of charge pips.
+PASS CONTROL before use: Strength pips 3/3, radial 0.00.
+PASS Real paid punch accepted (SuperHeroController.TryPunch).
+PASS Charge pips drop on payment: 2/3 lit (runtime charges 2).
+PASS Radial cooldown shows after the real punch: 1.00 of 0.45s.
+PASS Gameplay camera found for hero-default-loadout-after-punch
+PASS hero-default-loadout-after-punch: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
+PASS hero-default-loadout-after-punch: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 99.1 %).
+PASS hero-default-loadout-after-punch: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.2 %).
+PASS hero-default-loadout-after-punch: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.8 %).
+PASS hero-default-loadout-after-punch: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS hero-default-loadout-after-punch: crosshair drawn into the composite (32.4 % of its box changed).
+PASS hero-default-loadout-after-punch: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE hero-default-loadout-after-punch.png 1920x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 99 %, hud-vitals 99 %, hud-bottom-centre 99 %.
+PASS Punch impact landed after the windup (frame 258); PUNCH: 1 bodies hit @ 1350 N·s.
+PASS After impact the pips still match the runtime: 2/3.
+PASS Synergy slot key 'C' from ForgeCatalog.SynergyKey (C); radial 0 while ready.
+PASS Synergy Sonic Slam used for real -> radial 1.00 (runner cooldown 10.0/10.0s).
+PASS Gameplay camera found for hero-default-loadout-synergy-cooldown
+PASS hero-default-loadout-synergy-cooldown: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
+PASS hero-default-loadout-synergy-cooldown: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 99.1 %).
+PASS hero-default-loadout-synergy-cooldown: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.2 %).
+PASS hero-default-loadout-synergy-cooldown: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.8 %).
+PASS hero-default-loadout-synergy-cooldown: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS hero-default-loadout-synergy-cooldown: crosshair drawn into the composite (32.7 % of its box changed).
+PASS hero-default-loadout-synergy-cooldown: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE hero-default-loadout-synergy-cooldown.png 1920x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 99 %, hud-vitals 99 %, hud-bottom-centre 99 %.
+PASS Stars at rest (scale 1) with 3 lit.
+PASS Real Heat change: WorldSession.AddHeat(1) -> 3 -> 4 stars.
+PASS Gameplay camera found for hero-heat-star-pop
+PASS hero-heat-star-pop: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
+PASS hero-heat-star-pop: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 99.1 %).
+PASS hero-heat-star-pop: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.2 %).
+PASS hero-heat-star-pop: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.8 %).
+PASS hero-heat-star-pop: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS hero-heat-star-pop: crosshair drawn into the composite (32.4 % of its box changed).
+PASS hero-heat-star-pop: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE hero-heat-star-pop.png 1920x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 99 %, hud-vitals 99 %, hud-bottom-centre 99 %.
+PASS Star 4 popped to scale 1.30 and settled at 1.00 while Time.timeScale was 0 (unscaled-time animation).
+PASS CONTROL: unchanged stars did not pop.
+PASS GameFlow.Select launches villain
+PASS Villain Mode: session runs this definition; GameHud + PrototypeHUD exist.
+PASS Villain: health/energy SHOWN (data: Hud=All).
+PASS Villain: power bar SHOWN (data: Hud=All).
+PASS Villain: level/XP SHOWN (data: Hud=All).
+PASS Villain: heat stars SHOWN (data: Hud=All).
+PASS Villain: session timer SHOWN (data: SessionSeconds=900).
+PASS Villain: objective slot SHOWN (data: Hud=All).
+PASS Villain: director panel HIDDEN (data: Director=none).
+PASS Villain: timer and objective slot shown.
+PASS Gameplay camera found for villain-1280x720
+PASS villain-1280x720 1280x720: Expand scaling -> panel 1600x900 logical (expected 1600x900, scale 0.8); the 1600x900 reference area fits.
+PASS villain-1280x720 1280x720: all 67 visible HUD elements lie inside the panel with the 28px safe margin.
+PASS villain-1280x720 1280x720: no HUD element except the crosshair intersects the centre 40%x40% zone (480,270 640x360).
+PASS villain-1280x720 1280x720: no visible label text is truncated (measured text fits its box).
+PASS villain-1280x720 1280x720: HUD groups do not overlap each other: hud-level(27.5,27.5 285x77.5) hud-heat(1367.5,27.5 205x81.3) hud-top-centre(650,27.5 300x76.3) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,757.5 378.8x115)
+PASS villain-1280x720 1280x720: crosshair centre at 640,360 px vs screen centre 640,360 (|d| 0 px <= 1) — the aim ray is ViewportPointToRay(.5,.5).
+PASS villain-1280x720: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.6 %).
+PASS villain-1280x720: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 99.1 %).
+PASS villain-1280x720: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.3 %).
+PASS villain-1280x720: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 99.7 %).
+PASS villain-1280x720: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.2 %).
+PASS villain-1280x720: crosshair drawn into the composite (32.2 % of its box changed).
+PASS villain-1280x720: PIXEL centre-clear — 146780 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE villain-1280x720.png 1280x720 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 99 %, hud-vitals 100 %, hud-bottom-centre 99 %.
+PASS Gameplay camera found for villain-1920x1080
+PASS villain-1920x1080 1920x1080: Expand scaling -> panel 1600x900 logical (expected 1600x900, scale 1.2); the 1600x900 reference area fits.
+PASS villain-1920x1080 1920x1080: all 65 visible HUD elements lie inside the panel with the 28px safe margin.
+PASS villain-1920x1080 1920x1080: no HUD element except the crosshair intersects the centre 40%x40% zone (480,270 640x360).
+PASS villain-1920x1080 1920x1080: no visible label text is truncated (measured text fits its box).
+PASS villain-1920x1080 1920x1080: HUD groups do not overlap each other: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(650,28.3 300x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5)
+PASS villain-1920x1080 1920x1080: crosshair centre at 960,540 px vs screen centre 960,540 (|d| 0 px <= 1) — the aim ray is ViewportPointToRay(.5,.5).
+PASS villain-1920x1080: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
+PASS villain-1920x1080: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 99.1 %).
+PASS villain-1920x1080: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.1 %).
+PASS villain-1920x1080: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.8 %).
+PASS villain-1920x1080: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS villain-1920x1080: crosshair drawn into the composite (32.3 % of its box changed).
+PASS villain-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE villain-1920x1080.png 1920x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 99 %, hud-vitals 99 %, hud-bottom-centre 99 %.
+PASS Gameplay camera found for villain-2560x1080
+PASS villain-2560x1080 2560x1080: Expand scaling -> panel 2133.3x900 logical (expected 2133.3x900, scale 1.2); the 1600x900 reference area fits.
+PASS villain-2560x1080 2560x1080: all 65 visible HUD elements lie inside the panel with the 28px safe margin.
+PASS villain-2560x1080 2560x1080: no HUD element except the crosshair intersects the centre 40%x40% zone (640,270 853.3x360).
+PASS villain-2560x1080 2560x1080: no visible label text is truncated (measured text fits its box).
+PASS villain-2560x1080 2560x1080: HUD groups do not overlap each other: hud-level(28.3,28.3 283.3x75) hud-heat(1903.3,28.3 201.7x78.3) hud-top-centre(916.7,28.3 300x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,759.2 377.5x112.5)
+PASS villain-2560x1080 2560x1080: crosshair centre at 1280,540 px vs screen centre 1280,540 (|d| 0 px <= 1) — the aim ray is ViewportPointToRay(.5,.5).
+PASS villain-2560x1080: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
+PASS villain-2560x1080: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 99.3 %).
+PASS villain-2560x1080: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS villain-2560x1080: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.8 %).
+PASS villain-2560x1080: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS villain-2560x1080: crosshair drawn into the composite (32.4 % of its box changed).
+PASS villain-2560x1080: PIXEL centre-clear — 441072 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE villain-2560x1080.png 2560x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 99 %, hud-vitals 99 %, hud-bottom-centre 99 %.
+PASS GameFlow.Select launches free-play
+PASS Free Play: session runs this definition; GameHud + PrototypeHUD exist.
+PASS Free Play: health/energy SHOWN (data: Hud=Health, Powers, Progression, Heat).
+PASS Free Play: power bar SHOWN (data: Hud=Health, Powers, Progression, Heat).
+PASS Free Play: level/XP SHOWN (data: Hud=Health, Powers, Progression, Heat).
+PASS Free Play: heat stars SHOWN (data: Hud=Health, Powers, Progression, Heat).
+PASS Free Play: session timer HIDDEN (data: SessionSeconds=0).
+PASS Free Play: objective slot HIDDEN (data: Hud=Health, Powers, Progression, Heat).
+PASS Free Play: director panel HIDDEN (data: Director=none).
+PASS Free Play: no timer, no objective, no director; Heat stars shown.
+PASS Gameplay camera found for freeplay-1280x720
+PASS freeplay-1280x720 1280x720: Expand scaling -> panel 1600x900 logical (expected 1600x900, scale 0.8); the 1600x900 reference area fits.
+PASS freeplay-1280x720 1280x720: all 57 visible HUD elements lie inside the panel with the 28px safe margin.
+PASS freeplay-1280x720 1280x720: no HUD element except the crosshair intersects the centre 40%x40% zone (480,270 640x360).
+PASS freeplay-1280x720 1280x720: no visible label text is truncated (measured text fits its box).
+PASS freeplay-1280x720 1280x720: HUD groups do not overlap each other: hud-level(27.5,27.5 285x77.5) hud-heat(1367.5,27.5 205x47.5) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,757.5 378.8x115)
+PASS freeplay-1280x720 1280x720: crosshair centre at 640,360 px vs screen centre 640,360 (|d| 0 px <= 1) — the aim ray is ViewportPointToRay(.5,.5).
+PASS freeplay-1280x720: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.6 %).
+PASS freeplay-1280x720: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 98.3 %).
+PASS freeplay-1280x720: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 99.7 %).
+PASS freeplay-1280x720: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.2 %).
+PASS freeplay-1280x720: crosshair drawn into the composite (32.2 % of its box changed).
+PASS freeplay-1280x720: PIXEL centre-clear — 146780 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE freeplay-1280x720.png 1280x720 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 98 %, hud-vitals 100 %, hud-bottom-centre 99 %.
+PASS Gameplay camera found for freeplay-1920x1080
+PASS freeplay-1920x1080 1920x1080: Expand scaling -> panel 1600x900 logical (expected 1600x900, scale 1.2); the 1600x900 reference area fits.
+PASS freeplay-1920x1080 1920x1080: all 57 visible HUD elements lie inside the panel with the 28px safe margin.
+PASS freeplay-1920x1080 1920x1080: no HUD element except the crosshair intersects the centre 40%x40% zone (480,270 640x360).
+PASS freeplay-1920x1080 1920x1080: no visible label text is truncated (measured text fits its box).
+PASS freeplay-1920x1080 1920x1080: HUD groups do not overlap each other: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x45) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5)
+PASS freeplay-1920x1080 1920x1080: crosshair centre at 960,540 px vs screen centre 960,540 (|d| 0 px <= 1) — the aim ray is ViewportPointToRay(.5,.5).
+PASS freeplay-1920x1080: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
+PASS freeplay-1920x1080: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 98.4 %).
+PASS freeplay-1920x1080: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.8 %).
+PASS freeplay-1920x1080: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS freeplay-1920x1080: crosshair drawn into the composite (32.7 % of its box changed).
+PASS freeplay-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE freeplay-1920x1080.png 1920x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 98 %, hud-vitals 99 %, hud-bottom-centre 99 %.
+PASS Gameplay camera found for freeplay-2560x1080
+PASS freeplay-2560x1080 2560x1080: Expand scaling -> panel 2133.3x900 logical (expected 2133.3x900, scale 1.2); the 1600x900 reference area fits.
+PASS freeplay-2560x1080 2560x1080: all 57 visible HUD elements lie inside the panel with the 28px safe margin.
+PASS freeplay-2560x1080 2560x1080: no HUD element except the crosshair intersects the centre 40%x40% zone (640,270 853.3x360).
+PASS freeplay-2560x1080 2560x1080: no visible label text is truncated (measured text fits its box).
+PASS freeplay-2560x1080 2560x1080: HUD groups do not overlap each other: hud-level(28.3,28.3 283.3x75) hud-heat(1903.3,28.3 201.7x45) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,759.2 377.5x112.5)
+PASS freeplay-2560x1080 2560x1080: crosshair centre at 1280,540 px vs screen centre 1280,540 (|d| 0 px <= 1) — the aim ray is ViewportPointToRay(.5,.5).
+PASS freeplay-2560x1080: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
+PASS freeplay-2560x1080: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 98.8 %).
+PASS freeplay-2560x1080: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.8 %).
+PASS freeplay-2560x1080: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS freeplay-2560x1080: crosshair drawn into the composite (32.7 % of its box changed).
+PASS freeplay-2560x1080: PIXEL centre-clear — 441072 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE freeplay-2560x1080.png 2560x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-vitals 99 %, hud-bottom-centre 99 %.
+PASS GameFlow.Select launches endless-fight
+PASS Endless Fight (Hero): session runs this definition; GameHud + PrototypeHUD exist.
+PASS Endless: health/energy SHOWN (data: Hud=Health, Powers, Progression).
+PASS Endless: power bar SHOWN (data: Hud=Health, Powers, Progression).
+PASS Endless: level/XP SHOWN (data: Hud=Health, Powers, Progression).
+PASS Endless: heat stars HIDDEN (data: Hud=Health, Powers, Progression).
+PASS Endless: session timer HIDDEN (data: SessionSeconds=0).
+PASS Endless: objective slot HIDDEN (data: Hud=Health, Powers, Progression).
+PASS Endless: director panel SHOWN (data: Director=EndlessWaves).
+PASS Endless: wave/score panel shown, no objective, no Heat/timer group (Hud=Health, Powers, Progression, SessionSeconds=0).
+PASS Endless: HUD shows the director's structured values WAVE 1 · LEFT 3 · SCORE 0 · BEST 0 (wave 1, score 0, best 0).
+PASS Endless: legacy HudLine unchanged: WAVE 1 · LEFT 3 · SCORE 0 · BEST 0
+PASS Gameplay camera found for endless-1280x720
+PASS endless-1280x720 1280x720: Expand scaling -> panel 1600x900 logical (expected 1600x900, scale 0.8); the 1600x900 reference area fits.
+PASS endless-1280x720 1280x720: all 64 visible HUD elements lie inside the panel with the 28px safe margin.
+PASS endless-1280x720 1280x720: no HUD element except the crosshair intersects the centre 40%x40% zone (480,270 640x360).
+PASS endless-1280x720 1280x720: no visible label text is truncated (measured text fits its box).
+PASS endless-1280x720 1280x720: HUD groups do not overlap each other: hud-level(27.5,27.5 285x77.5) hud-top-centre(627.5,27.5 345x60) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,718.8 378.8x153.8)
+PASS endless-1280x720 1280x720: crosshair centre at 640,360 px vs screen centre 640,360 (|d| 0 px <= 1) — the aim ray is ViewportPointToRay(.5,.5).
+PASS endless-1280x720: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.6 %).
+PASS endless-1280x720: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS endless-1280x720: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 99.7 %).
+PASS endless-1280x720: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 82.3 %).
+PASS endless-1280x720: crosshair drawn into the composite (32.0 % of its box changed).
+PASS endless-1280x720: PIXEL centre-clear — 146780 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE endless-1280x720.png 1280x720 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-top-centre 99 %, hud-vitals 100 %, hud-bottom-centre 82 %.
+PASS Gameplay camera found for endless-1920x1080
+PASS endless-1920x1080 1920x1080: Expand scaling -> panel 1600x900 logical (expected 1600x900, scale 1.2); the 1600x900 reference area fits.
+PASS endless-1920x1080 1920x1080: all 64 visible HUD elements lie inside the panel with the 28px safe margin.
+PASS endless-1920x1080 1920x1080: no HUD element except the crosshair intersects the centre 40%x40% zone (480,270 640x360).
+PASS endless-1920x1080 1920x1080: no visible label text is truncated (measured text fits its box).
+PASS endless-1920x1080 1920x1080: HUD groups do not overlap each other: hud-level(28.3,28.3 283.3x75) hud-top-centre(626.7,28.3 346.7x60) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,721.7 377.5x150)
+PASS endless-1920x1080 1920x1080: crosshair centre at 960,540 px vs screen centre 960,540 (|d| 0 px <= 1) — the aim ray is ViewportPointToRay(.5,.5).
+PASS endless-1920x1080: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
+PASS endless-1920x1080: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS endless-1920x1080: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.8 %).
+PASS endless-1920x1080: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 82.5 %).
+PASS endless-1920x1080: crosshair drawn into the composite (32.2 % of its box changed).
+PASS endless-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE endless-1920x1080.png 1920x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-top-centre 99 %, hud-vitals 99 %, hud-bottom-centre 83 %.
+PASS Gameplay camera found for endless-2560x1080
+PASS endless-2560x1080 2560x1080: Expand scaling -> panel 2133.3x900 logical (expected 2133.3x900, scale 1.2); the 1600x900 reference area fits.
+PASS endless-2560x1080 2560x1080: all 64 visible HUD elements lie inside the panel with the 28px safe margin.
+PASS endless-2560x1080 2560x1080: no HUD element except the crosshair intersects the centre 40%x40% zone (640,270 853.3x360).
+PASS endless-2560x1080 2560x1080: no visible label text is truncated (measured text fits its box).
+PASS endless-2560x1080 2560x1080: HUD groups do not overlap each other: hud-level(28.3,28.3 283.3x75) hud-top-centre(893.3,28.3 346.7x60) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,721.7 377.5x150)
+PASS endless-2560x1080 2560x1080: crosshair centre at 1280,540 px vs screen centre 1280,540 (|d| 0 px <= 1) — the aim ray is ViewportPointToRay(.5,.5).
+PASS endless-2560x1080: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
+PASS endless-2560x1080: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS endless-2560x1080: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.8 %).
+PASS endless-2560x1080: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 82.5 %).
+PASS endless-2560x1080: crosshair drawn into the composite (32.7 % of its box changed).
+PASS endless-2560x1080: PIXEL centre-clear — 441072 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE endless-2560x1080.png 2560x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-top-centre 99 %, hud-vitals 99 %, hud-bottom-centre 83 %.
+PASS GameFlow.Select launches hero HUD-control clone
+PASS Hero Mode: session runs this definition; GameHud + PrototypeHUD exist.
+PASS Clone (unchanged flags): health/energy SHOWN (data: Hud=All).
+PASS Clone (unchanged flags): power bar SHOWN (data: Hud=All).
+PASS Clone (unchanged flags): level/XP SHOWN (data: Hud=All).
+PASS Clone (unchanged flags): heat stars SHOWN (data: Hud=All).
+PASS Clone (unchanged flags): session timer SHOWN (data: SessionSeconds=900).
+PASS Clone (unchanged flags): objective slot SHOWN (data: Hud=All).
+PASS Clone (unchanged flags): director panel HIDDEN (data: Director=none).
+PASS CONTROL: clearing Objectives+Heat and SessionSeconds=0 on the CLONED definition hides objective, stars, timer (and their group); vitals stay.
+PASS CONTROL: clearing Health/Powers/Progression hides vitals, power bar and level.
+PASS Gameplay camera found for control-clone-all-flags-off
+PASS control-clone-all-flags-off: crosshair drawn into the composite (32.5 % of its box changed).
+PASS control-clone-all-flags-off: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE control-clone-all-flags-off.png 1920x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: .
+PASS Clone (flags restored): health/energy SHOWN (data: Hud=All).
+PASS Clone (flags restored): power bar SHOWN (data: Hud=All).
+PASS Clone (flags restored): level/XP SHOWN (data: Hud=All).
+PASS Clone (flags restored): heat stars SHOWN (data: Hud=All).
+PASS Clone (flags restored): session timer SHOWN (data: SessionSeconds=900).
+PASS Clone (flags restored): objective slot SHOWN (data: Hud=All).
+PASS Clone (flags restored): director panel HIDDEN (data: Director=none).
+PASS Shipping hero definition untouched (Hud=All, SessionSeconds=900).
+PASS GameFlow.Select launches free-play + director HUD-control clone
+PASS Free Play: session runs this definition; GameHud + PrototypeHUD exist.
+PASS CONTROL: Free Play clone given a Director shows the director panel (4 values); the shipping Free Play (Director none) showed none.
+PASS Shipping Free Play definition untouched.
+PASS Menu component exists in Home
+PASS Existing progression unlock fire
+PASS Existing progression unlock ice
+PASS PlayerProgression.SetLoadout -> vector / Fire + Ice.
+PASS GameFlow.Select launches hero
+PASS Hero Mode: session runs this definition; GameHud + PrototypeHUD exist.
+PASS New session equips Fire + Ice; synergy Thermal Shock.
+PASS Rebuilt bar: fire[1] | ice[3] | thermal-shock[C]
+PASS fire slot: icon Flame = MenuIcon, colour = palette Fire, 3 pips = charges, key '1' (select key from PowerUser.Powers order).
+PASS ice slot: icon Crystal = MenuIcon, colour = palette Fire, 2 pips = charges, key '3' (select key from PowerUser.Powers order).
+PASS Synergy slot: Thermal Shock, icon Star, colour palette Fire, key 'C'.
+PASS CONTROL: unequipped Flight/Strength have no slot.
+PASS Strength not equipped -> small unslotted 'E / RMB MELEE' hint shown.
+PASS Bar signature: fire|ice|thermal-shock|5|C|False
+PASS Gameplay camera found for loadout-fire-ice-1920x1080
+PASS loadout-fire-ice-1920x1080 1920x1080: Expand scaling -> panel 1600x900 logical (expected 1600x900, scale 1.2); the 1600x900 reference area fits.
+PASS loadout-fire-ice-1920x1080 1920x1080: all 72 visible HUD elements lie inside the panel with the 28px safe margin.
+PASS loadout-fire-ice-1920x1080 1920x1080: no HUD element except the crosshair intersects the centre 40%x40% zone (480,270 640x360).
+PASS loadout-fire-ice-1920x1080 1920x1080: no visible label text is truncated (measured text fits its box).
+PASS loadout-fire-ice-1920x1080 1920x1080: HUD groups do not overlap each other: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(636.2,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(577.9,759.2 444.2x112.5)
+PASS loadout-fire-ice-1920x1080 1920x1080: crosshair centre at 960,540 px vs screen centre 960,540 (|d| 0 px <= 1) — the aim ray is ViewportPointToRay(.5,.5).
+PASS loadout-fire-ice-1920x1080: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
+PASS loadout-fire-ice-1920x1080: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 99.3 %).
+PASS loadout-fire-ice-1920x1080: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.2 %).
+PASS loadout-fire-ice-1920x1080: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.8 %).
+PASS loadout-fire-ice-1920x1080: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS loadout-fire-ice-1920x1080: crosshair drawn into the composite (32.6 % of its box changed).
+PASS loadout-fire-ice-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE loadout-fire-ice-1920x1080.png 1920x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 99 %, hud-vitals 99 %, hud-bottom-centre 99 %.
+PASS CONTROL before use: Fire pips 3/3, radial 0.
+PASS Real Fire Blast used (PowerUser.Use): Fire Blast activated
+PASS Fire slot after use: pips 2/3, radial 1.00, LMB tag on the selected slot: True.
+PASS Gameplay camera found for loadout-fire-ice-after-fire
+PASS loadout-fire-ice-after-fire: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
+PASS loadout-fire-ice-after-fire: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 99.0 %).
+PASS loadout-fire-ice-after-fire: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.2 %).
+PASS loadout-fire-ice-after-fire: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.8 %).
+PASS loadout-fire-ice-after-fire: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.4 %).
+PASS loadout-fire-ice-after-fire: crosshair drawn into the composite (32.6 % of its box changed).
+PASS loadout-fire-ice-after-fire: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
+CAPTURE loadout-fire-ice-after-fire.png 1920x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 99 %, hud-vitals 99 %, hud-bottom-centre 99 %.
+MEASURED A old IMGUI debug HUD (GameHud hidden): frames=302, FPS=75.3, mean=13.28ms, p95=14.24ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
+MEASURED B new GameHud (IMGUI debug hidden): frames=286, FPS=71.3, mean=14.02ms, p95=16.03ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
+MEASURED A old IMGUI debug HUD (GameHud hidden): frames=295, FPS=73.7, mean=13.56ms, p95=14.21ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
+MEASURED B new GameHud (IMGUI debug hidden): frames=284, FPS=71.0, mean=14.09ms, p95=15.99ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
+MEASURED GameHud.LateUpdate CPU per frame (B phases): 0.047 ms / 0.065 ms.
+MEASURED A/B summary: old IMGUI mean 74.5 FPS, new GameHud mean 71.1 FPS (-4.5%).
+LIMIT: batch mode dispatched no IMGUI repaint events, so phase A measures the frame WITHOUT the old IMGUI panel's draw cost; the A/B therefore bounds the new HUD's full cost rather than a like-for-like swap.
+LIMIT: no hardware keyboard in batch mode; the F3 control calls PrototypeHUD.ToggleDebug, the method the F3 handler calls. Captures come from batch-mode Metal render targets, not a physical display. The restyled Esc pause and Tab upgrade menus are still IMGUI (out of scope).

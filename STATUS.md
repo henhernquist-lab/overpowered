@@ -1,6 +1,43 @@
 # Prototype Status
 
-## HUD Phase 2: make the goal obvious — 2026-09-25 (current)
+## HUD Phase 3: connect the dots — 2026-09-25 (current)
+
+Every meaningful action now visibly feeds a system (`Hud/GameHudFeedback.cs`; gameplay files only gained additive
+events and an overload).
+- **Honest "+XP" popups:** they float from the event's world position. The new `AddXp(amount, where, reason)`
+  overload and `XpGranted` / `LevelUp` events are additive; `AddXp(int)` and `XpAwarded` are unchanged. The overload is
+  used for defeats, destruction, crimes and objective success. Grants within 0.3 s and 4 m merge into one popup, from
+  a pool of 16; XP with no position floats beside the level badge.
+- **Heat feedback:** `WorldSession.HeatAdded` (only from `AddHeat`, with the delta actually applied) flashes the stars
+  and shows +/−; decay only flashes when a whole star is lost.
+- **Mid-session level-up:** a badge burst plus a "LEVEL UP — TAB TO UPGRADE" banner. It never pauses or touches
+  timeScale.
+- **Banners:** objective complete (side colour, name, +XP), objective failed (muted) and Endless wave cleared. They
+  are queued one at a time, and alerts wait for them.
+- **Waypoint enlarged:** all sizes are named constants in `GameHudGuidance.cs`. At 720p the distance label is 16.8 px
+  (was 11.2) and the arrow 52 px (was 34).
+
+**Verification — HudPhase3 530 PASS + separate-process Reload 10, exit 0** (clone):
+- HONESTY: SUM(popups) == shown total == real XP gained (Hero 410, Villain 145, Endless 280)
+- MERGE: 3 defeats in 0.026 s → one "+105 XP"; CONTROLS: 1 s apart → separate, 12 m apart → separate; a 5-kill
+  Endless burst → one "+175 XP"
+- timeScale was 1 on every sampled frame of the level-up, and NPCs kept moving
+- the objective banner shows THEN the alert, with 0 frames overlapping
+- IDLE CONTROL (30 s): zero popups, banners and alerts
+- Heat: 1,258 frames of decay without a star change → 0 flashes, and the one star drop flashed exactly once. (The
+  brief's "zero flashes in 30 s" was physically impossible, because decay must cross a star in that window.)
+- Reload CONTROL: loading a levelled save replays no burst or popup
+
+Rescues grant 0 XP today, so they show no popup, by the honesty rule.
+Regressions exit 0: HUD P1 318, Mode 79 + 2, ModeExpansion 111 + 10, HeroForge 132 + 3, Combat 170, Audio 126,
+City 53 + 5. Evidence: `Verification/Hud/phase3/`.
+
+**KNOWN FLAKE, from Phase 2's committed code (3bd73dd), not this pass:** HudPhase2 fails 1 run in 3–4 at "Next to
+an interactable objective → prompt text ''". It reproduces on 3bd73dd without any Phase 3 code. The root cause is
+not yet known: it may be a test race or a real intermittent missing interact prompt. Being diagnosed.
+**Cosmetic:** the popping heat star overlaps the "HEAT" caption; the waypoint count label is still ~12 px at 720p.
+
+## HUD Phase 2: make the goal obvious — 2026-09-25 (previous)
 
 Built on Phase 1. Modal and world-anchored guidance lives on a second OVERLAY panel (`Hud/GameHudGuidance.cs`), so the
 Phase 1 centre-clear pixel check keeps its meaning for the persistent HUD.

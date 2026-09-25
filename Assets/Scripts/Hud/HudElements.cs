@@ -83,6 +83,8 @@ public static class HudBindings
     /// Also hardcoded outside the HUD and mirrored here: Jump is the legacy "Jump" button (Space), backflip is Q in
     /// SuperHeroController.Update, the encounter hold is R in CrimeEncounter.Update.
     public const string JumpKey = "SPACE", BackflipKey = "Q", InteractKey = "R";
+    /// The powers/upgrades menu toggle, hardcoded as KeyCode.Tab in WorldSession.Update; mirrored here.
+    public const KeyCode MenuKey = KeyCode.Tab;
     /// The melee key the player actually has: Super Strength's E when equipped, else the basic melee on E / RMB.
     public static string MeleeKey(PowerUser user) => user != null && user.Strength != null && user.IsEquipped(user.Strength.Definition) ? StrengthKey : BasicMelee;
     public static bool FlightEquipped(PowerUser user) => user != null && user.Flight != null && user.IsEquipped(user.Flight.Definition);

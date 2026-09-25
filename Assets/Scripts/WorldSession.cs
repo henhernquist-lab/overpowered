@@ -23,6 +23,9 @@ public sealed class WorldSession : MonoBehaviour
     public event System.Action PlayerRespawned;
     /// Raised after a mode encounter has been placed and initialised (HUD alerts listen; spawning is unchanged).
     public event System.Action<CrimeEncounter> EncounterSpawned;
+    /// Raised by AddHeat with the change actually applied (after clamping), only when Heat changed (HUD heat flash).
+    /// Continuous decay (TickHeat) and the respawn reset do not raise it.
+    public event System.Action<float> HeatAdded;
     public bool MenuOpen;
     public string Message = "Explore rooftops, stop crimes, or press H to switch sides.";
     public int ChaosProgress { get; private set; }
@@ -86,7 +89,7 @@ public sealed class WorldSession : MonoBehaviour
         float decayTime=Mathf.Max(0,troubleAgo-Tuning.Heat.DecayDelay)-Mathf.Max(0,before-Tuning.Heat.DecayDelay);
         Heat=Mathf.Max(0,Heat-decayTime*Tuning.Heat.DecayPerSecond);
     }
-    public void AddHeat(float amount) { Heat=Mathf.Clamp(Heat+amount,0,Tuning.Heat.MaximumStars); Mode?.ObserveHeat(Heat); if (amount>0) troubleAgo=0; }
+    public void AddHeat(float amount) { float before=Heat; Heat=Mathf.Clamp(Heat+amount,0,Tuning.Heat.MaximumStars); Mode?.ObserveHeat(Heat); if (amount>0) troubleAgo=0; if (Heat!=before) HeatAdded?.Invoke(Heat-before); }
     public void Alarm(Vector3 position)
     {
         foreach (var npc in Npcs) if (npc!=null && npc.Role==NpcRole.Civilian && Vector3.Distance(position,npc.transform.position)<Tuning.Npcs.AlarmRadius) npc.Alarm(position);
@@ -96,8 +99,8 @@ public sealed class WorldSession : MonoBehaviour
         if(Mode!=null&&Mode.Ended) return;
         Alarm(position); AddHeat(Tuning.Heat.DestructionHeat);
         if (Progression.Data.Side!=PlayerSide.Villain) return;
-        Progression.AddXp(Tuning.Progression.DestructionXp); ChaosProgress++;
-        if (Mode==null && ChaosProgress>=Tuning.Crimes.ChaosTarget) { ChaosProgress=0; Progression.AddXp(Tuning.Progression.CrimeXp); Message="Chaos objective complete: XP earned"; }
+        Progression.AddXp(Tuning.Progression.DestructionXp,position,"destruction"); ChaosProgress++;
+        if (Mode==null && ChaosProgress>=Tuning.Crimes.ChaosTarget) { ChaosProgress=0; Progression.AddXp(Tuning.Progression.CrimeXp,position,"chaos objective"); Message="Chaos objective complete: XP earned"; }
     }
     public void OnAssault(CityNpc npc)
     {
@@ -109,7 +112,7 @@ public sealed class WorldSession : MonoBehaviour
         if(Mode!=null&&Mode.Ended) return;
         if ((Progression.Data.Side==PlayerSide.Hero && npc.Role==NpcRole.Criminal) ||
             (Progression.Data.Side==PlayerSide.Villain && npc.Role!=NpcRole.Criminal))
-            Progression.AddXp(npc.Role==NpcRole.Civilian?Tuning.Progression.CivilianXp:Tuning.Progression.EnemyXp);
+            Progression.AddXp(npc.Role==NpcRole.Civilian?Tuning.Progression.CivilianXp:Tuning.Progression.EnemyXp,npc.transform.position,"defeat");
         if (npc.Role!=NpcRole.Criminal) AddHeat(Tuning.Heat.DefeatHeat);
     }
     public void DamagePlayer(float damage) { if (damage>0&&!PlayerDead && (Mode==null||!Mode.Ended)) { Health=Mathf.Max(0,Health-damage); PlayerDamaged?.Invoke(PlayerDead); if (PlayerDead) {Powers.Release(false);Mode?.PlayerDefeated();} } }
@@ -118,7 +121,7 @@ public sealed class WorldSession : MonoBehaviour
         if(Mode!=null) {crime.Encounter?.TryComplete(); return;}
         bool hero=Progression.Data.Side==PlayerSide.Hero;
         AddHeat(hero?-Tuning.Heat.CrimeReduction:Tuning.Heat.CrimeHeat);
-        Progression.AddXp(Tuning.Progression.CrimeXp);
+        Progression.AddXp(Tuning.Progression.CrimeXp,crime.transform.position,"crime");
         Message=hero?"Crime stopped: XP earned, Heat reduced":"Crime assisted: chaos XP earned, Heat increased";
     }
     public CrimeEvent SpawnCrime(CrimeKind kind,Vector3 position)

@@ -18,7 +18,21 @@ public sealed partial class GameHud
     public const float PromptMinSeconds = 1.5f;
     /// Waypoint: world height above the target, the radius around screen centre it is pushed out of (crosshair), and
     /// the inset band the on-screen marker / edge arrow is kept inside (clear of the corner and top/bottom groups).
-    public const float WaypointHeight = 2.3f, CrosshairClearRadius = 72f, WaypointInsetX = 80f, WaypointInsetTop = 150f, WaypointInsetBottom = 175f;
+    public const float WaypointHeight = 2.3f, WaypointInsetX = 100f, WaypointInsetTop = 150f, WaypointInsetBottom = 175f;
+    /// Waypoint SIZES, all in one place (panel units at the 1600x900 reference; x0.8 at 1280x720, x1.2 at 1920x1080).
+    /// Phase 3 raised them from diamond 30 / distance 14 / count 11 / arrow 34 / edge label 12 / marker width 96
+    /// (the distance label was ~11 px tall at 720p).
+    public const float WaypointMarkerSize = 44f, WaypointDistanceFont = 21f, WaypointCountFont = 15f, WaypointMarkerWidth = 100f,
+        WaypointArrowSize = 52f, WaypointEdgeFont = 21f, WaypointLabelWidth = 130f;
+    public const float WaypointEdgeBox = WaypointArrowSize + 10f;
+    /// Space the on-screen marker (diamond + distance + count) and the edge arrow (+ label) take around their point.
+    public static Rect WaypointMarkerBox => new Rect(-WaypointMarkerWidth * .5f, -WaypointMarkerSize * .5f, WaypointMarkerWidth, WaypointMarkerSize + 1f + (WaypointDistanceFont + WaypointCountFont) * 1.3f + 8f);
+    /// Half-size of the crosshair box the marker must never cover (26 px crosshair + 2 px slack).
+    public const float CrosshairHalf = 15f;
+    /// Radius around screen centre the marker is pushed out to: the smallest radius at which the marker box clears the
+    /// crosshair box in EVERY direction (worst case: up and to the side, where the labels hang below the diamond).
+    public static readonly float CrosshairClearRadius = Mathf.Ceil(new Vector2(WaypointMarkerBox.width * .5f + CrosshairHalf, WaypointMarkerBox.yMax + CrosshairHalf).magnitude);
+    public static Rect WaypointEdgeArea => new Rect(-WaypointLabelWidth * .5f, -WaypointEdgeBox * .5f, WaypointLabelWidth, WaypointEdgeBox + WaypointEdgeFont * 1.35f + 4f);
     public static readonly string[] PromptIds = { "move", "punch", "dodge", "interact" };
 
     public PanelSettings OverlayPanel { get; private set; }
@@ -109,17 +123,19 @@ public sealed partial class GameHud
         var ink = C(CityColor.UiInk); var muted = C(CityColor.UiMuted); var navy = C(CityColor.UiNavy);
 
         // ---- waypoint: on-screen marker (diamond + distance + remaining count) and the edge arrow
-        Waypoint = Box("hud-waypoint"); Absolute(Waypoint); Waypoint.style.alignItems = Align.Center; Waypoint.style.width = 96;
+        Waypoint = Box("hud-waypoint"); Absolute(Waypoint); Waypoint.style.alignItems = Align.Center; Waypoint.style.width = WaypointMarkerWidth;
         Waypoint.style.translate = new Translate(Length.Percent(-50), 0); OverlayRoot.Add(Waypoint);
-        waypointDiamond = new HudDiamond(Accent(PlayerSide.Hero), Alpha(navy, .9f)) { name = "waypoint-diamond" }; waypointDiamond.style.width = 30; waypointDiamond.style.height = 30;
+        waypointDiamond = new HudDiamond(Accent(PlayerSide.Hero), Alpha(navy, .9f)) { name = "waypoint-diamond" }; waypointDiamond.style.width = WaypointMarkerSize; waypointDiamond.style.height = WaypointMarkerSize;
         WaypointMarkerIcon = waypointDiamond; Waypoint.Add(waypointDiamond);
-        WaypointDistanceLabel = Text("", 14, ink); WaypointDistanceLabel.name = "waypoint-distance"; WaypointDistanceLabel.style.marginTop = 1; Outline(WaypointDistanceLabel); Waypoint.Add(WaypointDistanceLabel);
-        WaypointCountLabel = Text("", 11, ink); WaypointCountLabel.name = "waypoint-count"; Outline(WaypointCountLabel); Waypoint.Add(WaypointCountLabel);
-        WaypointEdge = Box("hud-waypoint-edge"); Absolute(WaypointEdge); WaypointEdge.style.width = 44; WaypointEdge.style.height = 44; OverlayRoot.Add(WaypointEdge);
+        WaypointDistanceLabel = Text("", (int)WaypointDistanceFont, ink); WaypointDistanceLabel.name = "waypoint-distance"; WaypointDistanceLabel.style.marginTop = 1; Outline(WaypointDistanceLabel); Pill(WaypointDistanceLabel); Waypoint.Add(WaypointDistanceLabel);
+        WaypointCountLabel = Text("", (int)WaypointCountFont, ink); WaypointCountLabel.name = "waypoint-count"; Outline(WaypointCountLabel); Pill(WaypointCountLabel); WaypointCountLabel.style.marginTop = 1; Waypoint.Add(WaypointCountLabel);
+        WaypointEdge = Box("hud-waypoint-edge"); Absolute(WaypointEdge); WaypointEdge.style.width = WaypointEdgeBox; WaypointEdge.style.height = WaypointEdgeBox; OverlayRoot.Add(WaypointEdge);
         WaypointArrow = new HudArrow(Accent(PlayerSide.Hero), Alpha(navy, .9f)) { name = "waypoint-arrow" }; Absolute(WaypointArrow);
-        WaypointArrow.style.left = 5; WaypointArrow.style.top = 5; WaypointArrow.style.width = 34; WaypointArrow.style.height = 34; WaypointEdge.Add(WaypointArrow);
-        waypointEdgeDistance = Text("", 12, ink); waypointEdgeDistance.name = "waypoint-edge-distance"; Absolute(waypointEdgeDistance); waypointEdgeDistance.style.top = 44;
-        waypointEdgeDistance.style.left = -20; waypointEdgeDistance.style.width = 84; waypointEdgeDistance.style.unityTextAlign = TextAnchor.MiddleCenter; Outline(waypointEdgeDistance); WaypointEdge.Add(waypointEdgeDistance);
+        WaypointArrow.style.left = 5; WaypointArrow.style.top = 5; WaypointArrow.style.width = WaypointArrowSize; WaypointArrow.style.height = WaypointArrowSize; WaypointEdge.Add(WaypointArrow);
+        var edgeRow = Box("waypoint-edge-label"); Absolute(edgeRow); edgeRow.style.top = WaypointEdgeBox; edgeRow.style.left = (WaypointEdgeBox - WaypointLabelWidth) * .5f;
+        edgeRow.style.width = WaypointLabelWidth; edgeRow.style.alignItems = Align.Center; WaypointEdge.Add(edgeRow);
+        waypointEdgeDistance = Text("", (int)WaypointEdgeFont, ink); waypointEdgeDistance.name = "waypoint-edge-distance"; waypointEdgeDistance.style.unityTextAlign = TextAnchor.MiddleCenter;
+        Outline(waypointEdgeDistance); Pill(waypointEdgeDistance); edgeRow.Add(waypointEdgeDistance);
         Show(Waypoint, false); Show(WaypointEdge, false);
 
         // ---- alert card (top-right, under the Heat group)
@@ -166,6 +182,8 @@ public sealed partial class GameHud
         text = Text("", 17, C(CityColor.UiInk), false); text.style.marginLeft = 12; text.style.whiteSpace = WhiteSpace.Normal; text.style.flexShrink = 1; row.Add(text);
         return row;
     }
+    /// Dark rounded backing behind a world-anchored label so it reads over bright sky and busy streets (Phase 3).
+    void Pill(Label label) { label.style.backgroundColor = Alpha(C(CityColor.UiNavy), .68f); Round(label, 6); Pad(label, 1, 7); }
     void Outline(Label label) { label.style.unityTextOutlineColor = Alpha(C(CityColor.UiNavy), .95f); label.style.unityTextOutlineWidth = .18f; }
 
     // ------------------------------------------------------------------ binding (additive events)
@@ -202,7 +220,8 @@ public sealed partial class GameHud
         var side = w.Progression.Data.Side; var accent = Accent(side);
         UpdateBriefing(w, definition, accent, now);
         bool free = !w.MenuOpen && !w.PlayerDead && (w.Mode == null || !w.Mode.Paused);
-        UpdateAlert(w, accent, now, free && !briefingActive);
+        UpdateAlert(w, accent, now, free && !briefingActive && BannerIdle);   // never over a banner; queued banners go first
+        UpdateFeedback(now, accent, free);
         UpdateWaypoint(w, accent, objectives && free && !briefingActive && !GameHud.Shown(Briefing));
         UpdatePrompts(w, accent, now, free && !briefingActive && !GameHud.Shown(Briefing));
     }
@@ -280,7 +299,8 @@ public sealed partial class GameHud
         {
             header = d.DisplayName.ToUpperInvariant() + (d.SuccessGoal > 0 ? $"  ·  {s.Successes}/{d.SuccessGoal} DONE" : "");
             // Between encounters: the last encounter result; never the mode Description (the briefing covers that).
-            body = s.Feedback != null && s.Feedback != d.Description ? s.Feedback : ""; meta = "";
+            // Phase 3: not while that result's own banner is up or queued (it would say the same thing twice).
+            body = s.Feedback != null && s.Feedback != d.Description && !ResultBannerPending ? s.Feedback : ""; meta = "";
         }
         if (objectiveHeader.text != header) objectiveHeader.text = header;
         if (ObjectiveBody.text != body) ObjectiveBody.text = body;
@@ -292,7 +312,12 @@ public sealed partial class GameHud
     {
         float t = (now - objectivePulseAt) / ObjectivePulseSeconds;
         float scale = t < 0f || t >= 1f ? 1f : 1f + .08f * Mathf.Sin(t * Mathf.PI);
-        if (!Mathf.Approximately(ObjectiveGroup.resolvedStyle.scale.value.x, scale)) ObjectiveGroup.style.scale = new Scale(new Vector3(scale, scale, 1f));
+        if (!Mathf.Approximately(ObjectiveGroup.resolvedStyle.scale.value.x, scale))
+        {
+            // Scaled about its centre, then moved down by the growth so the top edge never passes the safe margin.
+            ObjectiveGroup.style.scale = new Scale(new Vector3(scale, scale, 1f));
+            ObjectiveGroup.style.translate = new Translate(0, (scale - 1f) * ObjectiveGroup.layout.height * .5f);
+        }
     }
     public bool ObjectivePulsing => Time.unscaledTime - objectivePulseAt < ObjectivePulseSeconds;
 
@@ -330,11 +355,11 @@ public sealed partial class GameHud
         if (vp.z > 0f && inset.Contains(point))
         {
             WaypointOnScreen = true; WaypointPushed = false;
-            point = AvoidGroups(point, new Rect(-48f, -15f, 96f, 62f), centre);
+            point = AvoidGroups(point, WaypointMarkerBox, centre);
             var offset = point - centre;
             if (offset.magnitude < CrosshairClearRadius) { WaypointPushed = true; point = centre + (offset.sqrMagnitude > .01f ? offset.normalized : Vector2.down) * CrosshairClearRadius; }
             WaypointPoint = point;
-            Waypoint.style.left = point.x; Waypoint.style.top = point.y - 15f;
+            Waypoint.style.left = point.x; Waypoint.style.top = point.y - WaypointMarkerSize * .5f;
             if (WaypointDistanceLabel.text != metres) WaypointDistanceLabel.text = metres;
             string count = WaypointRemaining > 1 ? $"{WaypointRemaining} LEFT" : "";
             if (WaypointCountLabel.text != count) WaypointCountLabel.text = count;
@@ -353,8 +378,8 @@ public sealed partial class GameHud
             float halfW = inset.width * .5f, halfH = inset.height * .5f, insetCx = inset.center.x, insetCy = inset.center.y;
             float t = Mathf.Min(Mathf.Abs(dir.x) > .0001f ? halfW / Mathf.Abs(dir.x) : float.MaxValue, Mathf.Abs(dir.y) > .0001f ? halfH / Mathf.Abs(dir.y) : float.MaxValue);
             point = new Vector2(insetCx + dir.x * t, insetCy - dir.y * t); WaypointPushed = false;
-            point = AvoidGroups(point, new Rect(-42f, -22f, 84f, 66f), centre); WaypointPoint = point;
-            WaypointEdge.style.left = point.x - 22f; WaypointEdge.style.top = point.y - 22f;
+            point = AvoidGroups(point, WaypointEdgeArea, centre); WaypointPoint = point;
+            WaypointEdge.style.left = point.x - WaypointEdgeBox * .5f; WaypointEdge.style.top = point.y - WaypointEdgeBox * .5f;
             WaypointArrow.style.rotate = new Rotate(Angle.Degrees(WaypointArrowAngle));
             string label = WaypointRemaining > 1 ? $"{metres} · {WaypointRemaining}" : metres;
             if (waypointEdgeDistance.text != label) waypointEdgeDistance.text = label;
@@ -367,14 +392,19 @@ public sealed partial class GameHud
         for (int i = 0; i < 60; i++)
         {
             var at = new Rect(point + box.position, box.size); bool hit = false;
-            foreach (var g in AvoidList()) if (GameHud.Shown(g) && g.worldBound.Overlaps(at)) { hit = true; break; }
+            foreach (var g in AvoidList())
+            {
+                if (!GameHud.Shown(g)) continue; var r = g.worldBound;
+                if (g == Banner) r = Rect.MinMaxRect(r.xMin - 4f, r.yMin - 4f, r.xMax + 4f, r.yMax + 18f);   // its slide-in is still settling (last frame's layout)
+                if (r.Overlaps(at)) { hit = true; break; }
+            }
             if (!hit) return point;
             var step = centre - point; if (step.sqrMagnitude < 64f) return point;
             point += step.normalized * 8f; WaypointShifted = true;
         }
         return point;
     }
-    IEnumerable<VisualElement> AvoidList() { yield return LevelGroup; yield return HeatGroup; yield return TopCentre; yield return VitalsGroup; yield return BottomStack; yield return AlertCard; yield return PromptCard; }
+    IEnumerable<VisualElement> AvoidList() { yield return LevelGroup; yield return HeatGroup; yield return TopCentre; yield return VitalsGroup; yield return BottomStack; yield return AlertCard; yield return PromptCard; yield return Banner; }
     /// Horizontal direction to a world point relative to the camera heading (degrees clockwise, 0 = ahead).
     public static float HeadingBearing(Camera cam, Vector3 from, Vector3 world)
     {
@@ -391,7 +421,7 @@ public sealed partial class GameHud
         {
             while (alertQueue.Count > 0 && (alertQueue.Peek() == null || alertQueue.Peek().Finished)) alertQueue.Dequeue();
             if (alertQueue.Count == 0 || !allowed) { Show(AlertCard, false); return; }
-            AlertEncounter = alertQueue.Dequeue(); alertStartedAt = now; AlertsStarted++;
+            AlertEncounter = alertQueue.Dequeue(); alertStartedAt = now; AlertsStarted++; RecordAlertStart(AlertEncounter.Definition.DisplayName, now);
             AlertNameLabel.text = AlertEncounter.Definition.DisplayName.ToUpperInvariant();
             alertEyebrow.style.color = accent; AlertCard.style.borderLeftColor = accent; AlertArrow.SetFill(accent);
             Show(AlertCard, true);
@@ -400,7 +430,7 @@ public sealed partial class GameHud
         if (e == null || e.Finished || t >= total)
         {
             if (e != null) alertPending.Remove(e);
-            AlertEncounter = null; AlertsFinished++; Show(AlertCard, false);
+            AlertEncounter = null; AlertsFinished++; Show(AlertCard, false); RecordAlertEnd(now);
             objectivePulseAt = now; nextStep = 0f; nextObjective = 0f;   // the objective line updates now, with a pulse
             return;
         }

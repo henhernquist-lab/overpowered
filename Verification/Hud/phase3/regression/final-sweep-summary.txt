@@ -1,0 +1,18 @@
+fin-p3 | HudPhase3Verification.Run | exit 0 | PASS 530 | PASS HUD glyphs (minus '−', dash '—'): every glyph of "−0.35 — +105 XP LEVEL UP TAB TO UPGRADE OBJECTIVE COMPLETE FAILED WAVE CLEARED SCORE POINTS 0123456789" exists in the HUD font LegacyRuntime. | sync-diffs        1
+fin-p3-reload | HudPhase3Verification.Reload | exit 0 | PASS 10 |  | sync-diffs        1
+fin-hud | HudVerification.Run | exit 0 | PASS 318 |  | sync-diffs        1
+fin-p2 | HudPhase2Verification.Run | exit 1 | PASS 434 | FAIL System.Exception: Next to an interactable objective -> "". | sync-diffs        1
+fin-p2-reload | HudPhase2Verification.Reload | exit 1 | PASS 0 | FAIL System.Exception: Reloaded prompt save carries SeenHints: move,punch,dodge | sync-diffs        1
+fin-mode | ModeVerification.Run | exit 0 | PASS 79 |  | sync-diffs        1
+fin-mode-reload | ModeVerification.Reload | exit 0 | PASS 2 |  | sync-diffs        1
+fin-modeexp | ModeExpansionVerification.Run | exit 0 | PASS 111 |  | sync-diffs        1
+fin-modeexp-reload | ModeExpansionVerification.Reload | exit 0 | PASS 10 |  | sync-diffs        1
+fin-forge | HeroForgeVerification.Run | exit 0 | PASS 132 |  | sync-diffs        1
+fin-forge-reload | HeroForgeVerification.Reload | exit 0 | PASS 3 |  | sync-diffs        1
+fin-combat | CombatVerification.Run | exit 0 | PASS 170 |  | sync-diffs        1
+fin-audio | AudioVerification.Run | exit 0 | PASS 126 |  | sync-diffs        1
+fin-city | CityVerification.Run | exit 0 | PASS 53 |  | sync-diffs        1
+fin-city-reload | CityVerification.Reload | exit 0 | PASS 5 |  | sync-diffs        1
+DONE
+--- Phase 2 reruns (same Phase 3 code): p2-rerun2 Run exit 0 (460 PASS) + Reload exit 0 (28); p2-rerun3 Run exit 0 + Reload exit 0.
+--- CONTROL on committed HEAD 3bd73dd (no Phase 3 code), HudPhase2Verification.Run x3: exit 0 (460), exit 0 (460), exit 1 (434, same FAIL "Next to an interactable objective -> """).

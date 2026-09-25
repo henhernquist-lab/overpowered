@@ -147,6 +147,7 @@ public sealed class EndlessWaveState : ModeDirectorState
             Session.AddScore(Tuning.WaveClearBonus * Wave);
             World.Message = $"WAVE {Wave} CLEARED  +{Tuning.WaveClearBonus * Wave}";
             Intermission = true; IntermissionLeft = Tuning.IntermissionSeconds;
+            Announce($"{WaveKills} DEFEATED", $"WAVE {Wave} CLEARED", $"+{Tuning.WaveClearBonus * Wave} SCORE");
         }
     }
 
