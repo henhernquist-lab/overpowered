@@ -1,0 +1,46 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
+/// SCRATCH PROBE: gameplay-camera single-render FPS in the shipping Hero mode, hero idle at spawn (8 s warm-up so the final tree's 7 s briefing card has timed out), 1920x1080, every
+/// runtime-created UI Toolkit panel (the HUD, when the tree has one) drawn into the same target. Same code in A and B.
+public sealed class FpsProbeRunner : MonoBehaviour
+{
+    public Action<int> Finished;
+    IEnumerator Start()
+    {
+        QualitySettings.vSyncCount = 0; Application.targetFrameRate = -1;
+        var lines = new List<string>(); string label = Environment.GetEnvironmentVariable("FPS_LABEL") ?? "?";
+        while (GameFlow.Instance == null || GameFlow.Instance.Loading || SceneManager.GetActiveScene().name != GameFlow.HomeScene) yield return null;
+        yield return null;
+        var hero = Resources.LoadAll<GameModeDefinition>("Modes").First(m => m.Id == "hero");
+        GameFlow.Instance.Select(hero);
+        while (GameFlow.Instance.Loading || SceneManager.GetActiveScene().name != GameFlow.CityScene || WorldSession.Instance == null) yield return null;
+        var cam = FindAnyObjectByType<ThirdPersonCamera>().GetComponent<Camera>();
+        var target = new RenderTexture(1920, 1080, 24) { name = "FPS probe" }; target.Create();
+        cam.targetTexture = target; cam.enabled = false;
+        var panels = new List<PanelSettings>();
+        foreach (var doc in FindObjectsByType<UIDocument>(FindObjectsSortMode.None))
+            if (doc.panelSettings != null && !UnityEditor.AssetDatabase.Contains(doc.panelSettings)) { doc.panelSettings.targetTexture = target; panels.Add(doc.panelSettings); }
+        var warm = System.Diagnostics.Stopwatch.StartNew(); while (warm.Elapsed.TotalSeconds < 8) { cam.Render(); yield return null; }
+        var all = new List<double>();
+        for (int w = 0; w < 3; w++)
+        {
+            var watch = System.Diagnostics.Stopwatch.StartNew(); var frames = new List<double>(); double last = 0;
+            while (watch.Elapsed.TotalSeconds < 5) { cam.Render(); yield return null; double now = watch.Elapsed.TotalSeconds; frames.Add((now - last) * 1000); last = now; }
+            all.AddRange(frames); frames.Sort();
+            lines.Add($"{label} window {w + 1}: frames={frames.Count} FPS={frames.Count / watch.Elapsed.TotalSeconds:F2} mean={frames.Average():F2}ms p95={frames[(int)(frames.Count * .95)]:F2}ms npcs={WorldSession.Instance.Npcs.Count(n => n != null)} panels={panels.Count}");
+        }
+        all.Sort(); lines.Add($"{label} TOTAL: frames={all.Count} FPS={all.Count / (all.Sum() / 1000):F2} mean={all.Average():F2}ms p95={all[(int)(all.Count * .95)]:F2}ms; camera {cam.transform.position} fov {cam.fieldOfView}; hero {WorldSession.Instance.Hero.transform.position}");
+        foreach (var l in lines) Debug.Log("[FPSPROBE] " + l);
+        File.AppendAllLines(Path.GetFullPath("Temp/FpsProbe/fps.txt"), lines);
+        cam.targetTexture = null; cam.enabled = true; foreach (var p in panels) p.targetTexture = null; target.Release();
+        Finished(0);
+    }
+}
+#endif

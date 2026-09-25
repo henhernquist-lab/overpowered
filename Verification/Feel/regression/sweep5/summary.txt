@@ -1,0 +1,3 @@
+s5-p3 | HudPhase3Verification.Run | exit 0 | PASS-lines 562 | PASS HUD glyphs (minus '−', dash '—'): every glyph of "−0.35 — +105 XP LEVEL UP TAB TO UPGRADE OBJECTIVE COMPLETE FAILED WAVE CLEARED SCORE POINTS 0123456789" exists in the HUD font LegacyRuntime. | sync-diffs        1
+s5-p3-reload | HudPhase3Verification.Reload | exit 0 | PASS-lines 11 |  | sync-diffs        1
+DONE

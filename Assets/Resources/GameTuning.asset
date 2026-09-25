@@ -141,8 +141,36 @@ MonoBehaviour:
     Pitch: 16
     MinimumPitch: -10
     MaximumPitch: 65
-    LookHeight: 1.05
-    Offset: {x: 0, y: 2.6, z: -6.5}
+    LookHeight: 2.5
+    Offset: {x: 0, y: 2.8, z: -7.6}
     CollisionRadius: 0.2
     CollisionInset: 0.1
     FieldOfView: 65
+  Feel:
+    HeavyImpulse: 1000
+    HeavyIncomingDamage: 15
+    HitPauseSeconds: 0.06
+    HitPauseTimeScale: 0
+    HitPauseMinInterval: 0.4
+    ImpulseAmplitude: 0.16
+    ImpulseSeconds: 0.22
+    ImpulseFrequency: 18
+    IncomingImpulseScale: 0.8
+    FovKickDegrees: 2.5
+    FovKickSeconds: 0.2
+    HardLandingSpeed: 14
+    LandingScale: 0.7
+    ParticlePoolSize: 8
+    LightHitParticles: 6
+    HeavyHitParticles: 14
+    BreakParticles: 12
+    LandingParticles: 8
+    ParticleSize: 0.13
+    ParticleSizeJitter: 0.5
+    ParticleLifetime: 0.55
+    ParticleSpeed: 5
+    ParticleGravity: 1.6
+    HitDebris: 1
+    HeavyDebris: 9
+    BreakDebris: 11
+    LandingDebris: 1

@@ -34,7 +34,13 @@ public sealed partial class GameHud
         public float StartedAt, LastGrantAt, PoppedAt; public string Reason;
         /// Panel point of the anchor projection (or the badge fallback) before the rise, and the rise applied this frame.
         public Vector2 BasePoint, DrawnPoint; public float Rise; public bool OnScreen, Clamped;
+        /// Pushed off the crosshair this frame (transient feedback may sit near the centre, never on the crosshair).
+        public bool Nudged;
     }
+    /// Transient feedback keep-out around screen centre: the circle that encloses the crosshair box (CrosshairHalf) plus a
+    /// gap. A popup whose box would reach into it is pushed radially out until its box clears it (like the waypoint).
+    public const float PopupCrosshairGap = 12f;
+    public static float PopupCrosshairClearRadius => CrosshairHalf * 1.4142136f + PopupCrosshairGap;
     public readonly struct XpPopupRecord
     {
         public readonly int Id, Amount, Grants; public readonly bool Anchored; public readonly Vector3 Anchor; public readonly string Reason; public readonly float StartedAt;
@@ -222,6 +228,9 @@ public sealed partial class GameHud
             var drawn = new Vector2(p.BasePoint.x, p.BasePoint.y - p.Rise);
             var clamped = new Vector2(Mathf.Clamp(drawn.x, SafeMargin + halfW, Mathf.Max(SafeMargin + halfW, width - SafeMargin - halfW)),
                                       Mathf.Clamp(drawn.y, SafeMargin + halfH, Mathf.Max(SafeMargin + halfH, height - SafeMargin - halfH)));
+            // Never on the crosshair: nudged radially off the keep-out circle (straight up when centred on it).
+            var centre = new Vector2(width * .5f, height * .5f);
+            p.Nudged = OffCrosshair(ref clamped, centre, halfW, halfH);
             // Popups never cover the edge HUD or a banner: one that would pass over a top group / the banner is drawn just
             // below it, over a bottom group just above it (Clamped then says it left its projection).
             foreach (var g in PopupAvoid())
@@ -230,12 +239,24 @@ public sealed partial class GameHud
                 if (clamped.x + halfW > band.xMin && clamped.x - halfW < band.xMax && clamped.y - halfH < band.yMax && clamped.y + halfH > band.yMin)
                     clamped.y = bottom ? band.yMin - halfH - 4f : band.yMax + halfH + 4f;
             }
+            p.Nudged |= OffCrosshair(ref clamped, centre, halfW, halfH);
             p.Clamped = (clamped - drawn).sqrMagnitude > .01f; p.DrawnPoint = clamped;
             p.Element.style.left = clamped.x; p.Element.style.top = clamped.y;
             p.Element.style.scale = new Scale(new Vector3(scale, scale, 1f));
             p.Element.style.opacity = Mathf.Clamp01((end - age) / PopupFadeSeconds);
             Show(p.Element, p.OnScreen);
         }
+    }
+    /// Pushes a box (centre `point`, half extents) out of the crosshair keep-out circle. Returns true if it moved.
+    static bool OffCrosshair(ref Vector2 point, Vector2 centre, float halfW, float halfH)
+    {
+        float r = PopupCrosshairClearRadius; Vector2 d = point - centre;
+        Vector2 nearest = new Vector2(Mathf.Clamp(centre.x, point.x - halfW, point.x + halfW), Mathf.Clamp(centre.y, point.y - halfH, point.y + halfH));
+        if ((nearest - centre).sqrMagnitude >= r * r) return false;
+        Vector2 dir = d.sqrMagnitude > .01f ? d.normalized : Vector2.down;   // panel y grows downward: "down" = up the screen
+        float extent = Mathf.Abs(dir.x) * halfW + Mathf.Abs(dir.y) * halfH;  // box support along dir: its nearest face then lies >= r out
+        point = centre + dir * (r + extent + .5f);
+        return true;
     }
     IEnumerable<VisualElement> PopupAvoid() { yield return LevelGroup; yield return HeatGroup; yield return TopCentre; yield return Banner; yield return VitalsGroup; yield return BottomStack; }
     public int ActivePopups { get { int n = 0; foreach (var p in Popups) if (p.Active) n++; return n; } }

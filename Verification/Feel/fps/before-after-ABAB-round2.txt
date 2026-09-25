@@ -1,0 +1,21 @@
+run1 A exit 0
+[FPSPROBE] A(run1) window 1: frames=402 FPS=80.24 mean=12.46ms p95=13.70ms npcs=33 panels=0
+[FPSPROBE] A(run1) window 2: frames=403 FPS=80.51 mean=12.42ms p95=13.09ms npcs=33 panels=0
+[FPSPROBE] A(run1) window 3: frames=390 FPS=77.94 mean=12.83ms p95=13.88ms npcs=33 panels=0
+[FPSPROBE] A(run1) TOTAL: frames=1195 FPS=79.58 mean=12.57ms p95=13.60ms; camera (-20.00, 4.37, -45.53) fov 65; hero (-20.00, 0.08, -40.00)
+run2 B exit 0
+[FPSPROBE] B(run2) window 1: frames=365 FPS=72.81 mean=13.73ms p95=14.90ms npcs=33 panels=2
+[FPSPROBE] B(run2) window 2: frames=371 FPS=74.06 mean=13.50ms p95=14.33ms npcs=33 panels=2
+[FPSPROBE] B(run2) window 3: frames=364 FPS=72.68 mean=13.76ms p95=14.66ms npcs=33 panels=2
+[FPSPROBE] B(run2) TOTAL: frames=1100 FPS=73.19 mean=13.66ms p95=14.70ms; camera (-20.09, 4.87, -45.61) fov 65; hero (-20.09, 0.08, -39.08)
+run3 A exit 0
+[FPSPROBE] A(run3) window 1: frames=370 FPS=73.88 mean=13.53ms p95=15.26ms npcs=33 panels=0
+[FPSPROBE] A(run3) window 2: frames=377 FPS=75.32 mean=13.28ms p95=14.23ms npcs=33 panels=0
+[FPSPROBE] A(run3) window 3: frames=367 FPS=73.25 mean=13.65ms p95=14.41ms npcs=33 panels=0
+[FPSPROBE] A(run3) TOTAL: frames=1114 FPS=74.16 mean=13.48ms p95=14.51ms; camera (-20.00, 4.37, -45.53) fov 65; hero (-20.00, 0.08, -40.00)
+run4 B exit 0
+[FPSPROBE] B(run4) window 1: frames=353 FPS=70.53 mean=14.17ms p95=14.90ms npcs=33 panels=2
+[FPSPROBE] B(run4) window 2: frames=349 FPS=69.68 mean=14.35ms p95=16.08ms npcs=33 panels=2
+[FPSPROBE] B(run4) window 3: frames=352 FPS=70.28 mean=14.23ms p95=15.36ms npcs=33 panels=2
+[FPSPROBE] B(run4) TOTAL: frames=1054 FPS=70.17 mean=14.25ms p95=15.47ms; camera (-20.00, 4.87, -46.53) fov 65; hero (-20.00, 0.08, -40.00)
+DONE

@@ -94,7 +94,7 @@ public sealed class GameModeSession : MonoBehaviour
     }
     public void SetPaused(bool pause)
     {
-        if(Ended) return; Paused=pause; World.MenuOpen=pause; Time.timeScale=pause?0:1;
+        if(Ended) return; Paused=pause; World.MenuOpen=pause; TimeArbiter.SetMenuPaused(pause);   // timeScale pause?0:1; the menu always wins over a hit pause
         Cursor.lockState=pause?CursorLockMode.None:CursorLockMode.Locked; Cursor.visible=pause;
     }
     public void Finish(SessionOutcome outcome,string reason,bool home=false)
@@ -114,5 +114,5 @@ public sealed class GameModeSession : MonoBehaviour
     /// Pause-menu actions (PrototypeHUD draws these; verification calls the same methods).
     public void EndToResults() { Finish(SessionOutcome.Abandoned,"Returned from pause menu."); }
     public void ReturnHome() { Finish(SessionOutcome.Abandoned,"Returned home.",true); }
-    void OnDestroy() { if(World!=null&&World.Progression!=null) World.Progression.XpAwarded-=Awarded; Time.timeScale=1; }
+    void OnDestroy() { if(World!=null&&World.Progression!=null) World.Progression.XpAwarded-=Awarded; TimeArbiter.Reset(); Time.timeScale=1; }
 }

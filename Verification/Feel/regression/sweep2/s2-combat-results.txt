@@ -1,0 +1,90 @@
+PASS Roster asset maps Criminal->Rusher, Cop->Gunner, PursuingHero->Brute; token budget 2, ring 4.5m.
+ARCHETYPE Rusher: kind=Melee speed=7 health x0.6 damage x0.75 trigger=1.6 reach=1 radius=1.1 range=22 windup=0.45s cooldown=0.8s knockback=0m band=10+/-2 scale=0.9 accent=Amber
+ARCHETYPE Gunner: kind=Ranged speed=5.5 health x1 damage x1 trigger=22 reach=0 radius=0.6 range=22 windup=0.7s cooldown=1.8s knockback=0m band=10+/-2 scale=1 accent=Cyan
+ARCHETYPE Brute: kind=Slam speed=3 health x3 damage x2.25 trigger=2.8 reach=1.8 radius=3.2 range=22 windup=0.9s cooldown=2.2s knockback=2.5m band=10+/-2 scale=1.3 accent=UiPurple
+SHOOT CLIP left hand (model space) t=1.267 x=-0.143 y=1.268 | t=1.300 x=-0.244 y=1.314 | t=1.333 x=-0.348 y=1.364 | t=1.367 x=-0.444 y=1.410 | t=1.400 x=-0.536 y=1.446 | t=1.433 x=-0.620 y=1.468 | t=1.467 x=-0.674 y=1.478 | t=1.500 x=-0.699 y=1.479 | t=1.533 x=-0.710 y=1.476 | t=1.567 x=-0.717 y=1.472 | t=1.600 x=-0.723 y=1.466 | t=1.633 x=-0.726 y=1.464 | t=1.667 x=-0.727 y=1.464 | t=1.700 x=-0.726 y=1.468 | t=1.733 x=-0.724 y=1.476 | t=1.767 x=-0.720 y=1.492 | t=1.800 x=-0.710 y=1.518 | t=1.833 x=-0.683 y=1.566 | t=1.867 x=-0.627 y=1.631 | t=1.900 x=-0.539 y=1.685 | t=1.933 x=-0.444 y=1.709 | t=1.967 x=-0.367 y=1.713 | t=2.000 x=-0.320 y=1.706 | t=2.033 x=-0.303 y=1.700 | t=2.067 x=-0.311 y=1.697 | t=2.100 x=-0.337 y=1.697 | t=2.133 x=-0.374 y=1.692 | t=2.167 x=-0.417 y=1.681 | t=2.200 x=-0.461 y=1.663 | t=2.233 x=-0.507 y=1.633 | t=2.267 x=-0.550 y=1.592 | t=2.300 x=-0.588 y=1.540 | t=2.333 x=-0.617 y=1.478 | t=2.367 x=-0.637 y=1.410 | t=2.400 x=-0.643 y=1.336 | t=2.433 x=-0.635 y=1.258 | t=2.467 x=-0.614 y=1.182 | t=2.500 x=-0.584 y=1.113
+SHOOT CLIP: arm fully out (min x) at t=1.667s; steepest upward recoil step ends at t=1.867s; configured ShootImpactSeconds=1.800s.
+PASS ShootImpactSeconds lies inside the played Shoot window.
+PASS Sandbox: runtime COPY of the free-play definition (0 civilians, no police, no encounters) selected through GameFlow.
+PASS Sandbox city: 0 NPCs, Hero side (Criminals hostile), 0 Heat stars.
+LANE: hero at (-20.00, 0.11, -32.00), enemies spawn along +Z (straight NavMesh path, 2 corners, clear 1.2m line of sight; 4.5m clear to +X for strafing); crossing (-20.00, 0.11, -20.00).
+PASS Found a straight, unobstructed test lane through a street crossing.
+MEASURED Rusher approach: 18.99m -> 13.00m in 0.857s = 6.99 m/s (mean NavMeshAgent speed 6.99 m/s over 572 frames; configured 7); spawned max health 39.00.
+MEASURED Gunner approach: 19.00m -> 13.00m in 1.091s = 5.50 m/s (mean NavMeshAgent speed 5.50 m/s over 873 frames; configured 5.5); spawned max health 65.00.
+MEASURED Gunner held distance over 6.0s (4828 frames, player stationary): min 9.78m, max 11.99m, mean 10.32m (band 8-12m); it fired 3 telegraphed shots from there, player health 92 -> 68.
+PASS Gunner HOLDS its band while the player stands still (min 9.78 / max 11.99 m, never inside the 4.5m melee ring) and still attacks (3 shots).
+MEASURED Brute approach: 19.00m -> 13.00m in 2.000s = 3.00 m/s (mean NavMeshAgent speed 3.00 m/s over 1561 frames; configured 3); spawned max health 195.00.
+PASS Approach speed measured: Rusher 6.99 > Gunner 5.50 > Brute 3.00 m/s.
+PASS Rusher measured speed 6.99 m/s within 10% of its asset value 7.
+PASS Gunner measured speed 5.50 m/s within 10% of its asset value 5.5.
+PASS Brute measured speed 3.00 m/s within 10% of its asset value 3.
+PASS Spawned max health (Criminal role, 0 stars): Rusher 39.0 : Gunner 65.0 : Brute 195.0 = 0.60 : 1 : 3.00 (standard enemy 65).
+PASS Rusher HIT: windup started at 1.59m holding an attack token (pool 1/2).
+PASS Rusher HIT: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+PASS Rusher HIT: 'Punch' clip playing from windup start at fitted rate 1.037 (impact marker scheduled for release).
+CAPTURE windup-rusher.png (real ThirdPersonCamera placement (-20.00, 4.87, -38.53) fwd (0.00, -0.33, 0.94), 1280x720)
+PASS Rusher HIT: telegraph still visible at 60 % of the windup (scale (1.50, 0.05, 1.50)).
+PASS Rusher HIT: telegraph renderer hidden and token returned at release.
+PASS Rusher HIT: measured windup (release - windup start) = 451.2 ms vs asset 450 ms.
+PASS Rusher HIT: 'Punch' cue playing at the enemy on the release frame (hit): Attacked fires at release, hit or miss.
+PASS Rusher HIT: player standing still inside the attack took EXACTLY 6.00 (= Rusher damage 6.00) at release; horizontal distance from disc centre 0.59m vs radius 1.1+player 0.38 (margin -0.89m).
+Rusher HIT: presentation impact marker frame 11213 t=14.8522 vs release frame 11213 t=14.8522 (0.0 ms, 0 frames).
+PASS Rusher HIT: clip impact marker lands within 2 rendered frames of the damage.
+PASS Rusher HIT: no knockback CONTROL (moved 0.00m).
+PASS Rusher BACKFLIP: windup started at 1.59m holding an attack token (pool 1/2).
+PASS Rusher BACKFLIP: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+PASS Rusher BACKFLIP: hero facing the enemy backflips at windup start ('BACKFLIP: 4.2 m backward in 0.90s').
+PASS Rusher BACKFLIP: 'Punch' clip playing from windup start at fitted rate 1.037 (impact marker scheduled for release).
+PASS Rusher BACKFLIP: telegraph renderer hidden and token returned at release.
+PASS Rusher BACKFLIP: measured windup (release - windup start) = 451.1 ms vs asset 450 ms.
+PASS Rusher BACKFLIP: 'Punch' cue playing at the enemy on the release frame (miss): Attacked fires at release, hit or miss.
+PASS Rusher BACKFLIP DODGE: backflip at windup start -> NO damage; player travelled 2.11m; at release horizontal distance from disc centre 2.70m vs radius 1.1+player 0.38 (margin 1.22m).
+Rusher BACKFLIP: presentation impact marker frame 13144 t=17.4317 vs release frame 13144 t=17.4317 (0.0 ms, 0 frames).
+PASS Rusher LATE: windup started at 1.59m holding an attack token (pool 1/2).
+PASS Rusher LATE: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+PASS Rusher LATE: 'Punch' clip playing from windup start at fitted rate 1.037 (impact marker scheduled for release).
+PASS Rusher LATE: telegraph renderer hidden and token returned at release.
+PASS Rusher LATE: measured windup (release - windup start) = 450.5 ms vs asset 450 ms.
+PASS Rusher LATE: 'Punch' cue playing at the enemy on the release frame (hit): Attacked fires at release, hit or miss.
+PASS Rusher LATE: player standing still inside the attack took EXACTLY 6.00 (= Rusher damage 6.00) at release; horizontal distance from disc centre 0.59m vs radius 1.1+player 0.38 (margin -0.89m).
+Rusher LATE: presentation impact marker frame 17133 t=21.9891 vs release frame 17133 t=21.9891 (0.0 ms, 0 frames).
+PASS Rusher LATE CONTROL: backflip only AFTER release (the 6.00 hit already landed at release).
+PASS Rusher LATE CONTROL: late backflip cannot undo it: health 100 -> 94 (the timing window is real).
+PASS Rusher DEATH: windup started at 1.59m holding an attack token (pool 1/2).
+PASS Rusher DEATH: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+PASS Rusher DEATH: 'Punch' clip playing from windup start at fitted rate 1.037 (impact marker scheduled for release).
+PASS Rusher DEATH: killed at 50 % of the windup -> telegraph hidden, token released (pool 0), windup cancelled.
+PASS Rusher DEATH: NO damage at its would-be release (+0.3s): health 100 -> 100, releases 0; Death clip played.
+PASS Brute HIT: windup started at 2.80m holding an attack token (pool 1/2).
+PASS Brute HIT: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+PASS Brute HIT: 'Hurricane Kick' clip playing from windup start at fitted rate 0.667 (impact marker scheduled for release).
+CAPTURE windup-brute.png (real ThirdPersonCamera placement (-20.00, 4.87, -38.53) fwd (0.00, -0.33, 0.94), 1280x720)
+PASS Brute HIT: telegraph still visible at 60 % of the windup (scale (4.36, 0.05, 4.36)).
+PASS Brute HIT: telegraph renderer hidden and token returned at release.
+PASS Brute HIT: measured windup (release - windup start) = 900.8 ms vs asset 900 ms.
+PASS Brute HIT: 'Punch' cue playing at the enemy on the release frame (hit): Attacked fires at release, hit or miss.
+PASS Brute HIT: player standing still inside the attack took EXACTLY 18.00 (= Brute damage 18.00) at release; horizontal distance from disc centre 1.01m vs radius 3.2+player 0.38 (margin -2.58m).
+Brute HIT: presentation impact marker frame 23477 t=29.8832 vs release frame 23477 t=29.8832 (0.0 ms, 0 frames).
+PASS Brute HIT: clip impact marker lands within 2 rendered frames of the damage.
+PASS Brute HIT: knockback moved the player 2.49m (asset 2.5m).
+PASS Brute BACKFLIP: windup started at 2.80m holding an attack token (pool 1/2).
+PASS Brute BACKFLIP: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+PASS Brute BACKFLIP: hero facing the enemy backflips at windup start ('BACKFLIP: 4.2 m backward in 0.90s').
+PASS Brute BACKFLIP: 'Hurricane Kick' clip playing from windup start at fitted rate 0.667 (impact marker scheduled for release).
+PASS Brute BACKFLIP: telegraph renderer hidden and token returned at release.
+PASS Brute BACKFLIP: measured windup (release - windup start) = 901.1 ms vs asset 900 ms.
+PASS Brute BACKFLIP: 'Punch' cue playing at the enemy on the release frame (miss): Attacked fires at release, hit or miss.
+PASS Brute BACKFLIP DODGE: backflip at windup start -> NO damage; player travelled 4.20m; at release horizontal distance from disc centre 5.20m vs radius 3.2+player 0.38 (margin 1.62m).
+Brute BACKFLIP: presentation impact marker frame 26070 t=33.1596 vs release frame 26070 t=33.1596 (0.0 ms, 0 frames).
+PASS Brute LATE: windup started at 2.80m holding an attack token (pool 1/2).
+PASS Brute LATE: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+PASS Brute LATE: 'Hurricane Kick' clip playing from windup start at fitted rate 0.667 (impact marker scheduled for release).
+PASS Brute LATE: telegraph renderer hidden and token returned at release.
+PASS Brute LATE: measured windup (release - windup start) = 900.8 ms vs asset 900 ms.
+PASS Brute LATE: 'Punch' cue playing at the enemy on the release frame (hit): Attacked fires at release, hit or miss.
+PASS Brute LATE: player standing still inside the attack took EXACTLY 18.00 (= Brute damage 18.00) at release; horizontal distance from disc centre 1.01m vs radius 3.2+player 0.38 (margin -2.58m).
+Brute LATE: presentation impact marker frame 29825 t=37.5695 vs release frame 29825 t=37.5695 (0.0 ms, 0 frames).
+FAIL System.Exception: Brute LATE CONTROL: backflip only AFTER release (the 18.00 hit already landed at release).
+  at CombatVerificationRunner.Check (System.Boolean valid, System.String text) [0x0001b] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/CombatVerificationRunner.cs:46 
+  at CombatVerificationRunner+<RunTrial>d__53.MoveNext () [0x00e59] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/CombatVerificationRunner.cs:301 
+  at CombatVerificationRunner+<Start>d__25.MoveNext () [0x00090] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/CombatVerificationRunner.cs:38 

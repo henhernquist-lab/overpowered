@@ -1,6 +1,73 @@
 # Prototype Status
 
-## HUD Phase 3: connect the dots — 2026-09-25 (current)
+## Phase 4: game feel + HUD-pass final verification — 2026-09-25 (current)
+
+**Every feel value lives in ONE place:** the new `FeelSettings Feel` section of `GameTuning.asset`, beside the existing
+`Camera` section, which stays the only source for offset, look height and FOV.
+Values used: heavy = outgoing impulse ≥ 1000 N·s (punch 1350, kick 2025, synergies 1500–3400; basic melee 160 and
+Fire Blast 450 are light) or incoming damage ≥ 15 (Brute 27 heavy, Rusher 9 light). Hit pause 0.06 s, minimum
+interval 0.4 s. Camera impulse 0.16 m / 0.22 s / 18 Hz (incoming ×0.8). FOV kick 2.5° / 0.2 s. Hard landing
+≥ 14 m/s (×0.7). Particles: pool of 8, counts 6 / 14 / 12 / 8 (light / heavy / break / landing), size 0.13,
+life 0.55 s. **Camera: offset (0, 2.6, −6.5) → (0, 2.8, −7.6), look height 1.05 → 2.5**; pitch and FOV unchanged.
+- `Feel/TimeArbiter`: the ONLY writer of hit-pause time. The pause menu always wins and chained freezes are
+  rate-limited.
+- `Feel/FeelDirector`: decides "heavy" from data; hooked with one additive line each in `CombatImpact` and the
+  CityNpc hit on the player, plus the existing `Landed` / `Destroyed` events.
+- Camera kick: applied only for the render and undone after, so the aim ray and physics root never see it.
+- `Feel/ImpactParticlePool`: 8 pooled systems, the shared cube mesh and shared palette materials, `Emit()` only. The
+  existing prop shards are untouched.
+
+**Two real bugs found and fixed:**
+1. A hit pause produced zero-deltaTime frames that made the CharacterController report "not grounded", so backflip
+   and jump were refused inside a Brute's hit pause (Combat caught this). Zero-length moves are now skipped
+   (`SuperHeroController` ×2, CityNpc knockback ×1).
+2. **Aim (lead fix, `PowerUser.AimDirection`):** the crosshair raycast was capped at the power's Range measured from
+   the CAMERA. With the camera 7.6 m behind, Fire Blast missed beyond ~13 m. Anything between the camera and the hero
+   also counted as the aim target. Range is now measured from the hero, and hits nearer than the hero are ignored.
+   Miss distance, projectile contact vs the crosshair hit:
+
+   | Target | Before | After |
+   |---|---|---|
+   | 15 m | 0.185 m | 0.01 m |
+   | 22 m | 1.02 m | 0.10 m |
+   | 30 m | 1.99 m | 0.71 m |
+
+   The 30 m target is beyond Fire Blast's 20 m range, so its aim converges at the end of range. A car or deliberate
+   obstacle in the line of fire takes the hit (correct). Ice and Telekinesis select the crosshair target, with a
+   CONTROL crate. `Verification/Feel/results-after-aim-fix.txt`.
+
+**Verification — FeelVerification 142 PASS:**
+- Hit pause measured at 60.3 ms against 60 configured, with 0 physics steps during it and resumed after.
+- CONTROLS: a light hit gives no pause; the pause menu opened mid-hit-pause stays paused; 5 heavy hits in 175 ms give
+  1 pause.
+- HUD tweens advance at timeScale 0.
+- Physics: 4 pause/no-pause pairs give identical velocity (20.386 m/s, difference 0.0000).
+- Audio: the impact cue plays exactly once and keeps advancing through the pause.
+- Camera: kick + FOV return to rest within 220 ms; CONTROL: a soft landing gives none.
+- Particles: pool constant; Material count 78 → 78 (none created).
+- Particle cost: −4.4% (+0.16 ms), interleaved on/off.
+
+**Task 0 — the Phase 2 flake has a real, observed root cause** (2 failures in 12 traced runs). The test teleported the
+hero into a supply crate. When a civilian ALSO overlapped the spot, the controller pushed the hero out to 3.12 m,
+beyond the 3 m interact radius, so no prompt could show. It is a test race, not a game bug. The test now picks a free
+standing spot; 10/10 consecutive Run + Reload pairs pass.
+**Transient feedback vs centre-clear (lead ruling):** "centre clear" governs the PERSISTENT HUD. +XP popups land at
+the defeat, usually in front of the crosshair, as requested, but are pushed off the crosshair itself. Both HUD suites
+assert zero popup/crosshair overlap (0 in 3,756 + 322 samples).
+
+**FPS, before this HUD pass (0ce58f1) vs after,** same clone and scenario, alternating: **76.98 → 70.66 FPS (−8.2%,
++1.16 ms)**. That is an upper bound (the old IMGUI HUD never draws in batch mode), and run-to-run noise is ~5 FPS.
+
+**Final regression, all exit 0:** HUD P1 318, P2 485 + Reload 31, P3 562 + Reload 11, Feel 142, Mode 79 + 2,
+ModeExpansion 111 + 10, HeroForge 132 + 3, Combat 170, Audio 126, City 53 + 5, Humanoid 52, BackflipHurricane 63,
+CityArt 31, Menus 42. After the aim fix, re-run: Feel, Humanoid, City + Reload, Audio, HeroForge + Reload and Combat
+all exit 0.
+
+**NOT CLAIMED — needs a human playtest:** whether any of this FEELS good (hit-pause length, kick strength, particle
+density, camera distance), readability at speed, and the alert → travel → fight → reward rhythm. Batch mode has no
+keyboard/mouse; the input paths were exercised through the same methods the handlers call.
+
+## HUD Phase 3: connect the dots — 2026-09-25 (previous; its flake is resolved above)
 
 Every meaningful action now visibly feeds a system (`Hud/GameHudFeedback.cs`; gameplay files only gained additive
 events and an overload).

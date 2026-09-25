@@ -32,6 +32,7 @@ public static class CombatImpact
             body.GetComponent<BreakableProp>()?.TakeDamage(damage, source);
         }
         WorldSession.Instance?.Alarm(origin);
+        FeelDirector.Impact(origin, impulse, damage, bodies.Count + npcs.Count);   // feel only (particles / heavy-hit pause + camera)
         return bodies.Count;
     }
 }

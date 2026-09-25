@@ -1,0 +1,214 @@
+PASS Feel sandbox: runtime COPY of the free-play definition (0 civilians, no police) selected through GameFlow.
+PASS Feel sandbox: session with FeelDirector and the ThirdPersonCamera as the active feel camera.
+PASS Real jump dismisses the mission briefing (the card covers the crosshair).
+PASS FeelDirector reads GameTuning.Feel (the single source of feel values).
+FEEL VALUES (GameTuning.asset Feel): {"HeavyImpulse":1000.0,"HeavyIncomingDamage":15.0,"HitPauseSeconds":0.05999999865889549,"HitPauseTimeScale":0.0,"HitPauseMinInterval":0.4000000059604645,"ImpulseAmplitude":0.1599999964237213,"ImpulseSeconds":0.2199999988079071,"ImpulseFrequency":18.0,"IncomingImpulseScale":0.800000011920929,"FovKickDegrees":2.5,"FovKickSeconds":0.20000000298023224,"HardLandingSpeed":14.0,"LandingScale":0.699999988079071,"ParticlePoolSize":8,"LightHitParticles":6,"HeavyHitParticles":14,"BreakParticles":12,"LandingParticles":8,"ParticleSize":0.12999999523162842,"ParticleSizeJitter":0.5,"ParticleLifetime":0.550000011920929,"ParticleSpeed":5.0,"ParticleGravity":1.600000023841858,"HitDebris":1,"HeavyDebris":9,"BreakDebris":11,"LandingDebris":1}
+CAMERA VALUES (GameTuning.asset Camera): {"Sensitivity":3.5,"Pitch":16.0,"MinimumPitch":-10.0,"MaximumPitch":65.0,"LookHeight":2.5,"Offset":{"x":0.0,"y":2.799999952316284,"z":-7.599999904632568},"CollisionRadius":0.20000000298023224,"CollisionInset":0.10000000149011612,"FieldOfView":65.0}
+PASS Configured hit pause 60 ms lies in the 50-80 ms band.
+TIME SOURCES (static): GameHud / GameHudGuidance / GameHudFeedback animate only with Time.unscaledTime / unscaledDeltaTime; ThirdPersonCamera impulse + FOV kick use Time.unscaledTime; TimeArbiter measures with Time.realtimeSinceStartupAsDouble.
+PHYSICS SETUP (pause): other dynamic bodies within 8 m of the crate: City Newspaper(-13.62,0.12,-34.01) v0.00; Crate(-13.50,0.67,-40.00) v0.00; Barrel(-13.50,0.87,-37.00) v0.00; City Planter(-26.71,0.12,-34.10) v0.00; City Car(-16.81,0.00,-35.23) v0.00.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (hit pause ON).
+PASS Hit pause started at the impact.
+MEASURED PAUSE  : crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 74.3 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PHYSICS SETUP (control): other dynamic bodies within 8 m of the crate: City Newspaper(-13.62,0.12,-34.01) v0.00; Crate(-13.50,0.67,-40.00) v0.00; Barrel(-13.50,0.87,-37.00) v0.00; City Planter(-26.71,0.12,-34.10) v0.00; City Car(-16.80,0.00,-35.23) v0.00.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+MEASURED CONTROL: crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 15.4 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PHYSICS SETUP (pause): other dynamic bodies within 8 m of the crate: City Newspaper(-13.62,0.12,-34.01) v0.00; Crate(-13.50,0.67,-40.00) v0.00; Barrel(-13.50,0.87,-37.00) v0.00; City Planter(-26.71,0.12,-34.10) v0.00; City Car(-16.80,0.00,-35.23) v0.00.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (hit pause ON).
+PASS Hit pause started at the impact.
+MEASURED PAUSE  : crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 76.2 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PHYSICS SETUP (control): other dynamic bodies within 8 m of the crate: City Newspaper(-13.62,0.12,-34.01) v0.00; Crate(-13.50,0.67,-40.00) v0.00; Barrel(-13.50,0.87,-37.00) v0.00; City Planter(-26.71,0.12,-34.10) v0.00.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+MEASURED CONTROL: crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 15.0 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PHYSICS SETUP (pause): other dynamic bodies within 8 m of the crate: City Newspaper(-13.62,0.12,-34.01) v0.00; Crate(-13.50,0.67,-40.00) v0.00; Barrel(-13.50,0.87,-37.00) v0.00; City Planter(-26.71,0.12,-34.10) v0.00.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (hit pause ON).
+PASS Hit pause started at the impact.
+MEASURED PAUSE  : crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 75.4 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PHYSICS SETUP (control): other dynamic bodies within 8 m of the crate: City Newspaper(-13.62,0.12,-34.01) v0.00; Crate(-13.50,0.67,-40.00) v0.00; Barrel(-13.50,0.87,-37.00) v0.00; City Planter(-26.71,0.12,-34.10) v0.00.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+MEASURED CONTROL: crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 14.3 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PHYSICS SETUP (pause): other dynamic bodies within 8 m of the crate: City Newspaper(-13.62,0.12,-34.01) v0.00; Crate(-13.50,0.67,-40.00) v0.00; Barrel(-13.50,0.87,-37.00) v0.00; City Planter(-26.71,0.12,-34.10) v0.00.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (hit pause ON).
+PASS Hit pause started at the impact.
+MEASURED PAUSE  : crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 74.4 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PHYSICS SETUP (control): other dynamic bodies within 8 m of the crate: City Newspaper(-13.62,0.12,-34.01) v0.00; Crate(-13.50,0.67,-40.00) v0.00; Barrel(-13.50,0.87,-37.00) v0.00; City Planter(-26.71,0.12,-34.10) v0.00.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+MEASURED CONTROL: crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 15.0 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PASS The first physics step after the impact waited out the pause (74.3, 76.2, 75.4, 74.4 ms) vs the control (15.4, 15.0, 14.3, 15.0 ms).
+PASS Pair 1 (same geometry, |Δrel| 0.00 mm): velocity after the pause == no-pause control (v1 |Δ| 0.0000 m/s of 20.386; v10 |Δ| 0.0000; ratio 1.0000 -> impulse applied once, not lost, not doubled).
+PASS Pair 2 (same geometry, |Δrel| 0.00 mm): velocity after the pause == no-pause control (v1 |Δ| 0.0000 m/s of 20.386; v10 |Δ| 0.0000; ratio 1.0000 -> impulse applied once, not lost, not doubled).
+PASS Pair 3 (same geometry, |Δrel| 0.00 mm): velocity after the pause == no-pause control (v1 |Δ| 0.0000 m/s of 20.386; v10 |Δ| 0.0000; ratio 1.0000 -> impulse applied once, not lost, not doubled).
+PASS Pair 4 (same geometry, |Δrel| 0.00 mm): velocity after the pause == no-pause control (v1 |Δ| 0.0000 m/s of 20.386; v10 |Δ| 0.0000; ratio 1.0000 -> impulse applied once, not lost, not doubled).
+PASS 4 pause/control pairs with identical geometry compared (of 4 pause trials).
+PASS Every trial's crate was really launched (impulse applied).
+TEST HARNESS: a 45 kg crate in front of the hero, pre-hit twice with 0 damage so the real punch is its 3rd (breaking) hit (Props.HitsToBreak 3).
+PASS Real Super Strength punch accepted (windup 125 ms; force follows the windup).
+PASS Impact classified HEAVY from data: 1350 N·s >= Feel.HeavyImpulse 1000 (HEAVY impact 1350 N·s).
+PASS timeScale 0 at the impact callback (hit pause started in the impact frame 9312).
+PASS Impact cue: exactly one AudioSource plays the punch cue (1).
+HEAT FLASH probe: HeatFlashAt 10.063 -> 16.876, flashing True, timeScale 0, frames 0, unscaled 16.878.
+PASS Breaking the crate added Heat (Hero side: destruction = Heat, no XP) -> the HUD Heat flash tween started ('+0.35') while still inside the pause.
+MEASURED hit pause: Stopwatch 60.3 ms from the impact callback to the first frame with timeScale restored (configured 60 ms; TimeArbiter held 60.3 ms); 42 frames; timeScale samples [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1].
+PASS Hit pause lasted 60.3 ms real time (configured 60 ms, frame-granular; last frame dt 1.5 ms).
+PASS Measured hit pause 60.3 ms is inside 50-80 ms (+5 ms frame tolerance).
+PASS timeScale restored to its previous value (1).
+PASS FixedUpdate during the pause: 0 steps counted up to restore (the impact frame's own steps may precede the callback).
+PASS Game time frozen through the pause (Time.time advanced 0.000 ms over 42 frames).
+PASS FixedUpdate resumes after the pause (5 steps in 0.1 s).
+PASS HUD Heat-delta tween advances DURING the pause (unscaled): translate y 0.00 -> -0.05 -> -0.13 -> -0.16 -> -0.18 -> -0.21 -> -0.24 -> -0.26 -> -0.29 -> -0.32 -> -0.34 -> -0.37 -> -0.39 -> -0.41 -> -0.44 -> -0.46 -> -0.49 -> -0.51 -> -0.53 -> -0.56 -> -0.59 -> -0.61 -> -0.64 -> -0.66 -> -0.68 -> -0.70 -> -0.73 -> -0.75 -> -0.78 -> -0.80 -> -0.82 -> -0.85 -> -0.87 -> -0.89 -> -0.92 -> -0.94 -> -0.97 -> -0.99 -> -1.02 -> -1.04 -> -1.06 -> -1.08 -> -1.11 px while timeScale was 0.
+PASS Camera FOV kick animates during the pause (unscaled): [2.34,2.31,2.27,2.24,2.21,2.18,2.15,2.11,2.08,2.05,2.03,2.00,1.97,1.94,1.91,1.89,1.86,1.82,1.80,1.77,1.74,1.72,1.69,1.67,1.64,1.61,1.58,1.56,1.54,1.51,1.49,1.46,1.44,1.41,1.38,1.36,1.33,1.31,1.29,1.26,1.24,1.21] deg.
+AUDIO: punch voice timeSamples 0 -> 2790 across the pause (+2790); AudioListener.pause False; voices on the punch cue after the pause 1.
+PASS The punch cue's AudioSource keeps playing through the pause (timeSamples +2790; AudioSources are not timeScale-bound; AudioDirector ties nothing to timeScale).
+PASS The cue fired during the pause is not re-triggered on resume (1 voice).
+PASS Particles: heavy-hit burst + prop-break burst emitted from the pool (bursts 9 -> 11).
+PASS BreakableProp shard logic unchanged: rigidbodies 234 -> 238 (crate removed, 5 shards).
+PASS Heavy hit sent one camera impulse.
+PASS At rest the camera FOV equals Camera.FieldOfView 65.
+TEST HARNESS: FeelDirector.Impact called directly (the CombatImpact.Blast hook) to render mid-kick deterministically.
+PASS Mid-kick render used position rest+offset (0.00,-0.12,-0.09) (|0.149| m) and FOV 67.43 = 65 + 2.43.
+PASS After the render the camera transform and FOV are back at the follow pose (the aim ray and physics never see the kick).
+PASS Crosshair (aim) ray during an active kick is identical before and after the kicked render — gameplay aiming never sees the shake.
+PASS Back to rest after the window: zero offset, FOV exactly Camera.FieldOfView, camera-to-hero offset unchanged (no drift).
+PASS Real heavy punch for the pause-menu CONTROL.
+PASS Inside the hit pause (timeScale 0, TimeArbiter.HitPaused).
+PASS Pause menu opened DURING the hit pause: the hit pause is dropped, the menu holds timeScale 0.
+PASS Still paused 301 ms later (268 frames all timeScale 0): the expired hit pause did NOT unpause the game.
+PASS CONTROL: a heavy impact while paused is refused by the arbiter (timeScale stays 0).
+PASS Unpaused -> timeScale 1 on all 160 frames for 0.2 s (no stale hit-pause restore).
+PASS Real CombatImpact.Blast #1 with Super Strength stats (1350 N·s) hit crate 0 at 0 ms.
+PASS Real CombatImpact.Blast #2 with Super Strength stats (1350 N·s) hit crate 1 at 41 ms.
+PASS Real CombatImpact.Blast #3 with Super Strength stats (1350 N·s) hit crate 2 at 83 ms.
+PASS Real CombatImpact.Blast #4 with Super Strength stats (1350 N·s) hit crate 3 at 125 ms.
+PASS Real CombatImpact.Blast #5 with Super Strength stats (1350 N·s) hit crate 4 at 167 ms.
+PASS 5 heavy hits in 167 ms (< 200 ms): [0, 41, 83, 125, 167] ms.
+PASS Rate limit: ONE hit pause started, 4 refused (Feel.HitPauseMinInterval 0.4 s).
+PASS timeScale restored after the single pause.
+PASS CONTROL: after the min interval a new heavy hit pauses again (the limit is a rate, not a block).
+PASS Rusher contact damage 9 < Feel.HeavyIncomingDamage 15 -> light by data.
+Rusher hit landed: health 100 -> 91.
+PASS CONTROL light hit (Rusher): no hit pause, no camera impulse; timeScale 1 on all 579 sampled frames.
+PASS Brute contact damage 27 >= Feel.HeavyIncomingDamage 15 -> HEAVY by data.
+Brute hit landed: health 100 -> 73.
+PASS Brute slam landing on the player: hit pause + camera impulse (HEAVY incoming 27).
+PASS Inside the hit pause (knockback + idle frames frozen) the hero keeps ground contact [True,True,True] and a backflip input is ACCEPTED (BACKFLIP: 4.2 m backward in 0.90s) — the combat contract 'a shoved player can still backflip' holds through the freeze.
+PASS Real jump (soft landing CONTROL).
+PASS CONTROL soft landing 8.5 m/s < Feel.HardLandingSpeed 14: no impulse, no FOV kick.
+TEST HARNESS: hero placed 12 m above the street and released (a real fall; landing reported by SuperHeroController.Landed).
+MEASURED hard landing 24.1 m/s: |offset| samples [0.112,0.109,0.105,0.098,0.090,0.081,0.070,0.059,0.048,0.036,0.022,0.009,0.003,0.018,0.029,0.040,0.050,0.062,0.070,0.076,0.081,0.084,0.086,0.086,0.084,0.081,0.077,0.071,0.064,0.056,0.047,0.038,0.029,0.020,0.009,0.000,0.010,0.019,0.027,0.035,0.042,0.049,0.053,0.057,0.060,0.062,0.063,0.062,0.060,0.058,0.054,0.049,0.044,0.038,0.033,0.026,0.020,0.013,0.006,0.000,0.007,0.013,0.019,0.024,0.029,0.033,0.036,0.039,0.042,0.043,0.044,0.043,0.042,0.041,0.039,0.036,0.032,0.029,0.025,0.021,0.016,0.012,0.007,0.002,0.002,0.007,0.011,0.015,0.018,0.021,0.023,0.025,0.026,0.027,0.028,0.028,0.027,0.026,0.025,0.023,0.021,0.019,0.017,0.014,0.011,0.008,0.005,0.002,0.000,0.003,0.005,0.008,0.010,0.011,0.013,0.014,0.015,0.015,0.016,0.016,0.015,0.015,0.014,0.013,0.012,0.010,0.009,0.007,0.001,0.002,0.004,0.005,0.005,0.006,0.007,0.007,0.007,0.007,0.007,0.006,0.006,0.006,0.005,0.004,0.004,0.003,0.002,0.002,0.001,0.001,0.000,0.000,0.001,0.001,0.001,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.001,0.001,0.001,0.001,0.001,0.001,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000] m; FOV kick samples [1.75,1.73,1.71,1.68,1.66,1.64,1.62,1.60,1.59,1.57,1.55,1.53,1.51,1.49,1.47,1.45,1.43,1.41,1.39,1.37,1.36,1.34,1.32,1.30,1.28,1.26,1.25,1.23,1.21,1.19,1.18,1.16,1.14,1.13,1.11,1.10,1.08,1.06,1.05,1.03,1.02,1.00,0.99,0.97,0.96,0.94,0.92,0.91,0.89,0.88,0.86,0.85,0.84,0.82,0.81,0.80,0.78,0.77,0.76,0.75,0.73,0.72,0.71,0.70,0.68,0.67,0.66,0.65,0.63,0.62,0.61,0.60,0.59,0.57,0.56,0.55,0.54,0.53,0.52,0.51,0.50,0.49,0.48,0.47,0.46,0.45,0.44,0.43,0.42,0.41,0.40,0.39,0.38,0.37,0.36,0.35,0.34,0.33,0.33,0.32,0.31,0.30,0.29,0.28,0.28,0.27,0.26,0.25,0.25,0.24,0.23,0.22,0.22,0.21,0.20,0.20,0.19,0.18,0.18,0.17,0.16,0.16,0.15,0.15,0.14,0.13,0.13,0.12,0.09,0.09,0.08,0.08,0.07,0.07,0.07,0.06,0.06,0.05,0.05,0.05,0.04,0.04,0.04,0.03,0.03,0.03,0.03,0.02,0.02,0.02,0.02,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00] deg over 341 ms.
+PASS Hard landing 24.1 m/s >= 14: one impulse + FOV kick (scaled x0.7).
+PASS Kick present and bounded: max offset 0.112 m (<= 0.112), max FOV kick 1.75 deg (<= 1.75).
+PASS Back to rest within 220 ms (impulse 220 ms, FOV 200 ms).
+PASS Rest FOV exactly Camera.FieldOfView after the kick.
+MEASURED particles: bursts 24 -> 36, particles emitted 320 -> 452; pool 8 -> 8; ParticleSystems in scene 14 -> 14; Material objects 78 -> 78.
+PASS 12 bursts from real hits (6) + real breaks (6) (12).
+PASS Pool size constant (8 = Feel.ParticlePoolSize) and no ParticleSystem instantiated per hit (14 -> 14).
+PASS 0 new Material objects created by the hits/breaks/particles (78 -> 78).
+PASS Slot 0: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Wood' is a CityMaterials palette instance (reference-equal).
+PASS Slot 1: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Pavement' is a CityMaterials palette instance (reference-equal).
+PASS Slot 2: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Wood' is a CityMaterials palette instance (reference-equal).
+PASS Slot 3: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Wood' is a CityMaterials palette instance (reference-equal).
+PASS Slot 4: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Wood' is a CityMaterials palette instance (reference-equal).
+PASS Slot 5: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Pavement' is a CityMaterials palette instance (reference-equal).
+PASS Slot 6: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Wood' is a CityMaterials palette instance (reference-equal).
+PASS Slot 7: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Amber' is a CityMaterials palette instance (reference-equal).
+PASS Debris particles alive right after the bursts: 104.
+CAPTURE particles-hits-and-breaks-1920x1080.png (1920x1080, gameplay camera + HUD panels).
+MEASURED A particles ON : frames=1075, FPS=268.6, mean=3.72ms, p95=4.11ms, peak live debris=87 (heavy impact every 100 ms via the CombatImpact hook; hit pauses rate-limited; gameplay camera single render 1920x1080 + HUD).
+MEASURED B particles OFF: frames=1140, FPS=284.8, mean=3.51ms, p95=3.75ms, peak live debris=0 (heavy impact every 100 ms via the CombatImpact hook; hit pauses rate-limited; gameplay camera single render 1920x1080 + HUD).
+MEASURED A particles ON : frames=1104, FPS=275.9, mean=3.62ms, p95=3.89ms, peak live debris=87 (heavy impact every 100 ms via the CombatImpact hook; hit pauses rate-limited; gameplay camera single render 1920x1080 + HUD).
+MEASURED B particles OFF: frames=1140, FPS=285.0, mean=3.51ms, p95=3.72ms, peak live debris=0 (heavy impact every 100 ms via the CombatImpact hook; hit pauses rate-limited; gameplay camera single render 1920x1080 + HUD).
+MEASURED particles A/B summary: ON mean 272.3 FPS, OFF mean 284.9 FPS (-4.4%); frame-time delta +0.16 ms. Editor batch-mode throughput, not a player build.
+PASS FPS A/B really toggled the debris (ON had live particles, OFF had none).
+PASS Existing progression unlock fire
+PASS Existing progression unlock ice
+PASS PlayerProgression.SetLoadout -> fire + ice before the session.
+PASS fire+ice sandbox: runtime COPY of the free-play definition (0 civilians, no police) selected through GameFlow.
+PASS fire+ice sandbox: session with FeelDirector and the ThirdPersonCamera as the active feel camera.
+PASS Real jump dismisses the mission briefing (the card covers the crosshair).
+PASS Session equips fire + ice.
+CAPTURE camera-framing-rest-1920x1080.png (1920x1080, gameplay camera + HUD panels).
+FRAMING: camera (-20.00,4.87,-46.53) for hero (-20.00,0.08,-40.00) (height 4.79 m, 6.53 m behind); look-down 19.3 deg; hero head at viewport y 0.428 (crosshair 0.5).
+PASS Crosshair no longer on the hero: the top of the hero's head projects at viewport y 0.428, below the crosshair (0.5).
+FRAMING: at rest the crosshair ray meets 'Road foundation' 7.4 m ahead of the hero.
+PASS Fire Blast selected.
+PASS 5m-yaw0: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+CAPTURE aim-5m-yaw0-in-flight.png (1920x1080, gameplay camera + HUD panels).
+CAPTURE aim-5m-yaw0-impact.png (1920x1080, gameplay camera + HUD panels).
+AIM 5m-yaw0: crosshair hit (-20.00,1.04,-35.60) on 'Aim pillar 5 m yaw 0'; shoulder (-20.00,1.08,-40.00) dir (0.00,-0.01,1.00); projectile contact (-20.00,1.04,-35.60) on 'Aim pillar 5 m yaw 0'; MISS 0.001 m (off the crosshair ray by 0.001 m); shoulder line clear
+PASS Fire Blast selected.
+PASS 15m-yaw0: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+CAPTURE aim-15m-yaw0-in-flight.png (1920x1080, gameplay camera + HUD panels).
+CAPTURE aim-15m-yaw0-impact.png (1920x1080, gameplay camera + HUD panels).
+AIM 15m-yaw0: crosshair hit (-20.00,0.80,-25.60) on 'Aim pillar 15 m yaw 0'; shoulder (-20.00,1.17,-40.00) dir (0.00,-0.01,1.00); projectile contact (-20.00,0.98,-25.60) on 'Aim pillar 15 m yaw 0'; MISS 0.185 m (off the crosshair ray by 0.183 m); shoulder line clear; crosshair point is 21.9 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+PASS Fire Blast selected.
+PASS 30m-yaw0: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+CAPTURE aim-30m-yaw0-in-flight.png (1920x1080, gameplay camera + HUD panels).
+CAPTURE aim-30m-yaw0-impact.png (1920x1080, gameplay camera + HUD panels).
+AIM 30m-yaw0: crosshair hit (-20.00,0.98,-10.60) on 'Aim pillar 30 m yaw 0'; shoulder (-20.00,1.16,-40.00) dir (0.00,0.06,1.00); projectile contact (-20.00,2.97,-10.60) on 'Aim pillar 30 m yaw 0'; MISS 1.984 m (off the crosshair ray by 1.981 m); shoulder line clear; crosshair point is 37.0 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+PASS Fire Blast selected.
+PASS 15m-yaw30: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+CAPTURE aim-15m-yaw30-impact.png (1920x1080, gameplay camera + HUD panels).
+AIM 15m-yaw30: crosshair hit (-12.80,0.80,-27.53) on 'Aim pillar 15 m yaw 30'; shoulder (-20.00,1.17,-40.00) dir (0.50,-0.01,0.87); projectile contact (-17.71,1.11,-36.10) on 'City Car'; MISS 9.884 m (off the crosshair ray by 0.923 m); shoulder line BLOCKED by 'City Car' (parallax); crosshair point is 21.9 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+PASS Fire Blast selected.
+PASS 15m-yaw-30: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+AIM 15m-yaw-30: crosshair hit (-27.20,0.80,-27.53) on 'Aim pillar 15 m yaw -30'; shoulder (-20.00,1.17,-40.00) dir (-0.50,-0.01,0.87); projectile contact (-27.20,0.98,-27.53) on 'Aim pillar 15 m yaw -30'; MISS 0.185 m (off the crosshair ray by 0.183 m); shoulder line clear; crosshair point is 21.9 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+PASS Fire Blast selected.
+PASS 15m-yaw20: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+AIM 15m-yaw20: crosshair hit (-15.07,0.80,-26.47) on 'Aim pillar 15 m yaw 20'; shoulder (-20.00,1.17,-40.00) dir (0.34,-0.01,0.94); projectile contact (-15.07,0.98,-26.47) on 'Aim pillar 15 m yaw 20'; MISS 0.185 m (off the crosshair ray by 0.183 m); shoulder line clear; crosshair point is 21.9 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+PASS Fire Blast selected.
+PASS 8m-yaw20: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+AIM 8m-yaw20: crosshair hit (-17.47,0.78,-33.05) on 'Aim pillar 8 m yaw 20'; shoulder (-20.00,1.17,-40.00) dir (0.34,-0.05,0.94); projectile contact (-17.47,0.79,-33.05) on 'Aim pillar 8 m yaw 20'; MISS 0.006 m (off the crosshair ray by 0.006 m); shoulder line clear
+PASS Fire Blast selected.
+PASS 22m-yaw0: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+AIM 22m-yaw0: crosshair hit (-20.00,0.86,-18.60) on 'Aim pillar 22 m yaw 0'; shoulder (-20.00,1.16,-40.00) dir (0.00,0.03,1.00); projectile contact (-20.00,1.87,-18.60) on 'Aim pillar 22 m yaw 0'; MISS 1.013 m (off the crosshair ray by 1.010 m); shoulder line clear; crosshair point is 29.0 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+AIM TABLE (Fire Blast, projectile contact vs crosshair raycast hit):
+  5m-yaw0: crosshair hit (-20.00,1.04,-35.60) on 'Aim pillar 5 m yaw 0'; shoulder (-20.00,1.08,-40.00) dir (0.00,-0.01,1.00); projectile contact (-20.00,1.04,-35.60) on 'Aim pillar 5 m yaw 0'; MISS 0.001 m (off the crosshair ray by 0.001 m); shoulder line clear
+  15m-yaw0: crosshair hit (-20.00,0.80,-25.60) on 'Aim pillar 15 m yaw 0'; shoulder (-20.00,1.17,-40.00) dir (0.00,-0.01,1.00); projectile contact (-20.00,0.98,-25.60) on 'Aim pillar 15 m yaw 0'; MISS 0.185 m (off the crosshair ray by 0.183 m); shoulder line clear; crosshair point is 21.9 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+  30m-yaw0: crosshair hit (-20.00,0.98,-10.60) on 'Aim pillar 30 m yaw 0'; shoulder (-20.00,1.16,-40.00) dir (0.00,0.06,1.00); projectile contact (-20.00,2.97,-10.60) on 'Aim pillar 30 m yaw 0'; MISS 1.984 m (off the crosshair ray by 1.981 m); shoulder line clear; crosshair point is 37.0 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+  15m-yaw30: crosshair hit (-12.80,0.80,-27.53) on 'Aim pillar 15 m yaw 30'; shoulder (-20.00,1.17,-40.00) dir (0.50,-0.01,0.87); projectile contact (-17.71,1.11,-36.10) on 'City Car'; MISS 9.884 m (off the crosshair ray by 0.923 m); shoulder line BLOCKED by 'City Car' (parallax); crosshair point is 21.9 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+  15m-yaw-30: crosshair hit (-27.20,0.80,-27.53) on 'Aim pillar 15 m yaw -30'; shoulder (-20.00,1.17,-40.00) dir (-0.50,-0.01,0.87); projectile contact (-27.20,0.98,-27.53) on 'Aim pillar 15 m yaw -30'; MISS 0.185 m (off the crosshair ray by 0.183 m); shoulder line clear; crosshair point is 21.9 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+  15m-yaw20: crosshair hit (-15.07,0.80,-26.47) on 'Aim pillar 15 m yaw 20'; shoulder (-20.00,1.17,-40.00) dir (0.34,-0.01,0.94); projectile contact (-15.07,0.98,-26.47) on 'Aim pillar 15 m yaw 20'; MISS 0.185 m (off the crosshair ray by 0.183 m); shoulder line clear; crosshair point is 21.9 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+  8m-yaw20: crosshair hit (-17.47,0.78,-33.05) on 'Aim pillar 8 m yaw 20'; shoulder (-20.00,1.17,-40.00) dir (0.34,-0.05,0.94); projectile contact (-17.47,0.79,-33.05) on 'Aim pillar 8 m yaw 20'; MISS 0.006 m (off the crosshair ray by 0.006 m); shoulder line clear
+  22m-yaw0: crosshair hit (-20.00,0.86,-18.60) on 'Aim pillar 22 m yaw 0'; shoulder (-20.00,1.16,-40.00) dir (0.00,0.03,1.00); projectile contact (-20.00,1.87,-18.60) on 'Aim pillar 22 m yaw 0'; MISS 1.013 m (off the crosshair ray by 1.010 m); shoulder line clear; crosshair point is 29.0 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+PASS Parallax setup: crosshair on a pillar 15 m ahead.
+PARALLAX: obstacle (-20.00,1.04,-34.96) (1 m tall box) between the shoulder (-20.00,1.17,-40.00) and the crosshair point (-20.00,0.80,-25.60); camera ray still hits 'Aim pillar 15 m yaw 0'; shoulder line blocked by it: True.
+PASS Parallax case built: the crosshair shows the pillar, the shoulder's line is blocked.
+PASS Fire Blast selected.
+PASS parallax-15m: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+CAPTURE aim-parallax-15m-impact.png (1920x1080, gameplay camera + HUD panels).
+AIM parallax-15m: crosshair hit (-20.00,0.80,-25.60) on 'Aim pillar 15 m yaw 0'; shoulder (-20.00,1.17,-40.00) dir (0.00,-0.01,1.00); projectile contact (-20.00,1.11,-35.16) on 'Parallax obstacle'; MISS 9.565 m (off the crosshair ray by 0.884 m); shoulder line BLOCKED by 'Parallax obstacle' (parallax); crosshair point is 21.9 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+PARALLAX RESULT: parallax-15m: crosshair hit (-20.00,0.80,-25.60) on 'Aim pillar 15 m yaw 0'; shoulder (-20.00,1.17,-40.00) dir (0.00,-0.01,1.00); projectile contact (-20.00,1.11,-35.16) on 'Parallax obstacle'; MISS 9.565 m (off the crosshair ray by 0.884 m); shoulder line BLOCKED by 'Parallax obstacle' (parallax); crosshair point is 21.9 m from the CAMERA > Fire Range 20 (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point 20 m out instead)
+PARALLAX Ice/Telekinesis targeting (PowerUser.FindTarget, shoulder ray): 'Parallax obstacle' at (-20.00,1.02,-35.16) — the crosshair shows 'Aim pillar 15 m yaw 0'.
+PASS Crosshair meets the street.
+PASS Crosshair now on 'Ice target crate (under crosshair)'.
+PASS Real Ice cast: Ice activated
+PASS Ice froze the crate under the crosshair and not the decoy 2.6 m beside it.
+CAPTURE aim-ice-crosshair-target-1920x1080.png (1920x1080, gameplay camera + HUD panels).
+PASS Existing progression unlock telekinesis
+PASS PlayerProgression.SetLoadout -> telekinesis + fire before the session.
+PASS telekinesis+fire sandbox: runtime COPY of the free-play definition (0 civilians, no police) selected through GameFlow.
+PASS telekinesis+fire sandbox: session with FeelDirector and the ThirdPersonCamera as the active feel camera.
+PASS Real jump dismisses the mission briefing (the card covers the crosshair).
+PASS Session equips telekinesis + fire.
+TEST HARNESS: camera yaw -13.5 pitch 13.0 puts the crosshair on 'TK crate A'.
+PASS Crosshair brought onto 'TK crate A' (3 m from 'TK crate B').
+PASS Real Telekinesis cast: Telekinesis activated
+PASS Telekinesis grabbed 'TK crate A' — the crate under the crosshair, not 'TK crate B'.
+CAPTURE aim-telekinesis-crosshair-target-1920x1080.png (1920x1080, gameplay camera + HUD panels).
+TEST HARNESS: camera yaw 6.5 pitch 13.0 puts the crosshair on 'TK crate B'.
+PASS Crosshair brought onto 'TK crate B' (3 m from 'TK crate A').
+PASS Real Telekinesis cast: Telekinesis activated
+PASS Telekinesis grabbed 'TK crate B' — the crate under the crosshair, not 'TK crate A' (CONTROL: aim moved to the other crate, selection followed).
+LIMIT: batch mode has no keyboard/mouse or physical display: punches/landings/casts use the methods the input handlers call; the camera's yaw/pitch are set directly (the mouse drives them in play). Captures are batch-mode Metal render targets. FEEL IS NOT JUDGED HERE: amplitudes, durations and particle look need a human playtest.

@@ -1,0 +1,21 @@
+using System.IO;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+/// SCRATCH PROBE (not part of the project): identical in the A (0ce58f1) and B (final) clones.
+[InitializeOnLoad]
+public static class FpsProbe
+{
+    const string Key = "Overpowered.FpsProbe"; static double deadline;
+    static FpsProbe() { EditorApplication.update += () => { if (deadline > 0 && EditorApplication.timeSinceStartup > deadline) { Debug.LogError("FPS probe timeout"); Finish(1); } }; }
+    public static void Run()
+    {
+        var save = Path.GetFullPath("Temp/FpsProbe/save.json"); Directory.CreateDirectory(Path.GetDirectoryName(save)); foreach (var f in new[] { save, save + ".bak", save + ".tmp" }) if (File.Exists(f)) File.Delete(f);
+        SessionState.SetBool(Key, true); EditorSceneManager.OpenScene("Assets/Scenes/Home.unity"); EditorApplication.isPlaying = true;
+    }
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void Configure() { if (!SessionState.GetBool(Key, false)) return; EditorApplication.LockReloadAssemblies(); deadline = EditorApplication.timeSinceStartup + 300; WorldSession.VerificationSavePath = Path.GetFullPath("Temp/FpsProbe/save.json"); GameFlow.VerificationSandbox = false; }
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    static void Launch() { if (!SessionState.GetBool(Key, false)) return; var go = new GameObject("FPS probe"); Object.DontDestroyOnLoad(go); var r = go.AddComponent<FpsProbeRunner>(); r.Finished = Finish; }
+    static void Finish(int code) { SessionState.EraseBool(Key); deadline = 0; EditorApplication.UnlockReloadAssemblies(); EditorApplication.Exit(code); }
+}

@@ -1,0 +1,16 @@
+t0-1 Run exit 0 PASS 460 
+t0-2 Run exit 0 PASS 460 
+t0-3 Run exit 0 PASS 460 
+t0-4 Run exit 0 PASS 460 
+t0-5 Run exit 0 PASS 460 
+t0-6 Run exit 0 PASS 461 
+t0-7 Run exit 0 PASS 460 
+t0-8 Run exit 0 PASS 460 
+DONE
+diag-1 exit 0 PASS 460 
+diag-2 exit 0 PASS 460 
+diag-3 exit 0 PASS 460 
+diag-4 exit 0 PASS 460 
+diag-5 exit 0 PASS 461 
+diag-6 exit 1 PASS 247 FAIL System.Exception: villain-escape-objective-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the 
+DONE

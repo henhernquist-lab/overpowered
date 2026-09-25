@@ -195,6 +195,7 @@ public sealed class CityNpc : MonoBehaviour
         {
             Hits++;
             float before=world.Health; world.DamagePlayer(ContactDamage);
+            if (world.Health<before) FeelDirector.PlayerHit(before-world.Health, transform.position);   // feel only
             if (a.Knockback>0f && world.Health<before && !world.PlayerDead) StartCoroutine(Knockback(CommittedDirection, a.Knockback, a.KnockbackSeconds));
         }
         Agent.isStopped=false;
@@ -225,7 +226,7 @@ public sealed class CityNpc : MonoBehaviour
         while (moved<distance && body!=null && body.enabled && !world.PlayerDead)
         {
             // Small downward component keeps CharacterController ground contact (isGrounded), so a shoved player can still jump/backflip.
-            float step=Mathf.Min(distance-moved, speed*Time.deltaTime); body.Move(direction*step+Vector3.down*world.Tuning.Movement.GroundStickSpeed*Time.deltaTime); moved+=step;
+            float step=Mathf.Min(distance-moved, speed*Time.deltaTime); if (Time.deltaTime>0f) body.Move(direction*step+Vector3.down*world.Tuning.Movement.GroundStickSpeed*Time.deltaTime); moved+=step;   // frozen frame (hit pause): no zero Move, ground contact kept
             yield return null;
         }
     }

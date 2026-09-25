@@ -86,7 +86,9 @@ public sealed class SuperHeroController : MonoBehaviour
         bool wasGrounded = controller.isGrounded;
         airbornePeakHeight = wasGrounded ? transform.position.y : Mathf.Max(airbornePeakHeight, transform.position.y);
         float impactSpeed = Mathf.Max(0f, -verticalVelocity);
-        controller.Move((move * speed + Vector3.up * verticalVelocity) * Time.deltaTime);
+        // A frozen frame (hit pause / timeScale 0) moves nothing; skipping the zero Move keeps the CharacterController's
+        // ground contact, so jump/backflip input stays valid through a hit pause.
+        if (Time.deltaTime > 0f) controller.Move((move * speed + Vector3.up * verticalVelocity) * Time.deltaTime);
         PresentationState = new HeroPresentationState(transform.InverseTransformDirection(controller.velocity),
             controller.isGrounded, flying && !controller.isGrounded);
         // CharacterController can alternate ground contact for sub-skin-width moves.
@@ -157,7 +159,7 @@ public sealed class SuperHeroController : MonoBehaviour
         float speed = HeroAbilityTuning.BackflipDistance / Mathf.Max(.01f, HeroAbilityTuning.BackflipSeconds);
         while (Time.time < backflipUntil)
         {
-            controller.Move(-transform.forward * (speed * Time.deltaTime));
+            if (Time.deltaTime > 0f) controller.Move(-transform.forward * (speed * Time.deltaTime));   // frozen frame: keep ground contact
             yield return null;
         }
     }

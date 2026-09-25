@@ -1,0 +1,88 @@
+PASS Feel sandbox: runtime COPY of the free-play definition (0 civilians, no police) selected through GameFlow.
+PASS Feel sandbox: session with FeelDirector and the ThirdPersonCamera as the active feel camera.
+PASS Real jump dismisses the mission briefing (the card covers the crosshair).
+PASS FeelDirector reads GameTuning.Feel (the single source of feel values).
+FEEL VALUES (GameTuning.asset Feel): {"HeavyImpulse":1000.0,"HeavyIncomingDamage":15.0,"HitPauseSeconds":0.05999999865889549,"HitPauseTimeScale":0.0,"HitPauseMinInterval":0.4000000059604645,"ImpulseAmplitude":0.1599999964237213,"ImpulseSeconds":0.2199999988079071,"ImpulseFrequency":18.0,"IncomingImpulseScale":0.800000011920929,"FovKickDegrees":2.5,"FovKickSeconds":0.20000000298023224,"HardLandingSpeed":14.0,"LandingScale":0.699999988079071,"ParticlePoolSize":8,"LightHitParticles":6,"HeavyHitParticles":14,"BreakParticles":12,"LandingParticles":8,"ParticleSize":0.12999999523162842,"ParticleSizeJitter":0.5,"ParticleLifetime":0.550000011920929,"ParticleSpeed":5.0,"ParticleGravity":1.600000023841858,"HitDebris":1,"HeavyDebris":9,"BreakDebris":11,"LandingDebris":1}
+CAMERA VALUES (GameTuning.asset Camera): {"Sensitivity":3.5,"Pitch":16.0,"MinimumPitch":-10.0,"MaximumPitch":65.0,"LookHeight":2.5,"Offset":{"x":0.0,"y":2.799999952316284,"z":-7.599999904632568},"CollisionRadius":0.20000000298023224,"CollisionInset":0.10000000149011612,"FieldOfView":65.0}
+PASS Configured hit pause 60 ms lies in the 50-80 ms band.
+TIME SOURCES (static): GameHud / GameHudGuidance / GameHudFeedback animate only with Time.unscaledTime / unscaledDeltaTime; ThirdPersonCamera impulse + FOV kick use Time.unscaledTime; TimeArbiter measures with Time.realtimeSinceStartupAsDouble.
+TEST HARNESS: a 45 kg crate in front of the hero, pre-hit twice with 0 damage so the real punch is its 3rd (breaking) hit (Props.HitsToBreak 3).
+PASS Real Super Strength punch accepted (windup 125 ms; force follows the windup).
+PASS Impact classified HEAVY from data: 1350 N·s >= Feel.HeavyImpulse 1000 (HEAVY impact 1350 N·s).
+PASS timeScale 0 at the impact callback (hit pause started in the impact frame 1238).
+PASS Impact cue: exactly one AudioSource plays the punch cue (1).
+HEAT FLASH probe: HeatFlashAt -100.000 -> 7.040, flashing True, timeScale 0, frames 0, unscaled 7.053.
+PASS Breaking the crate added Heat (Hero side: destruction = Heat, no XP) -> the HUD Heat flash tween started ('+0.35') while still inside the pause.
+MEASURED hit pause: Stopwatch 60.3 ms from the impact callback to the first frame with timeScale restored (configured 60 ms; TimeArbiter held 60.9 ms); 41 frames; timeScale samples [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1].
+PASS Hit pause lasted 60.3 ms real time (configured 60 ms, frame-granular; last frame dt 1.2 ms).
+PASS Measured hit pause 60.3 ms is inside 50-80 ms (+5 ms frame tolerance).
+PASS timeScale restored to its previous value (1).
+PASS FixedUpdate during the pause: 0 steps counted up to restore (the impact frame's own steps may precede the callback).
+PASS Game time frozen through the pause (Time.time advanced 0.000 ms over 41 frames).
+PASS FixedUpdate resumes after the pause (5 steps in 0.1 s).
+PASS HUD Heat-delta tween advances DURING the pause (unscaled): translate y 0.00 -> -0.25 -> -0.35 -> -0.38 -> -0.41 -> -0.43 -> -0.45 -> -0.48 -> -0.50 -> -0.52 -> -0.55 -> -0.57 -> -0.60 -> -0.62 -> -0.64 -> -0.67 -> -0.69 -> -0.71 -> -0.73 -> -0.76 -> -0.78 -> -0.80 -> -0.82 -> -0.85 -> -0.87 -> -0.89 -> -0.92 -> -0.94 -> -0.96 -> -0.99 -> -1.01 -> -1.04 -> -1.06 -> -1.08 -> -1.10 -> -1.12 -> -1.14 -> -1.17 -> -1.19 -> -1.21 -> -1.23 -> -1.25 px while timeScale was 0.
+PASS Camera FOV kick animates during the pause (unscaled): [2.08,2.04,2.01,1.98,1.95,1.93,1.90,1.87,1.84,1.82,1.79,1.76,1.74,1.71,1.68,1.66,1.64,1.61,1.59,1.56,1.54,1.51,1.49,1.46,1.44,1.41,1.39,1.36,1.33,1.31,1.29,1.27,1.24,1.22,1.20,1.18,1.16,1.14,1.12,1.10,1.08] deg.
+AUDIO: punch voice timeSamples 0 -> 2833 across the pause (+2833); AudioListener.pause False; voices on the punch cue after the pause 1.
+PASS The punch cue's AudioSource keeps playing through the pause (timeSamples +2833; AudioSources are not timeScale-bound; AudioDirector ties nothing to timeScale).
+PASS The cue fired during the pause is not re-triggered on resume (1 voice).
+PASS Particles: heavy-hit burst + prop-break burst emitted from the pool (bursts 0 -> 2).
+PASS BreakableProp shard logic unchanged: rigidbodies 230 -> 234 (crate removed, 5 shards).
+PASS Heavy hit sent one camera impulse.
+PASS At rest the camera FOV equals Camera.FieldOfView 65.
+TEST HARNESS: FeelDirector.Impact called directly (the CombatImpact.Blast hook) to render mid-kick deterministically.
+PASS Mid-kick render used position rest+offset (0.00,-0.12,-0.09) (|0.146| m) and FOV 67.42 = 65 + 2.42.
+PASS After the render the camera transform and FOV are back at the follow pose (the aim ray and physics never see the kick).
+PASS Crosshair (aim) ray during an active kick is identical before and after the kicked render — gameplay aiming never sees the shake.
+PASS Back to rest after the window: zero offset, FOV exactly Camera.FieldOfView, camera-to-hero offset unchanged (no drift).
+PASS Real heavy punch for the pause-menu CONTROL.
+PASS Inside the hit pause (timeScale 0, TimeArbiter.HitPaused).
+PASS Pause menu opened DURING the hit pause: the hit pause is dropped, the menu holds timeScale 0.
+PASS Still paused 300 ms later (277 frames all timeScale 0): the expired hit pause did NOT unpause the game.
+PASS CONTROL: a heavy impact while paused is refused by the arbiter (timeScale stays 0).
+PASS Unpaused -> timeScale 1 on all 166 frames for 0.2 s (no stale hit-pause restore).
+PASS Real CombatImpact.Blast #1 with Super Strength stats (1350 N·s) hit crate 0 at 1 ms.
+PASS Real CombatImpact.Blast #2 with Super Strength stats (1350 N·s) hit crate 1 at 41 ms.
+PASS Real CombatImpact.Blast #3 with Super Strength stats (1350 N·s) hit crate 2 at 83 ms.
+PASS Real CombatImpact.Blast #4 with Super Strength stats (1350 N·s) hit crate 3 at 124 ms.
+PASS Real CombatImpact.Blast #5 with Super Strength stats (1350 N·s) hit crate 4 at 166 ms.
+PASS 5 heavy hits in 166 ms (< 200 ms): [0, 41, 83, 124, 166] ms.
+PASS Rate limit: ONE hit pause started, 4 refused (Feel.HitPauseMinInterval 0.4 s).
+PASS timeScale restored after the single pause.
+PASS CONTROL: after the min interval a new heavy hit pauses again (the limit is a rate, not a block).
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (hit pause ON).
+PASS Hit pause started at the impact.
+MEASURED PAUSE  : crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 74.3 ms (real) after the impact; v1 (-0.49,13.64,15.61) |20.739| m/s; v10 (-0.49,9.32,15.61) |18.190|; moved (-0.10,2.29,3.13) after 10 steps.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+MEASURED CONTROL: crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 15.1 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (hit pause ON).
+PASS Hit pause started at the impact.
+MEASURED PAUSE  : crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 75.3 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+MEASURED CONTROL: crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 15.4 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (hit pause ON).
+PASS Hit pause started at the impact.
+MEASURED PAUSE  : crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 75.0 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+MEASURED CONTROL: crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 14.9 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (hit pause ON).
+PASS Hit pause started at the impact.
+MEASURED PAUSE  : crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 74.6 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PASS Crate at rest before the punch (0.003 m/s).
+PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+MEASURED CONTROL: crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 14.9 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+PASS The first physics step after the impact waited out the pause (74.3, 75.3, 75.0, 74.6 ms) vs the control (15.1, 15.4, 14.9, 14.9 ms).
+FAIL System.Exception: Pair 1 (same geometry, |Δrel| 0.00 mm): velocity after the pause == no-pause control (v1 |Δ| 0.8585 m/s of 20.386; v10 |Δ| 0.8585; ratio 1.0173 -> impulse applied once, not lost, not doubled).
+  at FeelVerificationRunner.Check (System.Boolean valid, System.String text) [0x0001b] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/FeelVerificationRunner.cs:42 
+  at FeelVerificationRunner+<PhysicsThroughPause>d__53.MoveNext () [0x00293] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/FeelVerificationRunner.cs:328 
+  at FeelVerificationRunner+<Start>d__18.MoveNext () [0x0005f] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Assets/Scripts/FeelVerificationRunner.cs:33 

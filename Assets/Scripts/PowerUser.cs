@@ -29,10 +29,13 @@ public sealed class PowerUser : MonoBehaviour
             if (camera == null) return transform.forward;
             // Aim from the shoulder toward the camera crosshair, excluding the player.
             Ray ray = camera.ViewportPointToRay(new Vector3(.5f, .5f, 0));
-            float distance = Selected == null ? Strength.Definition.Range : Stats(Selected).Range;
+            // The power's reach is measured from the hero, not from the camera behind it, and anything between the
+            // camera and the hero (a lamppost behind you) is never the aim target.
+            float near = Mathf.Max(0f, Vector3.Dot(AimOrigin - ray.origin, ray.direction));
+            float distance = near + (Selected == null ? Strength.Definition.Range : Stats(Selected).Range);
             Vector3 target = ray.GetPoint(distance);
             foreach (var hit in Physics.RaycastAll(ray, distance))
-                if (hit.collider.transform.root != transform && hit.distance < distance) { distance = hit.distance; target = hit.point; }
+                if (hit.collider.transform.root != transform && hit.distance > near && hit.distance < distance) { distance = hit.distance; target = hit.point; }
             return (target - AimOrigin).normalized;
         }
     }

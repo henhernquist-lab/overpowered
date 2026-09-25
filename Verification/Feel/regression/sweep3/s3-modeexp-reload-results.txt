@@ -1,0 +1,10 @@
+PASS Menu component exists in Home
+PASS SECOND UNITY PROCESS: Home profile reloaded the exact save (4 mode records, level 6, sessions 6).
+PASS Reloaded per-mode bests: endless-fight 2120 (wave 6), endless-fight-villain 80.
+PASS In-game HUD after reload: GET READY · WAVE 1 IN 4s · SCORE 0 · BEST 2120
+PASS Abandoning a 0-score run after reload keeps best 2120 (runs 2 -> 3).
+PASS Legacy fixture is a real pre-change save (written 2026-09-20 by MenuPresentationVerification) with no ModeRecords field.
+PASS Legacy save loads: level 2, XP 70, best 420, side Villain, ModeRecords empty list (not null).
+PASS Legacy save upgraded in place: new endless record 55 / wave 3; old fields intact (global best 420 unchanged).
+PASS Invalid-save CONTROL: version-2 file still rejected (Invalid progression save.).
+PASS Fresh-save CONTROL in second process: no mode records, best 0.

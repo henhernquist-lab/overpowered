@@ -1,0 +1,12 @@
+Separate process: pid 74834, save /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Verification/Hud/phase3/saves/save-main.json
+PASS Reloaded save carries the progression Run earned: level 5, XP 172, points 4 (expected 5 172 4).
+PASS GameFlow.Select launches hero reload clone
+PASS hero reload clone: session runs this definition; GameHud + overlay exist.
+PASS CONTROL: loading a levelled save replays NO level-up burst/banner and NO popup (3 s).
+PASS Reload process: real defeat: XP actually granted 35 (Progression delta; tuning value 35).
+PASS Reload process: real defeat: ONE new popup "+35 XP" == XP granted (35); popups started +1, merges +0.
+PASS Reload process: real defeat: popup anchored at the event's world position (-20.0,0.1,-32.0) (reason "defeat"; anchor -20.000,0.108,-32.000, |d| 0.0000 m; timeScale 1).
+PASS Reload process: real defeat: popup base point (800.00, 445.70) == projection of the event's world position (-20.0,0.1,-32.0) + 2.2 m ((800.00, 445.70)).
+PASS Reload process: real defeat: label drawn at the projection minus its rise 2.7 (label centre (800.00, 442.50)).
+PASS HONESTY Reload session: SUM(popup XP) 35 == HUD shown total 35 == XP gained 35 (level/XP, GameTuning formula) == XpAwarded sum 35; 1 popups for 1 grants (0 merged).
+PASS Transient feedback NEVER overlapped the crosshair box: 3 popup/heat-delta samples over 443 HUD frames (keep-out radius 33.2).

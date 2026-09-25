@@ -1,0 +1,18 @@
+s2-p3 | HudPhase3Verification.Run | exit 1 | PASS-lines 321 | PASS HUD glyphs (minus '−', dash '—'): every glyph of "−0.35 — +105 XP LEVEL UP TAB TO UPGRADE OBJECTIVE COMPLETE FAILED WAVE CLEARED SCORE POINTS 0123456789" exists in the HUD font LegacyRuntime. | sync-diffs        1
+s2-p3-reload | HudPhase3Verification.Reload | exit 1 | PASS-lines 0 | FAIL System.IO.FileNotFoundException: Could not find file "/private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Verification/Hud/phase3/saves/expected-after-run.txt" | sync-diffs        1
+s2-feel | FeelVerification.Run | exit 0 | PASS-lines 141 |  | sync-diffs        1
+s2-mode | ModeVerification.Run | exit 0 | PASS-lines 79 |  | sync-diffs        1
+s2-mode-reload | ModeVerification.Reload | exit 0 | PASS-lines 2 |  | sync-diffs        1
+s2-modeexp | ModeExpansionVerification.Run | exit 0 | PASS-lines 111 |  | sync-diffs        1
+s2-modeexp-reload | ModeExpansionVerification.Reload | exit 0 | PASS-lines 10 |  | sync-diffs        1
+s2-forge | HeroForgeVerification.Run | exit 0 | PASS-lines 132 |  | sync-diffs        1
+s2-forge-reload | HeroForgeVerification.Reload | exit 0 | PASS-lines 3 |  | sync-diffs        1
+s2-combat | CombatVerification.Run | exit 1 | PASS-lines 68 | FAIL System.Exception: Brute LATE CONTROL: backflip only AFTER release (the 18.00 hit already landed at release). | sync-diffs        1
+s2-audio | AudioVerification.Run | exit 0 | PASS-lines 126 |  | sync-diffs        2
+s2-city | CityVerification.Run | exit 0 | PASS-lines 53 |  | sync-diffs        1
+s2-city-reload | CityVerification.Reload | exit 0 | PASS-lines 5 |  | sync-diffs        1
+s2-humanoid | HumanoidVerification.Run | exit 0 | PASS-lines 52 |  | sync-diffs        1
+s2-backflip | BackflipHurricaneVerification.Run | exit 0 | PASS-lines 63 |  | sync-diffs        1
+s2-cityart | CityArtVerification.Run | exit 0 | PASS-lines 31 |  | sync-diffs        1
+s2-menus | MenuPresentationVerification.Run | exit 0 | PASS-lines 42 | PASS Hero loss / no-level-up CONTROL: MISSION FAILED, no reward choices. | sync-diffs        1
+DONE

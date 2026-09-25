@@ -1,0 +1,6 @@
+s4-feel | FeelVerification.Run | exit 0 | PASS-lines 142 |  | sync-diffs        1
+s4-p3 | HudPhase3Verification.Run | exit 1 | PASS-lines 419 | PASS HUD glyphs (minus '−', dash '—'): every glyph of "−0.35 — +105 XP LEVEL UP TAB TO UPGRADE OBJECTIVE COMPLETE FAILED WAVE CLEARED SCORE POINTS 0123456789" exists in the HUD font LegacyRuntime. | sync-diffs        1
+s4-p3-reload | HudPhase3Verification.Reload | exit 1 | PASS-lines 0 | FAIL System.IO.FileNotFoundException: Could not find file "/private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/op-regression/Verification/Hud/phase3/saves/expected-after-run.txt" | sync-diffs        1
+s4-p3b | HudPhase3Verification.Run | exit 0 | PASS-lines 561 | PASS HUD glyphs (minus '−', dash '—'): every glyph of "−0.35 — +105 XP LEVEL UP TAB TO UPGRADE OBJECTIVE COMPLETE FAILED WAVE CLEARED SCORE POINTS 0123456789" exists in the HUD font LegacyRuntime. | sync-diffs        1
+s4-p3c | HudPhase3Verification.Run | exit 0 | PASS-lines 562 | PASS HUD glyphs (minus '−', dash '—'): every glyph of "−0.35 — +105 XP LEVEL UP TAB TO UPGRADE OBJECTIVE COMPLETE FAILED WAVE CLEARED SCORE POINTS 0123456789" exists in the HUD font LegacyRuntime. | sync-diffs        1
+DONE

@@ -12,6 +12,9 @@ public sealed class GameTuning : ScriptableObject
     public CrimeSettings Crimes = new CrimeSettings();
     public PropSettings Props = new PropSettings();
     public CameraSettings Camera = new CameraSettings();
+    /// Game feel (hit pause, camera impulse, FOV kick, impact particles). Every feel value lives here; Camera above stays
+    /// the camera authority (offset / look height / field of view).
+    public FeelSettings Feel = new FeelSettings();
 }
 [Serializable] public sealed class MovementSettings
 {
@@ -78,4 +81,38 @@ public sealed class GameTuning : ScriptableObject
     public float Sensitivity = 3.5f, Pitch = 16f, MinimumPitch = -10f, MaximumPitch = 65f, LookHeight = 1.05f;
     public Vector3 Offset = new Vector3(0,2.6f,-6.5f);
     public float CollisionRadius = .2f, CollisionInset = .1f, FieldOfView = 65f;
+}
+[Serializable] public sealed class FeelSettings
+{
+    [Header("Heavy hit definition")]
+    [Tooltip("An outgoing CombatImpact.Blast that touches at least one body/NPC is HEAVY at or above this impulse (N·s). Super Strength punch 1350, kick 2025, synergies 1500-3400 = heavy; Forge basic melee 160 and Fire Blast 450 = light.")]
+    public float HeavyImpulse = 1000f;
+    [Tooltip("Damage landing on the player at or above this is HEAVY (Brute slam 18; Rusher 6 and Gunner 8 are light).")]
+    public float HeavyIncomingDamage = 15f;
+    [Header("Hit pause (real time)")]
+    [Tooltip("Real seconds of the freeze on a heavy hit (target band 0.05-0.08).")]
+    public float HitPauseSeconds = .06f;
+    [Tooltip("timeScale held during the freeze.")]
+    public float HitPauseTimeScale = 0f;
+    [Tooltip("Minimum real seconds between hit-pause starts, so a crowd cannot chain freezes.")]
+    public float HitPauseMinInterval = .4f;
+    [Header("Camera impulse (additive, unscaled time)")]
+    public float ImpulseAmplitude = .16f;
+    public float ImpulseSeconds = .22f;
+    public float ImpulseFrequency = 18f;
+    [Tooltip("Incoming heavy hits shake at this fraction of ImpulseAmplitude.")]
+    public float IncomingImpulseScale = .8f;
+    [Header("FOV kick (unscaled time; does not stack with a synergy's own kick)")]
+    public float FovKickDegrees = 2.5f;
+    public float FovKickSeconds = .2f;
+    [Header("Hard landing")]
+    [Tooltip("SuperHeroController.Landed speed (m/s) at or above which a landing kicks the camera. A normal jump lands at ~8.5.")]
+    public float HardLandingSpeed = 14f;
+    [Tooltip("Hard landings shake/kick at this fraction of the hit values.")]
+    public float LandingScale = .7f;
+    [Header("Impact particles (fixed pool, shared cube mesh, shared palette materials)")]
+    public int ParticlePoolSize = 8;
+    public int LightHitParticles = 6, HeavyHitParticles = 14, BreakParticles = 12, LandingParticles = 8;
+    public float ParticleSize = .13f, ParticleSizeJitter = .5f, ParticleLifetime = .55f, ParticleSpeed = 5f, ParticleGravity = 1.6f;
+    public CityColor HitDebris = CityColor.Pavement, HeavyDebris = CityColor.Amber, BreakDebris = CityColor.Wood, LandingDebris = CityColor.Pavement;
 }

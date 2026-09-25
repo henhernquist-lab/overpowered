@@ -28,7 +28,7 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
     IEnumerator Start()
     {
         Directory.CreateDirectory(Folder); QualitySettings.vSyncCount = 0; Application.targetFrameRate = -1;
-        var stack = new Stack<IEnumerator>(); stack.Push(ReloadMode ? ReloadChecks() : Checks());
+        var stack = new Stack<IEnumerator>(); stack.Push(TransientVerdict()); stack.Push(ReloadMode ? ReloadChecks() : Checks());
         while (stack.Count > 0)
         {
             object next = null; bool moved = false;
@@ -43,6 +43,21 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
     void Check(bool valid, string text) { if (!valid) throw new Exception(text); Log("PASS " + text); }
     void Write() { File.WriteAllLines(Path.Combine(Folder, ReloadMode ? "reload.txt" : "results.txt"), output); }
 
+    // ---- Transient feedback (XP popups, heat delta) may sit near the centre but must NEVER overlap the crosshair box.
+    //      Checked every frame of the whole run (layout of the previous panel update), plus at every capture.
+    int transientFrames, transientSamples; readonly List<string> crosshairHits = new List<string>();
+    IEnumerable<VisualElement> Transients() { foreach (var p in hud.Popups) if (p.Active && GameHud.Shown(p.Element)) yield return p.Element; if (GameHud.Shown(hud.HeatDelta)) yield return hud.HeatDelta; }
+    void Update()
+    {
+        if (hud == null || hud.OverlayRoot == null || !GameHud.Shown(hud.OverlayRoot) || !GameHud.Shown(hud.Crosshair)) return;
+        var cross = hud.Crosshair.worldBound; if (cross.width <= 0f) return; transientFrames++;
+        foreach (var e in Transients()) { transientSamples++; if (e.worldBound.Overlaps(cross) && crosshairHits.Count < 20) crosshairHits.Add($"frame {Time.frameCount} {e.name}'{(e as Label)?.text}' {e.worldBound} x crosshair {cross}"); }
+    }
+    IEnumerator TransientVerdict()
+    {
+        Check(crosshairHits.Count == 0, $"Transient feedback NEVER overlapped the crosshair box: {transientSamples} popup/heat-delta samples over {transientFrames} HUD frames (keep-out radius {GameHud.PopupCrosshairClearRadius:0.#})" + (crosshairHits.Count > 0 ? " — OVERLAPS: " + string.Join("; ", crosshairHits) : "."));
+        yield break;
+    }
     // ---------------------------------------------------------------- helpers
     IEnumerator Scene(string name)
     {
@@ -193,6 +208,11 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
         var exempt = new List<RectInt>();
         void Exempt(VisualElement e, int pad) { var r = Pixels(e.worldBound); exempt.Add(new RectInt(r.xMin - pad, r.yMin - pad, r.width + 2 * pad, r.height + 2 * pad)); }
         if (GameHud.Shown(hud.Crosshair)) Exempt(hud.Crosshair, 2);
+        // Transient feedback (popups at the event, the heat delta) is exempt by its element bounds, like the waypoint;
+        // it must never touch the crosshair box.
+        var transients = Transients().ToList();
+        foreach (var t in transients) Exempt(t, 6);
+        Check(transients.All(t => !t.worldBound.Overlaps(hud.Crosshair.worldBound)), $"{name}: {transients.Count} transient feedback element(s) shown, none overlapping the crosshair box {R(hud.Crosshair.worldBound)}" + (transients.Count > 0 ? ": " + string.Join(" ", transients.Select(t => t.name + R(t.worldBound))) : "."));
         foreach (var w in Overlay().Where(e => (IsWaypoint(e) || e == hud.Briefing) && GameHud.Shown(e))) Exempt(w, 4);
         var zone = new RectInt(Mathf.RoundToInt(size.x * .3f), Mathf.RoundToInt(size.y * .3f), Mathf.RoundToInt(size.x * .4f), Mathf.RoundToInt(size.y * .4f));
         int offenders = 0, maxDiff = 0, total = 0;
@@ -201,7 +221,7 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
             var p = new Vector2Int(x, y); if (exempt.Any(r => r.Contains(p))) continue;
             total++; int d = Diff(x, y); maxDiff = Mathf.Max(maxDiff, d); if (d > 3) offenders++;
         }
-        Check(offenders == 0, $"{name}: PIXEL centre-clear — {total} centre-zone pixels outside the crosshair/waypoint{(GameHud.Shown(hud.Briefing) ? "/briefing" : "")} boxes identical to the camera-only render (max diff {maxDiff}, {offenders} > 3).");
+        Check(offenders == 0, $"{name}: PIXEL centre-clear — {total} centre-zone pixels outside the crosshair/waypoint{(GameHud.Shown(hud.Briefing) ? "/briefing" : "")}{(transients.Count > 0 ? "/transient-feedback" : "")} boxes identical to the camera-only render (max diff {maxDiff}, {offenders} > 3).");
         Log($"CAPTURE {name}.png {size.x}x{size.y} (gameplay camera + HUD + overlay, one target); coverage: {string.Join(", ", parts)}.");
     }
 
@@ -484,6 +504,44 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
         }
         throw new Exception("No NavMesh spot " + metres + " m from the player");
     }
+    /// TEST HARNESS (Task 0 root cause): the hero is TELEPORTED next to the robber. The old fixed spot (+2.4 m along +X)
+    /// sometimes overlapped the encounter's supply crate AND a wandering civilian; the CharacterController then
+    /// depenetrated the hero up onto the crate, 3.1-3.2 m from the robber (outside InteractRadius 3), so no prompt could
+    /// show. A player walking up can never stand inside a crate, so this picks the first direction (starting at +X) whose
+    /// hero capsule overlaps nothing at BOTH `metres` and `hold` metres, and holds nearby civilians still.
+    Vector3 FreeDirectionNear(Vector3 at, float metres, float hold)
+    {
+        var cc = W.Hero.GetComponent<CharacterController>(); float h = cc.height * .5f - cc.radius;
+        bool Free(Vector3 p) { Vector3 c = p + cc.center + Vector3.up * .05f; return !Physics.OverlapCapsule(c + Vector3.up * h, c - Vector3.up * h, cc.radius + .05f).Any(o => !o.isTrigger && o.transform.root != W.Hero.transform); }
+        foreach (var n in W.Npcs) if (n != null && !n.Dead && n.Role == NpcRole.Civilian && Vector3.Distance(n.transform.position, at) < 8f) n.Freeze(10f);
+        for (int i = 0; i < 16; i++)
+        {
+            Vector3 dir = Quaternion.Euler(0, 90f + i * 22.5f, 0) * Vector3.forward;
+            if (Free(at + dir * metres) && Free(at + dir * hold)) { Log($"TEST HARNESS: free standing spot {metres} m from the robber at bearing {90f + i * 22.5f:0.#} deg (candidate {i + 1}/16); civilians within 8 m held still."); return dir; }
+        }
+        throw new Exception("No free standing spot next to the robber");
+    }
+    float backflipAt = -100f;
+    /// DIAGNOSTIC (Task 0): logs, every frame for `seconds`, the inputs GameHudGuidance.PromptCandidate/UpdatePrompts use.
+    IEnumerator TracePromptInputs(CrimeEvent crime, EncounterActor robber, float seconds)
+    {
+        float until = Time.realtimeSinceStartup + seconds; var e = crime.Encounter;
+        Log($"TRACE setup: encounter '{e.Definition.DisplayName}' site {V(e.Site)}; crimes {string.Join(" | ", W.Crimes.Where(c => c != null && c.Encounter != null).Select(c => c.Encounter.Definition.DisplayName + "@" + V(c.Encounter.Site) + (c.Resolved ? " resolved" : "")))}; props near the hero: {string.Join(" ", e.Props.Where(b => b != null && Vector3.Distance(b.position, W.Hero.transform.position) < 4f).Select(b => b.name + V(b.position)))}.");
+        while (true)
+        {
+            var cc = W.Hero.GetComponent<CharacterController>(); Vector3 c0 = W.Hero.transform.position + cc.center;
+            var overlaps = Physics.OverlapCapsule(c0 + Vector3.up * (cc.height * .5f - cc.radius), c0 - Vector3.up * (cc.height * .5f - cc.radius), cc.radius).Where(o => o.transform.root != W.Hero.transform && !o.isTrigger).Select(o => o.name);
+            if (overlaps.Any()) Log("TRACE hero capsule overlaps: " + string.Join(",", overlaps));
+            var near = W.Npcs.Where(n => n != null && !n.Dead && n.Hostile && Vector3.Distance(n.transform.position, W.Hero.transform.position) < 10f).Select(n => $"{n.Archetype?.name}{(n.Encounter == e ? "[this]" : n.Encounter != null ? "[other enc]" : "")} {Vector3.Distance(n.transform.position, W.Hero.transform.position):0.0}m {n.Phase}{(n.Frozen ? " frozen" : "")}");
+            Log($"TRACE health {W.Health:0.0}; hostiles <10 m: {string.Join("; ", near)}");
+            Vector3 p = W.Hero.transform.position, f = W.Hero.transform.forward;
+            var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+            object candidate = typeof(GameHud).GetField("promptCandidate", flags)?.GetValue(hud), scan = typeof(GameHud).GetField("nextPromptScan", flags)?.GetValue(hud);
+            Log($"TRACE interact: frame {Time.frameCount} real {Time.realtimeSinceStartup:0.000} unscaledDt {Time.unscaledDeltaTime:0.000} unscaled {Time.unscaledTime:0.000} nextScan {scan:0.000} candidate '{candidate}' t-backflip {Time.time - backflipAt:0.000}s BackflipActive {W.Hero.BackflipActive} hero {V(p)} fwd ({f.x:0.00},{f.z:0.00}) robber {V(robber.Npc.transform.position)} dist {Vector3.Distance(p, robber.Npc.transform.position):0.00}/{e.Definition.InteractRadius} InteractableNear {e.InteractableNear(p)} resolved {crime.Resolved} grounded {W.Hero.GetComponent<CharacterController>().isGrounded} menu {W.MenuOpen} dead {W.PlayerDead} paused {W.Mode.Paused} seen {W.Progression.HintSeen("interact")} prompt '{hud.PromptId}'");
+            if (Time.realtimeSinceStartup >= until) yield break;
+            yield return null;
+        }
+    }
     IEnumerator Prompts()
     {
         yield return Home(); WorldSession.VerificationSavePath = PromptSave;
@@ -517,7 +575,7 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
         Check(hud.PromptId == "dodge" && hud.PromptText == $"{HudBindings.BackflipKey} BACKFLIP TO DODGE", $"Enemy telegraph targets the player -> DODGE prompt \"{hud.PromptText}\".");
         yield return Composite(new Vector2Int(1920, 1080), "prompt-dodge-1920x1080", false);
         Check(hud.PromptId == "dodge", "Dodge prompt still up right before the action (lingers " + GameHud.PromptMinSeconds + " s past the telegraph).");
-        Check(W.Hero.TryBackflip(), "Real backflip: " + W.Hero.LastBackflipResult); yield return null;
+        Check(W.Hero.TryBackflip(), "Real backflip: " + W.Hero.LastBackflipResult); backflipAt = Time.time; yield return null;
         Check(hud.PromptId != "dodge" && W.Progression.HintSeen("dodge") && SavedHints(PromptSave).Contains("dodge"), $"Backflip performed -> prompt gone; saved: {SavedHints(PromptSave)}.");
         attacker.Damage(10000, null);
         // interact
@@ -526,10 +584,11 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
         var robber = e.Robbers.First(a => a.Npc != null);
         Move(robber.Npc.transform.position + Vector3.right * 10f); yield return Realtime(.3f);
         Check(hud.PromptId == null, "CONTROL: 10 m from the robber (outside InteractRadius) -> no interact prompt.");
-        Move(robber.Npc.transform.position + Vector3.right * 2.4f); yield return Realtime(.3f);
+        var side = FreeDirectionNear(robber.Npc.transform.position, 2.4f, 2f);
+        Move(robber.Npc.transform.position + side * 2.4f); yield return TracePromptInputs(crime, robber, .3f);
         Check(hud.PromptId == "interact" && hud.PromptText == $"{HudBindings.InteractKey} HOLD TO INTERACT", $"Next to an interactable objective -> \"{hud.PromptText}\".");
         yield return Composite(new Vector2Int(1920, 1080), "prompt-interact-1920x1080");
-        Move(robber.Npc.transform.position + Vector3.right * 2f); yield return null;   // the player can slide after the capture frames
+        Move(robber.Npc.transform.position + side * 2f); yield return null;   // the player can slide after the capture frames
         Check(hud.PromptId == "interact", "Interact prompt still up right before the hold.");
         Log($"Before the hold: player {Vector3.Distance(W.Hero.transform.position, robber.Npc.transform.position):0.00} m from the robber, InteractableNear {e.InteractableNear(W.Hero.transform.position)}, dt {Time.deltaTime:0.0000}.");
         bool accepted = e.Interact(Time.deltaTime); float held = e.HoldFraction;
@@ -550,7 +609,7 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
         Check(hud.PromptId == "dodge", "Fresh-save CONTROL: DODGE prompt shows again.");
         attacker.Damage(10000, null); yield return Realtime(.3f);
         e = W.Mode.SpawnNext().Encounter; Hold(e, 60f); e.enabled = false; robber = e.Robbers.First(a => a.Npc != null);
-        Move(robber.Npc.transform.position + Vector3.right * 2.4f); yield return Realtime(.3f);
+        Move(robber.Npc.transform.position + FreeDirectionNear(robber.Npc.transform.position, 2.4f, 2.4f) * 2.4f); yield return Realtime(.3f);
         Check(hud.PromptId == "interact", "Fresh-save CONTROL: INTERACT prompt shows again.");
         Check(SavedHints(PromptSave).Split(',').Length == 4, "The prompt save still holds its four seen prompts for the separate-process Reload: " + SavedHints(PromptSave));
         yield return Home(); Destroy(mode); WorldSession.VerificationSavePath = MainSave;
@@ -573,7 +632,8 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
         Check(hud.PromptId == null, "Seen DODGE prompt does not reappear during a telegraph.");
         attacker.Damage(10000, null); yield return Realtime(.3f);
         var e = W.Mode.SpawnNext().Encounter; Hold(e, 60f); e.enabled = false; var robber = e.Robbers.First(a => a.Npc != null);
-        Move(robber.Npc.transform.position + Vector3.right * 2.4f); yield return Realtime(.4f);
+        Move(robber.Npc.transform.position + FreeDirectionNear(robber.Npc.transform.position, 2.4f, 2.4f) * 2.4f); yield return Realtime(.4f);
+        Check(e.InteractableNear(W.Hero.transform.position), $"The hero really stands inside InteractRadius ({Vector3.Distance(W.Hero.transform.position, robber.Npc.transform.position):0.00} m), so the next check is not vacuous.");
         Check(hud.PromptId == null && hud.PromptsShown.Count == 0, "Seen INTERACT prompt does not reappear; no prompt shown at all this session.");
         yield return Home(); Destroy(mode);
 

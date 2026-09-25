@@ -1,0 +1,3 @@
+s2b-combat | CombatVerification.Run | exit 0 | PASS-lines 170 |  | sync-diffs        1
+s2b-feel | FeelVerification.Run | exit 0 | PASS-lines 142 |  | sync-diffs        1
+DONE

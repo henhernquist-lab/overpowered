@@ -33,7 +33,7 @@ public sealed class HudPhase3VerificationRunner : MonoBehaviour
     IEnumerator Start()
     {
         Directory.CreateDirectory(Folder); QualitySettings.vSyncCount = 0; Application.targetFrameRate = -1;
-        var stack = new Stack<IEnumerator>(); stack.Push(ReloadMode ? ReloadChecks() : Checks());
+        var stack = new Stack<IEnumerator>(); stack.Push(TransientVerdict()); if (!ReloadMode) stack.Push(PopupNudgeControl()); stack.Push(ReloadMode ? ReloadChecks() : Checks());
         while (stack.Count > 0)
         {
             object next = null; bool moved = false;
@@ -48,6 +48,45 @@ public sealed class HudPhase3VerificationRunner : MonoBehaviour
     void Check(bool valid, string text) { if (!valid) throw new Exception(text); Log("PASS " + text); }
     void Write() { File.WriteAllLines(Path.Combine(Folder, ReloadMode ? "reload.txt" : "results.txt"), output); }
 
+    // ---- Transient feedback (XP popups, heat delta) may sit near the centre but must NEVER overlap the crosshair box.
+    //      Checked every frame of the whole run (layout of the previous panel update), plus at every capture.
+    int transientFrames, transientSamples; readonly List<string> crosshairHits = new List<string>();
+    IEnumerable<VisualElement> Transients() { foreach (var p in hud.Popups) if (p.Active && GameHud.Shown(p.Element)) yield return p.Element; if (GameHud.Shown(hud.HeatDelta)) yield return hud.HeatDelta; }
+    void Update()
+    {
+        if (hud == null || hud.OverlayRoot == null || !GameHud.Shown(hud.OverlayRoot) || !GameHud.Shown(hud.Crosshair)) return;
+        var cross = hud.Crosshair.worldBound; if (cross.width <= 0f) return; transientFrames++;
+        foreach (var e in Transients()) { transientSamples++; if (e.worldBound.Overlaps(cross) && crosshairHits.Count < 20) crosshairHits.Add($"frame {Time.frameCount} {e.name}'{(e as Label)?.text}' {e.worldBound} x crosshair {cross}"); }
+    }
+    /// POSITIVE CONTROL for the crosshair keep-out: XP granted at a world point whose popup anchor projects EXACTLY onto
+    /// the crosshair must be nudged off it (its box clear of the keep-out circle), not drawn over it. Own Hero session,
+    /// after every accounted check, so the extra +1 XP touches no honesty sum.
+    IEnumerator PopupNudgeControl()
+    {
+        var hero = Resources.LoadAll<GameModeDefinition>("Modes").First(m => m.Id == "hero");
+        string nudgeSave = Path.Combine(Path.GetDirectoryName(MainSave), "save-nudge.json");   // isolated: MainSave + ExpectedFile stay as Run left them for Reload
+        foreach (var f in new[] { nudgeSave, nudgeSave + ".bak", nudgeSave + ".tmp" }) if (File.Exists(f)) File.Delete(f);
+        yield return Home(); WorldSession.VerificationSavePath = nudgeSave;
+        yield return Launch(hero);
+        Check(W.Progression.SavePath == nudgeSave, "Nudge control runs on its own isolated save.");
+        var cam = Cam(); var target = new RenderTexture(1920, 1080, 24) { name = "HUD3 nudge" }; target.Create();
+        hud.Panel.targetTexture = target; hud.OverlayPanel.targetTexture = target; cam.aspect = 16f / 9f; yield return Frames(3);
+        var ray = cam.ViewportPointToRay(new Vector3(.5f, .5f, 0)); Vector3 anchor = ray.GetPoint(9f) - Vector3.up * GameHud.PopupHeight;
+        W.Progression.AddXp(1, anchor, "crosshair nudge control");
+        yield return Frames(3);
+        var p = hud.Popups.FirstOrDefault(x => x.Active && x.Reason == "crosshair nudge control");
+        var o = hud.OverlayRoot.layout; var centre = new Vector2(o.width * .5f, o.height * .5f); var at = cam.WorldToViewportPoint(anchor + Vector3.up * GameHud.PopupHeight);
+        var box = p?.Element.worldBound ?? default; var near = new Vector2(Mathf.Clamp(centre.x, box.xMin, box.xMax), Mathf.Clamp(centre.y, box.yMin, box.yMax));
+        Check(p != null && Mathf.Abs(at.x - .5f) < .002f && Mathf.Abs(at.y - .5f) < .01f && p.Nudged && !box.Overlaps(hud.Crosshair.worldBound) && (near - centre).magnitude >= GameHud.PopupCrosshairClearRadius - 1f,
+            $"CONTROL: a popup anchored ON the crosshair (anchor viewport {at.x:0.000},{at.y:0.000}) is nudged off it: box {R(box)}, nearest edge {(near - centre).magnitude:0.0} px from centre (keep-out {GameHud.PopupCrosshairClearRadius:0.0}), crosshair {R(hud.Crosshair.worldBound)}.");
+        cam.ResetAspect(); hud.Panel.targetTexture = null; hud.OverlayPanel.targetTexture = null; target.Release(); Destroy(target);
+        yield return Home(); WorldSession.VerificationSavePath = MainSave;
+    }
+    IEnumerator TransientVerdict()
+    {
+        Check(crosshairHits.Count == 0, $"Transient feedback NEVER overlapped the crosshair box: {transientSamples} popup/heat-delta samples over {transientFrames} HUD frames (keep-out radius {GameHud.PopupCrosshairClearRadius:0.#})" + (crosshairHits.Count > 0 ? " — OVERLAPS: " + string.Join("; ", crosshairHits) : "."));
+        yield break;
+    }
     // ---------------------------------------------------------------- helpers
     IEnumerator Scene(string name)
     {
@@ -132,7 +171,7 @@ public sealed class HudPhase3VerificationRunner : MonoBehaviour
         var p = NewestSince(id0);
         Check(p != null && hud.PopupsStarted == started0 + 1 && hud.PopupMerges == merges0 && p.Amount == granted && p.Grants == 1 && p.Element.text == $"+{granted} XP" && hud.PopupXpShown - shown0 == granted,
             $"{label}: ONE new popup \"{p?.Element.text}\" == XP granted ({granted}); popups started +{hud.PopupsStarted - started0}, merges +{hud.PopupMerges - merges0}.");
-        Check(p.Anchored && Vector3.Distance(p.Anchor, at) < .01f, $"{label}: popup anchored at the event's world position {V(at)} (reason \"{p.Reason}\").");
+        Check(p.Anchored && Vector3.Distance(p.Anchor, at) < .01f, $"{label}: popup anchored at the event's world position {V(at)} (reason \"{p.Reason}\"; anchor {p.Anchor.x:0.000},{p.Anchor.y:0.000},{p.Anchor.z:0.000}, |d| {Vector3.Distance(p.Anchor, at):0.0000} m; timeScale {Time.timeScale}).");
         ProjectionCheck(p, at, label);
         lastPopup = p;
     }
@@ -291,6 +330,8 @@ public sealed class HudPhase3VerificationRunner : MonoBehaviour
         var exempt = new List<RectInt>();
         void Exempt(VisualElement e, int pad) { var r = Pixels(e.worldBound); exempt.Add(new RectInt(r.xMin - pad, r.yMin - pad, r.width + 2 * pad, r.height + 2 * pad)); }
         if (GameHud.Shown(hud.Crosshair)) Exempt(hud.Crosshair, 2);
+        var transients = Transients().ToList();
+        Check(transients.All(t => !t.worldBound.Overlaps(hud.Crosshair.worldBound)), $"{name}: {transients.Count} transient feedback element(s) shown, none overlapping the crosshair box {R(hud.Crosshair.worldBound)}" + (transients.Count > 0 ? ": " + string.Join(" ", transients.Select(t => t.name + R(t.worldBound))) : "."));
         foreach (var w in Overlay().Where(e => (IsWaypoint(e) || e == hud.Briefing) && GameHud.Shown(e))) Exempt(w, 4);
         foreach (var p in ShownPopups()) Exempt(p, 6);
         var zone = new RectInt(Mathf.RoundToInt(size.x * .3f), Mathf.RoundToInt(size.y * .3f), Mathf.RoundToInt(size.x * .4f), Mathf.RoundToInt(size.y * .4f));
@@ -510,8 +551,14 @@ public sealed class HudPhase3VerificationRunner : MonoBehaviour
             if (r.x == 1280) WaypointSizeCheck(r, true);
         }
         // Marker box honesty: the drawn marker fits the box used for group-avoidance and the crosshair radius
+        // Evaluated with the panels at a real capture resolution (1920x1080, settled layout). Right after a capture the
+        // panels fall back to the 4:3 batch-mode screen, where one physical pixel is > 1 logical px, so pixel snapping
+        // alone can exceed the 0.5 px tolerance (seen once the Phase 4 camera moved the marker: 935 vs 936.2).
+        var honesty = new RenderTexture(1920, 1080, 24) { name = "HUD3 marker-box check" }; honesty.Create(); var hcam = Cam();
+        hud.Panel.targetTexture = honesty; hud.OverlayPanel.targetTexture = honesty; hcam.aspect = 16f / 9f; yield return Frames(3);
         var box = GameHud.WaypointMarkerBox; var drawn = hud.Waypoint.worldBound; var declared = new Rect(hud.WaypointPoint + box.position, box.size);
-        Check(drawn.xMin >= declared.xMin - .5f && drawn.xMax <= declared.xMax + .5f && drawn.yMin >= declared.yMin - .5f && drawn.yMax <= declared.yMax + .5f, $"Drawn marker {R(drawn)} fits its declared box {R(declared)}.");
+        Check(drawn.xMin >= declared.xMin - .5f && drawn.xMax <= declared.xMax + .5f && drawn.yMin >= declared.yMin - .5f && drawn.yMax <= declared.yMax + .5f, $"Drawn marker {R(drawn)} fits its declared box {R(declared)} (1920x1080 panels).");
+        hcam.ResetAspect(); hud.Panel.targetTexture = null; hud.OverlayPanel.targetTexture = null; honesty.Release(); Destroy(honesty); yield return Frames(2);
         var cross = hud.Crosshair.worldBound; var c = cross.center; int hits = 0;
         for (int i = 0; i < 72; i++)
         {
@@ -561,7 +608,10 @@ public sealed class HudPhase3VerificationRunner : MonoBehaviour
             var prop = e.Props.Where(p => p != null).OrderBy(p => (p.position - W.Hero.transform.position).sqrMagnitude).First();
             Move(prop.position - CamForward() * 9f + CamRight() * 2f); yield return Grounded(); yield return Realtime(.6f);
             int flashes0 = hud.HeatFlashes; float heat0 = W.Heat; string expect = HeatDelta(heat0, W.Tuning.Heat.DestructionHeat);
-            yield return RealAward($"Real destruction ({prop.name})", () => prop.GetComponent<BreakableProp>().TakeDamage(100000f, W.Powers), () => prop.position, destructionXp);
+            // Event position = what BreakableProp reports (its transform). A still-settling prop's interpolated transform can
+            // trail Rigidbody.position by centimetres (seen: 0.046 m), so the rigidbody position is not the event position.
+            Log($"{prop.name}: rigidbody vs transform before the break: {Vector3.Distance(prop.position, prop.transform.position):0.0000} m, speed {prop.linearVelocity.magnitude:0.000} m/s.");
+            yield return RealAward($"Real destruction ({prop.name})", () => prop.GetComponent<BreakableProp>().TakeDamage(100000f, W.Powers), () => prop.transform.position, destructionXp);
             Check(hud.HeatFlashes == flashes0 + 1 && hud.HeatDeltaText == expect && GameHud.Shown(hud.HeatDelta), $"Same destruction: Heat flash \"{hud.HeatDeltaText}\" (Heat {heat0:0.00} -> {W.Heat:0.00}).");
             yield return Realtime(.1f);
             yield return Composite(r, $"popup-heat-destruction-{r.x}x{r.y}", lastPopup.Element, hud.HeatDelta);
