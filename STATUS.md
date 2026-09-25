@@ -1,6 +1,43 @@
 # Prototype Status
 
-## Hero Forge merged onto main — 2026-09-24 (current)
+## HUD Phase 1: real in-game HUD — 2026-09-24 (current)
+
+The IMGUI developer panel (~40% of the screen, clipped at fullscreen) is replaced by `GameHud` (UI Toolkit, the menus'
+visual language: palette colours, MenuGlyph icons, rounded 0.9-alpha panels). Edges only: level + XP top-left; Heat
+stars (pop on change) + remaining-time timer top-right; Endless wave/left/score/best top-centre, or the objective slot;
+health (with damage trail) + energy bottom-left; bottom-centre, a power bar BUILT FROM THE HERO FORGE LOADOUT
+(EquippedA/B + synergy), with charge pips, fuel bar, radial cooldown and data-driven key hints (synergy key read from
+ForgeCatalog). Only the crosshair sits in the centre 40%×40%, at exact screen centre, because aiming uses the viewport
+centre. All tweens use unscaled time. The old text boxes are behind **F3** (unbound; off by default); Esc pause, the
+Tab menu and the defeated notice are unchanged (still IMGUI). Scaling uses Expand around 1600×900, so no aspect clips.
+Visibility is driven only by existing mode data (Hud flags, SessionSeconds, Director); no new flag was added.
+
+**Verification — HudVerification 319 PASS / 0 FAIL** (run in the regression clone; the user's Editor held the tree):
+- composited world+HUD captures of all 4 modes at 1280×720, 1920×1080 and 2560×1080
+- asserted: no element outside the safe margin, no truncated label, no group overlap, crosshair 0 px from centre
+- centre zone pixel-identical to a camera-only render
+- mode visibility, with CONTROLS (flags cleared on a CLONED definition hide exactly their elements)
+- F3 hidden by default with its draw path never run, and the toggle CONTROL
+- loadout swap: default `flight|strength|sonic-slam`, then Fire+Ice → `fire|ice|thermal-shock`, plus a melee hint
+- pips and radials driven by real punches, casts and synergy use
+- Heat star pop while timeScale=0
+
+FPS at the gameplay camera: 59.1 → 58.3 (−1.5%; the HUD update itself costs ~0.03 ms). That is an UPPER bound, since
+batch mode never draws IMGUI, so the old panel's cost is missing from the A side.
+Regressions all exit 0: MenuPresentation 42, ModeExpansion 111 + Reload 10, HeroForge 132 + Reload 3, Combat 170,
+Audio 126. Evidence: `Verification/Hud/`.
+
+**Known weak spots (visual, for review):**
+- 9px captions at 1280×720; the Endless labels and objective meta line are cramped.
+- Every power slot is orange because all power assets use the Fire palette colour. That's a data issue that also
+  colours projectiles, so it was not changed silently.
+- The crosshair sits on the hero's back (camera framing; Phase 4).
+- Raw objective text wraps awkwardly (Phase 2 replaces it).
+- The popping star briefly overlaps its neighbours.
+- In-world encounter labels moved behind F3 until Phase 2's waypoints.
+- F/E key hints are mirrored in `HudBindings`, because `SuperHeroController` hardcodes those keys.
+
+## Hero Forge merged onto main — 2026-09-24 (previous)
 
 `codex/hero-forge` (9b299ac: loadouts of two equipped powers + ten synergies, synergy key **C**) was built on cc1a3b7,
 before the FPS fix, Free Play/Endless and combat. The lead merged it. Its own entry follows this one.

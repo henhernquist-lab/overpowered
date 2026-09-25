@@ -195,16 +195,30 @@ public sealed class EndlessWaveState : ModeDirectorState
         Session.AddScore(Tuning.KillScore * Wave);
     }
 
+    /// Saved per-mode best, or this run's score once it is higher.
+    public int Best => Mathf.Max(World.Progression.BestScore(Session.Definition.Id), Session.Score);
+
     public override string HudLine
     {
         get
         {
-            int best = Mathf.Max(World.Progression.BestScore(Session.Definition.Id), Session.Score);
+            int best = Best;
             string tail = $"SCORE {Session.Score} · BEST {best}";
             if (!Intermission) return $"WAVE {Wave} · LEFT {Remaining} · {tail}";
             return (Wave == 0 ? "GET READY" : $"WAVE {Wave} CLEARED") + $" · WAVE {Wave + 1} IN {Mathf.CeilToInt(Mathf.Max(0f, IntermissionLeft))}s · {tail}";
         }
     }
+
+    public override void HudStats(List<DirectorHudStat> into)
+    {
+        into.Add(new DirectorHudStat("WAVE", Wave));
+        into.Add(new DirectorHudStat("LEFT", Intermission ? 0 : Remaining));
+        into.Add(new DirectorHudStat("SCORE", Session.Score));
+        into.Add(new DirectorHudStat("BEST", Best));
+    }
+
+    public override string HudCaption =>
+        !Intermission ? null : (Wave == 0 ? "GET READY" : $"WAVE {Wave} CLEARED") + $"  ·  WAVE {Wave + 1} IN {Mathf.CeilToInt(Mathf.Max(0f, IntermissionLeft))}s";
 
     public override void Describe(SessionResult result) { result.Wave = Wave; result.EnemiesDefeated = Kills; }
 }

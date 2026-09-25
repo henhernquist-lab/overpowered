@@ -22,7 +22,8 @@ public static class PrototypeBootstrap
         var sun = new GameObject("Sun").AddComponent<Light>(); sun.type = LightType.Directional; sun.intensity = 1.2f; sun.transform.rotation = Quaternion.Euler(45,-35,0);
         RenderSettings.ambientLight = new Color(.45f,.5f,.6f);
         if (!Application.isBatchMode) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; }
-        new GameObject("Prototype HUD").AddComponent<PrototypeHUD>();
+        new GameObject("Prototype HUD").AddComponent<PrototypeHUD>(); // F3 debug panel, pause + Tab menus, defeated notice
+        new GameObject("Game HUD").AddComponent<GameHud>();
     }
 }
 

@@ -1,9 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// Legacy IMGUI layer. The player-facing HUD is GameHud (UI Toolkit). What remains here:
+/// the developer debug panel (hidden by default, toggled with DebugKey), the Esc pause menu, the Tab upgrade menu and
+/// the defeated notice. The static helpers stay as they were (verification suites call them).
 public sealed class PrototypeHUD : MonoBehaviour
 {
     Vector2 scroll;
+    /// F3 is unbound elsewhere (lead audit, HUD Phase 1).
+    public const KeyCode DebugKey=KeyCode.F3;
+    /// Developer text panels (the old always-on boxes plus world encounter labels). Off by default.
+    public bool DebugVisible {get;private set;}
+    /// IMGUI Repaint events seen, and how many of them drew the debug panel (verification reads both).
+    public int RepaintEvents {get;private set;}
+    public int DebugRepaints {get;private set;}
+    /// The F3 handler; verification calls the same method.
+    public void ToggleDebug(){DebugVisible=!DebugVisible;}
+    void Update(){if(Input.GetKeyDown(DebugKey))ToggleDebug();}
     public const string ResumeOption="Resume", ResultsOption="End session / Results", HomeOption="Return home (keep earned XP)";
     /// Pause-menu entries for a session; modes with ShowResults=false offer no results screen.
     public static string[] PauseOptions(GameModeSession session) =>
@@ -44,6 +57,15 @@ public sealed class PrototypeHUD : MonoBehaviour
             foreach(var option in PauseOptions(w.Mode)) if(GUILayout.Button(option,GUILayout.Height(45))) ChoosePause(w.Mode,option);
             GUILayout.EndArea(); return;
         }
+        if(Event.current.type==EventType.Repaint) RepaintEvents++;
+        if(DebugVisible) DrawDebug(w);
+        if(w.PlayerDead) GUI.Box(new Rect(Screen.width*.5f-150,Screen.height*.5f-30,300,60),"Defeated — respawning; progression retained");
+        if(w.MenuOpen) DrawPowersMenu(w);
+    }
+    /// The former always-on developer boxes, unchanged, plus the world-anchored encounter labels.
+    void DrawDebug(WorldSession w)
+    {
+        if(Event.current.type==EventType.Repaint) DebugRepaints++;
         var p=w.Powers; var progress=w.Progression; var current=p.Selected;
         var hud=w.Mode==null?ModeHud.All:w.Mode.Definition.Hud;
         GUILayout.BeginArea(new Rect(14,14,510,Mathf.Min(610,Screen.height-28)),GUI.skin.box);
@@ -68,9 +90,6 @@ public sealed class PrototypeHUD : MonoBehaviour
         if(w.Mode==null&&progress.Data.Side==PlayerSide.Villain) GUILayout.Label($"Chaos: destroy props {w.ChaosProgress}/{w.Tuning.Crimes.ChaosTarget}");
         foreach(var line in ObjectiveLines(w)) GUILayout.Label(line);
         GUILayout.EndArea();
-        if(w.PlayerDead) GUI.Box(new Rect(Screen.width*.5f-150,Screen.height*.5f-30,300,60),"Defeated — respawning; progression retained");
-        else GUI.Label(new Rect(Screen.width*.5f-5,Screen.height*.5f-10,20,20),"+");
-        if(progress.LastError!=null) GUI.Box(new Rect(14,330,600,45),"SAVE ERROR: "+progress.LastError);
         var camera=Camera.main;
         if(camera!=null&&(hud&ModeHud.Objectives)!=0) foreach(var crime in w.Crimes)
         {
@@ -81,7 +100,10 @@ public sealed class PrototypeHUD : MonoBehaviour
             if(distance<w.Tuning.Crimes.ResolveRadius*2) text+="\n"+crime.Prompt;
             GUI.Label(new Rect(point.x-100,Screen.height-point.y,400,110),text);
         }
-        if(!w.MenuOpen) return;
+    }
+    void DrawPowersMenu(WorldSession w)
+    {
+        var p=w.Powers; var progress=w.Progression;
         GUILayout.BeginArea(new Rect(Mathf.Max(12,Screen.width-570),30,550,Mathf.Max(200,Screen.height-60)),GUI.skin.box);
         GUILayout.Label("POWERS — choose upgrades (world continues)");
         scroll=GUILayout.BeginScrollView(scroll);
