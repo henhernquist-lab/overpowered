@@ -118,8 +118,16 @@ public sealed class FirstPersonVerificationRunner : MonoBehaviour
     {
         var power=W.Powers.Powers.Find(p=>p.Definition.Id==id);W.Powers.Tick(100,true);
         Check(W.Powers.Select(power),name+" select equipped power.");
-        var ray=Cam.ViewportPointToRay(new Vector3(.5f,.5f));var target=Target(ray.GetPoint(9));var off=Target(ray.GetPoint(9)+Cam.transform.right*5);
-        Physics.SyncTransforms();var center=Physics.RaycastAll(ray,12,~0,QueryTriggerInteraction.Ignore).Where(h=>h.transform.root!=W.Hero.transform).OrderBy(h=>h.distance).FirstOrDefault();
+        var ray=Cam.ViewportPointToRay(new Vector3(.5f,.5f));
+        // The target sits 9 m of REACH beyond the hero on the crosshair ray (same rule as PowerUser.AimDirection's `near`).
+        // First person: near=0, identical to the original fixture. Third person: the Feel camera moved to 7.6 m back / 2.5 m
+        // look height, so the original "9 m from the camera" point now lies ~1 m in front of the hero, inside Fire's 1.7 m
+        // muzzle offset, and the contact point is no longer the crosshair point (fixture assumption, not an aim change).
+        float near=Mathf.Max(0,Vector3.Dot(W.Powers.AimOrigin-ray.origin,ray.direction));
+        Vector3 legacy=ray.GetPoint(9)-W.Hero.transform.position;legacy.y=0;
+        Log($"FIXTURE {name}: camera->hero reach offset={near:F2}m; the old camera-relative 9 m point would sit {legacy.magnitude:F2}m (horizontal) from the hero; target now at {near+9:F2}m along the ray.");
+        var target=Target(ray.GetPoint(near+9));var off=Target(ray.GetPoint(near+9)+Cam.transform.right*5);
+        Physics.SyncTransforms();var center=Physics.RaycastAll(ray,near+12,~0,QueryTriggerInteraction.Ignore).Where(h=>h.transform.root!=W.Hero.transform).OrderBy(h=>h.distance).FirstOrDefault();
         Check(center.rigidbody==target,name+" crosshair world ray targets intended rigidbody (self excluded).");
         Check(W.Powers.FindTarget(20,out var hit)&&hit.rigidbody==target,name+" gameplay ray hits same target.");
         float pixels=(Cam.WorldToViewportPoint(hit.point)-new Vector3(.5f,.5f,Cam.WorldToViewportPoint(hit.point).z)).magnitude*1280;
@@ -149,11 +157,13 @@ public sealed class FirstPersonVerificationRunner : MonoBehaviour
             Rig.SetLook(35,angle);yield return null;yield return null;
             Check(!Physics.OverlapSphere(Cam.transform.position,.15f,~0,QueryTriggerInteraction.Ignore).Any(c=>c.transform.root!=W.Hero.transform),"Tight corner eye volume clear at pitch "+angle);
         }
+        yield return EyeImpulse("tight corner");
         Rig.SetLook(45,-10);yield return null;yield return Capture("tight-space-first.png");
         // Move an overhang into the requested eye sphere: the sweep must compress, not clip.
         ceiling.transform.position=new Vector3(0,151.8f,0);Physics.SyncTransforms();yield return null;yield return null;
         Check(Cam.transform.position.y<151.55f,"Low-overhang positive control compresses eye below requested 1.62m height.");
         Check(!Physics.OverlapSphere(Cam.transform.position,.15f,~0,QueryTriggerInteraction.Ignore).Any(c=>c.transform.root!=W.Hero.transform),"Compressed eye remains outside overhang/walls.");
+        yield return EyeImpulse("low overhang");
         ceiling.transform.position=new Vector3(0,152,0);Physics.SyncTransforms();
         Rig.SetLook(0,85);yield return null;yield return Capture("tight-space-look-down.png");
         Rig.SetLook(0,0);yield return null;yield return null;
@@ -169,6 +179,47 @@ public sealed class FirstPersonVerificationRunner : MonoBehaviour
             Check(!W.Powers.Use(p)&&W.Powers.HeldBody==null&&behind.constraints!=RigidbodyConstraints.FreezeAll,"Wall CONTROL blocks "+p.Definition.Id+" target behind it.");Destroy(behind.gameObject);
         }
         Destroy(wall);Destroy(left);Destroy(right);Destroy(ceiling);yield return null;
+    }
+    /// The Feel camera impulse also shakes the first-person eye (added in OnPreCull, removed in OnPostRender). Fire the REAL
+    /// Feel hooks (a heavy outgoing impact from 4 sides and from directly above, and a heavy incoming hit) inside the tight
+    /// fixture and sample the exact offset the render applies (ThirdPersonCamera.OffsetAt, 1 ms steps over the whole
+    /// window, both signs of the oscillation). The near-plane corner sphere around every rendered eye position must stay
+    /// outside all geometry except the hero.
+    IEnumerator EyeImpulse(string label)
+    {
+        var f=W.Tuning.Feel;float worst=float.PositiveInfinity;string worstAt="";int samples=0,overlaps=0;float maxOffset=0;
+        foreach(float pitch in new[]{-85f,0,85})
+        {
+            Rig.SetLook(0,pitch);yield return null;yield return null;
+            Vector3 eye=Cam.transform.position;
+            float tan=Mathf.Tan(Cam.fieldOfView*.5f*Mathf.Deg2Rad);
+            // Distance from the eye to a near-plane corner: near * sqrt(1 + tan^2 * (1 + aspect^2)).
+            float corner=Cam.nearClipPlane*Mathf.Sqrt(1+tan*tan*(1+Cam.aspect*Cam.aspect));
+            var hero=W.Hero.transform.position;
+            var sources=new[]{hero+Vector3.forward*3,hero+Vector3.back*3,hero+Vector3.left*3,hero+Vector3.right*3,new Vector3(eye.x,hero.y,eye.z)};
+            for(int s=0;s<sources.Length+1;s++)
+            {
+                if(s<sources.Length)FeelDirector.Impact(sources[s],f.HeavyImpulse*2,0,1);else FeelDirector.PlayerHit(f.HeavyIncomingDamage+10,hero+Vector3.forward*3);
+                float start=Time.unscaledTime;
+                for(float t=0;t<=f.ImpulseSeconds;t+=.001f)
+                {
+                    Vector3 offset=Rig.OffsetAt(start+t);maxOffset=Mathf.Max(maxOffset,offset.magnitude);
+                    Vector3 p=eye+offset;samples++;
+                    foreach(var c in Physics.OverlapSphere(p,1.5f,~0,QueryTriggerInteraction.Ignore))
+                    {
+                        if(c.transform.root==W.Hero.transform||c is MeshCollider mesh&&!mesh.convex)continue;
+                        float d=Vector3.Distance(c.ClosestPoint(p),p);
+                        if(d<worst){worst=d;worstAt=$"{c.name} pitch={pitch} source={s} t={t*1000:F0}ms offset=({offset.x:F3},{offset.y:F3},{offset.z:F3})";}
+                        if(d<corner)overlaps++;
+                    }
+                }
+                yield return new WaitForSecondsRealtime(f.HitPauseMinInterval+.05f);
+            }
+        }
+        Log($"MEASURED first-person Feel impulse ({label}): {samples} render-offset samples, max offset={maxOffset:F3}m (configured {f.ImpulseAmplitude:F2}m), near-plane corner radius={Cam.nearClipPlane*Mathf.Sqrt(1+Mathf.Pow(Mathf.Tan(Cam.fieldOfView*.5f*Mathf.Deg2Rad),2)*(1+Cam.aspect*Cam.aspect)):F3}m, closest geometry={worst:F3}m at {worstAt}.");
+        Check(maxOffset>f.ImpulseAmplitude*.9f,$"Positive control: the Feel impulse really moves the first-person eye ({label}, max {maxOffset:F3}m).");
+        Check(overlaps==0,$"Feel impulse never puts the first-person near plane inside geometry ({label}): {overlaps} overlapping samples of {samples}.");
+        Rig.SetLook(0,0);yield return null;yield return null;
     }
     IEnumerator Capture(string file)
     {
