@@ -129,3 +129,5 @@ InitTestScene*.unity*
 /Verification/Hud/phase2/saves/
 /Verification/Hud/phase3/saves/
 /Verification/Feel/saves/
+/Verification/World/saves/
+/Verification/World/**/saves/

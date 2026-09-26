@@ -10,6 +10,7 @@ public static class PrototypeBootstrap
         if (tuning == null || layout == null) throw new System.InvalidOperationException("Generate project data via Overpowered > Create missing data assets.");
         Physics.gravity = Vector3.down * tuning.Movement.Gravity;
         var city = new GameObject("City District").AddComponent<CityDistrict>(); city.Build(tuning, layout);
+        var sessionWatch = System.Diagnostics.Stopwatch.StartNew();
         GameObject hero = new GameObject("Overpowered Hero");
         hero.transform.position = city.Spawn + Vector3.up * tuning.Movement.Height;
         CharacterController cc = hero.AddComponent<CharacterController>(); cc.height = tuning.Movement.Height; cc.radius = tuning.Movement.Radius; cc.center = Vector3.up * cc.height * .5f;
@@ -25,6 +26,7 @@ public static class PrototypeBootstrap
         if (!Application.isBatchMode) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; }
         new GameObject("Prototype HUD").AddComponent<PrototypeHUD>(); // F3 debug panel, pause + Tab menus, defeated notice
         new GameObject("Game HUD").AddComponent<GameHud>();
+        city.Timings.Add(new System.Collections.Generic.KeyValuePair<string,double>("session: hero, camera, WorldSession + NPC spawn, HUD", sessionWatch.Elapsed.TotalMilliseconds));
     }
 }
 

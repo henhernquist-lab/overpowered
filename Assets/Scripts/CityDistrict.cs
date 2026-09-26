@@ -9,8 +9,13 @@ public sealed class CityDistrict : MonoBehaviour
     public Vector3 Spawn { get; private set; }
     public CityArt Art {get;private set;}
     NavMeshDataInstance navmesh;
+    /// Generation stage timings (ms, in build order). Timing only: measuring never changes what is generated.
+    public readonly List<KeyValuePair<string,double>> Timings = new List<KeyValuePair<string,double>>();
+    readonly System.Diagnostics.Stopwatch stageWatch = new System.Diagnostics.Stopwatch();
+    public void Stage(string name) { Timings.Add(new KeyValuePair<string,double>(name, stageWatch.Elapsed.TotalMilliseconds)); stageWatch.Restart(); }
     public void Build(GameTuning tuning, CityLayout layout)
     {
+        stageWatch.Restart();
         Art=gameObject.AddComponent<CityArt>();Art.Initialize(tuning);
         var c = tuning.City; var p = tuning.Props;
         float pitch = c.BlockSize + c.StreetWidth;
@@ -27,7 +32,9 @@ public sealed class CityDistrict : MonoBehaviour
             MakeProp("Crate", PrimitiveType.Cube, center + new Vector3(-edge,0,0), p.CrateSize, p.CrateMass, tuning);
             MakeProp("Barrel", PrimitiveType.Cylinder, center + new Vector3(-edge,0,c.SidewalkWidth), p.BarrelSize, p.BarrelMass, tuning);
         }
+        Stage("ground, block sidewalks, block crates/barrels");
         Buildings.AddRange(layout.Generate(c));
+        Stage("layout generate");
         for (int i = 0; i < Buildings.Count; i++)
         {
             var b = Buildings[i];
@@ -41,14 +48,19 @@ public sealed class CityDistrict : MonoBehaviour
                 marker.AddComponent<RooftopDiscovery>().Id = c.Seed + ":roof:" + i;
             }
         }
-        Art.Streets();Art.FinishStaticGeometry();Art.Populate(Buildings);
+        Stage("buildings (art pieces) + rooftop markers");
+        Art.Streets();Stage("streets (curbs, dashes, crossings)");
+        Art.FinishStaticGeometry();Stage("static finalize (StaticBatchingUtility)");
+        Art.Populate(Buildings);Stage("street/rooftop props");
         var sources = new List<NavMeshBuildSource>();
         NavMeshBuilder.CollectSources(transform, ~0, NavMeshCollectGeometry.PhysicsColliders, 0, new List<NavMeshBuildMarkup>(), sources);
         sources.RemoveAll(s => s.component != null && s.component.GetComponent<Rigidbody>() != null);
+        Stage("navmesh collect sources");
         var settings = NavMesh.GetSettingsByIndex(0); settings.agentRadius = tuning.Npcs.Radius; settings.agentHeight = tuning.Npcs.Height;
         var data = NavMeshBuilder.BuildNavMeshData(settings, sources, new Bounds(Vector3.zero, new Vector3(span, c.LandmarkHeight*2, span)), Vector3.zero, Quaternion.identity);
         if (data == null) throw new System.InvalidOperationException("City NavMesh build failed");
         navmesh = NavMesh.AddNavMeshData(data);
+        Stage("navmesh build + add (whole city)");
     }
     void Box(string name, Vector3 position, Vector3 size, CityColor color)
     {
