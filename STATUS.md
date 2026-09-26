@@ -1587,3 +1587,96 @@ So the app this Unity project just built is Intel 64-bit. Finder's reported Appl
 - `Editor.log`'s `Architecture: x86_64` describes the Unity Editor host, not its player. It was not used as evidence for the app. The player architecture was checked with `file` and `lipo`.
 
 Conclusion: no reproducible build defect remains in the confirmed Unity output, and no architecture fix was needed. If the Finder item was meant to be this build, its selected path/metadata conflicts with the verified binary. If it was a different output, that app was not one of the paths in Unity's two latest build reports. `.DS_Store`, the local backup folder and the existing ProjectSettings edits were left untouched. No commit was made for this diagnostic pass.
+
+## Toggleable first-person camera — 2026-09-24 (appended)
+
+### Scope and delivery
+
+Implemented on `codex/first-person` in `/private/tmp/op-first-person`, based on merged main `aea8bd0` (Hero Forge, expanded modes, combat, HUD Phase 1). Git was checked before edits: the Hero Forge merge was complete, but unrelated HUD Phase 2 changes were underway, including PlayerProgression. Those shared-checkout changes were left untouched. This feature is committed separately, not merged over the ongoing HUD work; that later integration is not claimed tested here.
+
+- **B** toggles first-/third-person through the existing ThirdPersonCamera; third-person remains the default for fresh and old saves. B was unused (the historical V verifier still reserves V). Menu, pause, defeat and ended-session states reject the toggle. Existing third-person orbit/collision logic remains available.
+- Stable capsule-relative **1.62m eye**, not animated head tracking: flight lean, landing squash and backflip bones do not drag/roll the view. The player's existing visual-root renderers become **ShadowsOnly**, leaving Animator, physics, shadows and NPCs intact. Original renderer modes and near clip restore on return/disable. No first-person arms or new body mesh.
+- Eye sweep from capsule center prevents overhead clipping; its radius encloses near-plane corners, including aspect/FOV changes. The CharacterController still handles locomotion/environment collision. This does not promise recovery from arbitrary teleports into solid walls.
+- **All camera tuning stays in GameTuning.asset > Camera**: toggle key, eye height, 0.03m near clip, 0.15m eye sphere, -85..85 degree pitch, +5 degree forward-flight FOV at 8m/s, 5/s response. Hover has no FOV boost. Synergy FOV kick is additive through the same camera writer rather than competing with flight. No movement/collider dimensions were changed.
+- PowerUser uses the camera origin in first-person and retains shoulder-to-crosshair convergence in third-person. Fire/Ice/Telekinesis share the same viewport-center target. Trigger-only colliders no longer steal aiming. Fire caches aim BEFORE creating its projectile (avoids querying its own new collider), sweeps its radius along the muzzle offset, and refuses a cast from an obstructed origin before payment. This also fixes close-wall projectile spawning in third-person: the old 1.7m offset could skip a nearer wall. Damage, force, resources and loadout gates are unchanged.
+- **ProgressSave.FirstPerson** is one additive boolean in the existing version-1 atomic JSON save. Toggle saves immediately through PlayerProgression; scene/startup loads use the normal profile. No PlayerPrefs or separate settings framework.
+
+Files: camera integration in PrototypeBootstrap.cs; settings in GameTuning.cs / GameTuning.asset; preference in PlayerProgression.cs; aiming in PowerUser.cs / FireBlastEffect.cs; additive FOV handoff in Forge/SynergyRunner.cs. Added FirstPersonVerification.cs and FirstPersonVerificationRunner.cs (with metadata), docs/first-person.md and Verification/FirstPerson evidence. README, AGENTS and test-save ignore rules updated. No scene or manual Inspector setup required.
+
+### Real verification and controls
+
+Unity **6000.6.0f1 batch compile clean**, no C# warnings/errors in the final run. `FirstPersonVerification.Run` exited 0 with **194 PASS / 0 FAIL**; a separate-process `Reload` verifies the same final save with **5 PASS / 0 FAIL**. Supplemental dotnet build also has **0 warnings / 0 errors**. Existing camera flow regression: **45 PASS**, including Home, Hero/Villain, pause, Results, Home and disabled-camera controls. Existing city/power regression: **53 PASS** (including paid/empty-charge melee, real projectile/ice/telekinesis, progression and live AI). All exited 0. This is not a rerun of every historical suite.
+
+Commands used against isolated project `/private/tmp/op-fp-verify-jVg9ok` (no -quit; each runner exits itself):
+
+```sh
+Unity -batchmode -projectPath /private/tmp/op-fp-verify-jVg9ok -executeMethod FirstPersonVerification.Run -logFile /private/tmp/op-fp-matched.log
+Unity -batchmode -projectPath /private/tmp/op-fp-verify-jVg9ok -executeMethod FirstPersonVerification.Reload -logFile /private/tmp/op-fp-matched-reload.log
+Unity -batchmode -projectPath /private/tmp/op-fp-verify-jVg9ok -executeMethod CameraVerification.Verify -logFile /private/tmp/op-fp-camera-regression.log
+Unity -batchmode -projectPath /private/tmp/op-fp-verify-jVg9ok -executeMethod CityVerification.Run -logFile /private/tmp/op-fp-city-regression.log
+```
+
+Both modes exercised Fire+Ice and Fire+Telekinesis loadouts in BOTH views, using real resource-gated casts. Physics targets sit on the actual camera-center ray; an off-axis target is the negative control. First-person ray error **0.1051 pixels**, third-person **0.0066 pixels** at 1280x720. Fire's measured collision-contact error was **0.0846m first-person / 0.0745m third-person**, smaller than its 0.175m sphere radius. Ice freezes only the aimed body; Telekinesis holds exactly the aimed body. A wall inside the old muzzle offset gets the actual fire collision, and blocks Ice/Telekinesis from the target behind it.
+
+Verbatim selected final output (complete output in Verification/FirstPerson/results.txt):
+
+```text
+PASS hero third -> first toggle.
+PASS hero-first-fire aim error=0.1051px.
+PASS hero-first-fire physical projectile hits crosshair target; off-axis CONTROL untouched.
+MEASURED hero-first-fire contact error=0.0846m, target speed=0.548m/s.
+PASS hero-first-ice aimed target frozen; off-axis CONTROL not frozen.
+PASS hero-first-telekinesis aimed target held, not off-axis control.
+PASS villain third -> first toggle.
+PASS villain-first-fire aim error=0.1051px.
+PASS villain-first-ice aimed target frozen; off-axis CONTROL not frozen.
+PASS villain-first-telekinesis aimed target held, not off-axis control.
+PASS First-person hides own body; Animator and shadows retained.
+PASS Paused toggle CONTROL refused.
+PASS Tight corner eye volume clear at pitch -85
+PASS Tight corner eye volume clear at pitch 0
+PASS Tight corner eye volume clear at pitch 85
+PASS Low-overhang positive control compresses eye below requested 1.62m height.
+PASS Compressed eye remains outside overhang/walls.
+PASS Projectile spawn cannot skip wall inside original 1.7m muzzle offset.
+PASS Close-wall projectile actually impacts intervening wall.
+PASS Wall CONTROL blocks ice target behind it.
+PASS Wall CONTROL blocks telekinesis target behind it.
+PASS villain first -> third restores view.
+PASS Body visible again after reverse toggle.
+MEASURED forward flight FOV=69.997, additive=4.997 degrees; base=65.
+PASS Actual forward motion drives bounded flight FOV.
+PASS Synergy FOV adds to flight instead of fighting it.
+PASS Non-flight recovery restores baseline FOV after flight/kick.
+```
+
+Flight verification moves the real CharacterController through MoveAbility while consuming flight fuel. Hover, forward and non-flight recovery exercise camera response; this is not a human F-key feel test or a separate measured landing impact.
+
+The tight-space fixture has a close front wall, two side walls and low ceiling, inside the actual gameplay scene. Screenshots composite the existing HUD/crosshair and real gameplay camera. **Inspected** tight-space-first.png and tight-space-look-down.png: solid corner/ceiling/floor remain visible; no inside-head/body polygons or see-through wall gaps. The eye-volume checks additionally cover ±85 degree look and a deliberately lowered overhang. City-first.png / city-third.png show the populated city from each view; per-mode/power captures show the actual crosshair centered on the physical target. No assertion that every possible city crevice is glitch-free.
+
+Separate-process output (Verification/FirstPerson/reload.txt):
+
+```text
+PASS SECOND PROCESS restores first-person preference in existing save.
+PASS Existing loadout/progression preserved.
+PASS Fresh save CONTROL defaults to third-person.
+PASS Old save without camera field CONTROL keeps progression and defaults third-person.
+PASS SECOND PROCESS gameplay camera actually starts first-person.
+```
+
+### FPS and limits
+
+Final **matched world look angle** comparison: same city, player position (-20,8.12,-40), heading and world pitch 13.412 degrees; 26 civilians + 10 cops remain active. Player is held 8m above the spawn for benchmark safety; not a ground-level hands-on firefight. Existing HUD active, one enabled 1280x720 camera renders once per frame. Four five-second ABBA samples, after warmup:
+
+```text
+MEASURED third-person phase=0: FPS=59.80, draw calls=453.8.
+MEASURED first-person phase=1: FPS=57.47, draw calls=433.7.
+MEASURED first-person phase=2: FPS=54.64, draw calls=434.6.
+MEASURED third-person phase=3: FPS=51.73, draw calls=459.0.
+PASS Benchmark remained alive with populated city simulation running.
+PAIRED same-scene means: third-person=55.77 FPS; first-person=56.06 FPS; delta=0.52%. Perspective naturally changes visible geometry; no content or population cut.
+```
+
+This is effectively within measurement noise, not proof of an optimization or a standalone FPS guarantee. Even this run drifted 59.80 -> 51.73 FPS between third-person phases. Earlier unmatched-view samples were more variable (36.67 third / 47.22 first; retained in initial-results.txt); they are not substituted for the matched comparison. No geometry/actor cuts, pipeline changes or per-instance meshes were introduced.
+
+No hardware B-key/controller injection or human motion-sickness/feel session. No first-person hand animation. Console is **not** wholly error-free: UnityEditor.Search.SearchDatabase's pre-existing startup ArgumentOutOfRangeException remains; no game-code errors occurred in the successful runs. An initial test-only compile error attempted to set private Energy; the test now recharges through PowerUser.Tick and compiles cleanly. Tested feature scripts/assets were compared to the delivery checkout; unrelated shared HUD Phase 2 work is excluded.

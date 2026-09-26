@@ -19,6 +19,7 @@ public enum PlayerSide { Hero, Villain }
     public HeroLoadout Loadout;
     /// First-time control prompts the player has already acted on (HUD). Saves written before this field existed load with an empty list.
     public List<string> SeenHints = new List<string>();
+    public bool FirstPerson;
 }
 /// One XP grant as the player received it: the amount actually added, where it happened (if anywhere) and why.
 public readonly struct XpGrant
@@ -50,6 +51,7 @@ public sealed class PlayerProgression : MonoBehaviour
     }
     public int Tier(PowerDefinition definition) => Data.Powers.Find(p => p.Id == definition.Id)?.Tier ?? -1;
     public bool Owns(PowerDefinition definition) => Tier(definition) >= 0;
+    public void SetFirstPerson(bool enabled) { Data.FirstPerson = enabled; Save(); }
     public HeroDefinition SelectedHero => Resources.Load<ForgeCatalog>("ForgeCatalog")?.Hero(Data.Loadout?.HeroId);
     public PowerDefinition EquippedA => Array.Find(definitions,p=>p.Id==Data.Loadout?.PowerA);
     public PowerDefinition EquippedB => Array.Find(definitions,p=>p.Id==Data.Loadout?.PowerB);

@@ -58,6 +58,8 @@ ExportedObj/
 /Verification/Menus/save-*.json*
 /Verification/Forge/*.json*
 /Verification/Forge/save-path.txt
+/Verification/FirstPerson/*.json*
+/Verification/FirstPerson/save-path.txt
 /Verification/Audio/save-*.json*
 /Verification/ModeExpansion/save-*.json*
 /Verification/Combat/save-*.json*

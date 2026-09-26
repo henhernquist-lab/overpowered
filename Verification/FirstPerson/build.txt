@@ -1,0 +1,12 @@
+Unity 6000.6.0f1 batch FirstPersonVerification.Run: exit 0; no C# warnings/errors in final log.
+Unity 6000.6.0f1 batch FirstPersonVerification.Reload (separate process): exit 0.
+Known unrelated UnityEditor.Search startup indexing exception remains; not a clean-Console claim.
+
+Unity bundled DotNetSdk/dotnet build Overpowered.Build.csproj --no-restore -p:UseSharedCompilation=false
+  Overpowered.Build -> /private/tmp/op-first-person/bin/Debug/netstandard2.1/Overpowered.Build.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.21

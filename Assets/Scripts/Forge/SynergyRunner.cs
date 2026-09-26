@@ -137,6 +137,8 @@ public sealed class SynergyRunner : MonoBehaviour
     {
         if(view==null)view=Camera.main;
         if(view==null)return;
+        var rig=view.GetComponent<ThirdPersonCamera>();
+        if(rig!=null&&rig.isActiveAndEnabled){rig.KickFov(Catalog.FovKick,Catalog.FovSeconds);return;}
         if(fovUntil<=Time.unscaledTime)baseFov=view.fieldOfView;
         fovUntil=Time.unscaledTime+Catalog.FovSeconds;
     }

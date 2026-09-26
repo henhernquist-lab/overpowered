@@ -28,21 +28,86 @@ public static class PrototypeBootstrap
     }
 }
 
+[DefaultExecutionOrder(100)]
 public sealed class ThirdPersonCamera : MonoBehaviour
 {
     public Transform target;
-    float yaw, pitch;
+    public bool FirstPerson { get; private set; }
+    public float FlightFov { get; private set; }
+    float yaw, pitch, originalNearClip, kick, kickUntil, kickDuration;
     /// The follow camera of the running session (Feel sends impulses / FOV kicks here).
     public static ThirdPersonCamera Active { get; private set; }
-    void OnEnable() { Active = this; }
-    void OnDisable() { if (Active == this) Active = null; }
-    void Start() { if(WorldSession.Instance!=null&&WorldSession.Instance.Tuning!=null) pitch = WorldSession.Instance.Tuning.Camera.Pitch; }
+    Camera view;
+    Renderer[] body;
+    UnityEngine.Rendering.ShadowCastingMode[] shadows;
+    void Start()
+    {
+        var world=WorldSession.Instance;
+        if(world==null||target==null)return;
+        view=GetComponent<Camera>();originalNearClip=view.nearClipPlane;
+        pitch=world.Tuning.Camera.Pitch;
+        body=target.GetComponent<HumanoidPresentation>().VisualRoot.GetComponentsInChildren<Renderer>(true);
+        shadows=new UnityEngine.Rendering.ShadowCastingMode[body.Length];
+        for(int i=0;i<body.Length;i++)shadows[i]=body[i].shadowCastingMode;
+        ApplyView(world.Progression.Data.FirstPerson);
+    }
+    public bool ToggleView()
+    {
+        var world=WorldSession.Instance;
+        if(view==null||world==null||world.MenuOpen||world.PlayerDead||Time.timeScale==0||world.Mode!=null&&world.Mode.Ended)return false;
+        ApplyView(!FirstPerson);world.Progression.SetFirstPerson(FirstPerson);return true;
+    }
+    void ApplyView(bool first)
+    {
+        FirstPerson=first;
+        var c=WorldSession.Instance.Tuning.Camera;
+        // Match the last rendered look when entering, rather than the orbit's implicit focus angle.
+        if(first){yaw=transform.eulerAngles.y;pitch=Mathf.DeltaAngle(0,transform.eulerAngles.x);}
+        else pitch=Mathf.Clamp(pitch,c.MinimumPitch,c.MaximumPitch);
+        if(!first)FlightFov=0;
+        view.nearClipPlane=first?c.FirstPersonNearClip:originalNearClip;
+        for(int i=0;i<body.Length;i++)if(body[i]!=null)
+            body[i].shadowCastingMode=first?UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly:shadows[i];
+    }
+    /// Degrees the synergy kick (KickFov) currently adds; the Feel FOV kick de-stacks against this, not against flight FOV.
+    public float SynergyFov=>kick*Mathf.Clamp01((kickUntil-Time.unscaledTime)/Mathf.Max(.01f,kickDuration));
+    public void KickFov(float amount,float seconds)
+    {kick=amount;kickDuration=Mathf.Max(.01f,seconds);kickUntil=Time.unscaledTime+kickDuration;}
+    // Also useful for cinematics/tests; does not move the physics root or mutate the saved view preference.
+    public void SetLook(float heading,float elevation){yaw=heading;pitch=elevation;}
     void LateUpdate()
     {
         var world=WorldSession.Instance;
         if (target == null || world==null || world.Tuning==null) return;
         var c = world.Tuning.Camera;
-        if (!world.MenuOpen) { yaw += Input.GetAxis("Mouse X") * c.Sensitivity; pitch = Mathf.Clamp(pitch - Input.GetAxis("Mouse Y") * c.Sensitivity, c.MinimumPitch, c.MaximumPitch); }
+        if (!world.MenuOpen&&!world.PlayerDead&&Time.timeScale>0)
+        {
+            if(Input.GetKeyDown(c.ViewToggle))ToggleView();
+            yaw += Input.GetAxis("Mouse X") * c.Sensitivity;
+            pitch -= Input.GetAxis("Mouse Y") * c.Sensitivity;
+        }
+        pitch=Mathf.Clamp(pitch,FirstPerson?c.FirstPersonMinimumPitch:c.MinimumPitch,FirstPerson?c.FirstPersonMaximumPitch:c.MaximumPitch);
+        if(FirstPerson)
+        {
+            // Stable capsule-relative eye: flight/bob/squash bones never drag the camera through geometry.
+            var cc=target.GetComponent<CharacterController>();
+            Vector3 center=target.TransformPoint(cc.center), eye=target.position+Vector3.up*c.EyeHeight;
+            Vector3 up=eye-center;float height=up.magnitude;
+            // Contain the near-plane corners, including wide aspect ratios and additive FOV feedback.
+            float nearHalf=c.FirstPersonNearClip*Mathf.Tan((c.FieldOfView+c.FlightFovIncrease+Mathf.Abs(kick))*.5f*Mathf.Deg2Rad);
+            float radius=Mathf.Max(c.EyeCollisionRadius,nearHalf*Mathf.Sqrt(1+view.aspect*view.aspect));
+            foreach(var hit in Physics.SphereCastAll(center,radius,up.normalized,height,~0,QueryTriggerInteraction.Ignore))
+                if(hit.transform.root!=target)height=Mathf.Min(height,Mathf.Max(0,hit.distance-c.CollisionInset));
+            transform.SetPositionAndRotation(center+up.normalized*height,Quaternion.Euler(pitch,yaw,0));
+            var state=world.Hero.PresentationState;
+            Vector3 velocity=target.TransformDirection(state.LocalVelocity);
+            float forward=Vector3.Dot(velocity,Vector3.ProjectOnPlane(transform.forward,Vector3.up).normalized);
+            float desiredFov=state.Flying?c.FlightFovIncrease*Mathf.Clamp01(forward/Mathf.Max(.01f,c.FlightFovSpeed)):0;
+            FlightFov=Mathf.Lerp(FlightFov,desiredFov,1-Mathf.Exp(-c.FlightFovResponse*Time.deltaTime));
+            view.fieldOfView=c.FieldOfView+FlightFov+kick*Mathf.Clamp01((kickUntil-Time.unscaledTime)/Mathf.Max(.01f,kickDuration));
+            return;
+        }
+        view.fieldOfView=c.FieldOfView+kick*Mathf.Clamp01((kickUntil-Time.unscaledTime)/Mathf.Max(.01f,kickDuration));
         Vector3 focus = target.position + Vector3.up * c.LookHeight;
         Vector3 desired = target.position + Quaternion.Euler(pitch, yaw, 0) * c.Offset;
         Vector3 ray = desired - focus; float distance = ray.magnitude;
@@ -57,7 +122,7 @@ public sealed class ThirdPersonCamera : MonoBehaviour
     // undone right after, so the follow pose above, the aim ray (ViewportPointToRay at screen centre) and the hero's
     // physics root never see them, and nothing can accumulate into drift.
     float impulseAt = -100f, impulseAmplitude, impulseSeconds, impulseFrequency, kickAt = -100f, kickDegrees, kickSeconds;
-    Vector3 impulseDirection, restPosition; float restFov; bool applied; Camera view;
+    Vector3 impulseDirection, restPosition; float restFov; bool applied;
     public int ImpulsesAccepted { get; private set; }
     /// Offset added to the rendered camera position at unscaled time `t` (zero outside the impulse window).
     public Vector3 OffsetAt(float t)
@@ -93,18 +158,25 @@ public sealed class ThirdPersonCamera : MonoBehaviour
     void OnPreCull()
     {
         if (applied) return;
-        Vector3 offset = CurrentOffset; float kick = CurrentFovKick;
-        if (offset == Vector3.zero && kick <= 0f) return;
+        Vector3 offset = CurrentOffset; float feelKick = CurrentFovKick;
+        if (offset == Vector3.zero && feelKick <= 0f) return;
         if (view == null) view = GetComponent<Camera>();
         restPosition = transform.position; restFov = view.fieldOfView; applied = true;
         transform.position = restPosition + offset;
-        // A synergy may already be kicking this camera's FOV (SynergyRunner writes it directly): the two do not stack.
-        var world = WorldSession.Instance; float baseFov = world != null && world.Tuning != null ? world.Tuning.Camera.FieldOfView : restFov;
-        view.fieldOfView = restFov + Mathf.Max(0f, kick - Mathf.Max(0f, restFov - baseFov));
+        // A synergy may already be kicking this camera's FOV (KickFov, applied in LateUpdate): the two do not stack.
+        // Flight FOV is a separate, sustained widening and is not de-stacked against.
+        view.fieldOfView = restFov + Mathf.Max(0f, feelKick - SynergyFov);
     }
     void OnPostRender()
     {
         if (!applied) return;
         transform.position = restPosition; view.fieldOfView = restFov; applied = false;
     }
+    void OnDisable()
+    {
+        if (Active == this) Active = null;
+        if(body!=null)for(int i=0;i<body.Length;i++)if(body[i]!=null)body[i].shadowCastingMode=shadows[i];
+        if(view!=null){view.nearClipPlane=originalNearClip;if(WorldSession.Instance!=null)view.fieldOfView=WorldSession.Instance.Tuning.Camera.FieldOfView;}
+    }
+    void OnEnable(){Active=this;if(view!=null&&WorldSession.Instance!=null)ApplyView(FirstPerson);}
 }
