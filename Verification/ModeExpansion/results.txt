@@ -43,12 +43,12 @@ PASS Real Home button launched Endless Fight (Hero): EndlessWaveState runtime co
 PASS Before wave 1: 0 NPCs (no civilians, no police), 0 encounters; arena centre (-20.00, 0.11, -20.00).
 PASS Wave 0 is in its intermission (4.0s).
 PASS Intermission elapsed -> wave 1 started.
-RECORD WAVE 1: wave=1, alive=3, wave health=65.00, wave damage=8.00 (per enemy x archetype: Rusher 39.0/6.00, Rusher 39.0/6.00, Rusher 39.0/6.00), role=Criminal, Heat stars=0; spawn distances from player 14.1,15.9,29.7m; ring radii 22.0,22.0,22.0m.
+RECORD WAVE 1: wave=1, alive=3, wave health=65.00, wave damage=8.00 (per enemy x archetype: Rusher 39.0/6.00, Rusher 39.0/6.00, Rusher 39.0/6.00), role=Criminal, Heat stars=0; spawn distances from player 29.6,27.5,14.2m; ring radii 22.0,22.0,22.0m.
 PASS Wave 1 = FirstWaveCount 3 Criminals at base health 65 / damage 8.
 PASS HUD line: WAVE 1 · LEFT 3 · SCORE 0 · BEST 0
 PROFILER recorders found: PostLateUpdate.UpdateAllSkinnedMeshes, PostLateUpdate.BatchModeUpdate, PlayerLoop (requested: PostLateUpdate.UpdateAllSkinnedMeshes, PostLateUpdate.BatchModeUpdate, PlayerLoop)
 CAPTURE endless-wave-1-gameplay-camera.png (actual render target)
-MEASURED Endless wave 1: single-render FPS=198.71, mean=5.03ms, p95=6.47ms, frames=795; humanoids=4 (enemies alive 3 + hero), visible renderers=1315; profiled 642 frames: PostLateUpdate.UpdateAllSkinnedMeshes=0.163ms, PostLateUpdate.BatchModeUpdate=0.938ms, PlayerLoop=4.362ms; camera (-20.00, 8.09, -34.53) fwd (0.00, -0.33, 0.94), hero hovering at (-20.00, 3.31, -28.00); 1280x720 Editor Play Mode, Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz, AMD Radeon Pro 5300.
+MEASURED Endless wave 1: single-render FPS=217.43, mean=4.60ms, p95=5.32ms, frames=870; humanoids=4 (enemies alive 3 + hero), visible renderers=1315; profiled 679 frames: PostLateUpdate.UpdateAllSkinnedMeshes=0.151ms, PostLateUpdate.BatchModeUpdate=0.853ms, PlayerLoop=4.118ms; camera (-20.00, 8.09, -34.53) fwd (0.00, -0.33, 0.94), hero hovering at (-20.00, 3.31, -28.00); 1280x720 Editor Play Mode, Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz, AMD Radeon Pro 5300.
 PASS Hovering hero unreachable during the sample (no deaths, no kills).
 PASS Wave 1 contact damage: real Criminal contact attack took 6.00 health (100.00 -> 94.00); explicit per-wave damage 6.00.
 PASS Real E-punch accepted.
@@ -69,13 +69,13 @@ PASS SpawnPolice=0 CONTROL: 3 Heat stars for 2.6s -> 0 police, 0 pursuing hero.
 PASS Wave 4 cleared: 9 kills = WaveSize; score 1200.
 PASS Wave 4 is in its intermission (4.0s).
 PASS Intermission elapsed -> wave 5 started.
-RECORD WAVE 5: wave=5, alive=11, wave health=104.00, wave damage=11.20 (per enemy x archetype: Rusher 62.4/8.40, Gunner 104.0/11.20, Rusher 62.4/8.40, Brute 312.0/25.20, Gunner 104.0/11.20, Rusher 62.4/8.40, Rusher 62.4/8.40, Gunner 104.0/11.20, Rusher 62.4/8.40, Brute 312.0/25.20, Gunner 104.0/11.20), role=Criminal, Heat stars=3; spawn distances from player 23.9,19.4,14.7,21.8,29.6,27.3,29.8,24.4,25.9,26.1,24.2m; ring radii 22.0,22.0,22.0,22.0,22.0,22.0,22.0,22.0,22.0,22.0,22.0m.
+RECORD WAVE 5: wave=5, alive=11, wave health=104.00, wave damage=11.20 (per enemy x archetype: Rusher 62.4/8.40, Gunner 104.0/11.20, Rusher 62.4/8.40, Brute 312.0/25.20, Gunner 104.0/11.20, Rusher 62.4/8.40, Rusher 62.4/8.40, Gunner 104.0/11.20, Rusher 62.4/8.40, Brute 312.0/25.20, Gunner 104.0/11.20), role=Criminal, Heat stars=3; spawn distances from player 18.3,29.2,30.0,14.7,29.0,14.2,24.8,27.5,30.0,29.6,19.4m; ring radii 22.0,22.0,22.0,22.0,22.0,22.0,22.0,22.0,22.0,22.0,22.0m.
 PASS Alive count escalates exactly: wave 1 3 -> wave 5 11 (= 3 + 2 x 4, under MaxAlive 12).
 PASS Health escalates exactly: 65.00 -> 104.00 (x1.60); Heat-star formula would have given 119.00.
 PASS Damage escalates exactly: 8.00 -> 11.20 (x1.40); Heat-star formula would have given 14.00.
 CAPTURE endless-wave-5-gameplay-camera.png (actual render target)
-MEASURED Endless wave 5: single-render FPS=110.72, mean=9.03ms, p95=12.73ms, frames=443; humanoids=12 (enemies alive 11 + hero), visible renderers=1334; profiled 361 frames: PostLateUpdate.UpdateAllSkinnedMeshes=0.445ms, PostLateUpdate.BatchModeUpdate=2.976ms, PlayerLoop=7.858ms; camera (-20.00, 8.09, -34.53) fwd (0.00, -0.33, 0.94), hero hovering at (-20.00, 3.31, -28.00); 1280x720 Editor Play Mode, Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz, AMD Radeon Pro 5300.
-FPS SUMMARY gameplay camera: wave 1 (4 humanoids) 198.71 FPS / skinning 0.163ms / batch-mode overhead 0.938ms  ->  wave 5 (12 humanoids) 110.72 FPS / skinning 0.445ms / batch-mode overhead 2.976ms; skinning per added humanoid 0.035ms.
+MEASURED Endless wave 5: single-render FPS=129.06, mean=7.75ms, p95=10.13ms, frames=517; humanoids=12 (enemies alive 11 + hero), visible renderers=1331; profiled 408 frames: PostLateUpdate.UpdateAllSkinnedMeshes=0.377ms, PostLateUpdate.BatchModeUpdate=2.490ms, PlayerLoop=6.906ms; camera (-20.00, 8.09, -34.53) fwd (0.00, -0.33, 0.94), hero hovering at (-20.00, 3.31, -28.00); 1280x720 Editor Play Mode, Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz, AMD Radeon Pro 5300.
+FPS SUMMARY gameplay camera: wave 1 (4 humanoids) 217.43 FPS / skinning 0.151ms / batch-mode overhead 0.853ms  ->  wave 5 (12 humanoids) 129.06 FPS / skinning 0.377ms / batch-mode overhead 2.490ms; skinning per added humanoid 0.028ms.
 PASS Wave 5 contact damage (3 Heat stars active): real Criminal contact attack took 8.40 health (100.00 -> 91.60); explicit per-wave damage 8.40.
 PASS Wave 5 cleared: 11 kills = WaveSize; score 2000.
 PASS Wave 5 is in its intermission (4.0s).
@@ -108,7 +108,7 @@ PASS HOME button returned to Home.
 PASS Real Home button launched Endless Fight (Villain): side Villain, locked, same director asset.
 PASS Wave 0 is in its intermission (4.0s).
 PASS Intermission elapsed -> wave 1 started.
-RECORD VILLAIN WAVE 1: wave=1, alive=3, wave health=65.00, wave damage=8.00 (per enemy x archetype: Rusher 39.0/6.00, Rusher 39.0/6.00, Rusher 39.0/6.00), role=Cop, Heat stars=0; spawn distances from player 18.3,26.0,14.1m; ring radii 22.0,22.0,22.0m.
+RECORD VILLAIN WAVE 1: wave=1, alive=3, wave health=65.00, wave damage=8.00 (per enemy x archetype: Rusher 39.0/6.00, Rusher 39.0/6.00, Rusher 39.0/6.00), role=Cop, Heat stars=0; spawn distances from player 30.0,21.7,29.3m; ring radii 22.0,22.0,22.0m.
 PASS Villain enemies are 3 hostile Cops; 0 criminals, 0 civilians.
 PASS Villain wave 1 contact damage: real Cop contact attack took 6.00 health (100.00 -> 94.00); explicit per-wave damage 6.00.
 PASS Defeating cops raised Heat to 1.50 (2 stars) but SpawnPolice=0 spawned no police (only the 1 remaining enemy cop exists).

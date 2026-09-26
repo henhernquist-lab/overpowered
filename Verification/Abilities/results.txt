@@ -8,8 +8,8 @@ PASS Backflip accepted from the ground.
 PASS Backflip dispatches the shared humanoid's Backflip state (previously named Unwired Backflip).
 PASS Presentation reports the backflip as the active action from one real event.
 PASS Accepted backflip opens its dash window and counts one use.
-PASS Backflip repositioned the hero -4.21m backward against a configured 4.2m.
-PASS Backflip hop actually left the ground: peak rise 0.592m at 5.50m/s launch, brought back down by the existing gravity.
+PASS Backflip repositioned the hero -4.24m backward against a configured 4.2m.
+PASS Backflip hop actually left the ground: peak rise 0.596m at 5.50m/s launch, brought back down by the existing gravity.
 PASS Backflip does not rotate the physics root or turn the hero.
 PASS Backflip dash window closes when its configured window ends.
 PASS Cooldown CONTROL refuses an immediate second backflip.
@@ -37,20 +37,20 @@ PASS Existing 1.25 s charge recharge still restores the pool after kicks (0 -> 1
 REACH punch=5.00m kick=6.00m; targets at 2.8m (inside both) and 5.6m (outside the punch, inside the kick)
 PASS CONTROL: charged punch accepted with a fresh pool.
 PASS CONTROL: punch force resolved within 2.0s.
-PUNCH geometry at impact: origin=(-20.00, 200.62, -38.30); near target 1.65m, far target 3.93m from it
-PUNCH force=1350 N·s bodies=1 target(2.8m)=22.185m/s target(5.6m)=0.000m/s | origin 1.70m forward, radius 3.30m
+PUNCH geometry at impact: origin=(-20.00, 200.86, -38.30); near target 1.13m, far target 3.91m from it
+PUNCH force=1350 N·s bodies=1 target(2.8m)=22.272m/s target(5.6m)=0.000m/s | origin 1.70m forward, radius 3.30m
 PASS CONTROL: the punch's 5.00m reach touched only the near target (1 body; the 5.6m target stayed at 0.000m/s).
 PASS Hurricane Kick accepted through the Super Strength runtime.
 PASS Hurricane Kick dispatches the shared humanoid's Hurricane Kick state (previously Unwired Hurricane Kick).
 PASS CONTROL: kick force resolved within 2.0s.
-KICK geometry at impact: origin=(-20.00, 199.31, -38.60); near target 2.29m, far target 4.57m from it
+KICK geometry at impact: origin=(-20.00, 199.85, -38.60); near target 1.89m, far target 4.39m from it
 PASS CONTROL: kick animation impact marker resolved within 1.0s.
-KICK animation marker t=8.70045 frame=633; real force t=8.70045 frame=633; offset=0.00ms across 0 frames.
+KICK animation marker t=8.56865 frame=829; real force t=8.56865 frame=829; offset=0.00ms across 0 frames.
 PASS Kick force and its evaluated clip impact marker align within two rendered frames, exactly like the punch.
-HURRICANE KICK force=2025 N·s bodies=2 target(2.8m)=27.325m/s target(5.6m)=4.025m/s | origin 1.40m forward, radius 4.60m
+HURRICANE KICK force=2025 N·s bodies=2 target(2.8m)=29.951m/s target(5.6m)=5.087m/s | origin 1.40m forward, radius 4.60m
 PASS Kick applies more force than the punch: 2025 N·s vs 1350 N·s (x1.50).
-PASS Kick throws the same 45kg mass harder than the punch: 27.325m/s vs 22.185m/s.
-PASS Kick is wider than the punch: the same two targets give 2 bodies hit and 4.025m/s on the 5.6m one, versus 1 body and 0.000m/s for the punch (5.00m reach vs 6.00m).
+PASS Kick throws the same 45kg mass harder than the punch: 29.951m/s vs 22.272m/s.
+PASS Kick is wider than the punch: the same two targets give 2 bodies hit and 5.087m/s on the 5.6m one, versus 1 body and 0.000m/s for the punch (5.00m reach vs 6.00m).
 PASS CONTROL: a cop spawns on the NavMesh as a damage target.
 PASS CONTROL: a clear ground position faces the Cop target.
 PASS CONTROL: hero reached real ground contact.

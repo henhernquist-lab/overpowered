@@ -1,4 +1,4 @@
-SECOND PROCESS loaded /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/wt-gameplay/Verification/Synergy/saves/old-save-8a858735a9a14d5b95435084320b6bb6.json
+SECOND PROCESS loaded /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/wt-gameplay/Verification/Synergy/saves/old-save-c144656835f8488fbacc2c834fe1c801.json
 PASS Old save parsed without error.
 PASS SECOND PROCESS: old save without Fire/Ice/Telekinesis now owns them at tier 0 (loader grants InitiallyUnlocked).
 PASS Old progression preserved exactly: level 3, 17 XP, 2 unspent points, Flight tier 1, rooftop, sessions.

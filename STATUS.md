@@ -1835,3 +1835,20 @@ from a patrol cop at 0 Heat; they now assert the 1-star rule and raise Heat firs
 **Limits:** the frozen look applies to the Ice POWER only; synergy freezes (Frostwake, Thermal Shock, Glacier Fist, Cryo Crush)
 still stop NPCs without the look. Frozen Cyan is close to the Teal cop body colour. Ice damage (5) is unchanged and may still
 feel weak — a design call left to a playtest. No human has judged readability.
+
+## Gameplay balance branch: final regression sweep — 2026-09-26 (appended)
+
+On the final code (ff1e5f3 + evidence), all exit 0 unless noted: HUD Phase 2 482 + Reload 31, HUD Phase 3 560 + Reload 11,
+BackflipHurricane 63, MenuPresentation 42, SynergyAvailability 36 + Reload 9, Mode 79, ModeExpansion 111, City 53 + Reload 5
+(the first City Reload in the sweep ran without its paired Run and failed the exact-save match; the paired Run + Reload rerun
+passes). Earlier in this pass on the same final code: FirstPerson 207 + 5, Humanoid 54, HUD P1 316, Feel 139, HeroForge 131,
+Combat 170, Audio 127 + 49, Ice 34, Balance after 8.
+**KNOWN FAILURE, not fixed here: CityArtVerification.Run** fails its benchmark precondition "Populated benchmark: civilians=26,
+on-NavMesh cops=7" (needs ≥ 10). It sets 3 stars in a Hero session; Hero police are now 2 + 1/star (+ 2 responders) = 7,
+was 2 + 2/star + 2 = 10. This is a direct consequence of the Phase 2 cop count, not a crash. The CityArt runner belongs to the
+WORLD agent's area, so it was left for the lead: either raise its Heat to 5 stars or relax the precondition to the new count.
+PASS-count changes, explained: FirstPerson 210→207, Feel 142→139, HUD P1 318→316 and HeroForge 132→(−4 +3)=131 lost ONLY their
+conditional setup lines "Existing progression unlock <power>" / "Unlock <power> through progression". Those lines ran
+`if(!Owns(p)) Check(Buy(p))`; every power is now owned from the start, so no purchase happens. The powers are still equipped
+and used through the real paths, and ownership-from-start plus the tier purchase and zero-point CONTROLs are asserted in
+SynergyAvailabilityVerification.

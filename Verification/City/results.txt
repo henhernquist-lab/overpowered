@@ -51,5 +51,5 @@ PASS Existing patrol cop placed in attack range on NavMesh.
 PASS Hostile cop attacked through live AI: player HP 100 -> 86.
 PASS Defeating cop as Villain awards XP and disables dead NPC navigation.
 PASS Performance population: civilians=24, cops=6, on-NavMesh cops=6.
-MEASURED 1280x720 rendered Editor Play Mode: frames=264; seconds=5.015; FPS=52.64; p95 frame ms=20.56; GPU=AMD Radeon Pro 5300; CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz.
+MEASURED 1280x720 rendered Editor Play Mode: frames=266; seconds=5.010; FPS=53.10; p95 frame ms=21.87; GPU=AMD Radeon Pro 5300; CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz.
 PASS Saved level=5, strength tier=1; will verify in a separate Unity process.
