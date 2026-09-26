@@ -34,10 +34,10 @@ PASS Catalog restored to its 3 shipping heroes once the Telekinesis + Ice sessio
 LIMIT: the seventh-power test hero is registered in the loaded ForgeCatalog IN MEMORY ONLY (ScriptableObject.CreateInstance, no asset file, catalog never marked dirty or saved) and removed as soon as the Telekinesis + Ice session (shipping hero vector) has started; the shipping roster itself cannot equip verification-7.
 PASS Telekinesis grabs the aimed Rigidbody.
 PASS Second activation hurls the already-paid grab.
-PASS Telekinesis hurl velocity=444.519m/s.
+PASS Telekinesis hurl velocity=444.154m/s.
 PASS Ice freezes a targeted Rigidbody.
 PASS Ice expires and restores original physics constraints.
-PASS Real prop destruction: Heat=3.50; police 2 -> 10; high-tier max HP=137.
+PASS Real prop destruction: Heat=3.50; police 2 -> 6; high-tier max HP=137.
 PASS High Heat spawns one pursuing Hero NPC.
 PASS Civilians react to nearby destruction by fleeing.
 PASS Lay-low decay: 3.50 -> 2.80 after configured delay plus 10s.
@@ -48,8 +48,8 @@ PASS Immediate repeat switch CONTROL rejected.
 PASS Same fire event as Villain: Heat delta=1.00; opposite Hero outcome; same character=Overpowered Hero.
 PASS Cops become hostile on side switch; owned strength tier remains 1
 PASS Existing patrol cop placed in attack range on NavMesh.
-PASS Hostile cop attacked through live AI: player HP 100 -> 72.
+PASS Hostile cop attacked through live AI: player HP 100 -> 86.
 PASS Defeating cop as Villain awards XP and disables dead NPC navigation.
-PASS Performance population: civilians=24, cops=10, on-NavMesh cops=10.
-MEASURED 1280x720 rendered Editor Play Mode: frames=276; seconds=5.007; FPS=55.12; p95 frame ms=19.49; GPU=AMD Radeon Pro 5300; CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz.
+PASS Performance population: civilians=24, cops=6, on-NavMesh cops=6.
+MEASURED 1280x720 rendered Editor Play Mode: frames=258; seconds=5.009; FPS=51.51; p95 frame ms=21.65; GPU=AMD Radeon Pro 5300; CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz.
 PASS Saved level=5, strength tier=1; will verify in a separate Unity process.

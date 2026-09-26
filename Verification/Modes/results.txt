@@ -8,7 +8,7 @@ PASS Untouched marker CONTROL does not resolve encounter.
 PASS Blocked civilian CONTROL refuses rescue before blockade is moved/broken.
 PASS Real charged E-punch accepted against encounter physics blockade.
 PASS Animated punch impact hit encounter physics blockade after windup.
-PASS Rescue physics: actual punch AddExplosionForce(1350 N·s, Impulse), mass=45kg; displacement=9.071m.
+PASS Rescue physics: actual punch AddExplosionForce(1350 N·s, Impulse), mass=45kg; displacement=9.298m.
 PASS Held interaction accepted at valid objective.
 PASS Moved blockade permits real rescue interaction.
 PASS Hero police CONTROL: neutral cop in attack range does not damage player.
@@ -40,11 +40,11 @@ PASS Hero/Villain regenerated the SAME seeded city layout.
 PASS Mode-switch persistence: level=5, XP=92, points=4, wins=1.
 PASS Earned points purchase strength upgrade; tier=1 must survive restart.
 PASS Same encounter systems, opposite Villain loot/destruction/escape goals.
-PASS Villain live cop AI attacked: health 100 -> 92.
-PASS Existing Heat escalation retained: cops 4 -> 10 at Heat 3.00.
+PASS Villain live cop AI attacked: health 100 -> 96.
+PASS Existing Heat escalation retained: cops 4 -> 7 at Heat 3.00.
 PASS Configured spawn-clock interval adds second multi-part encounter.
 PASS Population-cap CONTROL refuses a third simultaneous encounter.
-MEASURED populated events: civilians=28, cops=12, events=2; 1280x720 rendered Editor Play Mode; frames=326, seconds=5.004, FPS=65.15, p95=16.48ms; Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz; AMD Radeon Pro 5300.
+MEASURED populated events: civilians=28, cops=9, events=2; 1280x720 rendered Editor Play Mode; frames=300, seconds=5.016, FPS=59.81, p95=17.55ms; Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz; AMD Radeon Pro 5300.
 PASS Held interaction accepted at valid objective.
 PASS Held interaction accepted at valid objective.
 PASS Villain escape CONTROL: loot/destruction alone cannot resolve while inside scene.

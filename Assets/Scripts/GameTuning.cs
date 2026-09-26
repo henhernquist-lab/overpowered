@@ -54,9 +54,26 @@ public sealed class GameTuning : ScriptableObject
 }
 [Serializable] public sealed class HeatSettings
 {
-    public int MaximumStars = 5, FriendlyPatrolCount = 2, CopsPerStar = 2, HeroThreshold = 4;
+    public int MaximumStars = 5, HeroThreshold = 4;
+    [Tooltip("Legacy (superseded by HeroPolice / VillainPolice). Kept for old data; not read by gameplay.")] public int FriendlyPatrolCount = 2, CopsPerStar = 2;
     public float DestructionHeat = .35f, AssaultHeat = .25f, DefeatHeat = .5f, CrimeHeat = 1f;
     public float CrimeReduction = 1f, DecayDelay = 10f, DecayPerSecond = .07f, ResponseInterval = 2f, SpawnDistance = 25f;
+    [Tooltip("Police response for a player on the HERO side (Heat never turns police on a hero by default).")]
+    public SidePoliceSettings HeroPolice = new SidePoliceSettings { HostileFromStars = 99, RespondersHostile = false };
+    [Tooltip("Police response for a player on the VILLAIN side.")]
+    public SidePoliceSettings VillainPolice = new SidePoliceSettings();
+    /// Per-side police data (count, hostility, damage). Legacy FriendlyPatrolCount / CopsPerStar above are superseded by these.
+    public SidePoliceSettings Police(PlayerSide side) => side == PlayerSide.Villain ? VillainPolice : HeroPolice;
+}
+/// How the police respond to one side. Defaults reproduce the original single rule set (2 + 2 per star, hostile to the
+/// villain at every Heat level, full damage); GameTuning.asset holds the tuned values.
+[Serializable] public sealed class SidePoliceSettings
+{
+    [Tooltip("Patrol police (not encounter responders) alive at 0 Heat stars.")] public int PatrolCount = 2;
+    [Tooltip("Extra patrol police per Heat star.")] public int CopsPerStar = 2;
+    [Tooltip("Patrol police and the pursuer attack this side only at or above this many Heat stars (above MaximumStars = never).")] public int HostileFromStars = 0;
+    [Tooltip("Encounter responders (the cops posted at a heist/crime site) and director-driven waves attack this side regardless of Heat.")] public bool RespondersHostile = true;
+    [Tooltip("x the Heat-star police attack damage (Cop / PursuingHero spawned by the city; Endless waves use their own explicit stats).")] public float DamageMultiplier = 1f;
 }
 [Serializable] public sealed class CrimeSettings
 {

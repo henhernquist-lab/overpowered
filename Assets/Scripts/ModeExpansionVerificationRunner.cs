@@ -114,7 +114,7 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         var session=W.Mode;var d=session.Definition;
         Check(d==freePlay&&Flow.ActiveMode==freePlay&&d.Rules==null&&d.Encounters.Length==0,"Real Home button -> GameFlow.Select launched Free Play with Rules=null and 0 encounter definitions.");
         Check(!W.Progression.SideLocked&&W.Progression.Data.Side==PlayerSide.Hero,$"Free Play takes the profile side ({W.Progression.Data.Side}) and does NOT lock it.");
-        Check(Count(NpcRole.Civilian)==d.Civilians&&Count(NpcRole.Cop)==W.Tuning.Heat.FriendlyPatrolCount,$"Population: {Count(NpcRole.Civilian)} civilians, {Count(NpcRole.Cop)} patrol cops.");
+        Check(Count(NpcRole.Civilian)==d.Civilians&&Count(NpcRole.Cop)==W.Tuning.Heat.Police(W.Progression.Data.Side).PatrolCount,$"Population: {Count(NpcRole.Civilian)} civilians, {Count(NpcRole.Cop)} patrol cops.");
         float advance=hero.SpawnInterval*3;
         yield return Advance(session,advance);
         int events=FindObjectsByType<CrimeEvent>().Length,encounters=FindObjectsByType<CrimeEncounter>().Length,criminals=Count(NpcRole.Criminal);
@@ -136,8 +136,8 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         Check(W.Heat>heat,$"Real BreakableProp break -> WorldSession.OnDestruction: Heat {heat:F2} -> {W.Heat:F2} ({W.Stars} star).");
         float until=Time.realtimeSinceStartup+W.Tuning.Heat.ResponseInterval+3;
         while(Count(NpcRole.Cop)<=cops&&Time.realtimeSinceStartup<until)yield return null;
-        int expectedCops=W.Tuning.Heat.FriendlyPatrolCount+W.Stars*W.Tuning.Heat.CopsPerStar;
-        Check(Count(NpcRole.Cop)==expectedCops&&Count(NpcRole.Cop)>cops,$"Police respond in real time: cops {cops} -> {Count(NpcRole.Cop)} (= patrol {W.Tuning.Heat.FriendlyPatrolCount} + {W.Stars} star x {W.Tuning.Heat.CopsPerStar}).");
+        var police=W.Tuning.Heat.Police(W.Progression.Data.Side);int expectedCops=police.PatrolCount+W.Stars*police.CopsPerStar;
+        Check(Count(NpcRole.Cop)==expectedCops&&Count(NpcRole.Cop)>cops,$"Police respond in real time: cops {cops} -> {Count(NpcRole.Cop)} (= {W.Progression.Data.Side} patrol {police.PatrolCount} + {W.Stars} star x {police.CopsPerStar}).");
         // Side switch flips Data.Side AND which NPCs are hostile.
         var far=W.City.Sidewalks.OrderByDescending(p=>(p-W.Hero.transform.position).sqrMagnitude).First();
         var criminal=CityNpc.Spawn(W,far,NpcRole.Criminal);criminal.Freeze(120);

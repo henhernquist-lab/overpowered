@@ -1742,3 +1742,62 @@ HeroForge 131 + Reload 3, City 53 + Reload 5, MenuPresentation 42, HUD P1 316, M
 **Limits:** cooldown lengths are a design judgment from the effect numbers, not human-playtested. The IMGUI Tab menu is never
 drawn in batch mode, so its "Not owned"/"Upgrade" labels are compile-checked only. Activation goes through
 `SynergyRunner.TryActivate` (what the C key calls); no hardware input.
+
+## Gameplay Phase 2: police and Heat rebalanced per side from measured numbers — 2026-09-26 (appended)
+
+**Diagnosis first (code + data, then measured).** Roster: Criminal = Rusher, Cop = Gunner (ranged 22 m), PursuingHero =
+Brute. Criminals are hostile only to a Hero, police only to a Villain. Detection range 100 m (the whole city). The police
+count was ONE rule for both sides: 2 "friendly patrol" + 2 per star (2→12 Gunners), + a Brute at ≥ 4 stars, + 2 responders
+per encounter. Gunner shot = 8 + 2/star, cycle 0.7 s windup + 1.8 s cooldown. Player: 100 HP with **no regeneration** outside
+respawn. Heat: destruction +0.35 (both sides), assault on non-criminals +0.25, defeat +0.5, success Hero −1 / Villain +1,
+decay 0.07/s after 10 s calm. The attack-token budget (2) only caps concurrent WINDUPS (the token is released at the
+shot), so a ranged crowd's shot RATE grows with its size.
+
+**Measured asymmetry** (`BalanceVerification.Before`: fresh session per cell, idle player at the live encounter site, Heat held,
+40 s cap; plus "objective" rows where the harness stays by the nearest robber / loot and holds R, 25 s cap):
+- Villain at **0 stars** already faced 4 hostile Gunners (the 2 "friendly" patrols + 2 heist responders) and died idle in
+  **9.2 s** (13 hits); 1★ 6.3 s … 5★ 4.2 s (15 hostiles). Looting 2/2 at 0★ still died at 10.3 s.
+- Hero took **0 damage at every Heat level**, idle or while capturing all 3 robbers: police are never hostile to a hero,
+  and the robbers' 1.6 m trigger is inside the 3 m capture radius, so capturing was risk-free. Hero Heat only added
+  4 → 14 neutral cops (clutter, no consequence).
+
+**Changes (all data; per-side values keyed by `PlayerSide`, no mode-ID switch).** New `GameTuning.Heat.HeroPolice` /
+`VillainPolice` (`SidePoliceSettings`: patrol count, cops per star, hostile-from-stars, responders hostile, police damage
+multiplier). `WorldSession.ReconcilePolice` and `CityNpc.Hostile` / `ContactDamage` read them; director waves (AlwaysAggro, i.e.
+Endless) and encounter responders follow `RespondersHostile`; Endless explicit stats are untouched. The legacy
+`FriendlyPatrolCount` / `CopsPerStar` fields stay in the asset, marked superseded. New archetype `Enemies/Robber.asset`
+(Rusher body) for `EnemyRoster.Criminal`; Endless still uses Rusher from its own composition.
+
+| Value | Before | After | Why |
+|---|---|---|---|
+| Villain patrol cops per star | 2 | 1 | shot rate scales with gunner count (budget caps windups only) |
+| Villain patrols hostile from | 0 stars | 1 star | the "friendly patrol" hunted a 0-Heat villain city-wide; heist responders stay hostile |
+| Villain police damage | ×1 | ×0.5 | no player regen; 0.6 left 5★ idle TTD at 4.9 s (tried, recorded) |
+| Hero patrol cops per star | 2 | 1 | 14 neutral cops at 5★ were clutter only |
+| Hero police hostile | never | never (99) | unchanged by design; Heat still escalates the count |
+| City/encounter criminal | Rusher ×0.6 HP ×0.75 dmg, trigger 1.6 m | Robber ×1 HP ×1 dmg, trigger 3.2 m, reach 1.8, radius 1.5 | reach now covers the 3 m capture radius, so robbers fight back |
+
+**Measured after** (same scenario code, `BalanceVerification.After`, exit 0, 8 PASS):
+
+| Side | Stars | Cops alive before→after | Hostiles before→after | Incoming DPS before→after | Time to death before→after |
+|---|---|---|---|---|---|
+| Villain | 0 | 4 → 4 | 4 → 2 | 10.9 → 2.0 | 9.2 s → survived 40 s (80 dmg) |
+| Villain | 1 | 6 → 5 | 6 → 5 | 15.8 → 7.4 | 6.3 → 13.5 s |
+| Villain | 2 | 8 → 6 | 8 → 6 | 17.9 → 9.7 | 5.6 → 10.3 s |
+| Villain | 3 | 10 → 7 | 10 → 7 | 26.3 → 11.8 | 3.8 → 8.5 s |
+| Villain | 4 | 12 → 8 | 13 → 9 | 22.0 → 12.9 | 4.5 → 7.8 s |
+| Villain | 5 | 14 → 9 | 15 → 10 | 24.0 → 16.8 | 4.2 → 5.9 s |
+| Hero idle | 0–5 | 4..14 → 4..9 | 3 → 3 | 0 → 0–3.3 (0★ 24 dmg; 2★ died 30.2 s; 3★ died 39.4 s; 1/4/5★ 0) | never → sometimes |
+| Hero capturing 3 robbers | 0 / 3 | — | 3 | 0 → 8 HP / 14 HP taken | survived |
+| Villain looting 2/2 | 0 / 3 | — | 4→2 / 10→7 | 9.5 → 2.4 / 24.0 → 12.7 | 10.3 → survived / 4.2 → 7.9 s |
+
+CONTROLS (asserted): Hero mode has real threat (captures cost 8 / 14 HP); Villain still escalates with Heat (DPS 2.0 → 16.8,
+hostiles 2 → 10, never dropping star to star) and an idle 5★ villain still dies. The Hero idle rows vary between seeded runs
+because whether fleeing robbers pass within 3.2 m depends on their exit routes (before: 0 in all cells).
+Regressions, all exit 0: Combat 170, Mode 79 + Reload 2, ModeExpansion 111 + Reload 10, City 53 + Reload 5 (Combat's roster
+check and ModeExpansion's police-count checks now read the Robber / per-side data). dotnet 0/0.
+
+**Not claimed:** balance FEEL is not human-playtested; samples are an idle (or R-holding) player, one seeded run per cell, not
+averages. Player health regeneration was left out (a new mechanic outside this pass's file scope); the villain's high-Heat
+pressure still comes from gunner count × shot rate and would change most with regen or a ranged token that covers the
+cooldown — both are recommendations, not done.
