@@ -1,0 +1,48 @@
+DATA synergy=frostwake pair=flight+ice cooldown=25s damage=12 radius=3m force=2600 duration=1.1s freeze=2s burn=0s
+DATA synergy=cryo-crush pair=ice+telekinesis cooldown=30s damage=35 radius=4m force=2000 duration=3s freeze=2s burn=0s
+DATA synergy=glacier-fist pair=ice+strength cooldown=30s damage=40 radius=0.4m force=2600 duration=6s freeze=1.5s burn=0s
+DATA synergy=orbit-throw pair=flight+telekinesis cooldown=30s damage=35 radius=7m force=1800 duration=2s freeze=2s burn=0s
+DATA synergy=thermal-shock pair=fire+ice cooldown=30s damage=25 radius=4m force=1500 duration=3s freeze=0.6s burn=0s
+DATA synergy=meteor-slam pair=strength+telekinesis cooldown=35s damage=50 radius=7m force=2800 duration=3s freeze=2s burn=0s
+DATA synergy=sonic-slam pair=flight+strength cooldown=35s damage=40 radius=7m force=2600 duration=3s freeze=2s burn=0s
+DATA synergy=meteor-punch pair=fire+strength cooldown=40s damage=75 radius=4m force=3400 duration=3s freeze=2s burn=4s
+DATA synergy=phoenix-dive pair=flight+fire cooldown=40s damage=55 radius=7m force=1800 duration=3s freeze=2s burn=4s
+DATA synergy=inferno-orbit pair=fire+telekinesis cooldown=45s damage=40 radius=3m force=1600 duration=2s freeze=2s burn=4s
+PASS All ten synergy cooldowns are long (25-45 s): sonic-slam=35, phoenix-dive=40, frostwake=25, orbit-throw=30, thermal-shock=30, meteor-punch=40, inferno-orbit=45, glacier-fist=30, cryo-crush=30, meteor-slam=35
+PASS Cooldowns are tuned per synergy, not one flat value.
+PASS Shortest synergy cooldown 25 s is >= 40x the longest normal power cooldown 0.6 s.
+PASS Fresh profile: level 1, 0 points.
+PASS Every power asset is InitiallyUnlocked and owned at tier 0 with 0 points.
+PASS Forge opens from Home.
+PASS Forge shows no UNLOCK / point-cost buttons.
+PASS VECTOR equips Fire + Ice (previously point-gated) straight from the Forge dropdowns.
+PASS Fire + Ice saved with 0 points spent.
+PASS Forge shows the synergy as available with its cooldown: 'SYNERGY / Thermal Shock' / 'READY WHEN EQUIPPED  ·  30 S COOLDOWN  ·  C TO USE'.
+PASS Changing the pair updates the synergy line and its own cooldown: READY WHEN EQUIPPED  ·  40 S COOLDOWN  ·  C TO USE
+PASS Back to Fire + Ice.
+PASS Enter Hero mode.
+PASS Session resolves Thermal Shock from the equipped pair; still 0 points.
+PASS HUD synergy slot shows Thermal Shock ready (radial 0).
+PASS Thermal Shock fires immediately on a 0-point profile (no unlock step).
+PASS Activation starts the configured cooldown: 30.00s of 30s.
+PASS HUD radial reads the new cooldown: 1.000 (runner 29.97/30s).
+PASS Real effect: aimed target took 25 damage (= Damage 25); out-of-radius CONTROL untouched.
+PASS Mid-cooldown activation refused (29.69s left): "Synergy cooling down".
+PASS Refused use caused no effect: health, impacts and VFX emissions unchanged.
+PASS Refused use did not reset or extend the cooldown: 29.69s -> 29.19s after 0.5s.
+PASS HUD radial halfway: 0.503 for 14.98/30s.
+PASS Still refused at half cooldown.
+MEASURED Thermal Shock became ready again 30.01s (game time) after activation; configured 30s.
+PASS Cooldown elapses on schedule.
+PASS CONTROL: after the cooldown the synergy fires again.
+PASS Second activation dealt 25 damage.
+PASS CONTROL: Fire + Ice with no synergy defined -> refused ("No synergy for this pair"), no cooldown, no impact.
+PASS No-synergy CONTROL: target untouched and the HUD has no synergy slot.
+PASS Catalog restored to its 10 shipping synergies; never dirtied or saved.
+PASS Equip Fire + Strength.
+PASS CONTROL: with Ice owned but unequipped, the session's synergy is Meteor Punch (not Thermal Shock) and Ice itself is refused by the equip gate.
+PASS Zero-point CONTROL: tier purchase refused, Fire stays tier 0.
+PASS Earned point buys Fire tier 0 -> 1.
+PASS Zero-point CONTROL after spending: Ice tier purchase refused.
+PASS Old save written with Fire/Ice not owned (no entry in Powers): old-save-8a858735a9a14d5b95435084320b6bb6.json
+LIMIT: activation is driven through SynergyRunner.TryActivate (the method the C key calls); no hardware key injection. Cooldown lengths are a design judgment from the effect numbers, not human-playtested.

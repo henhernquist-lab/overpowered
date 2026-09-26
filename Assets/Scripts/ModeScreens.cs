@@ -143,20 +143,21 @@ public sealed class ModeScreens : MonoBehaviour
         rewardBuilt=true;choices.Clear();UpgradeButtons.Clear();RewardVisible=result.EndLevel>result.StartLevel&&Profile.Data.Points>0;
         if(!RewardVisible){rewardLabel.text=result.EndLevel>result.StartLevel?"POWER UPGRADED. MAKE IT COUNT.":"YOUR PROGRESS IS SAVED.";return;}
         rewardLabel.text="LEVEL UP / CHOOSE YOUR NEXT EDGE     "+Profile.Data.Points+" POINT(S)";
-        var candidates=powers.Where(p=>Profile.Tier(p)<p.Upgrades.Length).OrderByDescending(Profile.Owns).ThenBy(p=>p.Id).Take(3).ToArray();
+        // Points buy upgrade TIERS of owned powers only; ownership itself is free data (PowerDefinition.InitiallyUnlocked). The equipped loadout is offered first.
+        var candidates=powers.Where(p=>Profile.Owns(p)&&Profile.Tier(p)<p.Upgrades.Length).OrderByDescending(p=>p==Profile.EquippedA||p==Profile.EquippedB).ThenBy(p=>p.Id).Take(3).ToArray();
         if(candidates.Length==0){rewardLabel.text="ALL POWERS MAXED / POINTS SAVED";return;}
         var accent=ColorFor(result.Side);
         foreach(var power in candidates)
         {
-            int tier=Profile.Tier(power),cost=tier<0?power.UnlockCost:power.Upgrades[tier].PointCost;
+            int tier=Profile.Tier(power),cost=power.Upgrades[tier].PointCost;
             var button=new Button(()=>ChooseUpgrade(power)){name="upgrade-"+power.Id};ResetButton(button);button.style.flexGrow=1;button.style.flexBasis=0;button.style.marginRight=16;PanelBox(button);Border(button,Alpha(accent,.65f),1);button.style.alignItems=Align.FlexStart;button.style.paddingLeft=18;button.style.paddingRight=62;
             var icon=new MenuIcon(power.MenuIcon,accent);icon.style.width=36;icon.style.height=36;icon.style.position=Position.Absolute;icon.style.right=14;icon.style.top=14;button.Add(icon);
-            button.Add(Text((tier<0?"UNLOCK ":"UPGRADE ")+power.DisplayName.ToUpperInvariant(),13,C(CityColor.UiInk),true));var detail=Text(UpgradeLine(power,tier),11,C(CityColor.UiMuted));detail.style.marginTop=8;button.Add(detail);var price=Text(cost+" POINT"+(cost==1?"":"S"),10,accent,true);price.style.marginTop=9;button.Add(price);button.SetEnabled(Profile.Data.Points>=cost);choices.Add(button);UpgradeButtons.Add(button);
+            button.Add(Text("UPGRADE "+power.DisplayName.ToUpperInvariant(),13,C(CityColor.UiInk),true));var detail=Text(UpgradeLine(power,tier),11,C(CityColor.UiMuted));detail.style.marginTop=8;button.Add(detail);var price=Text(cost+" POINT"+(cost==1?"":"S"),10,accent,true);price.style.marginTop=9;button.Add(price);button.SetEnabled(Profile.Data.Points>=cost);choices.Add(button);UpgradeButtons.Add(button);
         }
     }
     string UpgradeLine(PowerDefinition power,int tier)
     {
-        if(tier<0)return "ADD TO YOUR POWERS";var from=power.GetStats(tier);var to=power.GetStats(tier+1);
+        var from=power.GetStats(tier);var to=power.GetStats(tier+1);
         if(power.Effect.IsFlight)return $"{from.Duration:0.#}s FLIGHT > {to.Duration:0.#}s";
         if(to.Force>from.Force)return $"{from.Force:0} FORCE > {to.Force:0}";
         return $"{from.Charges} CHARGES > {to.Charges}";

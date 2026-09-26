@@ -9,13 +9,13 @@ PASS Visible ENABLED extras-row button endless-fight-villain below the side card
 PASS Coming Soon strip is empty: no non-playable mode definitions remain.
 PASS Flow-guard CONTROL: a Playable=false definition still does not launch.
 CAPTURE home.png (actual UI Toolkit target texture, not a mockup)
-PASS Hover lifts Hero card -8.00 logical pixels; configured -8.
+PASS Hover lifts Hero card -7.97 logical pixels; configured -8.
 CAPTURE home-hover.png (actual UI Toolkit target texture, not a mockup)
-PASS Skyline uses 36 actual seeded buildings; one-time capture 379.9ms; cached 768x432.
-MEASURED home static A: motion=False, frames=6469, seconds=4.003, FPS=1615.92, mean=0.618ms, p95=0.730ms, drawCalls=2.0, 1280x720 Editor UI render.
-MEASURED home animated B: motion=True, frames=2739, seconds=4.002, FPS=684.42, mean=1.461ms, p95=1.695ms, drawCalls=4.0, 1280x720 Editor UI render.
-MEASURED home animated B2: motion=True, frames=2044, seconds=4.002, FPS=510.80, mean=1.958ms, p95=2.149ms, drawCalls=4.0, 1280x720 Editor UI render.
-MEASURED home static A2: motion=False, frames=4202, seconds=4.001, FPS=1050.13, mean=0.952ms, p95=1.055ms, drawCalls=2.0, 1280x720 Editor UI render.
+PASS Skyline uses 36 actual seeded buildings; one-time capture 108.8ms; cached 768x432.
+MEASURED home static A: motion=False, frames=8631, seconds=4.002, FPS=2156.44, mean=0.463ms, p95=0.571ms, drawCalls=3.0, 1280x720 Editor UI render.
+MEASURED home animated B: motion=True, frames=3843, seconds=4.001, FPS=960.57, mean=1.041ms, p95=1.151ms, drawCalls=5.0, 1280x720 Editor UI render.
+MEASURED home animated B2: motion=True, frames=3863, seconds=4.001, FPS=965.44, mean=1.036ms, p95=1.146ms, drawCalls=5.0, 1280x720 Editor UI render.
+MEASURED home static A2: motion=False, frames=8712, seconds=4.001, FPS=2177.37, mean=0.459ms, p95=0.587ms, drawCalls=3.0, 1280x720 Editor UI render.
 PASS Actual Free Play extras-button submit loads Free Play (side not locked).
 PASS Menu component exists in Home
 PASS Actual retained UI layout 1440x810 logical pixels.
@@ -23,7 +23,7 @@ PASS Actual Hero card submit loads Hero gameplay.
 PASS Menu component exists in Results
 PASS Actual retained UI layout 1440x810 logical pixels.
 PASS Hero result: CITY SAVED, shared cyan, exactly four stats.
-PASS Animated XP: early L1 0.259 -> final L2 0.296; saved 40/135.
+PASS Animated XP: early L1 0.199 -> final L2 0.296; saved 40/135.
 PASS Actual XP level-up exposes three upgrade choices.
 CAPTURE hero-results-level-up.png (actual UI Toolkit target texture, not a mockup)
 PASS Real upgrade button -> PlayerProgression.Buy: Strength tier 0->1, points 1->0, force 1350->1890.
@@ -43,7 +43,7 @@ PASS Actual retained UI layout 1440x810 logical pixels.
 PASS Villain result: ESCAPED THE HEAT, shared orange, same component/layout, four stats.
 PASS Peak Heat snapshot records actual WorldSession.AddHeat updates.
 CAPTURE villain-results.png (actual UI Toolkit target texture, not a mockup)
-MEASURED villain results animated: motion=True, frames=2400, seconds=4.002, FPS=599.70, mean=1.667ms, p95=1.779ms, drawCalls=5.0, 1280x720 Editor UI render.
+MEASURED villain results animated: motion=True, frames=3832, seconds=4.001, FPS=957.70, mean=1.044ms, p95=1.167ms, drawCalls=5.0, 1280x720 Editor UI render.
 PASS PLAY AGAIN loads Villain.
 PASS Menu component exists in Results
 PASS Actual retained UI layout 1440x810 logical pixels.

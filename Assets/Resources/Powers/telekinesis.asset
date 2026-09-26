@@ -16,7 +16,7 @@ MonoBehaviour:
   DisplayName: Telekinesis
   Description: Aim at a prop and click to grab. Click again to hurl; hold expires safely.
   Effect: {fileID: 11400000, guid: f3acf6dd5ac0a4a57b3d56e5b1d797b6, type: 2}
-  InitiallyUnlocked: 0
+  InitiallyUnlocked: 1
   UnlockCost: 1
   Charges: 2
   Cooldown: 0.6

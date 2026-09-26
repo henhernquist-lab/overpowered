@@ -8,6 +8,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
 {
     public VisualElement Root {get;private set;}
     public Label SynergyLabel {get;private set;}
+    public Label SynergyStatus {get;private set;}
     public ForgeChoice SlotA {get;private set;}
     public ForgeChoice SlotB {get;private set;}
     public RenderTexture Preview {get;private set;}
@@ -56,7 +57,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
     bool Save()
     {
         bool ok=menu.Profile.SetLoadout(hero,a,b,primary,secondary);
-        if(ok){feedback.text="BUILD SAVED";Rebuild();Capture();}else feedback.text="Choose two different unlocked powers.";
+        if(ok){feedback.text="BUILD SAVED";Rebuild();Capture();}else feedback.text="Choose two different powers.";
         return ok;
     }
     ForgeChoice Dropdown(string title,string[] values,int selected,Action<int> changed)
@@ -77,12 +78,10 @@ public sealed class HeroForgeScreen : MonoBehaviour
         var synergy=catalog.Resolve(a,b);
         SynergyLabel=new Label("SYNERGY / "+(synergy?.DisplayName??"No synergy")){name="forge-synergy"};
         SynergyLabel.style.fontSize=24;SynergyLabel.style.whiteSpace=WhiteSpace.Normal;SynergyLabel.style.color=C(CityColor.HeroAccent);form.Add(SynergyLabel);
+        // Synergies have no unlock step: the equipped pair's synergy is available at once, gated only by its cooldown.
+        SynergyStatus=new Label(synergy!=null?$"READY WHEN EQUIPPED  ·  {synergy.Cooldown:0} S COOLDOWN  ·  {HudBindings.KeyName(catalog.SynergyKey)} TO USE":""){name="forge-synergy-status"};
+        SynergyStatus.style.fontSize=13;SynergyStatus.style.unityFontStyleAndWeight=FontStyle.Bold;SynergyStatus.style.color=C(CityColor.UiMuted);SynergyStatus.style.marginBottom=4;form.Add(SynergyStatus);
         var detail=new Label(synergy?.Description??"");detail.style.whiteSpace=WhiteSpace.Normal;detail.style.marginBottom=12;form.Add(detail);
-        foreach(var power in hero.AvailablePowers.Where(p=>!menu.Profile.Owns(p)))
-        {
-            var unlock=new Button(()=>{if(menu.Profile.Buy(power)){feedback.text="POWER UNLOCKED";Rebuild();}}){text="UNLOCK "+power.DisplayName+" / "+power.UnlockCost+" POINT"};
-            unlock.SetEnabled(menu.Profile.Data.Points>=power.UnlockCost);form.Add(unlock);
-        }
         rebuilding=false;
     }
     void Capture()

@@ -1680,3 +1680,65 @@ PAIRED same-scene means: third-person=55.77 FPS; first-person=56.06 FPS; delta=0
 This is effectively within measurement noise, not proof of an optimization or a standalone FPS guarantee. Even this run drifted 59.80 -> 51.73 FPS between third-person phases. Earlier unmatched-view samples were more variable (36.67 third / 47.22 first; retained in initial-results.txt); they are not substituted for the matched comparison. No geometry/actor cuts, pipeline changes or per-instance meshes were introduced.
 
 No hardware B-key/controller injection or human motion-sickness/feel session. No first-person hand animation. Console is **not** wholly error-free: UnityEditor.Search.SearchDatabase's pre-existing startup ArgumentOutOfRangeException remains; no game-code errors occurred in the successful runs. An initial test-only compile error attempted to set private Energy; the test now recharges through PowerUser.Tick and compiles cleanly. Tested feature scripts/assets were compared to the delivery checkout; unrelated shared HUD Phase 2 work is excluded.
+
+## Gameplay Phase 1: synergies available on equip, long cooldowns — 2026-09-26 (appended; branch feat/gameplay-balance)
+
+**Step 0 (merged base 66937b9, before any edit):** Feel 142, Camera 45, HUD P1 318, HeroForge 132 + Reload 3, City 53 + Reload 5
+all exit 0. FirstPerson.Run FAILED at "hero-third-fire contact within projectile radius tolerance" (0.3083 m); its Reload failed
+as a consequence. Root cause = **test assumption, not a merge bug**: the fixture put targets 9 m from the CAMERA; the feel camera
+(0, 2.8, −7.6 / look 2.5) now puts that point 1.25 m in front of the hero, inside Fire's 1.7 m muzzle offset. Targets now sit
+9 m of reach beyond the hero (the `near` rule AimDirection uses; first person unchanged): contact error 0.0951 m third /
+0.0846 m first; Run 210 PASS, Reload 5 PASS (commit d0f5ae8). **FP eye vs Feel impulse:** the real Feel hooks (heavy impact from
+4 sides and from below, heavy incoming hit), sampled at 1 ms over the whole impulse at pitch −85/0/85 in the tight corner and the
+low overhang: 0 of 3,960 samples put the 0.044 m near-plane corner sphere into geometry; closest 0.127 m (low overhang, +0.123 m
+upward swing). No Feel change needed. One rerun was lost to macOS sleep (pmset: sleep 02:10 → 04:03; the runner's 600 s deadline
+fired on wake); runs now use `caffeinate -dims`.
+
+**Finding (verified):** synergies never had an unlock step; `SynergyRunner` fires whenever the resolved pair is equipped. The
+"UNLOCK … / 1 POINT" button was POWER OWNERSHIP (Fire/Ice/Telekinesis had `InitiallyUnlocked: 0`), and the Forge slots list only
+owned powers, so the pair (and its synergy) was point-gated.
+
+**Change (data first):** `InitiallyUnlocked: 1` on fire/ice/telekinesis (and `ProjectDataSetup` defaults). The loader already
+grants InitiallyUnlocked powers to old saves. PowerUser/PlayerProgression equip + ownership gates are unchanged; `UnlockCost`
+stays as unused legacy data; `Buy` still exists and now only buys TIERS for owned powers. UI: Forge UNLOCK buttons removed and a
+status line added ("READY WHEN EQUIPPED · 30 S COOLDOWN · C TO USE", key from ForgeCatalog); Tab menu shows "Not owned" instead of
+an Unlock purchase; Results upgrade picks list owned powers only, equipped pair first ("UPGRADE …"). HUD synergy radial reads
+`runner.Cooldown / Synergy.Cooldown` and needed no change. `HeroForgeSetup` creation defaults carry the same cooldowns.
+
+**Cooldowns — the balancing lever** (normal powers: 0.45–0.6 s + charges/energy, ~30 sustained DPS; "potential" = damage × up to
+4 targets in radius, from the effect code):
+
+| Synergy | Damage | Radius | Force | Duration / control | Old | New | Reasoning |
+|---|---|---|---|---|---|---|---|
+| Frostwake | 12 per pass | 3 m along a ~28 m dash | 2600 | 1.1 s dash, 2 s freeze | 10 | 25 | low damage (~48), CC + escape; also burns flight fuel |
+| Glacier Fist | ×1.65 punch force, +0 dmg | punch 3.3 m | 2600 | 6 s buff, 1.5 s freeze per punch | 10 | 30 | ~6 punches of AoE freeze in the window; still pays charges |
+| Orbit Throw | 35 per prop | ≤4 props in 9 m | 1800 | 2 s orbit | 10 | 30 | ≤140, needs props nearby |
+| Cryo Crush | 35 slam | 4 m | 2000 | 2 s freeze + 1.1 s lift | 10 | 30 | one enemy removed + small AoE (≤140) |
+| Thermal Shock | 25 (+17.5 on frozen/burning) | 4 m | 1500 | 0.6 s freeze | 10 | 30 | ranged, instant; 100–170 |
+| Sonic Slam | 40 | 7 m | 2600 | self dive, NPC displacement | 10 | 35 | clears the whole 4.5 m wait ring (160+) |
+| Meteor Slam | 50 | 7 m | 2800 | 1.2 s lift | 10 | 35 | 200 potential, needs a target |
+| Phoenix Dive | 55 | 7 m | 1800 | 4 s burn (enables Thermal bonus) | 10 | 40 | 220 at a chosen spot 24 m away |
+| Meteor Punch | 75 | 4 m | 3400 | 4 s burn | 10 | 40 | highest single hit (300 potential), reliable |
+| Inferno Orbit | 40 per prop + 40 blast (3 m) each | ≤4 props | 1600 | 4 s burn | 10 | 45 | highest ceiling (≤320+) |
+
+**Verification — `SynergyAvailabilityVerification.Run` 36 PASS, separate-process `Reload` 9 PASS, exit 0** (`Verification/Synergy/`):
+fresh profile (level 1, 0 points) owns all five powers; the Forge has no UNLOCK buttons; VECTOR equips Fire + Ice with 0 points
+spent; the Forge line reads "SYNERGY / Thermal Shock — READY WHEN EQUIPPED · 30 S COOLDOWN" (and 40 S for Meteor Punch); in Play
+Mode Thermal Shock fires immediately and deals 25 (= data) to the aimed actor, CONTROL actor untouched; HUD radial 1.000 then
+0.503 at 14.98/30 s; a mid-cooldown use is REFUSED ("Synergy cooling down"), with health, impacts and VFX emissions unchanged and
+the cooldown not reset (29.69 → 29.19 s after 0.5 s); ready again after 30.01 s and fires again (CONTROL). Refusals: a pair with no
+synergy (catalog changed IN MEMORY ONLY, restored, never dirtied) → "No synergy for this pair", no cooldown/impact, no HUD slot;
+Ice owned but unequipped → session synergy is Meteor Punch and Ice is refused by the equip gate. Tiers: 0-point purchase refused;
+an earned point buys Fire tier 0→1; the next purchase is refused. **Old-save migration (second process):** a save written without
+Fire/Ice/Telekinesis and without a Loadout loads with all three owned at tier 0, level 3 / 17 XP / 2 points / Flight tier 1 /
+rooftop / sessions preserved, equips Fire + Ice for 0 points, writes the ownership back, and fires Thermal Shock in a session.
+
+Historical suites retargeted (kept what they prove): HeroForge "Locked-power CONTROL" → fresh profile owns all at 0 points, no
+UNLOCK buttons, and an ownership CONTROL (Fire removed from the save in memory → Forge and SetLoadout refuse; restored). City
+"Earned points unlock Telekinesis and Ice" → both owned at tier 0 with the 3 earned points unspent. Regressions, all exit 0:
+HeroForge 131 + Reload 3, City 53 + Reload 5, MenuPresentation 42, HUD P1 316, Mode 79 + Reload 2. (HeroForge 132→131 and HUD
+318→316 are exactly the removed "Existing progression unlock …" purchases, which have nothing to buy now.) dotnet 0/0.
+
+**Limits:** cooldown lengths are a design judgment from the effect numbers, not human-playtested. The IMGUI Tab menu is never
+drawn in batch mode, so its "Not owned"/"Upgrade" labels are compile-checked only. Activation goes through
+`SynergyRunner.TryActivate` (what the C key calls); no hardware input.

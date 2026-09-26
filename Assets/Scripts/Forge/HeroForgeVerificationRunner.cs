@@ -64,7 +64,16 @@ public sealed class HeroForgeVerificationRunner : MonoBehaviour
         Check(screen!=null&&screen.Root.resolvedStyle.display!=DisplayStyle.None,"Home button opens Forge in existing panel.");
         Check(screen.Preview!=null&&screen.Preview.IsCreated(),"Character preview render texture exists.");
         Check(!menu.Profile.SetLoadout(F.Heroes[0],Power("flight"),Power("flight"),CityColor.Blue,CityColor.Cyan),"Duplicate-pair CONTROL rejected by save API.");
-        Check(!screen.SelectPower(1,Power("fire")),"Locked-power CONTROL rejected by Forge.");
+        // Every shipping power is owned from the start (InitiallyUnlocked data): no point is spent to equip any pair.
+        Check(Resources.LoadAll<PowerDefinition>("Powers").All(p=>menu.Profile.Owns(p))&&menu.Profile.Data.Points==0,"Fresh profile owns every power with 0 points spent (InitiallyUnlocked data).");
+        Check(!screen.Root.Query<Button>().ToList().Any(b=>b.text.StartsWith("UNLOCK")),"Forge shows no UNLOCK purchase buttons.");
+        {
+            // Ownership gate CONTROL (kept intact): a power missing from the save is still refused by Forge and SetLoadout.
+            var owned=menu.Profile.Data.Powers.Find(o=>o.Id=="fire");menu.Profile.Data.Powers.Remove(owned);
+            bool refused=!screen.SelectPower(1,Power("fire"))&&!menu.Profile.SetLoadout(F.Heroes[0],Power("flight"),Power("fire"),CityColor.Blue,CityColor.Cyan);
+            menu.Profile.Data.Powers.Add(owned);
+            Check(refused&&menu.Profile.Owns(Power("fire")),"Unowned-power CONTROL (ownership removed in memory only) rejected by Forge and SetLoadout; ownership restored.");
+        }
         menu.Profile.AddXp(2000);foreach(var p in Resources.LoadAll<PowerDefinition>("Powers"))if(!menu.Profile.Owns(p))Check(menu.Profile.Buy(p),"Existing progression unlock "+p.Id);
         Check(screen.SelectHero(F.Hero("nova")),"Select NOVA definition.");
         Check(screen.SetColors(CityColor.Red,CityColor.Cyan),"Suit palette roles saved.");

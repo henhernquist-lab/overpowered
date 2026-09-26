@@ -115,9 +115,10 @@ public sealed class PrototypeHUD : MonoBehaviour
             GUILayout.Label($"Charges {s.Charges} · cooldown {s.Cooldown:F2}s · force {s.Force:F0} N·s\nDamage {s.Damage:F0} · duration {s.Duration:F1}s · range {s.Range:F1}m · energy {d.ResourceCost:F0}");
             GUILayout.BeginHorizontal(); GUI.enabled=tier>=0&&p.IsEquipped(d);
             if(GUILayout.Button("Select")) p.Select(power);
-            int cost=tier<0?d.UnlockCost:tier<d.Upgrades.Length?d.Upgrades[tier].PointCost:0;
-            GUI.enabled=tier<d.Upgrades.Length && progress.Data.Points>=cost;
-            if(GUILayout.Button(tier<0?$"Unlock ({cost} point)":tier<d.Upgrades.Length?$"Upgrade ({cost} point)":"Max tier")) progress.Buy(d);
+            // Powers are owned from the start (InitiallyUnlocked data); points only buy upgrade tiers, never ownership.
+            int cost=tier>=0&&tier<d.Upgrades.Length?d.Upgrades[tier].PointCost:0;
+            GUI.enabled=tier>=0 && tier<d.Upgrades.Length && progress.Data.Points>=cost;
+            if(GUILayout.Button(tier<0?"Not owned":tier<d.Upgrades.Length?$"Upgrade ({cost} point)":"Max tier")) progress.Buy(d);
             GUI.enabled=true; GUILayout.EndHorizontal(); GUILayout.Space(12);
         }
         GUILayout.EndScrollView(); GUILayout.Label($"Side switch cooldown: {progress.SwitchRemaining:F1}s");

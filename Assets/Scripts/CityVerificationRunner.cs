@@ -49,7 +49,7 @@ public sealed class CityVerificationRunner : MonoBehaviour
             Check(w.Progression.Data.Level==expected.Level&&w.Progression.Data.Xp==expected.Xp&&w.Progression.Data.Points==expected.Points&&w.Progression.Data.Side==expected.Side,
                 $"Separate Unity process restored exact save: level={w.Progression.Data.Level}, XP={w.Progression.Data.Xp}, points={w.Progression.Data.Points}, side={w.Progression.Data.Side}.");
             Check(w.Progression.Tier(w.Powers.Strength.Definition)==1,"Separate process retained strength upgrade tier=1; force="+w.Powers.Stats(w.Powers.Strength).Force);
-            Check(w.Progression.Owns(w.Powers.Powers.Find(p=>p.Definition.Id=="telekinesis").Definition),"Unlocked Telekinesis persisted.");
+            Check(w.Progression.Owns(w.Powers.Powers.Find(p=>p.Definition.Id=="telekinesis").Definition),"Telekinesis owned in the separate process (InitiallyUnlocked).");
             string fresh=Path.Combine(Output,"fresh-"+Guid.NewGuid().ToString("N")+".json");
             var control=new GameObject("Fresh save control").AddComponent<PlayerProgression>(); control.Initialize(w.Tuning.Progression,Resources.LoadAll<PowerDefinition>("Powers"),fresh);
             Check(control.Data.Level==1 && control.Data.Points==0,"Fresh-save CONTROL: level=1, points=0.");
@@ -101,7 +101,9 @@ public sealed class CityVerificationRunner : MonoBehaviour
         // Buy additional powers through earned levels, never inject ownership or tier state.
         for(int i=0;i<3;i++) w.Progression.AddXp(w.Progression.RequiredXp);
         var tk=w.Powers.Powers.Find(p=>p.Definition.Id=="telekinesis"); var ice=w.Powers.Powers.Find(p=>p.Definition.Id=="ice");
-        Check(w.Progression.Buy(tk.Definition)&&w.Progression.Buy(ice.Definition),"Earned points unlock Telekinesis and Ice.");
+        int pointsBefore=w.Progression.Data.Points;
+        Check(w.Progression.Owns(tk.Definition)&&w.Progression.Owns(ice.Definition)&&w.Progression.Tier(tk.Definition)==0&&w.Progression.Tier(ice.Definition)==0&&w.Progression.Data.Points==pointsBefore&&pointsBefore==3,
+            $"Telekinesis and Ice owned from the start at tier 0 (InitiallyUnlocked data); the {pointsBefore} earned points stay unspent for tiers.");
         {
             // Hero Forge gate CONTROL: owned but unequipped Telekinesis and Ice are refused before grabbing/freezing anything.
             var probe=Target(w.Powers.AimOrigin+Vector3.forward*6); probe.useGravity=false; Physics.SyncTransforms();

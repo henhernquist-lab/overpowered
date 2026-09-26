@@ -1,5 +1,5 @@
 PASS World bootstrapped with city, powers, and progression.
-PASS Separate Unity process restored exact save: level=5, XP=155, points=1, side=Villain.
+PASS Separate Unity process restored exact save: level=5, XP=155, points=3, side=Villain.
 PASS Separate process retained strength upgrade tier=1; force=1890
-PASS Unlocked Telekinesis persisted.
+PASS Telekinesis owned in the separate process (InitiallyUnlocked).
 PASS Fresh-save CONTROL: level=1, points=0.
