@@ -154,7 +154,8 @@ public sealed class WorldSession : MonoBehaviour
         if(Mode!=null&&!Mode.Definition.SpawnPolice) return;
         int count=0; CityNpc hunter=null;
         foreach(var npc in Npcs) if(npc!=null&&!npc.Dead) { if(npc.Role==NpcRole.Cop&&npc.Encounter==null) count++; if(npc.Role==NpcRole.PursuingHero) hunter=npc; }
-        int desired=Tuning.Heat.FriendlyPatrolCount+Stars*Tuning.Heat.CopsPerStar;
+        var police=Tuning.Heat.Police(Progression.Data.Side);
+        int desired=police.PatrolCount+Stars*police.CopsPerStar;
         while(count<desired)
         {
             Vector3 from=Hero.transform.position+Quaternion.Euler(0,count*360f/Mathf.Max(1,desired),0)*Vector3.forward*Tuning.Heat.SpawnDistance;
@@ -164,6 +165,14 @@ public sealed class WorldSession : MonoBehaviour
         for(int i=Npcs.Count-1;i>=0&&count>desired;i--) if(Npcs[i]!=null&&!Npcs[i].Dead&&Npcs[i].Role==NpcRole.Cop&&Npcs[i].Encounter==null) { var npc=Npcs[i]; Npcs.RemoveAt(i); Destroy(npc.gameObject); count--; }
         if(Stars>=Tuning.Heat.HeroThreshold&&hunter==null) CityNpc.Spawn(this,City.NearestSidewalk(Hero.transform.position+Vector3.forward*Tuning.Heat.SpawnDistance),NpcRole.PursuingHero);
         if(Stars<Tuning.Heat.HeroThreshold&&hunter!=null) Destroy(hunter.gameObject);
+    }
+    /// Whether a police NPC (Cop / PursuingHero) attacks the player: per-side data, never a mode-ID switch. Encounter
+    /// responders and director-driven (AlwaysAggro, e.g. Endless wave) police follow RespondersHostile; Heat-spawned patrols
+    /// and the pursuer follow HostileFromStars.
+    public bool PoliceHostileTo(CityNpc npc)
+    {
+        var police=Tuning.Heat.Police(Progression.Data.Side);
+        return npc.Encounter!=null||npc.AlwaysAggro ? police.RespondersHostile : Stars>=police.HostileFromStars;
     }
     void OnDestroy() { if(Instance==this) Instance=null; }
 }

@@ -1,0 +1,10 @@
+SECOND PROCESS loaded /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/wt-gameplay/Verification/Synergy/saves/old-save-c144656835f8488fbacc2c834fe1c801.json
+PASS Old save parsed without error.
+PASS SECOND PROCESS: old save without Fire/Ice/Telekinesis now owns them at tier 0 (loader grants InitiallyUnlocked).
+PASS Old progression preserved exactly: level 3, 17 XP, 2 unspent points, Flight tier 1, rooftop, sessions.
+PASS Migrated Fire + Ice equippable with no points spent.
+PASS Migrated ownership written back to the same save file.
+PASS Migrated session equips Fire + Ice and resolves Thermal Shock.
+PASS Migrated profile fires Thermal Shock immediately.
+PASS Migrated Thermal Shock dealt 25 damage.
+PASS Fresh-save CONTROL: 0 points and every power owned.

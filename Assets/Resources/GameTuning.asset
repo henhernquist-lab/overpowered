@@ -105,6 +105,18 @@ MonoBehaviour:
     DecayPerSecond: 0.07
     ResponseInterval: 2
     SpawnDistance: 25
+    HeroPolice:
+      PatrolCount: 2
+      CopsPerStar: 1
+      HostileFromStars: 99
+      RespondersHostile: 0
+      DamageMultiplier: 1
+    VillainPolice:
+      PatrolCount: 2
+      CopsPerStar: 1
+      HostileFromStars: 1
+      RespondersHostile: 1
+      DamageMultiplier: 0.5
   Crimes:
     MaximumActive: 3
     SpawnInterval: 12

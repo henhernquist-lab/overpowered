@@ -54,6 +54,9 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
         while(!(cop.Phase!=AttackPhase.Windup&&cop.Agent.velocity.magnitude>.1f&&copPresentation.MeasuredSpeed>.1f&&copPresentation.State=="Armed")&&Time.time<armedUntil){if(cop.Phase==AttackPhase.Windup)windupFrames++;yield return null;}
         Log($"COP gait sample: phase={cop.Phase}, agent speed={cop.Agent.velocity.magnitude:F3}m/s, measured speed={copPresentation.MeasuredSpeed:F3}m/s, state={copPresentation.State}, windup frames skipped={windupFrames}, budget left={armedUntil-Time.time:F2}s of 10s.");
         Check(cop.Phase!=AttackPhase.Windup&&copPresentation.MeasuredSpeed>.1f&&copPresentation.State=="Armed"&&cop.Agent.velocity.magnitude>.1f,$"Moving cop (phase={cop.Phase}) actual speed={cop.Agent.velocity.magnitude:F3}m/s selects shared Pistol Run.");
+        // Balance pass: Villain patrol police turn hostile from VillainPolice.HostileFromStars (1 star), not at 0 Heat.
+        Check(!cop.Hostile||W.Stars>=W.Tuning.Heat.VillainPolice.HostileFromStars,$"CONTROL: patrol cop at {W.Stars} stars is hostile={cop.Hostile} (per-side data, hostile from {W.Tuning.Heat.VillainPolice.HostileFromStars}).");
+        W.AddHeat(W.Tuning.Heat.VillainPolice.HostileFromStars-W.Heat);Check(cop.Hostile,$"Heat raised to {W.Stars} star(s): the same patrol cop is now hostile.");
         Move(cop.transform.position+Vector3.right);float hp=W.Health;
         float timeout=Time.time+3;while(W.Health==hp&&Time.time<timeout)yield return null;
         yield return null;Check(W.Health<hp&&cop.GetComponent<HumanoidPresentation>().State=="Shoot",$"Live hostile cop attack: HP {hp}->{W.Health}; shared controller plays Shooting Gun.");

@@ -1681,6 +1681,178 @@ This is effectively within measurement noise, not proof of an optimization or a 
 
 No hardware B-key/controller injection or human motion-sickness/feel session. No first-person hand animation. Console is **not** wholly error-free: UnityEditor.Search.SearchDatabase's pre-existing startup ArgumentOutOfRangeException remains; no game-code errors occurred in the successful runs. An initial test-only compile error attempted to set private Energy; the test now recharges through PowerUser.Tick and compiles cleanly. Tested feature scripts/assets were compared to the delivery checkout; unrelated shared HUD Phase 2 work is excluded.
 
+## Gameplay Phase 1: synergies available on equip, long cooldowns — 2026-09-26 (appended; branch feat/gameplay-balance)
+
+**Step 0 (merged base 66937b9, before any edit):** Feel 142, Camera 45, HUD P1 318, HeroForge 132 + Reload 3, City 53 + Reload 5
+all exit 0. FirstPerson.Run FAILED at "hero-third-fire contact within projectile radius tolerance" (0.3083 m); its Reload failed
+as a consequence. Root cause = **test assumption, not a merge bug**: the fixture put targets 9 m from the CAMERA; the feel camera
+(0, 2.8, −7.6 / look 2.5) now puts that point 1.25 m in front of the hero, inside Fire's 1.7 m muzzle offset. Targets now sit
+9 m of reach beyond the hero (the `near` rule AimDirection uses; first person unchanged): contact error 0.0951 m third /
+0.0846 m first; Run 210 PASS, Reload 5 PASS (commit d0f5ae8). **FP eye vs Feel impulse:** the real Feel hooks (heavy impact from
+4 sides and from below, heavy incoming hit), sampled at 1 ms over the whole impulse at pitch −85/0/85 in the tight corner and the
+low overhang: 0 of 3,960 samples put the 0.044 m near-plane corner sphere into geometry; closest 0.127 m (low overhang, +0.123 m
+upward swing). No Feel change needed. One rerun was lost to macOS sleep (pmset: sleep 02:10 → 04:03; the runner's 600 s deadline
+fired on wake); runs now use `caffeinate -dims`.
+
+**Finding (verified):** synergies never had an unlock step; `SynergyRunner` fires whenever the resolved pair is equipped. The
+"UNLOCK … / 1 POINT" button was POWER OWNERSHIP (Fire/Ice/Telekinesis had `InitiallyUnlocked: 0`), and the Forge slots list only
+owned powers, so the pair (and its synergy) was point-gated.
+
+**Change (data first):** `InitiallyUnlocked: 1` on fire/ice/telekinesis (and `ProjectDataSetup` defaults). The loader already
+grants InitiallyUnlocked powers to old saves. PowerUser/PlayerProgression equip + ownership gates are unchanged; `UnlockCost`
+stays as unused legacy data; `Buy` still exists and now only buys TIERS for owned powers. UI: Forge UNLOCK buttons removed and a
+status line added ("READY WHEN EQUIPPED · 30 S COOLDOWN · C TO USE", key from ForgeCatalog); Tab menu shows "Not owned" instead of
+an Unlock purchase; Results upgrade picks list owned powers only, equipped pair first ("UPGRADE …"). HUD synergy radial reads
+`runner.Cooldown / Synergy.Cooldown` and needed no change. `HeroForgeSetup` creation defaults carry the same cooldowns.
+
+**Cooldowns — the balancing lever** (normal powers: 0.45–0.6 s + charges/energy, ~30 sustained DPS; "potential" = damage × up to
+4 targets in radius, from the effect code):
+
+| Synergy | Damage | Radius | Force | Duration / control | Old | New | Reasoning |
+|---|---|---|---|---|---|---|---|
+| Frostwake | 12 per pass | 3 m along a ~28 m dash | 2600 | 1.1 s dash, 2 s freeze | 10 | 25 | low damage (~48), CC + escape; also burns flight fuel |
+| Glacier Fist | ×1.65 punch force, +0 dmg | punch 3.3 m | 2600 | 6 s buff, 1.5 s freeze per punch | 10 | 30 | ~6 punches of AoE freeze in the window; still pays charges |
+| Orbit Throw | 35 per prop | ≤4 props in 9 m | 1800 | 2 s orbit | 10 | 30 | ≤140, needs props nearby |
+| Cryo Crush | 35 slam | 4 m | 2000 | 2 s freeze + 1.1 s lift | 10 | 30 | one enemy removed + small AoE (≤140) |
+| Thermal Shock | 25 (+17.5 on frozen/burning) | 4 m | 1500 | 0.6 s freeze | 10 | 30 | ranged, instant; 100–170 |
+| Sonic Slam | 40 | 7 m | 2600 | self dive, NPC displacement | 10 | 35 | clears the whole 4.5 m wait ring (160+) |
+| Meteor Slam | 50 | 7 m | 2800 | 1.2 s lift | 10 | 35 | 200 potential, needs a target |
+| Phoenix Dive | 55 | 7 m | 1800 | 4 s burn (enables Thermal bonus) | 10 | 40 | 220 at a chosen spot 24 m away |
+| Meteor Punch | 75 | 4 m | 3400 | 4 s burn | 10 | 40 | highest single hit (300 potential), reliable |
+| Inferno Orbit | 40 per prop + 40 blast (3 m) each | ≤4 props | 1600 | 4 s burn | 10 | 45 | highest ceiling (≤320+) |
+
+**Verification — `SynergyAvailabilityVerification.Run` 36 PASS, separate-process `Reload` 9 PASS, exit 0** (`Verification/Synergy/`):
+fresh profile (level 1, 0 points) owns all five powers; the Forge has no UNLOCK buttons; VECTOR equips Fire + Ice with 0 points
+spent; the Forge line reads "SYNERGY / Thermal Shock — READY WHEN EQUIPPED · 30 S COOLDOWN" (and 40 S for Meteor Punch); in Play
+Mode Thermal Shock fires immediately and deals 25 (= data) to the aimed actor, CONTROL actor untouched; HUD radial 1.000 then
+0.503 at 14.98/30 s; a mid-cooldown use is REFUSED ("Synergy cooling down"), with health, impacts and VFX emissions unchanged and
+the cooldown not reset (29.69 → 29.19 s after 0.5 s); ready again after 30.01 s and fires again (CONTROL). Refusals: a pair with no
+synergy (catalog changed IN MEMORY ONLY, restored, never dirtied) → "No synergy for this pair", no cooldown/impact, no HUD slot;
+Ice owned but unequipped → session synergy is Meteor Punch and Ice is refused by the equip gate. Tiers: 0-point purchase refused;
+an earned point buys Fire tier 0→1; the next purchase is refused. **Old-save migration (second process):** a save written without
+Fire/Ice/Telekinesis and without a Loadout loads with all three owned at tier 0, level 3 / 17 XP / 2 points / Flight tier 1 /
+rooftop / sessions preserved, equips Fire + Ice for 0 points, writes the ownership back, and fires Thermal Shock in a session.
+
+Historical suites retargeted (kept what they prove): HeroForge "Locked-power CONTROL" → fresh profile owns all at 0 points, no
+UNLOCK buttons, and an ownership CONTROL (Fire removed from the save in memory → Forge and SetLoadout refuse; restored). City
+"Earned points unlock Telekinesis and Ice" → both owned at tier 0 with the 3 earned points unspent. Regressions, all exit 0:
+HeroForge 131 + Reload 3, City 53 + Reload 5, MenuPresentation 42, HUD P1 316, Mode 79 + Reload 2. (HeroForge 132→131 and HUD
+318→316 are exactly the removed "Existing progression unlock …" purchases, which have nothing to buy now.) dotnet 0/0.
+
+**Limits:** cooldown lengths are a design judgment from the effect numbers, not human-playtested. The IMGUI Tab menu is never
+drawn in batch mode, so its "Not owned"/"Upgrade" labels are compile-checked only. Activation goes through
+`SynergyRunner.TryActivate` (what the C key calls); no hardware input.
+
+## Gameplay Phase 2: police and Heat rebalanced per side from measured numbers — 2026-09-26 (appended)
+
+**Diagnosis first (code + data, then measured).** Roster: Criminal = Rusher, Cop = Gunner (ranged 22 m), PursuingHero =
+Brute. Criminals are hostile only to a Hero, police only to a Villain. Detection range 100 m (the whole city). The police
+count was ONE rule for both sides: 2 "friendly patrol" + 2 per star (2→12 Gunners), + a Brute at ≥ 4 stars, + 2 responders
+per encounter. Gunner shot = 8 + 2/star, cycle 0.7 s windup + 1.8 s cooldown. Player: 100 HP with **no regeneration** outside
+respawn. Heat: destruction +0.35 (both sides), assault on non-criminals +0.25, defeat +0.5, success Hero −1 / Villain +1,
+decay 0.07/s after 10 s calm. The attack-token budget (2) only caps concurrent WINDUPS (the token is released at the
+shot), so a ranged crowd's shot RATE grows with its size.
+
+**Measured asymmetry** (`BalanceVerification.Before`: fresh session per cell, idle player at the live encounter site, Heat held,
+40 s cap; plus "objective" rows where the harness stays by the nearest robber / loot and holds R, 25 s cap):
+- Villain at **0 stars** already faced 4 hostile Gunners (the 2 "friendly" patrols + 2 heist responders) and died idle in
+  **9.2 s** (13 hits); 1★ 6.3 s … 5★ 4.2 s (15 hostiles). Looting 2/2 at 0★ still died at 10.3 s.
+- Hero took **0 damage at every Heat level**, idle or while capturing all 3 robbers: police are never hostile to a hero,
+  and the robbers' 1.6 m trigger is inside the 3 m capture radius, so capturing was risk-free. Hero Heat only added
+  4 → 14 neutral cops (clutter, no consequence).
+
+**Changes (all data; per-side values keyed by `PlayerSide`, no mode-ID switch).** New `GameTuning.Heat.HeroPolice` /
+`VillainPolice` (`SidePoliceSettings`: patrol count, cops per star, hostile-from-stars, responders hostile, police damage
+multiplier). `WorldSession.ReconcilePolice` and `CityNpc.Hostile` / `ContactDamage` read them; director waves (AlwaysAggro, i.e.
+Endless) and encounter responders follow `RespondersHostile`; Endless explicit stats are untouched. The legacy
+`FriendlyPatrolCount` / `CopsPerStar` fields stay in the asset, marked superseded. New archetype `Enemies/Robber.asset`
+(Rusher body) for `EnemyRoster.Criminal`; Endless still uses Rusher from its own composition.
+
+| Value | Before | After | Why |
+|---|---|---|---|
+| Villain patrol cops per star | 2 | 1 | shot rate scales with gunner count (budget caps windups only) |
+| Villain patrols hostile from | 0 stars | 1 star | the "friendly patrol" hunted a 0-Heat villain city-wide; heist responders stay hostile |
+| Villain police damage | ×1 | ×0.5 | no player regen; 0.6 left 5★ idle TTD at 4.9 s (tried, recorded) |
+| Hero patrol cops per star | 2 | 1 | 14 neutral cops at 5★ were clutter only |
+| Hero police hostile | never | never (99) | unchanged by design; Heat still escalates the count |
+| City/encounter criminal | Rusher ×0.6 HP ×0.75 dmg, trigger 1.6 m | Robber ×1 HP ×1 dmg, trigger 3.2 m, reach 1.8, radius 1.5 | reach now covers the 3 m capture radius, so robbers fight back |
+
+**Measured after** (same scenario code, `BalanceVerification.After`, exit 0, 8 PASS):
+
+| Side | Stars | Cops alive before→after | Hostiles before→after | Incoming DPS before→after | Time to death before→after |
+|---|---|---|---|---|---|
+| Villain | 0 | 4 → 4 | 4 → 2 | 10.9 → 2.0 | 9.2 s → survived 40 s (80 dmg) |
+| Villain | 1 | 6 → 5 | 6 → 5 | 15.8 → 7.4 | 6.3 → 13.5 s |
+| Villain | 2 | 8 → 6 | 8 → 6 | 17.9 → 9.7 | 5.6 → 10.3 s |
+| Villain | 3 | 10 → 7 | 10 → 7 | 26.3 → 11.8 | 3.8 → 8.5 s |
+| Villain | 4 | 12 → 8 | 13 → 9 | 22.0 → 12.9 | 4.5 → 7.8 s |
+| Villain | 5 | 14 → 9 | 15 → 10 | 24.0 → 16.8 | 4.2 → 5.9 s |
+| Hero idle | 0–5 | 4..14 → 4..9 | 3 → 3 | 0 → 0–3.3 (0★ 24 dmg; 2★ died 30.2 s; 3★ died 39.4 s; 1/4/5★ 0) | never → sometimes |
+| Hero capturing 3 robbers | 0 / 3 | — | 3 | 0 → 8 HP / 14 HP taken | survived |
+| Villain looting 2/2 | 0 / 3 | — | 4→2 / 10→7 | 9.5 → 2.4 / 24.0 → 12.7 | 10.3 → survived / 4.2 → 7.9 s |
+
+CONTROLS (asserted): Hero mode has real threat (captures cost 8 / 14 HP); Villain still escalates with Heat (DPS 2.0 → 16.8,
+hostiles 2 → 10, never dropping star to star) and an idle 5★ villain still dies. The Hero idle rows vary between seeded runs
+because whether fleeing robbers pass within 3.2 m depends on their exit routes (before: 0 in all cells).
+Regressions, all exit 0: Combat 170, Mode 79 + Reload 2, ModeExpansion 111 + Reload 10, City 53 + Reload 5 (Combat's roster
+check and ModeExpansion's police-count checks now read the Robber / per-side data). dotnet 0/0.
+
+**Not claimed:** balance FEEL is not human-playtested; samples are an idle (or R-holding) player, one seeded run per cell, not
+averages. Player health regeneration was left out (a new mechanic outside this pass's file scope); the villain's high-Heat
+pressure still comes from gunner count × shot rate and would change most with regen or a ranged token that covers the
+cooldown — both are recommendations, not done.
+
+## Gameplay Phase 3: Ice made visible — 2026-09-26 (appended)
+
+**What Ice is meant to do** (IceEffect + ice.asset): select the crosshair target within 20 m; an NPC is frozen for
+`Duration` 4 s (CityNpc.Freeze → agent stopped, attack cancelled) and takes `Damage` 5; a non-kinematic rigidbody gets
+`FreezeAll` constraints for 4 s. 2 charges, 0.6 s cooldown, 10 energy.
+
+**Evidence BEFORE the fix** (`IceVerification.Before`, live city, real `PowerUser.Use`, `Verification/Ice/results-before.txt`):
+the mechanism WORKED. A live AI Rusher charging at 7.00 m/s dropped to 0.00 m/s for exactly 4.00 s (third and first person),
+then moved again; 5 damage; Frozen flag set; a falling 45 kg crate went 11.0 → 0.00 m/s (0.000 m drift) for 4.03 s and fell
+again; off-axis and out-of-range (27.3 m vs 20 m: "No valid target", no charge spent) CONTROLs held. Targeting, range and
+the NPC path were fine. **Root cause of "doesn't do shit": nothing showed it.** The cast emitted no effect of any kind; the
+frozen NPC kept its colours and kept animating (0 of 2 body renderers changed, Animator.speed 1) so a stopped enemy just
+looked idle; a frozen prop looked like any resting prop; and `ice.asset` used the Fire palette colour (orange HUD slot).
+So it is a presentation bug, not an effect/targeting bug, and not a numbers problem — damage stays 5 (no blind buff).
+
+**Fix:** `IceEffect` now (1) shows a `FrozenLook` for exactly as long as the freeze holds — every body renderer swaps to ONE
+shared palette material (`CityMaterials.Get(PaletteColor)`, no per-instance material) and an NPC's Animator holds its pose
+(speed 0); both restore exactly on thaw, death or destruction — and (2) emits two bursts (hand, impact) from the existing
+fixed Feel particle pool. `ice.asset` PaletteColor Fire → Cyan (also recolours its HUD slot/projectile colour data).
+
+**After** (`IceVerification.After` 34 PASS, exit 0): NPC 7.00 → 0.00 m/s for 4.00 s (third person) / 4.01 s (first person),
+resumes after thaw (1.74 / 1.28 m/s mean over 1.5 s), 5 damage, 2/2 renderers on the shared Cyan material with Animator.speed 0
+while frozen, 0 cyan and speed 1 after; 2 pooled cast bursts; crate 11.04 → 0.00 → 8.16 m/s, Cyan while frozen, back to
+shared Wood after; control crate untouched; off-axis NPC never frozen or damaged; out-of-range refused. Images:
+`before-*-npc-frozen.png` vs `after-*-npc-frozen.png` (third and first person).
+Regressions exit 0: FirstPerson 207 + Reload 5 (includes Ice in B view), City 53, Humanoid 54, HUD P1 316, Feel 139,
+HeroForge 131, Combat 170, Audio 127 + Reload 49. (FirstPerson 210→207 and Feel 142→139 are the removed conditional "unlock"
+purchases from Phase 1.) Two Phase 2 consequences were caught here and fixed in 1f9ad49: Humanoid and Audio waited for a shot
+from a patrol cop at 0 Heat; they now assert the 1-star rule and raise Heat first.
+
+**Limits:** the frozen look applies to the Ice POWER only; synergy freezes (Frostwake, Thermal Shock, Glacier Fist, Cryo Crush)
+still stop NPCs without the look. Frozen Cyan is close to the Teal cop body colour. Ice damage (5) is unchanged and may still
+feel weak — a design call left to a playtest. No human has judged readability.
+
+## Gameplay balance branch: final regression sweep — 2026-09-26 (appended)
+
+On the final code (ff1e5f3 + evidence), all exit 0 unless noted: HUD Phase 2 482 + Reload 31, HUD Phase 3 560 + Reload 11,
+BackflipHurricane 63, MenuPresentation 42, SynergyAvailability 36 + Reload 9, Mode 79, ModeExpansion 111, City 53 + Reload 5
+(the first City Reload in the sweep ran without its paired Run and failed the exact-save match; the paired Run + Reload rerun
+passes). Earlier in this pass on the same final code: FirstPerson 207 + 5, Humanoid 54, HUD P1 316, Feel 139, HeroForge 131,
+Combat 170, Audio 127 + 49, Ice 34, Balance after 8.
+**KNOWN FAILURE, not fixed here: CityArtVerification.Run** fails its benchmark precondition "Populated benchmark: civilians=26,
+on-NavMesh cops=7" (needs ≥ 10). It sets 3 stars in a Hero session; Hero police are now 2 + 1/star (+ 2 responders) = 7,
+was 2 + 2/star + 2 = 10. This is a direct consequence of the Phase 2 cop count, not a crash. The CityArt runner belongs to the
+WORLD agent's area, so it was left for the lead: either raise its Heat to 5 stars or relax the precondition to the new count.
+PASS-count changes, explained: FirstPerson 210→207, Feel 142→139, HUD P1 318→316 and HeroForge 132→(−4 +3)=131 lost ONLY their
+conditional setup lines "Existing progression unlock <power>" / "Unlock <power> through progression". Those lines ran
+`if(!Owns(p)) Check(Buy(p))`; every power is now owned from the start, so no purchase happens. The powers are still equipped
+and used through the real paths, and ownership-from-start plus the tier purchase and zero-point CONTROLs are asserted in
+SynergyAvailabilityVerification.
+
 ## World expansion: four districts on one island — 2026-09-26 (feat/world-districts, appended)
 
 **What changed.** The boxed 3x3 grid (130 x 130 m, 36 buildings) is now a 576 x 368 m island of four districts, all

@@ -19,7 +19,7 @@ MonoBehaviour:
   PowerB: {fileID: 11400000, guid: cf8bf79c81570416f835a3043495579d, type: 2}
   Icon: 6
   Effect: {fileID: 11400000, guid: 79049a5778b0c4ed3bbc1fd9963a6b5b, type: 2}
-  Cooldown: 10
+  Cooldown: 30
   Duration: 6
   Damage: 40
   Force: 2600

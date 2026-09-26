@@ -1,0 +1,50 @@
+CONFIG tag=after; player health=100, no regeneration outside respawn; token budget=2; detection range=100 m.
+CONFIG police Hero: patrol=2 + 1/star, patrols hostile from 99 stars, responders hostile=False, damage x1; criminal archetype=Robber (trigger 3.2 m, health x1, damage x1).
+CONFIG police Villain: patrol=2 + 1/star, patrols hostile from 1 stars, responders hostile=True, damage x0.6; criminal archetype=Robber (trigger 3.2 m, health x1, damage x1).
+CONFIG heat: pursuer at >= 4 stars, destruction +0.35, assault +0.25, defeat +0.5, decay 0.07/s after 10s.
+SAMPLE side=Hero stars=0 cops(max)=4 hostiles(max)=3 engaged(max)=1 hits=0 damage=0 over 40.0s -> DPS=0.00; survived.
+SAMPLE side=Hero stars=1 cops(max)=5 hostiles(max)=3 engaged(max)=1 hits=0 damage=0 over 40.0s -> DPS=0.00; survived.
+SAMPLE side=Hero stars=2 cops(max)=6 hostiles(max)=3 engaged(max)=1 hits=0 damage=0 over 40.0s -> DPS=0.00; survived.
+SAMPLE side=Hero stars=3 cops(max)=7 hostiles(max)=3 engaged(max)=1 hits=0 damage=0 over 40.0s -> DPS=0.00; survived.
+SAMPLE side=Hero stars=4 cops(max)=8 hostiles(max)=3 engaged(max)=1 hits=0 damage=0 over 40.0s -> DPS=0.00; survived.
+SAMPLE side=Hero stars=5 cops(max)=9 hostiles(max)=3 engaged(max)=1 hits=0 damage=0 over 40.0s -> DPS=0.00; survived.
+SAMPLE side=Villain stars=0 cops(max)=4 hostiles(max)=2 engaged(max)=2 hits=20 damage=96 over 40.0s -> DPS=2.40; survived.
+SAMPLE side=Villain stars=1 cops(max)=5 hostiles(max)=5 engaged(max)=2 hits=17 damage=100 over 12.5s -> DPS=8.01; DIED at 12.5s.
+SAMPLE side=Villain stars=2 cops(max)=6 hostiles(max)=6 engaged(max)=2 hits=14 damage=100 over 8.5s -> DPS=11.76; DIED at 8.5s.
+SAMPLE side=Villain stars=3 cops(max)=7 hostiles(max)=7 engaged(max)=2 hits=12 damage=100 over 6.8s -> DPS=14.76; DIED at 6.8s.
+SAMPLE side=Villain stars=4 cops(max)=8 hostiles(max)=9 engaged(max)=2 hits=11 damage=100 over 6.3s -> DPS=15.82; DIED at 6.3s.
+SAMPLE side=Villain stars=5 cops(max)=9 hostiles(max)=10 engaged(max)=2 hits=10 damage=100 over 4.9s -> DPS=20.47; DIED at 4.9s.
+SAMPLE OBJECTIVE side=Hero stars=0 cops(max)=4 hostiles(max)=3 engaged(max)=1 hits=2 damage=16 over 25.0s -> DPS=0.64; survived.
+SAMPLE OBJECTIVE side=Hero stars=3 cops(max)=7 hostiles(max)=3 engaged(max)=1 hits=2 damage=28 over 25.0s -> DPS=1.12; survived.
+SAMPLE OBJECTIVE side=Villain stars=0 cops(max)=4 hostiles(max)=2 engaged(max)=2 hits=15 damage=72 over 25.0s -> DPS=2.88; survived.
+SAMPLE OBJECTIVE side=Villain stars=3 cops(max)=7 hostiles(max)=7 engaged(max)=2 hits=12 damage=100 over 6.1s -> DPS=16.42; DIED at 6.1s.
+TABLE (objective rows: Hero keeps within 2.2 m of the nearest robber and holds R to capture; Villain stands at the nearest loot and holds R; 25 s cap)
+TABLE side | stars | cops alive (max) | hostiles alive (max) | engaged attackers (max) | hits | damage | DPS | time to death
+TABLE Hero | 0 | 4 | 3 | 1 | 0 | 0 | 0.00 | survived 40 s
+TABLE Hero | 1 | 5 | 3 | 1 | 0 | 0 | 0.00 | survived 40 s
+TABLE Hero | 2 | 6 | 3 | 1 | 0 | 0 | 0.00 | survived 40 s
+TABLE Hero | 3 | 7 | 3 | 1 | 0 | 0 | 0.00 | survived 40 s
+TABLE Hero | 4 | 8 | 3 | 1 | 0 | 0 | 0.00 | survived 40 s
+TABLE Hero | 5 | 9 | 3 | 1 | 0 | 0 | 0.00 | survived 40 s
+TABLE Villain | 0 | 4 | 2 | 2 | 20 | 96 | 2.40 | survived 40 s
+TABLE Villain | 1 | 5 | 5 | 2 | 17 | 100 | 8.01 | 12.5 s
+TABLE Villain | 2 | 6 | 6 | 2 | 14 | 100 | 11.76 | 8.5 s
+TABLE Villain | 3 | 7 | 7 | 2 | 12 | 100 | 14.76 | 6.8 s
+TABLE Villain | 4 | 8 | 9 | 2 | 11 | 100 | 15.82 | 6.3 s
+TABLE Villain | 5 | 9 | 10 | 2 | 10 | 100 | 20.47 | 4.9 s
+TABLE Hero OBJECTIVE (done 3) | 0 | 4 | 3 | 1 | 2 | 16 | 0.64 | survived 25 s
+TABLE Hero OBJECTIVE (done 3) | 3 | 7 | 3 | 1 | 2 | 28 | 1.12 | survived 25 s
+TABLE Villain OBJECTIVE (done 2) | 0 | 4 | 2 | 2 | 15 | 72 | 2.88 | survived 25 s
+TABLE Villain OBJECTIVE (done 2) | 3 | 7 | 7 | 2 | 12 | 100 | 16.42 | 6.1 s
+OBSERVED hero-side total damage over all levels=0; villain-side=596.
+OBSERVED villain hostiles(max) by star: 2 / 5 / 6 / 7 / 9 / 10; DPS by star: 2.4 / 8.0 / 11.8 / 14.8 / 15.8 / 20.5.
+OBSERVED hero hostiles(max) by star: 3 / 3 / 3 / 3 / 3 / 3; DPS by star: 0.0 / 0.0 / 0.0 / 0.0 / 0.0 / 0.0.
+PASS CONTROL Hero mode has real threat: capturing robbers costs 16 HP (2 hits) / 28 HP (2 hits) at 0 / 3 stars.
+PASS CONTROL Villain still escalates with Heat: DPS 2.4 -> 20.5, hostiles 2 -> 10 (0 -> 5 stars).
+PASS Villain hostiles never drop as Heat rises: 0* 2 -> 1* 5.
+PASS Villain hostiles never drop as Heat rises: 1* 5 -> 2* 6.
+PASS Villain hostiles never drop as Heat rises: 2* 6 -> 3* 7.
+PASS Villain hostiles never drop as Heat rises: 3* 7 -> 4* 9.
+PASS Villain hostiles never drop as Heat rises: 4* 9 -> 5* 10.
+PASS CONTROL: an idle villain at 5 stars is still killed inside the sample window.
+LIMIT: idle player (no dodging, no fighting back) at the encounter site; batch mode, no human playtest. Numbers are one seeded run per cell, not averages.

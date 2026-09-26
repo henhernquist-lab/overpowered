@@ -131,3 +131,6 @@ InitTestScene*.unity*
 /Verification/Feel/saves/
 /Verification/World/saves/
 /Verification/World/**/saves/
+/Verification/Synergy/saves/
+/Verification/Balance/saves/
+/Verification/Ice/saves/

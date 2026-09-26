@@ -17,9 +17,9 @@ public static class ProjectDataSetup
         var ice=Asset<IceEffect>("Assets/Resources/Effects/Ice.asset");
         Define("flight","Flight",flight,true,d=> { d.Duration=PrototypeTuning.FlightDuration; d.ResourceCost=1; d.GroundRecharge=PrototypeTuning.FlightRechargePerSecond; d.Description="Hold F airborne. Space ascends; no directional input hovers. Land to recharge."; });
         Define("strength","Super Strength",punch,true,d=> { d.Charges=PrototypeTuning.PunchMaxCharges; d.Cooldown=PrototypeTuning.PunchCooldown; d.ChargeRecharge=PrototypeTuning.PunchChargeRecharge; d.Radius=PrototypeTuning.PunchRadius; d.Force=PrototypeTuning.PunchForce; d.UpwardForce=PrototypeTuning.PunchUpwardForce; d.ResourceCost=0; d.Damage=35; d.Description="Punch nearby physics objects and enemies. E always punches."; });
-        Define("telekinesis","Telekinesis",grab,false,d=> { d.Charges=2; d.Force=1800; d.Duration=6; d.Description="Aim at a prop and click to grab. Click again to hurl; hold expires safely."; });
-        Define("fire","Fire Blast",fire,false,d=> { d.Charges=3; d.Damage=45; d.Description="Launch an explosive physics projectile at the crosshair."; });
-        Define("ice","Ice",ice,false,d=> { d.Charges=2; d.Damage=5; d.Color=Color.cyan; d.Description="Aim at an NPC or rigidbody to freeze it temporarily."; });
+        Define("telekinesis","Telekinesis",grab,true,d=> { d.Charges=2; d.Force=1800; d.Duration=6; d.Description="Aim at a prop and click to grab. Click again to hurl; hold expires safely."; });
+        Define("fire","Fire Blast",fire,true,d=> { d.Charges=3; d.Damage=45; d.Description="Launch an explosive physics projectile at the crosshair."; });
+        Define("ice","Ice",ice,true,d=> { d.Charges=2; d.Damage=5; d.Color=Color.cyan; d.Description="Aim at an NPC or rigidbody to freeze it temporarily."; });
         ModeDataSetup.Create();CityArtSetup.Create();
         AssetDatabase.SaveAssets(); AssetDatabase.Refresh();
     }

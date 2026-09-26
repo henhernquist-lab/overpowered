@@ -16,7 +16,7 @@ MonoBehaviour:
   DisplayName: Ice
   Description: Aim at an NPC or rigidbody to freeze it temporarily.
   Effect: {fileID: 11400000, guid: a7ac3168994994021893c08061345801, type: 2}
-  InitiallyUnlocked: 0
+  InitiallyUnlocked: 1
   UnlockCost: 1
   Charges: 2
   Cooldown: 0.6
@@ -38,7 +38,7 @@ MonoBehaviour:
   HoldDamping: 10
   HoldMaxMass: 500
   Color: {r: 0, g: 1, b: 1, a: 1}
-  PaletteColor: 16
+  PaletteColor: 15
   CastingPresentation: 1
   MenuIcon: 5
   Upgrades:

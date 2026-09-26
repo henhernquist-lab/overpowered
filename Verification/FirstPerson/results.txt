@@ -1,25 +1,26 @@
 PASS Fresh initial preference is third-person.
-PASS Unlock fire through progression.
-PASS Unlock ice through progression.
 PASS Equip fire / ice through saved loadout.
 PASS Launch hero
 PASS Third-person restores body renderers.
 PASS hero-third-fire select equipped power.
+FIXTURE hero-third-fire: camera->hero reach offset=7.54m; the old camera-relative 9 m point would sit 1.25m (horizontal) from the hero; target now at 16.54m along the ray.
 PASS hero-third-fire crosshair world ray targets intended rigidbody (self excluded).
 PASS hero-third-fire gameplay ray hits same target.
-PASS hero-third-fire aim error=0.0066px.
+PASS hero-third-fire aim error=0.0006px.
 PASS hero-third-fire real cast accepted.
 PASS hero-third-fire physical projectile hits crosshair target; off-axis CONTROL untouched.
-MEASURED hero-third-fire contact error=0.0745m, target speed=9.977m/s.
+MEASURED hero-third-fire contact error=0.0951m, target speed=0.535m/s.
 PASS hero-third-fire contact within projectile radius tolerance.
 PASS hero-third-ice select equipped power.
+FIXTURE hero-third-ice: camera->hero reach offset=7.54m; the old camera-relative 9 m point would sit 1.25m (horizontal) from the hero; target now at 16.54m along the ray.
 PASS hero-third-ice crosshair world ray targets intended rigidbody (self excluded).
 PASS hero-third-ice gameplay ray hits same target.
-PASS hero-third-ice aim error=0.0066px.
+PASS hero-third-ice aim error=0.0006px.
 PASS hero-third-ice real cast accepted.
 PASS hero-third-ice aimed target frozen; off-axis CONTROL not frozen.
 PASS hero third -> first toggle.
 PASS hero-first-fire select equipped power.
+FIXTURE hero-first-fire: camera->hero reach offset=0.00m; the old camera-relative 9 m point would sit 8.83m (horizontal) from the hero; target now at 9.00m along the ray.
 PASS hero-first-fire crosshair world ray targets intended rigidbody (self excluded).
 PASS hero-first-fire gameplay ray hits same target.
 PASS hero-first-fire aim error=0.1051px.
@@ -28,6 +29,7 @@ PASS hero-first-fire physical projectile hits crosshair target; off-axis CONTROL
 MEASURED hero-first-fire contact error=0.0846m, target speed=0.548m/s.
 PASS hero-first-fire contact within projectile radius tolerance.
 PASS hero-first-ice select equipped power.
+FIXTURE hero-first-ice: camera->hero reach offset=0.00m; the old camera-relative 9 m point would sit 8.83m (horizontal) from the hero; target now at 9.00m along the ray.
 PASS hero-first-ice crosshair world ray targets intended rigidbody (self excluded).
 PASS hero-first-ice gameplay ray hits same target.
 PASS hero-first-ice aim error=0.1051px.
@@ -38,8 +40,14 @@ PASS Paused toggle CONTROL refused.
 PASS Tight corner eye volume clear at pitch -85
 PASS Tight corner eye volume clear at pitch 0
 PASS Tight corner eye volume clear at pitch 85
+MEASURED first-person Feel impulse (tight corner): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+PASS Positive control: the Feel impulse really moves the first-person eye (tight corner, max 0.160m).
+PASS Feel impulse never puts the first-person near plane inside geometry (tight corner): 0 overlapping samples of 3960.
 PASS Low-overhang positive control compresses eye below requested 1.62m height.
 PASS Compressed eye remains outside overhang/walls.
+MEASURED first-person Feel impulse (low overhang): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+PASS Positive control: the Feel impulse really moves the first-person eye (low overhang, max 0.160m).
+PASS Feel impulse never puts the first-person near plane inside geometry (low overhang): 0 overlapping samples of 3960.
 PASS Close-wall fire accepted from clear eye.
 PASS Projectile spawn cannot skip wall inside original 1.7m muzzle offset.
 PASS Close-wall projectile actually impacts intervening wall.
@@ -48,27 +56,29 @@ PASS hero first -> third restores view.
 PASS Body visible again after reverse toggle.
 PASS Persist first-person through existing profile.
 PASS Mode -> Home retains preference.
-PASS Unlock telekinesis through progression.
 PASS Equip fire / telekinesis through saved loadout.
 PASS Launch hero
 PASS hero first -> third toggle.
 PASS Third-person restores body renderers.
 PASS hero-third-fire select equipped power.
+FIXTURE hero-third-fire: camera->hero reach offset=7.54m; the old camera-relative 9 m point would sit 1.25m (horizontal) from the hero; target now at 16.54m along the ray.
 PASS hero-third-fire crosshair world ray targets intended rigidbody (self excluded).
 PASS hero-third-fire gameplay ray hits same target.
-PASS hero-third-fire aim error=0.0066px.
+PASS hero-third-fire aim error=0.0006px.
 PASS hero-third-fire real cast accepted.
 PASS hero-third-fire physical projectile hits crosshair target; off-axis CONTROL untouched.
-MEASURED hero-third-fire contact error=0.0745m, target speed=9.977m/s.
+MEASURED hero-third-fire contact error=0.0951m, target speed=0.535m/s.
 PASS hero-third-fire contact within projectile radius tolerance.
 PASS hero-third-telekinesis select equipped power.
+FIXTURE hero-third-telekinesis: camera->hero reach offset=7.54m; the old camera-relative 9 m point would sit 1.25m (horizontal) from the hero; target now at 16.54m along the ray.
 PASS hero-third-telekinesis crosshair world ray targets intended rigidbody (self excluded).
 PASS hero-third-telekinesis gameplay ray hits same target.
-PASS hero-third-telekinesis aim error=0.0066px.
+PASS hero-third-telekinesis aim error=0.0006px.
 PASS hero-third-telekinesis real cast accepted.
 PASS hero-third-telekinesis aimed target held, not off-axis control.
 PASS hero third -> first toggle.
 PASS hero-first-fire select equipped power.
+FIXTURE hero-first-fire: camera->hero reach offset=0.00m; the old camera-relative 9 m point would sit 8.83m (horizontal) from the hero; target now at 9.00m along the ray.
 PASS hero-first-fire crosshair world ray targets intended rigidbody (self excluded).
 PASS hero-first-fire gameplay ray hits same target.
 PASS hero-first-fire aim error=0.1051px.
@@ -77,6 +87,7 @@ PASS hero-first-fire physical projectile hits crosshair target; off-axis CONTROL
 MEASURED hero-first-fire contact error=0.0846m, target speed=0.548m/s.
 PASS hero-first-fire contact within projectile radius tolerance.
 PASS hero-first-telekinesis select equipped power.
+FIXTURE hero-first-telekinesis: camera->hero reach offset=0.00m; the old camera-relative 9 m point would sit 8.83m (horizontal) from the hero; target now at 9.00m along the ray.
 PASS hero-first-telekinesis crosshair world ray targets intended rigidbody (self excluded).
 PASS hero-first-telekinesis gameplay ray hits same target.
 PASS hero-first-telekinesis aim error=0.1051px.
@@ -87,8 +98,14 @@ PASS Paused toggle CONTROL refused.
 PASS Tight corner eye volume clear at pitch -85
 PASS Tight corner eye volume clear at pitch 0
 PASS Tight corner eye volume clear at pitch 85
+MEASURED first-person Feel impulse (tight corner): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+PASS Positive control: the Feel impulse really moves the first-person eye (tight corner, max 0.160m).
+PASS Feel impulse never puts the first-person near plane inside geometry (tight corner): 0 overlapping samples of 3960.
 PASS Low-overhang positive control compresses eye below requested 1.62m height.
 PASS Compressed eye remains outside overhang/walls.
+MEASURED first-person Feel impulse (low overhang): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+PASS Positive control: the Feel impulse really moves the first-person eye (low overhang, max 0.160m).
+PASS Feel impulse never puts the first-person near plane inside geometry (low overhang): 0 overlapping samples of 3960.
 PASS Close-wall fire accepted from clear eye.
 PASS Projectile spawn cannot skip wall inside original 1.7m muzzle offset.
 PASS Close-wall projectile actually impacts intervening wall.
@@ -102,21 +119,24 @@ PASS Launch villain
 PASS villain first -> third toggle.
 PASS Third-person restores body renderers.
 PASS villain-third-fire select equipped power.
+FIXTURE villain-third-fire: camera->hero reach offset=7.54m; the old camera-relative 9 m point would sit 1.25m (horizontal) from the hero; target now at 16.54m along the ray.
 PASS villain-third-fire crosshair world ray targets intended rigidbody (self excluded).
 PASS villain-third-fire gameplay ray hits same target.
-PASS villain-third-fire aim error=0.0066px.
+PASS villain-third-fire aim error=0.0006px.
 PASS villain-third-fire real cast accepted.
 PASS villain-third-fire physical projectile hits crosshair target; off-axis CONTROL untouched.
-MEASURED villain-third-fire contact error=0.0745m, target speed=9.977m/s.
+MEASURED villain-third-fire contact error=0.0951m, target speed=0.535m/s.
 PASS villain-third-fire contact within projectile radius tolerance.
 PASS villain-third-ice select equipped power.
+FIXTURE villain-third-ice: camera->hero reach offset=7.54m; the old camera-relative 9 m point would sit 1.25m (horizontal) from the hero; target now at 16.54m along the ray.
 PASS villain-third-ice crosshair world ray targets intended rigidbody (self excluded).
 PASS villain-third-ice gameplay ray hits same target.
-PASS villain-third-ice aim error=0.0066px.
+PASS villain-third-ice aim error=0.0006px.
 PASS villain-third-ice real cast accepted.
 PASS villain-third-ice aimed target frozen; off-axis CONTROL not frozen.
 PASS villain third -> first toggle.
 PASS villain-first-fire select equipped power.
+FIXTURE villain-first-fire: camera->hero reach offset=0.00m; the old camera-relative 9 m point would sit 8.83m (horizontal) from the hero; target now at 9.00m along the ray.
 PASS villain-first-fire crosshair world ray targets intended rigidbody (self excluded).
 PASS villain-first-fire gameplay ray hits same target.
 PASS villain-first-fire aim error=0.1051px.
@@ -125,6 +145,7 @@ PASS villain-first-fire physical projectile hits crosshair target; off-axis CONT
 MEASURED villain-first-fire contact error=0.0846m, target speed=0.548m/s.
 PASS villain-first-fire contact within projectile radius tolerance.
 PASS villain-first-ice select equipped power.
+FIXTURE villain-first-ice: camera->hero reach offset=0.00m; the old camera-relative 9 m point would sit 8.83m (horizontal) from the hero; target now at 9.00m along the ray.
 PASS villain-first-ice crosshair world ray targets intended rigidbody (self excluded).
 PASS villain-first-ice gameplay ray hits same target.
 PASS villain-first-ice aim error=0.1051px.
@@ -135,8 +156,14 @@ PASS Paused toggle CONTROL refused.
 PASS Tight corner eye volume clear at pitch -85
 PASS Tight corner eye volume clear at pitch 0
 PASS Tight corner eye volume clear at pitch 85
+MEASURED first-person Feel impulse (tight corner): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+PASS Positive control: the Feel impulse really moves the first-person eye (tight corner, max 0.160m).
+PASS Feel impulse never puts the first-person near plane inside geometry (tight corner): 0 overlapping samples of 3960.
 PASS Low-overhang positive control compresses eye below requested 1.62m height.
 PASS Compressed eye remains outside overhang/walls.
+MEASURED first-person Feel impulse (low overhang): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+PASS Positive control: the Feel impulse really moves the first-person eye (low overhang, max 0.160m).
+PASS Feel impulse never puts the first-person near plane inside geometry (low overhang): 0 overlapping samples of 3960.
 PASS Close-wall fire accepted from clear eye.
 PASS Projectile spawn cannot skip wall inside original 1.7m muzzle offset.
 PASS Close-wall projectile actually impacts intervening wall.
@@ -150,21 +177,24 @@ PASS Launch villain
 PASS villain first -> third toggle.
 PASS Third-person restores body renderers.
 PASS villain-third-fire select equipped power.
+FIXTURE villain-third-fire: camera->hero reach offset=7.54m; the old camera-relative 9 m point would sit 1.25m (horizontal) from the hero; target now at 16.54m along the ray.
 PASS villain-third-fire crosshair world ray targets intended rigidbody (self excluded).
 PASS villain-third-fire gameplay ray hits same target.
-PASS villain-third-fire aim error=0.0066px.
+PASS villain-third-fire aim error=0.0006px.
 PASS villain-third-fire real cast accepted.
 PASS villain-third-fire physical projectile hits crosshair target; off-axis CONTROL untouched.
-MEASURED villain-third-fire contact error=0.0745m, target speed=9.977m/s.
+MEASURED villain-third-fire contact error=0.0951m, target speed=0.535m/s.
 PASS villain-third-fire contact within projectile radius tolerance.
 PASS villain-third-telekinesis select equipped power.
+FIXTURE villain-third-telekinesis: camera->hero reach offset=7.54m; the old camera-relative 9 m point would sit 1.25m (horizontal) from the hero; target now at 16.54m along the ray.
 PASS villain-third-telekinesis crosshair world ray targets intended rigidbody (self excluded).
 PASS villain-third-telekinesis gameplay ray hits same target.
-PASS villain-third-telekinesis aim error=0.0066px.
+PASS villain-third-telekinesis aim error=0.0006px.
 PASS villain-third-telekinesis real cast accepted.
 PASS villain-third-telekinesis aimed target held, not off-axis control.
 PASS villain third -> first toggle.
 PASS villain-first-fire select equipped power.
+FIXTURE villain-first-fire: camera->hero reach offset=0.00m; the old camera-relative 9 m point would sit 8.83m (horizontal) from the hero; target now at 9.00m along the ray.
 PASS villain-first-fire crosshair world ray targets intended rigidbody (self excluded).
 PASS villain-first-fire gameplay ray hits same target.
 PASS villain-first-fire aim error=0.1051px.
@@ -173,6 +203,7 @@ PASS villain-first-fire physical projectile hits crosshair target; off-axis CONT
 MEASURED villain-first-fire contact error=0.0846m, target speed=0.548m/s.
 PASS villain-first-fire contact within projectile radius tolerance.
 PASS villain-first-telekinesis select equipped power.
+FIXTURE villain-first-telekinesis: camera->hero reach offset=0.00m; the old camera-relative 9 m point would sit 8.83m (horizontal) from the hero; target now at 9.00m along the ray.
 PASS villain-first-telekinesis crosshair world ray targets intended rigidbody (self excluded).
 PASS villain-first-telekinesis gameplay ray hits same target.
 PASS villain-first-telekinesis aim error=0.1051px.
@@ -183,8 +214,14 @@ PASS Paused toggle CONTROL refused.
 PASS Tight corner eye volume clear at pitch -85
 PASS Tight corner eye volume clear at pitch 0
 PASS Tight corner eye volume clear at pitch 85
+MEASURED first-person Feel impulse (tight corner): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+PASS Positive control: the Feel impulse really moves the first-person eye (tight corner, max 0.160m).
+PASS Feel impulse never puts the first-person near plane inside geometry (tight corner): 0 overlapping samples of 3960.
 PASS Low-overhang positive control compresses eye below requested 1.62m height.
 PASS Compressed eye remains outside overhang/walls.
+MEASURED first-person Feel impulse (low overhang): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+PASS Positive control: the Feel impulse really moves the first-person eye (low overhang, max 0.160m).
+PASS Feel impulse never puts the first-person near plane inside geometry (low overhang): 0 overlapping samples of 3960.
 PASS Close-wall fire accepted from clear eye.
 PASS Projectile spawn cannot skip wall inside original 1.7m muzzle offset.
 PASS Close-wall projectile actually impacts intervening wall.
@@ -200,11 +237,11 @@ MEASURED forward flight FOV=69.997, additive=4.997 degrees; base=65.
 PASS Actual forward motion drives bounded flight FOV.
 PASS Synergy FOV adds to flight instead of fighting it.
 PASS Non-flight recovery restores baseline FOV after flight/kick.
-BENCH same city position=(-20.00, 8.12, -40.00), matched world pitch=13.412, civilians=26, cops=10; 1280x720 camera+HUD, single render/frame.
-MEASURED third-person phase=0: FPS=59.80, draw calls=453.8.
-MEASURED first-person phase=1: FPS=57.47, draw calls=433.7.
-MEASURED first-person phase=2: FPS=54.64, draw calls=434.6.
-MEASURED third-person phase=3: FPS=51.73, draw calls=459.0.
+BENCH same city position=(-20.00, 8.12, -40.00), matched world pitch=2.261, civilians=26, cops=7; 1280x720 camera+HUD, single render/frame.
+MEASURED third-person phase=0: FPS=62.60, draw calls=429.8.
+MEASURED first-person phase=1: FPS=63.74, draw calls=412.2.
+MEASURED first-person phase=2: FPS=64.15, draw calls=416.7.
+MEASURED third-person phase=3: FPS=61.92, draw calls=437.0.
 PASS Benchmark remained alive with populated city simulation running.
-PAIRED same-scene means: third-person=55.77 FPS; first-person=56.06 FPS; delta=0.52%. Perspective naturally changes visible geometry; no content or population cut.
+PAIRED same-scene means: third-person=62.26 FPS; first-person=63.95 FPS; delta=2.70%. Perspective naturally changes visible geometry; no content or population cut.
 LIMIT: gameplay/UI/collision entry points and actual rendered frames tested; no hardware B-key injection, human feel or standalone FPS claim.

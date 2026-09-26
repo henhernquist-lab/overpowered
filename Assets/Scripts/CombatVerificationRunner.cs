@@ -108,9 +108,12 @@ public sealed class CombatVerificationRunner : MonoBehaviour
         waves=Resources.Load<EndlessWaveDirector>("ModeDirectors/EndlessWaves");
         var catalog=Resources.LoadAll<GameModeDefinition>("Modes");GameModeDefinition Mode(string id)=>catalog.First(m=>m.Id==id);
         hero=Mode("hero");villain=Mode("villain");freePlay=Mode("free-play");endless=Mode("endless-fight");endlessVillain=Mode("endless-fight-villain");
-        Check(roster!=null&&rusher!=null&&gunner!=null&&brute!=null&&roster.Criminal==rusher&&roster.Cop==gunner&&roster.PursuingHero==brute,
+        var robber=Resources.Load<EnemyArchetype>("Enemies/Robber");
+        // Balance pass: city/encounter criminals use the Robber archetype (Rusher body, trigger reach covering the 3 m capture
+        // radius); Endless waves still pick Rusher/Gunner/Brute from their own composition table.
+        Check(roster!=null&&rusher!=null&&gunner!=null&&brute!=null&&robber!=null&&roster.Criminal==robber&&roster.Cop==gunner&&roster.PursuingHero==brute,
             $"Roster asset maps Criminal->{roster?.Criminal?.name}, Cop->{roster?.Cop?.name}, PursuingHero->{roster?.PursuingHero?.name}; token budget {roster?.MaxConcurrentAttackers}, ring {roster?.WaitRingRadius}m.");
-        foreach(var a in new[]{rusher,gunner,brute})
+        foreach(var a in new[]{rusher,gunner,brute,robber})
             Log($"ARCHETYPE {a.name}: kind={a.Kind} speed={a.MoveSpeed} health x{a.HealthMultiplier} damage x{a.DamageMultiplier} trigger={a.TriggerDistance} reach={a.Reach} radius={a.Radius} range={a.Range} windup={a.WindupSeconds}s cooldown={a.CooldownSeconds}s knockback={a.Knockback}m band={a.PreferredDistance}+/-{a.PreferredBand} scale={a.VisualScale} accent={a.Accent}");
         yield return Scene(GameFlow.HomeScene);
         SampleShootClip();

@@ -17,9 +17,11 @@ public sealed class CityNpc : MonoBehaviour
     float explicitDamage = -1f;
     /// Damage of one attack (dealt at release, only if the committed shape still contains the player): the explicit
     /// per-spawn value when set, otherwise the Heat-star formula (standard enemy damage x archetype DamageMultiplier).
-    public float ContactDamage => explicitDamage >= 0f ? explicitDamage : Archetype != null ?
+    public float ContactDamage => explicitDamage >= 0f ? explicitDamage : PoliceDamageScale * (Archetype != null ?
         (world.Tuning.Npcs.AttackDamage+world.Stars*world.Tuning.Npcs.DamagePerStar)*Archetype.DamageMultiplier :
-        (Role==NpcRole.PursuingHero ? world.Tuning.Npcs.HeroDamage : world.Tuning.Npcs.AttackDamage)+world.Stars*world.Tuning.Npcs.DamagePerStar;
+        (Role==NpcRole.PursuingHero ? world.Tuning.Npcs.HeroDamage : world.Tuning.Npcs.AttackDamage)+world.Stars*world.Tuning.Npcs.DamagePerStar);
+    /// Per-side police damage (GameTuning Heat.HeroPolice / VillainPolice); 1 for criminals and explicit (Endless) stats.
+    float PoliceDamageScale => Role==NpcRole.Cop || Role==NpcRole.PursuingHero ? world.Tuning.Heat.Police(world.Progression.Data.Side).DamageMultiplier : 1f;
     /// Explicit combat stats for this NPC, replacing the Heat-star spawn formula (health) and attack formula (damage).
     public void SetCombatStats(float health, float damage) { Health = MaxHealth = Mathf.Max(1f, health); explicitDamage = Mathf.Max(0f, damage); }
     public bool Dead => Health <= 0f;
@@ -29,7 +31,7 @@ public sealed class CityNpc : MonoBehaviour
     public void MarkBurn(float duration){burningUntil=Mathf.Max(burningUntil,Time.time+duration);}
     public bool Fleeing => Time.time < fleeUntil;
     public bool Hostile => Role == NpcRole.Criminal ? world.Progression.Data.Side == PlayerSide.Hero :
-        (Role == NpcRole.Cop || Role == NpcRole.PursuingHero) && world.Progression.Data.Side == PlayerSide.Villain;
+        (Role == NpcRole.Cop || Role == NpcRole.PursuingHero) && world.PoliceHostileTo(this);
     public NavMeshAgent Agent { get; private set; }
     public event System.Action<bool> Damaged;
     /// Fired at RELEASE, whether the committed shape hits or misses (audio/presentation stay in sync with the strike).

@@ -16,7 +16,7 @@ MonoBehaviour:
   DisplayName: Fire Blast
   Description: Launch an explosive physics projectile at the crosshair.
   Effect: {fileID: 11400000, guid: 8949018453c804f20a57c47d929925e4, type: 2}
-  InitiallyUnlocked: 0
+  InitiallyUnlocked: 1
   UnlockCost: 1
   Charges: 3
   Cooldown: 0.6

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f797eef34f5a4d33b54ef9573ba2cccb, type: 3}
   m_Name: EnemyRoster
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRoster
-  Criminal: {fileID: 11400000, guid: 1d334c48aa174f13a7467013e21ed45a, type: 2}
+  Criminal: {fileID: 11400000, guid: 7e40ddfa7c8149ccb0acfdfd5651b125, type: 2}
   Cop: {fileID: 11400000, guid: 5c4548189b514982a60622ee54f14bbc, type: 2}
   PursuingHero: {fileID: 11400000, guid: 8849d95f3b6842299eb95540af7b454b, type: 2}
   MaxConcurrentAttackers: 2
