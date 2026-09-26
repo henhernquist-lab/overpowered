@@ -4,24 +4,88 @@ public sealed class IceEffect : PowerEffect
 {
     public override bool Execute(PowerUser user, PowerRuntime power)
     {
-        if (!user.FindTarget(user.Stats(power).Range, out RaycastHit hit)) return false;
+        var stats = user.Stats(power);
+        if (!user.FindTarget(stats.Range, out RaycastHit hit)) return false;
         var npc = hit.collider.GetComponentInParent<CityNpc>();
-        if (npc != null) { npc.Freeze(user.Stats(power).Duration); npc.Damage(user.Stats(power).Damage, user); return true; }
+        if (npc != null)
+        {
+            npc.Freeze(stats.Duration); npc.Damage(stats.Damage, user);
+            // Visible state for as long as the NPC's own Frozen flag holds (a later Ice/synergy freeze extends it too).
+            if (!npc.Dead) FrozenLook.Show(npc.gameObject, power.Definition.PaletteColor, () => npc != null && !npc.Dead && npc.Frozen);
+            Cast(user, power, hit.point); return true;
+        }
         if (hit.rigidbody == null || hit.rigidbody.isKinematic) return false;
         var frozen = hit.rigidbody.GetComponent<FrozenBody>();
         if (frozen == null) frozen = hit.rigidbody.gameObject.AddComponent<FrozenBody>();
-        frozen.Apply(user.Stats(power).Duration);
+        frozen.Apply(stats.Duration, power.Definition.PaletteColor);
+        Cast(user, power, hit.point);
         return true;
+    }
+    /// Visible cast: a small burst at the casting hand and a heavy burst where the freeze lands, from the fixed Feel pool in
+    /// the power's palette colour (ice.asset PaletteColor). No new particle systems or materials.
+    static void Cast(PowerUser user, PowerRuntime power, Vector3 point)
+    {
+        var feel = FeelDirector.Instance; if (feel == null) return;
+        var color = power.Definition.PaletteColor;
+        feel.Particles.Burst(user.AimOrigin + user.AimDirection * .6f, color, feel.Settings.LightHitParticles);
+        feel.Particles.Burst(point, color, feel.Settings.HeavyHitParticles);
     }
 }
 public sealed class FrozenBody : MonoBehaviour
 {
     Rigidbody body; RigidbodyConstraints prior; float until; bool applied;
-    public void Apply(float seconds)
+    public void Apply(float seconds, CityColor color)
     {
         if (!applied) { body = GetComponent<Rigidbody>(); prior = body.constraints; applied = true; }
         body.constraints = RigidbodyConstraints.FreezeAll; until = Time.time + seconds;
+        FrozenLook.Show(gameObject, color, () => this != null && enabled);
     }
     void Update() { if (Time.time >= until) Destroy(this); }
     void OnDisable() { if (body != null && applied) body.constraints = prior; }
+}
+/// Visible frozen state for an NPC or a physics prop: every body renderer shows ONE shared palette material
+/// (CityMaterials.Get, never a per-instance material) and an NPC's Animator holds its pose. Everything is restored exactly
+/// when the freeze condition ends (thaw, death, or the frozen component going away).
+public sealed class FrozenLook : MonoBehaviour
+{
+    Renderer[] renderers; Material[][] original; Animator animator; float animatorSpeed; System.Func<bool> active; bool shown;
+    public bool Shown => shown;
+    public static FrozenLook Show(GameObject target, CityColor color, System.Func<bool> stillFrozen)
+    {
+        var look = target.GetComponent<FrozenLook>(); if (look == null) look = target.AddComponent<FrozenLook>();
+        look.Apply(color, stillFrozen); return look;
+    }
+    void Apply(CityColor color, System.Func<bool> stillFrozen)
+    {
+        active = stillFrozen;
+        if (!shown)
+        {
+            var npc = GetComponent<CityNpc>();
+            // NPC: only the humanoid body (not the attack telegraph); prop: every renderer under the rigidbody.
+            renderers = npc != null ? GetComponentsInChildren<SkinnedMeshRenderer>(true) : GetComponentsInChildren<Renderer>(true);
+            original = new Material[renderers.Length][];
+            for (int i = 0; i < renderers.Length; i++) original[i] = renderers[i].sharedMaterials;
+            var presentation = npc != null ? GetComponent<HumanoidPresentation>() : null;
+            animator = presentation != null ? presentation.Animator : null;
+            if (animator != null) animatorSpeed = animator.speed;
+            shown = true;
+        }
+        var ice = CityMaterials.Get(color);
+        foreach (var r in renderers)
+        {
+            if (r == null) continue;
+            var mats = r.sharedMaterials; for (int m = 0; m < mats.Length; m++) mats[m] = ice; r.sharedMaterials = mats;
+        }
+        if (animator != null) animator.speed = 0f;
+        enabled = true;
+    }
+    void LateUpdate() { if (shown && (active == null || !active())) Restore(); }
+    void Restore()
+    {
+        if (!shown) return; shown = false;
+        for (int i = 0; i < renderers.Length; i++) if (renderers[i] != null) renderers[i].sharedMaterials = original[i];
+        if (animator != null) animator.speed = animatorSpeed;
+        enabled = false;
+    }
+    void OnDestroy() { Restore(); }
 }

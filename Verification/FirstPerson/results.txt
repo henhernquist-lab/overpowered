@@ -1,6 +1,4 @@
 PASS Fresh initial preference is third-person.
-PASS Unlock fire through progression.
-PASS Unlock ice through progression.
 PASS Equip fire / ice through saved loadout.
 PASS Launch hero
 PASS Third-person restores body renderers.
@@ -58,7 +56,6 @@ PASS hero first -> third restores view.
 PASS Body visible again after reverse toggle.
 PASS Persist first-person through existing profile.
 PASS Mode -> Home retains preference.
-PASS Unlock telekinesis through progression.
 PASS Equip fire / telekinesis through saved loadout.
 PASS Launch hero
 PASS hero first -> third toggle.
@@ -240,11 +237,11 @@ MEASURED forward flight FOV=69.997, additive=4.997 degrees; base=65.
 PASS Actual forward motion drives bounded flight FOV.
 PASS Synergy FOV adds to flight instead of fighting it.
 PASS Non-flight recovery restores baseline FOV after flight/kick.
-BENCH same city position=(-20.00, 8.12, -40.00), matched world pitch=2.261, civilians=26, cops=10; 1280x720 camera+HUD, single render/frame.
-MEASURED third-person phase=0: FPS=64.07, draw calls=429.5.
-MEASURED first-person phase=1: FPS=64.94, draw calls=415.9.
-MEASURED first-person phase=2: FPS=63.68, draw calls=421.0.
-MEASURED third-person phase=3: FPS=62.72, draw calls=443.2.
+BENCH same city position=(-20.00, 8.12, -40.00), matched world pitch=2.261, civilians=26, cops=7; 1280x720 camera+HUD, single render/frame.
+MEASURED third-person phase=0: FPS=62.60, draw calls=429.8.
+MEASURED first-person phase=1: FPS=63.74, draw calls=412.2.
+MEASURED first-person phase=2: FPS=64.15, draw calls=416.7.
+MEASURED third-person phase=3: FPS=61.92, draw calls=437.0.
 PASS Benchmark remained alive with populated city simulation running.
-PAIRED same-scene means: third-person=63.39 FPS; first-person=64.31 FPS; delta=1.45%. Perspective naturally changes visible geometry; no content or population cut.
+PAIRED same-scene means: third-person=62.26 FPS; first-person=63.95 FPS; delta=2.70%. Perspective naturally changes visible geometry; no content or population cut.
 LIMIT: gameplay/UI/collision entry points and actual rendered frames tested; no hardware B-key injection, human feel or standalone FPS claim.

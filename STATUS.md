@@ -1801,3 +1801,37 @@ check and ModeExpansion's police-count checks now read the Robber / per-side dat
 averages. Player health regeneration was left out (a new mechanic outside this pass's file scope); the villain's high-Heat
 pressure still comes from gunner count × shot rate and would change most with regen or a ranged token that covers the
 cooldown — both are recommendations, not done.
+
+## Gameplay Phase 3: Ice made visible — 2026-09-26 (appended)
+
+**What Ice is meant to do** (IceEffect + ice.asset): select the crosshair target within 20 m; an NPC is frozen for
+`Duration` 4 s (CityNpc.Freeze → agent stopped, attack cancelled) and takes `Damage` 5; a non-kinematic rigidbody gets
+`FreezeAll` constraints for 4 s. 2 charges, 0.6 s cooldown, 10 energy.
+
+**Evidence BEFORE the fix** (`IceVerification.Before`, live city, real `PowerUser.Use`, `Verification/Ice/results-before.txt`):
+the mechanism WORKED. A live AI Rusher charging at 7.00 m/s dropped to 0.00 m/s for exactly 4.00 s (third and first person),
+then moved again; 5 damage; Frozen flag set; a falling 45 kg crate went 11.0 → 0.00 m/s (0.000 m drift) for 4.03 s and fell
+again; off-axis and out-of-range (27.3 m vs 20 m: "No valid target", no charge spent) CONTROLs held. Targeting, range and
+the NPC path were fine. **Root cause of "doesn't do shit": nothing showed it.** The cast emitted no effect of any kind; the
+frozen NPC kept its colours and kept animating (0 of 2 body renderers changed, Animator.speed 1) so a stopped enemy just
+looked idle; a frozen prop looked like any resting prop; and `ice.asset` used the Fire palette colour (orange HUD slot).
+So it is a presentation bug, not an effect/targeting bug, and not a numbers problem — damage stays 5 (no blind buff).
+
+**Fix:** `IceEffect` now (1) shows a `FrozenLook` for exactly as long as the freeze holds — every body renderer swaps to ONE
+shared palette material (`CityMaterials.Get(PaletteColor)`, no per-instance material) and an NPC's Animator holds its pose
+(speed 0); both restore exactly on thaw, death or destruction — and (2) emits two bursts (hand, impact) from the existing
+fixed Feel particle pool. `ice.asset` PaletteColor Fire → Cyan (also recolours its HUD slot/projectile colour data).
+
+**After** (`IceVerification.After` 34 PASS, exit 0): NPC 7.00 → 0.00 m/s for 4.00 s (third person) / 4.01 s (first person),
+resumes after thaw (1.74 / 1.28 m/s mean over 1.5 s), 5 damage, 2/2 renderers on the shared Cyan material with Animator.speed 0
+while frozen, 0 cyan and speed 1 after; 2 pooled cast bursts; crate 11.04 → 0.00 → 8.16 m/s, Cyan while frozen, back to
+shared Wood after; control crate untouched; off-axis NPC never frozen or damaged; out-of-range refused. Images:
+`before-*-npc-frozen.png` vs `after-*-npc-frozen.png` (third and first person).
+Regressions exit 0: FirstPerson 207 + Reload 5 (includes Ice in B view), City 53, Humanoid 54, HUD P1 316, Feel 139,
+HeroForge 131, Combat 170, Audio 127 + Reload 49. (FirstPerson 210→207 and Feel 142→139 are the removed conditional "unlock"
+purchases from Phase 1.) Two Phase 2 consequences were caught here and fixed in 1f9ad49: Humanoid and Audio waited for a shot
+from a patrol cop at 0 Heat; they now assert the 1-star rule and raise Heat first.
+
+**Limits:** the frozen look applies to the Ice POWER only; synergy freezes (Frostwake, Thermal Shock, Glacier Fist, Cryo Crush)
+still stop NPCs without the look. Frozen Cyan is close to the Teal cop body colour. Ice damage (5) is unchanged and may still
+feel weak — a design call left to a playtest. No human has judged readability.
