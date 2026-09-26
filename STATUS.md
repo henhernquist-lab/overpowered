@@ -1901,8 +1901,28 @@ Verified: at spawn 10 full / 23 cheap; a hostile criminal 120 m away ran 8 AI ti
 off; CONTROL — moved next to the hero it was promoted within 2 frames and attacked (windup→release→hit, clip impact
 marker on the release frame, AI every frame).
 
-**FPS — interleaved A/B, same harness (`WorldProfile`), Free Play (24 civilians) + 3-star police, gameplay camera
-single-render, no other batch Unity during any sample** (`Verification/World/ab/`, baseline = clone of 4ee45ed):
+**FPS — FINAL comparison, after merging main 84c4129 (gameplay balance: fewer hero-side police), so both sides use the
+same police rules.** Interleaved A/B x3, same harness (`WorldProfile`), Free Play (24 civilians) + 3 Heat stars (now
+5 patrol cops), gameplay camera single-render, no other batch Unity during any sample. Baseline = 84c4129 + the
+timing/harness patch of 4ee45ed (`Verification/World/ab2/`, `baseline-harness.patch`):
+
+| | Baseline 3x3 (84c4129) | District world (merged e8237d1) |
+|---|---|---|
+| Densest street FPS (9 samples each) | **89.1** (85.0–91.6) | **94.0** (88.4–101.3) |
+| Flight view FPS (views differ) | 77.9 | 140.4 |
+| Street draws / static-batched / instanced draws | 347 / 603 / 200 | 269 / 327 / 174 |
+| Street triangles | 0.46 M | 1.22 M |
+| City build, warm (ms) | 175 | 420 |
+| Build incl. session (ms) | 340 | 596 |
+| NavMesh (ms) | 54 (whole city) | 63 / 62 / 54 / 73 (Downtown/Park/Residential/Docks) |
+
+Same-process control (merged): street LOD on 94.4, **LOD off 82.7 (−12%)**, i.e. without NPC LOD the district world
+would be ~7% below this baseline at street level. Flight LOD off 85 vs on 138. Street profile: skinning 0.72 vs
+0.90 ms, scripts 0.46 vs 0.27 ms, opaque rendering 1.27 vs 1.25 ms. Generation +245 ms (city) / +256 ms (incl.
+session). Flight samples drift (138 → 175 FPS within the controls run), so flight numbers are ±15%.
+
+*Historical (before the merge; baseline 4ee45ed = 66937b9 + timing, old police rules, 8 cops):* interleaved
+A/B/S x3 (`Verification/World/ab/`):
 
 | | Baseline 3x3 | District world (shipped) | District world, per-piece static batching |
 |---|---|---|---|
@@ -1914,10 +1934,10 @@ single-render, no other batch Unity during any sample** (`Verification/World/ab/
 | City build, warm (ms) | 192 | 451 | 1,002 |
 | Build incl. hero/session/NPC spawn (ms) | 367 | 633 | 1,184 |
 
-Stage split, shipped (ms): plan 3, ground/water/decks 2, buildings 53, streets 1, structures+backdrop 13, static finalize
-45, props 60, NavMesh 272, session 182. **Generation is +266 ms over baseline (under the 1.5 s flag).**
+Stage split, shipped (merged, ms): plan 3, ground/water/decks 2, buildings 50, streets 1, structures+backdrop 12, static
+finalize 42, props 55, NavMesh 253, session 177. **Generation is +245–266 ms over baseline (under the 1.5 s flag).**
 
-**Said plainly: the bigger world is NOT free at street level — NPC LOD pays for it.** Same-process control at the
+**Said plainly: the bigger world is NOT free at street level — NPC LOD pays for it.** Historical same-process control at the
 street view: LOD on 76.8 FPS, LOD off (all 32 NPCs full) 65.8 FPS (−14%). So without LOD the district world would be
 ~2 ms/frame slower than the old city; the profiler attributes the visible part to +0.2 ms scripts (523 props vs 247,
 NpcLod) and a larger batch-mode editor overhead (+0.8 ms), rendering itself is flat (Render.OpaqueGeometry 1.3 vs
@@ -1946,8 +1966,18 @@ HUD2 alert/waypoint spots, HUD3 escape sidewalk, Mode villain-cop start, City/Me
 - Seeds vary block size, lots, heights, plazas, styles, trees, containers and props; district regions, canal, bridges
   and landmark positions are authored data and do not move with the seed.
 - Civilian recycling concentrates the 24 civilians around the player by design; far districts are empty of civilians.
-- `FirstPersonVerification.Run` fails `hero-third-fire contact within projectile radius tolerance` (0.3083 m vs 0.3 m)
-  identically on the untouched baseline clone (4ee45ed = main + timing only) — pre-existing on main, not caused here.
+- Before the merge, `FirstPersonVerification.Run` failed `hero-third-fire contact within projectile radius tolerance`
+  (0.3083 m vs 0.3 m) identically on the untouched 4ee45ed baseline clone; on the merged branch it passes (207).
 - `HudPhase2Verification` "briefing still up after 5.5 s" failed once under another agent's concurrent Unity load, on
-  the baseline clone as well; it passes on a quiet machine.
+  the baseline clone as well; it passes on a quiet machine. One pre-merge `HudPhase3` run failed a 1.7 px
+  top-centre/banner overlap in `popup-endless-crowd`; it passed on the runs before and after (not reproduced).
+- The Mode villain-cop check now waits up to 4 s for the responder's first hit (it landed at 0.73 s); a first retarget
+  that stood 25 m away beforehand made the cop strike early and then sit in cooldown, and was replaced.
+- The edge: from altitude the sky reads as uniform haze (overcast) and the backdrop silhouettes are plain boxes; the
+  haze-skirt corners are faintly visible at frame edges in the 120 m north view.
+
+**Final regressions on the merged branch (e8237d1 + Mode retarget), all exit 0:** World 57 + Reload 3, City 53 +
+Reload 5, CityArt 31, Humanoid 54, Combat 170, Mode 79 + Reload 2, ModeExpansion 111 + Reload 10, HUD P1 316,
+P2 483 + Reload 31, P3 562 + Reload 11, Audio 127, MenuPresentation 42, FirstPerson 207. Run in an APFS clone of the
+branch (`scratchpad/world-reg`) except World, which writes its evidence in the branch.
 - All FPS is Editor batch-mode throughput (includes ~5–7 ms batch overhead), not a player build.

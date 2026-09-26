@@ -1,0 +1,424 @@
+diff --git a/Assets/Editor/WorldProfile.cs b/Assets/Editor/WorldProfile.cs
+new file mode 100644
+index 0000000..ffca237
+--- /dev/null
++++ b/Assets/Editor/WorldProfile.cs
+@@ -0,0 +1,60 @@
++using System;
++using System.IO;
++using UnityEditor;
++using UnityEditor.SceneManagement;
++using UnityEngine;
++
++/// World-scale measurement (diagnostic only; changes nothing it measures).
++/// Unity -batchmode -projectPath <project> -executeMethod WorldProfile.Run -logFile <log>
++///   [-worldTag baseline] [-worldRounds 3] [-worldGens 3] [-worldCommit <hash>]
++/// Writes Verification/World/<tag>/results.txt plus captures. Omit -quit; the runner exits with its own code.
++[InitializeOnLoad]
++public static class WorldProfile
++{
++    const string Key = "Overpowered.WorldProfile";
++    static double deadline;
++
++    static WorldProfile()
++    {
++        EditorApplication.update += () =>
++        {
++            if (deadline > 0 && EditorApplication.timeSinceStartup > deadline)
++            { Debug.LogError("World profile timeout"); Finish(1); }
++        };
++    }
++
++    public static void Run()
++    {
++        SessionState.SetBool(Key, true);
++        EditorSceneManager.OpenScene("Assets/Scenes/Home.unity");
++        EditorApplication.isPlaying = true;
++    }
++
++    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
++    static void Configure()
++    {
++        if (!SessionState.GetBool(Key, false)) return;
++        EditorApplication.LockReloadAssemblies();
++        deadline = EditorApplication.timeSinceStartup + 5400;
++        Directory.CreateDirectory("Verification/World/saves");
++        WorldSession.VerificationSavePath = Path.GetFullPath("Verification/World/saves/profile-" + Guid.NewGuid().ToString("N") + ".json");
++        GameFlow.VerificationSandbox = false;
++    }
++
++    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
++    static void Launch()
++    {
++        if (!SessionState.GetBool(Key, false)) return;
++        var go = new GameObject("World profile");
++        UnityEngine.Object.DontDestroyOnLoad(go);
++        go.AddComponent<WorldProfileRunner>().Finished = Finish;
++    }
++
++    static void Finish(int code)
++    {
++        SessionState.EraseBool(Key);
++        deadline = 0;
++        EditorApplication.UnlockReloadAssemblies();
++        EditorApplication.Exit(code);
++    }
++}
+diff --git a/Assets/Editor/WorldProfile.cs.meta b/Assets/Editor/WorldProfile.cs.meta
+new file mode 100644
+index 0000000..7246a8f
+--- /dev/null
++++ b/Assets/Editor/WorldProfile.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 32cfe8df98d3542fcbabc2a773cbc8d2
+\ No newline at end of file
+diff --git a/Assets/Scripts/CityDistrict.cs b/Assets/Scripts/CityDistrict.cs
+index f689fcd..5f81187 100644
+--- a/Assets/Scripts/CityDistrict.cs
++++ b/Assets/Scripts/CityDistrict.cs
+@@ -9,8 +9,13 @@ public sealed class CityDistrict : MonoBehaviour
+     public Vector3 Spawn { get; private set; }
+     public CityArt Art {get;private set;}
+     NavMeshDataInstance navmesh;
++    /// Generation stage timings (ms, in build order). Timing only: measuring never changes what is generated.
++    public readonly List<KeyValuePair<string,double>> Timings = new List<KeyValuePair<string,double>>();
++    readonly System.Diagnostics.Stopwatch stageWatch = new System.Diagnostics.Stopwatch();
++    public void Stage(string name) { Timings.Add(new KeyValuePair<string,double>(name, stageWatch.Elapsed.TotalMilliseconds)); stageWatch.Restart(); }
+     public void Build(GameTuning tuning, CityLayout layout)
+     {
++        stageWatch.Restart();
+         Art=gameObject.AddComponent<CityArt>();Art.Initialize(tuning);
+         var c = tuning.City; var p = tuning.Props;
+         float pitch = c.BlockSize + c.StreetWidth;
+@@ -27,7 +32,9 @@ public sealed class CityDistrict : MonoBehaviour
+             MakeProp("Crate", PrimitiveType.Cube, center + new Vector3(-edge,0,0), p.CrateSize, p.CrateMass, tuning);
+             MakeProp("Barrel", PrimitiveType.Cylinder, center + new Vector3(-edge,0,c.SidewalkWidth), p.BarrelSize, p.BarrelMass, tuning);
+         }
++        Stage("ground, block sidewalks, block crates/barrels");
+         Buildings.AddRange(layout.Generate(c));
++        Stage("layout generate");
+         for (int i = 0; i < Buildings.Count; i++)
+         {
+             var b = Buildings[i];
+@@ -41,14 +48,19 @@ public sealed class CityDistrict : MonoBehaviour
+                 marker.AddComponent<RooftopDiscovery>().Id = c.Seed + ":roof:" + i;
+             }
+         }
+-        Art.Streets();Art.FinishStaticGeometry();Art.Populate(Buildings);
++        Stage("buildings (art pieces) + rooftop markers");
++        Art.Streets();Stage("streets (curbs, dashes, crossings)");
++        Art.FinishStaticGeometry();Stage("static finalize (StaticBatchingUtility)");
++        Art.Populate(Buildings);Stage("street/rooftop props");
+         var sources = new List<NavMeshBuildSource>();
+         NavMeshBuilder.CollectSources(transform, ~0, NavMeshCollectGeometry.PhysicsColliders, 0, new List<NavMeshBuildMarkup>(), sources);
+         sources.RemoveAll(s => s.component != null && s.component.GetComponent<Rigidbody>() != null);
++        Stage("navmesh collect sources");
+         var settings = NavMesh.GetSettingsByIndex(0); settings.agentRadius = tuning.Npcs.Radius; settings.agentHeight = tuning.Npcs.Height;
+         var data = NavMeshBuilder.BuildNavMeshData(settings, sources, new Bounds(Vector3.zero, new Vector3(span, c.LandmarkHeight*2, span)), Vector3.zero, Quaternion.identity);
+         if (data == null) throw new System.InvalidOperationException("City NavMesh build failed");
+         navmesh = NavMesh.AddNavMeshData(data);
++        Stage("navmesh build + add (whole city)");
+     }
+     void Box(string name, Vector3 position, Vector3 size, CityColor color)
+     {
+diff --git a/Assets/Scripts/PrototypeBootstrap.cs b/Assets/Scripts/PrototypeBootstrap.cs
+index 37a4650..fffb25c 100644
+--- a/Assets/Scripts/PrototypeBootstrap.cs
++++ b/Assets/Scripts/PrototypeBootstrap.cs
+@@ -10,6 +10,7 @@ public static class PrototypeBootstrap
+         if (tuning == null || layout == null) throw new System.InvalidOperationException("Generate project data via Overpowered > Create missing data assets.");
+         Physics.gravity = Vector3.down * tuning.Movement.Gravity;
+         var city = new GameObject("City District").AddComponent<CityDistrict>(); city.Build(tuning, layout);
++        var sessionWatch = System.Diagnostics.Stopwatch.StartNew();
+         GameObject hero = new GameObject("Overpowered Hero");
+         hero.transform.position = city.Spawn + Vector3.up * tuning.Movement.Height;
+         CharacterController cc = hero.AddComponent<CharacterController>(); cc.height = tuning.Movement.Height; cc.radius = tuning.Movement.Radius; cc.center = Vector3.up * cc.height * .5f;
+@@ -25,6 +26,7 @@ public static class PrototypeBootstrap
+         if (!Application.isBatchMode) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; }
+         new GameObject("Prototype HUD").AddComponent<PrototypeHUD>(); // F3 debug panel, pause + Tab menus, defeated notice
+         new GameObject("Game HUD").AddComponent<GameHud>();
++        city.Timings.Add(new System.Collections.Generic.KeyValuePair<string,double>("session: hero, camera, WorldSession + NPC spawn, HUD", sessionWatch.Elapsed.TotalMilliseconds));
+     }
+ }
+ 
+diff --git a/Assets/Scripts/WorldProfileRunner.cs b/Assets/Scripts/WorldProfileRunner.cs
+new file mode 100644
+index 0000000..fe84a08
+--- /dev/null
++++ b/Assets/Scripts/WorldProfileRunner.cs
+@@ -0,0 +1,265 @@
++#if UNITY_EDITOR
++using System;
++using System.Collections;
++using System.Collections.Generic;
++using System.IO;
++using System.Linq;
++using UnityEditor;
++using UnityEngine;
++using UnityEngine.AI;
++using UnityEngine.SceneManagement;
++using Unity.Profiling;
++using Unity.Profiling.LowLevel.Unsafe;
++
++/// World-scale measurement: generation time by stage, renderer/draw/batch counts, NPC counts, and single-render FPS
++/// through the REAL gameplay camera (ThirdPersonCamera placement; camera disabled + one Render() per frame, the
++/// "gameplay-camera single-render" method recorded in STATUS). Free Play session (24 civilians, no encounters, so no
++/// combat perturbs the sample) with Heat topped to 3 stars before every sample (friendly patrols + 3-star police).
++/// Diagnostic only: it measures and captures, it never changes generation.
++public sealed class WorldProfileRunner : MonoBehaviour
++{
++    public Action<int> Finished;
++    readonly List<string> lines = new List<string>();
++    WorldSession W => WorldSession.Instance;
++    string runTag = "baseline";
++    int rounds = 3, gens = 3;
++    string Folder => Path.GetFullPath("Verification/World/" + runTag);
++    Camera cam;
++    RenderTexture target;
++
++    void Log(string text) { lines.Add(text); Debug.Log("[WORLD PROFILE] " + text); }
++    void Check(bool ok, string text) { if (!ok) throw new Exception(text); Log("PASS " + text); }
++    static string Arg(string name) { var a = Environment.GetCommandLineArgs(); int i = Array.IndexOf(a, name); return i >= 0 && i + 1 < a.Length ? a[i + 1] : null; }
++
++    IEnumerator Start()
++    {
++        if (Arg("-worldTag") is string t) runTag = t;
++        if (int.TryParse(Arg("-worldRounds"), out int r) && r > 0) rounds = r;
++        if (int.TryParse(Arg("-worldGens"), out int g) && g > 0) gens = g;
++        Directory.CreateDirectory(Folder);
++        QualitySettings.vSyncCount = 0; Application.targetFrameRate = -1;
++        var stack = new Stack<IEnumerator>(); stack.Push(Run());
++        while (stack.Count > 0)
++        {
++            bool more = false; object current = null;
++            try { more = stack.Peek().MoveNext(); if (more) current = stack.Peek().Current; }
++            catch (Exception e) { Log("FAIL " + e); Finish(1); yield break; }
++            if (!more) { stack.Pop(); continue; }
++            if (current is IEnumerator next) stack.Push(next); else yield return current;
++        }
++        Finish(0);
++    }
++
++    void Finish(int code)
++    {
++        File.WriteAllLines(Path.Combine(Folder, "results.txt"), lines);
++        Finished(code);
++    }
++
++    IEnumerator Scene(string name, int settle = 8)
++    {
++        float until = Time.realtimeSinceStartup + 180;
++        while (GameFlow.Instance.Loading || SceneManager.GetActiveScene().name != name || (name == GameFlow.CityScene && W == null))
++        { if (Time.realtimeSinceStartup > until) throw new Exception("Scene load timeout " + name); yield return null; }
++        for (int i = 0; i < settle; i++) yield return null;
++    }
++
++    static string Shell(string file, string args)
++    {
++        try
++        {
++            var p = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(file, args) { RedirectStandardOutput = true, UseShellExecute = false });
++            string text = p.StandardOutput.ReadToEnd().Trim(); p.WaitForExit(); return text;
++        }
++        catch (Exception e) { return "unavailable (" + e.Message + ")"; }
++    }
++    static string LoadAverage() => Shell("/usr/sbin/sysctl", "-n vm.loadavg");
++    /// Unity batch-mode processes on the machine (this one included). >1 means another agent's Unity is running.
++    static int BatchUnities() { string s = Shell("/usr/bin/pgrep", "-f \"^/Applications/Unity.*/MacOS/Unity -batchmode\""); return s.StartsWith("unavailable") ? -1 : s.Split('\n').Count(l => l.Trim().Length > 0); }
++
++    IEnumerator Run()
++    {
++        yield return Scene(GameFlow.HomeScene);
++        var mode = Resources.Load<GameModeDefinition>("Modes/free-play");
++        Log($"ENV runTag={runTag} commit={Arg("-worldCommit") ?? "?"} GPU={SystemInfo.graphicsDeviceName} CPU={SystemInfo.processorType} quality='{QualitySettings.names[QualitySettings.GetQualityLevel()]}' shadows={QualitySettings.shadows} shadowDistance={QualitySettings.shadowDistance} load={LoadAverage()} batchUnities={BatchUnities()}");
++        Log($"SCENARIO mode={mode.Id} civilians={mode.Civilians} spawnPolice={mode.SpawnPolice}; Heat topped to 3 before every sample; seed={Resources.Load<GameTuning>("GameTuning").City.Seed}");
++
++        // ---- generation time: Select() -> session ready, and CityDistrict's own stage split.
++        for (int g = 1; g <= gens; g++)
++        {
++            var watch = System.Diagnostics.Stopwatch.StartNew();
++            if (!GameFlow.Instance.Select(mode)) throw new Exception("Free Play select refused");
++            while (GameFlow.Instance.Loading || SceneManager.GetActiveScene().name != GameFlow.CityScene || W == null) yield return null;
++            double ready = watch.Elapsed.TotalMilliseconds;
++            var t = W.City.Timings;
++            double city = t.Where(p => !p.Key.StartsWith("session")).Sum(p => p.Value);
++            Log($"GEN {g}: select->session ready {ready:F0} ms (includes async scene load); city build {city:F1} ms; total build incl. session {t.Sum(p => p.Value):F1} ms");
++            foreach (var p in t) Log($"GEN {g} STAGE {p.Key}: {p.Value:F1} ms");
++            if (g < gens) { GameFlow.Instance.Home(); yield return Scene(GameFlow.HomeScene); }
++        }
++        yield return Scene(GameFlow.CityScene);
++
++        // ---- structure
++        Populate(); yield return new WaitForSeconds(2f);
++        Structure();
++
++        // ---- top-down capture (before FPS so it shows the populated city exactly as measured)
++        TopDown();
++
++        // ---- FPS: views
++        cam = Camera.main;
++        if (target == null) { target = new RenderTexture(1280, 720, 24) { name = "World profile 1280x720" }; target.Create(); }
++        foreach (var view in new[] { "street", "flight" })
++        {
++            yield return StageView(view);
++            cam.enabled = false; cam.targetTexture = target;
++            var warm = System.Diagnostics.Stopwatch.StartNew();
++            while (warm.Elapsed.TotalSeconds < 2) { cam.Render(); yield return null; }
++            for (int r = 1; r <= rounds; r++) { Populate(); yield return Measure(view, r, false); }
++            yield return Measure(view, 0, true);
++            Save(target, "view-" + view);
++            cam.targetTexture = null; cam.enabled = true;
++        }
++        GameFlow.Instance.Home(); yield return Scene(GameFlow.HomeScene);
++        Log($"END load={LoadAverage()} batchUnities={BatchUnities()}");
++        Log("LIMIT: Editor Play Mode (batch) throughput at 1280x720, hero parked, input idle; includes ~5.8 ms batch-mode overhead per STATUS. Not a standalone-player figure.");
++    }
++
++    void Populate() { if (W.Heat < 3) W.AddHeat(3 - W.Heat); W.ReconcilePolice(); }
++
++    void Structure()
++    {
++        var all = FindObjectsByType<Renderer>();
++        int staticBatched = all.Count(r => r.isPartOfStaticBatch);
++        var breakable = FindObjectsByType<BreakableProp>();
++        var breakableRenderers = breakable.SelectMany(b => b.GetComponentsInChildren<Renderer>()).ToArray();
++        int breakableStatic = breakableRenderers.Count(r => r.isPartOfStaticBatch);
++        var props = W.City.GetComponentsInChildren<CityArtProp>();
++        int civilians = W.Npcs.Count(n => n != null && !n.Dead && n.Role == NpcRole.Civilian);
++        int cops = W.Npcs.Count(n => n != null && !n.Dead && n.Role == NpcRole.Cop);
++        var tri = NavMesh.CalculateTriangulation();
++        var filters = FindObjectsByType<MeshFilter>();
++        Log($"STRUCTURE renderers={all.Length} staticBatchedRenderers={staticBatched} meshFilters={filters.Length} distinctMeshes={filters.Select(f => f.sharedMesh).Where(m => m != null).Distinct().Count()} gameObjectsUnderCity={W.City.GetComponentsInChildren<Transform>(true).Length} colliders={W.City.GetComponentsInChildren<Collider>(true).Length}");
++        Log($"STRUCTURE buildings={W.City.Buildings.Count} props={props.Length} breakableProps={breakable.Length} breakableRenderers={breakableRenderers.Length} breakableRenderersInStaticBatch={breakableStatic} sidewalkPoints={W.City.Sidewalks.Count}");
++        Log($"STRUCTURE npcs={W.Npcs.Count(n => n != null)} civilians={civilians} cops={cops} animators={FindObjectsByType<Animator>().Length} skinned={FindObjectsByType<SkinnedMeshRenderer>().Length} navmeshVerts={tri.vertices.Length} navmeshTris={tri.indices.Length / 3}");
++        var bounds = CityBounds();
++        Log($"STRUCTURE city renderer bounds min={bounds.min} max={bounds.max} size={bounds.size}; camera farClip={Camera.main.farClipPlane} fog={RenderSettings.fog} fogMode={RenderSettings.fogMode} fogDensity={RenderSettings.fogDensity}");
++        Check(breakableStatic == 0, $"No BreakableProp renderer is part of a static batch ({breakableRenderers.Length} breakable renderers checked).");
++    }
++
++    Bounds CityBounds()
++    {
++        var rs = W.City.GetComponentsInChildren<Renderer>().Where(r => r.enabled).ToArray();
++        var b = rs[0].bounds; foreach (var r in rs) b.Encapsulate(r.bounds); return b;
++    }
++
++    void TopDown()
++    {
++        var b = CityBounds();
++        var go = new GameObject("World top-down capture"); var c = go.AddComponent<Camera>();
++        c.orthographic = true; c.orthographicSize = Mathf.Max(b.extents.x, b.extents.z) * 1.05f;
++        c.transform.position = new Vector3(b.center.x, b.max.y + 50, b.center.z); c.transform.rotation = Quaternion.Euler(90, 0, 0);
++        c.nearClipPlane = 1; c.farClipPlane = b.size.y + 200; c.clearFlags = CameraClearFlags.SolidColor; c.backgroundColor = Color.black;
++        var rt = new RenderTexture(1600, 1600, 24); rt.Create(); c.targetTexture = rt;
++        float shadow = QualitySettings.shadowDistance; QualitySettings.shadowDistance = Mathf.Max(shadow, b.size.magnitude + 300);
++        c.Render(); QualitySettings.shadowDistance = shadow;
++        Save(rt, "topdown");
++        Log($"CAPTURE topdown.png: orthographic, north (+Z) up, east (+X) right, covers x {b.center.x - c.orthographicSize:F0}..{b.center.x + c.orthographicSize:F0}, z {b.center.z - c.orthographicSize:F0}..{b.center.z + c.orthographicSize:F0}");
++        c.targetTexture = null; rt.Release(); Destroy(rt); Destroy(go);
++    }
++
++    /// Street: the densest street of the city, hero on the sidewalk, real ThirdPersonCamera placement looking along it.
++    /// Flight: hero parked 45 m up at the city's south edge, camera looking north across the whole city.
++    IEnumerator StageView(string view)
++    {
++        W.Hero.enabled = false;
++        var c = W.Tuning.City;
++        Vector3 at; float yaw, pitch; string where;
++        if (view == "street") { at = new Vector3(-c.BlockSize * .5f + 1, c.SidewalkHeight, 0); yaw = 0; pitch = W.Tuning.Camera.Pitch; where = "sidewalk beside the centre street (x=-pitch/2), the densest street of the 3x3 grid"; }
++        else { at = new Vector3(0, 45, -(c.Blocks * (c.BlockSize + c.StreetWidth)) * .5f); yaw = 0; pitch = 12; where = "45 m up over the south edge, looking north across the whole city"; }
++        var cc = W.Hero.GetComponent<CharacterController>(); cc.enabled = false; W.Hero.transform.position = at; cc.enabled = true;
++        var follow = Camera.main.GetComponent<ThirdPersonCamera>(); follow.enabled = true; follow.SetLook(yaw, pitch);
++        Populate();
++        yield return new WaitForSeconds(1.5f);
++        Log($"VIEW {view}: hero at {at} ({where}); camera {Camera.main.transform.position} fwd {Camera.main.transform.forward}");
++    }
++
++    static readonly string[] RecorderNames = { "PlayerLoop", "PostLateUpdate.BatchModeUpdate", "PostLateUpdate.UpdateAllSkinnedMeshes", "PostLateUpdate.UpdateAllRenderers",
++        "PreLateUpdate.DirectorUpdateAnimationBegin", "PreLateUpdate.DirectorUpdateAnimationEnd", "Update.ScriptRunBehaviourUpdate", "PreLateUpdate.ScriptRunBehaviourLateUpdate",
++        "PreUpdate.AIUpdate", "PreLateUpdate.AIUpdatePostScript", "FixedUpdate.PhysicsFixedUpdate", "Camera.Render", "Culling", "Shadows.RenderShadowMap", "Render.OpaqueGeometry" };
++
++    /// FPS hygiene: another agent's batch-mode Unity shares this machine. Wait until this process is the only one,
++    /// sample, and re-sample (up to 3 tries) when another one started during the sample.
++    IEnumerator Measure(string view, int round, bool profiled)
++    {
++        for (int attempt = 1; attempt <= 3; attempt++)
++        {
++            double waited = 0; var wait = System.Diagnostics.Stopwatch.StartNew();
++            while (BatchUnities() > 1 && wait.Elapsed.TotalMinutes < 20) { yield return new WaitForSecondsRealtime(5f); Populate(); }
++            waited = wait.Elapsed.TotalSeconds;
++            if (waited > 1) Log($"HYGIENE waited {waited:F0}s for other batch-mode Unity processes to finish before sampling {view} r{round}");
++            yield return Sample(view, round, profiled, attempt);
++            if (!contaminated) yield break;
++            Log($"HYGIENE sample {view} r{round} attempt {attempt} was CONTAMINATED (another batch Unity ran during it); re-sampling");
++        }
++    }
++    bool contaminated;
++
++    IEnumerator Sample(string view, int round, bool profiled, int attempt)
++    {
++        yield return new WaitForSecondsRealtime(.4f);
++        int othersBefore = BatchUnities();
++        List<(string Name, ProfilerRecorder Rec, double Sum)> recs = null;
++        if (profiled)
++        {
++            var handles = new List<ProfilerRecorderHandle>(); ProfilerRecorderHandle.GetAvailable(handles);
++            recs = handles.Select(h => (h, ProfilerRecorderHandle.GetDescription(h).Name)).Where(x => RecorderNames.Contains(x.Name)).GroupBy(x => x.Name).Select(x => x.First())
++                .Select(x => (x.Name, new ProfilerRecorder(x.h, 1, ProfilerRecorderOptions.Default), 0.0)).ToList();
++            foreach (var x in recs) x.Rec.Start();
++        }
++        var times = new List<double>(); var draws = new List<int>(); var batches = new List<int>(); var pass = new List<int>();
++        var stat = new List<int>(); var statB = new List<int>(); var inst = new List<int>(); var instB = new List<int>(); var dyn = new List<int>();
++        var tris = new List<long>(); var sums = new double[recs?.Count ?? 0]; int frames = 0;
++        var watch = System.Diagnostics.Stopwatch.StartNew(); double prior = 0;
++        while (watch.Elapsed.TotalSeconds < 4)
++        {
++            cam.Render();
++            yield return null;
++            double now = watch.Elapsed.TotalSeconds; times.Add((now - prior) * 1000); prior = now;
++            draws.Add(UnityStats.drawCalls); batches.Add(UnityStats.staticBatches + UnityStats.dynamicBatches + UnityStats.instancedBatches); pass.Add(UnityStats.setPassCalls);
++            stat.Add(UnityStats.staticBatchedDrawCalls); statB.Add(UnityStats.staticBatches); inst.Add(UnityStats.instancedBatchedDrawCalls); instB.Add(UnityStats.instancedBatches);
++            dyn.Add(UnityStats.dynamicBatchedDrawCalls); tris.Add(UnityStats.triangles);
++            if (recs != null) { for (int i = 0; i < recs.Count; i++) sums[i] += recs[i].Rec.LastValue; frames++; }
++        }
++        watch.Stop();
++        int othersAfter = BatchUnities();
++        contaminated = othersBefore > 1 || othersAfter > 1;
++        var sorted = new List<double>(times); sorted.Sort();
++        double fps = times.Count / watch.Elapsed.TotalSeconds;
++        int visible = FindObjectsByType<Renderer>().Count(r => r.isVisible);
++        string lod = NpcLodLine();
++        Log($"MEASURED {view} {(profiled ? "PROFILED (recorders attached; FPS not used)" : "r" + round)} attempt{attempt}: FPS={fps:F2} mean={times.Average():F2}ms p95={sorted[(int)(sorted.Count * .95f)]:F2}ms frames={times.Count} " +
++            $"drawCalls={Median(draws)} batches={Median(batches)} setPass={Median(pass)} staticBatchedDraws={Median(stat)} staticBatches={Median(statB)} instancedDraws={Median(inst)} instancedBatches={Median(instB)} dynamicBatchedDraws={Median(dyn)} tris={Median(tris)} " +
++            $"visibleRenderers={visible} npcs={W.Npcs.Count(n => n != null && !n.Dead)} heat={W.Heat:F2} {lod} batchUnities before/after={othersBefore}/{othersAfter}{(othersBefore > 1 || othersAfter > 1 ? " CONTAMINATED" : "")}");
++        if (recs != null)
++        {
++            for (int i = 0; i < recs.Count; i++) { Log($"PROFILE {view} {recs[i].Name}: {sums[i] / Math.Max(1, frames) / 1e6:F3} ms/frame"); recs[i].Rec.Dispose(); }
++        }
++    }
++
++    /// Filled in by the NPC LOD system when it exists; baseline has none.
++    string NpcLodLine() => "npcLod=none(all full)";
++
++    static int Median(List<int> v) { var c = new List<int>(v); c.Sort(); return c.Count == 0 ? 0 : c[c.Count / 2]; }
++    static long Median(List<long> v) { var c = new List<long>(v); c.Sort(); return c.Count == 0 ? 0 : c[c.Count / 2]; }
++
++    void Save(RenderTexture rt, string name)
++    {
++        var previous = RenderTexture.active; RenderTexture.active = rt;
++        var image = new Texture2D(rt.width, rt.height, TextureFormat.RGB24, false);
++        image.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0); image.Apply();
++        File.WriteAllBytes(Path.Combine(Folder, name + ".png"), image.EncodeToPNG());
++        RenderTexture.active = previous; Destroy(image);
++    }
++}
++#endif
+diff --git a/Assets/Scripts/WorldProfileRunner.cs.meta b/Assets/Scripts/WorldProfileRunner.cs.meta
+new file mode 100644
+index 0000000..1774335
+--- /dev/null
++++ b/Assets/Scripts/WorldProfileRunner.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 458fced06f245401cad6ab51bf2a1d01
+\ No newline at end of file

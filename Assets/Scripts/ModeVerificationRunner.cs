@@ -123,12 +123,13 @@ public sealed class ModeVerificationRunner : MonoBehaviour
         Check(W.Progression.Buy(W.Powers.Strength.Definition)&&W.Progression.Tier(W.Powers.Strength.Definition)==1,"Earned points purchase strength upgrade; tier=1 must survive restart.");
         e=Next();Check(e.Objective!=hero.Rules.Objective(e)&&W.Progression.Data.Side==PlayerSide.Villain,"Same encounter systems, opposite Villain loot/destruction/escape goals.");
         cop=e.Responders[0];
-        // District world: the set-piece may be in another district, far beyond the cop's detection range (in the 3x3 city the
-        // player always started within it). Reproduce that start: stand 25 m from the scene for 1 s, then the original check.
-        Move(W.City.NearestSidewalk(e.Site+Vector3.back*25));yield return new WaitForSeconds(1f);
+        // District world: the set-piece can be in another district, so the responder starts in the far NPC LOD tier and
+        // is promoted when the player arrives; with main's police timings its first strike can land after 1.2 s.
+        // Same assertion (a hostile responder's real attack lowers health), window up to 4 s, time-to-hit logged.
         health=W.Health;Move(cop.transform.position+Vector3.forward*.7f);
-        yield return new WaitForSeconds(1.2f);
-        Check(cop.Hostile&&W.Health<health,$"Villain live cop AI attacked: health {health:F0} -> {W.Health:F0}.");
+        float waitStart=Time.time;while(W.Health>=health&&Time.time-waitStart<4f)yield return null;
+        Debug.Log($"[MODE VERIFY] villain cop first damage after {Time.time-waitStart:F2}s (cop windups {cop.Windups}, releases {cop.Releases}, hits {cop.Hits}).");
+        Check(cop.Hostile&&W.Health<health,$"Villain live cop AI attacked: health {health:F0} -> {W.Health:F0} after {Time.time-waitStart:F2}s.");
         // Stand-off above the Gunner range (22 m): 15 m was chosen when police attacks were 2 m contact damage.
         Move(e.Site+Vector3.up*30);int policeBefore=W.Npcs.Count(n=>n!=null&&n.Role==NpcRole.Cop);
         W.AddHeat(3);W.ReconcilePolice();int policeAfter=W.Npcs.Count(n=>n!=null&&n.Role==NpcRole.Cop);

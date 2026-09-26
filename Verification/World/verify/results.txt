@@ -1,9 +1,9 @@
 SEEDS A=2409 B=3226; districts in CityLayout: Downtown, Park, Residential, Docks
 PASS GameFlow.Select hero (world verification copy)
-PASS [A1] District Downtown: 37 buildings, 29 static structures, 6 encounter sites on NavMesh; NavMesh build 143 ms.
-PASS [A1] District Park: 0 buildings, 144 static structures, 4 encounter sites on NavMesh; NavMesh build 65 ms.
-PASS [A1] District Residential: 20 buildings, 92 static structures, 3 encounter sites on NavMesh; NavMesh build 67 ms.
-PASS [A1] District Docks: 6 buildings, 181 static structures, 4 encounter sites on NavMesh; NavMesh build 80 ms.
+PASS [A1] District Downtown: 37 buildings, 29 static structures, 6 encounter sites on NavMesh; NavMesh build 72 ms.
+PASS [A1] District Park: 0 buildings, 144 static structures, 4 encounter sites on NavMesh; NavMesh build 63 ms.
+PASS [A1] District Residential: 20 buildings, 92 static structures, 3 encounter sites on NavMesh; NavMesh build 54 ms.
+PASS [A1] District Docks: 6 buildings, 181 static structures, 4 encounter sites on NavMesh; NavMesh build 72 ms.
 PASS [A1] 63 buildings: 0 overlapping footprints (0), 0 in water, 0 within 13 m of a landmark centre; 3 landmarks.
 PASS [A1] Overlap-test CONTROL: building 0 vs a copy shifted 1 m = overlap; shifted by its width + 1 m = no overlap.
 PASS [A1] Spawn (-28.0,0.1,4.0) is on walkable NavMesh (nearest (-28.0,0.1,4.0), 0.05 m).
@@ -15,10 +15,10 @@ PASS [A1] Reachability CONTROL: open sea at (228.0,-0.6,-258.0) (50 m off the so
 PASS [A1] Encounters spread across districts: 8 active set-pieces in 4 districts (Downtown, Park, Residential, Docks, Downtown, Park, Residential, Docks).
 CAPTURE seed-2409-topdown.png: top-down orthographic, north up, x -300..300, z -356..244.
 PASS GameFlow.Select hero (world verification copy)
-PASS [A2] District Downtown: 37 buildings, 29 static structures, 6 encounter sites on NavMesh; NavMesh build 69 ms.
-PASS [A2] District Park: 0 buildings, 144 static structures, 4 encounter sites on NavMesh; NavMesh build 63 ms.
-PASS [A2] District Residential: 20 buildings, 92 static structures, 3 encounter sites on NavMesh; NavMesh build 57 ms.
-PASS [A2] District Docks: 6 buildings, 181 static structures, 4 encounter sites on NavMesh; NavMesh build 76 ms.
+PASS [A2] District Downtown: 37 buildings, 29 static structures, 6 encounter sites on NavMesh; NavMesh build 61 ms.
+PASS [A2] District Park: 0 buildings, 144 static structures, 4 encounter sites on NavMesh; NavMesh build 58 ms.
+PASS [A2] District Residential: 20 buildings, 92 static structures, 3 encounter sites on NavMesh; NavMesh build 54 ms.
+PASS [A2] District Docks: 6 buildings, 181 static structures, 4 encounter sites on NavMesh; NavMesh build 69 ms.
 PASS [A2] 63 buildings: 0 overlapping footprints (0), 0 in water, 0 within 13 m of a landmark centre; 3 landmarks.
 PASS [A2] Overlap-test CONTROL: building 0 vs a copy shifted 1 m = overlap; shifted by its width + 1 m = no overlap.
 PASS [A2] Spawn (-28.0,0.1,4.0) is on walkable NavMesh (nearest (-28.0,0.1,4.0), 0.05 m).
@@ -29,10 +29,10 @@ PASS [A2] Docks reachable on NavMesh from spawn: farthest site (212.0,0.1,-150.0
 PASS [A2] Reachability CONTROL: open sea at (228.0,-0.6,-258.0) (50 m off the south shore) has no NavMesh and no complete path.
 PASS [A2] Encounters spread across districts: 8 active set-pieces in 4 districts (Downtown, Park, Residential, Docks, Downtown, Park, Residential, Docks).
 PASS GameFlow.Select hero (world verification copy)
-PASS [B] District Downtown: 41 buildings, 29 static structures, 6 encounter sites on NavMesh; NavMesh build 60 ms.
-PASS [B] District Park: 0 buildings, 144 static structures, 4 encounter sites on NavMesh; NavMesh build 73 ms.
-PASS [B] District Residential: 30 buildings, 92 static structures, 3 encounter sites on NavMesh; NavMesh build 56 ms.
-PASS [B] District Docks: 6 buildings, 182 static structures, 4 encounter sites on NavMesh; NavMesh build 75 ms.
+PASS [B] District Downtown: 41 buildings, 29 static structures, 6 encounter sites on NavMesh; NavMesh build 55 ms.
+PASS [B] District Park: 0 buildings, 144 static structures, 4 encounter sites on NavMesh; NavMesh build 59 ms.
+PASS [B] District Residential: 30 buildings, 92 static structures, 3 encounter sites on NavMesh; NavMesh build 51 ms.
+PASS [B] District Docks: 6 buildings, 182 static structures, 4 encounter sites on NavMesh; NavMesh build 74 ms.
 PASS [B] 77 buildings: 0 overlapping footprints (0), 0 in water, 0 within 13 m of a landmark centre; 3 landmarks.
 PASS [B] Overlap-test CONTROL: building 0 vs a copy shifted 1 m = overlap; shifted by its width + 1 m = no overlap.
 PASS [B] Spawn (-25.5,0.1,6.5) is on walkable NavMesh (nearest (-25.5,0.1,6.5), 0.05 m).
@@ -43,13 +43,14 @@ PASS [B] Docks reachable on NavMesh from spawn: farthest site (212.0,0.1,-150.0)
 PASS [B] Reachability CONTROL: open sea at (228.0,-0.6,-258.0) (50 m off the south shore) has no NavMesh and no complete path.
 PASS [B] Encounters spread across districts: 8 active set-pieces in 4 districts (Downtown, Park, Residential, Docks, Downtown, Park, Residential, Docks).
 CAPTURE seed-3226-topdown.png: top-down orthographic, north up, x -300..300, z -356..244.
-PASS DETERMINISM CONTROL: seed 2409 built twice gives an identical plan, prop placement and static-geometry fingerprint (92226 chars, hash D2670C10).
-PASS Different seed 3226 gives a different layout (hash 88438C7F vs D2670C10).
+PASS DETERMINISM CONTROL: seed 2409 built twice gives an identical plan, prop placement and static-geometry fingerprint (92226 chars, hash 7B808435).
+PASS Different seed 3226 gives a different layout (hash 027820C0 vs 7B808435).
 PASS GameFlow.Select hero (world verification copy)
 Downtown rooftop viewpoint: tallest spawn-district building, height 106.1 m, roof (-9.0,108.7,-5.0).
-CAPTURE downtown-rooftop-west-park-tower.png from (-9.0,108.7,-5.0) looking at (-196.0,60.0,104.0); landmarks in frame with clear line of sight: Park Lookout Tower (218 m).
-CAPTURE downtown-rooftop-south-harbour-light.png from (-9.0,108.7,-5.0) looking at (-14.0,30.0,-258.0); landmarks in frame with clear line of sight: Harbour Light (262 m).
-CAPTURE downtown-rooftop-north-spire.png from (-9.0,108.7,-7.0) looking at (0.0,110.0,60.0); landmarks in frame with clear line of sight: Meridian Spire (69 m).
+CAPTURE downtown-rooftop-west-park-tower.png from (-13.6,112.7,-2.3) looking at (-196.0,20.0,104.0); landmarks in frame with clear line of sight: Park Lookout Tower (213 m).
+CAPTURE downtown-rooftop-south-harbour-light.png from (-9.1,112.7,-10.3) looking at (-14.0,5.0,-258.0); landmarks in frame with clear line of sight: Harbour Light (258 m).
+CAPTURE downtown-rooftop-north-spire.png from (-8.3,112.7,0.3) looking at (0.0,90.0,60.0); landmarks in frame with clear line of sight: Meridian Spire (61 m).
+CAPTURE downtown-rooftop-east-residential.png from (-3.8,112.7,-4.0) looking at (220.0,0.0,40.0); landmarks in frame with clear line of sight: none.
 CAPTURE waterfront-quay.png from (-120.0,7.0,-193.0) looking at (-14.0,25.0,-258.0); landmarks in frame with clear line of sight: Harbour Light (129 m).
 CAPTURE park-pond-and-tower.png from (-150.0,5.0,-20.0) looking at (-196.0,45.0,104.0); landmarks in frame with clear line of sight: Park Lookout Tower (154 m).
 CAPTURE bridge-grand-canal.png from (128.0,3.0,-22.0) looking at (128.0,2.0,32.0); landmarks in frame with clear line of sight: none.
@@ -65,16 +66,16 @@ TRAVEL spawn -> Residential site (212.0,0.0,85.0): NavMesh path 262 m = 29.1 s r
 TRAVEL spawn -> Docks site (-40.0,0.1,-186.0): NavMesh path 190 m = 21.2 s running; straight 190 m = ~2.6 s flying (1 tank(s)).
 TRAVEL spawn -> Docks site (212.0,0.1,-150.0): NavMesh path 310 m = 34.5 s running; straight 285 m = ~4.0 s flying (1 tank(s)).
 PASS GameHud present.
-PASS HUD waypoint at the new distances: target (27.7,0.1,-20.1) of Bank break-out at 261 m (independent 261 m), on-screen=True, label "261 M".
+PASS HUD waypoint at the new distances: target (27.7,0.1,-20.3) of Bank break-out at 261 m (independent 261 m), on-screen=True, label "261 M".
 PASS Waypoint distance label reads the long distance.
-PASS Facing away at 261 m: the edge arrow points back to the target (angle 176).
+PASS Facing away at 261 m: the edge arrow points back to the target (angle 177).
 PASS Rooftop contract: 5 discovery markers with ids 2409:roof:0, 2409:roof:1, 2409:roof:2, 2409:roof:3, 2409:roof:4 on the first 5 buildings (districts Downtown,Downtown,Downtown,Residential,Docks).
 PASS Standing on the roof claims 2409:roof:0 into the Rooftops save field; marker removed.
 PASS NpcLod active.
-LOD counts over 449 frames at spawn: full (near) 10..10, cheap (far) 23..23; promotions 10, demotions 33, civilians recycled 8.
+LOD counts over 679 frames at spawn: full (near) 11..11, cheap (far) 22..22; promotions 11, demotions 33, civilians recycled 7.
 PASS Both tiers populated in a live session.
 PASS Hostile criminal spawned 120 m from the hero.
-PASS FAR tier: animator off (manual steps 10 in 2.0 s), presentation off, avoidance off, AI ticks 8 over 342 frames (~4.0/s), windups 0.
+PASS FAR tier: animator off (manual steps 9 in 2.0 s), presentation off, avoidance off, AI ticks 8 over 452 frames (~4.0/s), windups 0.
 PASS CONTROL promoted: within 2 frames animator, presentation and obstacle avoidance are back on.
-PASS CONTROL promoted NPC fights again: windups 1, releases 1, hits 1, attack clip impact marker at t=10.47 vs release t=10.47; AI ticked 170 times in 170 frames (every frame).
+PASS CONTROL promoted NPC fights again: windups 1, releases 1, hits 1, attack clip impact marker at t=9.74 vs release t=9.74; AI ticked 199 times in 199 frames (every frame).
 LIMIT: no human playtest of traversal feel; travel times are NavMesh path length / RunSpeed and a flight estimate from the real flight numbers, not a driven run (batch mode has no input).

@@ -1,0 +1,97 @@
+STATIC GEOMETRY MODE BuildingMeshes
+ENV runTag=ab2/B1 commit=? GPU=AMD Radeon Pro 5300 CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz quality='Ultra' shadows=All shadowDistance=150 load={ 6.05 7.31 6.43 } batchUnities=0
+SCENARIO mode=free-play civilians=24 spawnPolice=True; Heat topped to 3 before every sample; seed=2409
+GEN 1: select->session ready 894 ms (includes async scene load); city build 580.2 ms; total build incl. session 825.9 ms
+GEN 1 STAGE plan (layout generate): 3.5 ms
+GEN 1 STAGE ground, water holes, decks, sea: 6.6 ms
+GEN 1 STAGE buildings (art) + rooftop markers: 72.1 ms
+GEN 1 STAGE streets (curbs, dashes, crossings): 5.8 ms
+GEN 1 STAGE structures (trees, containers, cranes, landmarks) + backdrop: 18.8 ms
+GEN 1 STAGE static finalize (per-district StaticBatchingUtility): 58.1 ms
+GEN 1 STAGE street/rooftop/feature props: 90.3 ms
+GEN 1 STAGE navmesh collect sources: 7.4 ms
+GEN 1 STAGE navmesh build: Downtown: 88.6 ms
+GEN 1 STAGE navmesh build: Park: 76.3 ms
+GEN 1 STAGE navmesh build: Residential: 58.6 ms
+GEN 1 STAGE navmesh build: Docks: 92.5 ms
+GEN 1 STAGE navmesh add (one data, all districts): 1.6 ms
+GEN 1 STAGE session: hero, camera, WorldSession + NPC spawn, HUD: 245.7 ms
+GEN 2: select->session ready 622 ms (includes async scene load); city build 420.7 ms; total build incl. session 607.2 ms
+GEN 2 STAGE plan (layout generate): 3.0 ms
+GEN 2 STAGE ground, water holes, decks, sea: 2.0 ms
+GEN 2 STAGE buildings (art) + rooftop markers: 48.4 ms
+GEN 2 STAGE streets (curbs, dashes, crossings): 0.9 ms
+GEN 2 STAGE structures (trees, containers, cranes, landmarks) + backdrop: 11.7 ms
+GEN 2 STAGE static finalize (per-district StaticBatchingUtility): 41.7 ms
+GEN 2 STAGE street/rooftop/feature props: 57.3 ms
+GEN 2 STAGE navmesh collect sources: 0.7 ms
+GEN 2 STAGE navmesh build: Downtown: 63.2 ms
+GEN 2 STAGE navmesh build: Park: 61.4 ms
+GEN 2 STAGE navmesh build: Residential: 55.4 ms
+GEN 2 STAGE navmesh build: Docks: 74.0 ms
+GEN 2 STAGE navmesh add (one data, all districts): 0.8 ms
+GEN 2 STAGE session: hero, camera, WorldSession + NPC spawn, HUD: 186.5 ms
+GEN 3: select->session ready 580 ms (includes async scene load); city build 400.2 ms; total build incl. session 565.5 ms
+GEN 3 STAGE plan (layout generate): 2.7 ms
+GEN 3 STAGE ground, water holes, decks, sea: 2.0 ms
+GEN 3 STAGE buildings (art) + rooftop markers: 46.8 ms
+GEN 3 STAGE streets (curbs, dashes, crossings): 1.1 ms
+GEN 3 STAGE structures (trees, containers, cranes, landmarks) + backdrop: 11.5 ms
+GEN 3 STAGE static finalize (per-district StaticBatchingUtility): 37.2 ms
+GEN 3 STAGE street/rooftop/feature props: 51.3 ms
+GEN 3 STAGE navmesh collect sources: 0.7 ms
+GEN 3 STAGE navmesh build: Downtown: 59.7 ms
+GEN 3 STAGE navmesh build: Park: 62.5 ms
+GEN 3 STAGE navmesh build: Residential: 53.6 ms
+GEN 3 STAGE navmesh build: Docks: 70.4 ms
+GEN 3 STAGE navmesh add (one data, all districts): 0.8 ms
+GEN 3 STAGE session: hero, camera, WorldSession + NPC spawn, HUD: 165.4 ms
+STRUCTURE renderers=1685 staticBatchedRenderers=1032 meshFilters=1617 distinctMeshes=27 gameObjectsUnderCity=1778 colliders=1855
+STRUCTURE buildings=63 props=523 breakableProps=516 breakableRenderers=516 breakableRenderersInStaticBatch=0 sidewalkPoints=171
+STRUCTURE npcs=29 civilians=24 cops=5 animators=30 skinned=60 navmeshVerts=16247 navmeshTris=7387
+STRUCTURE districts=4 (Downtown: 37 buildings, navmesh 60 ms, Park: 0 buildings, navmesh 62 ms, Residential: 20 buildings, navmesh 54 ms, Docks: 6 buildings, navmesh 70 ms); staticPieces=15263 landmarks=Meridian Spire/Harbour Light/Park Lookout Tower spawn=(-28.00, 0.12, 4.00) encounterSites=17
+STRUCTURE city renderer bounds min=(-288.00, -1.61, -272.00) max=(288.70, 154.10, 160.00) size=(576.70, 155.71, 432.00); camera farClip=2300 fog=True fogMode=Exponential fogDensity=0.0016
+PASS No BreakableProp renderer is part of a static batch (516 breakable renderers checked).
+CAPTURE topdown.png: orthographic, north (+Z) up, east (+X) right, covers x -302..303, z -359..247
+VIEW street: hero at (-36.50, 0.12, -52.00) (Downtown west sidewalk, mid-block south of the densest crossing (-28.00, 0.03, -24.00) (722 m of building height within 60 m)); camera (-36.50, 4.91, -58.53) fwd (0.00, -0.33, 0.94)
+MEASURED street r1 attempt1: FPS=90.35 mean=11.07ms p95=12.14ms frames=362 drawCalls=275 batches=115 setPass=62 staticBatchedDraws=327 staticBatches=34 instancedDraws=174 instancedBatches=81 dynamicBatchedDraws=0 tris=1362366 visibleRenderers=434 npcs=29 heat=3.00 npcLod near(full)=9 far(cheap)=20 recycled=0 batchUnities before/after=0/0
+MEASURED street r2 attempt1: FPS=91.55 mean=10.92ms p95=11.72ms frames=367 drawCalls=273 batches=115 setPass=62 staticBatchedDraws=327 staticBatches=34 instancedDraws=174 instancedBatches=81 dynamicBatchedDraws=0 tris=1313254 visibleRenderers=430 npcs=29 heat=3.00 npcLod near(full)=9 far(cheap)=20 recycled=0 batchUnities before/after=0/0
+MEASURED street r3 attempt1: FPS=91.02 mean=10.99ms p95=11.69ms frames=365 drawCalls=269 batches=115 setPass=62 staticBatchedDraws=327 staticBatches=34 instancedDraws=174 instancedBatches=81 dynamicBatchedDraws=0 tris=1215030 visibleRenderers=428 npcs=29 heat=3.00 npcLod near(full)=8 far(cheap)=21 recycled=1 batchUnities before/after=0/0
+MEASURED street PROFILED (recorders attached; FPS not used) attempt1: FPS=94.88 mean=10.54ms p95=11.19ms frames=380 drawCalls=267 batches=115 setPass=62 staticBatchedDraws=327 staticBatches=34 instancedDraws=174 instancedBatches=81 dynamicBatchedDraws=0 tris=1165918 visibleRenderers=426 npcs=29 heat=2.75 npcLod near(full)=9 far(cheap)=20 recycled=2 batchUnities before/after=0/0
+PROFILE street PlayerLoop: 9.976 ms/frame
+PROFILE street Render.OpaqueGeometry: 1.260 ms/frame
+PROFILE street Camera.Render: 0.000 ms/frame
+PROFILE street Culling: 0.076 ms/frame
+PROFILE street Shadows.RenderShadowMap: 0.000 ms/frame
+PROFILE street FixedUpdate.PhysicsFixedUpdate: 0.173 ms/frame
+PROFILE street PreUpdate.AIUpdate: 0.186 ms/frame
+PROFILE street Update.ScriptRunBehaviourUpdate: 0.465 ms/frame
+PROFILE street PreLateUpdate.AIUpdatePostScript: 0.001 ms/frame
+PROFILE street PreLateUpdate.DirectorUpdateAnimationBegin: 0.119 ms/frame
+PROFILE street PreLateUpdate.DirectorUpdateAnimationEnd: 0.169 ms/frame
+PROFILE street PreLateUpdate.ScriptRunBehaviourLateUpdate: 0.196 ms/frame
+PROFILE street PostLateUpdate.UpdateAllRenderers: 0.050 ms/frame
+PROFILE street PostLateUpdate.UpdateAllSkinnedMeshes: 0.711 ms/frame
+PROFILE street PostLateUpdate.BatchModeUpdate: 5.480 ms/frame
+VIEW flight: hero at (0.00, 70.00, -96.00) (70 m up over the Downtown south edge, looking north across the island); camera (0.00, 74.08, -103.00) fwd (0.00, -0.22, 0.98)
+MEASURED flight r1 attempt1: FPS=151.16 mean=6.62ms p95=7.36ms frames=605 drawCalls=265 batches=117 setPass=46 staticBatchedDraws=418 staticBatches=41 instancedDraws=264 instancedBatches=76 dynamicBatchedDraws=0 tris=762058 visibleRenderers=537 npcs=29 heat=3.00 npcLod near(full)=0 far(cheap)=29 recycled=8 batchUnities before/after=0/0
+MEASURED flight r2 attempt1: FPS=143.56 mean=6.97ms p95=7.92ms frames=575 drawCalls=268 batches=117 setPass=46 staticBatchedDraws=418 staticBatches=41 instancedDraws=264 instancedBatches=76 dynamicBatchedDraws=0 tris=832010 visibleRenderers=539 npcs=29 heat=2.82 npcLod near(full)=0 far(cheap)=29 recycled=8 batchUnities before/after=0/0
+MEASURED flight r3 attempt1: FPS=149.94 mean=6.67ms p95=7.54ms frames=600 drawCalls=264 batches=117 setPass=46 staticBatchedDraws=418 staticBatches=41 instancedDraws=264 instancedBatches=76 dynamicBatchedDraws=0 tris=741218 visibleRenderers=534 npcs=29 heat=3.00 npcLod near(full)=0 far(cheap)=29 recycled=9 batchUnities before/after=0/0
+MEASURED flight PROFILED (recorders attached; FPS not used) attempt1: FPS=191.67 mean=5.22ms p95=5.93ms frames=767 drawCalls=255 batches=117 setPass=46 staticBatchedDraws=418 staticBatches=41 instancedDraws=264 instancedBatches=76 dynamicBatchedDraws=0 tris=516498 visibleRenderers=525 npcs=29 heat=3.00 npcLod near(full)=0 far(cheap)=29 recycled=11 batchUnities before/after=0/0
+PROFILE flight PlayerLoop: 4.825 ms/frame
+PROFILE flight Render.OpaqueGeometry: 1.070 ms/frame
+PROFILE flight Camera.Render: 0.000 ms/frame
+PROFILE flight Culling: 0.073 ms/frame
+PROFILE flight Shadows.RenderShadowMap: 0.000 ms/frame
+PROFILE flight FixedUpdate.PhysicsFixedUpdate: 0.078 ms/frame
+PROFILE flight PreUpdate.AIUpdate: 0.166 ms/frame
+PROFILE flight Update.ScriptRunBehaviourUpdate: 0.376 ms/frame
+PROFILE flight PreLateUpdate.AIUpdatePostScript: 0.001 ms/frame
+PROFILE flight PreLateUpdate.DirectorUpdateAnimationBegin: 0.030 ms/frame
+PROFILE flight PreLateUpdate.DirectorUpdateAnimationEnd: 0.039 ms/frame
+PROFILE flight PreLateUpdate.ScriptRunBehaviourLateUpdate: 0.088 ms/frame
+PROFILE flight PostLateUpdate.UpdateAllRenderers: 0.064 ms/frame
+PROFILE flight PostLateUpdate.UpdateAllSkinnedMeshes: 0.267 ms/frame
+PROFILE flight PostLateUpdate.BatchModeUpdate: 1.578 ms/frame
+END load={ 8.15 7.62 6.59 } batchUnities=0
+LIMIT: Editor Play Mode (batch) throughput at 1280x720, hero parked, input idle; includes ~5.8 ms batch-mode overhead per STATUS. Not a standalone-player figure.
