@@ -14,7 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CityArtSettings
   Palette: {fileID: 11400000, guid: 6c2db8d117de94442ba7bb997287b05d, type: 2}
   PropMeshes: 1
-  StaticGeometry: 1
+  StaticGeometry: 4
+  Rendering:
+    FarClip: 2300
+    Fog: 1
+    FogMode: 2
+    FogDensity: 0.0016
+    FogColor: 25
+    DetailLayer: 8
+    PropLayer: 9
+    ActorLayer: 10
+    BackdropLayer: 11
+    DetailCull: 220
+    PropCull: 140
+    ActorCull: 170
+    BackdropCull: 0
+    SphericalCull: 1
+    ChunkSize: 64
   FloorHeight: 3.2
   WindowSpacing: 2.4
   WindowWidth: 1.1
@@ -36,21 +52,43 @@ MonoBehaviour:
     Footprint: {x: 1, y: 0.94}
     SetbackAt: 0.65
     UpperWidth: 1
+    WindowSpacingScale: 1
   - Name: Sandstone terraces
     Wall: 4
     Footprint: {x: 0.92, y: 1}
     SetbackAt: 0.65
     UpperWidth: 0.72
+    WindowSpacingScale: 1
   - Name: Teal offices
     Wall: 5
     Footprint: {x: 0.88, y: 0.9}
     SetbackAt: 0.48
     UpperWidth: 0.84
+    WindowSpacingScale: 1
   - Name: Slate tower
     Wall: 6
     Footprint: {x: 0.9, y: 0.82}
     SetbackAt: 0.78
     UpperWidth: 0.76
+    WindowSpacingScale: 1
+  - Name: Glass high-rise
+    Wall: 8
+    Footprint: {x: 0.92, y: 0.92}
+    SetbackAt: 0.72
+    UpperWidth: 0.8
+    WindowSpacingScale: 1
+  - Name: Harbour shed
+    Wall: 10
+    Footprint: {x: 1, y: 1}
+    SetbackAt: 1
+    UpperWidth: 1
+    WindowSpacingScale: 3
+  - Name: Townhouse
+    Wall: 2
+    Footprint: {x: 0.94, y: 0.9}
+    SetbackAt: 0.62
+    UpperWidth: 0.9
+    WindowSpacingScale: 1
   Shapes:
   - Kind: 0
     Size: {x: 0.7, y: 4.2, z: 0.7}
@@ -209,5 +247,502 @@ MonoBehaviour:
     - {x: 0.015, y: -0.36}
     Yaw: 0
     Jitter: 0
+  Structures:
+  - Name: Street tree
+    Variants: 
+    Pieces:
+    - Type: 2
+      Position: {x: 0, y: 1.2, z: 0}
+      Size: {x: 0.32, y: 2.4, z: 0.32}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 11
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 3.3, z: 0}
+      Size: {x: 2.4, y: 2, z: 2.4}
+      Euler: {x: 0, y: 45, z: 0}
+      Color: 12
+      Variant: 0
+      Solid: 0
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 4.3, z: 0}
+      Size: {x: 1.6, y: 1.3, z: 1.6}
+      Euler: {x: 0, y: 20, z: 0}
+      Color: 12
+      Variant: 0
+      Solid: 0
+      Detail: 0
+  - Name: Park tree
+    Variants: 
+    Pieces:
+    - Type: 2
+      Position: {x: 0, y: 1.6, z: 0}
+      Size: {x: 0.5, y: 3.2, z: 0.5}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 11
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 4.4, z: 0}
+      Size: {x: 4.2, y: 3.2, z: 4.2}
+      Euler: {x: 0, y: 45, z: 0}
+      Color: 12
+      Variant: 0
+      Solid: 0
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 6.2, z: 0}
+      Size: {x: 3, y: 2.2, z: 3}
+      Euler: {x: 0, y: 15, z: 0}
+      Color: 26
+      Variant: 0
+      Solid: 0
+      Detail: 0
+  - Name: Pine tree
+    Variants: 
+    Pieces:
+    - Type: 2
+      Position: {x: 0, y: 1.1, z: 0}
+      Size: {x: 0.42, y: 2.2, z: 0.42}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 11
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 2.8, z: 0}
+      Size: {x: 3.4, y: 1.7, z: 3.4}
+      Euler: {x: 0, y: 45, z: 0}
+      Color: 12
+      Variant: 0
+      Solid: 0
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 4.2, z: 0}
+      Size: {x: 2.5, y: 1.5, z: 2.5}
+      Euler: {x: 0, y: 20, z: 0}
+      Color: 12
+      Variant: 0
+      Solid: 0
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 5.4, z: 0}
+      Size: {x: 1.5, y: 1.4, z: 1.5}
+      Euler: {x: 0, y: 45, z: 0}
+      Color: 12
+      Variant: 0
+      Solid: 0
+      Detail: 0
+  - Name: Shipping container
+    Variants: 0d0000000e00000005000000090000000300000002000000i
+    Pieces:
+    - Type: 3
+      Position: {x: 0, y: 1.3, z: 0}
+      Size: {x: 2.44, y: 2.59, z: 6.06}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 13
+      Variant: 1
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 1.3, z: -3.04}
+      Size: {x: 2.2, y: 2.3, z: 0.04}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 10
+      Variant: 0
+      Solid: 0
+      Detail: 1
+    - Type: 3
+      Position: {x: 0, y: 2.62, z: 0}
+      Size: {x: 2.2, y: 0.04, z: 5.6}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 10
+      Variant: 0
+      Solid: 0
+      Detail: 1
+  - Name: Gantry crane
+    Variants: 
+    Pieces:
+    - Type: 3
+      Position: {x: -6, y: 13, z: -4.5}
+      Size: {x: 1, y: 26, z: 1}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 6, y: 13, z: -4.5}
+      Size: {x: 1, y: 26, z: 1}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: -6, y: 13, z: 4.5}
+      Size: {x: 1, y: 26, z: 1}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 6, y: 13, z: 4.5}
+      Size: {x: 1, y: 26, z: 1}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: -6, y: 25.5, z: 0}
+      Size: {x: 1.2, y: 1.4, z: 10.4}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 6, y: 25.5, z: 0}
+      Size: {x: 1.2, y: 1.4, z: 10.4}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: -6, y: 8, z: 0}
+      Size: {x: 0.6, y: 0.6, z: 9}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 0
+      Detail: 1
+    - Type: 3
+      Position: {x: 6, y: 8, z: 0}
+      Size: {x: 0.6, y: 0.6, z: 9}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 0
+      Detail: 1
+    - Type: 3
+      Position: {x: 0, y: 27, z: 0}
+      Size: {x: 13.2, y: 1.6, z: 3}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 27, z: -16}
+      Size: {x: 2.2, y: 1.3, z: 36}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 27, z: 9}
+      Size: {x: 2.2, y: 1.3, z: 8}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 30, z: 4}
+      Size: {x: 5, y: 4, z: 6}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 2
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 30.2, z: 1}
+      Size: {x: 5.1, y: 1, z: 0.2}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 8
+      Variant: 0
+      Solid: 0
+      Detail: 1
+    - Type: 3
+      Position: {x: 0, y: 29.5, z: 11}
+      Size: {x: 3, y: 4, z: 3}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 6
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 20, z: -26}
+      Size: {x: 0.15, y: 13, z: 0.15}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 10
+      Variant: 0
+      Solid: 0
+      Detail: 1
+    - Type: 3
+      Position: {x: 0, y: 13, z: -26}
+      Size: {x: 1.4, y: 1, z: 1.4}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 13
+      Variant: 0
+      Solid: 0
+      Detail: 1
+  - Name: Meridian Spire
+    Variants: 
+    Pieces:
+    - Type: 3
+      Position: {x: 0, y: 3, z: 0}
+      Size: {x: 26, y: 6, z: 26}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 6
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 6.2, z: 0}
+      Size: {x: 26.4, y: 0.4, z: 26.4}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 2
+      Variant: 0
+      Solid: 0
+      Detail: 1
+    - Type: 3
+      Position: {x: 0, y: 36, z: 0}
+      Size: {x: 19, y: 60, z: 19}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 5
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 21, z: 0}
+      Size: {x: 19.4, y: 0.6, z: 19.4}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 0
+      Detail: 1
+    - Type: 3
+      Position: {x: 0, y: 41, z: 0}
+      Size: {x: 19.4, y: 0.6, z: 19.4}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 0
+      Detail: 1
+    - Type: 3
+      Position: {x: 0, y: 61, z: 0}
+      Size: {x: 19.4, y: 0.6, z: 19.4}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 0
+      Detail: 1
+    - Type: 3
+      Position: {x: 0, y: 84, z: 0}
+      Size: {x: 14, y: 36, z: 14}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 8
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 66.2, z: 0}
+      Size: {x: 19.6, y: 0.4, z: 19.6}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 2
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 93, z: 0}
+      Size: {x: 14.4, y: 0.6, z: 14.4}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 0
+      Detail: 1
+    - Type: 3
+      Position: {x: 0, y: 110, z: 0}
+      Size: {x: 9, y: 16, z: 9}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 5
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 102.2, z: 0}
+      Size: {x: 14.6, y: 0.4, z: 14.6}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 2
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 119, z: 0}
+      Size: {x: 11, y: 2, z: 11}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 2
+      Position: {x: 0, y: 136, z: 0}
+      Size: {x: 1.3, y: 32, z: 1.3}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 10
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 153, z: 0}
+      Size: {x: 2.2, y: 2.2, z: 2.2}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 13
+      Variant: 0
+      Solid: 0
+      Detail: 0
+  - Name: Harbour Light
+    Variants: 
+    Pieces:
+    - Type: 2
+      Position: {x: 0, y: 2, z: 0}
+      Size: {x: 12, y: 4, z: 12}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 6
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 2
+      Position: {x: 0, y: 9, z: 0}
+      Size: {x: 7, y: 10, z: 7}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 2
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 2
+      Position: {x: 0, y: 19, z: 0}
+      Size: {x: 6.6, y: 10, z: 6.6}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 13
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 2
+      Position: {x: 0, y: 29, z: 0}
+      Size: {x: 6.2, y: 10, z: 6.2}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 2
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 2
+      Position: {x: 0, y: 39, z: 0}
+      Size: {x: 5.8, y: 10, z: 5.8}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 13
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 2
+      Position: {x: 0, y: 44.5, z: 0}
+      Size: {x: 8.4, y: 1, z: 8.4}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 10
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 2
+      Position: {x: 0, y: 47, z: 0}
+      Size: {x: 4.6, y: 4, z: 4.6}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 2
+      Position: {x: 0, y: 50, z: 0}
+      Size: {x: 5.6, y: 2, z: 5.6}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 13
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 52, z: 0}
+      Size: {x: 0.4, y: 2, z: 0.4}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 10
+      Variant: 0
+      Solid: 0
+      Detail: 0
+  - Name: Lookout Tower
+    Variants: 
+    Pieces:
+    - Type: 3
+      Position: {x: 0, y: 1.5, z: 0}
+      Size: {x: 14, y: 3, z: 14}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 6
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 2
+      Position: {x: 0, y: 37, z: 0}
+      Size: {x: 6, y: 68, z: 6}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 2
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 2
+      Position: {x: 0, y: 69.5, z: 0}
+      Size: {x: 14, y: 1, z: 14}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 9
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 2
+      Position: {x: 0, y: 74, z: 0}
+      Size: {x: 18, y: 7, z: 18}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 8
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 2
+      Position: {x: 0, y: 78, z: 0}
+      Size: {x: 19, y: 1.2, z: 19}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 2
+      Variant: 0
+      Solid: 1
+      Detail: 0
+    - Type: 2
+      Position: {x: 0, y: 90, z: 0}
+      Size: {x: 1, y: 24, z: 1}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 10
+      Variant: 0
+      Solid: 0
+      Detail: 0
+    - Type: 3
+      Position: {x: 0, y: 102.8, z: 0}
+      Size: {x: 1.8, y: 1.8, z: 1.8}
+      Euler: {x: 0, y: 0, z: 0}
+      Color: 13
+      Variant: 0
+      Solid: 0
+      Detail: 0
   UseAuthoredPlacements: 0
   AuthoredPlacements: []

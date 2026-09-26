@@ -49,18 +49,20 @@ public sealed class CityArtVerificationRunner : MonoBehaviour
             tuning.City.Seed=seed;GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene("Prototype");
             var art=W.City.Art;var buildings=W.City.GetComponentsInChildren<ArtBuilding>();var props=W.City.GetComponentsInChildren<CityArtProp>();
             var counts=props.GroupBy(p=>p.Kind).OrderBy(g=>g.Key).Select(g=>g.Key+"="+g.Count());
-            Check(buildings.Length==36&&buildings.Select(b=>b.Style).Distinct().Count()==4,$"Seed {seed}: 36 buildings, all four archetypes; distribution="+string.Join(",",buildings.GroupBy(b=>b.Archetype).Select(g=>g.Key+"="+g.Count())));
+            // World pass: each district draws from its own style list (CityLayout), so check membership per district + variety.
+            bool stylesInDistrict=buildings.All(b=>b.District<0||W.City.DistrictDefinitions[b.District].Styles.Contains(b.Style));
+            Check(buildings.Length==W.City.Buildings.Count&&buildings.Length>=40&&stylesInDistrict&&buildings.Select(b=>b.Style).Distinct().Count()>=6,$"Seed {seed}: {buildings.Length} buildings, every one styled from its district's list, {buildings.Select(b=>b.Style).Distinct().Count()} archetypes; distribution="+string.Join(",",buildings.GroupBy(b=>b.Archetype).Select(g=>g.Key+"="+g.Count())));
             Check(props.Length>200&&props.Any(p=>p.Kind==CityPropKind.Billboard)&&props.Any(p=>p.Kind==CityPropKind.WaterTower),$"Seed {seed}: props={props.Length}, rooftop={props.Count(p=>p.Rooftop)}, street={props.Count(p=>!p.Rooftop)}; "+string.Join(",",counts));
             Check(W.City.Buildings.Select(b=>b.Size.y).Distinct().Count()>10,"Existing seeded height/layout variety retained.");
             var layout=Resources.Load<CityLayout>("CityLayout").Generate(tuning.City);
             Check(layout.Select(b=>JsonUtility.ToJson(b)).SequenceEqual(W.City.Buildings.Select(b=>JsonUtility.ToJson(b))),"Layout CONTROL: original CityLayout placements/heights/reward records are unchanged by art generation.");
-            var plan=art.Settings.Generate(tuning.City,W.City.Buildings);
+            var plan=art.Settings.Generate(tuning.City,W.City.Plan);
             string fingerprint=string.Join("|",plan.Select(p=>JsonUtility.ToJson(p)))+string.Join(",",buildings.Select(b=>b.Style));
             Check(plan.Count==art.Placements.Count&&string.Join("|",plan.Select(p=>JsonUtility.ToJson(p)))==string.Join("|",art.Placements.Select(p=>JsonUtility.ToJson(p))),"Same-seed CONTROL regenerates exact placement records.");
             if(firstFingerprint==null)firstFingerprint=fingerprint;else Check(firstFingerprint!=fingerprint,"Different-seed CONTROL changes styles, rooftop equipment selection, street jitter and existing heights.");
             File.WriteAllText("Verification/Art/seed-"+seed+"-placements.json",JsonUtility.ToJson(new PlacementRecord{Seed=seed,Placements=plan},true));
             var clone=Instantiate(art.Settings);clone.AuthoredPlacements=new List<ArtPlacement>{new ArtPlacement{Kind=CityPropKind.Bench,Position=new Vector3(1,2,3),Yaw=37}};clone.UseAuthoredPlacements=true;
-            Check(clone.Generate(tuning.City,W.City.Buildings).Count==1&&clone.Generate(tuning.City,W.City.Buildings)[0].Yaw==37,"Authored placement CONTROL preserves explicit position/yaw instead of regenerating over edits.");Destroy(clone);
+            Check(clone.Generate(tuning.City,W.City.Plan).Count==1&&clone.Generate(tuning.City,W.City.Plan)[0].Yaw==37,"Authored placement CONTROL preserves explicit position/yaw instead of regenerating over edits.");Destroy(clone);
             yield return PaletteControl();
             var sun=UnityEngine.Object.FindObjectsByType<Light>().Single(l=>l.type==LightType.Directional);
             Check(Mathf.Approximately(sun.intensity,1.2f)&&Quaternion.Angle(sun.transform.rotation,Quaternion.Euler(45,-35,0))<.01f&&RenderSettings.ambientLight==new Color(.45f,.5f,.6f),"Existing sun intensity=1.2, rotation=(45,-35,0), ambient=(.45,.5,.6) unchanged.");

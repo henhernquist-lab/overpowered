@@ -4,10 +4,13 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 public sealed class CityArtProp : MonoBehaviour { public CityPropKind Kind; public bool Rooftop; }
-public sealed class ArtBuilding : MonoBehaviour { public int Style; public string Archetype; }
+public sealed class ArtBuilding : MonoBehaviour { public int Style; public string Archetype; public int District=-1; }
+/// One district of the generated world. Its "Static" child is static-batched on its own; its NavMesh is its own NavMeshData.
+public sealed class CityDistrictRoot : MonoBehaviour { public int Index; public string DistrictName; public Rect Region; public Transform Static; }
 public sealed class CityArt : MonoBehaviour
 {
     public CityArtSettings Settings {get;private set;}
+    public WorldRendering Rendering=>Settings.Rendering;
     public readonly List<ArtPlacement> Placements=new List<ArtPlacement>();
     // Modes are read once so every prop (including runtime CreateProp calls) matches the rest of this city.
     public PropMeshMode PropMode {get;private set;}
@@ -15,17 +18,27 @@ public sealed class CityArt : MonoBehaviour
     public double BuildMilliseconds {get;private set;}
     public double StaticFinalizeMilliseconds {get;private set;}
     public int SharedPropMeshes=>sharedProps.Count;
-    /// Renderers that draw buildings and streets in the current mode (combined children, pieces or city meshes).
-    public IEnumerable<Renderer> StaticGeometryRenderers=>staticRoots.Where(r=>r!=null).SelectMany(r=>r.GetComponentsInChildren<Renderer>()).Concat(cityRenderers.Where(r=>r!=null));
+    /// Static primitive pieces generated (every mode), and static renderers/GameObjects that exist after finishing.
+    public int PieceCount {get;private set;}
+    public IReadOnlyList<CityDistrictRoot> Districts=>districtRoots;
+    public Transform BackdropRoot {get;private set;}
+    /// Renderers that draw buildings, ground, streets, structures and backdrop (combined children, pieces or city meshes).
+    public IEnumerable<Renderer> StaticGeometryRenderers=>districtRoots.Where(r=>r!=null).SelectMany(r=>r.Static.GetComponentsInChildren<Renderer>())
+        .Concat(BackdropRoot!=null?BackdropRoot.GetComponentsInChildren<Renderer>():new Renderer[0]).Concat(cityRenderers.Where(r=>r!=null)).Distinct();
     readonly List<Mesh> ownedMeshes=new List<Mesh>();
-    readonly List<GameObject> staticRoots=new List<GameObject>(), pendingStatic=new List<GameObject>();
+    readonly List<GameObject> staticRoots=new List<GameObject>();
     readonly List<Renderer> cityRenderers=new List<Renderer>();
+    readonly List<CityDistrictRoot> districtRoots=new List<CityDistrictRoot>();
+    readonly Dictionary<(int,int,int),Transform> chunks=new Dictionary<(int,int,int),Transform>();
+    readonly Dictionary<(Transform,CityColor,int),Batch> batches=new Dictionary<(Transform,CityColor,int),Batch>();
     readonly Dictionary<string,SharedProp> sharedProps=new Dictionary<string,SharedProp>();
     readonly System.Diagnostics.Stopwatch buildWatch=new System.Diagnostics.Stopwatch();
     static readonly Dictionary<PrimitiveType,Mesh> primitives=new Dictionary<PrimitiveType,Mesh>();
     GameTuning tuning;
     struct PropPiece { public string Name; public PrimitiveType Type; public Vector3 Position, Size; public Quaternion Rotation; public CityColor Color; }
     sealed class SharedProp { public Mesh Mesh; public Mesh[] Parts; public Material[] Materials; }
+    sealed class Batch { public Transform Owner; public CityColor Color; public int Layer; public readonly List<CombineInstance> Parts=new List<CombineInstance>(); public long Vertices; }
+    bool Meshes=>StaticMode==StaticGeometryMode.BuildingMeshes;
     public void Initialize(GameTuning config)
     {
         buildWatch.Restart();
@@ -43,128 +56,313 @@ public sealed class CityArt : MonoBehaviour
         return go;
     }
     static Vector3 PieceScale(Vector3 size,PrimitiveType type)=>new Vector3(size.x,size.y*(type==PrimitiveType.Cylinder?.5f:1),size.z);
+
+    // ------------------------------------------------------------------ roots, chunks and the static piece sink
+    public CityDistrictRoot District(int index,CityPlan plan=null)
+    {
+        while(districtRoots.Count<=index)districtRoots.Add(null);
+        if(districtRoots[index]!=null)return districtRoots[index];
+        var def=plan!=null&&index<plan.Districts.Count?plan.Districts[index]:null;
+        var go=new GameObject("District "+index+(def!=null?" — "+def.Name:""));go.transform.SetParent(transform,false);
+        var root=go.AddComponent<CityDistrictRoot>();root.Index=index;root.DistrictName=def?.Name;root.Region=def!=null?def.Region:default;
+        root.Static=new GameObject("Static").transform;root.Static.SetParent(go.transform,false);
+        return districtRoots[index]=root;
+    }
+    /// Ground, streets and structures are grouped per district and per ChunkSize cell, so culling stays local.
+    Transform Chunk(int district,Vector3 world)
+    {
+        float size=Mathf.Max(8,Rendering.ChunkSize);var key=(district,Mathf.FloorToInt(world.x/size),Mathf.FloorToInt(world.z/size));
+        if(chunks.TryGetValue(key,out var t)&&t!=null)return t;
+        var go=new GameObject($"Chunk {key.Item2},{key.Item3}");go.transform.SetParent(District(district).Static,false);
+        staticRoots.Add(go);return chunks[key]=go.transform;
+    }
+    /// One primitive piece of never-moving geometry. Legacy modes create a GameObject per piece; BuildingMeshes appends it to
+    /// the owner's mesh for that colour and layer and adds a BoxCollider on the owner when solid. Owners are never rotated/scaled.
+    GameObject Part(Transform owner,string name,Vector3 local,Vector3 size,CityColor color,bool solid,bool detail,PrimitiveType type=PrimitiveType.Cube,Quaternion? rotated=null)
+    {
+        PieceCount++;
+        var rotation=rotated??Quaternion.identity;
+        int layer=detail?Rendering.DetailLayer:0;
+        if(!Meshes)
+        {
+            var go=Piece(owner,name,local,size,color,solid,type);go.layer=layer;
+            if(detail)go.GetComponent<Renderer>().shadowCastingMode=ShadowCastingMode.Off;
+            if(rotation!=Quaternion.identity)go.transform.localRotation=rotation;
+            return go;
+        }
+        var key=(owner,color,layer);
+        if(!batches.TryGetValue(key,out var batch))batches[key]=batch=new Batch{Owner=owner,Color=color,Layer=layer};
+        var mesh=Primitive(type);
+        batch.Parts.Add(new CombineInstance{mesh=mesh,transform=Matrix4x4.TRS(local,rotation,PieceScale(size,type))});batch.Vertices+=mesh.vertexCount;
+        if(solid)
+        {
+            // Cylinders are symmetric about their axis, so a yaw-only rotation needs no rotated collider.
+            bool upright=rotation==Quaternion.identity||(type==PrimitiveType.Cylinder&&Mathf.Abs(Quaternion.Angle(rotation,Quaternion.Euler(0,rotation.eulerAngles.y,0)))<.01f);
+            bool quarter=Mathf.Abs(Quaternion.Angle(rotation,Quaternion.Euler(0,Mathf.Round(rotation.eulerAngles.y/90)*90,0)))<.01f;
+            if(upright||quarter)
+            {
+                var s=upright?size:Quaternion.Euler(0,Mathf.Round(rotation.eulerAngles.y/90)*90,0)*size;
+                var box=owner.gameObject.AddComponent<BoxCollider>();box.center=local;box.size=new Vector3(Mathf.Abs(s.x),Mathf.Abs(s.y),Mathf.Abs(s.z));
+            }
+            else
+            {
+                var holder=new GameObject(name+" collider");holder.transform.SetParent(owner,false);holder.transform.localPosition=local;holder.transform.localRotation=rotation;
+                holder.AddComponent<BoxCollider>().size=size;
+            }
+        }
+        return null;
+    }
+    void FlushBatches()
+    {
+        foreach(var batch in batches.Values)
+        {
+            if(batch.Owner==null||batch.Parts.Count==0)continue;
+            var mesh=new Mesh{name=batch.Owner.name+" / "+batch.Color+(batch.Layer!=0?" (detail)":""),indexFormat=batch.Vertices>65000?IndexFormat.UInt32:IndexFormat.UInt16};
+            mesh.CombineMeshes(batch.Parts.ToArray(),true,true);
+            var go=new GameObject(batch.Color+(batch.Layer!=0?" detail":"")){layer=batch.Layer};go.transform.SetParent(batch.Owner,false);
+            go.AddComponent<MeshFilter>().sharedMesh=mesh;var renderer=go.AddComponent<MeshRenderer>();renderer.sharedMaterial=CityMaterials.Get(batch.Color);
+            // Facade/street detail (windows, bands, signs, kerbs, lane marks) receives shadows but never casts: it is flush
+            // with the surfaces behind it, and casting it multiplied shadow-pass triangles for no visible change.
+            if(batch.Layer!=0)renderer.shadowCastingMode=ShadowCastingMode.Off;
+            ownedMeshes.Add(mesh);
+        }
+        batches.Clear();
+    }
+
+    // ------------------------------------------------------------------ buildings
     public void Building(BuildingPlacement b,int index)
     {
-        int styleIndex=Settings.StyleIndex(tuning.City.Seed,index);var style=Settings.Styles[styleIndex];
-        var root=new GameObject("Building "+index+" — "+style.Name);root.transform.SetParent(transform,false);
+        int styleIndex=Settings.StyleOf(tuning.City,b,index);var style=Settings.Styles[styleIndex];
+        var root=new GameObject("Building "+index+" — "+style.Name);root.transform.SetParent(District(Mathf.Max(0,b.District)).Static,false);
         root.transform.position=b.Position-Vector3.up*b.Size.y*.5f;
-        var info=root.AddComponent<ArtBuilding>();info.Style=styleIndex;info.Archetype=style.Name;
+        var info=root.AddComponent<ArtBuilding>();info.Style=styleIndex;info.Archetype=style.Name;info.District=b.District;
+        var t=root.transform;
         float w=b.Size.x*style.Footprint.x,d=b.Size.z*style.Footprint.y,h=b.Size.y;
         float entry=Mathf.Min(Settings.FloorHeight,h*.4f),door=Settings.EntranceWidth,recess=Settings.EntranceDepth;
         // Solid ground-floor wings and recessed back wall make an actual entrance pocket.
-        Piece(root.transform,"Ground floor",new Vector3(0,entry*.5f,recess*.5f),new Vector3(w,entry,d-recess),style.Wall,true);
-        foreach(float side in new[]{-1f,1f})Piece(root.transform,"Entrance jamb",new Vector3(side*(w+door)*.25f,entry*.5f,-d*.5f+recess*.5f),new Vector3((w-door)*.5f,entry,recess),style.Wall,true);
-        Piece(root.transform,"Recessed doorway",new Vector3(0,entry*.4f,-d*.5f+recess-.015f),new Vector3(door,entry*.8f,.035f),CityColor.Glass);
+        Part(t,"Ground floor",new Vector3(0,entry*.5f,recess*.5f),new Vector3(w,entry,d-recess),style.Wall,true,false);
+        foreach(float side in new[]{-1f,1f})Part(t,"Entrance jamb",new Vector3(side*(w+door)*.25f,entry*.5f,-d*.5f+recess*.5f),new Vector3((w-door)*.5f,entry,recess),style.Wall,true,false);
+        Part(t,"Recessed doorway",new Vector3(0,entry*.4f,-d*.5f+recess-.015f),new Vector3(door,entry*.8f,.035f),CityColor.Glass,false,true);
         float split=Mathf.Max(entry,h*style.SetbackAt);
-        Piece(root.transform,"Lower volume",new Vector3(0,(entry+split)*.5f,0),new Vector3(w,split-entry,d),style.Wall,true);
+        if(split-entry>.01f)Part(t,"Lower volume",new Vector3(0,(entry+split)*.5f,0),new Vector3(w,split-entry,d),style.Wall,true,false);
         float uw=w*style.UpperWidth,ud=d*style.UpperWidth;
-        Piece(root.transform,"Upper volume",new Vector3(0,(split+h)*.5f,0),new Vector3(uw,h-split,ud),style.Wall,true);
-        Facade(root.transform,w,d,entry,split,index);Facade(root.transform,uw,ud,split,h,index);
-        if(style.UpperWidth<1)Piece(root.transform,"Setback terrace",new Vector3(0,split+.04f,0),new Vector3(w+.12f,.08f,d+.12f),CityColor.Roof,true);
-        Piece(root.transform,"Roof deck",new Vector3(0,h+.04f,0),new Vector3(uw,.08f,ud),CityColor.Roof,true);
+        if(h-split>.01f)Part(t,"Upper volume",new Vector3(0,(split+h)*.5f,0),new Vector3(uw,h-split,ud),style.Wall,true,false);
+        Facade(t,w,d,entry,split,index,style);Facade(t,uw,ud,split,h,index,style);
+        if(style.UpperWidth<1)Part(t,"Setback terrace",new Vector3(0,split+.04f,0),new Vector3(w+.12f,.08f,d+.12f),CityColor.Roof,true,false);
+        Part(t,"Roof deck",new Vector3(0,h+.04f,0),new Vector3(uw,.08f,ud),CityColor.Roof,true,false);
         float wall=Settings.ParapetHeight,thick=Settings.ParapetThickness;
         foreach(float side in new[]{-1f,1f})
         {
-            Piece(root.transform,"Parapet",new Vector3(side*(uw-thick)*.5f,h+wall*.5f,0),new Vector3(thick,wall,ud),CityColor.Cream,true);
-            Piece(root.transform,"Parapet",new Vector3(0,h+wall*.5f,side*(ud-thick)*.5f),new Vector3(uw,wall,thick),CityColor.Cream,true);
+            Part(t,"Parapet",new Vector3(side*(uw-thick)*.5f,h+wall*.5f,0),new Vector3(thick,wall,ud),CityColor.Cream,true,false);
+            Part(t,"Parapet",new Vector3(0,h+wall*.5f,side*(ud-thick)*.5f),new Vector3(uw,wall,thick),CityColor.Cream,true,false);
         }
-        Piece(root.transform,"Shop canopy",new Vector3(0,entry,-d*.5f-.3f),new Vector3(w*.6f,.25f,.7f),CityColor.Teal);
-        Piece(root.transform,"Shop sign",new Vector3(0,entry-.5f,-d*.5f-.36f),new Vector3(w*.5f,.65f,.12f),CityColor.Brick);
-        for(int i=0;i<3;i++)Piece(root.transform,"Abstract shop glyph",new Vector3((i-1)*w*.13f,entry-.5f,-d*.5f-.44f),new Vector3(w*.09f,.16f,.035f),CityColor.Cream);
+        Part(t,"Shop canopy",new Vector3(0,entry,-d*.5f-.3f),new Vector3(w*.6f,.25f,.7f),CityColor.Teal,false,true);
+        Part(t,"Shop sign",new Vector3(0,entry-.5f,-d*.5f-.36f),new Vector3(w*.5f,.65f,.12f),CityColor.Brick,false,true);
+        for(int i=0;i<3;i++)Part(t,"Abstract shop glyph",new Vector3((i-1)*w*.13f,entry-.5f,-d*.5f-.44f),new Vector3(w*.09f,.16f,.035f),CityColor.Cream,false,true);
+        if(Meshes)FlushOwner(t);
         StaticRoot(root);
     }
-    void Facade(Transform root,float w,float d,float bottom,float top,int seed)
+    void Facade(Transform root,float w,float d,float bottom,float top,int seed,BuildingStyle style)
     {
+        if(top-bottom<.5f)return;
+        float spacing=Settings.WindowSpacing*Mathf.Max(.25f,style.WindowSpacingScale);
         int floors=Mathf.Max(1,Mathf.FloorToInt((top-bottom)/Settings.FloorHeight));float storey=(top-bottom)/floors;
         for(int floor=0;floor<floors;floor++)
         {
             float y=bottom+floor*storey;
-            Piece(root,"Floor band",new Vector3(0,y,0),new Vector3(w+.12f,Settings.BandHeight,d+.12f),CityColor.Cream);
+            Part(root,"Floor band",new Vector3(0,y,0),new Vector3(w+.12f,Settings.BandHeight,d+.12f),CityColor.Cream,false,true);
             float wy=y+storey*.5f;float wh=Mathf.Min(Settings.WindowHeight,storey*.65f);if(wh<.3f)continue;
             for(int face=0;face<4;face++)
             {
-                bool acrossX=face<2;float span=acrossX?w:d;int count=Mathf.Max(1,Mathf.FloorToInt(span/Settings.WindowSpacing));
+                bool acrossX=face<2;float span=acrossX?w:d;int count=Mathf.Max(1,Mathf.FloorToInt(span/spacing));
                 for(int i=0;i<count;i++)
                 {
-                    float along=(i-(count-1)*.5f)*Settings.WindowSpacing;float side=face%2==0?-1:1;
+                    float along=(i-(count-1)*.5f)*spacing;float side=face%2==0?-1:1;
                     var pos=acrossX?new Vector3(along,wy,side*(d*.5f+.015f)):new Vector3(side*(w*.5f+.015f),wy,along);
                     var size=acrossX?new Vector3(Settings.WindowWidth,wh,.035f):new Vector3(.035f,wh,Settings.WindowWidth);
-                    Piece(root,"Window",pos,size,(seed+i+face+(int)y)%5==0?CityColor.Amber:CityColor.Glass);
+                    Part(root,"Window",pos,size,(seed+i+face+(int)y)%5==0?CityColor.Amber:CityColor.Glass,false,true);
                 }
             }
         }
     }
-    public void Streets()
+    /// Flushes only this owner's batches (a building is complete once Building() returns).
+    void FlushOwner(Transform owner)
     {
-        var c=tuning.City;float pitch=c.BlockSize+c.StreetWidth;
-        var root=new GameObject("Curbs crossings and lane markings");root.transform.SetParent(transform,false);
-        for(int x=0;x<c.Blocks;x++)for(int z=0;z<c.Blocks;z++)
+        var mine=batches.Where(p=>p.Key.Item1==owner).ToList();
+        foreach(var p in mine)batches.Remove(p.Key);
+        var keep=new Dictionary<(Transform,CityColor,int),Batch>(batches);batches.Clear();
+        foreach(var p in mine)batches[p.Key]=p.Value;
+        FlushBatches();
+        foreach(var p in keep)batches[p.Key]=p.Value;
+    }
+
+    // ------------------------------------------------------------------ ground, sea, decks, streets, structures, backdrop
+    public void Ground(CityPlan plan)
+    {
+        for(int i=0;i<plan.Districts.Count;i++)District(i,plan);
+        foreach(var s in plan.Slabs)
         {
-            var center=new Vector3((x-(c.Blocks-1)*.5f)*pitch,0,(z-(c.Blocks-1)*.5f)*pitch);
+            var c=new Vector3(s.Area.center.x,(s.Top+s.Bottom)*.5f,s.Area.center.y);
+            Part(Chunk(s.District,c),"Ground",c,new Vector3(s.Area.width,Mathf.Max(.02f,s.Top-s.Bottom),s.Area.height),s.Color,true,s.Detail);
+        }
+        foreach(var k in plan.Decks)
+        {
+            var a=k.Area;float top=k.Top+.04f;bool alongX=a.width>=a.height;var owner=Chunk(k.District,new Vector3(a.center.x,0,a.center.y));
+            Part(owner,"Deck",new Vector3(a.center.x,top-.4f,a.center.y),new Vector3(a.width,.8f,a.height),k.Color,true,false);
             foreach(float side in new[]{-1f,1f})
             {
-                Piece(root.transform,"Curb",center+new Vector3(side*c.BlockSize*.5f,Settings.CurbHeight*.5f,0),new Vector3(Settings.CurbWidth,Settings.CurbHeight,c.BlockSize),CityColor.Cream);
-                Piece(root.transform,"Curb",center+new Vector3(0,Settings.CurbHeight*.5f,side*c.BlockSize*.5f),new Vector3(c.BlockSize,Settings.CurbHeight,Settings.CurbWidth),CityColor.Cream);
+                var rail=alongX?new Vector3(a.center.x,top+k.Railing*.5f,side<0?a.yMin+.15f:a.yMax-.15f):new Vector3(side<0?a.xMin+.15f:a.xMax-.15f,top+k.Railing*.5f,a.center.y);
+                var size=alongX?new Vector3(a.width,k.Railing,.3f):new Vector3(.3f,k.Railing,a.height);
+                Part(owner,"Railing",rail,size,CityColor.Cream,true,false);
+                var girder=alongX?new Vector3(a.center.x,top-1.2f,side<0?a.yMin+.3f:a.yMax-.3f):new Vector3(side<0?a.xMin+.3f:a.xMax-.3f,top-1.2f,a.center.y);
+                Part(owner,"Girder",girder,alongX?new Vector3(a.width,.9f,.5f):new Vector3(.5f,.9f,a.height),CityColor.Slate,false,true);
             }
-            for(float along=-c.BlockSize*.4f;along<c.BlockSize*.4f;along+=Settings.RoadDashSpacing)
+            float span=alongX?a.width:a.height;
+            for(int n=0;n<k.Arches;n++)
             {
-                Piece(root.transform,"Road dash",center+new Vector3(pitch*.5f,.012f,along),new Vector3(.12f,.02f,Settings.RoadDashLength),CityColor.Amber);
-                Piece(root.transform,"Road dash",center+new Vector3(along,.012f,pitch*.5f),new Vector3(Settings.RoadDashLength,.02f,.12f),CityColor.Amber);
+                float f=(n+1f)/(k.Arches+1f);float low=plan.Seabed;
+                var at=alongX?new Vector3(a.xMin+span*f,(low+top-.8f)*.5f,a.center.y):new Vector3(a.center.x,(low+top-.8f)*.5f,a.yMin+span*f);
+                Part(owner,"Bridge pier",at,alongX?new Vector3(2,top-.8f-low,a.height*.8f):new Vector3(a.width*.8f,top-.8f-low,2),CityColor.Slate,false,true);
             }
         }
-        for(int x=0;x<c.Blocks-1;x++)for(int z=0;z<c.Blocks-1;z++)
+    }
+    /// Sea surface, seabed and island boundary. Not part of any district root, so never in the city NavMesh.
+    public void Sea(CityPlan plan,CityLayout layout)
+    {
+        var root=new GameObject("Sea and bounds").transform;root.SetParent(transform,false);
+        var isl=plan.Island;float m=layout.Backdrop.SeaMargin;
+        var sea=Piece(root,"Sea surface",new Vector3(isl.center.x,layout.WaterLevel-.05f,isl.center.y),new Vector3(isl.width+2*m,.1f,isl.height+2*m),CityColor.Water);
+        sea.layer=Rendering.BackdropLayer;var seaRenderer=sea.GetComponent<Renderer>();seaRenderer.shadowCastingMode=ShadowCastingMode.Off;
+        var outer=CityLayout.Expand(isl,layout.BoundaryMargin);
+        var bed=root.gameObject.AddComponent<BoxCollider>();bed.center=new Vector3(outer.center.x,layout.SeabedLevel-1,outer.center.y);bed.size=new Vector3(outer.width,2,outer.height);
+        float wallH=layout.BoundaryHeight;
+        foreach(var (c,s) in new[]{(new Vector3(outer.xMin-1,wallH*.5f,outer.center.y),new Vector3(2,wallH,outer.height+4)),(new Vector3(outer.xMax+1,wallH*.5f,outer.center.y),new Vector3(2,wallH,outer.height+4)),
+            (new Vector3(outer.center.x,wallH*.5f,outer.yMin-1),new Vector3(outer.width+4,wallH,2)),(new Vector3(outer.center.x,wallH*.5f,outer.yMax+1),new Vector3(outer.width+4,wallH,2))})
+        {var wall=root.gameObject.AddComponent<BoxCollider>();wall.center=c;wall.size=s;}
+    }
+    public void Streets(CityPlan plan)
+    {
+        foreach(var block in plan.Blocks)
         {
-            var center=new Vector3((x-(c.Blocks-2)*.5f)*pitch,.025f,(z-(c.Blocks-2)*.5f)*pitch);
+            var r=block.Area;var center=new Vector3(r.center.x,0,r.center.y);var owner=Chunk(block.District,center);
+            foreach(float side in new[]{-1f,1f})
+            {
+                Part(owner,"Curb",center+new Vector3(side*r.width*.5f,Settings.CurbHeight*.5f,0),new Vector3(Settings.CurbWidth,Settings.CurbHeight,r.height),CityColor.Cream,false,true);
+                Part(owner,"Curb",center+new Vector3(0,Settings.CurbHeight*.5f,side*r.height*.5f),new Vector3(r.width,Settings.CurbHeight,Settings.CurbWidth),CityColor.Cream,false,true);
+            }
+        }
+        foreach(var line in plan.Dashes)
+        {
+            var dir=line.To-line.From;float len=dir.magnitude;if(len<1)continue;dir/=len;bool alongX=Mathf.Abs(dir.x)>Mathf.Abs(dir.z);
+            for(float t=Settings.RoadDashLength*.5f;t<len;t+=Settings.RoadDashSpacing)
+            {
+                var at=line.From+dir*t;
+                Part(Chunk(line.District,at),"Road dash",at,alongX?new Vector3(Settings.RoadDashLength,.02f,.12f):new Vector3(.12f,.02f,Settings.RoadDashLength),CityColor.Amber,false,true);
+            }
+        }
+        foreach(var cross in plan.Crossings)
+        {
+            var owner=Chunk(cross.District,cross.Center);
             for(int i=0;i<Settings.CrosswalkStripes;i++)
             {
-                float offset=(i-(Settings.CrosswalkStripes-1)*.5f)*c.StreetWidth/Settings.CrosswalkStripes;
+                float offset=(i-(Settings.CrosswalkStripes-1)*.5f)*cross.Street/Settings.CrosswalkStripes;
                 foreach(float side in new[]{-1f,1f})
                 {
-                    Piece(root.transform,"Crosswalk",center+new Vector3(offset,0,side*c.StreetWidth*.6f),new Vector3(Settings.CrosswalkStripe,.025f,1.8f),CityColor.Cream);
-                    Piece(root.transform,"Crosswalk",center+new Vector3(side*c.StreetWidth*.6f,0,offset),new Vector3(1.8f,.025f,Settings.CrosswalkStripe),CityColor.Cream);
+                    Part(owner,"Crosswalk",cross.Center+new Vector3(offset,0,side*cross.Street*.6f),new Vector3(Settings.CrosswalkStripe,.025f,1.8f),CityColor.Cream,false,true);
+                    Part(owner,"Crosswalk",cross.Center+new Vector3(side*cross.Street*.6f,0,offset),new Vector3(1.8f,.025f,Settings.CrosswalkStripe),CityColor.Cream,false,true);
                 }
             }
         }
-        StaticRoot(root);
     }
-    void StaticRoot(GameObject root)
+    public void Structures(CityPlan plan)
     {
-        staticRoots.Add(root);
-        if(StaticMode==StaticGeometryMode.PerRootCombine)Combine(root);else pendingStatic.Add(root);
+        foreach(var s in plan.Structures)
+        {
+            var recipe=Settings.Recipe(s.Recipe);
+            if(recipe==null)throw new System.InvalidOperationException("CityArtSettings has no structure recipe '"+s.Recipe+"'.");
+            var rot=Quaternion.Euler(0,s.Yaw,0);var owner=Chunk(s.District,s.Position);
+            foreach(var p in recipe.Pieces)
+            {
+                var color=p.Variant&&recipe.Variants.Length>0?recipe.Variants[s.Variant%recipe.Variants.Length]:p.Color;
+                Part(owner,recipe.Name,s.Position+rot*p.Position,p.Size,color,p.Solid,p.Detail,p.Type,rot*Quaternion.Euler(p.Euler));
+            }
+        }
     }
-    /// Call once all buildings and streets exist (and before any capture render). Batches or merges the
-    /// never-moving geometry for StaticBatching/CityCombine; a no-op for the per-root and uncombined modes.
+    /// Distant "mainland" silhouettes across the sea: no colliders, backdrop layer, fogged by distance.
+    public void Backdrop(CityPlan plan,BackdropSettings backdrop)
+    {
+        BackdropRoot=new GameObject("Backdrop skyline").transform;BackdropRoot.SetParent(transform,false);
+        Skirt(plan,backdrop);
+        var rng=new System.Random(unchecked(tuning.City.Seed*13+5));var centre=new Vector3(plan.Island.center.x,plan.WaterLevel,plan.Island.center.y);
+        for(int i=0;i<backdrop.Count;i++)
+        {
+            float angle=(i+(float)rng.NextDouble()*.8f)/backdrop.Count*Mathf.PI*2,radius=Mathf.Lerp(backdrop.Radius.x,backdrop.Radius.y,(float)rng.NextDouble());
+            float h=Mathf.Lerp(backdrop.Height.x,backdrop.Height.y,(float)Mathf.Pow((float)rng.NextDouble(),2)),w=Mathf.Lerp(backdrop.Width.x,backdrop.Width.y,(float)rng.NextDouble());
+            var rotation=Quaternion.Euler(0,-angle*Mathf.Rad2Deg,0);var outward=new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle));
+            // A low shore under each cluster so the silhouettes stand on land instead of floating on the horizon.
+            Silhouette(centre+outward*(radius+20)+Vector3.up*3,new Vector3(w*2.6f,6,70),rotation,backdrop.ShoreColor);
+            Silhouette(centre+outward*radius+Vector3.up*h*.5f,new Vector3(w,h,w*.7f),rotation,backdrop.Color);
+            if(rng.NextDouble()<.6){float h2=h*Mathf.Lerp(.35f,.8f,(float)rng.NextDouble());Silhouette(centre+outward*(radius+12)+rotation*Vector3.right*(w*.8f)+Vector3.up*h2*.5f,new Vector3(w*.7f,h2,w*.6f),rotation,backdrop.Color);}
+        }
+    }
+    void Skirt(CityPlan plan,BackdropSettings backdrop)
+    {
+        var c=new Vector3(plan.Island.center.x,plan.WaterLevel-20+backdrop.SkirtHeight*.5f,plan.Island.center.y);float r=backdrop.SkirtRadius,h=backdrop.SkirtHeight+20;
+        Silhouette(c+Vector3.forward*r,new Vector3(2*r+20,h,10),Quaternion.identity,backdrop.SkirtColor);Silhouette(c+Vector3.back*r,new Vector3(2*r+20,h,10),Quaternion.identity,backdrop.SkirtColor);
+        Silhouette(c+Vector3.right*r,new Vector3(10,h,2*r+20),Quaternion.identity,backdrop.SkirtColor);Silhouette(c+Vector3.left*r,new Vector3(10,h,2*r+20),Quaternion.identity,backdrop.SkirtColor);
+    }
+    void Silhouette(Vector3 at,Vector3 size,Quaternion rotation,CityColor color)
+    {
+        var go=Piece(BackdropRoot,"Backdrop silhouette",at,size,color);go.layer=Rendering.BackdropLayer;go.transform.rotation=rotation;
+        var r=go.GetComponent<Renderer>();r.shadowCastingMode=ShadowCastingMode.Off;r.receiveShadows=false;
+    }
+    void StaticRoot(GameObject root){staticRoots.Add(root);}
+    /// Call once all static geometry exists (and before any capture render). Legacy modes combine as before; StaticBatching and
+    /// BuildingMeshes run StaticBatchingUtility once PER DISTRICT ROOT (plus the backdrop), never over props or actors.
     public void FinishStaticGeometry()
     {
-        if(pendingStatic.Count==0)return;
         var watch=System.Diagnostics.Stopwatch.StartNew();
-        var filters=pendingStatic.Where(r=>r!=null).SelectMany(r=>r.GetComponentsInChildren<MeshFilter>()).Where(f=>f.sharedMesh!=null&&f.GetComponent<MeshRenderer>()!=null).ToArray();
-        pendingStatic.Clear();
-        if(StaticMode==StaticGeometryMode.StaticBatching&&filters.Length>0)
-        {
-            var source=new HashSet<Mesh>(filters.Select(f=>f.sharedMesh));
-            StaticBatchingUtility.Combine(filters.Select(f=>f.gameObject).ToArray(),gameObject);
-            // The batch meshes Unity creates here belong to this city; release them with it.
-            foreach(var mesh in filters.Select(f=>f.sharedMesh).Distinct())if(mesh!=null&&!source.Contains(mesh))ownedMeshes.Add(mesh);
-        }
+        if(Meshes)FlushBatches();
+        var roots=districtRoots.Where(r=>r!=null).Select(r=>r.Static.gameObject).ToList();
+        if(BackdropRoot!=null)roots.Add(BackdropRoot.gameObject);
+        if(StaticMode==StaticGeometryMode.PerRootCombine)foreach(var root in staticRoots.Where(r=>r!=null))Combine(root);
+        else if(StaticMode==StaticGeometryMode.StaticBatching||Meshes)
+            foreach(var root in roots)
+            {
+                var filters=root.GetComponentsInChildren<MeshFilter>().Where(f=>f.sharedMesh!=null&&f.GetComponent<MeshRenderer>()!=null).ToArray();
+                if(filters.Length==0)continue;
+                var source=new HashSet<Mesh>(filters.Select(f=>f.sharedMesh));
+                StaticBatchingUtility.Combine(filters.Select(f=>f.gameObject).ToArray(),root);
+                // The batch meshes Unity creates here belong to this city; release them with it.
+                foreach(var mesh in filters.Select(f=>f.sharedMesh).Distinct())if(mesh!=null&&!source.Contains(mesh))ownedMeshes.Add(mesh);
+            }
         else if(StaticMode==StaticGeometryMode.CityCombine)
         {
-            foreach(var group in filters.GroupBy(f=>f.GetComponent<Renderer>().sharedMaterial))
+            var filters=roots.SelectMany(r=>r.GetComponentsInChildren<MeshFilter>()).Where(f=>f.sharedMesh!=null&&f.GetComponent<MeshRenderer>()!=null).ToArray();
+            foreach(var group in filters.GroupBy(f=>(f.GetComponent<Renderer>().sharedMaterial,f.gameObject.layer)))
             {
-                var parts=group.ToArray();var mesh=new Mesh{name="City static / "+group.Key.name,indexFormat=IndexFormat.UInt32};
+                var parts=group.ToArray();var mesh=new Mesh{name="City static / "+group.Key.Item1.name,indexFormat=IndexFormat.UInt32};
                 mesh.CombineMeshes(parts.Select(f=>new CombineInstance{mesh=f.sharedMesh,transform=transform.worldToLocalMatrix*f.transform.localToWorldMatrix}).ToArray(),true,true);
-                var combined=new GameObject("City static geometry / "+group.Key.name){layer=parts[0].gameObject.layer};combined.transform.SetParent(transform,false);
-                combined.AddComponent<MeshFilter>().sharedMesh=mesh;var renderer=combined.AddComponent<MeshRenderer>();renderer.sharedMaterial=group.Key;
+                var combined=new GameObject("City static geometry / "+group.Key.Item1.name){layer=group.Key.Item2};combined.transform.SetParent(transform,false);
+                combined.AddComponent<MeshFilter>().sharedMesh=mesh;var renderer=combined.AddComponent<MeshRenderer>();renderer.sharedMaterial=group.Key.Item1;
                 ownedMeshes.Add(mesh);cityRenderers.Add(renderer);
-                // Piece GameObjects stay (the solid ones keep their colliders); only their drawing moves.
                 foreach(var part in parts){var old=part.GetComponent<Renderer>();old.enabled=false;Destroy(old);Destroy(part);}
             }
         }
+        staticRoots.Clear();
         StaticFinalizeMilliseconds+=watch.Elapsed.TotalMilliseconds;
     }
-    public void Populate(List<BuildingPlacement> buildings)
+    /// Camera far clip, per-layer cull distances and fog for the big world (values in CityArtSettings.Rendering).
+    public void ApplyRendering(Camera camera)
     {
-        Placements.AddRange(Settings.Generate(tuning.City,buildings));foreach(var placement in Placements)CreateProp(placement);
+        var r=Rendering;camera.farClipPlane=r.FarClip;
+        var distances=new float[32];distances[r.DetailLayer]=r.DetailCull;distances[r.PropLayer]=r.PropCull;distances[r.ActorLayer]=r.ActorCull;distances[r.BackdropLayer]=r.BackdropCull;
+        camera.layerCullDistances=distances;camera.layerCullSpherical=r.SphericalCull;
+        RenderSettings.fog=r.Fog;RenderSettings.fogMode=r.FogMode;RenderSettings.fogDensity=r.FogDensity;RenderSettings.fogColor=Settings.Palette.Colors[(int)r.FogColor];
+    }
+    public void Populate(CityPlan plan)
+    {
+        Placements.AddRange(Settings.Generate(tuning.City,plan));foreach(var placement in Placements)CreateProp(placement);
         BuildMilliseconds=buildWatch.Elapsed.TotalMilliseconds;
     }
     public GameObject CreateProp(ArtPlacement placement)
@@ -194,6 +392,7 @@ public sealed class CityArt : MonoBehaviour
             }
         }
         else if(PropMode==PropMeshMode.PerPropCombine)Combine(root);
+        foreach(var node in root.GetComponentsInChildren<Transform>(true))node.gameObject.layer=Rendering.PropLayer;
         return root;
     }
     // Piece list for one prop in root-local space. Pure data: identical for every mode.

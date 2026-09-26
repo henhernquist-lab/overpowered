@@ -14,3 +14,721 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CityLayout
   UseAuthoredBuildings: 0
   Buildings: []
+  Land:
+  - serializedVersion: 2
+    x: -288
+    y: -208
+    width: 576
+    height: 368
+  Districts:
+  - Name: Downtown
+    Region:
+      serializedVersion: 2
+      x: -96
+      y: -96
+      width: 192
+      height: 256
+    Area:
+      serializedVersion: 2
+      x: -84
+      y: -84
+      width: 168
+      height: 232
+    BlockSize: {x: 36, y: 42}
+    StreetWidth: 14
+    LotsPerSide: 2
+    LotFill: {x: 0.8, y: 0.94}
+    Occupancy: 1
+    Height: {x: 20, y: 46}
+    TallChance: 0.28
+    TallHeight: {x: 56, y: 84}
+    Core: {x: 0, y: 40}
+    CoreRadius: 120
+    CoreBoost: 0.45
+    PlazaChance: 0.3
+    Styles: 02000000030000000400000000000000i
+    StreetProps: 1
+    RooftopProps: 1
+    BlockProps: 1
+    SidewalkRecipe: 
+    SidewalkRecipeSpacing: 12
+    RooftopPickups: 3
+    Sites: []
+    Features: []
+  - Name: Park
+    Region:
+      serializedVersion: 2
+      x: -288
+      y: -96
+      width: 192
+      height: 256
+    Area:
+      serializedVersion: 2
+      x: -276
+      y: -84
+      width: 168
+      height: 232
+    BlockSize: {x: 0, y: 0}
+    StreetWidth: 14
+    LotsPerSide: 2
+    LotFill: {x: 0.75, y: 0.9}
+    Occupancy: 1
+    Height: {x: 18, y: 50}
+    TallChance: 0
+    TallHeight: {x: 60, y: 80}
+    Core: {x: 0, y: 0}
+    CoreRadius: 0
+    CoreBoost: 0
+    PlazaChance: 0
+    Styles: 00000000010000000200000003000000i
+    StreetProps: 1
+    RooftopProps: 1
+    BlockProps: 1
+    SidewalkRecipe: 
+    SidewalkRecipeSpacing: 12
+    RooftopPickups: 0
+    Sites:
+    - {x: -250, y: -40}
+    - {x: -150, y: 120}
+    - {x: -180, y: 60}
+    - {x: -128, y: -40}
+    Features:
+    - Name: Park lawn
+      Kind: 0
+      Area:
+        serializedVersion: 2
+        x: -276
+        y: -84
+        width: 168
+        height: 232
+      Height: 0.14
+      Color: 26
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+    - Name: Pond
+      Kind: 1
+      Area:
+        serializedVersion: 2
+        x: -236
+        y: 6
+        width: 52
+        height: 34
+      Height: 0
+      Color: 1
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+    - Name: Pond footbridge
+      Kind: 2
+      Area:
+        serializedVersion: 2
+        x: -213
+        y: 2
+        width: 6
+        height: 42
+      Height: 0.3
+      Color: 11
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+    - Name: Loop path
+      Kind: 3
+      Area:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      Height: 0.16
+      Color: 4
+      Recipes: []
+      Props: 01000000000000000200000000000000i
+      Count: 0
+      Spacing: 16
+      Width: 5
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points:
+      - {x: -108, y: -40}
+      - {x: -250, y: -40}
+      - {x: -250, y: 120}
+      - {x: -150, y: 120}
+      - {x: -150, y: 60}
+      - {x: -108, y: 60}
+    - Name: South gate path
+      Kind: 3
+      Area:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      Height: 0.16
+      Color: 4
+      Recipes: []
+      Props: 00000000i
+      Count: 0
+      Spacing: 18
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points:
+      - {x: -192, y: -84}
+      - {x: -192, y: -40}
+    - Name: Pond path south
+      Kind: 3
+      Area:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      Height: 0.16
+      Color: 4
+      Recipes: []
+      Props: 01000000i
+      Count: 0
+      Spacing: 18
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points:
+      - {x: -210, y: -40}
+      - {x: -210, y: 4}
+    - Name: Pond path north
+      Kind: 3
+      Area:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      Height: 0.16
+      Color: 4
+      Recipes: []
+      Props: 0100000000000000i
+      Count: 0
+      Spacing: 18
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points:
+      - {x: -210, y: 42}
+      - {x: -210, y: 60}
+      - {x: -150, y: 60}
+    - Name: Tower path
+      Kind: 3
+      Area:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      Height: 0.16
+      Color: 4
+      Recipes: []
+      Props: 00000000i
+      Count: 0
+      Spacing: 18
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points:
+      - {x: -196, y: 60}
+      - {x: -196, y: 120}
+    - Name: Park trees
+      Kind: 4
+      Area:
+        serializedVersion: 2
+        x: -274
+        y: -82
+        width: 164
+        height: 228
+      Height: 0.14
+      Color: 1
+      Recipes:
+      - Park tree
+      - Park tree
+      - Pine tree
+      Props: 
+      Count: 130
+      Spacing: 8
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      - 30
+      - 60
+      - 90
+      Points: []
+  - Name: Residential
+    Region:
+      serializedVersion: 2
+      x: 96
+      y: -96
+      width: 192
+      height: 256
+    Area:
+      serializedVersion: 2
+      x: 148
+      y: -84
+      width: 128
+      height: 232
+    BlockSize: {x: 40, y: 46}
+    StreetWidth: 12
+    LotsPerSide: 2
+    LotFill: {x: 0.5, y: 0.72}
+    Occupancy: 0.82
+    Height: {x: 6, y: 13}
+    TallChance: 0.1
+    TallHeight: {x: 16, y: 22}
+    Core: {x: 0, y: 0}
+    CoreRadius: 0
+    CoreBoost: 0
+    PlazaChance: 0.15
+    Styles: 060000000100000000000000i
+    StreetProps: 1
+    RooftopProps: 1
+    BlockProps: 1
+    SidewalkRecipe: Street tree
+    SidewalkRecipeSpacing: 11
+    RooftopPickups: 1
+    Sites: []
+    Features:
+    - Name: Canal
+      Kind: 1
+      Area:
+        serializedVersion: 2
+        x: 120
+        y: -208
+        width: 16
+        height: 368
+      Height: 0
+      Color: 1
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+    - Name: Grand Canal Bridge
+      Kind: 2
+      Area:
+        serializedVersion: 2
+        x: 112
+        y: 20
+        width: 32
+        height: 24
+      Height: 0
+      Color: 2
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1.2
+      Stack: {x: 1, y: 2}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+    - Name: North footbridge
+      Kind: 2
+      Area:
+        serializedVersion: 2
+        x: 114
+        y: 112
+        width: 28
+        height: 10
+      Height: 0
+      Color: 11
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+  - Name: Docks
+    Region:
+      serializedVersion: 2
+      x: -288
+      y: -288
+      width: 576
+      height: 192
+    Area:
+      serializedVersion: 2
+      x: -270
+      y: -160
+      width: 540
+      height: 50
+    BlockSize: {x: 40, y: 48}
+    StreetWidth: 18
+    LotsPerSide: 1
+    LotFill: {x: 0.62, y: 0.82}
+    Occupancy: 0.8
+    Height: {x: 7, y: 12}
+    TallChance: 0.12
+    TallHeight: {x: 14, y: 18}
+    Core: {x: 0, y: 0}
+    CoreRadius: 0
+    CoreBoost: 0
+    PlazaChance: 0
+    Styles: 050000000500000000000000i
+    StreetProps: 0
+    RooftopProps: 1
+    BlockProps: 1
+    SidewalkRecipe: 
+    SidewalkRecipeSpacing: 12
+    RooftopPickups: 1
+    Sites:
+    - {x: -200, y: -184}
+    - {x: -40, y: -186}
+    - {x: 80, y: -186}
+    - {x: 212, y: -150}
+    Features:
+    - Name: Quay apron
+      Kind: 0
+      Area:
+        serializedVersion: 2
+        x: -288
+        y: -208
+        width: 576
+        height: 44
+      Height: 0.08
+      Color: 1
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+    - Name: East basin
+      Kind: 1
+      Area:
+        serializedVersion: 2
+        x: 176
+        y: -208
+        width: 64
+        height: 30
+      Height: 0
+      Color: 1
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+    - Name: Harbour Boulevard bridge
+      Kind: 2
+      Area:
+        serializedVersion: 2
+        x: 112
+        y: -108
+        width: 32
+        height: 24
+      Height: 0
+      Color: 2
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1.2
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+    - Name: Quay bridge
+      Kind: 2
+      Area:
+        serializedVersion: 2
+        x: 112
+        y: -200
+        width: 32
+        height: 18
+      Height: 0.08
+      Color: 6
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+    - Name: Lighthouse pier
+      Kind: 2
+      Area:
+        serializedVersion: 2
+        x: -20
+        y: -250
+        width: 12
+        height: 44
+      Height: 0.08
+      Color: 11
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+    - Name: Lighthouse platform
+      Kind: 2
+      Area:
+        serializedVersion: 2
+        x: -28
+        y: -272
+        width: 28
+        height: 24
+      Height: 0.08
+      Color: 6
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+    - Name: Fishing pier
+      Kind: 2
+      Area:
+        serializedVersion: 2
+        x: 56
+        y: -238
+        width: 10
+        height: 32
+      Height: 0.08
+      Color: 11
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+    - Name: Gantry cranes
+      Kind: 4
+      Area:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      Height: 0.08
+      Color: 1
+      Recipes:
+      - Gantry crane
+      Props: 
+      Count: 0
+      Spacing: 24
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points:
+      - {x: -150, y: -202}
+      - {x: -90, y: -202}
+      - {x: 20, y: -202}
+      - {x: 200, y: -172}
+    - Name: Container yard
+      Kind: 4
+      Area:
+        serializedVersion: 2
+        x: -270
+        y: -200
+        width: 330
+        height: 30
+      Height: 0.08
+      Color: 1
+      Recipes:
+      - Shipping container
+      Props: 
+      Count: 0
+      Spacing: 7
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 3}
+      Rows: 1
+      Yaws:
+      - 90
+      Points: []
+    - Name: Dock crates
+      Kind: 4
+      Area:
+        serializedVersion: 2
+        x: 150
+        y: -205
+        width: 130
+        height: 40
+      Height: 0.08
+      Color: 1
+      Recipes: []
+      Props: 060000000200000005000000i
+      Count: 14
+      Spacing: 5
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points: []
+  Boulevards:
+  - Name: West Boulevard
+    Area:
+      serializedVersion: 2
+      x: -108
+      y: -108
+      width: 24
+      height: 268
+    Median: 3
+    MedianRecipe: Street tree
+    RecipeSpacing: 14
+  - Name: East Boulevard
+    Area:
+      serializedVersion: 2
+      x: 84
+      y: -108
+      width: 24
+      height: 268
+    Median: 3
+    MedianRecipe: Street tree
+    RecipeSpacing: 14
+  - Name: Harbour Boulevard
+    Area:
+      serializedVersion: 2
+      x: -288
+      y: -108
+      width: 576
+      height: 24
+    Median: 3
+    MedianRecipe: Street tree
+    RecipeSpacing: 14
+  Landmarks:
+  - Name: Meridian Spire
+    Recipe: Meridian Spire
+    Position: {x: 0, y: 40}
+    ClearRadius: 4
+    SnapToBlock: 1
+  - Name: Harbour Light
+    Recipe: Harbour Light
+    Position: {x: -14, y: -258}
+    ClearRadius: 10
+    SnapToBlock: 0
+  - Name: Park Lookout Tower
+    Recipe: Lookout Tower
+    Position: {x: -196, y: 104}
+    ClearRadius: 16
+    SnapToBlock: 0
+  SpawnDistrict: 0
+  WaterLevel: -0.6
+  SeabedLevel: -1.3
+  LandBottom: -1.3
+  BoundaryMargin: 90
+  BoundaryHeight: 400
+  Backdrop:
+    Count: 64
+    Radius: {x: 820, y: 1050}
+    Height: {x: 30, y: 140}
+    Width: {x: 40, y: 110}
+    Color: 6
+    ShoreColor: 7
+    SeaMargin: 2600
+  NavVoxelSize: 0.16666667
+  NavTileVoxels: 192
+  NpcLod:
+    NearRadius: 60
+    Hysteresis: 8
+    FarThinkInterval: 0.25
+    FarAnimatorInterval: 0.2
+    RecycleRadius: 150
+    RecycleDistance: {x: 45, y: 110}
+    RecyclePerSecond: 4
+    WanderRadius: 70
+    Enabled: 1
+  EncounterSites:
+    RotateDistricts: 1
+    PreferredMinDistance: 45
+    MaxDistance: 320
+  StackHeight: 2.6

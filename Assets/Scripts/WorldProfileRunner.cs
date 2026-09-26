@@ -143,13 +143,14 @@ public sealed class WorldProfileRunner : MonoBehaviour
         Log($"STRUCTURE buildings={W.City.Buildings.Count} props={props.Length} breakableProps={breakable.Length} breakableRenderers={breakableRenderers.Length} breakableRenderersInStaticBatch={breakableStatic} sidewalkPoints={W.City.Sidewalks.Count}");
         Log($"STRUCTURE npcs={W.Npcs.Count(n => n != null)} civilians={civilians} cops={cops} animators={FindObjectsByType<Animator>().Length} skinned={FindObjectsByType<SkinnedMeshRenderer>().Length} navmeshVerts={tri.vertices.Length} navmeshTris={tri.indices.Length / 3}");
         var bounds = CityBounds();
+        Log($"STRUCTURE districts={W.City.Plan.Districts.Count} ({string.Join(", ", W.City.Plan.Districts.Select((d, i) => $"{d.Name}: {W.City.Buildings.Count(b => b.District == i)} buildings, navmesh {W.City.NavMeshMilliseconds[i]:F0} ms"))}); staticPieces={W.City.Art.PieceCount} landmarks={string.Join("/", W.City.Plan.Landmarks)} spawn={W.City.Spawn} encounterSites={W.City.EncounterSites.Count}");
         Log($"STRUCTURE city renderer bounds min={bounds.min} max={bounds.max} size={bounds.size}; camera farClip={Camera.main.farClipPlane} fog={RenderSettings.fog} fogMode={RenderSettings.fogMode} fogDensity={RenderSettings.fogDensity}");
         Check(breakableStatic == 0, $"No BreakableProp renderer is part of a static batch ({breakableRenderers.Length} breakable renderers checked).");
     }
 
     Bounds CityBounds()
     {
-        var rs = W.City.GetComponentsInChildren<Renderer>().Where(r => r.enabled).ToArray();
+        var rs = W.City.Art.Districts.Where(d => d != null).SelectMany(d => d.Static.GetComponentsInChildren<Renderer>()).Where(r => r.enabled).ToArray();
         var b = rs[0].bounds; foreach (var r in rs) b.Encapsulate(r.bounds); return b;
     }
 
@@ -162,7 +163,8 @@ public sealed class WorldProfileRunner : MonoBehaviour
         c.nearClipPlane = 1; c.farClipPlane = b.size.y + 200; c.clearFlags = CameraClearFlags.SolidColor; c.backgroundColor = Color.black;
         var rt = new RenderTexture(1600, 1600, 24); rt.Create(); c.targetTexture = rt;
         float shadow = QualitySettings.shadowDistance; QualitySettings.shadowDistance = Mathf.Max(shadow, b.size.magnitude + 300);
-        c.Render(); QualitySettings.shadowDistance = shadow;
+        bool fog = RenderSettings.fog; RenderSettings.fog = false;
+        c.Render(); QualitySettings.shadowDistance = shadow; RenderSettings.fog = fog;
         Save(rt, "topdown");
         Log($"CAPTURE topdown.png: orthographic, north (+Z) up, east (+X) right, covers x {b.center.x - c.orthographicSize:F0}..{b.center.x + c.orthographicSize:F0}, z {b.center.z - c.orthographicSize:F0}..{b.center.z + c.orthographicSize:F0}");
         c.targetTexture = null; rt.Release(); Destroy(rt); Destroy(go);
@@ -173,10 +175,24 @@ public sealed class WorldProfileRunner : MonoBehaviour
     IEnumerator StageView(string view)
     {
         W.Hero.enabled = false;
-        var c = W.Tuning.City;
         Vector3 at; float yaw, pitch; string where;
-        if (view == "street") { at = new Vector3(-c.BlockSize * .5f + 1, c.SidewalkHeight, 0); yaw = 0; pitch = W.Tuning.Camera.Pitch; where = "sidewalk beside the centre street (x=-pitch/2), the densest street of the 3x3 grid"; }
-        else { at = new Vector3(0, 45, -(c.Blocks * (c.BlockSize + c.StreetWidth)) * .5f); yaw = 0; pitch = 12; where = "45 m up over the south edge, looking north across the whole city"; }
+        var plan = W.City.Plan; int spawnDistrict = W.City.DistrictAt(W.City.Spawn);
+        if (view == "street")
+        {
+            // Densest street: the spawn district's crossing with the most building height within 60 m; stand on the west
+            // sidewalk of its north-south street, mid-block to the south, looking north along the street.
+            var best = plan.Crossings.Where(x => x.District == spawnDistrict)
+                .OrderByDescending(x => W.City.Buildings.Where(b => (new Vector2(b.Position.x, b.Position.z) - new Vector2(x.Center.x, x.Center.z)).magnitude < 60).Sum(b => b.Size.y)).First();
+            at = new Vector3(best.Center.x - best.Street * .5f - 1.5f, W.Tuning.City.SidewalkHeight, best.Center.z - best.Pitch * .5f);
+            yaw = 0; pitch = W.Tuning.Camera.Pitch;
+            where = $"{plan.Districts[spawnDistrict].Name} west sidewalk, mid-block south of the densest crossing {best.Center} ({W.City.Buildings.Where(b => (new Vector2(b.Position.x, b.Position.z) - new Vector2(best.Center.x, best.Center.z)).magnitude < 60).Sum(b => b.Size.y):F0} m of building height within 60 m)";
+        }
+        else
+        {
+            var r = plan.Districts[spawnDistrict].Region;
+            at = new Vector3(r.center.x, 70, r.yMin); yaw = 0; pitch = 10;
+            where = $"70 m up over the {plan.Districts[spawnDistrict].Name} south edge, looking north across the island";
+        }
         var cc = W.Hero.GetComponent<CharacterController>(); cc.enabled = false; W.Hero.transform.position = at; cc.enabled = true;
         var follow = Camera.main.GetComponent<ThirdPersonCamera>(); follow.enabled = true; follow.SetLook(yaw, pitch);
         Populate();
@@ -247,8 +263,7 @@ public sealed class WorldProfileRunner : MonoBehaviour
         }
     }
 
-    /// Filled in by the NPC LOD system when it exists; baseline has none.
-    string NpcLodLine() => "npcLod=none(all full)";
+    string NpcLodLine() => NpcLod.Current == null ? "npcLod=none(all full)" : $"npcLod near(full)={NpcLod.Current.NearCount} far(cheap)={NpcLod.Current.FarCount} recycled={NpcLod.Current.Recycled}";
 
     static int Median(List<int> v) { var c = new List<int>(v); c.Sort(); return c.Count == 0 ? 0 : c[c.Count / 2]; }
     static long Median(List<long> v) { var c = new List<long>(v); c.Sort(); return c.Count == 0 ? 0 : c[c.Count / 2]; }

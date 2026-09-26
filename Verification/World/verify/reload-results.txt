@@ -1,0 +1,3 @@
+PASS GameFlow.Select free-play
+PASS Separate process: the save still holds rooftop 2409:roof:0; that marker is not respawned; 4 unclaimed markers remain.
+PASS Fresh-save CONTROL: a new save has no claimed rooftops.

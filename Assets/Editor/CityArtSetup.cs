@@ -19,7 +19,7 @@ public static class CityArtSetup
         if(settings.UseAuthoredPlacements){Debug.LogWarning("Already using authored placements; disable that option explicitly before replacing them.");return;}
         Undo.RecordObject(settings,"Bake seeded art placements");
         var city=Resources.Load<GameTuning>("GameTuning").City;
-        settings.AuthoredPlacements=settings.Generate(city,Resources.Load<CityLayout>("CityLayout").Generate(city));settings.UseAuthoredPlacements=true;
+        settings.AuthoredPlacements=settings.Generate(city,Resources.Load<CityLayout>("CityLayout").Plan(city));settings.UseAuthoredPlacements=true;
         EditorUtility.SetDirty(settings);AssetDatabase.SaveAssets();
     }
 }

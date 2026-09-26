@@ -27,7 +27,7 @@ public sealed class GameModeSession : MonoBehaviour
     /// queued ahead of any level-up the reward causes). Additive: scoring and rules are unchanged.
     public event System.Action<EncounterOutcome> EncounterResolved;
     int startLevel,startXp;
-    float spawnClock; int nextEncounter;
+    float spawnClock; int nextEncounter, siteDistrict=-1;
     public void Initialize(WorldSession world,GameModeDefinition definition)
     {
         World=world; Definition=definition;
@@ -58,20 +58,11 @@ public sealed class GameModeSession : MonoBehaviour
     {
         World.Crimes.RemoveAll(c=>c==null||c.Resolved);
         if(Ended||World.Crimes.Count>=Definition.MaximumEncounters||Definition.Encounters==null||Definition.Encounters.Length==0) return null;
-        // Place set-pieces at street intersections, leaving space for physics cars and escape routes.
-        var sites=new List<Vector3>();
-        var city=World.Tuning.City; float pitch=city.BlockSize+city.StreetWidth;
-        for(int x=0;x<city.Blocks-1;x++) for(int z=0;z<city.Blocks-1;z++)
-            sites.Add(new Vector3((x-(city.Blocks-2)*.5f)*pitch,0,(z-(city.Blocks-2)*.5f)*pitch));
-        if(sites.Count==0) sites.Add(World.City.Spawn);
-        sites.Sort((a,b)=>(a-World.Hero.transform.position).sqrMagnitude.CompareTo((b-World.Hero.transform.position).sqrMagnitude));
-        foreach(var site in sites)
-        {
-            if(World.Crimes.Exists(c=>c!=null&&c.Encounter!=null&&Vector3.Distance(c.Encounter.Site,site)<Definition.SiteSeparation)) continue;
-            var definition=Definition.Encounters[nextEncounter++%Definition.Encounters.Length];
-            return World.SpawnEncounter(definition,site);
-        }
-        return null;
+        // Set-pieces go to the city's encounter sites (street crossings, park/dock squares), spread across districts
+        // by CityLayout.EncounterSites (round robin), leaving space for physics cars and escape routes.
+        if(!World.City.PickEncounterSite(World.Hero.transform.position,
+            site=>!World.Crimes.Exists(c=>c!=null&&c.Encounter!=null&&Vector3.Distance(c.Encounter.Site,site)<Definition.SiteSeparation),ref siteDistrict,out var chosen)) return null;
+        return World.SpawnEncounter(Definition.Encounters[nextEncounter++%Definition.Encounters.Length],chosen);
     }
     public void EncounterEnded(CrimeEncounter encounter,bool success,string reason)
     {

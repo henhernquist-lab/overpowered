@@ -63,7 +63,7 @@ public sealed class CityNpc : MonoBehaviour
     HumanoidAnimationTuning animationTuning;
     public CrimeEvent Crime;
     public CrimeEncounter Encounter;
-    WorldSession world; float nextPath, nextAttack, fleeUntil, frozenUntil, releaseAt, engageUntil, nextSight, combatSpeed; Vector3 alarm; int waypoint, circleSign=1; bool queued, sight;
+    WorldSession world; float nextPath, nextAttack, fleeUntil, frozenUntil, releaseAt, engageUntil, nextSight, combatSpeed; Vector3 alarm, wander; int circleSign=1; bool queued, sight;
     static readonly RaycastHit[] rayHits = new RaycastHit[16];
     EnemyRoster Roster => EnemyRoster.Current;
     public static CityNpc Spawn(WorldSession world, Vector3 position, NpcRole role) =>
@@ -102,6 +102,7 @@ public sealed class CityNpc : MonoBehaviour
     void Update()
     {
         if (world==null || Dead) return;
+        if (NpcLod.Current!=null && !NpcLod.Current.ShouldThink(this)) return;   // far NPC between its reduced-rate AI ticks
         if (!Agent.isOnNavMesh || (world.Mode!=null&&(world.Mode.Ended||world.Mode.Paused))) { CancelAttack(); return; }
         var c=world.Tuning.Npcs;
         Agent.isStopped=Time.time<frozenUntil || world.PlayerDead;
@@ -123,8 +124,9 @@ public sealed class CityNpc : MonoBehaviour
         else if (Fleeing) destination=PanicDestination(transform.position+(transform.position-alarm).normalized*c.FleeDistance);
         else
         {
-            if (!Agent.hasPath || Agent.remainingDistance<c.MinimumWanderDistance) waypoint=Random.Range(0,world.City.Sidewalks.Count);
-            destination=world.City.Sidewalks[waypoint];
+            // Wander to a sidewalk near here (CityLayout.NpcLod.WanderRadius), not across the whole island.
+            if (!Agent.hasPath || Agent.remainingDistance<c.MinimumWanderDistance) wander=world.City.RandomSidewalkNear(transform.position,world.City.Layout.NpcLod.WanderRadius);
+            destination=wander;
         }
         if (NavMesh.SamplePosition(destination,out var hit,c.NavSampleRadius,NavMesh.AllAreas)) Agent.SetDestination(hit.position);
     }

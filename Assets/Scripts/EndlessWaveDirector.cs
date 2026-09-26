@@ -117,18 +117,10 @@ public sealed class EndlessWaveState : ModeDirectorState
         Intermission = true; IntermissionLeft = Tuning.IntermissionSeconds;
     }
 
-    /// Street intersection nearest the city centre (same site grid as GameModeSession.SpawnNext); the 3-block city has
-    /// four equidistant intersections, so ties go to the one nearest the player's spawn.
+    /// Arena: the spawn district's encounter site nearest the player spawn (CityDistrict.ArenaSite), snapped to the NavMesh.
     Vector3 ArenaCentre()
     {
-        var city = World.Tuning.City; float pitch = city.BlockSize + city.StreetWidth;
-        Vector3 best = World.City.Spawn; float bestCentre = float.MaxValue, bestSpawn = float.MaxValue;
-        for (int x = 0; x < city.Blocks - 1; x++) for (int z = 0; z < city.Blocks - 1; z++)
-        {
-            var site = new Vector3((x - (city.Blocks - 2) * .5f) * pitch, 0, (z - (city.Blocks - 2) * .5f) * pitch);
-            float centre = Mathf.Round(site.sqrMagnitude * 100f), spawn = (site - World.City.Spawn).sqrMagnitude;
-            if (centre < bestCentre || (centre == bestCentre && spawn < bestSpawn)) { best = site; bestCentre = centre; bestSpawn = spawn; }
-        }
+        var best = World.City.ArenaSite();
         return NavMesh.SamplePosition(best, out var hit, World.Tuning.Npcs.NavSampleRadius, NavMesh.AllAreas) ? hit.position : best;
     }
 

@@ -18,8 +18,10 @@ public static class PrototypeBootstrap
         Camera camera = GameCamera.Ensure(hero.scene,true);
         var follow=camera.GetComponent<ThirdPersonCamera>() ?? camera.gameObject.AddComponent<ThirdPersonCamera>();
         follow.target=hero.transform;camera.fieldOfView=tuning.Camera.FieldOfView;
+        city.Art.ApplyRendering(camera); // far clip, per-layer cull distances, fog (CityArtSettings.Rendering)
         new GameObject("World Session").AddComponent<WorldSession>().Initialize(tuning, city, controller);
         new GameObject("Feel Director").AddComponent<FeelDirector>().Initialize(WorldSession.Instance);
+        new GameObject("NPC LOD").AddComponent<NpcLod>().Initialize(WorldSession.Instance, layout.NpcLod, city.Art.Rendering.ActorLayer);
         HumanoidPresentation.Create(hero,cc.height,controller,null,WorldSession.Instance.Progression.SelectedHero);
         var sun = new GameObject("Sun").AddComponent<Light>(); sun.type = LightType.Directional; sun.intensity = 1.2f; sun.transform.rotation = Quaternion.Euler(45,-35,0);
         RenderSettings.ambientLight = new Color(.45f,.5f,.6f);
