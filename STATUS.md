@@ -1552,3 +1552,38 @@ Actual verification on Unity 6000.6.0f1, in a temporary project copy to preserve
 - Actual 5m controller fall: exactly one landing event, 13.117m/s impact, minimum visual Y scale 0.820, recovery to 1.000. Controller height remained 1.800m. All controlled poses preserved physics-root position, rotation, and scale. Disabling the component restored the resting pose.
 
 Limits: deterministic pose samples and an actual automated fall were verified; no human keyboard/mouse feel session was performed. Unity compiled the scripts successfully, but the editor log included existing deprecated object-lookup warnings and a UnityEditor.Search startup indexing exception; these did not prevent the Play Mode checks from passing. No city/progression work or gameplay-resource re-verification is claimed by this pass.
+
+## macOS Intel architecture investigation — 2026-09-25
+
+### Findings
+
+The reported Apple Silicon binary could not be reproduced in the Unity output recorded by this checkout. Unity's last two successful Build History entries say:
+
+```text
+Build 2026-09-26T01:59:54.4219670Z: Succeeded, StandaloneOSX, OutputPath=/Users/melaniehernquist/Documents/ChatGPT/op/overpowered.app, BuildProfilePath="", errors=0.
+Build 2026-09-26T02:00:30.6208430Z: Succeeded, StandaloneOSX, OutputPath=/Users/melaniehernquist/Documents/ChatGPT/op/overpowered.app, BuildProfilePath="", errors=0.
+```
+
+These are not two different output locations: both target the same in-project `overpowered.app`. Their Unity `BuildLog.jsonl` entries explicitly report `Intel (x86_64) architecture support for macOS is deprecated and will be removed in a future version of Unity.` The second build ended at 22:00:37 local time; the executable at that exact output path has the matching 22:00:37 modification time.
+
+Direct inspection of the executable named by that app's `Info.plist`:
+
+```text
+CFBundleExecutable: Overpowered Prototype
+file overpowered.app/Contents/MacOS/Overpowered Prototype:
+  Mach-O 64-bit executable x86_64
+lipo -archs overpowered.app/Contents/MacOS/Overpowered Prototype:
+  x86_64
+```
+
+So the app this Unity project just built is Intel 64-bit. Finder's reported Apple Silicon label does not describe this executable. Unity's build reports do not include the path Finder's Get Info panel was displaying, so I cannot identify a different app's origin from this evidence. The mismatch is between the Finder observation and the app path/output recorded by Unity; it is not an architecture failure in the produced executable. No architecture code/settings change was appropriate because the verified Build already produces Intel.
+
+### Serialized settings and other build routes
+
+- `ProjectSettings/ProjectSettings.asset` has `platformArchitecture: {}`; there is no serialized global macOS architecture override. Its current working-tree diff only changes the Standalone bundle identifier and WebGL texture compression. Those pre-existing user edits were preserved.
+- There is no `Assets/Settings` directory or tracked BuildProfile asset in this checkout. Unity's generated local profiles are under `Library/BuildProfiles/`. The only macOS profile is `PlatformProfile.0d2129357eac403d8b359c2dcbf82502.asset`: `m_BuildTarget: 2`, type `OSXStandaloneBuildProfile`, `m_Architecture: 1`. Its output is independently confirmed as x86_64 above. The only other platform profile is WebGL (`m_BuildTarget: 20`, `WebGLPlatformSettings`); `SharedProfile.asset` is the shared settings object, not another macOS profile.
+- Searched project C#, shell/command files, GitHub workflows and build-related docs for `BuildPipeline.BuildPlayer`, `BuildPlayerOptions`, `StandaloneOSX`, `OSXIntel` and `OSXARM64`: no custom macOS build automation exists. The reports identify normal `StandaloneOSX` Player builds.
+- Build History's `BuildProfilePath` is empty on these two builds, while the generated macOS platform profile stores architecture 1. I do not infer a profile asset path from that blank report field; the decisive architecture evidence is the Unity Intel warning plus the executable's Mach-O slices.
+- `Editor.log`'s `Architecture: x86_64` describes the Unity Editor host, not its player. It was not used as evidence for the app. The player architecture was checked with `file` and `lipo`.
+
+Conclusion: no reproducible build defect remains in the confirmed Unity output, and no architecture fix was needed. If the Finder item was meant to be this build, its selected path/metadata conflicts with the verified binary. If it was a different output, that app was not one of the paths in Unity's two latest build reports. `.DS_Store`, the local backup folder and the existing ProjectSettings edits were left untouched. No commit was made for this diagnostic pass.
