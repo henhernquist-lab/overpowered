@@ -50,8 +50,10 @@ public sealed class WorldProfileRunner : MonoBehaviour
         Finish(0);
     }
 
+    CityArtSettings art; StaticGeometryMode restoreStatic; bool staticOverride;
     void Finish(int code)
     {
+        if (staticOverride) art.StaticGeometry = restoreStatic;
         File.WriteAllLines(Path.Combine(Folder, "results.txt"), lines);
         Finished(code);
     }
@@ -80,6 +82,9 @@ public sealed class WorldProfileRunner : MonoBehaviour
     IEnumerator Run()
     {
         yield return Scene(GameFlow.HomeScene);
+        art = Resources.Load<CityArtSettings>("CityArtSettings"); restoreStatic = art.StaticGeometry;
+        if (int.TryParse(Arg("-worldStatic"), out int forced)) { staticOverride = true; art.StaticGeometry = (StaticGeometryMode)forced; }
+        Log($"STATIC GEOMETRY MODE {art.StaticGeometry}{(staticOverride ? " (command-line override for this run only; asset restored at exit)" : "")}");
         var mode = Resources.Load<GameModeDefinition>("Modes/free-play");
         Log($"ENV runTag={runTag} commit={Arg("-worldCommit") ?? "?"} GPU={SystemInfo.graphicsDeviceName} CPU={SystemInfo.processorType} quality='{QualitySettings.names[QualitySettings.GetQualityLevel()]}' shadows={QualitySettings.shadows} shadowDistance={QualitySettings.shadowDistance} load={LoadAverage()} batchUnities={BatchUnities()}");
         Log($"SCENARIO mode={mode.Id} civilians={mode.Civilians} spawnPolice={mode.SpawnPolice}; Heat topped to 3 before every sample; seed={Resources.Load<GameTuning>("GameTuning").City.Seed}");
@@ -118,11 +123,35 @@ public sealed class WorldProfileRunner : MonoBehaviour
             for (int r = 1; r <= rounds; r++) { Populate(); yield return Measure(view, r, false); }
             yield return Measure(view, 0, true);
             Save(target, "view-" + view);
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "-worldControls") >= 0) yield return Controls(view);
             cam.targetTexture = null; cam.enabled = true;
         }
         GameFlow.Instance.Home(); yield return Scene(GameFlow.HomeScene);
         Log($"END load={LoadAverage()} batchUnities={BatchUnities()}");
         Log("LIMIT: Editor Play Mode (batch) throughput at 1280x720, hero parked, input idle; includes ~5.8 ms batch-mode overhead per STATUS. Not a standalone-player figure.");
+    }
+
+    /// Controls at the current view, each reverted: NPC LOD off (every NPC full), and "streaming" (every district's static
+    /// root except the spawn district deactivated) to price what district streaming could save.
+    IEnumerator Controls(string view)
+    {
+        var lod = NpcLod.Current;
+        if (lod != null)
+        {
+            lod.Settings.Enabled = false; yield return null; yield return null;
+            for (int r = 1; r <= 2; r++) { Populate(); yield return Measure(view + " CONTROL npcLod OFF", r, false); }
+            lod.Settings.Enabled = true; yield return null;
+        }
+        int home = W.City.DistrictAt(W.City.Spawn);
+        var others = W.City.Art.Districts.Where(d => d != null && d.Index != home).Select(d => d.Static.gameObject).ToList();
+        foreach (var go in others) go.SetActive(false);
+        if (W.City.Art.BackdropRoot != null) W.City.Art.BackdropRoot.gameObject.SetActive(false);
+        yield return null;
+        for (int r = 1; r <= 2; r++) { Populate(); yield return Measure(view + " CONTROL only spawn district static geometry active", r, false); }
+        foreach (var go in others) go.SetActive(true);
+        if (W.City.Art.BackdropRoot != null) W.City.Art.BackdropRoot.gameObject.SetActive(true);
+        yield return null;
+        for (int r = 1; r <= 2; r++) { Populate(); yield return Measure(view + " CONTROL restored", r, false); }
     }
 
     void Populate() { if (W.Heat < 3) W.AddHeat(3 - W.Heat); W.ReconcilePolice(); }

@@ -1,0 +1,162 @@
+A1 street [84.2, 86.52, 87.85] flight [73.03, 72.64, 72.35] gen [230.6, 185.4, 187.9]
+A2 street [78.07, 76.32, 71.88] flight [62.45, 65.38, 65.32] gen [244.3, 197.9, 214.0]
+A3 street [83.98, 82.53, 77.97] flight [75.35, 74.12, 69.75] gen [224.2, 179.3, 188.1]
+B1 street [78.45, 70.96, 77.1] flight [125.06, 133.93, 143.71] gen [670.6, 494.8, 442.6]
+B2 street [85.15, 82.98, 83.42] flight [117.77, 116.82, 125.77] gen [526.3, 438.9, 419.7]
+B3 street [78.04, 82.59, 81.25] flight [143.91, 137.05, 125.99] gen [566.1, 485.6, 423.1]
+S1 street [61.46, 62.49, 66.72] flight [71.23, 66.78, 70.77] gen [1204.4, 1046.7, 981.5]
+S2 street [61.81, 63.61, 66.3] flight [93.05, 92.77, 89.8] gen [1152.1, 974.2, 949.1]
+S3 street [58.85, 61.59, 59.69] flight [70.39, 71.1, 72.55] gen [1257.7, 1040.4, 1022.0]
+BASELINE 4ee45ed: street mean 81.0 (min 71.9 max 87.8, n=9); flight mean 70.0 (min 62.5 max 75.3); city build (warm gens) 192 ms, incl session 367 ms
+  per-run street means [86.2, 75.4, 81.5] flight [72.7, 64.4, 73.1]
+  draw street (draws,staticDraws,staticBatches,instDraws,instBatches,tris,visible): ('351', '603', '7', '200', '90', '557662', '697', 'npcLod=none(all full) ')
+  draw flight: ('367', '1525', '8', '584', '106', '1470510', '1788', 'npcLod=none(all full) ')
+  stage ground, block sidewalks, block crates/barrels: 2.4 ms
+  stage layout generate: 0.0 ms
+  stage buildings (art pieces) + rooftop markers: 74.7 ms
+  stage streets (curbs, dashes, crossings): 9.9 ms
+  stage static finalize (StaticBatchingUtility): 15.3 ms
+  stage street/rooftop props: 26.8 ms
+  stage navmesh collect sources: 1.9 ms
+  stage navmesh build + add (whole city): 61.0 ms
+  stage session: hero, camera, WorldSession + NPC spawn, HUD: 175.4 ms
+   renderers=2483 staticBatchedRenderers=2129 meshFilters=2409 distinctMeshes=19 gameObjectsUnderCity=2447 colliders=667
+   buildings=36 props=247 breakableProps=229 breakableRenderers=229 breakableRenderersInStaticBatch=0 sidewalkPoints=36
+   npcs=32 civilians=24 cops=8 animators=33 skinned=66 navmeshVerts=3910 navmeshTris=1762
+   city renderer bounds min=(-65.00, -1.00, -65.00) max=(65.00, 31.96, 65.00) size=(130.00, 32.96, 130.00); camera farClip=1000 fog=False fogMode=ExponentialSquared fogDensity=0.01
+  prof ('flight', 'Camera.Render') [0.0, 0.0, 0.0]
+  prof ('flight', 'Culling') [0.095, 0.097, 0.116]
+  prof ('flight', 'FixedUpdate.PhysicsFixedUpdate') [0.229, 0.248, 0.345]
+  prof ('flight', 'PlayerLoop') [13.092, 13.699, 16.656]
+  prof ('flight', 'PostLateUpdate.BatchModeUpdate') [6.278, 6.499, 7.386]
+  prof ('flight', 'PostLateUpdate.UpdateAllRenderers') [0.093, 0.095, 0.12]
+  prof ('flight', 'PostLateUpdate.UpdateAllSkinnedMeshes') [1.905, 2.147, 3.286]
+  prof ('flight', 'PreLateUpdate.AIUpdatePostScript') [0.001, 0.001, 0.001]
+  prof ('flight', 'PreLateUpdate.DirectorUpdateAnimationBegin') [0.188, 0.199, 0.221]
+  prof ('flight', 'PreLateUpdate.DirectorUpdateAnimationEnd') [0.268, 0.291, 0.389]
+  prof ('flight', 'PreLateUpdate.ScriptRunBehaviourLateUpdate') [0.493, 0.504, 0.572]
+  prof ('flight', 'PreUpdate.AIUpdate') [0.269, 0.283, 0.341]
+  prof ('flight', 'Render.OpaqueGeometry') [1.722, 1.743, 2.023]
+  prof ('flight', 'Shadows.RenderShadowMap') [0.0, 0.0, 0.0]
+  prof ('flight', 'Update.ScriptRunBehaviourUpdate') [0.275, 0.281, 0.316]
+  prof ('street', 'Camera.Render') [0.0, 0.0, 0.0]
+  prof ('street', 'Culling') [0.089, 0.084, 0.081]
+  prof ('street', 'FixedUpdate.PhysicsFixedUpdate') [0.215, 0.217, 0.193]
+  prof ('street', 'PlayerLoop') [11.668, 12.685, 11.413]
+  prof ('street', 'PostLateUpdate.BatchModeUpdate') [5.161, 6.232, 5.571]
+  prof ('street', 'PostLateUpdate.UpdateAllRenderers') [0.093, 0.09, 0.079]
+  prof ('street', 'PostLateUpdate.UpdateAllSkinnedMeshes') [2.135, 2.138, 1.738]
+  prof ('street', 'PreLateUpdate.AIUpdatePostScript') [0.001, 0.001, 0.001]
+  prof ('street', 'PreLateUpdate.DirectorUpdateAnimationBegin') [0.218, 0.188, 0.182]
+  prof ('street', 'PreLateUpdate.DirectorUpdateAnimationEnd') [0.291, 0.284, 0.24]
+  prof ('street', 'PreLateUpdate.ScriptRunBehaviourLateUpdate') [0.515, 0.503, 0.486]
+  prof ('street', 'PreUpdate.AIUpdate') [0.282, 0.271, 0.252]
+  prof ('street', 'Render.OpaqueGeometry') [1.24, 1.283, 1.232]
+  prof ('street', 'Shadows.RenderShadowMap') [0.0, 0.0, 0.0]
+  prof ('street', 'Update.ScriptRunBehaviourUpdate') [0.276, 0.278, 0.271]
+CANDIDATE BuildingMeshes: street mean 80.0 (min 71.0 max 85.2, n=9); flight mean 130.0 (min 116.8 max 143.9); city build (warm gens) 451 ms, incl session 633 ms
+  per-run street means [75.5, 83.9, 80.6] flight [134.2, 120.1, 135.7]
+  draw street (draws,staticDraws,staticBatches,instDraws,instBatches,tris,visible): ('269', '327', '34', '174', '81', '1215030', '428', 'npcLod near(full)=13 far(cheap)=19 recycled=0 ')
+  draw flight: ('262', '418', '41', '264', '76', '684674', '531', 'npcLod near(full)=0 far(cheap)=32 recycled=10 ')
+  stage plan (layout generate): 3.0 ms
+  stage ground, water holes, decks, sea: 2.4 ms
+  stage buildings (art) + rooftop markers: 52.9 ms
+  stage streets (curbs, dashes, crossings): 1.4 ms
+  stage structures (trees, containers, cranes, landmarks) + backdrop: 12.5 ms
+  stage static finalize (per-district StaticBatchingUtility): 45.2 ms
+  stage street/rooftop/feature props: 59.6 ms
+  stage navmesh collect sources: 0.8 ms
+  stage navmesh build: Downtown: 69.2 ms
+  stage navmesh build: Park: 67.3 ms
+  stage navmesh build: Residential: 56.7 ms
+  stage navmesh build: Docks: 78.8 ms
+  stage navmesh add (one data, all districts): 0.9 ms
+  stage session: hero, camera, WorldSession + NPC spawn, HUD: 182.3 ms
+   renderers=1691 staticBatchedRenderers=1032 meshFilters=1617 distinctMeshes=27 gameObjectsUnderCity=1778 colliders=1855
+   buildings=63 props=523 breakableProps=516 breakableRenderers=516 breakableRenderersInStaticBatch=0 sidewalkPoints=171
+   npcs=32 civilians=24 cops=8 animators=33 skinned=66 navmeshVerts=16247 navmeshTris=7387
+   districts=4 (Downtown: 37 buildings, navmesh 71 ms, Park: 0 buildings, navmesh 66 ms, Residential: 20 buildings, navmesh 54 ms, Docks: 6 buildings, navmesh 74 ms); staticPieces=15263 landmarks=Meridian Spire/Harbour Light/Park Lookout Tower spawn=(-28.00, 0.12, 4.00) encounterSites=17
+   city renderer bounds min=(-288.00, -1.61, -272.00) max=(288.70, 154.10, 160.00) size=(576.70, 155.71, 432.00); camera farClip=2300 fog=True fogMode=Exponential fogDensity=0.0016
+  prof ('flight', 'Camera.Render') [0.0, 0.0, 0.0]
+  prof ('flight', 'Culling') [0.088, 0.075, 0.079]
+  prof ('flight', 'FixedUpdate.PhysicsFixedUpdate') [0.139, 0.127, 0.128]
+  prof ('flight', 'PlayerLoop') [6.042, 7.212, 6.719]
+  prof ('flight', 'PostLateUpdate.BatchModeUpdate') [1.976, 3.352, 2.819]
+  prof ('flight', 'PostLateUpdate.UpdateAllRenderers') [0.084, 0.072, 0.078]
+  prof ('flight', 'PostLateUpdate.UpdateAllSkinnedMeshes') [0.34, 0.479, 0.407]
+  prof ('flight', 'PreLateUpdate.AIUpdatePostScript') [0.001, 0.001, 0.001]
+  prof ('flight', 'PreLateUpdate.DirectorUpdateAnimationBegin') [0.036, 0.034, 0.034]
+  prof ('flight', 'PreLateUpdate.DirectorUpdateAnimationEnd') [0.047, 0.042, 0.044]
+  prof ('flight', 'PreLateUpdate.ScriptRunBehaviourLateUpdate') [0.101, 0.093, 0.1]
+  prof ('flight', 'PreUpdate.AIUpdate') [0.279, 0.231, 0.245]
+  prof ('flight', 'Render.OpaqueGeometry') [1.205, 1.163, 1.157]
+  prof ('flight', 'Shadows.RenderShadowMap') [0.0, 0.0, 0.0]
+  prof ('flight', 'Update.ScriptRunBehaviourUpdate') [0.466, 0.428, 0.448]
+  prof ('street', 'Camera.Render') [0.0, 0.0, 0.0]
+  prof ('street', 'Culling') [0.082, 0.077, 0.081]
+  prof ('street', 'FixedUpdate.PhysicsFixedUpdate') [0.222, 0.205, 0.215]
+  prof ('street', 'PlayerLoop') [12.03, 11.36, 11.443]
+  prof ('street', 'PostLateUpdate.BatchModeUpdate') [6.823, 6.312, 6.281]
+  prof ('street', 'PostLateUpdate.UpdateAllRenderers') [0.068, 0.058, 0.065]
+  prof ('street', 'PostLateUpdate.UpdateAllSkinnedMeshes') [0.971, 0.945, 0.901]
+  prof ('street', 'PreLateUpdate.AIUpdatePostScript') [0.001, 0.001, 0.001]
+  prof ('street', 'PreLateUpdate.DirectorUpdateAnimationBegin') [0.146, 0.139, 0.145]
+  prof ('street', 'PreLateUpdate.DirectorUpdateAnimationEnd') [0.25, 0.206, 0.234]
+  prof ('street', 'PreLateUpdate.ScriptRunBehaviourLateUpdate') [0.265, 0.262, 0.252]
+  prof ('street', 'PreUpdate.AIUpdate') [0.252, 0.236, 0.254]
+  prof ('street', 'Render.OpaqueGeometry') [1.303, 1.326, 1.32]
+  prof ('street', 'Shadows.RenderShadowMap') [0.0, 0.0, 0.0]
+  prof ('street', 'Update.ScriptRunBehaviourUpdate') [0.482, 0.471, 0.503]
+CANDIDATE per-piece StaticBatching: street mean 62.5 (min 58.9 max 66.7, n=9); flight mean 77.6 (min 66.8 max 93.0); city build (warm gens) 1002 ms, incl session 1184 ms
+  per-run street means [63.6, 63.9, 60.0] flight [69.6, 91.9, 71.3]
+  draw street (draws,staticDraws,staticBatches,instDraws,instBatches,tris,visible): ('1035', '5881', '34', '174', '81', '1261614', '5982', 'npcLod near(full)=8 far(cheap)=24 recycled=1 ')
+  draw flight: ('951', '8400', '41', '264', '76', '908254', '8525', 'npcLod near(full)=0 far(cheap)=32 recycled=11 ')
+  stage plan (layout generate): 2.9 ms
+  stage ground, water holes, decks, sea: 5.9 ms
+  stage buildings (art) + rooftop markers: 477.7 ms
+  stage streets (curbs, dashes, crossings): 39.6 ms
+  stage structures (trees, containers, cranes, landmarks) + backdrop: 62.3 ms
+  stage static finalize (per-district StaticBatchingUtility): 74.7 ms
+  stage street/rooftop/feature props: 56.9 ms
+  stage navmesh collect sources: 6.3 ms
+  stage navmesh build: Downtown: 67.1 ms
+  stage navmesh build: Park: 67.8 ms
+  stage navmesh build: Residential: 59.3 ms
+  stage navmesh build: Docks: 80.9 ms
+  stage navmesh add (one data, all districts): 0.9 ms
+  stage session: hero, camera, WorldSession + NPC spawn, HUD: 182.1 ms
+   renderers=16093 staticBatchedRenderers=15434 meshFilters=16019 distinctMeshes=27 gameObjectsUnderCity=16180 colliders=1855
+   buildings=63 props=523 breakableProps=516 breakableRenderers=516 breakableRenderersInStaticBatch=0 sidewalkPoints=171
+   npcs=32 civilians=24 cops=8 animators=33 skinned=66 navmeshVerts=16364 navmeshTris=7450
+   districts=4 (Downtown: 37 buildings, navmesh 65 ms, Park: 0 buildings, navmesh 68 ms, Residential: 20 buildings, navmesh 59 ms, Docks: 6 buildings, navmesh 80 ms); staticPieces=15263 landmarks=Meridian Spire/Harbour Light/Park Lookout Tower spawn=(-28.00, 0.12, 4.00) encounterSites=17
+   city renderer bounds min=(-288.00, -1.61, -272.00) max=(288.70, 154.10, 160.00) size=(576.70, 155.71, 432.00); camera farClip=2300 fog=True fogMode=Exponential fogDensity=0.0016
+  prof ('flight', 'Camera.Render') [0.0, 0.0, 0.0]
+  prof ('flight', 'Culling') [0.19, 0.185, 0.189]
+  prof ('flight', 'FixedUpdate.PhysicsFixedUpdate') [0.262, 0.203, 0.233]
+  prof ('flight', 'PlayerLoop') [13.199, 11.266, 12.465]
+  prof ('flight', 'PostLateUpdate.BatchModeUpdate') [3.558, 2.488, 2.837]
+  prof ('flight', 'PostLateUpdate.UpdateAllRenderers') [0.09, 0.082, 0.089]
+  prof ('flight', 'PostLateUpdate.UpdateAllSkinnedMeshes') [0.568, 0.406, 0.498]
+  prof ('flight', 'PreLateUpdate.AIUpdatePostScript') [0.001, 0.001, 0.001]
+  prof ('flight', 'PreLateUpdate.DirectorUpdateAnimationBegin') [0.036, 0.034, 0.037]
+  prof ('flight', 'PreLateUpdate.DirectorUpdateAnimationEnd') [0.048, 0.047, 0.047]
+  prof ('flight', 'PreLateUpdate.ScriptRunBehaviourLateUpdate') [0.099, 0.098, 0.103]
+  prof ('flight', 'PreUpdate.AIUpdate') [0.248, 0.232, 0.243]
+  prof ('flight', 'Render.OpaqueGeometry') [5.018, 4.601, 5.06]
+  prof ('flight', 'Shadows.RenderShadowMap') [0.0, 0.0, 0.0]
+  prof ('flight', 'Update.ScriptRunBehaviourUpdate') [0.489, 0.447, 0.497]
+  prof ('street', 'Camera.Render') [0.0, 0.0, 0.0]
+  prof ('street', 'Culling') [0.17, 0.169, 0.18]
+  prof ('street', 'FixedUpdate.PhysicsFixedUpdate') [0.254, 0.268, 0.404]
+  prof ('street', 'PlayerLoop') [13.939, 14.271, 18.396]
+  prof ('street', 'PostLateUpdate.BatchModeUpdate') [5.482, 5.831, 8.028]
+  prof ('street', 'PostLateUpdate.UpdateAllRenderers') [0.071, 0.069, 0.087]
+  prof ('street', 'PostLateUpdate.UpdateAllSkinnedMeshes') [0.816, 0.907, 1.134]
+  prof ('street', 'PreLateUpdate.AIUpdatePostScript') [0.001, 0.001, 0.001]
+  prof ('street', 'PreLateUpdate.DirectorUpdateAnimationBegin') [0.143, 0.165, 0.166]
+  prof ('street', 'PreLateUpdate.DirectorUpdateAnimationEnd') [0.217, 0.24, 0.299]
+  prof ('street', 'PreLateUpdate.ScriptRunBehaviourLateUpdate') [0.218, 0.262, 0.275]
+  prof ('street', 'PreUpdate.AIUpdate') [0.256, 0.248, 0.324]
+  prof ('street', 'Render.OpaqueGeometry') [3.739, 3.575, 4.425]
+  prof ('street', 'Shadows.RenderShadowMap') [0.0, 0.0, 0.0]
+  prof ('street', 'Update.ScriptRunBehaviourUpdate') [0.502, 0.475, 0.591]

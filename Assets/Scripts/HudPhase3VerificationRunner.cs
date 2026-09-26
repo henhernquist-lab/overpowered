@@ -661,7 +661,9 @@ public sealed class HudPhase3VerificationRunner : MonoBehaviour
             yield return LevelUpIfAny("wreck");
         }
         yield return Until(() => hud.BannerIdle, 8f, "banners idle");
-        CalmPolice(); Move(W.City.NearestSidewalk(e.Site + Vector3.right * (e.Definition.PlayerEscapeDistance + 6f))); yield return Grounded();
+        // District world: sidewalk points are sparser, so take the sidewalk nearest that spot among those really beyond the escape distance.
+        var escapeSpot = e.Site + Vector3.right * (e.Definition.PlayerEscapeDistance + 6f);
+        CalmPolice(); Move(W.City.Sidewalks.Where(p => Vector3.Distance(p, e.Site) > e.Definition.PlayerEscapeDistance + 1f).OrderBy(p => (p - escapeSpot).sqrMagnitude).First()); yield return Grounded();
         yield return Realtime(GameHud.PopupMergeSeconds + .05f);   // not merged into the last wreck popup
         int total1 = Total(), id1 = LastPopupId();
         Check(e.TryComplete() && e.Finished, $"Escape past {e.Definition.PlayerEscapeDistance} m -> CrimeEncounter.TryComplete (what its Tick calls) succeeds.");

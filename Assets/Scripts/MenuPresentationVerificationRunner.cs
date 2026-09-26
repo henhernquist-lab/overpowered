@@ -81,7 +81,7 @@ public sealed class MenuPresentationVerificationRunner : MonoBehaviour
         Capture("home");
         using(var enter=PointerEnterEvent.GetPooled()){enter.target=hero;hero.SendEvent(enter);}yield return new WaitForSecondsRealtime(.4f);
         Check(hero.style.translate.value.y.value<-7,$"Hover lifts Hero card {hero.style.translate.value.y.value:F2} logical pixels; configured -8.");Capture("home-hover");
-        var skyline=GameFlow.Instance.GetComponent<MenuSkyline>();Check(skyline.BuildingCount==36&&skyline.Texture.IsCreated(),$"Skyline uses {skyline.BuildingCount} actual seeded buildings; one-time capture {skyline.CaptureMilliseconds:F1}ms; cached {skyline.Texture.width}x{skyline.Texture.height}.");
+        var skyline=GameFlow.Instance.GetComponent<MenuSkyline>();int plannedBuildings=Resources.Load<CityLayout>("CityLayout").Generate(Resources.Load<GameTuning>("GameTuning").City).Count;Check(skyline.BuildingCount==plannedBuildings&&plannedBuildings>=40&&skyline.Texture.IsCreated(),$"Skyline uses {skyline.BuildingCount} actual seeded buildings; one-time capture {skyline.CaptureMilliseconds:F1}ms; cached {skyline.Texture.width}x{skyline.Texture.height}.");
         yield return Benchmark(false,"home static A");yield return Benchmark(true,"home animated B");yield return Benchmark(true,"home animated B2");yield return Benchmark(false,"home static A2");ui.MotionEnabled=true;
         Submit(ui.ModeButtons["free-play"]);yield return Scene(GameFlow.CityScene);Check(W.Mode.Definition.Id=="free-play"&&!W.Progression.SideLocked,"Actual Free Play extras-button submit loads Free Play (side not locked).");
         GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);yield return Menu();hero=ui.ModeButtons["hero"];

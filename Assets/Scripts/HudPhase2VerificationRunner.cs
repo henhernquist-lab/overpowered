@@ -279,6 +279,15 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
         var cam = Cam();
         EncounterActor NearestRobber(Vector3 from) => e.Robbers.Where(a => !a.Captured && !a.Escaped && a.Npc != null && !a.Npc.Dead).OrderBy(a => (a.Npc.transform.position - from).sqrMagnitude).FirstOrDefault();
         var first = NearestRobber(W.Hero.transform.position); var at = first.Npc.transform.position;
+        // The spot 8 m behind / 3 m left of a robber is just outside PunchPromptRange (8 m), so no punch prompt appears. In the
+        // district world the robbers' exit routes differ, so another robber can stand within 8 m of that spot: use the first
+        // robber whose spot keeps EVERY robber beyond the prompt range (the 3x3 city's choice when that holds).
+        var live = e.Robbers.Where(a => !a.Captured && !a.Escaped && a.Npc != null && !a.Npc.Dead).ToList();
+        foreach (var candidate in new[] { first }.Concat(live.Where(a => a != first)))
+        {
+            var spot = candidate.Npc.transform.position - Vector3.forward * 8f - Vector3.right * 3f;
+            if (live.All(a => (a.Npc.transform.position - spot).sqrMagnitude > GameHud.PunchPromptRange * GameHud.PunchPromptRange + .25f)) { at = candidate.Npc.transform.position; break; }
+        }
         Move(at - Vector3.forward * 8f - Vector3.right * 3f); yield return Frames(4); yield return null;
         var near = NearestRobber(W.Hero.transform.position);
         Check(hud.WaypointVisible && hud.WaypointOnScreen && GameHud.Shown(hud.Waypoint) && !GameHud.Shown(hud.WaypointEdge), $"Waypoint ON-SCREEN marker shown (target ahead-right).");
@@ -449,11 +458,13 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
         var e0 = FirstEncounter(); Hold(e0, 400f); e0.enabled = false;
         Log("TEST HARNESS: cloned hero definition with SpawnInterval=100000 (no timed spawns); initial encounter held/paused.");
         yield return Grounded(); W.Hero.TryJump(); yield return Grounded();
-        // Stand at the intersection farthest from the first encounter so the next SpawnNext() lands nearest the player.
-        var city = W.Tuning.City; float pitch = city.BlockSize + city.StreetWidth; var sites = new List<Vector3>();
-        for (int x = 0; x < city.Blocks - 1; x++) for (int z = 0; z < city.Blocks - 1; z++) sites.Add(new Vector3((x - (city.Blocks - 2) * .5f) * pitch, 0, (z - (city.Blocks - 2) * .5f) * pitch));
-        var far = sites.OrderByDescending(s => (s - e0.Site).sqrMagnitude).First();
-        Move(W.City.NearestSidewalk(far + new Vector3(4f, 0, -6f))); yield return Grounded();
+        // Stand where the next SpawnNext() lands nearer the player than the first encounter. The district world spreads
+        // set-pieces round robin (CityLayout.EncounterSites), so stand in the district the session will use next, at its
+        // sidewalk farthest from the first encounter (the 3x3 city's "farthest intersection" choice, per district).
+        int next = W.Mode.NextSiteDistrict;
+        var spot = W.City.Sidewalks.Where((p, i) => W.City.SidewalkDistrict[i] == next).OrderByDescending(p => (p - e0.Site).sqrMagnitude).First();
+        Log($"District world: next set-piece district {W.City.Plan.Districts[next].Name}; standing at {V(spot)}, {Vector3.Distance(spot, e0.Site):F0} m from the first encounter.");
+        Move(spot + Vector3.up * .1f); yield return Grounded();
         int shownFrames = 0, frames = 0; float until = Time.realtimeSinceStartup + 30f;
         while (Time.realtimeSinceStartup < until) { yield return null; frames++; if (GameHud.Shown(hud.AlertCard) || hud.AlertShowing) shownFrames++; }
         Check(spawned == 0 && hud.AlertsStarted == 0 && shownFrames == 0, $"CONTROL: 30 s of idle with no spawn ({frames} frames): EncounterSpawned {spawned}, alerts {hud.AlertsStarted}, alert card shown on {shownFrames} frames.");

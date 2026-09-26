@@ -155,8 +155,9 @@ public sealed class CombatVerificationRunner : MonoBehaviour
         Check(Flow.Select(sandbox),"Sandbox: runtime COPY of the free-play definition (0 civilians, no police, no encounters) selected through GameFlow.");
         yield return Scene(GameFlow.CityScene);
         Check(W.Npcs.Count==0&&W.Progression.Data.Side==PlayerSide.Hero&&W.Stars==0,"Sandbox city: 0 NPCs, Hero side (Criminals hostile), 0 Heat stars.");
-        var c=W.Tuning.City;float pitch=c.BlockSize+c.StreetWidth;
-        foreach(var site in new[]{new Vector3(-pitch*.5f,0,-pitch*.5f),new Vector3(pitch*.5f,0,-pitch*.5f),new Vector3(-pitch*.5f,0,pitch*.5f),new Vector3(pitch*.5f,0,pitch*.5f)})
+        // District world: street crossings of the spawn district, nearest the spawn first (was the four 3x3 crossings).
+        int home=W.City.DistrictAt(W.City.Spawn);
+        foreach(var site in W.City.EncounterSites.Where((p,i)=>W.City.EncounterSiteDistrict[i]==home).OrderBy(p=>(p-W.City.Spawn).sqrMagnitude))
         {
             if(!NavMesh.SamplePosition(site,out var centre,3,NavMesh.AllAreas))continue;
             Vector3 near=site-lane*12,far=site+lane*8;

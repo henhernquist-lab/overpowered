@@ -28,6 +28,8 @@ public sealed class GameModeSession : MonoBehaviour
     public event System.Action<EncounterOutcome> EncounterResolved;
     int startLevel,startXp;
     float spawnClock; int nextEncounter, siteDistrict=-1;
+    /// District index the next SpawnNext() tries first (CityLayout.EncounterSites round robin); -1 before the first spawn.
+    public int NextSiteDistrict => siteDistrict;
     public void Initialize(WorldSession world,GameModeDefinition definition)
     {
         World=world; Definition=definition;

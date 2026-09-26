@@ -211,9 +211,12 @@ public sealed class WorldVerificationRunner : MonoBehaviour
         Vector2 L(string recipe) { var s = plan.Structures.First(x => x.Recipe == recipe); return new Vector2(s.Position.x, s.Position.z); }
         Vector3 At(Vector2 p, float y) => new Vector3(p.x, y, p.y);
         Log($"Downtown rooftop viewpoint: tallest spawn-district building, height {downtown.Size.y:F1} m, roof {V(roof)}.");
-        View("downtown-rooftop-west-park-tower", roof, At(L("Lookout Tower"), 60));
-        View("downtown-rooftop-south-harbour-light", roof, At(L("Harbour Light"), 30));
-        View("downtown-rooftop-north-spire", roof + Vector3.back * 2, At(L("Meridian Spire"), 110));
+        // Standing at the parapet on the side facing the target, eye 4 m above the deck (a hero hovering at the roof edge).
+        Vector3 Edge(Vector3 look) { var d = look - roof; d.y = 0; d.Normalize(); return roof + d * (Mathf.Min(downtown.Size.x, downtown.Size.z) * .35f) + Vector3.up * 4f; }
+        View("downtown-rooftop-west-park-tower", Edge(At(L("Lookout Tower"), 60)), At(L("Lookout Tower"), 20));
+        View("downtown-rooftop-south-harbour-light", Edge(At(L("Harbour Light"), 30)), At(L("Harbour Light"), 5));
+        View("downtown-rooftop-north-spire", Edge(At(L("Meridian Spire"), 110)), At(L("Meridian Spire"), 90));
+        View("downtown-rooftop-east-residential", Edge(new Vector3(220, 0, 40)), new Vector3(220, 0, 40));
         View("waterfront-quay", new Vector3(-120, 7, -193), At(L("Harbour Light"), 25));
         View("park-pond-and-tower", new Vector3(-150, 5, -20), At(L("Lookout Tower"), 45));
         View("bridge-grand-canal", new Vector3(128, 3, -22), new Vector3(128, 2, 32));

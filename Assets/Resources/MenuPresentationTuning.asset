@@ -23,7 +23,7 @@ MonoBehaviour:
   AmbientSize: 2.2
   SkylineWidth: 768
   SkylineHeight: 432
-  SkylineCamera: {x: -22, y: 7, z: -138}
-  SkylineLook: {x: 0, y: 27, z: 0}
+  SkylineCamera: {x: -30, y: 14, z: -250}
+  SkylineLook: {x: 0, y: 40, z: 30}
   SkylineFieldOfView: 32
   SkylineTint: 0.52

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -55,7 +56,8 @@ public sealed class CityVerificationRunner : MonoBehaviour
             Check(control.Data.Level==1 && control.Data.Points==0,"Fresh-save CONTROL: level=1, points=0.");
             yield break;
         }
-        Check(w.City.Buildings.Count==36,"Seeded city: "+w.City.Buildings.Count+" solid buildings; civilians="+Count(NpcRole.Civilian));
+        int planned=Resources.Load<CityLayout>("CityLayout").Generate(w.Tuning.City).Count;
+        Check(w.City.Buildings.Count==planned&&planned>=40&&w.City.Buildings.Select(b=>b.District).Distinct().Count()>=3,"Seeded city: "+w.City.Buildings.Count+" solid buildings (== planned "+planned+") across "+w.City.Buildings.Select(b=>b.District).Distinct().Count()+" districts; civilians="+Count(NpcRole.Civilian));
         var layout=Resources.Load<CityLayout>("CityLayout"); var same=layout.Generate(w.Tuning.City);
         Check(same[0].Position==w.City.Buildings[0].Position && same[7].Size==w.City.Buildings[7].Size,"Same seed reproduced layout samples.");
         var path=new NavMeshPath();
