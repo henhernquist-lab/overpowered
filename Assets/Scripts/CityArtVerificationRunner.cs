@@ -117,7 +117,10 @@ public sealed class CityArtVerificationRunner : MonoBehaviour
         var target=new RenderTexture(1280,720,24);target.Create();camera.targetTexture=target;
         yield return new WaitForSeconds(1);
         int civilians=W.Npcs.Count(n=>n!=null&&!n.Dead&&n.Role==NpcRole.Civilian),cops=W.Npcs.Count(n=>n!=null&&!n.Dead&&n.Role==NpcRole.Cop&&n.Agent.isOnNavMesh);
-        Check(civilians>=24&&cops>=10,$"Populated benchmark: civilians={civilians}, on-NavMesh cops={cops}.");
+        // Expected police come from the tuned data (GameTuning.Heat per-side PatrolCount + stars x CopsPerStar, patrols only),
+        // not a hard-coded 10: the gameplay rebalance lowered hero-side police. Every patrol the rules ask for must be live.
+        var police=W.Tuning.Heat.Police(W.Progression.Data.Side);int patrols=W.Npcs.Count(n=>n!=null&&!n.Dead&&n.Role==NpcRole.Cop&&n.Encounter==null&&n.Agent.isOnNavMesh),wanted=police.PatrolCount+W.Stars*police.CopsPerStar;
+        Check(civilians>=24&&patrols>=wanted&&wanted>0,$"Populated benchmark: civilians={civilians}, on-NavMesh cops={cops} (patrols {patrols} >= {wanted} = {police.PatrolCount} + {W.Stars} stars x {police.CopsPerStar} from GameTuning.Heat, side {W.Progression.Data.Side}).");
         var watch=System.Diagnostics.Stopwatch.StartNew();var times=new List<double>();var draws=new List<int>();var passes=new List<int>();double previous=0;
         while(watch.Elapsed.TotalSeconds<5)
         {camera.Render();yield return null;double now=watch.Elapsed.TotalSeconds;times.Add((now-previous)*1000);previous=now;draws.Add(UnityStats.drawCalls);passes.Add(UnityStats.setPassCalls);}
