@@ -91,17 +91,28 @@ public sealed class IceVerificationRunner : MonoBehaviour
             if(h.transform.root!=W.Hero.transform&&h.collider.GetComponentInParent<CityNpc>()==null)return false;
         return true;
     }
-    /// A sidewalk point at [min,max] m from the hero with a clear sight line from the hero's head.
-    Vector3 Point(float min,float max,Vector3 avoid)
+    /// NavMesh points (where the NPCs really walk) [min,max] m from the hero, fanned out every 15 deg with the distance nearest
+    /// the band's middle tried first; `sight` also requires a clear line from the hero's head to the point's chest height.
+    /// Layout-independent: it follows whatever streets/sidewalks the seeded city generates (the old fixture picked from
+    /// CityPlan.Sidewalks, i.e. block corners, which on the district map lie ~21 m from spawn - outside the 13-19 m band).
+    IEnumerable<Vector3> NavPoints(float min,float max,bool sight)
     {
-        var head=W.Hero.transform.position+Vector3.up*1.7f;
-        foreach(var p in W.City.Sidewalks.OrderBy(p=>Mathf.Abs(Vector3.Distance(p,W.Hero.transform.position)-(min+max)*.5f)))
-        {
-            float d=Vector3.Distance(p,W.Hero.transform.position);
-            if(d<min||d>max||Vector3.Distance(p,avoid)<6||!Clear(head,p+Vector3.up*1.2f))continue;return p;
-        }
-        throw new Exception($"No clear sidewalk {min}-{max} m from the hero");
+        Vector3 hero=W.Hero.transform.position,head=hero+Vector3.up*1.7f;float mid=(min+max)*.5f;
+        var distances=new List<float>();for(float d=min+.5f;d<=max-.5f+.01f;d+=.5f)distances.Add(d);
+        foreach(float d in distances.OrderBy(d=>Mathf.Abs(d-mid)).ThenBy(d=>d))
+            for(int a=0;a<360;a+=15)
+            {
+                if(!NavMesh.SamplePosition(hero+Quaternion.Euler(0,a,0)*Vector3.forward*d,out var hit,.75f,NavMesh.AllAreas))continue;
+                Vector3 p=hit.position;float real=Vector3.Distance(p,hero);
+                if(real<min||real>max||(sight&&!Clear(head,p+Vector3.up*1.2f)))continue;yield return p;
+            }
     }
+    Vector3 NavPoint(float min,float max,bool sight,Func<Vector3,bool> accept,string what)
+    {
+        foreach(var p in NavPoints(min,max,sight))if(accept(p))return p;
+        throw new Exception($"No {(sight?"clear ":"")}NavMesh point {min}-{max} m from the hero ({what})");
+    }
+    static float FlatAngle(Vector3 a,Vector3 b){a.y=0;b.y=0;return Vector3.Angle(a,b);}
     float speed;
     IEnumerator Speed(CityNpc npc,float seconds)
     {
@@ -120,10 +131,14 @@ public sealed class IceVerificationRunner : MonoBehaviour
         string view=first?"first-person":"third-person";
         Hero(W.City.Spawn+Vector3.up*.2f);View(first);yield return null;yield return null;
         // Keep ambient police/civilians from blocking the line: move them far away is not possible, so pick a clear lane.
-        var lane=Point(13,19,Vector3.one*9999);
+        // The target starts 13-19 m out (inside Ice's range) on the NavMesh with a clear sight line and runs at the hero; the
+        // off-axis CONTROL starts 60-120 deg away from that lane, 8-16 m out.
+        Vector3 hero=W.Hero.transform.position;
+        var lane=NavPoint(13,19,true,p=>true,"target lane");
+        var controlAt=NavPoint(8,16,false,p=>{float a=FlatAngle(p-hero,lane-hero);return a>=60&&a<=120;},"off-axis control");
+        Log($"FIXTURE {view}: hero {hero:F1}; target start {lane:F1} ({Vector3.Distance(lane,hero):0.0} m, range {W.Powers.Stats(Ice).Range:0.#} m); control start {controlAt:F1} ({Vector3.Distance(controlAt,hero):0.0} m, {FlatAngle(controlAt-hero,lane-hero):0} deg off the lane).");
         var target=CityNpc.Spawn(W,lane,NpcRole.Criminal);target.AlwaysAggro=true;target.SetCombatStats(500,target.ContactDamage);
-        Vector3 side=Vector3.Cross(Vector3.up,(lane-W.Hero.transform.position).normalized);
-        var control=CityNpc.Spawn(W,W.City.NearestSidewalk(W.Hero.transform.position+side*14),NpcRole.Criminal);control.AlwaysAggro=true;control.SetCombatStats(500,control.ContactDamage);
+        var control=CityNpc.Spawn(W,controlAt,NpcRole.Criminal);control.AlwaysAggro=true;control.SetCombatStats(500,control.ContactDamage);
         Check(target!=null&&control!=null,view+": live Rusher target and off-axis CONTROL spawned on the NavMesh.");
         yield return new WaitForSeconds(.6f);
         yield return Speed(target,.5f);float before=speed;yield return Speed(control,.2f);float controlBefore=speed;
@@ -210,13 +225,14 @@ public sealed class IceVerificationRunner : MonoBehaviour
     IEnumerator OutOfRange()
     {
         Hero(W.City.Spawn+Vector3.up*.2f);View(false);yield return null;
-        float range=W.Powers.Stats(Ice).Range;var head=W.Hero.transform.position+Vector3.up*1.7f;
+        float range=W.Powers.Stats(Ice).Range;
         W.Powers.Tick(100,true);W.Powers.Select(Ice);CityNpc far=null;float distance=0;string blocker="";
         // TEST HARNESS: every other NPC (encounter robbers/civilians, patrols) is deactivated for this control only and restored
         // after, so the only thing on the crosshair is the out-of-range target.
         var parked=W.Npcs.Where(n=>n!=null&&n.gameObject.activeSelf).ToList();foreach(var n in parked)n.gameObject.SetActive(false);
-        // A lane where the crosshair ray reaches the NPC (beyond range) and nothing else lies within Ice's range.
-        foreach(var p in W.City.Sidewalks.Where(p=>{float d=Vector3.Distance(p,W.Hero.transform.position);return d>range+4&&d<range+12;}).Where(p=>Clear(head,p+Vector3.up*1.2f)).Take(12))
+        // A lane where the crosshair ray reaches the NPC (beyond range: range+4 .. range+12 m, on the NavMesh with a clear
+        // sight line) and nothing else lies within Ice's range.
+        foreach(var p in NavPoints(range+4,range+12,true).Take(12))
         {
             far=CityNpc.Spawn(W,p,NpcRole.Criminal);if(far==null)continue;far.enabled=false;far.Agent.enabled=false;far.SetCombatStats(500,0);Physics.SyncTransforms();
             AimAt(Chest(far),false);yield return null;AimAt(Chest(far),false);Physics.SyncTransforms();
@@ -229,7 +245,7 @@ public sealed class IceVerificationRunner : MonoBehaviour
         Check(far!=null,"Out-of-range CONTROL setup: an NPC on the crosshair beyond range with nothing else inside range (last blocker: "+blocker+").");
         int charges=Ice.Charges;float hp=far.Health;
         bool used=W.Powers.Use(Ice);
-        Check(!used&&!far.Frozen&&far.Health==hp&&Ice.Charges==charges,$"Out-of-range CONTROL: NPC {distance:0.0} m away (range {range:0.#} m) on the crosshair -> refused (\"{W.Powers.Message}\"), not frozen, not damaged, no charge spent.");
+        Check(distance>range&&!used&&!far.Frozen&&far.Health==hp&&Ice.Charges==charges,$"Out-of-range CONTROL: NPC {distance:0.0} m away (range {range:0.#} m) on the crosshair -> refused (\"{W.Powers.Message}\"), not frozen, not damaged, no charge spent.");
         Destroy(far.gameObject);foreach(var n in parked)if(n!=null)n.gameObject.SetActive(true);
     }
     IEnumerator CaptureNpc(CityNpc npc,string file,bool first)

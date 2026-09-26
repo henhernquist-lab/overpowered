@@ -1981,3 +1981,28 @@ Reload 5, CityArt 31, Humanoid 54, Combat 170, Mode 79 + Reload 2, ModeExpansion
 P2 483 + Reload 31, P3 562 + Reload 11, Audio 127, MenuPresentation 42, FirstPerson 207. Run in an APFS clone of the
 branch (`scratchpad/world-reg`) except World, which writes its evidence in the branch.
 - All FPS is Editor batch-mode throughput (includes ~5–7 ms batch overhead), not a player build.
+
+## Ice + Feel verification fixtures retargeted to the district map — 2026-09-26 (feat/world-districts, appended)
+
+The final sweep found two runners whose FIXTURES assumed the old 3x3 grid; product code is unchanged, assertions unchanged.
+- `IceVerificationRunner`: the live-NPC target was picked from `CityPlan.Sidewalks` 13–19 m from spawn, but on the
+  district map the nearest sidewalk points (block corners) are ~21.3 m away (`FAIL No clear sidewalk 13-19 m`). Target,
+  off-axis CONTROL and out-of-range CONTROL now come from NavMesh points fanned out around the hero (15° steps, band
+  middle first) with a clear sight line where needed: target 13–19 m (inside Ice's 20 m range) → (-28,0.1,20), 16.0 m;
+  CONTROL 8–16 m and 60–120° off the lane → 11.9 m, 75°; out-of-range NPC range+4..range+12 m → 28.0 m. The out-of-range
+  check now also asserts `distance > range` explicitly. A `FIXTURE` line logs the chosen points.
+- `FeelVerificationRunner` particles check: a real street `BreakableProp` inside the crate row's blast reach broke too
+  (13 bursts, the extra one exactly `BreakParticles`). For that exact-count check only, non-test BreakableProps within
+  Strength radius + 4 m (7.3 m) of the crates are deactivated and re-activated afterwards (both logged: City Planter,
+  City Car, Barrel, City Newspaper; 4/4 restored). The assertion stays `== 12`.
+- Rest of both runners checked on the new map: no other failure. Feel's `15m-yaw30` aim row hits a parked `City Car`
+  (shoulder-line parallax) exactly as the committed old-map baseline did — a real case, not a fixture failure.
+
+**Results (twice each, exit 0, identical PASS sets; only timing numbers differ).** `IceVerification.After` 34 PASS / 0 FAIL
+(baseline 34): approach 7.00 m/s → 0.00 during freeze → 2.72/2.66 (3rd person) and 2.71/2.64 m/s (1st person) after
+thaw; freeze 4.00–4.01 s; damage 5; prop 11.04 → 0.00 m/s (drift 0.000 m) → 7.20 m/s; out-of-range NPC 28.0 m refused.
+`FeelVerification.Run` 139 PASS / 0 FAIL (baseline 139): hit pause 61.1 / 60.8 ms; particles bursts 23 → 35 (= 12);
+Fire aim MISS 0.001–0.004 m at 5/8/15 m, 0.102 m at 22 m, 0.705 m at 30 m (beyond Fire's 20 m range, as before);
+particles A/B ON 338.4 vs OFF 347.7 FPS (−2.7%) and 342.7 vs 356.5 FPS (−3.9%), Editor batch-mode.
+`IceVerification.Before` shares the placement code and also runs clean (exit 0, 27 PASS + 7 "OBSERVED yes"); its
+output was NOT committed so the historical pre-fix `results-before.txt` / `before-*.png` evidence stays as recorded.

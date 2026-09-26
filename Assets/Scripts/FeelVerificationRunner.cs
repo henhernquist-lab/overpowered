@@ -397,6 +397,16 @@ public sealed class FeelVerificationRunner : MonoBehaviour
     {
         Clear(); Place(spot); yield return Grounded();
         var crates = new List<Rigidbody>(); for (int i = 0; i < 6; i++) crates.Add(Crate(spot + new Vector3(-7.5f + i * 3f, 0, 10f), "Feel particle crate " + i));
+        // TEST HARNESS: the district map lines its 14 m streets with destructible street props (BreakableProp), and one inside
+        // the crate row's blast reach broke too (a 13th burst). Only for this exact-count check, every NON-test BreakableProp
+        // within Strength's blast radius + 4 m of a crate (crates drift when a neighbour's blast pushes them) is deactivated,
+        // then re-activated below, so the zone is genuinely prop-free and the count stays exactly 6 hits + 6 breaks.
+        var blast = W.Powers.Strength.Definition; var ours = new HashSet<GameObject>(spawned);
+        var parkedProps = crates.SelectMany(c => Physics.OverlapSphere(c.position, blast.Radius + 4f)).Select(h => h.GetComponentInParent<BreakableProp>())
+            .Where(b => b != null && b.gameObject.activeSelf && !ours.Contains(b.gameObject)).Distinct().OrderBy(b => b.transform.position.x).ThenBy(b => b.transform.position.z).ToList();
+        Log($"TEST HARNESS: {parkedProps.Count} street BreakableProp(s) within {blast.Radius + 4f:0.#} m of the particle crates deactivated for this check: {(parkedProps.Count == 0 ? "none" : string.Join("; ", parkedProps.Select(b => b.name + V(b.transform.position))))}.");
+        foreach (var b in parkedProps) b.gameObject.SetActive(false);
+        Physics.SyncTransforms();
         yield return Realtime(.5f);
         var pool = D.Particles; int poolCount = pool.PoolCount; var cube = GameObject.CreatePrimitive(PrimitiveType.Cube); Mesh builtin = cube.GetComponent<MeshFilter>().sharedMesh; Destroy(cube);
         int materials0 = Resources.FindObjectsOfTypeAll<Material>().Length, systems0 = FindObjectsByType<ParticleSystem>(FindObjectsInactive.Include).Length;
@@ -425,6 +435,8 @@ public sealed class FeelVerificationRunner : MonoBehaviour
         Check(alive > 0, $"Debris particles alive right after the bursts: {alive}.");
         yield return Composite(new Vector2Int(1920, 1080), "particles-hits-and-breaks-1920x1080");
         Clear();
+        foreach (var b in parkedProps) if (b != null) b.gameObject.SetActive(true);
+        Log($"TEST HARNESS: {parkedProps.Count(b => b != null && b.gameObject.activeSelf)}/{parkedProps.Count} parked street BreakableProp(s) re-activated.");
     }
 
     // ---- 8. FPS: heavy-hit stress with particles ON vs OFF, interleaved A/B/A/B, gameplay camera single render
