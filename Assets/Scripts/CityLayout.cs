@@ -70,7 +70,7 @@ public enum FeatureKind
     public int Count=64; public Vector2 Radius=new Vector2(820,1050), Height=new Vector2(30,140), Width=new Vector2(40,110);
     public CityColor Color=CityColor.Slate, ShoreColor=CityColor.Roof; public float SeaMargin=2600;
     [Tooltip("Haze skirt: a square of fog-coloured walls this far from the island centre, taller than any camera, so an elevated view never sees the sky's ground half below the sea horizon.")]
-    public float SkirtRadius=1500, SkirtHeight=600; public CityColor SkirtColor=CityColor.Haze;
+    public float SkirtRadius=1500, SkirtHeight=1200; public CityColor SkirtColor=CityColor.Haze;
 }
 [Serializable] public sealed class NpcLodSettings
 {

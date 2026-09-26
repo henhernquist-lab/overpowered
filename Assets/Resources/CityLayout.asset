@@ -715,6 +715,9 @@ MonoBehaviour:
     Color: 6
     ShoreColor: 7
     SeaMargin: 2600
+    SkirtRadius: 1500
+    SkirtHeight: 1200
+    SkirtColor: 25
   NavVoxelSize: 0.16666667
   NavTileVoxels: 192
   NpcLod:

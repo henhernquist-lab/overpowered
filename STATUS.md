@@ -1680,3 +1680,102 @@ PAIRED same-scene means: third-person=55.77 FPS; first-person=56.06 FPS; delta=0
 This is effectively within measurement noise, not proof of an optimization or a standalone FPS guarantee. Even this run drifted 59.80 -> 51.73 FPS between third-person phases. Earlier unmatched-view samples were more variable (36.67 third / 47.22 first; retained in initial-results.txt); they are not substituted for the matched comparison. No geometry/actor cuts, pipeline changes or per-instance meshes were introduced.
 
 No hardware B-key/controller injection or human motion-sickness/feel session. No first-person hand animation. Console is **not** wholly error-free: UnityEditor.Search.SearchDatabase's pre-existing startup ArgumentOutOfRangeException remains; no game-code errors occurred in the successful runs. An initial test-only compile error attempted to set private Energy; the test now recharges through PowerUser.Tick and compiles cleanly. Tested feature scripts/assets were compared to the delivery checkout; unrelated shared HUD Phase 2 work is excluded.
+
+## World expansion: four districts on one island — 2026-09-26 (feat/world-districts, appended)
+
+**What changed.** The boxed 3x3 grid (130 x 130 m, 36 buildings) is now a 576 x 368 m island of four districts, all
+generated from data by one seeded planner (`CityLayout.Plan`, no district-ID branches):
+
+| District (region, NavMesh tile-aligned) | Content (seed 2409) | Silhouette |
+|---|---|---|
+| Downtown 192 x 256 m | 37 buildings on 3x4 blocks of 36–42 m, 14 m streets, intersection plazas, landmark plaza | 20–84 m with a core boost toward the spire; tallest 106 m |
+| Park 192 x 256 m | lawn, loop + cross paths with benches/lamps (breakable props), pond with footbridge, 130+ trees | open, low; lookout tower |
+| Residential 192 x 256 m (incl. canal) | 20 townhouses/terraces 6–22 m on 40–46 m blocks, 12 m streets, street trees, canal with the Grand Canal bridge + footbridge | low, wide spacing |
+| Docks 576 x 192 m | 6 harbour sheds 7–18 m, container yard (stacks 1–3), 4 gantry cranes, 3 piers, east basin, quay bridge | open, low, water edge; Harbour Light |
+
+Boulevards (24 m, planted medians) separate the districts; canal bridges carry the East Boulevard traffic into
+Residential. Landmarks: Meridian Spire (154 m, downtown plaza), Park Lookout Tower (~104 m), Harbour Light (53 m, on a
+pier). The edge is one sea plane (palette `Water`), fog (palette `Haze`, exponential 0.0016), a ring of distant
+backdrop silhouettes on low shores and a haze skirt — no extra playable geometry. Invisible boundary walls 90 m off
+shore; a seabed collider at −1.3 m lets the hero wade and jump out of canal/pond/sea (not driven-tested, see limits).
+Palette gained three swatches at the END (`Water`, `Haze`, `Lawn`); layers 8–11 named `CityDetail`, `CityProps`,
+`Actors`, `Backdrop`. Styles 4–6 and eight structure recipes were appended to `CityArtSettings.asset`
+(`WorldSetup.Apply`, idempotent).
+
+**Contracts kept.** `WorldSession.City` is still `CityDistrict` (`Spawn`, `Sidewalks`, `Buildings`,
+`NearestSidewalk`). Rooftop pickups: the first N buildings are the reward ones and keep ids `seed:roof:index`
+(3 downtown, 1 residential, 1 docks); a separate-process reload keeps a claimed roof. BreakableProp is the only
+destruction path; encounter props unchanged; police still spawn via NavMesh at `NearestSidewalk`. Set-pieces use
+`CityDistrict.EncounterSites` with a round-robin district rule (`CityLayout.EncounterSites`); Endless arena =
+spawn-district site nearest spawn. Civilians wander within 70 m (`RandomSidewalkNear`) instead of across the island.
+
+**Rendering / static geometry decision (measured).** New `StaticGeometryMode.BuildingMeshes` (shipped): pieces are
+written straight into one mesh per building (and per 64 m chunk for ground/streets/structures) per material and layer
+— no per-piece GameObjects — then `StaticBatchingUtility.Combine` once per district root. Per-piece static batching
+(the previous default) was measured on the same world: 16,093 renderers, 1,035 draws at street, **62.5 FPS and 1,002 ms
+build vs 80.0 FPS and 451 ms** — rejected. Props stay shared-mesh + instanced on the prop layer (0 of 516 breakable
+renderers in a static batch, asserted). Window/band/kerb detail never casts shadows. Cull distances (layer, m):
+detail 220, props 140, actors 170; far clip 2,300.
+
+**NavMesh.** Per district, but NOT as separate NavMeshData: measured first, separate per-district datas did not stitch
+(spawn→Park path ended at the seam). Shipped: one NavMeshData over the island, `UpdateNavMeshData` once per district as
+each district's sources are added. Build per district: Downtown 69, Park 67, Residential 57, Docks 79 ms (mean of warm
+generations); total 272 ms vs 61 ms for the old city.
+
+**NPC LOD** (`NpcLod`, tuning `CityLayout.NpcLod`): within 60 m (±8 m hysteresis) full AI/Animator/presentation;
+beyond: AI every 0.25 s, Animator off and advanced manually every 0.2 s, presentation overlay off, skinning only when
+visible, no obstacle avoidance. Unseen civilians beyond 150 m are moved to unseen sidewalks 45–110 m from the hero.
+Verified: at spawn 10 full / 23 cheap; a hostile criminal 120 m away ran 8 AI ticks in 342 frames with the animator
+off; CONTROL — moved next to the hero it was promoted within 2 frames and attacked (windup→release→hit, clip impact
+marker on the release frame, AI every frame).
+
+**FPS — interleaved A/B, same harness (`WorldProfile`), Free Play (24 civilians) + 3-star police, gameplay camera
+single-render, no other batch Unity during any sample** (`Verification/World/ab/`, baseline = clone of 4ee45ed):
+
+| | Baseline 3x3 | District world (shipped) | District world, per-piece static batching |
+|---|---|---|---|
+| Densest street FPS (9 samples each) | **81.0** (71.9–87.8) | **80.0** (71.0–85.2) | 62.5 (58.9–66.7) |
+| Flight view FPS (views differ: 45 m over old city / 70 m over downtown) | 70.0 | 130.0 | 77.6 |
+| Street draws / static-batched / instanced draws | 351 / 603 / 200 | 269 / 327 / 174 | 1,035 / 5,881 / 174 |
+| Street triangles | 0.56 M | 1.22 M | 1.26 M |
+| Renderers (static-batched) | 2,483 (2,129) | 1,691 (1,032) | 16,093 (15,434) |
+| City build, warm (ms) | 192 | 451 | 1,002 |
+| Build incl. hero/session/NPC spawn (ms) | 367 | 633 | 1,184 |
+
+Stage split, shipped (ms): plan 3, ground/water/decks 2, buildings 53, streets 1, structures+backdrop 13, static finalize
+45, props 60, NavMesh 272, session 182. **Generation is +266 ms over baseline (under the 1.5 s flag).**
+
+**Said plainly: the bigger world is NOT free at street level — NPC LOD pays for it.** Same-process control at the
+street view: LOD on 76.8 FPS, LOD off (all 32 NPCs full) 65.8 FPS (−14%). So without LOD the district world would be
+~2 ms/frame slower than the old city; the profiler attributes the visible part to +0.2 ms scripts (523 props vs 247,
+NpcLod) and a larger batch-mode editor overhead (+0.8 ms), rendering itself is flat (Render.OpaqueGeometry 1.3 vs
+1.24 ms); the rest is not attributed. LOD halves skinning (0.95 vs 2.0 ms). Streaming control: disabling every
+non-spawn district's static geometry changed street FPS 80.0→76.9 and flight 125→121.7 (noise) — district
+streaming would save nothing measurable, so none was added.
+
+**Travel (NavMesh path / RunSpeed 9 m/s; flight = straight line at RunSpeed x FlightForwardBoost = 72 m/s, one 6 s /
+432 m tank):** spawn → Downtown far site 104 m 11.6 s run; → Park 113–228 m 12.5–25.3 s; → Residential 257–262 m
+28.6–29.1 s; → Docks 190–310 m 21.2–34.5 s; every district is within one flight tank (≤ 4 s). Encounter deadline 210 s;
+two seeds each spread 8 set-pieces over all 4 districts. HUD waypoint verified at 261 m (label "261 M", edge arrow when
+facing away).
+
+**Verification.** `WorldVerification.Run` / `.Reload` (new): two seeds valid and different, same seed twice identical
+(fingerprint CONTROL), 0 overlapping buildings (overlap-test CONTROL), spawn on NavMesh, every district reachable from
+spawn (sea CONTROL unreachable), crimes in 4 districts, landmark line-of-sight from downtown rooftops, rooftop save
+contract across processes, NPC LOD tiers + promotion CONTROL. Captures `Verification/World/verify/`. Tests that
+hard-coded the 3x3 grid were retargeted to the city's own sites/sidewalks without weakening assertions (Combat lane,
+HUD2 alert/waypoint spots, HUD3 escape sidewalk, Mode villain-cop start, City/Menus building counts vs the plan).
+
+**Not verified / limits (explicit).**
+- No human playtest: traversal feel, whether crossing feels tedious or too short, rooftop-hopping downtown, district
+  readability. Travel times are computed from paths and movement numbers, not driven with input (batch mode).
+- Flight time assumes run-speed flight (Shift held); walking flight is 41.6 m/s.
+- Wading/jump-out of canal, pond and sea (bed 1.3–1.44 m below the bank, jump apex 1.5 m) was not exercised.
+- Seeds vary block size, lots, heights, plazas, styles, trees, containers and props; district regions, canal, bridges
+  and landmark positions are authored data and do not move with the seed.
+- Civilian recycling concentrates the 24 civilians around the player by design; far districts are empty of civilians.
+- `FirstPersonVerification.Run` fails `hero-third-fire contact within projectile radius tolerance` (0.3083 m vs 0.3 m)
+  identically on the untouched baseline clone (4ee45ed = main + timing only) — pre-existing on main, not caused here.
+- `HudPhase2Verification` "briefing still up after 5.5 s" failed once under another agent's concurrent Unity load, on
+  the baseline clone as well; it passes on a quiet machine.
+- All FPS is Editor batch-mode throughput (includes ~5–7 ms batch overhead), not a player build.
