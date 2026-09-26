@@ -158,7 +158,7 @@ public sealed class FeelVerificationRunner : MonoBehaviour
         Log($"TEST HARNESS: a {crate.mass:0} kg crate in front of the hero, pre-hit twice with 0 damage so the real punch is its 3rd (breaking) hit (Props.HitsToBreak {W.Tuning.Props.HitsToBreak}).");
         yield return Realtime(.4f);
         int pauses0 = TimeArbiter.HitPausesStarted, heavy0 = D.HeavyImpacts, bursts0 = D.Particles.Bursts, kicks0 = follow.ImpulsesAccepted;
-        int shardsBefore = FindObjectsByType<Rigidbody>(FindObjectsSortMode.None).Length;
+        int shardsBefore = FindObjectsByType<Rigidbody>().Length;
         var watch = new System.Diagnostics.Stopwatch(); float scaleAtImpact = -1f, impactUnscaled = -1f; float flashBefore = hud.HeatFlashAt; int impactFrame = -1; int fixedAtImpact = 0;
         Action onImpact = () => { watch.Start(); scaleAtImpact = Time.timeScale; impactUnscaled = Time.unscaledTime; impactFrame = Time.frameCount; fixedAtImpact = fixedSteps; };
         W.Hero.PunchImpacted += onImpact;
@@ -203,7 +203,7 @@ public sealed class FeelVerificationRunner : MonoBehaviour
         Check(voice.isPlaying && samples1 > samples0 && !AudioListener.pause, $"The punch cue's AudioSource keeps playing through the pause (timeSamples +{samples1 - samples0}; AudioSources are not timeScale-bound; AudioDirector ties nothing to timeScale).");
         Check(voicesAfter <= 1, $"The cue fired during the pause is not re-triggered on resume ({voicesAfter} voice).");
         Check(D.Particles.Bursts >= bursts0 + 2, $"Particles: heavy-hit burst + prop-break burst emitted from the pool (bursts {bursts0} -> {D.Particles.Bursts}).");
-        int shardsAfter = FindObjectsByType<Rigidbody>(FindObjectsSortMode.None).Length;
+        int shardsAfter = FindObjectsByType<Rigidbody>().Length;
         Check(breakable == null || !breakable || shardsAfter - shardsBefore + 1 == W.Tuning.Props.ShardCount, $"BreakableProp shard logic unchanged: rigidbodies {shardsBefore} -> {shardsAfter} (crate removed, {W.Tuning.Props.ShardCount} shards).");
         Check(follow.ImpulsesAccepted == kicks0 + 1, "Heavy hit sent one camera impulse.");
         yield return CaptureDuringKick();
@@ -296,7 +296,7 @@ public sealed class FeelVerificationRunner : MonoBehaviour
         crate.position = new Vector3(seat.x, groundY + W.Tuning.Props.CrateSize.y * .5f + .002f, seat.z); crate.rotation = Quaternion.identity;
         crate.linearVelocity = Vector3.zero; crate.angularVelocity = Vector3.zero; Physics.SyncTransforms();
         for (int i = 0; i < 3; i++) yield return new WaitForFixedUpdate();
-        var others = FindObjectsByType<Rigidbody>(FindObjectsSortMode.None).Where(b => b != crate && !b.isKinematic && (b.position - crate.position).magnitude < 8f).Select(b => $"{b.name}{V(b.position)} v{b.linearVelocity.magnitude:0.00}").ToList();
+        var others = FindObjectsByType<Rigidbody>().Where(b => b != crate && !b.isKinematic && (b.position - crate.position).magnitude < 8f).Select(b => $"{b.name}{V(b.position)} v{b.linearVelocity.magnitude:0.00}").ToList();
         Log($"PHYSICS SETUP ({(pause ? "pause" : "control")}): other dynamic bodies within 8 m of the crate: {(others.Count == 0 ? "none" : string.Join("; ", others))}.");
         Refill(); var t = new Trial { Paused = pause }; int frame0 = W.Hero.LastImpactFrame; int started = TimeArbiter.HitPausesStarted;
         Vector3 start = crate.position;
@@ -399,7 +399,7 @@ public sealed class FeelVerificationRunner : MonoBehaviour
         var crates = new List<Rigidbody>(); for (int i = 0; i < 6; i++) crates.Add(Crate(spot + new Vector3(-7.5f + i * 3f, 0, 10f), "Feel particle crate " + i));
         yield return Realtime(.5f);
         var pool = D.Particles; int poolCount = pool.PoolCount; var cube = GameObject.CreatePrimitive(PrimitiveType.Cube); Mesh builtin = cube.GetComponent<MeshFilter>().sharedMesh; Destroy(cube);
-        int materials0 = Resources.FindObjectsOfTypeAll<Material>().Length, systems0 = FindObjectsByType<ParticleSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None).Length;
+        int materials0 = Resources.FindObjectsOfTypeAll<Material>().Length, systems0 = FindObjectsByType<ParticleSystem>(FindObjectsInactive.Include).Length;
         int bursts0 = pool.Bursts, emitted0 = pool.ParticlesEmitted; var s = W.Powers.Strength.Definition;
         for (int i = 0; i < 6; i++)
         {
@@ -408,7 +408,7 @@ public sealed class FeelVerificationRunner : MonoBehaviour
         }
         foreach (var c in crates) if (c != null) c.GetComponent<BreakableProp>().TakeDamage(100000f, W.Powers);   // real breaks
         yield return Frames(3);
-        int materials1 = Resources.FindObjectsOfTypeAll<Material>().Length, systems1 = FindObjectsByType<ParticleSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None).Length;
+        int materials1 = Resources.FindObjectsOfTypeAll<Material>().Length, systems1 = FindObjectsByType<ParticleSystem>(FindObjectsInactive.Include).Length;
         Log($"MEASURED particles: bursts {bursts0} -> {pool.Bursts}, particles emitted {emitted0} -> {pool.ParticlesEmitted}; pool {poolCount} -> {pool.PoolCount}; ParticleSystems in scene {systems0} -> {systems1}; Material objects {materials0} -> {materials1}.");
         Check(pool.Bursts - bursts0 == 12, $"12 bursts from real hits (6) + real breaks (6) ({pool.Bursts - bursts0}).");
         Check(pool.PoolCount == poolCount && poolCount == shipped.ParticlePoolSize && systems1 == systems0, $"Pool size constant ({poolCount} = Feel.ParticlePoolSize) and no ParticleSystem instantiated per hit ({systems0} -> {systems1}).");
@@ -516,9 +516,9 @@ public sealed class FeelVerificationRunner : MonoBehaviour
         string line = Physics.Linecast(origin, crosshairPoint, out var blocker) && blocker.collider != intended && blocker.collider.transform.root != W.Hero.transform ? $"shoulder line BLOCKED by '{blocker.collider.name}' (parallax)" : "shoulder line clear";
         float camDist = (crosshairPoint - cam.transform.position).magnitude, range = W.Powers.Stats(fire).Range;
         if (camDist > range) line += $"; crosshair point is {camDist:0.0} m from the CAMERA > Fire Range {range:0} (AimDirection clamps its crosshair raycast at Range from the camera, so it aims at the ray point {range:0} m out instead)";
-        var before = new HashSet<PowerProjectile>(FindObjectsByType<PowerProjectile>(FindObjectsSortMode.None));
+        var before = new HashSet<PowerProjectile>(FindObjectsByType<PowerProjectile>());
         Check(W.Powers.Use(fire), $"{label}: real Fire Blast cast (PowerUser.Use): {W.Powers.Message}");
-        var shot = FindObjectsByType<PowerProjectile>(FindObjectsSortMode.None).First(p => !before.Contains(p));
+        var shot = FindObjectsByType<PowerProjectile>().First(p => !before.Contains(p));
         var probe = shot.gameObject.AddComponent<ShotProbe>(); var body = shot.GetComponent<Rigidbody>();
         RenderTexture target = null;
         if (capture) { target = new RenderTexture(1920, 1080, 24); target.Create(); hud.Panel.targetTexture = target; hud.OverlayPanel.targetTexture = target; cam.aspect = 16f / 9f; }
