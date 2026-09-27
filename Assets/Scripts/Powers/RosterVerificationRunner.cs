@@ -12,45 +12,13 @@ using UnityEngine.SceneManagement;
 /// a real Hero session, and fired through PowerUser.Use (LMB) / PowerUser.Channel (held LMB) against real CityNpc actors.
 /// Fixtures that need no navigation stand on an isolated floor 150 m above the city (the Forge suite's pattern, AI off);
 /// the Darkness root is measured on LIVE, NavMesh-driven criminals in the city.
-public sealed class RosterVerificationRunner : MonoBehaviour
+public sealed class RosterVerificationRunner : SessionVerificationRunner
 {
-    public Action<int> Finished; public bool Reload;
-    const string Folder = "Verification/Roster/";
-    readonly List<string> output = new List<string>(); string runtimeFailure;
-    WorldSession W => WorldSession.Instance;
-    ForgeCatalog F => Resources.Load<ForgeCatalog>("ForgeCatalog");
-    Camera Cam => Camera.main;
-    PowerDefinition Power(string id) => Resources.Load<PowerDefinition>("Powers/" + id);
-    PowerRuntime Runtime(string id) => W.Powers.Powers.Find(p => p.Definition.Id == id);
-    void Awake() { Application.logMessageReceived += ObserveLog; }
-    void OnDestroy() { Application.logMessageReceived -= ObserveLog; }
-    void ObserveLog(string message, string trace, LogType type)
-    { if ((type == LogType.Exception || type == LogType.Error || type == LogType.Assert) && trace.Contains("Assets/Scripts/")) runtimeFailure = message; }
-    IEnumerator Start()
-    {
-        Directory.CreateDirectory(Folder); var stack = new Stack<IEnumerator>(); stack.Push(Checks());
-        while (stack.Count > 0)
-        {
-            object next = null; bool moved = false;
-            try { if (runtimeFailure != null) throw new Exception("Gameplay Console error: " + runtimeFailure); moved = stack.Peek().MoveNext(); if (moved) next = stack.Peek().Current; }
-            catch (Exception e) { Log("FAIL " + e); Write(); Finished(1); yield break; }
-            if (!moved) { stack.Pop(); continue; }
-            if (next is IEnumerator nested) stack.Push(nested); else yield return next;
-        }
-        Write(); Finished(0);
-    }
-    void Log(string line) { output.Add(line); Debug.Log(line); }
-    void Check(bool ok, string line) { if (!ok) throw new Exception(line); Log("PASS " + line); }
-    void Write() { File.WriteAllLines(Folder + (Reload ? "reload.txt" : "results.txt"), output); }
-    IEnumerator Scene(string name)
-    {
-        float until = Time.realtimeSinceStartup + 60;
-        while (GameFlow.Instance == null || GameFlow.Instance.Loading || SceneManager.GetActiveScene().name != name || (name == GameFlow.CityScene && W == null))
-        { if (Time.realtimeSinceStartup > until) throw new Exception("Scene timeout: " + name); yield return null; }
-        yield return new WaitForSecondsRealtime(.5f);
-    }
+    public bool Reload;
+    protected override string Folder => "Verification/Roster/";
+    protected override string ResultFile => Reload ? "reload.txt" : "results.txt";
     static readonly string[] NewPowers = { "darkness", "laser-eyes", "lightning", "force-field", "speed", "poison" };
-    IEnumerator Checks()
+    protected override IEnumerator Checks()
     {
         yield return Scene(GameFlow.HomeScene);
         var profile = FindAnyObjectByType<ModeScreens>().Profile;
@@ -88,56 +56,6 @@ public sealed class RosterVerificationRunner : MonoBehaviour
         Check(profile.SetLoadout(F.Hero("nova"), Power("laser-eyes"), Power("poison"), CityColor.UiPurple, CityColor.Red), "Save Laser Eyes + Poison for the separate-process Reload.");
         Log("LIMIT: entry points are the ones the input handlers call (PowerUser.Use / Channel / SynergyRunner.TryActivate); no hardware input, no human feel test.");
         Log("LIMIT: most fixtures stand AI-off on an isolated floor (as in HeroForgeVerification); only the Darkness root is measured on live navigation.");
-    }
-    // ---------------------------------------------------------------- session + fixtures
-    IEnumerator Enter(string a, string b)
-    {
-        if (SceneManager.GetActiveScene().name != GameFlow.HomeScene) { GameFlow.Instance.Home(); yield return Scene(GameFlow.HomeScene); }
-        var profile = FindAnyObjectByType<ModeScreens>().Profile;
-        Check(profile.SetLoadout(F.Heroes[0], Power(a), Power(b), CityColor.Blue, CityColor.Cyan), $"Equip {a} + {b} through the saved loadout.");
-        GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero")); yield return Scene(GameFlow.CityScene);
-        Check(W.Powers.IsEquipped(Power(a)) && W.Powers.IsEquipped(Power(b)), $"Session equips {a} + {b}.");
-        var rt = Runtime(a); Check(W.Powers.Select(rt) && W.Powers.Selected == rt, $"{a} selected for LMB (key {W.Powers.SlotNumber(rt)}).");
-    }
-    void Isolate()
-    {
-        var floor = GameObject.CreatePrimitive(PrimitiveType.Cube); floor.name = "Roster isolated floor";
-        floor.transform.position = new Vector3(0, 149.5f, 0); floor.transform.localScale = new Vector3(120, 1, 120);
-        floor.GetComponent<Renderer>().sharedMaterial = CityMaterials.Get(CityColor.Road);
-        PlaceHero(new Vector3(0, 150.05f, 0));
-        Cam.GetComponent<ThirdPersonCamera>().enabled = false;
-    }
-    void PlaceHero(Vector3 at)
-    {
-        W.Hero.enabled = false; var cc = W.Hero.GetComponent<CharacterController>(); cc.enabled = false;
-        W.Hero.transform.position = at; W.Hero.transform.forward = Vector3.forward; cc.enabled = true; W.Hero.ResetMotion(); Physics.SyncTransforms();
-    }
-    /// Shoulder camera 1 m behind the hero's head, looking at the point: the viewport-centre ray (the crosshair) passes through it.
-    void Aim(Vector3 point)
-    {
-        Vector3 head = W.Hero.transform.position + Vector3.up * 1.7f, dir = (point - head).normalized;
-        Cam.transform.position = head - dir * 1f + Vector3.up * .2f; Cam.transform.LookAt(point); Physics.SyncTransforms();
-    }
-    CityNpc Actor(Vector3 feet, NpcRole role, float health)
-    {
-        var npc = CityNpc.Spawn(W, W.City.Sidewalks[0], role);
-        if (npc == null) throw new Exception("Actor spawn failed");
-        npc.enabled = false; npc.Agent.enabled = false; npc.transform.position = feet; npc.SetCombatStats(health, 0); Physics.SyncTransforms();
-        return npc;
-    }
-    GameObject Wall(Vector3 centre, Vector3 size)
-    {
-        var wall = GameObject.CreatePrimitive(PrimitiveType.Cube); wall.name = "Roster wall CONTROL"; wall.transform.position = centre; wall.transform.localScale = size;
-        wall.GetComponent<Renderer>().sharedMaterial = CityMaterials.Get(CityColor.Brick); Physics.SyncTransforms(); return wall;
-    }
-    static Vector3 Chest(CityNpc npc) => npc.transform.position + Vector3.up * 1.2f;
-    void Capture(string file)
-    {
-        var target = new RenderTexture(1280, 720, 24); var previous = Cam.targetTexture; Cam.targetTexture = target; Cam.Render(); Cam.targetTexture = previous;
-        var active = RenderTexture.active; RenderTexture.active = target;
-        var image = new Texture2D(1280, 720, TextureFormat.RGB24, false); image.ReadPixels(new Rect(0, 0, 1280, 720), 0, 0); image.Apply();
-        File.WriteAllBytes(Folder + file, image.EncodeToPNG()); RenderTexture.active = active; Destroy(image); target.Release(); Destroy(target);
-        Log("IMAGE " + Folder + file);
     }
     // ---------------------------------------------------------------- DARKNESS: live navigation
     IEnumerable<Vector3> NavPoints(float min, float max)
