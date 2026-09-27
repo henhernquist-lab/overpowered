@@ -16,6 +16,8 @@ public sealed class WorldSession : MonoBehaviour
     /// Attack-token budget shared by every hostile NPC of this city (tuning: Resources/Enemies/EnemyRoster.asset).
     public readonly AttackTokenPool AttackTokens = new AttackTokenPool();
     public float Heat { get; private set; }
+    /// District gameplay layer (profiles per district; all neutral unless Resources/DistrictProfiles is enabled).
+    public DistrictContext Districts { get; private set; }
     public int Stars => Mathf.Clamp(Mathf.CeilToInt(Heat),0,Tuning.Heat.MaximumStars);
     public float Health { get; private set; }
     public bool PlayerDead => Health<=0;
@@ -42,10 +44,12 @@ public sealed class WorldSession : MonoBehaviour
         Powers=hero.gameObject.AddComponent<PowerUser>(); Powers.Initialize(hero,Progression,definitions,tuning.Movement);
         hero.Initialize(Powers,tuning.Movement);
         Health=MaxHealth;
+        Districts=gameObject.AddComponent<DistrictContext>(); Districts.Initialize(this);
         if(GameFlow.Instance!=null&&GameFlow.Instance.ActiveMode!=null)
         { Mode=gameObject.AddComponent<GameModeSession>(); Mode.Initialize(this,GameFlow.Instance.ActiveMode); Message=Mode.Definition.Description; }
         int civilians=Mode==null?tuning.City.Civilians:Mode.Definition.Civilians;
-        for (int i=0;i<civilians;i++) CityNpc.Spawn(this,city.Sidewalks[i%city.Sidewalks.Count],NpcRole.Civilian);
+        if (!Districts.Active) for (int i=0;i<civilians;i++) CityNpc.Spawn(this,city.Sidewalks[i%city.Sidewalks.Count],NpcRole.Civilian);
+        else SpawnCiviliansByDistrict(civilians);
         ReconcilePolice();
         if(Mode!=null) Mode.Begin();
         else for (int i=0;i<tuning.Crimes.MaximumActive;i++) SpawnCrime((CrimeKind)(i%3),city.Sidewalks[(i*7)%city.Sidewalks.Count]);
@@ -80,6 +84,17 @@ public sealed class WorldSession : MonoBehaviour
         if (Mode==null && crimeTimer>=Tuning.Crimes.SpawnInterval && Crimes.Count<Tuning.Crimes.MaximumActive)
         { crimeTimer=0; SpawnCrime((CrimeKind)Random.Range(0,3),City.Sidewalks[Random.Range(0,City.Sidewalks.Count)]); }
     }
+    /// District civilian density (only with an active DistrictProfileSet): each district keeps the sidewalks it would have
+    /// had, in the same order, with its count scaled by CivilianDensity.
+    void SpawnCiviliansByDistrict(int total)
+    {
+        var counts=Districts.CivilianCounts(total);
+        for (int d=0;d<counts.Length;d++)
+        {
+            var own=new List<int>(); for (int i=0;i<City.Sidewalks.Count;i++) if (City.SidewalkDistrict[i]==d) own.Add(i);
+            for (int k=0;k<counts[d]&&own.Count>0;k++) CityNpc.Spawn(this,City.Sidewalks[own[k%own.Count]],NpcRole.Civilian);
+        }
+    }
     /// The H-key action. Modes lock the side unless their definition sets AllowSideSwitch.
     public string RequestSideSwitch()
     {
@@ -100,15 +115,16 @@ public sealed class WorldSession : MonoBehaviour
     public void OnDestruction(Vector3 position)
     {
         if(Mode!=null&&Mode.Ended) return;
-        Alarm(position); AddHeat(Tuning.Heat.DestructionHeat);
+        Alarm(position); AddHeat(Tuning.Heat.DestructionHeat*Districts.HeatFactorAt(position));
         if (Progression.Data.Side!=PlayerSide.Villain) return;
-        Progression.AddXp(Tuning.Progression.DestructionXp,position,"destruction"); ChaosProgress++;
+        float reward=Districts.DestructionFactorAt(position);
+        Progression.AddXp(reward==1f?Tuning.Progression.DestructionXp:Mathf.RoundToInt(Tuning.Progression.DestructionXp*reward),position,"destruction"); ChaosProgress++;
         if (Mode==null && ChaosProgress>=Tuning.Crimes.ChaosTarget) { ChaosProgress=0; Progression.AddXp(Tuning.Progression.CrimeXp,position,"chaos objective"); Message="Chaos objective complete: XP earned"; }
     }
     public void OnAssault(CityNpc npc)
     {
         Alarm(npc.transform.position);
-        if (npc.Role!=NpcRole.Criminal || Progression.Data.Side==PlayerSide.Villain) AddHeat(Tuning.Heat.AssaultHeat);
+        if (npc.Role!=NpcRole.Criminal || Progression.Data.Side==PlayerSide.Villain) AddHeat(Tuning.Heat.AssaultHeat*Districts.HeatFactorAt(npc.transform.position));
     }
     public void OnDefeat(CityNpc npc)
     {
@@ -116,7 +132,7 @@ public sealed class WorldSession : MonoBehaviour
         if ((Progression.Data.Side==PlayerSide.Hero && npc.Role==NpcRole.Criminal) ||
             (Progression.Data.Side==PlayerSide.Villain && npc.Role!=NpcRole.Criminal))
             Progression.AddXp(npc.Role==NpcRole.Civilian?Tuning.Progression.CivilianXp:Tuning.Progression.EnemyXp,npc.transform.position,"defeat");
-        if (npc.Role!=NpcRole.Criminal) AddHeat(Tuning.Heat.DefeatHeat);
+        if (npc.Role!=NpcRole.Criminal) AddHeat(Tuning.Heat.DefeatHeat*Districts.HeatFactorAt(npc.transform.position));
     }
     public void DamagePlayer(float damage) { DamagePlayer(damage,false); }
     /// unblockable: bypasses the Force Field (the kill plane). Otherwise a raised shield absorbs first; a fully absorbed hit
@@ -132,7 +148,7 @@ public sealed class WorldSession : MonoBehaviour
     {
         if(Mode!=null) {crime.Encounter?.TryComplete(); return;}
         bool hero=Progression.Data.Side==PlayerSide.Hero;
-        AddHeat(hero?-Tuning.Heat.CrimeReduction:Tuning.Heat.CrimeHeat);
+        AddHeat(hero?-Tuning.Heat.CrimeReduction:Tuning.Heat.CrimeHeat*Districts.HeatFactorAt(crime.transform.position));
         Progression.AddXp(Tuning.Progression.CrimeXp,crime.transform.position,"crime");
         Message=hero?"Crime stopped: XP earned, Heat reduced":"Crime assisted: chaos XP earned, Heat increased";
     }
@@ -168,10 +184,12 @@ public sealed class WorldSession : MonoBehaviour
         foreach(var npc in Npcs) if(npc!=null&&!npc.Dead) { if(npc.Role==NpcRole.Cop&&npc.Encounter==null) count++; if(npc.Role==NpcRole.PursuingHero) hunter=npc; }
         var police=Tuning.Heat.Police(Progression.Data.Side);
         int desired=police.PatrolCount+Stars*police.CopsPerStar;
+        float districtPolice=Districts!=null?Districts.PoliceFactor:1f; if(districtPolice!=1f) desired=Mathf.RoundToInt(desired*districtPolice);
         while(count<desired)
         {
             Vector3 from=Hero.transform.position+Quaternion.Euler(0,count*360f/Mathf.Max(1,desired),0)*Vector3.forward*Tuning.Heat.SpawnDistance;
-            if(CityNpc.Spawn(this,City.NearestSidewalk(from),NpcRole.Cop)==null) break;
+            var preferred=Districts!=null?Districts.PreferredArchetype(NpcRole.Cop,from):null;
+            if((preferred!=null?CityNpc.Spawn(this,City.NearestSidewalk(from),NpcRole.Cop,preferred):CityNpc.Spawn(this,City.NearestSidewalk(from),NpcRole.Cop))==null) break;
             count++;
         }
         for(int i=Npcs.Count-1;i>=0&&count>desired;i--) if(Npcs[i]!=null&&!Npcs[i].Dead&&Npcs[i].Role==NpcRole.Cop&&Npcs[i].Encounter==null) { var npc=Npcs[i]; Npcs.RemoveAt(i); Destroy(npc.gameObject); count--; }

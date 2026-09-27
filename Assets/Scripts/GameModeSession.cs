@@ -92,7 +92,8 @@ public sealed class GameModeSession : MonoBehaviour
         if(!World.City.PickEncounterSite(World.Hero.transform.position,
             site=>!World.Crimes.Exists(c=>c!=null&&c.Encounter!=null&&Vector3.Distance(c.Encounter.Site,site)<Definition.SiteSeparation),ref siteDistrict,out var chosen)) return null;
         if(Selection==null) return World.SpawnEncounter(Definition.Encounters[nextEncounter++%Definition.Encounters.Length],chosen);
-        var picked=Selection.Pick(SelectionDifficulty,World.City.DistrictDefinitions[World.City.DistrictAt(chosen)].Name);
+        var districts=World.Districts; var profile=districts!=null&&districts.Active?districts.ProfileAt(chosen):null;
+        var picked=Selection.Pick(SelectionDifficulty,World.City.DistrictDefinitions[World.City.DistrictAt(chosen)].Name,profile,profile!=null?profile.DifficultyOffset:0);
         // Nothing eligible (every option banded / filtered out): fall back to the mode's own list rather than spawn nothing
         // forever (a success goal would become unreachable). An empty list keeps "no spawn this cycle".
         if(picked==null&&!noList){SelectionFallbacks++;picked=Definition.Encounters[nextEncounter++%Definition.Encounters.Length];}

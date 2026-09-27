@@ -147,6 +147,7 @@ public sealed class StagedState : ScenarioState
         Yaw = d.RandomYaw ? (float)(random.NextDouble() * 360d) : 0f;
         Mirrored = d.RandomMirror && random.Next(2) == 1;
         Band = e.World.Mode != null ? e.World.Mode.Successes / Mathf.Max(1, d.DifficultyStep) : 0;
+        if (e.World.Districts != null) Band = Mathf.Max(0, Band + e.World.Districts.DifficultyOffsetAt(e.Site));   // district difficulty (0 when neutral)
         ExtraActors = Mathf.Clamp(Mathf.FloorToInt(Band * d.ExtraActorsPerBand + 1e-4f), 0, Mathf.Max(0, d.MaxExtraActors));
         TimeoutScale = Mathf.Clamp(Mathf.Pow(d.TimeoutScalePerBand, Band), Mathf.Min(1f, d.MinTimeoutScale), 1f);
         foreach (var p in d.Points)
