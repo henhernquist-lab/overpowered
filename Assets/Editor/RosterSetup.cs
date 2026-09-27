@@ -22,6 +22,16 @@ public static class RosterSetup
             d.Damage = 4f; d.Force = 0f; d.Duration = 3.5f; d.Range = 22f;
             d.PaletteColor = CityColor.UiPurple; d.MenuIcon = MenuGlyph.Orbit; d.CastingPresentation = true;
         });
+        // Channeled: no charges are spent (Charges 1 only keeps the shared HUD slot's single pip full); ResourceCost is the energy
+        // needed to START; DrainPerSecond is paid while held (net ~20/s against the 12/s regen, ~5 s from full); Damage is per second.
+        Define("laser-eyes", "Laser Eyes", Effect<LaserEyesEffect>("LaserEyes"), d =>
+        {
+            d.Description = "Hold to fire a continuous beam at the crosshair. Drains energy while held.";
+            d.Activation = PowerActivation.Channeled; d.DrainPerSecond = 32f; d.ResourceCost = 10f;
+            d.Charges = 1; d.ChargeRecharge = 1f; d.Cooldown = .8f;
+            d.Damage = 38f; d.Force = 60f; d.Range = 26f; d.Duration = 0f; d.OriginHeight = 1.62f;
+            d.PaletteColor = CityColor.Red; d.MenuIcon = MenuGlyph.Star; d.CastingPresentation = false;
+        });
         AddToHeroes();
         AssetDatabase.SaveAssets(); AssetDatabase.Refresh();
     }
