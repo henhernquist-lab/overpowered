@@ -40,14 +40,17 @@ public sealed class GameModeDefinition : ScriptableObject
 /// The kinds of task an encounter can ask of the player. Counts and targets come from the CrimeEncounter lists;
 /// the player-facing words come from the ModeRules asset (ObjectiveTaskLabel), never from code.
 /// Threats..Extract are mission-scenario tasks (EncounterScenario); their progress/targets come from the ScenarioState.
-public enum ObjectiveTask { Robbers, Civilians, Hazards, Loot, Wreck, Escape, Threats, Hostages, Fires, Carry, Vault, Extract }
+public enum ObjectiveTask { Robbers, Civilians, Hazards, Loot, Wreck, Escape, Threats, Hostages, Fires, Carry, Vault, Extract, Stage }
 [Serializable] public sealed class ObjectiveTaskLabel { public ObjectiveTask Task; public string Label; }
 /// One task of one encounter: its data label and live progress. Escape is a distance task (Done/Total are metres).
 public readonly struct ObjectiveStep
 {
     public readonly ObjectiveTask Task; public readonly string Label; public readonly int Done, Total, More; public readonly bool Valid;
-    public ObjectiveStep(ObjectiveTask task, string label, int done, int total, int more) { Task=task; Label=label; Done=done; Total=total; More=more; Valid=true; }
-    public bool Distance => Task==ObjectiveTask.Escape||Task==ObjectiveTask.Extract;
+    public ObjectiveStep(ObjectiveTask task, string label, int done, int total, int more) { Task=task; Label=label; Done=done; Total=total; More=more; Valid=true; DistanceStage=false; }
+    public bool Distance => Task==ObjectiveTask.Escape||Task==ObjectiveTask.Extract||DistanceStage;
+    /// A staged-mission step whose Done/Total are metres (reach / escape stages).
+    public readonly bool DistanceStage;
+    public ObjectiveStep(string label, int done, int total, int more, bool distance) { Task=ObjectiveTask.Stage; Label=label; Done=done; Total=total; More=more; Valid=true; DistanceStage=distance; }
     /// "STOP THE ROBBERS 2/3" or, for escape, "ESCAPE THE SCENE 14 M".
     public string Text => !Valid ? "" : Distance ? $"{Label} {Mathf.Max(0,Total-Done)} M" : $"{Label} {Done}/{Total}";
 }
@@ -58,6 +61,7 @@ public abstract class ModeRules : ScriptableObject
     /// Every task with its progress, built from Tasks (the debug panel and verification suites read this string).
     public virtual string Objective(CrimeEncounter encounter)
     {
+        if(encounter!=null&&encounter.Scenario!=null&&encounter.Scenario.TryCurrent(out var staged)) return staged.Text;
         var parts=new System.Collections.Generic.List<string>();
         foreach(var t in TasksFor(encounter)) if(t!=null&&Progress(encounter,t.Task,out int done,out int total)&&total>0) parts.Add(new ObjectiveStep(t.Task,t.Label,done,total,0).Text);
         return string.Join(" · ",parts);
@@ -65,6 +69,7 @@ public abstract class ModeRules : ScriptableObject
     /// The first incomplete task (in Tasks order) and how many other tasks are still incomplete; Valid=false when none.
     public ObjectiveStep Current(CrimeEncounter encounter)
     {
+        if(encounter!=null&&encounter.Scenario!=null&&encounter.Scenario.TryCurrent(out var staged)) return staged;
         ObjectiveStep first=default; int more=0;
         foreach(var t in TasksFor(encounter))
         {

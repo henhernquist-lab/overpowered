@@ -28,6 +28,8 @@ public abstract class ScenarioState : MonoBehaviour
     public abstract bool Failed(out string reason);
     /// Progress of a scenario task kind (ObjectiveTask values the scenario defines); false = not handled here.
     public virtual bool Progress(ObjectiveTask task, out int done, out int total) { done = total = 0; return false; }
+    /// Staged missions supply the whole current objective step (label + progress) themselves; false = use the task labels.
+    public virtual bool TryCurrent(out ObjectiveStep step) { step = default; return false; }
     public virtual void Targets(ObjectiveTask task, List<Vector3> into) { }
     /// Hold-R style interaction for this frame (dt 0 = key not held). True when something completed.
     public virtual bool Interact(float dt) => false;
