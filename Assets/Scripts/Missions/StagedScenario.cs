@@ -46,7 +46,7 @@ public sealed class StagedScenario : EncounterScenario
 public enum StageKind { DefeatTargets, ReachArea, ProtectActors, EscortActors, InteractTargets, DestroyTargets, CollectItems, Survive, EscapeRadius, ChaseExit, StopVehicles, RaiseHeat }
 public enum ActorBehavior { Default, Idle, HoldPost, Flee, Follow, Pursue, Harass }
 public enum TargetKind { Hardpoint, Crate, Vehicle, Pickup }
-public enum StageActionKind { SpawnActors, SpawnTargets, SetBehavior, AddHeat, Hint, DropPickupsAtActors }
+public enum StageActionKind { SpawnActors, SpawnTargets, SetBehavior, AddHeat, Hint }
 /// A named place relative to the site: Angle (degrees, 0 = +Z) and Distance; optionally snapped to the nearest sidewalk.
 [Serializable] public sealed class MissionPoint { public string Id; public float Angle, Distance; public bool Sidewalk = true; }
 [Serializable] public sealed class ActorGroupSpec
@@ -66,7 +66,9 @@ public enum StageActionKind { SpawnActors, SpawnTargets, SetBehavior, AddHeat, H
 }
 [Serializable] public sealed class StageAction
 {
-    public StageActionKind Kind; public string Group; public ActorBehavior Behavior; public float Amount; public string Text;
+    public StageActionKind Kind; public string Group; public ActorBehavior Behavior; public float Amount;
+    [Tooltip("Hint: the text. SpawnActors / SpawnTargets: optional ANCHOR - an actor or target group (spawn around its first live member, else its last known position) or a point id. Empty = the group's own AtPoint.")]
+    public string Text;
 }
 [Serializable] public sealed class MissionStageSpec
 {
@@ -79,7 +81,7 @@ public enum StageActionKind { SpawnActors, SpawnTargets, SetBehavior, AddHeat, H
 public enum MissionTerminal { Running, Complete, Failed }
 public sealed class StagedState : ScenarioState
 {
-    public sealed class Actor { public CityNpc Npc; public Vector3 Post; public bool Captured, Escaped; public int ExitIndex; public float StuckTimer; public Vector3 StuckFrom; public bool Following; public float HarassTimer; }
+    public sealed class Actor { public CityNpc Npc; public Vector3 Post; public Vector3? LastSeen; public bool Captured, Escaped; public int ExitIndex; public float StuckTimer; public Vector3 StuckFrom; public bool Following; public float HarassTimer; }
     public sealed class Target { public GameObject Go; public DamageTarget Hardpoint; public MissionVehicle Vehicle; public EncounterNode Pickup; public bool Done; public float Hold; public bool Missing => Go == null && Pickup == null; }
     StagedScenario d;
     readonly Dictionary<string, Vector3> points = new Dictionary<string, Vector3>();
@@ -111,16 +113,16 @@ public sealed class StagedState : ScenarioState
     }
     // ---------------------------------------------------------------- lookups and spawning
     public Vector3 Point(string id) => !string.IsNullOrEmpty(id) && points.TryGetValue(id, out var p) ? p : Encounter.Site;
-    ActorGroupSpec ActorSpec(string id) => Array.Find(d.Actors, g => g.Id == id);
+    public ActorGroupSpec ActorSpec(string id) => Array.Find(d.Actors, g => g.Id == id);
     TargetGroupSpec TargetSpec(string id) => Array.Find(d.Targets, t => t.Id == id);
     public List<Actor> Group(string id) => id != null && Actors.TryGetValue(id, out var list) ? list : null;
     public List<Target> TargetGroup(string id) => id != null && TargetsById.TryGetValue(id, out var list) ? list : null;
     static bool Gone(Actor a) => a.Npc == null || a.Npc.Dead || a.Captured;
     static bool Lost(Actor a) => !a.Captured && (a.Npc == null || a.Npc.Dead);
-    public int SpawnActors(string id, int count)
+    public int SpawnActors(string id, int count, Vector3? around = null)
     {
         var g = ActorSpec(id); var list = Group(id); if (g == null || list == null) return 0;
-        int made = 0; Vector3 centre = Point(g.AtPoint);
+        int made = 0; Vector3 centre = around ?? Point(g.AtPoint);
         for (int i = 0; i < count; i++)
         {
             Vector3 at = centre + Quaternion.Euler(0, (list.Count + i) * 137.5f, 0) * Vector3.forward * g.Ring;
@@ -128,7 +130,8 @@ public sealed class StagedState : ScenarioState
             if (npc == null) continue;
             if (g.HealthMultiplier != 1f) npc.SetCombatStats(npc.MaxHealth * g.HealthMultiplier, npc.ContactDamage);
             if (g.Role == NpcRole.Civilian) npc.GetComponentInChildren<Renderer>().sharedMaterial = CityMaterials.Get(CityColor.Cyan);
-            list.Add(new Actor { Npc = npc, Post = npc.transform.position, StuckFrom = npc.transform.position }); made++;
+            // Each member starts on its own exit (a fleeing group scatters); blocked, it moves on to the next one.
+            list.Add(new Actor { Npc = npc, Post = npc.transform.position, StuckFrom = npc.transform.position, ExitIndex = list.Count }); made++;
         }
         return made;
     }
@@ -184,17 +187,27 @@ public sealed class StagedState : ScenarioState
         foreach (var a in actions)
             switch (a.Kind)
             {
-                case StageActionKind.SpawnActors: SpawnActors(a.Group, Mathf.Max(1, Mathf.RoundToInt(a.Amount))); break;
-                case StageActionKind.SpawnTargets: SpawnTargets(a.Group); break;
+                case StageActionKind.SpawnActors: SpawnActors(a.Group, Mathf.Max(1, Mathf.RoundToInt(a.Amount)), Anchor(a.Text)); break;
+                case StageActionKind.SpawnTargets: SpawnTargets(a.Group, Anchor(a.Text)); break;
                 case StageActionKind.SetBehavior: SetBehavior(a.Group, a.Behavior); break;
                 case StageActionKind.AddHeat: World.AddHeat(a.Amount); break;
                 case StageActionKind.Hint: Encounter.InteractionHint = a.Text; break;
-                case StageActionKind.DropPickupsAtActors:
-                    // Group = pickup target group; Text = actor group whose last known positions receive the drop.
-                    var from = Group(a.Text); Vector3 at = Encounter.Site;
-                    if (from != null) foreach (var m in from) if (m.Npc != null) { at = m.Npc.transform.position; break; }
-                    SpawnTargets(a.Group, at); break;
             }
+    }
+    /// Where an anchored spawn goes: the first live member of an actor group, else any member's last position (a runner
+    /// that was just taken down drops its bag where it fell); the first target of a target group; a point id; null = none.
+    public Vector3? Anchor(string id)
+    {
+        if (string.IsNullOrEmpty(id)) return null;
+        var g = Group(id);
+        if (g != null)
+        {
+            foreach (var a in g) if (!Gone(a) && !a.Escaped) return a.Npc.transform.position;
+            for (int i = g.Count - 1; i >= 0; i--) if (g[i].LastSeen.HasValue) return g[i].LastSeen;
+        }
+        var t = TargetGroup(id); if (t != null) foreach (var x in t) if (x.Go != null) return x.Go.transform.position;
+        if (points.TryGetValue(id, out var p)) return p;
+        return null;
     }
     readonly Dictionary<string, ActorBehavior> behaviorOverride = new Dictionary<string, ActorBehavior>();
     void SetBehavior(string group, ActorBehavior behavior) { if (group != null) behaviorOverride[group] = behavior; }
@@ -225,7 +238,7 @@ public sealed class StagedState : ScenarioState
         if (index + 1 >= d.Stages.Length) { Terminal = MissionTerminal.Complete; Encounter.TryComplete(); return; }
         BeginStage(index + 1);
     }
-    Vector3 ReachPoint(MissionStageSpec s)
+    public Vector3 ReachPoint(MissionStageSpec s)
     {
         if (!string.IsNullOrEmpty(s.Point)) return Point(s.Point);
         var g = Group(s.Group); if (g != null) foreach (var a in g) if (!Gone(a)) return a.Npc.transform.position;
@@ -301,6 +314,7 @@ public sealed class StagedState : ScenarioState
             var spec = ActorSpec(pair.Key); var behavior = BehaviorOf(pair.Key, spec);
             foreach (var a in pair.Value)
             {
+                if (a.Npc != null) a.LastSeen = a.Npc.transform.position;
                 if (Gone(a) || a.Escaped) continue;
                 if (behavior == ActorBehavior.Pursue) a.Npc.AlwaysAggro = true;
                 if (behavior == ActorBehavior.Harass) Harass(a, spec, dt);
@@ -313,8 +327,15 @@ public sealed class StagedState : ScenarioState
             }
         }
     }
-    string[] Exits(ActorGroupSpec spec) => string.IsNullOrEmpty(spec.BehaviorArgument) ? new string[0] : spec.BehaviorArgument.Split(',');
-    Vector3[] ExitPoints(ActorGroupSpec spec) { var ids = Exits(spec); var r = new Vector3[ids.Length]; for (int i = 0; i < ids.Length; i++) r[i] = Point(ids[i].Trim()); return r; }
+    readonly Dictionary<ActorGroupSpec, Vector3[]> exitCache = new Dictionary<ActorGroupSpec, Vector3[]>();
+    /// A Flee group's exits (resolved once; points never move during a mission).
+    public Vector3[] ExitPoints(ActorGroupSpec spec)
+    {
+        if (exitCache.TryGetValue(spec, out var cached)) return cached;
+        var ids = string.IsNullOrEmpty(spec.BehaviorArgument) ? new string[0] : spec.BehaviorArgument.Split(',');
+        var r = new Vector3[ids.Length]; for (int i = 0; i < ids.Length; i++) r[i] = Point(ids[i].Trim());
+        exitCache[spec] = r; return r;
+    }
     void Harass(Actor a, ActorGroupSpec spec, float dt)
     {
         // Harass an actor group (hurt its members) or a target group (undo restored targets).
@@ -335,7 +356,8 @@ public sealed class StagedState : ScenarioState
     {
         foreach (var pair in Actors)
         {
-            var a = pair.Value.Find(x => x.Npc == npc); if (a == null) continue;
+            Actor a = null; foreach (var x in pair.Value) if (x.Npc == npc) { a = x; break; }
+            if (a == null) continue;
             var spec = ActorSpec(pair.Key);
             switch (BehaviorOf(pair.Key, spec))
             {
@@ -345,7 +367,7 @@ public sealed class StagedState : ScenarioState
                 {
                     var exits = ExitPoints(spec); if (exits.Length == 0) return false;
                     Vector3 exit = exits[a.ExitIndex % exits.Length];
-                    npc.Agent.isStopped = false; npc.DirectTo(exit, spec.Speed);
+                    npc.Agent.isStopped = npc.Rooted; npc.DirectTo(exit, spec.Speed);
                     // Blocked or stuck: take the next exit (the route changes when the way is cut off).
                     a.StuckTimer += Time.deltaTime;
                     if (a.StuckTimer >= d.StuckSeconds)
@@ -361,7 +383,7 @@ public sealed class StagedState : ScenarioState
                     Vector3 hero = World.Hero.transform.position;
                     if (!a.Following && Vector3.Distance(hero, npc.transform.position) < d.FollowRadius) a.Following = true;
                     if (!a.Following) { npc.Agent.isStopped = true; return true; }
-                    npc.Agent.isStopped = false; npc.DirectTo(hero - (hero - npc.transform.position).normalized * d.FollowGap, spec.Speed); return true;
+                    npc.Agent.isStopped = npc.Rooted; npc.DirectTo(hero - (hero - npc.transform.position).normalized * d.FollowGap, spec.Speed); return true;
                 }
                 case ActorBehavior.Harass:
                 {
@@ -371,7 +393,7 @@ public sealed class StagedState : ScenarioState
                     var targets = TargetGroup(spec.BehaviorArgument);
                     if (targets != null) foreach (var t in targets) { if (!t.Done || t.Go == null) continue; float dist = Vector3.Distance(t.Go.transform.position, npc.transform.position); if (dist < best) { best = dist; goal = t.Go.transform.position; } }
                     if (goal == null) return false;
-                    npc.Agent.isStopped = false; npc.DirectTo(goal.Value, spec.Speed); return true;
+                    npc.Agent.isStopped = npc.Rooted; npc.DirectTo(goal.Value, spec.Speed); return true;
                 }
                 default: return false;
             }
