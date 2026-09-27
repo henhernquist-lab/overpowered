@@ -47,6 +47,14 @@ public static class RosterSetup
             d.Damage = 0f; d.Force = 0f; d.Duration = 6f; d.Range = 0f;
             d.PaletteColor = CityColor.Blue; d.MenuIcon = MenuGlyph.Shield; d.CastingPresentation = true;
         });
+        // Range = dash metres, Duration = dash seconds (9 m in 0.18 s); Damage hits each hostile NPC the dash passes, once.
+        Define("speed", "Speed", Effect<SpeedDashEffect>("SpeedDash"), d =>
+        {
+            d.Description = "Burst dash through the crowd toward your movement (or aim). Clips enemies you pass.";
+            d.Charges = 3; d.ChargeRecharge = 2.5f; d.Cooldown = .35f; d.ResourceCost = 8f;
+            d.Damage = 8f; d.Force = 0f; d.Range = 9f; d.Duration = .18f;
+            d.PaletteColor = CityColor.Amber; d.MenuIcon = MenuGlyph.Wing; d.CastingPresentation = false;
+        });
         AddToHeroes();
         AssetDatabase.SaveAssets(); AssetDatabase.Refresh();
     }
