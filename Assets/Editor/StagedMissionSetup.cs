@@ -44,7 +44,21 @@ public static class StagedMissionSetup
     static void Rotation(string id, PlayerSide side, string modePath, params string[] scenarioMissions)
     {
         string path = Rotations + id + ".asset";
-        if (AssetDatabase.LoadAssetAtPath<EncounterSelection>(path) != null) return;
+        var existing = AssetDatabase.LoadAssetAtPath<EncounterSelection>(path);
+        if (existing != null)
+        {
+            // Create-missing at option level: staged missions added to the library later are appended; existing options
+            // (and any inspector tuning of them) are never changed.
+            var list = new System.Collections.Generic.List<EncounterSelection.Option>(existing.Options ?? new EncounterSelection.Option[0]); int added = 0;
+            foreach (var entry in StagedMissionLibrary.All)
+            {
+                if (entry.Side != side) continue;
+                var e = AssetDatabase.LoadAssetAtPath<EncounterDefinition>(Encounters + entry.Asset + ".asset");
+                if (e != null && !list.Exists(o => o != null && o.Encounter == e)) { list.Add(StagedOption(entry, e)); added++; }
+            }
+            if (added > 0) { existing.Options = list.ToArray(); EditorUtility.SetDirty(existing); }
+            return;
+        }
         var options = new System.Collections.Generic.List<EncounterSelection.Option>();
         var mode = AssetDatabase.LoadAssetAtPath<GameModeDefinition>(modePath);
         if (mode != null && mode.Encounters != null) foreach (var e in mode.Encounters) if (e != null) options.Add(new EncounterSelection.Option { Encounter = e, Weight = 1f });
@@ -54,13 +68,15 @@ public static class StagedMissionSetup
         {
             if (entry.Side != side) continue;
             var e = AssetDatabase.LoadAssetAtPath<EncounterDefinition>(Encounters + entry.Asset + ".asset");
-            if (e != null) options.Add(new EncounterSelection.Option { Encounter = e, Weight = entry.Weight, MinDifficulty = entry.MinBand, MaxDifficulty = 999, Districts = entry.Districts });
+            if (e != null) options.Add(StagedOption(entry, e));
         }
         var selection = ScriptableObject.CreateInstance<EncounterSelection>();
         selection.Options = options.ToArray(); selection.AntiRepeatWindow = 2; selection.Difficulty = EncounterSelection.DifficultySource.Successes;
         selection.DifficultyStep = 1; selection.DistrictFallback = true; selection.Seeded = false;
         AssetDatabase.CreateAsset(selection, path);
     }
+    static EncounterSelection.Option StagedOption(StagedMissionLibrary.Entry entry, EncounterDefinition e) => new EncounterSelection.Option
+        { Encounter = e, Weight = entry.Weight, MinDifficulty = entry.MinBand, MaxDifficulty = 999, Districts = entry.Districts, Category = entry.Category, Tags = entry.Tags ?? new string[0] };
     static void Build(bool overwrite)
     {
         Directory.CreateDirectory(Scenarios); Directory.CreateDirectory(Encounters); AssetDatabase.Refresh();

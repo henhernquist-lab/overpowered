@@ -5,7 +5,7 @@ using UnityEngine;
 /// EncounterDefinition under Resources (menu / batch, never by hand), and StagedMissionVerification reads the assets back.
 /// After creation the assets are the source of truth for tuning; this file is the recipe. Rooftop Rescue is not here: NPCs
 /// only stand on the ground NavMesh (rooftops have none), so a rooftop cast cannot exist without a NavMesh change (STATUS).
-public static class StagedMissionLibrary
+public static partial class StagedMissionLibrary
 {
     public sealed class Entry
     {
@@ -13,9 +13,16 @@ public static class StagedMissionLibrary
         /// Rotation data (StagedMissionSetup.CreateRotations -> EncounterSelection options): weight, first difficulty band
         /// (session successes), and the CityLayout districts whose streets suit the mission (empty = any).
         public float Weight = 1f; public int MinBand; public string[] Districts = new string[0];
+        /// District-profile hooks for the rotation (EncounterSelection.Option Category / Tags), and whether the mission's
+        /// stages lead into other districts (verification proves they are distinct).
+        public string Category; public string[] Tags = new string[0]; public bool CrossDistrict;
         public string Asset => "staged-" + Id;
     }
-    public static readonly Entry[] All =
+    /// Every staged mission: the replayability set (Core) followed by the district / cross-district set (World).
+    public static Entry[] All => all ??= Concat(Core, World);
+    static Entry[] all;
+    static Entry[] Concat(Entry[] a, Entry[] b) { var r = new Entry[a.Length + b.Length]; a.CopyTo(r, 0); b.CopyTo(r, a.Length); return r; }
+    static readonly Entry[] Core =
     {
         new Entry { Id = "pursuit", Title = "Street pursuit", Side = PlayerSide.Hero, Kind = CrimeKind.Robbery, Deadline = 200f, Build = Pursuit, Weight = 1.2f, Districts = new[] { "Downtown", "Residential" } },
         new Entry { Id = "convoy-intercept", Title = "Convoy intercept", Side = PlayerSide.Hero, Kind = CrimeKind.Robbery, Deadline = 200f, Build = ConvoyIntercept, Districts = new[] { "Docks", "Downtown", "West Boulevard", "East Boulevard", "Harbour Boulevard" } },

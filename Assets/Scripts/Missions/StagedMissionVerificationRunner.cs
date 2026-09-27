@@ -23,6 +23,7 @@ public sealed class StagedMissionVerificationRunner : StagedMissionRunner
             Log($"---- {entry.Title.ToUpperInvariant()} ({entry.Side}, {entry.Asset})");
             bool hero = entry.Side == PlayerSide.Hero;
             yield return Session(hero ? "ice" : "fire", hero ? "strength" : "ice", hero ? "hero" : "villain");
+            homeDistrict = entry.Districts != null && entry.Districts.Length > 0 ? entry.Districts[0] : null;
             Immortal = true;
             yield return FailPath(entry);
             yield return Solve(entry);
@@ -32,10 +33,29 @@ public sealed class StagedMissionVerificationRunner : StagedMissionRunner
         Log("LIMIT: the solver teleports the hero and acts through NPC damage / CombatImpact.Blast / ScriptedHold R; escort followers are warped the last stretch; player health is refilled by the harness. No human playtest of difficulty, pacing or readability.");
     }
     // ---------------------------------------------------------------- data rules
-    static readonly StageKind[] PowerKinds = { StageKind.DefeatTargets, StageKind.ChaseExit, StageKind.DestroyTargets, StageKind.StopVehicles, StageKind.ProtectActors, StageKind.EscortActors, StageKind.RaiseHeat };
+    static readonly StageKind[] PowerKinds = { StageKind.DefeatTargets, StageKind.ChaseExit, StageKind.DestroyTargets, StageKind.StopVehicles, StageKind.ProtectActors, StageKind.EscortActors, StageKind.RaiseHeat, StageKind.DefendTargets };
+    /// Missions authored for a district spawn at an encounter site of that district (by name: verification data, not gameplay).
+    string homeDistrict;
+    CrimeEncounter SpawnHome(EncounterDefinition def)
+    {
+        if (string.IsNullOrEmpty(homeDistrict)) return Spawn(def);
+        int district = Enumerable.Range(0, W.Districts.Count).FirstOrDefault(i => string.Equals(W.Districts.NameOf(i), homeDistrict, StringComparison.OrdinalIgnoreCase));
+        var sites = Enumerable.Range(0, W.City.EncounterSites.Count).Where(i => W.City.EncounterSiteDistrict[i] == district && W.Crimes.TrueForAll(c => c == null || c.Encounter == null || Vector3.Distance(c.Encounter.Site, W.City.EncounterSites[i]) > 45f)).ToList();
+        Check(sites.Count > 0, $"A free encounter site in {homeDistrict} (district {district}).");
+        StagedState.SeedOverride = NextSeed++;
+        var crime = W.SpawnEncounter(def, W.City.EncounterSites[sites[0]]); StagedState.SeedOverride = null;
+        Check(crime?.Encounter?.Scenario is StagedState st && W.City.DistrictAt(crime.Encounter.Site) == district, $"{def.DisplayName} spawned in its home district {homeDistrict} (seed {((StagedState)crime.Encounter.Scenario).Seed}).");
+        return crime.Encounter;
+    }
     void Data()
     {
-        Check(StagedMissionLibrary.All.Count(x => x.Side == PlayerSide.Hero) == 4 && StagedMissionLibrary.All.Count(x => x.Side == PlayerSide.Villain) == 5, "Library: 4 hero missions (Rooftop Rescue omitted, see STATUS) and 5 villain missions.");
+        int heroes = StagedMissionLibrary.All.Count(x => x.Side == PlayerSide.Hero), villains = StagedMissionLibrary.All.Count(x => x.Side == PlayerSide.Villain);
+        Check(heroes == 10 && villains == 11, $"Library: {heroes} hero and {villains} villain missions (Core 4 + 5, World 6 + 6; Rooftop Rescue omitted, see STATUS).");
+        foreach (var district in new[] { "Downtown", "Docks", "Park", "Residential" })
+        {
+            var own = StagedMissionLibrary.All.Where(x => x.Districts != null && x.Districts.Length == 1 && x.Districts[0] == district && !x.Id.Contains("pursuit")).ToList();
+            Check(own.Count >= 2 && own.Any(x => x.Side == PlayerSide.Hero) && own.Any(x => x.Side == PlayerSide.Villain), $"{district}: {own.Count} authored missions ({string.Join(", ", own.Select(x => x.Id + "/" + x.Side))}).");
+        }
         var sequences = new Dictionary<string, string>();
         foreach (var entry in StagedMissionLibrary.All)
         {
@@ -43,8 +63,8 @@ public sealed class StagedMissionVerificationRunner : StagedMissionRunner
             Check(d != null && def.Robbers + def.Civilians + def.RespondingCops + def.Cars + def.LooseProps + def.Loot + def.Hazards == 0, $"{entry.Asset}: encounter asset with a StagedScenario and no legacy cast.");
             Check(References(d, out string problem), $"{entry.Asset}: every group / point / anchor reference resolves{(problem == null ? "" : " - " + problem)}.");
             var kinds = d.Stages.Select(x => x.Kind).ToArray();
-            int holds = kinds.Count(k => k == StageKind.InteractTargets);
-            Check(kinds.Distinct().Count() >= 2 && holds <= 1 && holds * 2 < kinds.Length && kinds.Any(k => PowerKinds.Contains(k)),
+            int holds = kinds.Count(k => k == StageKind.InteractTargets || k == StageKind.SearchTargets);
+            Check(kinds.Distinct().Count() >= 2 && holds <= 1 && holds * 2 <= kinds.Length && kinds.Any(k => PowerKinds.Contains(k)),
                 $"{entry.Asset}: {kinds.Length} stages [{string.Join(" > ", d.Stages.Select(x => x.Label))}] - {kinds.Distinct().Count()} kinds, {holds} hold-R stage(s), needs powers/combat.");
             string key = string.Join(",", kinds);
             Check(!sequences.ContainsKey(key), $"{entry.Asset}: stage sequence differs from every other mission{(sequences.TryGetValue(key, out var other) ? " (same as " + other + ")" : "")}.");
@@ -67,7 +87,7 @@ public sealed class StagedMissionVerificationRunner : StagedMissionRunner
             foreach (var entry in StagedMissionLibrary.All.Where(e => e.Side == side))
             {
                 var o = rotation.Options.FirstOrDefault(x => x.Encounter != null && x.Encounter.name == entry.Asset);
-                Check(o != null && Mathf.Approximately(o.Weight, entry.Weight) && o.MinDifficulty == entry.MinBand && o.Districts.SequenceEqual(entry.Districts), $"{id}-rotation: {entry.Asset} weight {entry.Weight}, from band {entry.MinBand}, districts [{string.Join(", ", entry.Districts)}].");
+                Check(o != null && Mathf.Approximately(o.Weight, entry.Weight) && o.MinDifficulty == entry.MinBand && o.Districts.SequenceEqual(entry.Districts), $"{id}-rotation: {entry.Asset} weight {entry.Weight}, from band {entry.MinBand}, districts [{string.Join(", ", entry.Districts)}], category {entry.Category ?? "-"}.");
             }
             var recent = new List<EncounterDefinition>(); var scratch = new List<int>(); var random = new System.Random(5); var picked = new HashSet<string>();
             for (int i = 0; i < 400; i++) { int k = EncounterSelection.Choose(rotation.Options, 0, "Downtown", recent, rotation.AntiRepeatWindow, true, random.NextDouble(), scratch); if (k >= 0) { recent.Add(rotation.Options[k].Encounter); picked.Add(rotation.Options[k].Encounter.name); } }
@@ -79,27 +99,34 @@ public sealed class StagedMissionVerificationRunner : StagedMissionRunner
     {
         problem = null;
         var actors = new HashSet<string>(d.Actors.Select(a => a.Id)); var targets = new HashSet<string>(d.Targets.Select(t => t.Id)); var points = new HashSet<string>(d.Points.Select(p => p.Id));
-        bool Any(string id) => actors.Contains(id) || targets.Contains(id) || points.Contains(id);
+        IEnumerable<string> Parts(string key) => key.Split(',').Select(x => x.Trim());
+        bool AllIn(string key, params HashSet<string>[] sets) => Parts(key).All(k => sets.Any(set => set.Contains(k)));
+        bool Anchor(string id) => id == "$here" || id == "$player" || AllIn(id, actors, targets, points);
+        foreach (var p in d.Points)
+            if (!string.IsNullOrEmpty(p.NotInDistrictsOf) && !Parts(p.NotInDistrictsOf).All(k => d.Points.TakeWhile(x => x != p).Any(x => x.Id == k))) { problem = $"point {p.Id} NotInDistrictsOf {p.NotInDistrictsOf} (must name EARLIER points)"; return false; }
         foreach (var a in d.Actors)
         {
-            if (!string.IsNullOrEmpty(a.AtPoint) && !points.Contains(a.AtPoint)) { problem = $"actor {a.Id} AtPoint {a.AtPoint}"; return false; }
-            if (a.Behavior == ActorBehavior.Flee && (string.IsNullOrEmpty(a.BehaviorArgument) || a.BehaviorArgument.Split(',').Any(x => !points.Contains(x.Trim())))) { problem = $"actor {a.Id} exits"; return false; }
-            if (!string.IsNullOrEmpty(a.BehaviorArgument) && a.Behavior != ActorBehavior.Flee && !actors.Contains(a.BehaviorArgument) && !targets.Contains(a.BehaviorArgument) && !a.BehaviorArgument.Contains(",")) { problem = $"actor {a.Id} argument {a.BehaviorArgument}"; return false; }
+            if (!string.IsNullOrEmpty(a.AtPoint) && !AllIn(a.AtPoint, points)) { problem = $"actor {a.Id} AtPoint {a.AtPoint}"; return false; }
+            if (a.Behavior == ActorBehavior.Flee && (string.IsNullOrEmpty(a.BehaviorArgument) || !AllIn(a.BehaviorArgument, points))) { problem = $"actor {a.Id} exits"; return false; }
+            // HoldPost / Idle may carry the exits a later SetBehavior(Flee) uses; Harass names actor or target groups.
+            if (!string.IsNullOrEmpty(a.BehaviorArgument) && a.Behavior != ActorBehavior.Flee && !AllIn(a.BehaviorArgument, actors, targets, points)) { problem = $"actor {a.Id} argument {a.BehaviorArgument}"; return false; }
         }
-        foreach (var t in d.Targets) if (!string.IsNullOrEmpty(t.AtPoint) && !points.Contains(t.AtPoint)) { problem = $"target {t.Id} AtPoint {t.AtPoint}"; return false; }
+        foreach (var t in d.Targets) if (!string.IsNullOrEmpty(t.AtPoint) && !AllIn(t.AtPoint, points)) { problem = $"target {t.Id} AtPoint {t.AtPoint}"; return false; }
+        foreach (var b in d.Bonuses ?? new BonusObjective[0]) if (b.Kind == BonusKind.NoLosses && (string.IsNullOrEmpty(b.Group) || !AllIn(b.Group, actors))) { problem = $"bonus {b.Label} group {b.Group}"; return false; }
         foreach (var s in d.Stages)
         {
-            if (!string.IsNullOrEmpty(s.Group) && !actors.Contains(s.Group) && !targets.Contains(s.Group)) { problem = $"stage {s.Label} group {s.Group}"; return false; }
+            if (!string.IsNullOrEmpty(s.Group) && !AllIn(s.Group, actors) && !AllIn(s.Group, targets)) { problem = $"stage {s.Label} group {s.Group}"; return false; }
             if (!string.IsNullOrEmpty(s.Point) && !points.Contains(s.Point)) { problem = $"stage {s.Label} point {s.Point}"; return false; }
             if (!string.IsNullOrEmpty(s.RepeatGroup) && !actors.Contains(s.RepeatGroup)) { problem = $"stage {s.Label} repeat {s.RepeatGroup}"; return false; }
-            bool needsGroup = s.Kind != StageKind.Survive && s.Kind != StageKind.RaiseHeat && s.Kind != StageKind.EscapeRadius && !(s.Kind == StageKind.ReachArea && !string.IsNullOrEmpty(s.Point));
+            bool needsGroup = s.Kind != StageKind.Survive && s.Kind != StageKind.RaiseHeat && s.Kind != StageKind.EscapeRadius && s.Kind != StageKind.LosePursuit && !(s.Kind == StageKind.ReachArea && !string.IsNullOrEmpty(s.Point));
             if (needsGroup && string.IsNullOrEmpty(s.Group)) { problem = $"stage {s.Label} has no group"; return false; }
-            foreach (var a in (s.OnStart ?? new StageAction[0]).Concat(s.OnComplete ?? new StageAction[0]))
+            if (s.Kind == StageKind.SearchTargets && !targets.Contains(s.Group)) { problem = $"stage {s.Label} searches a non-target group"; return false; }
+            foreach (var a in (s.OnStart ?? new StageAction[0]).Concat(s.OnComplete ?? new StageAction[0]).Concat(s.OnDecoy ?? new StageAction[0]))
             {
                 if (a.Kind == StageActionKind.SpawnActors && !actors.Contains(a.Group)) { problem = $"action spawn actors {a.Group}"; return false; }
                 if (a.Kind == StageActionKind.SpawnTargets && !targets.Contains(a.Group)) { problem = $"action spawn targets {a.Group}"; return false; }
-                if (a.Kind == StageActionKind.SetBehavior && !actors.Contains(a.Group)) { problem = $"action behavior {a.Group}"; return false; }
-                if ((a.Kind == StageActionKind.SpawnActors || a.Kind == StageActionKind.SpawnTargets) && !string.IsNullOrEmpty(a.Text) && !Any(a.Text)) { problem = $"anchor {a.Text}"; return false; }
+                if (a.Kind == StageActionKind.SetBehavior && !AllIn(a.Group, actors)) { problem = $"action behavior {a.Group}"; return false; }
+                if ((a.Kind == StageActionKind.SpawnActors || a.Kind == StageActionKind.SpawnTargets) && !string.IsNullOrEmpty(a.Text) && !Anchor(a.Text)) { problem = $"anchor {a.Text}"; return false; }
             }
         }
         return true;
@@ -113,18 +140,58 @@ public sealed class StagedMissionVerificationRunner : StagedMissionRunner
     }
     IEnumerator Solve(StagedMissionLibrary.Entry entry)
     {
-        var e = Spawn(Def(entry)); var s = (StagedState)e.Scenario; var d = (StagedScenario)e.Definition.Scenario; Away(e);
+        var e = SpawnHome(Def(entry)); var s = (StagedState)e.Scenario; var d = (StagedScenario)e.Definition.Scenario; Away(e);
         int n = d.Stages.Length, guard = 0;
+        if (entry.CrossDistrict) CrossDistricts(e, s, d);
+        var visited = new HashSet<int>();
         while (s.Terminal == MissionTerminal.Running && !Ended(e) && guard++ < n + 2)
         {
-            Check(Line(e).StartsWith(s.Stage.Label), $"HUD objective line for stage {s.StageIndex}: \"{Line(e)}\".");
+            var stage = s.Stage;
+            Check(Line(e).StartsWith(stage.Label), $"HUD objective line for stage {s.StageIndex}: \"{Line(e)}\".");
+            if (!string.IsNullOrEmpty(stage.Point) && (stage.Kind == StageKind.ReachArea || stage.Kind == StageKind.EscortActors))
+            {
+                var targets = new List<Vector3>(); ModeRules.Targets(e, W.Mode.Definition.Rules.Current(e).Task, targets);
+                Check(targets.Count > 0 && targets.Any(t => Vector3.Distance(t, s.Point(stage.Point)) < .01f), $"HUD target for \"{stage.Label}\" is its destination in district {s.DistrictOfPoint(stage.Point)} ({W.Districts.NameOf(s.DistrictOfPoint(stage.Point))}).");
+                visited.Add(s.DistrictOfPoint(stage.Point));
+            }
             yield return SolveStage(e, s, d);
         }
+        if (entry.CrossDistrict) Log($"Stage destinations visited {visited.Count} district(s): {string.Join(", ", visited.Select(v => W.Districts.NameOf(v)))} (mission site in {W.Districts.NameOf(W.City.DistrictAt(e.Site))}).");
         yield return Outcome(e, 3f);
         Check(Ended(e) && Result(e).Success, $"SOLVE: {Describe(e)}.");
         Check(ExactlyOnce(s.Started, n) && ExactlyOnce(s.Completed, n), $"Every stage started and completed exactly once ({Counts(s)}).");
         yield return new WaitForSeconds(.5f);
         Check(OutcomeCount(e) == 1, "Exactly one outcome for the mission.");
+    }
+    /// Cross-district missions: every OtherDistrict point sits outside the mission's own district, and points that must differ
+    /// (NotInDistrictsOf) really occupy distinct districts; no destination needed a fallback.
+    void CrossDistricts(CrimeEncounter e, StagedState s, StagedScenario d)
+    {
+        int home = W.City.DistrictAt(e.Site);
+        var far = d.Points.Where(p => p.Placement == PointPlacement.OtherDistrict).ToList();
+        Check(far.Count > 0 && far.All(p => s.DistrictOfPoint(p.Id) != home), $"Cross-district: {far.Count} destination(s) outside the home district {W.Districts.NameOf(home)}: {string.Join(", ", far.Select(p => p.Id + " -> " + W.Districts.NameOf(s.DistrictOfPoint(p.Id))))}.");
+        foreach (var p in far.Where(p => !string.IsNullOrEmpty(p.NotInDistrictsOf)))
+            foreach (var other in p.NotInDistrictsOf.Split(','))
+                Check(s.DistrictOfPoint(p.Id) != s.DistrictOfPoint(other.Trim()), $"{p.Id} and {other.Trim()} are in distinct districts.");
+        int distinct = far.Select(p => s.DistrictOfPoint(p.Id)).Append(home).Distinct().Count();
+        Log($"Distinct districts across the mission: {distinct}; fallbacks: {(s.PointFallbacks.Count == 0 ? "none" : string.Join("; ", s.PointFallbacks))}.");
+        Check(s.PointFallbacks.Count == 0, "No destination needed a fallback on this city.");
+    }
+    /// Missions without a hand-written failure path: the first timed stage that absence cannot complete gets a 3 s timeout
+    /// (in-memory clone); the solver clears the stages before it, then the hero leaves and the mission must FAIL once.
+    IEnumerator GenericFail(StagedMissionLibrary.Entry entry)
+    {
+        var recipe = StagedMissionLibrary.Create(entry);
+        var passive = new[] { StageKind.LosePursuit, StageKind.EscapeRadius, StageKind.Survive, StageKind.ProtectActors, StageKind.DefendTargets };
+        int k = System.Array.FindIndex(recipe.Stages, x => x.Timeout > 0f && !passive.Contains(x.Kind));
+        Check(k >= 0, $"{entry.Asset}: has a timed stage absence cannot complete ({(k >= 0 ? recipe.Stages[k].Label : "none")}).");
+        Log($"In-memory clone: stage {k} \"{recipe.Stages[k].Label}\" timeout {recipe.Stages[k].Timeout} s -> 3 s.");
+        var e = SpawnHome(Def(entry, d => d.Stages[k].Timeout = 3f)); var s = (StagedState)e.Scenario; var d0 = (StagedScenario)e.Definition.Scenario;
+        yield return SolveUntil(e, s, d0, k);
+        Check(s.StageIndex == k && s.Terminal == MissionTerminal.Running, $"Solved up to stage {k}.");
+        Away(e);
+        yield return Outcome(e, 6f + recipe.Stages[k].Timeout * 0f);
+        Check(Ended(e) && !Result(e).Success && OutcomeCount(e) == 1 && s.Completed[k] == 0, $"FAIL PATH: {Describe(e)} ({Counts(s)}).");
     }
     IEnumerator FailPath(StagedMissionLibrary.Entry entry)
     {
@@ -139,7 +206,7 @@ public sealed class StagedMissionVerificationRunner : StagedMissionRunner
             case "convoy-robbery": yield return ConvoyRobbery(entry); break;
             case "distraction": yield return Distraction(entry); break;
             case "getaway": yield return Getaway(entry); break;
-            default: throw new Exception("No failure path written for " + entry.Id);
+            default: yield return GenericFail(entry); break;
         }
     }
     IEnumerator Failed(CrimeEncounter e, StagedState s, float seconds, string contains, int stage)
