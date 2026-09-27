@@ -132,7 +132,7 @@ public sealed class HudPhase3VerificationRunner : MonoBehaviour
     static string V(Vector3 v) => $"({v.x:0.0},{v.y:0.0},{v.z:0.0})";
     CrimeEncounter FirstEncounter() => W.Crimes.Where(c => c != null && !c.Resolved && c.Encounter != null).Select(c => c.Encounter).FirstOrDefault();
     /// TEST HARNESS (logged where used): hold an encounter's actors still so placements are deterministic.
-    void Hold(CrimeEncounter e, float seconds) { foreach (var a in e.Robbers.Concat(e.Civilians)) if (a.Npc != null && !a.Npc.Dead) a.Npc.Freeze(seconds); }
+    void Hold(CrimeEncounter e, float seconds) { foreach (var a in e.Robbers.Concat(e.Civilians)) if (a.Npc != null && !a.Npc.Dead) a.Npc.Freeze(seconds,ice:false); }
     GameModeDefinition Clone(GameModeDefinition d, string name, bool briefing = true)
     {
         var c = Instantiate(d); c.name = name; c.SpawnInterval = 100000f; if (!briefing) c.BriefingGoal = c.BriefingWin = c.BriefingLose = ""; clones.Add(c); return c;
@@ -182,7 +182,7 @@ public sealed class HudPhase3VerificationRunner : MonoBehaviour
         {
             Vector3 p = near + Quaternion.Euler(0, i * 30f, 0) * Vector3.forward * (i == 0 ? 0f : .8f);
             if (!NavMesh.SamplePosition(p, out var hit, 2f, NavMesh.AllAreas)) continue;
-            var npc = CityNpc.Spawn(W, hit.position, NpcRole.Criminal); if (npc == null) continue; npc.Freeze(120f); return npc;
+            var npc = CityNpc.Spawn(W, hit.position, NpcRole.Criminal); if (npc == null) continue; npc.Freeze(120f,ice:false); return npc;
         }
         throw new Exception("No NavMesh spot near " + V(near));
     }
@@ -192,7 +192,7 @@ public sealed class HudPhase3VerificationRunner : MonoBehaviour
     void Defeat(CityNpc npc) => npc.Damage(100000f, W.Powers);
     /// TEST HARNESS (Villain side only, logged): police hunting the villain are frozen so gunfire cannot kill the player
     /// mid-check (a death respawns and resets Heat, which would pollute the Heat and XP accounting).
-    void CalmPolice() { foreach (var n in W.Npcs) if (n != null && !n.Dead && n.Hostile && n.Encounter == null) n.Freeze(20f); }
+    void CalmPolice() { foreach (var n in W.Npcs) if (n != null && !n.Dead && n.Hostile && n.Encounter == null) n.Freeze(20f,ice:false); }
     string HeatDelta(float before, float add) { float after = Mathf.Clamp(before + add, 0, W.Tuning.Heat.MaximumStars), d = after - before; return (d >= 0 ? "+" : hud.Minus) + Mathf.Abs(d).ToString("0.##"); }
     void GlyphCheck(Label label, string what)
     {
@@ -684,7 +684,7 @@ public sealed class HudPhase3VerificationRunner : MonoBehaviour
         yield return Launch(endless);
         var state = W.Mode.Director as EndlessWaveState; Check(state != null, "Endless director state.");
         yield return Until(() => !state.Intermission && state.Wave == 1 && state.Alive.Count == state.Tuning.WaveSize(1), 12f, "wave 1");
-        foreach (var n in state.Alive) n.Freeze(60f);
+        foreach (var n in state.Alive) n.Freeze(60f,ice:false);
         int id0 = LastPopupId(), total0 = Total(), score0 = W.Mode.Score, banners0 = hud.BannersStarted;
         var wave1 = state.Alive.ToList(); for (int i = 0; i < wave1.Count; i++) { Defeat(wave1[i]); yield return null; }
         yield return Frames(2);
@@ -700,7 +700,7 @@ public sealed class HudPhase3VerificationRunner : MonoBehaviour
         // Wave 2: pack the crowd at one spot (harness) and defeat it within 0.3 s -> ONE popup
         yield return Until(() => !state.Intermission && state.Wave == 2 && state.Alive.Count == state.Tuning.AliveTarget(2), 15f, "wave 2");
         Vector3 spot = Ahead(10f); NavMesh.SamplePosition(spot, out var hit, 3f, NavMesh.AllAreas);
-        var crowd = state.Alive.ToList(); for (int i = 0; i < crowd.Count; i++) { crowd[i].Freeze(60f); crowd[i].Agent.Warp(hit.position + Quaternion.Euler(0, i * 72f, 0) * Vector3.forward * 1.2f); }
+        var crowd = state.Alive.ToList(); for (int i = 0; i < crowd.Count; i++) { crowd[i].Freeze(60f,ice:false); crowd[i].Agent.Warp(hit.position + Quaternion.Euler(0, i * 72f, 0) * Vector3.forward * 1.2f); }
         Log($"TEST HARNESS: wave-2 crowd ({crowd.Count}) frozen and warped (NavMeshAgent.Warp) into a 1.2 m ring {V(hit.position)} in front of the player.");
         yield return Frames(2);
         id0 = LastPopupId(); total0 = Total(); int merges0 = hud.PopupMerges; float t0 = Time.realtimeSinceStartup;

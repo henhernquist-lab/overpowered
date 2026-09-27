@@ -36,7 +36,7 @@ public sealed class IceEffect : PowerEffect
         {
             npc.Freeze(stats.Duration); npc.Damage(stats.Damage, user);
             // Visible state for as long as the NPC's own Frozen flag holds (a later Ice/synergy freeze extends it too).
-            if (!npc.Dead) FrozenLook.Show(npc.gameObject, power.Definition.PaletteColor, () => npc != null && !npc.Dead && npc.Frozen);
+            if (!npc.Dead) FrozenLook.Show(npc.gameObject, power.Definition.PaletteColor, () => npc != null && !npc.Dead && npc.IceFrozen);
             Cast(user, power, hit.point); return true;
         }
         if (hit.rigidbody == null || hit.rigidbody.isKinematic) return false;
@@ -69,6 +69,7 @@ public sealed class FrozenBody : MonoBehaviour
     }
     void Update() { if (Time.time >= until) Destroy(this); }
     void OnDisable() { if (body != null && applied) body.constraints = prior; }
+    void OnEnable(){if(applied&&body!=null&&Time.time<until)body.constraints=RigidbodyConstraints.FreezeAll;}
 }
 /// Visible frozen state for an NPC or a physics prop: every body renderer shows ONE shared palette material
 /// (CityMaterials.Get, never a per-instance material) and an NPC's Animator holds its pose. Everything is restored exactly
@@ -76,7 +77,9 @@ public sealed class FrozenBody : MonoBehaviour
 public sealed class FrozenLook : MonoBehaviour
 {
     Renderer[] renderers; Material[][] original; Animator animator; float animatorSpeed; System.Func<bool> active; bool shown;
+    FreezeIndicatorPool.Marker marker; HumanoidPresentation presentation;
     public bool Shown => shown;
+    public Renderer Indicator => OwnsMarker ? marker.Render : null;
     public void Clear() { Restore(); }
     public static FrozenLook Show(GameObject target, CityColor color, System.Func<bool> stillFrozen)
     {
@@ -93,7 +96,7 @@ public sealed class FrozenLook : MonoBehaviour
             renderers = npc != null ? GetComponentsInChildren<SkinnedMeshRenderer>(true) : GetComponentsInChildren<Renderer>(true);
             original = new Material[renderers.Length][];
             for (int i = 0; i < renderers.Length; i++) original[i] = renderers[i].sharedMaterials;
-            var presentation = npc != null ? GetComponent<HumanoidPresentation>() : null;
+            presentation = npc != null ? GetComponent<HumanoidPresentation>() : null;
             animator = presentation != null ? presentation.Animator : null;
             if (animator != null) animatorSpeed = animator.speed;
             shown = true;
@@ -105,6 +108,8 @@ public sealed class FrozenLook : MonoBehaviour
             var mats = r.sharedMaterials; for (int m = 0; m < mats.Length; m++) mats[m] = ice; r.sharedMaterials = mats;
         }
         if (animator != null) animator.speed = 0f;
+        if(presentation!=null)presentation.FrozenOverlay=true;
+        AcquireMarker();
         enabled = true;
     }
     void LateUpdate() { if (shown && (active == null || !active())) Restore(); }
@@ -113,7 +118,16 @@ public sealed class FrozenLook : MonoBehaviour
         if (!shown) return; shown = false;
         for (int i = 0; i < renderers.Length; i++) if (renderers[i] != null) renderers[i].sharedMaterials = original[i];
         if (animator != null) animator.speed = animatorSpeed;
+        if(presentation!=null)presentation.FrozenOverlay=false;
+        ReleaseMarker();
         enabled = false;
     }
-    void OnDestroy() { Restore(); }
+    // A marker counts as ours only while it is rented to this transform, so a stale reference can never release or
+    // report a marker that the pool has since handed to another frozen target.
+    bool OwnsMarker=>marker!=null&&marker.Used&&marker.Target==transform;
+    void AcquireMarker(){if(shown&&!OwnsMarker&&FreezeIndicatorPool.Current!=null)marker=FreezeIndicatorPool.Current.Rent(transform);}
+    void ReleaseMarker(){if(OwnsMarker&&marker.Owner!=null)marker.Owner.Release(marker);marker=null;}
+    void OnDisable(){ReleaseMarker();}
+    void OnEnable(){if(shown)AcquireMarker();}
+    void OnDestroy() { Restore();ReleaseMarker(); }
 }

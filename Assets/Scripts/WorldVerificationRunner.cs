@@ -154,7 +154,7 @@ public sealed class WorldVerificationRunner : MonoBehaviour
         {
             var crime = W.Mode.SpawnNext(); if (crime == null || crime.Encounter == null) break;
             districts.Add(plan.Districts[city.DistrictAt(crime.Encounter.Site)].Name);
-            foreach (var a in crime.Encounter.Robbers.Concat(crime.Encounter.Civilians)) if (a.Npc != null) a.Npc.Freeze(60);
+            foreach (var a in crime.Encounter.Robbers.Concat(crime.Encounter.Civilians)) if (a.Npc != null) a.Npc.Freeze(60,ice:false);
         }
         var initial = W.Crimes.Where(c => c != null && c.Encounter != null).Select(c => plan.Districts[city.DistrictAt(c.Encounter.Site)].Name).ToList();
         Check(initial.Distinct().Count() >= 3, $"[{tag}] Encounters spread across districts: {initial.Count} active set-pieces in {initial.Distinct().Count()} districts ({string.Join(", ", initial)}).");
@@ -204,7 +204,7 @@ public sealed class WorldVerificationRunner : MonoBehaviour
 
     IEnumerator Captures()
     {
-        foreach (var npc in W.Npcs) if (npc != null) npc.Freeze(30);
+        foreach (var npc in W.Npcs) if (npc != null) npc.Freeze(30,ice:false);
         var plan = W.City.Plan; var layout = Resources.Load<CityLayout>("CityLayout");
         var downtown = W.City.Buildings.Where(b => b.District == W.City.DistrictAt(W.City.Spawn)).OrderByDescending(b => b.Size.y).First();
         Vector3 roof = downtown.Position + Vector3.up * (downtown.Size.y * .5f + 2.5f);
@@ -250,7 +250,7 @@ public sealed class WorldVerificationRunner : MonoBehaviour
     IEnumerator Waypoint()
     {
         var hud = FindAnyObjectByType<GameHud>(); Check(hud != null, "GameHud present.");
-        W.Hero.enabled = true; foreach (var npc in W.Npcs) if (npc != null) npc.Freeze(60);
+        W.Hero.enabled = true; foreach (var npc in W.Npcs) if (npc != null) npc.Freeze(60,ice:false);
         var e = W.Crimes.Where(c => c != null && c.Encounter != null).Select(c => c.Encounter).First(); e.enabled = false;
         float until = Time.realtimeSinceStartup + 6; while (!W.Hero.GetComponent<CharacterController>().isGrounded && Time.realtimeSinceStartup < until) yield return null;
         W.Hero.TryJump(); yield return Realtime(GameHud.BriefingFadeSeconds + .4f);

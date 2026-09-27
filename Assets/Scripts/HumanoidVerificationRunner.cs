@@ -128,7 +128,7 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
     {
         var a=W.Npcs.First(n=>n.Role==NpcRole.Civilian&&!n.Dead);var b=W.Npcs.Last(n=>n.Role==NpcRole.Civilian&&!n.Dead);
         var ap=a.GetComponent<HumanoidPresentation>();var bp=b.GetComponent<HumanoidPresentation>();int before=ap.HitCount;
-        a.Agent.Warp(W.City.Spawn);a.Freeze(5);
+        a.Agent.Warp(W.City.Spawn);a.Freeze(5,ice:false);
         a.Damage(1,null);yield return null;Check(ap.HitCount==before+1&&ap.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"),"Real NPC damage triggers Hit Reaction.");
         Check(bp.HitCount==0&&bp.DeathCount==0&&!bp.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"),"Undamaged NPC CONTROL plays neither hit nor death.");
         a.Damage(10000,null);yield return null;Check(ap.DeathCount==1&&ap.Animator.GetCurrentAnimatorStateInfo(0).IsName("Death")&&!a.Agent.enabled,"Lethal damage triggers Death, disables navigation/collision; no root 90-degree flip.");

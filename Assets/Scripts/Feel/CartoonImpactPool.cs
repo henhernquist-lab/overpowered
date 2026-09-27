@@ -31,6 +31,9 @@ public sealed class CartoonImpactPool : MonoBehaviour
                 var renderer = system.GetComponent<ParticleSystemRenderer>();
                 renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; renderer.receiveShadows = false;
             }
+            // Resolve all vendor shared material assets before gameplay (Unity may lazily load a secondary ring).
+            foreach(var renderer in root.GetComponentsInChildren<Renderer>(true))
+                foreach(var material in renderer.sharedMaterials)if(material!=null){var shader=material.shader;}
             root.SetActive(false); slots[i] = new Slot { Root = root, Systems = systems };
         }
     }

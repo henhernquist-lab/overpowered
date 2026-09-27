@@ -198,7 +198,7 @@ public sealed class BackflipHurricaneVerificationRunner : MonoBehaviour
     {
         var punchCop=CityNpc.Spawn(W,W.City.Spawn+Vector3.up*.1f,NpcRole.Cop);
         Check(punchCop!=null,"CONTROL: a cop spawns on the NavMesh as a damage target.");
-        punchCop.Freeze(90);
+        punchCop.Freeze(90,ice:false);
         Check(TryAimAt(punchCop.transform,out var position,out var rotation),$"CONTROL: a clear ground position faces the {punchCop.Role} target.");
         MoveTo(position,rotation);yield return Settle();
         float punchBefore=punchCop.Health;
@@ -211,7 +211,7 @@ public sealed class BackflipHurricaneVerificationRunner : MonoBehaviour
         Check(punchDamage>0f,$"CONTROL: the punch really damaged the cop ({punchDamage:F1} of {punchBefore:F0} health); no geometry shielded it.");
         var kickCop=CityNpc.Spawn(W,W.City.Spawn+Vector3.up*.1f,NpcRole.Cop);
         Check(kickCop!=null,"CONTROL: a second identical cop spawns for the kick comparison.");
-        kickCop.Freeze(90);
+        kickCop.Freeze(90,ice:false);
         Check(TryAimAt(kickCop.transform,out position,out rotation),$"CONTROL: a clear ground position faces the second {kickCop.Role} target.");
         MoveTo(position,rotation);yield return Settle();
         float kickBefore=kickCop.Health;

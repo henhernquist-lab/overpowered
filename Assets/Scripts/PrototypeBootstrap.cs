@@ -19,6 +19,7 @@ public static class PrototypeBootstrap
         var follow=camera.GetComponent<ThirdPersonCamera>() ?? camera.gameObject.AddComponent<ThirdPersonCamera>();
         follow.target=hero.transform;camera.fieldOfView=tuning.Camera.FieldOfView;
         city.Art.ApplyRendering(camera); // far clip, per-layer cull distances, fog (CityArtSettings.Rendering)
+        new GameObject("Freeze indicator pool").AddComponent<FreezeIndicatorPool>().Initialize();
         new GameObject("World Session").AddComponent<WorldSession>().Initialize(tuning, city, controller);
         new GameObject("Feel Director").AddComponent<FeelDirector>().Initialize(WorldSession.Instance);
         new GameObject("NPC LOD").AddComponent<NpcLod>().Initialize(WorldSession.Instance, layout.NpcLod, city.Art.Rendering.ActorLayer);

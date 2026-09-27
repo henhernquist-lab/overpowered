@@ -2588,3 +2588,43 @@ Final Humanoid: VECTOR/TITAN/NOVA 69 PASS each. BackflipHurricane: all three 64 
 Combined effects stress at 1920x1080: ON mean 308.4 FPS vs OFF 340.4 (-9.4%, +0.30ms/frame); draws ON 233–234 vs OFF 225–226. Peak Cartoon slots 4; materials 91→91; ParticleSystems 22→22. Editor measurement compares Cartoon plus existing debris against both OFF; no isolated rig/Cartoon A/B or player-build benchmark. Human look/feel and NPC dense-scene rig overhead remain untested.
 
 Final live-capture Feel rerun: 143 PASS, 0 FAIL. ON 317.4/321.9 FPS vs OFF 341.0/337.2; means 319.7 vs 339.1 (-5.7%, +0.18ms/frame). Same pool/draw bounds. Both runs retained; throughput variability is not an isolated effect-cost result. Live heavy-impact capture inspected: an amber impact flash supplements the existing cube debris.
+
+## Overnight Phase 5: frozen state readable by shape, not colour — 2026-09-27 (branch `codex/freeze-readability`, appended)
+
+Finished and reviewed the uncommitted Codex work. A six-ray branched snowflake (cream fill, navy geometric border, one shared mesh, CityPalette's shared Cream/UiNavy materials) floats above every frozen NPC and prop, billboarded to the camera, from a 64-marker pool created at session start (`FreezeIndicatorPool`). The existing `FrozenLook` owns it together with the shared Cyan material swap, held Animator and the new held presentation overlay; thaw, death, destruction, disable and session unload release it. See `docs/freeze-readability.md`.
+
+**One implementation for every freeze source.** Grep of every frozen-state writer on main: `CityNpc.Freeze` (direct Ice; Thermal Shock and Frostwake via `SynergyRunner.AffectNearby`; Glacier Fist via `ModifyMelee`; Cryo Crush via `LiftSlamEffect` Freeze=1) and `FrozenBody.Apply` (direct Ice on props; no synergy freezes props). Both enter `FrozenLook`, so a new source that calls `Freeze` gets the presentation by default. **Regression found and fixed in the WIP:** `CrimeEncounter` police suppression also calls `Freeze` (0.6 s every 1 s near a robber); with the shared look every suppressed robber would have flickered Cyan with a snowflake. It now calls `Freeze(0.6, ice:false)`: identical gameplay hold (`Frozen` unchanged), no ice presentation (`IceFrozen` is the presentation condition). Also hardened: a pooled marker can only be released/reported by the look it is currently rented to; the glyph ignores a disabled collider's bounds.
+
+**Verification added to `FreezeReadabilityVerification.Run`** (80 PASS, exit 0): real gates for direct Ice (NPC + Teal prop), Thermal Shock, Frostwake, Glacier Fist and Cryo Crush (each in its own Free Play session; asserts these four are exactly the freezing synergies of the current 10-synergy catalog); off-axis/far controls; non-ice hold control; rendered glyph on/off over a Cyan wall and a Teal wall; pool/material counts; thaw, disable/re-enable, death, destruction, session cleanup. Measured:
+- Cyan wall: 2154 glyph pixels, 804 (37%) at ≥0.25 luma contrast (all navy border). Teal wall: 1780 (83%; navy 648, cream 1132). Palette contrast vs Cyan: cream 1.26:1, navy 11.21:1; vs Teal: cream 3.72:1, navy 3.81:1. The border carries the silhouette on Cyan; the fill carries it on Teal.
+- Markers 64→64, growth 0, materials 109→109 across repeated freezes (the one vendor Cartoon ring material is resolved at Cartoon pool start-up, not per freeze).
+- Cryo Crush glyph follows the lifted captive (glyph y 156.39 vs captive 154.44).
+- Finding: unfrozen cops wear Teal with a **Cyan** joint accent, so frozen (all-Cyan) vs unfrozen cop really is ambiguous by colour; the glyph is the distinguishing cue.
+
+Captures inspected (`Verification/FreezeReadability/`): `direct-ice-cyan-on-teal` (all-Cyan frozen criminal with snowflake beside an unfrozen Teal/Cyan-jointed cop), `glyph-over-cyan-wall` / `glyph-over-teal-wall` (same glyph: navy outline reads on Cyan, cream+navy on Teal), `direct-ice-prop` (Cyan crate with glyph; thawed criminal back to red), `thermal-shock` (orange impact on frozen target, glyph above), `frostwake` (hero mid-dive, frozen target with glyph), `glacier-fist` (cyan debris cubes + white spike burst around the frozen target; glyph visible above), `cryo-crush` (lifted frozen captive with glyph; two dark-grey Cartoon rings on the floor — the pre-existing Phase 3 ring renders dark in these RT captures, not investigated).
+
+**Test fixtures.** Verifiers that used `Freeze` only to hold NPCs still (Feel CalmNpcs, HUD2, HUD3, World, BackflipHurricane, Humanoid, Combat, ModeExpansion) now pass `ice:false`, restoring their exact pre-Phase-5 presentation; genuine freeze semantics are kept (Combat freeze-cancels-windup CONTROL, HeroForge Thermal Shock frozen precondition). Found by Combat run 1: its archetype colour check saw the ice material on a held NPC.
+
+| Suite (final code; wt-sidekick) | exit | PASS | FAIL |
+|---|---|---|---|
+| FreezeReadabilityVerification.Run | 0 | 80 | 0 |
+| IceVerification.After | 0 | 34 | 0 |
+| HumanoidVerification.Run (default hero) | 0 | 68 | 0 |
+| HeroForgeVerification.Run / Reload (separate process) | 0 / 0 | 131 / 3 | 0 |
+| FeelVerification.Run | 0 | 143 | 0 |
+| SynergyAvailabilityVerification.Run / Reload | 0 / 0 | 36 / 9 | 0 |
+| CombatVerification.Run | 0 | 170 | 0 |
+| HudVerification.Run (P1) | 0 | 316 | 0 |
+| BackflipHurricaneVerification.Run | 0 | 63 | 0 |
+| HudPhase2Verification.Run / Reload | 0 / 0 | 483 / 31 | 0 |
+| HudPhase3Verification.Run / Reload | 0 / 0 | 562 / 11 | 0 |
+| WorldVerification.Run / Reload | 0 / 0 | 57 / 3 | 0 |
+
+Failed attempts kept in `Verification/FreezeReadability/regression/failed-attempts/`: Combat run 1 (fixture, fixed above); Feel run 2 (hit-pause physics-step timing, control step 58.8 ms while a wt-cloud Unity HudVerification ran; rerun 143 PASS); HUD3 run 1 ("Timed out waiting for banner faded in" while wt-cloud FeelVerification ran; rerun 562 PASS; its Reload then passed). Count differences vs Phase 3: Humanoid 68 vs 69 and Backflip 63 vs 64 are the per-hero "hero under test" line (default-hero runs here); HUD2 483 vs 484 is one conditional "composite contains hud-prompt" check whose transient prompt was not on screen in that frame. SDK compile: 0 warnings, 0 errors.
+
+### OVERNIGHT DECISIONS
+- `CityNpc.Freeze` stays the single presentation-bearing entry point (opt-out, not opt-in), because the brief requires that future freeze sources cannot forget presentation. Police suppression is the only gameplay opt-out.
+- Gameplay unchanged: a police-suppressed NPC still reports `Frozen` for Shatter/Thermal Shock exactly as on main (pre-existing hidden interaction; flagged for design, not changed overnight).
+- Verified against the CURRENT 10-synergy catalog (4 freezing synergies). Re-run `FreezeReadabilityVerification.Run` after the cloud catalog cut to five.
+
+Limits: batch captures, not human readability or colour-vision review; no dense-freeze benchmark; the glyph uses the lit palette material, so night lighting (Phase 6) must re-check it; editor only, no player build.

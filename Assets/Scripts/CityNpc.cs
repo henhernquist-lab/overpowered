@@ -89,8 +89,20 @@ public sealed class CityNpc : MonoBehaviour
     }
     public void Alarm(Vector3 position) { alarm=position; fleeUntil=Time.time+world.Tuning.Npcs.FleeSeconds; nextPath=0; }
     public int FreezeStartedFrame { get; private set; } = -1;
-    public void Freeze(float duration) { if(!Frozen&&duration>0)FreezeStartedFrame=Time.frameCount; frozenUntil=Mathf.Max(frozenUntil,Time.time+duration); if(duration>0f) CancelAttack(); }
-    public void Thaw() { frozenUntil=Time.time; }
+    float iceUntil;
+    /// Frozen by ice (Ice power or any freezing synergy): the part of Frozen that shows the shared FrozenLook/frost glyph.
+    public bool IceFrozen=>Frozen&&Time.time<iceUntil;
+    /// Every freeze source goes through here, so the shared FrozenLook (palette material, held pose, pooled frost glyph)
+    /// cannot be forgotten by a new source. ice=false is ONLY for a non-ice hold with the same gameplay stop (police
+    /// suppression in crime encounters), which must not show a frost glyph.
+    public void Freeze(float duration, bool ice=true)
+    {
+        if(!Frozen&&duration>0)FreezeStartedFrame=Time.frameCount; frozenUntil=Mathf.Max(frozenUntil,Time.time+duration);
+        if(duration<=0f)return;
+        CancelAttack();
+        if(ice&&!Dead){iceUntil=Mathf.Max(iceUntil,Time.time+duration);FrozenLook.Show(gameObject,CityColor.Cyan,()=>this!=null&&!Dead&&IceFrozen);}
+    }
+    public void Thaw() { frozenUntil=iceUntil=Time.time;GetComponent<FrozenLook>()?.Clear(); }
     public void Damage(float amount, PowerUser source)
     {
         if (Dead || amount <= 0f) return;

@@ -98,7 +98,7 @@ public sealed class FeelVerificationRunner : MonoBehaviour
     void Refill() { Energy(100); W.Hero.DebugSetResources(6, 3, 0); }
     AudioCueDefinition Cue(AudioCue id) => AudioDirector.Instance.Tuning.Find(id);
     List<AudioSource> Playing(AudioCue id) { var clips = Cue(id).Clips; return AudioDirector.Instance.Sources.Where(s => s.isPlaying && clips.Contains(s.clip)).ToList(); }
-    void CalmNpcs() { foreach (var n in W.Npcs) if (n != null && !n.Dead) n.Freeze(60f); }
+    void CalmNpcs() { foreach (var n in W.Npcs) if (n != null && !n.Dead) n.Freeze(60f,ice:false); }
 
     IEnumerator Composite(Vector2Int size, string name)
     {

@@ -230,7 +230,7 @@ public sealed class CombatVerificationRunner : MonoBehaviour
         yield return Clear();Heal();Move(heroSpot);Face(lane);yield return Ground();yield return BackflipReady();
         float spawnAt=a.Kind==AttackKind.Ranged?a.PreferredDistance:5f;
         var npc=Spawn(a,heroSpot+lane*spawnAt);var pose=npc.GetComponent<HumanoidPresentation>();
-        npc.Freeze(1.1f); // AudioDirector registers new NPCs once per ActorRefreshInterval (1 s); hold so the cue check is fair
+        npc.Freeze(1.1f,ice:false); // AudioDirector registers new NPCs once per ActorRefreshInterval (1 s); hold so the cue check is fair
         float hp=W.Health;
         float timeout=Time.time+8;
         while(npc.Phase!=AttackPhase.Windup)
@@ -322,7 +322,7 @@ public sealed class CombatVerificationRunner : MonoBehaviour
         var set=new[]{rusher,gunner,brute};var npcs=new List<CityNpc>();
         for(int i=0;i<3;i++)
         {
-            var npc=Spawn(set[i],heroSpot+lane*7+right*((i-1)*2.6f));npc.Freeze(60);npcs.Add(npc);
+            var npc=Spawn(set[i],heroSpot+lane*7+right*((i-1)*2.6f));npc.Freeze(60,ice:false);npcs.Add(npc);
         }
         yield return null;
         foreach(var npc in npcs){npc.transform.rotation=Quaternion.LookRotation(-lane);}
@@ -433,7 +433,7 @@ public sealed class CombatVerificationRunner : MonoBehaviour
         float end=Time.time+3f;
         while(Time.time<end){yield return null;active+=recorder.LastValue;activeFrames++;for(int i=0;i<W.Npcs.Count;i++)if(W.Npcs[i]!=null&&W.Npcs[i].Phase==AttackPhase.Windup){windupFrames++;break;}}
         for(int i=0;i<crowd.Count;i++)if(crowd[i]!=null)releases1+=crowd[i].Releases;
-        for(int i=0;i<crowd.Count;i++)if(crowd[i]!=null&&!crowd[i].Dead)crowd[i].Freeze(30);
+        for(int i=0;i<crowd.Count;i++)if(crowd[i]!=null&&!crowd[i].Dead)crowd[i].Freeze(30,ice:false);
         yield return Frames(10);
         end=Time.time+3f;
         while(Time.time<end){yield return null;frozen+=recorder.LastValue;frozenFrames++;}
@@ -457,9 +457,9 @@ public sealed class CombatVerificationRunner : MonoBehaviour
         // Real hostile Villain-mode cop (Gunner): telegraphed shot, and the audio cue follows the release.
         var audio=AudioDirector.Instance;var cop=W.Npcs.Where(n=>n!=null&&!n.Dead&&n.Role==NpcRole.Cop&&n.Encounter==null).OrderBy(n=>Flat(n.transform.position,W.Hero.transform.position)).First();
         cop.Agent.Warp(W.City.Spawn);Move(cop.transform.position+Vector3.forward*6f);Face(cop.transform.position-W.Hero.transform.position);
-        foreach(var n in W.Npcs)if(n!=null&&n!=cop&&n.Role!=NpcRole.Civilian)n.Freeze(20);
+        foreach(var n in W.Npcs)if(n!=null&&n!=cop&&n.Role!=NpcRole.Civilian)n.Freeze(20,ice:false);
         // The teleports above must not inherit a windup the cop locked on the player's OLD position: freeze cancels it.
-        cop.Freeze(.3f);Heal();float hp=W.Health,movedAt=Time.time;
+        cop.Freeze(.3f,ice:false);Heal();float hp=W.Health,movedAt=Time.time;
         yield return Until(()=>cop.Phase==AttackPhase.Windup&&cop.WindupStartTime>movedAt,6,"villain cop windup");
         int releases=cop.Releases;
         Check(W.Health==hp&&cop.Telegraph.Visible,$"Villain mode: hostile Cop ({cop.Archetype.name}) commits a telegraphed windup; no damage yet.");
