@@ -26,6 +26,8 @@ public static class PrototypeBootstrap
         HumanoidPresentation.Create(hero,cc.height,controller,null,WorldSession.Instance.Progression.SelectedHero);
         var sun = new GameObject("Sun").AddComponent<Light>(); sun.type = LightType.Directional; sun.intensity = 1.2f; sun.transform.rotation = Quaternion.Euler(45,-35,0);
         RenderSettings.ambientLight = new Color(.45f,.5f,.6f);
+        var lighting=Resources.Load<WorldLighting>("WorldLighting");
+        if(lighting!=null)new GameObject("World lighting").AddComponent<WorldLightingDirector>().Initialize(WorldSession.Instance,sun,camera,lighting);
         if (!Application.isBatchMode) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; }
         new GameObject("Prototype HUD").AddComponent<PrototypeHUD>(); // F3 debug panel, pause + Tab menus, defeated notice
         new GameObject("Game HUD").AddComponent<GameHud>();

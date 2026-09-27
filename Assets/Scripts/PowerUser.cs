@@ -115,6 +115,7 @@ public sealed class PowerUser : MonoBehaviour
         power.Charges--; power.Cooldown = Stats(power).Cooldown; power.ChargeTimer = 0f;
         Energy -= power.Definition.ResourceCost; Message = power.Definition.DisplayName + " activated";
         Activated?.Invoke(power.Definition);
+        WorldLightingDirector.Instance?.FlashPower(power.Definition.Light,AimOrigin);
         WorldSession.Instance?.Alarm(transform.position);
         return true;
     }

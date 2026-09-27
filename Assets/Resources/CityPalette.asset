@@ -40,7 +40,32 @@ MonoBehaviour:
   - {r: 0.13, g: 0.37, b: 0.47, a: 1}
   - {r: 0.66, g: 0.74, b: 0.82, a: 1}
   - {r: 0.42, g: 0.64, b: 0.34, a: 1}
+  - {r: 1, g: 0.7, b: 0.26, a: 1}
+  - {r: 1, g: 0.7, b: 0.26, a: 1}
+  - {r: 0.92, g: 0.87, b: 0.71, a: 1}
+  - {r: 0.8, g: 0.23, b: 0.22, a: 1}
+  - {r: 0.62, g: 0.5, b: 0.52, a: 1}
+  - {r: 0.075, g: 0.095, b: 0.17, a: 1}
   Smoothness: 0.08
+  Emissive:
+  - Swatch: 27
+    Emission: 27
+    Strength: 1
+  - Swatch: 28
+    Emission: 28
+    Strength: 1.3
+  - Swatch: 29
+    Emission: 15
+    Strength: 1.1
+  - Swatch: 30
+    Emission: 30
+    Strength: 1.4
+  - Swatch: 16
+    Emission: 16
+    Strength: 0.6
+  - Swatch: 15
+    Emission: 15
+    Strength: 0.35
   ToonCity: 0
   ToonHeroes: 0
   ToonShade: 0.65

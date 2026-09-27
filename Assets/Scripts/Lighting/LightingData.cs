@@ -2,36 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-/// One look of the world (Phase 6). Pure data, blended by LightingCycle. The ONE directional light is the sun by day and the
-/// moon by night; ambient is the scene's own sky probe (the legacy day look) scaled per channel by AmbientTint plus a flat
-/// AmbientFloor, so the Day preset (tint 1, floor 0) reproduces the pre-lighting look exactly. Fog colour is a CityPalette
-/// swatch. Glow scales every emissive palette swatch (CityPalette.Emissive); StreetLights scales the capped real lamp lights.
-[CreateAssetMenu(menuName="Overpowered/Lighting/Preset")]
-public sealed class LightingPreset : ScriptableObject
-{
-    [Header("Directional light (sun / moon): rotation = Euler(Elevation, Azimuth, 0)")]
-    public float Elevation=45;
-    public float Azimuth=-35;
-    public Color LightColor=Color.white;
-    [Min(0)] public float Intensity=1.2f;
-    [Header("Ambient = scene sky probe x AmbientTint + AmbientFloor")]
-    public Color AmbientTint=Color.white;
-    public Color AmbientFloor=Color.black;
-    [Tooltip("RenderSettings.reflectionIntensity (the skybox reflection on the palette's low-smoothness surfaces).")] [Range(0,1)] public float Reflections=1;
-    [Header("Fog (exponential, CityArtSettings.Rendering.FogDensity x FogDensityScale)")]
-    public CityColor FogColor=CityColor.Haze;
-    [Min(0)] public float FogDensityScale=1;
-    [Header("Procedural sky (a session copy of the scene skybox)")]
-    public Color SkyTint=new Color(.5f,.5f,.5f);
-    public Color SkyGround=new Color(.369f,.349f,.341f);
-    [Min(0)] public float SkyExposure=1.3f;
-    [Range(0,5)] public float Atmosphere=1;
-    [Range(0,1)] public float SunSize=.04f;
-    [Header("City emission and street lights (0 = off / day, 1 = full night)")]
-    [Range(0,1)] public float Glow;
-    [Range(0,1)] public float StreetLights;
-}
-
 [Serializable] public sealed class LightingKey
 {
     [Range(0,1)] public float Time;
@@ -40,38 +10,6 @@ public sealed class LightingPreset : ScriptableObject
 
 /// A mode's time of day: presets on a 0..1 day, blended (smoothstep) between neighbouring keys. A static cycle
 /// (DurationSeconds 0) holds StartTime for the whole session. Referenced from GameModeDefinition.Lighting.
-[CreateAssetMenu(menuName="Overpowered/Lighting/Cycle")]
-public sealed class LightingCycle : ScriptableObject
-{
-    [Tooltip("Presets by time of day (0..1), in ascending Time order.")] public LightingKey[] Keys=new LightingKey[0];
-    [Tooltip("Real (scaled) seconds for time of day to run 0 -> 1. 0 = static at StartTime.")] [Min(0)] public float DurationSeconds;
-    [Range(0,1)] public float StartTime;
-    [Tooltip("True: 1 wraps to 0 (a repeating day). False: time holds at 1 (e.g. dusk that settles into night).")] public bool Loop=true;
-    public bool Advances=>DurationSeconds>0;
-    public float Advance(float time,float seconds)
-    {
-        if(!Advances)return time;
-        time+=seconds/DurationSeconds;
-        return Loop?Mathf.Repeat(time,1f):Mathf.Min(time,1f);
-    }
-    public float Normalize(float time)=>Loop?Mathf.Repeat(time,1f):Mathf.Clamp01(time);
-    /// The two presets around `time` and the smoothstep weight of the second. A single key (or none after it) returns it twice.
-    public void Evaluate(float time,out LightingPreset from,out LightingPreset to,out float weight)
-    {
-        from=to=null;weight=0;int n=Keys==null?0:Keys.Length;if(n==0)return;
-        time=Normalize(time);
-        if(n==1){from=to=Keys[0].Preset;return;}
-        int next=0;while(next<n&&Keys[next].Time<=time)next++;
-        int prev=next-1;
-        if(prev<0){if(!Loop){from=to=Keys[0].Preset;return;}prev=n-1;}
-        if(next>=n){if(!Loop){from=to=Keys[n-1].Preset;return;}next=0;}
-        float a=Keys[prev].Time,b=Keys[next].Time,span=b-a,at=time-a;
-        if(prev>=next){span+=1f;if(at<0)at+=1f;} // wrapping segment (last key -> first key of the next day)
-        from=Keys[prev].Preset;to=Keys[next].Preset;weight=span<=0?1:Mathf.SmoothStep(0,1,Mathf.Clamp01(at/span));
-        if(from==to)weight=0;
-    }
-}
-
 [Serializable] public sealed class StreetLightSettings
 {
     [Tooltip("Real point lights placed on the nearest intact, upright street lamps around the camera (0 = emissive lamp heads only). Scaled by the preset's StreetLights.")]
@@ -109,16 +47,6 @@ public sealed class LightingCycle : ScriptableObject
 }
 
 /// Session lighting configuration (Resources/WorldLighting.asset).
-[CreateAssetMenu(menuName="Overpowered/Lighting/World Lighting")]
-public sealed class WorldLighting : ScriptableObject
-{
-    [Tooltip("Used when the session has no mode, or its mode has no Lighting cycle (verification sandboxes).")] public LightingCycle DefaultCycle;
-    [Tooltip("Copy the scene skybox once per session and drive it from the presets (false: the scene sky is left untouched).")] public bool DriveSky=true;
-    [Tooltip("Ambient/emission are re-applied only when the blended value moved by more than this (a cycle changes slowly).")] public float ApplyEpsilon=.002f;
-    public StreetLightSettings StreetLights=new StreetLightSettings();
-    public PowerLightSettings PowerLights=new PowerLightSettings();
-}
-
 /// The blended values the director applies (one frame's lighting).
 public struct LightingState
 {

@@ -1,0 +1,6 @@
+PASS Save Fire/Ice through Forge ownership gate for real power light control.
+PASS Home launches hero
+FAIL System.Exception: hero uses its authored cycle asset.
+  at LightingVerificationRunner.Check (System.Boolean pass, System.String value) [0x0001b] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/wt-light/Assets/Scripts/Lighting/LightingVerificationRunner.cs:22
+  at LightingVerificationRunner+<Enter>d__21.MoveNext () [0x0009b] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/wt-light/Assets/Scripts/Lighting/LightingVerificationRunner.cs:31
+  at LightingVerificationRunner+<Start>d__18.MoveNext () [0x00066] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/wt-light/Assets/Scripts/Lighting/LightingVerificationRunner.cs:26
