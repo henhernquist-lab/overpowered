@@ -32,6 +32,13 @@ public static class RosterSetup
             d.Damage = 38f; d.Force = 60f; d.Range = 26f; d.Duration = 0f; d.OriginHeight = 1.62f;
             d.PaletteColor = CityColor.Red; d.MenuIcon = MenuGlyph.Star; d.CastingPresentation = false;
         });
+        Define("lightning", "Lightning", Effect<LightningEffect>("Lightning"), d =>
+        {
+            d.Description = "Chain bolt: strikes the aimed enemy, then arcs to up to five nearby enemies (weaker each jump).";
+            d.Charges = 2; d.ChargeRecharge = 2.5f; d.Cooldown = .8f; d.ResourceCost = 18f;
+            d.Damage = 24f; d.Force = 300f; d.Range = 24f;
+            d.PaletteColor = CityColor.Cream; d.MenuIcon = MenuGlyph.Chevron; d.CastingPresentation = true;
+        });
         AddToHeroes();
         AssetDatabase.SaveAssets(); AssetDatabase.Refresh();
     }
