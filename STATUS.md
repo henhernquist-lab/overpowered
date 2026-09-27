@@ -2719,3 +2719,76 @@ Nothing from it was run.
 - Feel `:179` hit-pause probe is load-sensitive (passed 143 on two reruns) — local, noted.
 - The real checkout was switched to a local `cloud/verification-gauntlet` branch (6 verification-only commits from a Cloud
   worker at 15:19–15:20). Local main was not modified by it; the local agent now commits to main from a separate worktree.
+
+## Overnight Phase 5: frozen state readable by shape, not colour — 2026-09-27 (branch `codex/freeze-readability`, appended)
+
+Finished and reviewed the uncommitted Codex work. A six-ray branched snowflake (cream fill, navy geometric border, one shared mesh, CityPalette's shared Cream/UiNavy materials) floats above every frozen NPC and prop, billboarded to the camera, from a 64-marker pool created at session start (`FreezeIndicatorPool`). The existing `FrozenLook` owns it together with the shared Cyan material swap, held Animator and the new held presentation overlay; thaw, death, destruction, disable and session unload release it. See `docs/freeze-readability.md`.
+
+**One implementation for every freeze source.** Grep of every frozen-state writer on main: `CityNpc.Freeze` (direct Ice; Thermal Shock and Frostwake via `SynergyRunner.AffectNearby`; Glacier Fist via `ModifyMelee`; Cryo Crush via `LiftSlamEffect` Freeze=1) and `FrozenBody.Apply` (direct Ice on props; no synergy freezes props). Both enter `FrozenLook`, so a new source that calls `Freeze` gets the presentation by default. **Regression found and fixed in the WIP:** `CrimeEncounter` police suppression also calls `Freeze` (0.6 s every 1 s near a robber); with the shared look every suppressed robber would have flickered Cyan with a snowflake. It now calls `Freeze(0.6, ice:false)`: identical gameplay hold (`Frozen` unchanged), no ice presentation (`IceFrozen` is the presentation condition). Also hardened: a pooled marker can only be released/reported by the look it is currently rented to; the glyph ignores a disabled collider's bounds.
+
+**Verification added to `FreezeReadabilityVerification.Run`** (80 PASS, exit 0): real gates for direct Ice (NPC + Teal prop), Thermal Shock, Frostwake, Glacier Fist and Cryo Crush (each in its own Free Play session; asserts these four are exactly the freezing synergies of the current 10-synergy catalog); off-axis/far controls; non-ice hold control; rendered glyph on/off over a Cyan wall and a Teal wall; pool/material counts; thaw, disable/re-enable, death, destruction, session cleanup. Measured:
+- Cyan wall: 2154 glyph pixels, 804 (37%) at ≥0.25 luma contrast (all navy border). Teal wall: 1780 (83%; navy 648, cream 1132). Palette contrast vs Cyan: cream 1.26:1, navy 11.21:1; vs Teal: cream 3.72:1, navy 3.81:1. The border carries the silhouette on Cyan; the fill carries it on Teal.
+- Markers 64→64, growth 0, materials 109→109 across repeated freezes (the one vendor Cartoon ring material is resolved at Cartoon pool start-up, not per freeze).
+- Cryo Crush glyph follows the lifted captive (glyph y 156.39 vs captive 154.44).
+- Finding: unfrozen cops wear Teal with a **Cyan** joint accent, so frozen (all-Cyan) vs unfrozen cop really is ambiguous by colour; the glyph is the distinguishing cue.
+
+Captures inspected (`Verification/FreezeReadability/`): `direct-ice-cyan-on-teal` (all-Cyan frozen criminal with snowflake beside an unfrozen Teal/Cyan-jointed cop), `glyph-over-cyan-wall` / `glyph-over-teal-wall` (same glyph: navy outline reads on Cyan, cream+navy on Teal), `direct-ice-prop` (Cyan crate with glyph; thawed criminal back to red), `thermal-shock` (orange impact on frozen target, glyph above), `frostwake` (hero mid-dive, frozen target with glyph), `glacier-fist` (cyan debris cubes + white spike burst around the frozen target; glyph visible above), `cryo-crush` (lifted frozen captive with glyph; two dark-grey Cartoon rings on the floor — the pre-existing Phase 3 ring renders dark in these RT captures, not investigated).
+
+**Test fixtures.** Verifiers that used `Freeze` only to hold NPCs still (Feel CalmNpcs, HUD2, HUD3, World, BackflipHurricane, Humanoid, Combat, ModeExpansion) now pass `ice:false`, restoring their exact pre-Phase-5 presentation; genuine freeze semantics are kept (Combat freeze-cancels-windup CONTROL, HeroForge Thermal Shock frozen precondition). Found by Combat run 1: its archetype colour check saw the ice material on a held NPC.
+
+| Suite (final code; wt-sidekick) | exit | PASS | FAIL |
+|---|---|---|---|
+| FreezeReadabilityVerification.Run | 0 | 80 | 0 |
+| IceVerification.After | 0 | 34 | 0 |
+| HumanoidVerification.Run (default hero) | 0 | 68 | 0 |
+| HeroForgeVerification.Run / Reload (separate process) | 0 / 0 | 131 / 3 | 0 |
+| FeelVerification.Run | 0 | 143 | 0 |
+| SynergyAvailabilityVerification.Run / Reload | 0 / 0 | 36 / 9 | 0 |
+| CombatVerification.Run | 0 | 170 | 0 |
+| HudVerification.Run (P1) | 0 | 316 | 0 |
+| BackflipHurricaneVerification.Run | 0 | 63 | 0 |
+| HudPhase2Verification.Run / Reload | 0 / 0 | 483 / 31 | 0 |
+| HudPhase3Verification.Run / Reload | 0 / 0 | 562 / 11 | 0 |
+| WorldVerification.Run / Reload | 0 / 0 | 57 / 3 | 0 |
+
+Failed attempts kept in `Verification/FreezeReadability/regression/failed-attempts/`: Combat run 1 (fixture, fixed above); Feel run 2 (hit-pause physics-step timing, control step 58.8 ms while a wt-cloud Unity HudVerification ran; rerun 143 PASS); HUD3 run 1 ("Timed out waiting for banner faded in" while wt-cloud FeelVerification ran; rerun 562 PASS; its Reload then passed). Count differences vs Phase 3: Humanoid 68 vs 69 and Backflip 63 vs 64 are the per-hero "hero under test" line (default-hero runs here); HUD2 483 vs 484 is one conditional "composite contains hud-prompt" check whose transient prompt was not on screen in that frame. SDK compile: 0 warnings, 0 errors.
+
+### OVERNIGHT DECISIONS
+- `CityNpc.Freeze` stays the single presentation-bearing entry point (opt-out, not opt-in), because the brief requires that future freeze sources cannot forget presentation. Police suppression is the only gameplay opt-out.
+- Gameplay unchanged: a police-suppressed NPC still reports `Frozen` for Shatter/Thermal Shock exactly as on main (pre-existing hidden interaction; flagged for design, not changed overnight).
+- Verified against the CURRENT 10-synergy catalog (4 freezing synergies). Re-run `FreezeReadabilityVerification.Run` after the cloud catalog cut to five.
+
+Limits: batch captures, not human readability or colour-vision review; no dense-freeze benchmark; the glyph uses the lit palette material, so night lighting (Phase 6) must re-check it; editor only, no player build.
+
+## Overnight Phase 4: Free Play + Endless current-state audit — 2026-09-27 (branch `codex/freeze-readability`, on top of Phase 5, appended)
+
+Audit only; the modes were not rebuilt and **no gameplay regression was found, so no gameplay code changed.** Audited on the current main content (5 powers, 10-synergy catalog, district map, Sidekick heroes, Phase 3 presentation, Phase 5 freeze glyph). The cloud features are not merged, so **"all 11 powers can be equipped" is pending the cloud merge**; all 5 current powers were verified instead.
+
+Existing coverage reused and cited (`ModeExpansionVerification`, all 111 earlier PASS lines still present): Home -> Free Play via the real button; Rules=null, 0 encounter definitions; 150 s accelerated with 0 crimes / 0 CrimeEvent / 0 CrimeEncounter / 0 criminals; HUD has no objective/timer/director line, Heat shown; 4 deaths (> Hero DefeatLimit) each respawn at 100 HP without ending the session; real prop break raises Heat and police respond (cops 2 -> 3); H side switch (Hero -> Villain, saved, hostility flips, cooldown CONTROL); pause offers only Resume/Return home; relaunch keeps the saved side; results request lands on Home. Hero-mode CONTROL still spawns encounters and locks side. Endless Hero waves 1-6 -> real wave-6 NPC attacks kill the player -> Survival results (wave 6, 37 defeated, score 2120, new best) -> PLAY AGAIN lower-score CONTROL keeps the best -> HOME. Endless Villain waves 1-2 (hostile cops, no police spawn) -> death -> results -> Home. Explicit per-wave health/damage independent of 3 Heat stars; MaxAlive 12 with reinforcements; per-mode records saved.
+
+Added to the same verifier (45 new PASS lines):
+- **Free Play powers:** three Free Play sessions launched from Home after `PlayerProgression.SetLoadout` (fire+ice, flight+strength, telekinesis+fire) use all five current powers for real: Fire projectile reaches/pushes a crate, Ice freezes it (with the Phase 5 glyph), Telekinesis holds then hurls it, Strength punch 35.0 damage consuming a Strength charge, Flight's held-flight fuel gate 6.00 -> 5.75 (Flight is deliberately not a click cast). CONTROLs: unequipped click power refused ("Power not equipped"), unequipped Flight fuel gate refuses, basic melee without Strength 8.0 < 35.0 with Strength charges untouched; each session 0 objective lines / 0 encounters; original loadout restored through the same save API.
+- **Composition over the current roster:** EndlessWaves references the current Rusher/Gunner/Brute assets; live waves equal the director's deterministic mix: wave 1 3 Rusher; wave 3 4 Rusher / 2 Gunner / 1 Brute; wave 5 5/4/2; wave 6 6/4/2; Villain wave 1 3 Rusher (as cops).
+- **MaxAlive:** every sample and every tick of every cleared wave asserts alive <= 12.
+- **Late representative wave FPS:** wave 6 is the first wave held at MaxAlive (every later wave is the same 12-enemy crowd; only per-enemy stats scale).
+
+FPS (existing single-render method, real gameplay camera, 1280x720 Editor Play Mode, i9-10910 / Radeon Pro 5300; **no other batch Unity process in any of 43 two-second samples during the run**, `phase4-audit/ModeExpansionVerification.Run/contention-samples.txt`): wave 1 (4 humanoids) 242.40 FPS, mean 4.13 ms; wave 5 (12) 130.90 FPS, mean 7.64 ms, p95 10.30 ms; **wave 6 MaxAlive (13 humanoids) 122.96 FPS, mean 8.13 ms, p95 11.24 ms**, skinning 0.415 ms, batch-mode overhead 2.598 ms. Previous committed run (84c4129, pre-districts/Sidekick): wave 1 217.43, wave 5 129.06 — different code and a single unpaired run each, not a regression measurement.
+
+| Suite (wt-sidekick) | exit | PASS | FAIL |
+|---|---|---|---|
+| ModeExpansionVerification.Run | 0 | 156 | 0 |
+| ModeExpansionVerification.Reload (separate process: bests 2120 / wave 6 and villain 80 reload; legacy/invalid/fresh saves) | 0 | 10 | 0 |
+| ModeVerification.Run / Reload (Hero/Villain mode regression) | 0 / 0 | 79 / 2 | 0 |
+
+Captures inspected: `endless-wave-6-maxalive-gameplay-camera.png` (behind the hovering Sidekick hero over the Downtown arena intersection; red Rushers/Gunners and a larger purple-jointed Brute converging), `endless-results-new-best.png` ("WAVE 6 REACHED / NEW BEST": 6 / 37 / 2120 / 2120, HOME + PLAY AGAIN), `home-extras.png` (FREE PLAY / ENDLESS FIGHT (HERO) / ENDLESS FIGHT (VILLAIN) row under the side cards).
+
+### OVERNIGHT DECISIONS
+- Treated wave 6 as the late representative wave: the MaxAlive cap makes every later wave the same crowd size, and pushing further would change the verifier's score bookkeeping for no new rendering load.
+- Flight is verified at its real gate (`ConsumeFlight`, the held-F path) rather than a click cast, matching its data model.
+- Fixture holds in this verifier use `Freeze(x, ice:false)` (Phase 5) so audit captures do not show ice glyphs on merely held NPCs.
+
+Limits: batch entry points, not hardware input; Editor Play Mode throughput, no player build; no human feel pass. Re-run this audit (and the 11-power equip check) after the cloud merge and the catalog cut to five synergies.
+
+## Humanoid verifier: Editor search-index start-up exception ignored — 2026-09-27 (appended)
+
+`HumanoidVerificationRunner`'s Phase 3 runtime-error observer also caught the Editor's own `UnityEditor.Search.SearchDatabase` start-up exception (via `SearchInit.IndexationOnStartup`) and failed before any check on some runs (reported 3/3 in the cloud worktree). It now uses CameraVerificationRunner's filter: an Exception whose stack contains `UnityEditor.Search.SearchDatabase` and not `Assets/Scripts/` is recorded as EDITOR-ONLY; everything else (PropertyStreamHandle, child-Transform binding, any real exception) stays fatal. Controls (temporary hook, removed before commit; `Verification/Humanoid/observer-filter/`): synthetic search-only exception -> exit 0, 68 PASS, EDITOR-ONLY recorded; synthetic search stack through Assets/Scripts/ -> exit 1; real project exception -> exit 1. Final committed code: HumanoidVerification.Run exit 0, 68 PASS.

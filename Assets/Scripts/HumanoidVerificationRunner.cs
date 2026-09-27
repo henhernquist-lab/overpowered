@@ -18,7 +18,14 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
     string runtimeFailure;
     void Awake(){Application.logMessageReceived+=Observe;}
     void OnDestroy(){Application.logMessageReceived-=Observe;}
-    void Observe(string message,string trace,LogType kind){if(kind==LogType.Exception||message.Contains("PropertyStreamHandle")||message.Contains("because it is not a child Transform"))runtimeFailure=message;}
+    void Observe(string message,string trace,LogType kind)
+    {
+        // The Editor's own search-index start-up exception (UnityEditor.Search.SearchDatabase via SearchInit.IndexationOnStartup)
+        // is not presentation code (same filter as CameraVerificationRunner). Anything whose stack reaches Assets/Scripts/ stays fatal.
+        if(kind==LogType.Exception&&trace!=null&&trace.Contains("UnityEditor.Search.SearchDatabase")&&!trace.Contains("Assets/Scripts/"))
+        {lines.Add("EDITOR-ONLY (not presentation code): "+message);return;}
+        if(kind==LogType.Exception||message.Contains("PropertyStreamHandle")||message.Contains("because it is not a child Transform"))runtimeFailure=message;
+    }
     IEnumerator Start()
     {
         var stack=new Stack<IEnumerator>();stack.Push(Run());
@@ -128,7 +135,7 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
     {
         var a=W.Npcs.First(n=>n.Role==NpcRole.Civilian&&!n.Dead);var b=W.Npcs.Last(n=>n.Role==NpcRole.Civilian&&!n.Dead);
         var ap=a.GetComponent<HumanoidPresentation>();var bp=b.GetComponent<HumanoidPresentation>();int before=ap.HitCount;
-        a.Agent.Warp(W.City.Spawn);a.Freeze(5);
+        a.Agent.Warp(W.City.Spawn);a.Freeze(5,ice:false);
         a.Damage(1,null);yield return null;Check(ap.HitCount==before+1&&ap.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"),"Real NPC damage triggers Hit Reaction.");
         Check(bp.HitCount==0&&bp.DeathCount==0&&!bp.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"),"Undamaged NPC CONTROL plays neither hit nor death.");
         a.Damage(10000,null);yield return null;Check(ap.DeathCount==1&&ap.Animator.GetCurrentAnimatorStateInfo(0).IsName("Death")&&!a.Agent.enabled,"Lethal damage triggers Death, disables navigation/collision; no root 90-degree flip.");

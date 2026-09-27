@@ -204,7 +204,7 @@ public sealed class CrimeEncounter : MonoBehaviour
             if(closest==null) return true;
             npc.DirectTo(closest.Npc.transform.position,World.Tuning.Npcs.CopSpeed);
             if(best<World.Tuning.Npcs.AttackRange&&Time.time>=nextSuppression)
-            {nextSuppression=Time.time+World.Tuning.Npcs.AttackCooldown;closest.Npc.Freeze(Definition.CopSuppressSeconds);closest.Npc.Damage(Definition.CopSuppressDamage,null);}
+            {nextSuppression=Time.time+World.Tuning.Npcs.AttackCooldown;closest.Npc.Freeze(Definition.CopSuppressSeconds,ice:false);closest.Npc.Damage(Definition.CopSuppressDamage,null);}
             return true;
         }
         return false;

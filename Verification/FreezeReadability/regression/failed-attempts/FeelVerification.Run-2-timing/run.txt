@@ -1,0 +1,38 @@
+[FEEL] PASS Feel sandbox: runtime COPY of the free-play definition (0 civilians, no police) selected through GameFlow.
+[FEEL] PASS Feel sandbox: session with FeelDirector and the ThirdPersonCamera as the active feel camera.
+[FEEL] PASS Real jump dismisses the mission briefing (the card covers the crosshair).
+[FEEL] PASS FeelDirector reads GameTuning.Feel (the single source of feel values).
+[FEEL] PASS Configured hit pause 60 ms lies in the 50-80 ms band.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (hit pause ON).
+[FEEL] PASS Hit pause started at the impact.
+[FEEL] MEASURED PAUSE  : crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 73.9 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+[FEEL] PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+[FEEL] MEASURED CONTROL: crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 12.6 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (hit pause ON).
+[FEEL] PASS Hit pause started at the impact.
+[FEEL] MEASURED PAUSE  : crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 71.2 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+[FEEL] PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+[FEEL] MEASURED CONTROL: crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 19.0 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (hit pause ON).
+[FEEL] PASS Hit pause started at the impact.
+[FEEL] MEASURED PAUSE  : crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 74.3 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+[FEEL] PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+[FEEL] MEASURED CONTROL: crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 58.8 ms (real) after the impact; v1 (-0.70,13.00,14.84) |19.741| m/s; v10 (-0.70,8.68,14.84) |17.207|; moved (-0.17,2.70,3.57) after 10 steps.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (hit pause ON).
+[FEEL] PASS Hit pause started at the impact.
+[FEEL] MEASURED PAUSE  : crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 76.2 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+[FEEL] PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+[FEEL] MEASURED CONTROL: crate - blast origin at impact 0.0000,-0.5300,0.9000; impulse 1350 N·s; first physics step 7.9 ms (real) after the impact; v1 (-0.70,13.96,14.84) |20.386| m/s; v10 (-0.70,9.64,14.84) |17.710|; moved (-0.14,2.34,2.98) after 10 steps.
+[FEEL] FAIL System.Exception: The first physics step after the impact waited out the pause (73.9, 71.2, 74.3, 76.2 ms) vs the control (12.6, 19.0, 58.8, 7.9 ms).

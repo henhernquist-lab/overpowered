@@ -1,0 +1,1 @@
+exit 0 (32s wall); PASS 9; FAIL 0

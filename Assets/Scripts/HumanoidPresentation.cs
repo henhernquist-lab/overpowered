@@ -10,6 +10,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
     public HumanoidRigging Rigging { get; private set; }
     public bool ActionActive => Time.time < actionUntil;
     public bool IsDead => dead;
+    public bool FrozenOverlay { get; set; }
     public HumanoidAnimationTuning Tuning { get; private set; }
     public Transform PoseRoot { get; private set; }
     public float FlightWeight { get; private set; }
@@ -222,6 +223,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
         {KickAnimationImpact();kickMarkerPending=false;}
         if(attackMarkerPending&&attackClip!=null&&Animator.GetCurrentAnimatorStateInfo(0).IsName(attackMarkerState)&&Animator.GetCurrentAnimatorStateInfo(0).normalizedTime*attackClip.length>=attackImpactSeconds)
         {LastAttackImpactTime=Time.time;LastAttackImpactFrame=Time.frameCount;attackMarkerPending=false;}
+        if(FrozenOverlay)return;
         ApplyPose(ReadState(),npc!=null&&npc.Fleeing&&!npc.Dead,Time.deltaTime);
     }
     // Verification supplies recorded states through this same overlay path.

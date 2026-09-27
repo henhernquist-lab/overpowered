@@ -1,0 +1,87 @@
+PASS Save Fire/Ice pair through ownership/equip gates.
+PASS Direct Ice uses the real equipped power.
+PASS Direct Ice NPC: visible frost silhouette exists.
+PASS Direct Ice NPC: six-ray branched shape with border is shared geometry.
+PASS Direct Ice NPC: cream shape/navy outline use shared palette materials.
+PASS Direct Ice NPC: glyph does not affect target physics or its renderer snapshot.
+PASS Off-axis CONTROL has no glyph or freeze.
+PASS Frozen Animator and presentation overlays both hold the head pose.
+PASS Unfrozen control is a Teal-bodied cop beside the frozen all-Cyan target (its own accent: SkinnedMeshRenderer:Beta_Joints=Palette/Cyan,SkinnedMeshRenderer:Beta_Surface=Palette/Teal)
+MEASURED Cyan wall: glyph pixels=2154, |dLuma|>=0.25: 804 (37%; navy-darker 804, cream-lighter 0); mean backdrop under glyph RGBA(0.376, 0.827, 0.843, 1.000) vs wall sample RGBA(0.376, 0.827, 0.843, 1.000)
+PASS Glyph is actually composited over the Cyan wall.
+PASS Frost silhouette reads by shape over a Cyan backdrop (>=300 px and >=25% of glyph pixels at >=0.25 luma contrast).
+MEASURED Teal wall: glyph pixels=2154, |dLuma|>=0.25: 1780 (83%; navy-darker 648, cream-lighter 1132); mean backdrop under glyph RGBA(0.286, 0.529, 0.565, 1.000) vs wall sample RGBA(0.286, 0.529, 0.565, 1.000)
+PASS Glyph is actually composited over the Teal wall.
+PASS Frost silhouette reads by shape over a Teal backdrop (>=300 px and >=25% of glyph pixels at >=0.25 luma contrast).
+MEASURED palette contrast vs Cyan: cream 1.26:1, navy outline 11.21:1
+PASS Palette glyph colours reach 3:1 against Cyan.
+MEASURED palette contrast vs Teal: cream 3.72:1, navy outline 3.81:1
+PASS Palette glyph colours reach 3:1 against Teal.
+PASS Explicit thaw clears silhouette and restores presentation.
+PASS Non-ice hold CONTROL (Freeze(0.6, ice:false), the call CrimeEncounter police suppression makes) stops the NPC without frost glyph or material swap.
+PASS Suppression CONTROL ends without leaving presentation behind.
+PASS Direct Ice uses the real power on a Teal physics prop.
+PASS Direct Ice prop: visible frost silhouette exists.
+PASS Direct Ice prop: six-ray branched shape with border is shared geometry.
+PASS Direct Ice prop: cream shape/navy outline use shared palette materials.
+PASS Direct Ice prop: glyph does not affect target physics or its renderer snapshot.
+PASS Pool reuses the released NPC marker for a prop.
+PASS Disabling frozen prop releases its glyph.
+PASS Re-enabled frozen prop: visible frost silhouette exists.
+PASS Re-enabled frozen prop: six-ray branched shape with border is shared geometry.
+PASS Re-enabled frozen prop: cream shape/navy outline use shared palette materials.
+PASS Re-enabled frozen prop: glyph does not affect target physics or its renderer snapshot.
+PASS Prop thaw restores exact constraints/material and releases glyph.
+PASS Shipping Thermal Shock activated through real synergy gate on burning target.
+PASS Thermal Shock NPC: visible frost silhouette exists.
+PASS Thermal Shock NPC: six-ray branched shape with border is shared geometry.
+PASS Thermal Shock NPC: cream shape/navy outline use shared palette materials.
+PASS Thermal Shock NPC: glyph does not affect target physics or its renderer snapshot.
+PASS Frozen NPC death releases silhouette.
+PASS Destruction control: visible frost silhouette exists.
+PASS Destruction control: six-ray branched shape with border is shared geometry.
+PASS Destruction control: cream shape/navy outline use shared palette materials.
+PASS Destruction control: glyph does not affect target physics or its renderer snapshot.
+PASS Destroying frozen prop releases silhouette.
+PASS Timed prop thaw clears silhouette.
+MEASURED markers 64->64, growth=0, materials 109->109; newly loaded: 
+PASS Repeated freezes reuse preallocated markers without material growth.
+PASS Session transition destroys its marker pool.
+MEASURED current catalog synergies=10; freezing=Cryo Crush, Frostwake, Glacier Fist, Thermal Shock
+PASS Every freezing synergy in the current catalog is exercised here (Thermal Shock above).
+PASS Catalog pair flight+ice resolves to frostwake.
+PASS Save Frostwake pair through ownership/equip gates.
+PASS Frostwake activated through the real synergy gate.
+PASS Frostwake NPC: visible frost silhouette exists.
+PASS Frostwake NPC: six-ray branched shape with border is shared geometry.
+PASS Frostwake NPC: cream shape/navy outline use shared palette materials.
+PASS Frostwake NPC: glyph does not affect target physics or its renderer snapshot.
+PASS Frostwake uses the shared FrozenLook (Cyan palette material, held presentation).
+PASS Frostwake far CONTROL has no glyph or freeze.
+PASS Frostwake thaw/death releases the glyph (thawed).
+PASS Frostwake reuses preallocated markers (no growth).
+PASS Catalog pair ice+strength resolves to glacier-fist.
+PASS Save Glacier Fist pair through ownership/equip gates.
+PASS Glacier Fist activated through the real synergy gate.
+PASS Glacier Fist empowered punch through the existing melee gate.
+PASS Glacier Fist NPC: visible frost silhouette exists.
+PASS Glacier Fist NPC: six-ray branched shape with border is shared geometry.
+PASS Glacier Fist NPC: cream shape/navy outline use shared palette materials.
+PASS Glacier Fist NPC: glyph does not affect target physics or its renderer snapshot.
+PASS Glacier Fist uses the shared FrozenLook (Cyan palette material, held presentation).
+PASS Glacier Fist far CONTROL has no glyph or freeze.
+PASS Glacier Fist thaw/death releases the glyph (thawed).
+PASS Glacier Fist reuses preallocated markers (no growth).
+PASS Catalog pair ice+telekinesis resolves to cryo-crush.
+PASS Save Cryo Crush pair through ownership/equip gates.
+PASS Cryo Crush activated through the real synergy gate.
+PASS Cryo Crush NPC: visible frost silhouette exists.
+PASS Cryo Crush NPC: six-ray branched shape with border is shared geometry.
+PASS Cryo Crush NPC: cream shape/navy outline use shared palette materials.
+PASS Cryo Crush NPC: glyph does not affect target physics or its renderer snapshot.
+PASS Cryo Crush uses the shared FrozenLook (Cyan palette material, held presentation).
+PASS Cryo Crush glyph follows the lifted captive: glyph y=156.39, captive y=154.08
+PASS Cryo Crush far CONTROL has no glyph or freeze.
+PASS Cryo Crush thaw/death releases the glyph (thawed).
+PASS Cryo Crush reuses preallocated markers (no growth).
+LIMIT: batch entry-point tests and rendered screenshots; human silhouette readability and dense freeze performance still need review.

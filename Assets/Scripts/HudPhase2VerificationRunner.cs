@@ -93,7 +93,7 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
     static string V(Vector3 v) => $"({v.x:0.0},{v.y:0.0},{v.z:0.0})";
     CrimeEncounter FirstEncounter() => W.Crimes.Where(c => c != null && !c.Resolved && c.Encounter != null).Select(c => c.Encounter).FirstOrDefault();
     /// TEST HARNESS (logged where used): hold an encounter's actors still so camera-relative placements are deterministic.
-    void Hold(CrimeEncounter e, float seconds) { foreach (var a in e.Robbers.Concat(e.Civilians)) if (a.Npc != null && !a.Npc.Dead) a.Npc.Freeze(seconds); }
+    void Hold(CrimeEncounter e, float seconds) { foreach (var a in e.Robbers.Concat(e.Civilians)) if (a.Npc != null && !a.Npc.Dead) a.Npc.Freeze(seconds,ice:false); }
     string SavedHints(string path) { var s = JsonUtility.FromJson<ProgressSave>(File.ReadAllText(path)); return s.SeenHints == null ? "<null>" : string.Join(",", s.SeenHints); }
     /// Independent screen bearing of a world point (degrees clockwise from screen-up): the signed angle, about the view
     /// axis, from the camera's up vector to the point's offset projected onto the image plane.
@@ -539,7 +539,7 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
     {
         var cc = W.Hero.GetComponent<CharacterController>(); float h = cc.height * .5f - cc.radius;
         bool Free(Vector3 p) { Vector3 c = p + cc.center + Vector3.up * .05f; return !Physics.OverlapCapsule(c + Vector3.up * h, c - Vector3.up * h, cc.radius + .05f).Any(o => !o.isTrigger && o.transform.root != W.Hero.transform); }
-        foreach (var n in W.Npcs) if (n != null && !n.Dead && n.Role == NpcRole.Civilian && Vector3.Distance(n.transform.position, at) < 8f) n.Freeze(10f);
+        foreach (var n in W.Npcs) if (n != null && !n.Dead && n.Role == NpcRole.Civilian && Vector3.Distance(n.transform.position, at) < 8f) n.Freeze(10f,ice:false);
         for (int i = 0; i < 16; i++)
         {
             Vector3 dir = Quaternion.Euler(0, 90f + i * 22.5f, 0) * Vector3.forward;
@@ -584,7 +584,7 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
         yield return Grounded(); yield return Realtime(.5f);
         Check(hud.PromptId == null, "CONTROL: nothing hostile near, no telegraph, no interactable -> no prompt.");
         // punch
-        var rusher = Hostile(5f, false); rusher.Freeze(30f); Log("TEST HARNESS: a roster Rusher (Criminal) spawned 5 m away and frozen, as the 'hostile nearby' context.");
+        var rusher = Hostile(5f, false); rusher.Freeze(30f,ice:false); Log("TEST HARNESS: a roster Rusher (Criminal) spawned 5 m away and frozen, as the 'hostile nearby' context.");
         yield return Realtime(.3f);
         Check(hud.PromptId == "punch" && hud.PromptText == $"{HudBindings.MeleeKey(W.Powers)} PUNCH", $"Hostile within {GameHud.PunchPromptRange} m -> PUNCH prompt \"{hud.PromptText}\".");
         yield return Composite(new Vector2Int(1920, 1080), "prompt-punch-1920x1080");
@@ -628,7 +628,7 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
         WorldSession.VerificationSavePath = FreshSave; mode = PromptMode(); yield return Launch(mode);
         yield return Grounded(); yield return Realtime(.3f);
         Check(hud.PromptId == "move", "Fresh-save CONTROL: MOVE prompt shows again.");
-        rusher = Hostile(5f, false); rusher.Freeze(30f); yield return Realtime(.3f);
+        rusher = Hostile(5f, false); rusher.Freeze(30f,ice:false); yield return Realtime(.3f);
         Check(hud.PromptId == "punch", "Fresh-save CONTROL: PUNCH prompt shows again.");
         rusher.Damage(10000, null);
         attacker = Hostile(4f, true); yield return Until(() => attacker.Phase == AttackPhase.Windup, 8f, "rusher windup"); yield return Realtime(.15f);
@@ -651,7 +651,7 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
         var mode = PromptMode(); yield return Launch(mode);
         yield return Grounded(); yield return Realtime(1.5f);
         Check(hud.PromptId == null && hud.PromptsShown.Count == 0, "Seen MOVE prompt does not reappear (grounded 1.5 s).");
-        var rusher = Hostile(5f, false); rusher.Freeze(30f); yield return Realtime(.6f);
+        var rusher = Hostile(5f, false); rusher.Freeze(30f,ice:false); yield return Realtime(.6f);
         Check(hud.PromptId == null, "Seen PUNCH prompt does not reappear next to a hostile.");
         rusher.Damage(10000, null);
         var attacker = Hostile(4f, true); yield return Until(() => attacker.Phase == AttackPhase.Windup, 8f, "rusher windup"); yield return Realtime(.15f);

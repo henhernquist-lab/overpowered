@@ -1,0 +1,9 @@
+[HUMANOID VERIFY] PASS Home camera retained.
+[HUMANOID VERIFY] PASS Player uses the selected hero's valid Humanoid (vector-rigged: 1 skinned mesh(es)), no capsule renderer.
+[HUMANOID VERIFY] PASS CONTROL: player collider unchanged: height=1.800m radius=.380m; NPC capsule=1.800m/.350m.
+[HUMANOID VERIFY] PASS Reference skinned vertices height=1.7658m, visual scale=1.0194, fitted height=1.8000m; exactly one authoritative player collider.
+[HUMANOID VERIFY] PASS SAME controller asset on player and all 33 civilians/cops/criminals.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] FAIL System.Exception: Runtime error: InvalidOperationException: CONTROL: real exception from project code
