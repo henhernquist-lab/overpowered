@@ -141,11 +141,20 @@ public sealed class HeroForgeVerificationRunner : MonoBehaviour
     }
     IEnumerator AllSynergies()
     {
-        Check(F.Synergies.Length==10,"All ten unordered pairs have effect assets.");
+        // The roster grew past the original five and synergies are capped, so "every pair has a synergy" now holds only for the
+        // ORIGINAL five powers (the ten legacy synergies). Every pair must still resolve symmetrically, and an uncovered new pair
+        // must resolve to no synergy (CONTROL). The three capped new synergies are verified by RosterVerification.
+        Check(LegacySynergies.All(id=>F.Synergies.Count(s=>s!=null&&s.Id==id)==1),"All ten original pairs still have exactly one synergy asset each.");
         var powers=Resources.LoadAll<PowerDefinition>("Powers");
         for(int a=0;a<powers.Length;a++)for(int b=a+1;b<powers.Length;b++)
-            Check(F.Resolve(powers[a],powers[b])!=null&&F.Resolve(powers[a],powers[b])==F.Resolve(powers[b],powers[a]),"Unique symmetric pair "+powers[a].Id+" + "+powers[b].Id);
-        foreach(var definition in F.Synergies.Where(d=>d.Id!="sonic-slam"))
+        {
+            bool original=OriginalPowers.Contains(powers[a].Id)&&OriginalPowers.Contains(powers[b].Id);
+            var resolved=F.Resolve(powers[a],powers[b]);
+            Check(resolved==F.Resolve(powers[b],powers[a])&&(!original||resolved!=null),(original?"Original pair has a synergy, symmetric: ":"Symmetric lookup: ")+powers[a].Id+" + "+powers[b].Id+" -> "+(resolved!=null?resolved.Id:"none"));
+        }
+        var speed=Power("speed");var poison=Power("poison");
+        if(speed!=null&&poison!=null)Check(F.Resolve(speed,poison)==null,"Uncovered new pair CONTROL: Speed + Poison resolves to no synergy.");
+        foreach(var definition in F.Synergies.Where(d=>d!=null&&LegacySynergies.Contains(d.Id)&&d.Id!="sonic-slam"))
         {
             var menu=FindAnyObjectByType<ModeScreens>();
             Check(menu.Profile.SetLoadout(F.Heroes[0],definition.PowerA,definition.PowerB,CityColor.Blue,CityColor.Cyan),"Equip "+definition.DisplayName);
@@ -229,6 +238,8 @@ public sealed class HeroForgeVerificationRunner : MonoBehaviour
             GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);
         }
     }
+    static readonly string[] OriginalPowers={"flight","strength","telekinesis","fire","ice"};
+    static readonly string[] LegacySynergies={"sonic-slam","phoenix-dive","frostwake","orbit-throw","thermal-shock","meteor-punch","inferno-orbit","glacier-fist","cryo-crush","meteor-slam"};
     CityNpc Actor(Vector3 point)
     {
         var npc=CityNpc.Spawn(W,W.City.Sidewalks[0],NpcRole.Criminal);npc.enabled=false;npc.Agent.enabled=false;npc.transform.position=point;return npc;
