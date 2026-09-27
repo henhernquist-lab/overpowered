@@ -24,6 +24,25 @@ public sealed class PowerUser : MonoBehaviour
     /// Verification harness: treated exactly like the fire button being held (batch mode has no mouse).
     public bool ScriptedHold;
     public event System.Action<PowerDefinition> ChannelEnded;
+    /// Instrumentation only (per-power stats): the id NPC damage from this user is credited to right now. Set around a
+    /// power's Execute / Sustain and re-entered by deferred hits (projectiles, poison ticks, dash steps, melee impacts,
+    /// synergy steps). Uncredited damage (null) is not counted. Never read by gameplay.
+    public string Crediting { get; private set; }
+    public CreditScope Credit(string id) => new CreditScope(this, id);
+    public readonly struct CreditScope : System.IDisposable
+    {
+        readonly PowerUser user; readonly string previous;
+        public CreditScope(PowerUser owner, string id) { user = owner; previous = owner != null ? owner.Crediting : null; if (owner != null) owner.Crediting = id; }
+        public void Dispose() { if (user != null) user.Crediting = previous; }
+    }
+    /// A successful activation of `id` (stats only).
+    public void RecordUse(string id) { var u = Progression != null ? Progression.Usage(id, true) : null; if (u != null) u.Uses++; }
+    /// Called by CityNpc.Damage for damage this user caused: health actually removed and whether it killed.
+    public void ReportDamage(float dealt, bool killed)
+    {
+        if (Crediting == null || Progression == null || dealt <= 0f) return;
+        var u = Progression.Usage(Crediting, true); u.Hits++; u.Damage += dealt; if (killed) u.Kills++;
+    }
     /// Force Field (or null): the player's damage-absorbing shield. WorldSession.DamagePlayer routes damage through it.
     public PlayerShield Shield { get; private set; }
     /// The session hero's archetype (baseline without a Forge hero).
@@ -78,6 +97,8 @@ public sealed class PowerUser : MonoBehaviour
         Synergy=Forge?.Resolve(EquippedA,EquippedB);
         Selected = Powers.Find(p=>IsEquipped(p.Definition)&&!p.Definition.Effect.IsFlight)??Strength; progression.Changed += Refresh;
         Refresh();
+        // Stats: one equipped session per power (a Forge loadout's two powers; without a Forge every power counts).
+        foreach (var p in Powers) if (IsEquipped(p.Definition) && progression.Owns(p.Definition)) { var u = progression.Usage(p.Definition.Id, true); if (u != null) u.Sessions++; }
         if(Forge!=null){SynergyRunner=gameObject.AddComponent<SynergyRunner>();SynergyRunner.Initialize(this);}
     }
     public PowerStats Stats(PowerRuntime power)
@@ -151,7 +172,9 @@ public sealed class PowerUser : MonoBehaviour
         if (power.Charges <= 0) { Message = "Blocked: 0 charges"; return false; }
         if (Energy < power.Definition.ResourceCost) { Message = "Blocked: energy"; return false; }
         Message = "No valid target";
-        if (!power.Definition.Effect.Execute(this, power)) return false;
+        bool executed; using (Credit(power.Definition.Id)) executed = power.Definition.Effect.Execute(this, power);
+        if (!executed) return false;
+        RecordUse(power.Definition.Id);
         power.Charges--; power.Cooldown = Stats(power).Cooldown; power.ChargeTimer = 0f;
         Energy -= power.Definition.ResourceCost; Message = power.Definition.DisplayName + " activated";
         Activated?.Invoke(power.Definition);
@@ -165,7 +188,9 @@ public sealed class PowerUser : MonoBehaviour
         // Energy is drained while held; ResourceCost is only the minimum needed to start. No charge is spent.
         if (Energy < power.Definition.ResourceCost) { Message = "Blocked: energy"; return false; }
         EndChannel();
-        if (!power.Definition.Effect.Execute(this, power)) return false;
+        bool executed; using (Credit(power.Definition.Id)) executed = power.Definition.Effect.Execute(this, power);
+        if (!executed) return false;
+        RecordUse(power.Definition.Id);
         Channeling = power; Message = power.Definition.DisplayName + " channeling";
         Activated?.Invoke(power.Definition);
         WorldSession.Instance?.Alarm(transform.position);
@@ -182,7 +207,7 @@ public sealed class PowerUser : MonoBehaviour
         float cost = power.Definition.DrainPerSecond * dt;
         if (Energy < cost) { Message = "Blocked: energy"; EndChannel(); return; }
         Energy -= cost;
-        ((ChanneledEffect)power.Definition.Effect).Sustain(this, power, dt);
+        using (Credit(power.Definition.Id)) ((ChanneledEffect)power.Definition.Effect).Sustain(this, power, dt);
     }
     public void EndChannel()
     {
@@ -228,7 +253,7 @@ public sealed class PowerUser : MonoBehaviour
 }
 public sealed class ThrownProp : MonoBehaviour
 {
-    PowerUser owner; float damage, expiry; bool spent;
+    PowerUser owner; float damage, expiry; bool spent; string credit;
     TelekinesisEffect throwSettings;
     public Vector3 LastContact { get; private set; }
     public float LastDamage { get; private set; }
@@ -236,7 +261,7 @@ public sealed class ThrownProp : MonoBehaviour
     public Vector3 LaunchImpulse { get; private set; }
     public bool Spent => spent;
     public void Initialize(PowerUser user, float value, float duration, TelekinesisEffect settings = null, Vector3 launchImpulse = default)
-    { owner = user; damage = value; expiry = Time.time + duration; spent = false; throwSettings = settings; LastDamage=LastImpulse=0; LaunchImpulse=launchImpulse; }
+    { owner = user; damage = value; expiry = Time.time + duration; spent = false; throwSettings = settings; LastDamage=LastImpulse=0; LaunchImpulse=launchImpulse; credit = user != null ? user.Crediting : null; }
     void OnCollisionEnter(Collision other)
     {
         if (spent || Time.time > expiry || owner == null || other.transform.root == owner.transform) return;
@@ -252,7 +277,7 @@ public sealed class ThrownProp : MonoBehaviour
                 GetComponentsInChildren<Collider>(),throwSettings.ImpactSeparationSeconds));
             FeelDirector.Impact(LastContact,LastImpulse,damage,1);
         }
-        LastDamage=damage;npc.Damage(damage, owner); spent = true;
+        LastDamage=damage;using(owner.Credit(credit))npc.Damage(damage, owner); spent = true;
     }
     static System.Collections.IEnumerator LaunchAfterContact(CityNpc npc,Vector3 impulse,Collider[] projectileColliders,float separation)
     {

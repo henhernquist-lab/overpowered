@@ -122,6 +122,8 @@ public sealed class SuperHeroController : MonoBehaviour
     }
     public void DebugSimulateFlight(float seconds) { powers.ConsumeFlight(seconds); }
     public void DebugSimulateGround(float seconds) { powers.Tick(seconds, true); }
+    /// Per-power stats id for melee hits: Super Strength when it drives the melee, "melee" for basic melee without it.
+    string MeleeCredit => powers.Strength != null && (powers.Forge == null || powers.IsEquipped(powers.Strength.Definition)) ? powers.Strength.Definition.Id : "melee";
     public bool TryPunch()
     {
         if(powers.Forge!=null&&!powers.IsEquipped(powers.Strength.Definition))return BasicMelee(false);
@@ -149,7 +151,7 @@ public sealed class SuperHeroController : MonoBehaviour
     void ApplyPunch(PowerDefinition definition,PowerStats stats,bool pause=false)
     {
         LastForce = stats.Force;
-        LastAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * definition.OriginHeight + transform.forward * definition.OriginOffset,
+        using (powers.Credit(MeleeCredit)) LastAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * definition.OriginHeight + transform.forward * definition.OriginOffset,
             stats.Radius, stats.Force, stats.Damage, definition.UpwardForce, melee:true);
         LastPunchResult = $"PUNCH: {LastAffectedBodies} bodies hit @ {LastForce:0} N·s";
         LastImpactTime=Time.time;LastImpactFrame=Time.frameCount;PunchImpacted?.Invoke();
@@ -213,7 +215,7 @@ public sealed class SuperHeroController : MonoBehaviour
     {
         stats.Radius=HeroAbilityTuning.KickRadius;
         LastKickForce = stats.Force * HeroAbilityTuning.KickForceMultiplier;
-        LastKickAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * HeroAbilityTuning.KickOriginHeight + transform.forward * HeroAbilityTuning.KickOriginOffset,
+        using (powers.Credit(MeleeCredit)) LastKickAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * HeroAbilityTuning.KickOriginHeight + transform.forward * HeroAbilityTuning.KickOriginOffset,
             HeroAbilityTuning.KickRadius, LastKickForce, stats.Damage * HeroAbilityTuning.KickDamageMultiplier, HeroAbilityTuning.KickUpwardForce, melee:true);
         LastKickResult = $"HURRICANE KICK: {LastKickAffectedBodies} bodies hit @ {LastKickForce:0} N\u00b7s";
         LastKickImpactTime=Time.time;LastKickImpactFrame=Time.frameCount;HurricaneKickImpacted?.Invoke();
@@ -304,7 +306,7 @@ public sealed class SuperHeroController : MonoBehaviour
         var world = WorldSession.Instance;
         if (!landed || world == null || world.PlayerDead || (world.Mode != null && world.Mode.Ended)) { LastMeleeResult = landed ? "Pound cancelled" : "Pound found no ground"; yield break; }
         LastPoundForce = stats.Force * m.PoundForceMultiplier; LastPoundDamage = stats.Damage * m.PoundDamageMultiplier;
-        LastPoundBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * .3f, m.PoundRadius, LastPoundForce, LastPoundDamage, m.PoundLift, melee: true);
+        using (powers.Credit(MeleeCredit)) LastPoundBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * .3f, m.PoundRadius, LastPoundForce, LastPoundDamage, m.PoundLift, melee: true);
         LastPoundImpactTime = Time.time; GroundPounds++; GroundPoundImpacted?.Invoke();
     }
     /// Distance from the feet to the ground below (infinity with nothing below within 200 m).

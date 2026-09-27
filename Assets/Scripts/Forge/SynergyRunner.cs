@@ -59,8 +59,12 @@ public sealed class SynergyRunner : MonoBehaviour
         Cooldown=Definition.Cooldown;Busy=true;deadline=Time.time+Mathf.Max(8,Definition.Duration+4);
         Feedback=Definition.DisplayName;
         action=StartCoroutine(Perform(Definition.Effect));
+        User.RecordUse(CreditId);
         return true;
     }
+    /// Per-power stats id for this synergy's hits and activations.
+    public string CreditId{get{if(creditFor!=Definition){creditFor=Definition;creditId=Definition!=null?"synergy:"+Definition.Id:null;}return creditId;}}
+    PowerSynergyDefinition creditFor;string creditId;
     IEnumerator Perform(SynergyEffect effect)
     {
         var steps=new Stack<IEnumerator>();steps.Push(effect.Execute(this));
@@ -68,7 +72,7 @@ public sealed class SynergyRunner : MonoBehaviour
         {
             if(Time.timeScale==0){yield return null;continue;}
             object next=null;bool moved=false;Exception error=null;
-            try{moved=steps.Peek().MoveNext();if(moved)next=steps.Peek().Current;}
+            try{using(User.Credit(CreditId)){moved=steps.Peek().MoveNext();if(moved)next=steps.Peek().Current;}}
             catch(Exception e){error=e;}
             if(error!=null)
             {

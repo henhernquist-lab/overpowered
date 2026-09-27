@@ -38,13 +38,13 @@ public sealed class SpeedDashEffect : PowerEffect
 public sealed class DashTrail : MonoBehaviour
 {
     TrailRenderer trail; SuperHeroController hero;
-    PowerUser user; SpeedDashEffect settings; float damage; CityColor color;
+    PowerUser user; SpeedDashEffect settings; float damage; CityColor color; string credit;
     readonly Collider[] nearby = new Collider[32];
     /// Hostile NPCs clipped by the current (or last) dash.
     public readonly HashSet<CityNpc> Passed = new HashSet<CityNpc>();
     public System.Action Step { get; private set; }
     public void Begin(PowerUser owner, SpeedDashEffect effect, float hitDamage, CityColor tint)
-    { user = owner; settings = effect; damage = hitDamage; color = tint; Passed.Clear(); if (Step == null) Step = OnStep; }
+    { user = owner; settings = effect; damage = hitDamage; color = tint; credit = owner != null ? owner.Crediting : null; Passed.Clear(); if (Step == null) Step = OnStep; }
     void OnStep()
     {
         if (hero == null || settings == null) return;
@@ -55,7 +55,7 @@ public sealed class DashTrail : MonoBehaviour
         {
             var npc = nearby[i].GetComponentInParent<CityNpc>();
             if (npc == null || npc.Dead || !npc.Hostile || !Passed.Add(npc)) continue;
-            npc.Damage(damage, user);
+            using (user != null ? user.Credit(credit) : default) npc.Damage(damage, user);
             FeelDirector.Instance?.Particles.Burst(npc.transform.position + Vector3.up, color, settings.PassParticles);
         }
     }

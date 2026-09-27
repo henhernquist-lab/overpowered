@@ -32,7 +32,7 @@ public sealed class PoisonEffect : PowerEffect
 /// Live poison on one NPC. Added once per NPC and reused; listens to CityNpc.Damaged so any killing blow spreads it.
 public sealed class Poisoned : MonoBehaviour
 {
-    CityNpc npc; PowerUser source; PoisonEffect settings; CityColor color;
+    CityNpc npc; PowerUser source; PoisonEffect settings; CityColor color; string credit;
     float dps, nextTick, baseSeconds; int ticksLeft; bool assaulted, spread;
     public int Generation { get; private set; }
     public float TotalDamage { get; private set; }
@@ -50,7 +50,7 @@ public sealed class Poisoned : MonoBehaviour
         var p = target.GetComponent<Poisoned>();
         if (p == null) { p = target.gameObject.AddComponent<Poisoned>(); p.npc = target; target.Damaged += p.OnDamaged; }
         bool wasActive = p.Active;
-        p.source = user; p.settings = settings; p.color = color; p.baseSeconds = seconds;
+        p.source = user; p.settings = settings; p.color = color; p.baseSeconds = seconds; p.credit = user != null ? user.Crediting : null;
         p.dps = wasActive ? Mathf.Max(p.dps, dps) : dps;
         int ticks = Mathf.Max(1, Mathf.RoundToInt(seconds / Mathf.Max(.01f, settings.TickSeconds)));
         p.ticksLeft = wasActive ? Mathf.Max(p.ticksLeft, ticks) : ticks;
@@ -69,7 +69,7 @@ public sealed class Poisoned : MonoBehaviour
         bool first = !assaulted; assaulted = true;
         FeelDirector.Instance?.Particles.Burst(npc.transform.position + Vector3.up * 1.2f, color, settings.TickParticles);
         lethalTick = true;
-        npc.Damage(damage, source, first);   // a lethal tick raises Damaged(true) -> OnDamaged spreads
+        using (source != null ? source.Credit(credit) : default) npc.Damage(damage, source, first);   // a lethal tick raises Damaged(true) -> OnDamaged spreads
         lethalTick = false;
     }
     void OnDamaged(bool died)

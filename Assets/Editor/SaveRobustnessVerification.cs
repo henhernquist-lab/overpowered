@@ -64,8 +64,8 @@ public static class SaveRobustnessVerification
     {
         Log("---- LEGACY");
         var p = Load(Write("legacy", Save(3, 10, 2)));
-        Check(p.LastError == null && p.RecoveredFrom == null && p.Data.Level == 3 && p.Data.Xp == 10 && p.Data.Points == 2 && p.Data.ModeRecords != null && p.Data.SeenHints != null && p.Repairs.Count == 0,
-            "Minimal legacy save (no ModeRecords / SeenHints / Loadout) loads unchanged with empty new lists and no repairs.");
+        Check(p.LastError == null && p.RecoveredFrom == null && p.Data.Level == 3 && p.Data.Xp == 10 && p.Data.Points == 2 && p.Data.ModeRecords != null && p.Data.SeenHints != null && p.Data.PowerStats != null && p.Data.PowerStats.Count == 0 && p.Repairs.Count == 0,
+            "Minimal legacy save (no ModeRecords / SeenHints / Loadout / PowerStats) loads unchanged with empty new lists and no repairs.");
         Check(Powers.Where(d => d.InitiallyUnlocked).All(p.Owns) && p.Data.Loadout != null && !string.IsNullOrEmpty(p.Data.Loadout.HeroId), $"Initially unlocked powers granted, loadout validated ({p.Data.Loadout.HeroId}: {p.Data.Loadout.PowerA} + {p.Data.Loadout.PowerB}).");
         Done(p);
     }
@@ -81,12 +81,16 @@ public static class SaveRobustnessVerification
     {
         Log("---- DUPLICATES");
         string json = "{\"Version\":1,\"Level\":2,\"Xp\":0,\"Points\":0,\"Powers\":[{\"Id\":\"strength\",\"Tier\":0},{\"Id\":\"strength\",\"Tier\":1},{\"Id\":\"\",\"Tier\":4}]," +
-            "\"Rooftops\":[\"roof-a\",\"roof-a\",\"roof-b\"],\"SeenHints\":[\"move\",\"move\",\"\"],\"ModeRecords\":[{\"Id\":\"endless-fight\",\"BestScore\":100,\"BestWave\":3,\"Runs\":2},{\"Id\":\"endless-fight\",\"BestScore\":250,\"BestWave\":2,\"Runs\":5}]}";
+            "\"Rooftops\":[\"roof-a\",\"roof-a\",\"roof-b\"],\"SeenHints\":[\"move\",\"move\",\"\"],\"ModeRecords\":[{\"Id\":\"endless-fight\",\"BestScore\":100,\"BestWave\":3,\"Runs\":2},{\"Id\":\"endless-fight\",\"BestScore\":250,\"BestWave\":2,\"Runs\":5}]," +
+            "\"PowerStats\":[{\"Id\":\"ice\",\"Uses\":4,\"Hits\":3,\"Kills\":-2,\"Sessions\":1,\"Damage\":40.5},{\"Id\":\"ice\",\"Uses\":9,\"Hits\":1,\"Kills\":1,\"Sessions\":2,\"Damage\":-3},{\"Id\":\"\",\"Uses\":1}]}";
         var p = Load(Write("duplicates", json));
         var strength = p.Data.Powers.Where(x => x.Id == "strength").ToList(); var record = p.Record("endless-fight");
         Check(strength.Count == 1 && strength[0].Tier == 1 && !p.Data.Powers.Any(x => string.IsNullOrEmpty(x.Id)), "Duplicate power entries merged (highest tier kept), empty ids dropped.");
         Check(p.Data.Rooftops.Count == 2 && p.Data.SeenHints.SequenceEqual(new[] { "move" }), "Rooftops and hints de-duplicated.");
         Check(p.Data.ModeRecords.Count(r => r.Id == "endless-fight") == 1 && record.BestScore == 250 && record.BestWave == 3 && record.Runs == 5, "Duplicate mode records merged (best of each field).");
+        var ice = p.Data.PowerStats.Where(u => u.Id == "ice").ToList();
+        Check(ice.Count == 1 && ice[0].Uses == 9 && ice[0].Hits == 3 && ice[0].Kills == 1 && ice[0].Sessions == 2 && Mathf.Abs(ice[0].Damage - 40.5f) < .01f && !p.Data.PowerStats.Any(u => string.IsNullOrEmpty(u.Id)),
+            "Per-power stats: duplicates merged field by field (max), negative values clamped to 0, empty ids dropped.");
         Log("Repairs: " + string.Join("; ", p.Repairs)); Done(p);
     }
     static void UnknownIds()

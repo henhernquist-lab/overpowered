@@ -108,7 +108,9 @@ public sealed class CityNpc : MonoBehaviour
     public void Damage(float amount, PowerUser source, bool assault)
     {
         if (Dead || amount <= 0f) return;
+        float before = Health;
         Health = Mathf.Max(0f, Health-amount);
+        if (source != null) source.ReportDamage(before - Health, Dead);   // per-power stats (instrumentation only)
         if (Dead) CancelAttack(); // a killed NPC mid-windup never deals its damage
         Damaged?.Invoke(Dead);
         if(source!=null&&assault) world.OnAssault(this);

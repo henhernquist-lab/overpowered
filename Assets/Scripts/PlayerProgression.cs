@@ -7,6 +7,10 @@ public enum PlayerSide { Hero, Villain }
 [Serializable] public sealed class PowerOwnership { public string Id; public int Tier; }
 /// Per-mode personal records (e.g. Endless Fight best score). Saves written before this field existed load with an empty list.
 [Serializable] public sealed class ModeRecord { public string Id; public int BestScore, BestWave, Runs; }
+/// Per-power instrumentation (no gameplay effect): uses, damage instances, damage dealt (health actually removed), kills
+/// and sessions the power was equipped in. Id = power id, "melee" (basic melee without Super Strength) or "synergy:<id>".
+/// Saves written before this field existed load with an empty list.
+[Serializable] public sealed class PowerUsage { public string Id; public int Uses, Hits, Kills, Sessions; public float Damage; }
 [Serializable] public sealed class ProgressSave
 {
     public int Version = 1, Level = 1, Xp, Points;
@@ -20,6 +24,7 @@ public enum PlayerSide { Hero, Villain }
     /// First-time control prompts the player has already acted on (HUD). Saves written before this field existed load with an empty list.
     public List<string> SeenHints = new List<string>();
     public bool FirstPerson;
+    public List<PowerUsage> PowerStats = new List<PowerUsage>();
 }
 /// One XP grant as the player received it: the amount actually added, where it happened (if anywhere) and why.
 public readonly struct XpGrant
@@ -152,6 +157,15 @@ public sealed class PlayerProgression : MonoBehaviour
         Data.SeenHints.Add(id); Save(); return true;
     }
     public ModeRecord Record(string mode) => Data.ModeRecords.Find(r => r.Id == mode);
+    /// Stats entry for a power id (created on first use when `create`). Written with the next regular save.
+    public PowerUsage Usage(string id, bool create = false)
+    {
+        if (string.IsNullOrEmpty(id)) return null;
+        if (Data.PowerStats == null) Data.PowerStats = new List<PowerUsage>();
+        var u = Data.PowerStats.Find(x => x.Id == id);
+        if (u == null && create) Data.PowerStats.Add(u = new PowerUsage { Id = id });
+        return u;
+    }
     public int BestScore(string mode) => Record(mode)?.BestScore ?? 0;
     public bool ClaimRoof(string id)
     {
@@ -250,6 +264,18 @@ public sealed class PlayerProgression : MonoBehaviour
             else { same.BestScore = Mathf.Max(same.BestScore, r.BestScore); same.BestWave = Mathf.Max(same.BestWave, r.BestWave); same.Runs = Mathf.Max(same.Runs, r.Runs); Note("duplicate mode record " + r.Id); }
         }
         d.ModeRecords = records;
+        if (d.PowerStats == null) d.PowerStats = new List<PowerUsage>();
+        var usage = new List<PowerUsage>();
+        foreach (var u in d.PowerStats)
+        {
+            if (u == null || string.IsNullOrEmpty(u.Id)) { Note("empty power stats entry"); continue; }
+            u.Uses = Mathf.Max(0, u.Uses); u.Hits = Mathf.Max(0, u.Hits); u.Kills = Mathf.Max(0, u.Kills); u.Sessions = Mathf.Max(0, u.Sessions);
+            u.Damage = float.IsNaN(u.Damage) || u.Damage < 0f ? 0f : Mathf.Min(u.Damage, float.MaxValue);
+            var same = usage.Find(x => x.Id == u.Id);
+            if (same == null) usage.Add(u);
+            else { same.Uses = Mathf.Max(same.Uses, u.Uses); same.Hits = Mathf.Max(same.Hits, u.Hits); same.Kills = Mathf.Max(same.Kills, u.Kills); same.Sessions = Mathf.Max(same.Sessions, u.Sessions); same.Damage = Mathf.Max(same.Damage, u.Damage); Note("duplicate power stats " + u.Id); }
+        }
+        d.PowerStats = usage;
         if (d.Level > MaxLevel) { d.Level = MaxLevel; Note("level clamped"); }
         d.SessionsPlayed = Mathf.Max(0, d.SessionsPlayed); d.SessionsWon = Mathf.Clamp(d.SessionsWon, 0, d.SessionsPlayed);
         d.BestSessionScore = Mathf.Max(0, d.BestSessionScore); d.LastSessionXp = Mathf.Max(0, d.LastSessionXp);
