@@ -1,0 +1,96 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+/// POISON — damage over time. The aimed NPC takes the power's Damage PER SECOND for its Duration, in TickSeconds steps (the
+/// first tick counts as the assault for Heat; later ticks do not). If a poisoned NPC dies WHILE still poisoned — from the
+/// poison or from anything else — the poison jumps to up to MaxSpreadTargets nearby enemies within SpreadRadius, for a fresh
+/// Duration x SpreadDurationScale. Each jump is one generation deeper; MaxGenerations bounds the chain.
+[CreateAssetMenu(menuName = "Overpowered/Effects/Poison")]
+public sealed class PoisonEffect : PowerEffect
+{
+    [Header("Damage over time")]
+    public float TickSeconds = .5f;
+    [Header("Spread on death")]
+    public float SpreadRadius = 6f, SpreadDurationScale = 1f;
+    public int MaxSpreadTargets = 3, MaxGenerations = 3;
+    [Tooltip("Spread only to NPCs hostile to the player.")] public bool EnemiesOnly = true;
+    [Header("Presentation")]
+    public int ApplyParticles = 10, TickParticles = 3;
+    public float SpreadArcSeconds = .35f, SpreadArcWidth = .06f;
+    public override bool Execute(PowerUser user, PowerRuntime power)
+    {
+        var stats = user.Stats(power);
+        if (!user.FindTarget(stats.Range, out RaycastHit hit)) return false;
+        var npc = hit.collider.GetComponentInParent<CityNpc>();
+        if (npc == null || npc.Dead) { user.Message = "Aim at a person to poison."; return false; }
+        Poisoned.Apply(npc, user, this, stats.Damage, stats.Duration, 0, power.Definition.PaletteColor);
+        FeelDirector.Instance?.Particles.Burst(npc.transform.position + Vector3.up, power.Definition.PaletteColor, ApplyParticles);
+        return true;
+    }
+}
+/// Live poison on one NPC. Added once per NPC and reused; listens to CityNpc.Damaged so any killing blow spreads it.
+public sealed class Poisoned : MonoBehaviour
+{
+    CityNpc npc; PowerUser source; PoisonEffect settings; CityColor color;
+    float dps, until, nextTick, baseSeconds; bool assaulted, spread;
+    public int Generation { get; private set; }
+    public float TotalDamage { get; private set; }
+    public int Ticks { get; private set; }
+    public bool Active => npc != null && !npc.Dead && Time.time < until;
+    public bool Spread => spread;
+    /// (from, to) each time poison jumps from a dying NPC to a new one.
+    public static event System.Action<CityNpc, CityNpc> Spreading;
+    static readonly Collider[] nearby = new Collider[64];
+    public static Poisoned Apply(CityNpc target, PowerUser user, PoisonEffect settings, float dps, float seconds, int generation, CityColor color)
+    {
+        var p = target.GetComponent<Poisoned>();
+        if (p == null) { p = target.gameObject.AddComponent<Poisoned>(); p.npc = target; target.Damaged += p.OnDamaged; }
+        bool wasActive = p.Active;
+        p.source = user; p.settings = settings; p.color = color; p.baseSeconds = seconds;
+        p.dps = wasActive ? Mathf.Max(p.dps, dps) : dps;
+        p.until = Mathf.Max(wasActive ? p.until : 0f, Time.time + seconds);
+        p.Generation = wasActive ? Mathf.Min(p.Generation, generation) : generation;
+        if (!wasActive) { p.nextTick = Time.time + settings.TickSeconds; p.assaulted = false; p.spread = false; }
+        p.enabled = true;
+        return p;
+    }
+    void Update()
+    {
+        if (!Active) { enabled = false; return; }
+        if (Time.time < nextTick) return;
+        nextTick += settings.TickSeconds;
+        float damage = dps * settings.TickSeconds;
+        TotalDamage += damage; Ticks++;
+        bool first = !assaulted; assaulted = true;
+        FeelDirector.Instance?.Particles.Burst(npc.transform.position + Vector3.up * 1.2f, color, settings.TickParticles);
+        npc.Damage(damage, source, first);   // a lethal tick raises Damaged(true) -> OnDamaged spreads
+    }
+    void OnDamaged(bool died)
+    {
+        // Still poisoned at the moment of death (until has not passed): spread once.
+        if (!died || spread || settings == null || Time.time >= until) return;
+        spread = true; enabled = false;
+        if (Generation >= settings.MaxGenerations) return;
+        Vector3 origin = transform.position;
+        int count = Physics.OverlapSphereNonAlloc(origin, settings.SpreadRadius, nearby, ~0, QueryTriggerInteraction.Ignore);
+        var candidates = new List<CityNpc>();
+        for (int i = 0; i < count; i++)
+        {
+            var other = nearby[i].GetComponentInParent<CityNpc>();
+            if (other == null || other == npc || other.Dead || candidates.Contains(other)) continue;
+            if (settings.EnemiesOnly && !other.Hostile) continue;
+            var existing = other.GetComponent<Poisoned>(); if (existing != null && existing.Active) continue;
+            candidates.Add(other);
+        }
+        candidates.Sort((a, b) => Vector3.Distance(origin, a.transform.position).CompareTo(Vector3.Distance(origin, b.transform.position)));
+        var vfx = PowerVfx.Get();
+        for (int i = 0; i < candidates.Count && i < settings.MaxSpreadTargets; i++)
+        {
+            var target = candidates[i];
+            Apply(target, source, settings, dps, baseSeconds * settings.SpreadDurationScale, Generation + 1, color);
+            vfx.Arc(origin + Vector3.up, target.transform.position + Vector3.up, 5, .25f, color, settings.SpreadArcWidth, settings.SpreadArcSeconds);
+            Spreading?.Invoke(npc, target);
+        }
+    }
+    void OnDestroy() { if (npc != null) npc.Damaged -= OnDamaged; }
+}

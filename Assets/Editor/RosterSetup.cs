@@ -55,6 +55,14 @@ public static class RosterSetup
             d.Damage = 8f; d.Force = 0f; d.Range = 9f; d.Duration = .18f;
             d.PaletteColor = CityColor.Amber; d.MenuIcon = MenuGlyph.Wing; d.CastingPresentation = false;
         });
+        // Damage is damage PER SECOND for Duration (10 x 6 s = 60: kills a 39 HP Endless rusher on its own, not a 65 HP cop).
+        Define("poison", "Poison", Effect<PoisonEffect>("Poison"), d =>
+        {
+            d.Description = "Poison the aimed enemy (damage over time). If it dies while poisoned, the poison jumps to nearby enemies.";
+            d.Charges = 2; d.ChargeRecharge = 3f; d.Cooldown = .6f; d.ResourceCost = 12f;
+            d.Damage = 10f; d.Force = 0f; d.Duration = 6f; d.Range = 20f;
+            d.PaletteColor = CityColor.Leaf; d.MenuIcon = MenuGlyph.Crystal; d.CastingPresentation = true;
+        });
         AddToHeroes();
         AssetDatabase.SaveAssets(); AssetDatabase.Refresh();
     }
