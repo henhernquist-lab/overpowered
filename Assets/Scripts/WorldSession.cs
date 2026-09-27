@@ -20,6 +20,8 @@ public sealed class WorldSession : MonoBehaviour
     public DistrictContext Districts { get; private set; }
     /// Villain / open-world pursuit state (Clear / Alerted / Pursued / Searching / Escaped); read-only facts for missions.
     public PursuitTracker Pursuit { get; private set; }
+    /// Optional Heat response tiers (HeatResponseProfile); neutral unless an enabled profile is present.
+    public HeatResponse Response { get; private set; }
     public int Stars => Mathf.Clamp(Mathf.CeilToInt(Heat),0,Tuning.Heat.MaximumStars);
     public float Health { get; private set; }
     public bool PlayerDead => Health<=0;
@@ -48,6 +50,7 @@ public sealed class WorldSession : MonoBehaviour
         Health=MaxHealth;
         Districts=gameObject.AddComponent<DistrictContext>(); Districts.Initialize(this);
         Pursuit=gameObject.AddComponent<PursuitTracker>(); Pursuit.Initialize(this);
+        Response=gameObject.AddComponent<HeatResponse>(); Response.Initialize(this);
         if(GameFlow.Instance!=null&&GameFlow.Instance.ActiveMode!=null)
         { Mode=gameObject.AddComponent<GameModeSession>(); Mode.Initialize(this,GameFlow.Instance.ActiveMode); Message=Mode.Definition.Description; }
         int civilians=Mode==null?tuning.City.Civilians:Mode.Definition.Civilians;
@@ -82,7 +85,8 @@ public sealed class WorldSession : MonoBehaviour
         }
         TickHeat(Time.deltaTime);
         responseTimer+=Time.deltaTime; crimeTimer+=Time.deltaTime;
-        if (responseTimer>=Tuning.Heat.ResponseInterval) { responseTimer=0; ReconcilePolice(); }
+        float arrival=Response!=null?Response.ArrivalMultiplier:1f;
+        if (responseTimer>=(arrival==1f?Tuning.Heat.ResponseInterval:Tuning.Heat.ResponseInterval*arrival)) { responseTimer=0; ReconcilePolice(); }
         Crimes.RemoveAll(c=>c==null || c.Resolved);
         if (Mode==null && crimeTimer>=Tuning.Crimes.SpawnInterval && Crimes.Count<Tuning.Crimes.MaximumActive)
         { crimeTimer=0; SpawnCrime((CrimeKind)Random.Range(0,3),City.Sidewalks[Random.Range(0,City.Sidewalks.Count)]); }
@@ -108,7 +112,8 @@ public sealed class WorldSession : MonoBehaviour
     {
         float before=troubleAgo; troubleAgo+=dt;
         float decayTime=Mathf.Max(0,troubleAgo-Tuning.Heat.DecayDelay)-Mathf.Max(0,before-Tuning.Heat.DecayDelay);
-        Heat=Mathf.Max(0,Heat-decayTime*Tuning.Heat.DecayPerSecond);
+        float decay=Response!=null?Response.DecayMultiplier:1f;
+        Heat=Mathf.Max(0,Heat-decayTime*(decay==1f?Tuning.Heat.DecayPerSecond:Tuning.Heat.DecayPerSecond*decay));
     }
     public void AddHeat(float amount) { float before=Heat; Heat=Mathf.Clamp(Heat+amount,0,Tuning.Heat.MaximumStars); Mode?.ObserveHeat(Heat); if (amount>0) troubleAgo=0; if (Heat!=before) HeatAdded?.Invoke(Heat-before); }
     public void Alarm(Vector3 position)
@@ -188,11 +193,15 @@ public sealed class WorldSession : MonoBehaviour
         var police=Tuning.Heat.Police(Progression.Data.Side);
         int desired=police.PatrolCount+Stars*police.CopsPerStar;
         float districtPolice=Districts!=null?Districts.PoliceFactor:1f; if(districtPolice!=1f) desired=Mathf.RoundToInt(desired*districtPolice);
+        float tierPolice=Response!=null?Response.CountMultiplier:1f; if(tierPolice!=1f) desired=Mathf.RoundToInt(desired*tierPolice);
         while(count<desired)
         {
             Vector3 from=Hero.transform.position+Quaternion.Euler(0,count*360f/Mathf.Max(1,desired),0)*Vector3.forward*Tuning.Heat.SpawnDistance;
-            var preferred=Districts!=null?Districts.PreferredArchetype(NpcRole.Cop,from):null;
-            if((preferred!=null?CityNpc.Spawn(this,City.NearestSidewalk(from),NpcRole.Cop,preferred):CityNpc.Spawn(this,City.NearestSidewalk(from),NpcRole.Cop))==null) break;
+            var preferred=Response!=null?Response.NextArchetype():null;
+            if(preferred==null&&Districts!=null) preferred=Districts.PreferredArchetype(NpcRole.Cop,from);
+            var cop=preferred!=null?CityNpc.Spawn(this,City.NearestSidewalk(from),NpcRole.Cop,preferred):CityNpc.Spawn(this,City.NearestSidewalk(from),NpcRole.Cop);
+            if(cop==null) break;
+            Response?.Apply(cop);
             count++;
         }
         for(int i=Npcs.Count-1;i>=0&&count>desired;i--) if(Npcs[i]!=null&&!Npcs[i].Dead&&Npcs[i].Role==NpcRole.Cop&&Npcs[i].Encounter==null) { var npc=Npcs[i]; Npcs.RemoveAt(i); Destroy(npc.gameObject); count--; }
