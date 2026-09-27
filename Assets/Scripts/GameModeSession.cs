@@ -58,10 +58,13 @@ public sealed class GameModeSession : MonoBehaviour
     }
     /// Session style score (separate from Score; never changes rewards). Best per mode is saved at the end of the session.
     public StyleScoreTracker Style {get;private set;}
+    /// Challenge progress for this session (definitions: Resources/Challenges).
+    public ChallengeTracker Challenges {get;private set;}
     public void Begin()
     {
         Style=gameObject.AddComponent<StyleScoreTracker>(); Style.Begin(World.Powers);
         if(Definition.Director!=null) Director=Definition.Director.Begin(this);
+        Challenges=gameObject.AddComponent<ChallengeTracker>(); Challenges.Begin(this);
         for(int i=0;i<Definition.InitialEncounters;i++) SpawnNext();
     }
     void Awarded(int amount) { if(!Ended) XpEarned+=amount; }

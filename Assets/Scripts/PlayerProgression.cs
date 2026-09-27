@@ -25,6 +25,7 @@ public enum PlayerSide { Hero, Villain }
     public List<string> SeenHints = new List<string>();
     public bool FirstPerson;
     public List<PowerUsage> PowerStats = new List<PowerUsage>();
+    public List<ChallengeProgress> Challenges = new List<ChallengeProgress>();
 }
 /// One XP grant as the player received it: the amount actually added, where it happened (if anywhere) and why.
 public readonly struct XpGrant
@@ -147,6 +148,30 @@ public sealed class PlayerProgression : MonoBehaviour
             record.Runs++; record.BestScore=Mathf.Max(record.BestScore,score); record.BestWave=Mathf.Max(record.BestWave,wave);
         }
         Save();
+    }
+    /// Raised once per challenge, right after its reward was paid and saved.
+    public event Action<ChallengeDefinition> ChallengePaid;
+    public ChallengeProgress Challenge(string id, bool create = false)
+    {
+        if (string.IsNullOrEmpty(id)) return null;
+        if (Data.Challenges == null) Data.Challenges = new List<ChallengeProgress>();
+        var c = Data.Challenges.Find(x => x.Id == id);
+        if (c == null && create) Data.Challenges.Add(c = new ChallengeProgress { Id = id });
+        return c;
+    }
+    /// Pays a challenge's reward ONCE: the Paid flag and the reward land in the same save. False if it was already paid.
+    /// Rewards use the existing currencies only (XP through the normal grant, upgrade points).
+    public bool PayChallenge(ChallengeDefinition definition)
+    {
+        if (definition == null) return false;
+        var c = Challenge(definition.Id, true);
+        if (c.Paid) return false;
+        c.Completed = true; c.Paid = true;
+        Data.Points = (int)Math.Min((long)Data.Points + Mathf.Max(0, definition.RewardPoints), int.MaxValue);
+        if (definition.RewardXp > 0) Grant(definition.RewardXp, false, default, "challenge");   // saves (flag + both rewards)
+        else { Save(); Changed?.Invoke(); }
+        ChallengePaid?.Invoke(definition);
+        return true;
     }
     /// Best session style per mode (saved with the RecordSession that follows it).
     public void RecordStyle(string mode, int style)
@@ -283,6 +308,17 @@ public sealed class PlayerProgression : MonoBehaviour
             else { same.Uses = Mathf.Max(same.Uses, u.Uses); same.Hits = Mathf.Max(same.Hits, u.Hits); same.Kills = Mathf.Max(same.Kills, u.Kills); same.Sessions = Mathf.Max(same.Sessions, u.Sessions); same.Damage = Mathf.Max(same.Damage, u.Damage); Note("duplicate power stats " + u.Id); }
         }
         d.PowerStats = usage;
+        if (d.Challenges == null) d.Challenges = new List<ChallengeProgress>();
+        var challenges = new List<ChallengeProgress>();
+        foreach (var c in d.Challenges)
+        {
+            if (c == null || string.IsNullOrEmpty(c.Id)) { Note("empty challenge entry"); continue; }
+            c.Progress = Mathf.Max(0, c.Progress); if (c.Paid) c.Completed = true;
+            var same = challenges.Find(x => x.Id == c.Id);
+            if (same == null) challenges.Add(c);
+            else { same.Progress = Mathf.Max(same.Progress, c.Progress); same.Completed |= c.Completed; same.Paid |= c.Paid; Note("duplicate challenge " + c.Id); }
+        }
+        d.Challenges = challenges;
         if (d.Level > MaxLevel) { d.Level = MaxLevel; Note("level clamped"); }
         d.SessionsPlayed = Mathf.Max(0, d.SessionsPlayed); d.SessionsWon = Mathf.Clamp(d.SessionsWon, 0, d.SessionsPlayed);
         d.BestSessionScore = Mathf.Max(0, d.BestSessionScore); d.LastSessionXp = Mathf.Max(0, d.LastSessionXp);

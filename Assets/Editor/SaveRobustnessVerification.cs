@@ -82,7 +82,8 @@ public static class SaveRobustnessVerification
         Log("---- DUPLICATES");
         string json = "{\"Version\":1,\"Level\":2,\"Xp\":0,\"Points\":0,\"Powers\":[{\"Id\":\"strength\",\"Tier\":0},{\"Id\":\"strength\",\"Tier\":1},{\"Id\":\"\",\"Tier\":4}]," +
             "\"Rooftops\":[\"roof-a\",\"roof-a\",\"roof-b\"],\"SeenHints\":[\"move\",\"move\",\"\"],\"ModeRecords\":[{\"Id\":\"endless-fight\",\"BestScore\":100,\"BestWave\":3,\"Runs\":2},{\"Id\":\"endless-fight\",\"BestScore\":250,\"BestWave\":2,\"Runs\":5}]," +
-            "\"PowerStats\":[{\"Id\":\"ice\",\"Uses\":4,\"Hits\":3,\"Kills\":-2,\"Sessions\":1,\"Damage\":40.5},{\"Id\":\"ice\",\"Uses\":9,\"Hits\":1,\"Kills\":1,\"Sessions\":2,\"Damage\":-3},{\"Id\":\"\",\"Uses\":1}]}";
+            "\"PowerStats\":[{\"Id\":\"ice\",\"Uses\":4,\"Hits\":3,\"Kills\":-2,\"Sessions\":1,\"Damage\":40.5},{\"Id\":\"ice\",\"Uses\":9,\"Hits\":1,\"Kills\":1,\"Sessions\":2,\"Damage\":-3},{\"Id\":\"\",\"Uses\":1}]," +
+            "\"Challenges\":[{\"Id\":\"first-blood\",\"Progress\":1,\"Completed\":false,\"Paid\":true},{\"Id\":\"first-blood\",\"Progress\":0,\"Completed\":false,\"Paid\":false},{\"Id\":\"removed-challenge\",\"Progress\":9,\"Completed\":false,\"Paid\":false},{\"Id\":\"neg\",\"Progress\":-5}]}";
         var p = Load(Write("duplicates", json));
         var strength = p.Data.Powers.Where(x => x.Id == "strength").ToList(); var record = p.Record("endless-fight");
         Check(strength.Count == 1 && strength[0].Tier == 1 && !p.Data.Powers.Any(x => string.IsNullOrEmpty(x.Id)), "Duplicate power entries merged (highest tier kept), empty ids dropped.");
@@ -91,6 +92,9 @@ public static class SaveRobustnessVerification
         var ice = p.Data.PowerStats.Where(u => u.Id == "ice").ToList();
         Check(ice.Count == 1 && ice[0].Uses == 9 && ice[0].Hits == 3 && ice[0].Kills == 1 && ice[0].Sessions == 2 && Mathf.Abs(ice[0].Damage - 40.5f) < .01f && !p.Data.PowerStats.Any(u => string.IsNullOrEmpty(u.Id)),
             "Per-power stats: duplicates merged field by field (max), negative values clamped to 0, empty ids dropped.");
+        var fb = p.Data.Challenges.Where(c => c.Id == "first-blood").ToList(); var removed = p.Challenge("removed-challenge");
+        Check(fb.Count == 1 && fb[0].Paid && fb[0].Completed && fb[0].Progress == 1 && removed != null && removed.Progress == 9 && !removed.Paid && p.Challenge("neg").Progress == 0,
+            "Challenges: duplicate entries merged keeping PAID (so it can never pay twice), paid implies completed, a removed challenge id kept untouched, negative progress clamped.");
         Log("Repairs: " + string.Join("; ", p.Repairs)); Done(p);
     }
     static void UnknownIds()
