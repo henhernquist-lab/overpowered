@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 /// POISON — damage over time. The aimed NPC takes the power's Damage PER SECOND for its Duration, in TickSeconds steps (the
 /// first tick counts as the assault for Heat; later ticks do not). If a poisoned NPC dies WHILE still poisoned — from the
@@ -79,24 +80,31 @@ public sealed class Poisoned : MonoBehaviour
         if (Generation >= settings.MaxGenerations) return;
         Vector3 origin = transform.position;
         int count = Physics.OverlapSphereNonAlloc(origin, settings.SpreadRadius, nearby, ~0, QueryTriggerInteraction.Ignore);
-        var candidates = new List<CityNpc>();
-        for (int i = 0; i < count; i++)
+        // Pooled per spread (nested-safe); the nearest MaxSpreadTargets are kept by insertion, no sort delegate per spread.
+        var chosen = ListPool<CityNpc>.Get();
+        try
         {
-            var other = nearby[i].GetComponentInParent<CityNpc>();
-            if (other == null || other == npc || other.Dead || candidates.Contains(other)) continue;
-            if (settings.EnemiesOnly && !other.Hostile) continue;
-            var existing = other.GetComponent<Poisoned>(); if (existing != null && existing.Active) continue;
-            candidates.Add(other);
+            int keep = Mathf.Max(0, settings.MaxSpreadTargets);
+            for (int i = 0; i < count && keep > 0; i++)
+            {
+                var other = nearby[i].GetComponentInParent<CityNpc>();
+                if (other == null || other == npc || other.Dead || chosen.Contains(other)) continue;
+                if (settings.EnemiesOnly && !other.Hostile) continue;
+                var existing = other.GetComponent<Poisoned>(); if (existing != null && existing.Active) continue;
+                float d = (other.transform.position - origin).sqrMagnitude; int at = chosen.Count;
+                while (at > 0 && (chosen[at - 1].transform.position - origin).sqrMagnitude > d) at--;
+                if (at >= keep) continue;
+                chosen.Insert(at, other); if (chosen.Count > keep) chosen.RemoveAt(chosen.Count - 1);
+            }
+            var vfx = PowerVfx.Get();
+            foreach (var target in chosen)
+            {
+                Apply(target, source, settings, dps, baseSeconds * settings.SpreadDurationScale, Generation + 1, color);
+                vfx.Arc(origin + Vector3.up, target.transform.position + Vector3.up, 5, .25f, color, settings.SpreadArcWidth, settings.SpreadArcSeconds);
+                Spreading?.Invoke(npc, target);
+            }
         }
-        candidates.Sort((a, b) => Vector3.Distance(origin, a.transform.position).CompareTo(Vector3.Distance(origin, b.transform.position)));
-        var vfx = PowerVfx.Get();
-        for (int i = 0; i < candidates.Count && i < settings.MaxSpreadTargets; i++)
-        {
-            var target = candidates[i];
-            Apply(target, source, settings, dps, baseSeconds * settings.SpreadDurationScale, Generation + 1, color);
-            vfx.Arc(origin + Vector3.up, target.transform.position + Vector3.up, 5, .25f, color, settings.SpreadArcWidth, settings.SpreadArcSeconds);
-            Spreading?.Invoke(npc, target);
-        }
+        finally { ListPool<CityNpc>.Release(chosen); }
     }
     void OnDestroy() { if (npc != null) npc.Damaged -= OnDamaged; }
 }

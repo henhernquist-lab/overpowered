@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 /// LIGHTNING — chain attack. The first target is the aimed NPC; if the crosshair lands on anything else, the bolt jumps from
 /// that point to the nearest eligible NPC within ArcRadius. From each struck NPC it arcs to the nearest not-yet-struck ENEMY
@@ -29,7 +30,9 @@ public sealed class LightningEffect : PowerEffect
         if (first == null) first = Next(hit.point, null, null, user);
         if (first == null) { user.Message = "No one in reach of the bolt."; return false; }
         LastChain.Clear(); LastDamages.Clear();
-        var struck = new HashSet<CityNpc>();
+        // Pooled per cast (nested-safe: a nested cast rents its own set), never a shared static set.
+        var struck = HashSetPool<CityNpc>.Get();
+        try {
         var vfx = PowerVfx.Get(); var color = power.Definition.PaletteColor;
         Vector3 from = user.AimOrigin + user.AimDirection * .5f;
         float damage = stats.Damage;
@@ -44,6 +47,7 @@ public sealed class LightningEffect : PowerEffect
             from = chest; damage *= Falloff;
             current = jump < MaxArcs ? Next(current.transform.position, current, struck, user) : null;
         }
+        } finally { HashSetPool<CityNpc>.Release(struck); }
         FeelDirector.Impact(first.transform.position + Vector3.up, stats.Force, stats.Damage, LastChain.Count);
         user.Message = "Lightning: " + LastChain.Count + " struck";
         return true;
