@@ -1,0 +1,82 @@
+PASS NpcLooks: HumanSpecies_01 (5883 verts), HumanSpecies_02 (8973 verts), HumanSpecies_03 (6748 verts), HumanSpecies_04 (7630 verts); mannequin Idle (28374 verts in 2 skinned meshes).
+ENV GPU=AMD Radeon Pro 5300 CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz quality='Ultra' load={ 19.16 13.93 10.06 } batchUnities=1 rounds=3 seconds/sample=5
+SCENARIO free-play: 24 civilians, Heat topped to 3 stars; sessions cycle STU each round: A = mannequin NPCs + Sidekick hero VECTOR=Starter_03; B = Sidekick NPCs + same hero; C = mannequin NPCs + the mannequin as hero (hero definition's prefab/suit cleared for that session only, restored at exit).
+PASS S Standard city and heroes r1: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+PASS Built-in rendering retained.
+PASS Every palette and hero shader is supported.
+S Standard city and heroes r1 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+PASS A: every NPC body is the shared mannequin.
+PASS A: NpcLod has NPCs in both tiers (near 14, far 15).
+PASS A: far NPC (Civilian, 67 m): Animator disabled and stepped manually (5 steps in 1 s), presentation off, skinning only when visible.
+PASS A: near NPC (Civilian, 37 m): Animator, presentation and skinning fully on.
+A NpcLod now near(full)=13 far(cheap)=16
+S Standard city and heroes HERO BODY vector-body (suit Body vector-body): 19510 verts, 88 bones, 0 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+HYGIENE waited 5s for other batch Unity processes / other CPU load before S Standard city and heroes r1
+MEASURED S Standard city and heroes r1 attempt1: FPS=96.28 p95=11.39ms frames=482 drawCalls median=262 npcs=29 heat=3.00 npcLod near/far=11/18 visibleNpcBodies=36 batchUnities before/after=1/1 otherCpu before/after=61%/56% CONTAMINATED load={ 16.59 13.69 10.07 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=9.85 Render.OpaqueGeometry=1.20 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.21 PostLateUpdate.UpdateAllSkinnedMeshes=0.72
+HYGIENE waited 5s for other batch Unity processes / other CPU load before S Standard city and heroes r1
+MEASURED S Standard city and heroes r1 attempt2: FPS=97.73 p95=11.06ms frames=489 drawCalls median=264 npcs=29 heat=3.00 npcLod near/far=7/22 visibleNpcBodies=36 batchUnities before/after=1/1 otherCpu before/after=62%/49% CONTAMINATED load={ 16.01 13.65 10.09 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=9.70 Render.OpaqueGeometry=1.23 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.12 PreLateUpdate.DirectorUpdateAnimationEnd=0.20 PostLateUpdate.UpdateAllSkinnedMeshes=0.69
+MEASURED S Standard city and heroes r1 attempt3: FPS=98.16 p95=12.03ms frames=491 drawCalls median=262 npcs=29 heat=2.91 npcLod near/far=7/22 visibleNpcBodies=36 batchUnities before/after=1/1 otherCpu before/after=57%/214% CONTAMINATED load={ 15.13 13.51 10.06 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=9.67 Render.OpaqueGeometry=1.26 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.12 PreLateUpdate.DirectorUpdateAnimationEnd=0.21 PostLateUpdate.UpdateAllSkinnedMeshes=0.73
+FAILED to get an uncontaminated sample for S Standard city and heroes r1
+PASS T Toon hero only r1: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+PASS Built-in rendering retained.
+PASS Every palette and hero shader is supported.
+T Toon hero only r1 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+PASS A: every NPC body is the shared mannequin.
+PASS A: NpcLod has NPCs in both tiers (near 13, far 16).
+PASS A: far NPC (Civilian, 82 m): Animator disabled and stepped manually (5 steps in 1 s), presentation off, skinning only when visible.
+PASS A: near NPC (Civilian, 35 m): Animator, presentation and skinning fully on.
+A NpcLod now near(full)=13 far(cheap)=16
+T Toon hero only HERO BODY vector-body (suit Body vector-body): 19510 verts, 88 bones, 0 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+HYGIENE waited 5s for other batch Unity processes / other CPU load before T Toon hero only r1
+MEASURED T Toon hero only r1 attempt1: FPS=96.41 p95=11.50ms frames=483 drawCalls median=265 npcs=29 heat=3.00 npcLod near/far=9/20 visibleNpcBodies=40 batchUnities before/after=1/1 otherCpu before/after=59%/68% CONTAMINATED load={ 11.75 12.84 9.90 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=9.83 Render.OpaqueGeometry=1.29 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.21 PostLateUpdate.UpdateAllSkinnedMeshes=0.75
+HYGIENE waited 5s for other batch Unity processes / other CPU load before T Toon hero only r1
+MEASURED T Toon hero only r1 attempt2: FPS=95.14 p95=11.57ms frames=476 drawCalls median=267 npcs=29 heat=3.00 npcLod near/far=7/22 visibleNpcBodies=40 batchUnities before/after=1/1 otherCpu before/after=51%/49% load={ 12.47 12.95 9.98 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=9.98 Render.OpaqueGeometry=1.29 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.11 PreLateUpdate.DirectorUpdateAnimationEnd=0.19 PostLateUpdate.UpdateAllSkinnedMeshes=0.75
+PASS U Toon city and heroes r1: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+PASS Built-in rendering retained.
+PASS Every palette and hero shader is supported.
+U Toon city and heroes r1 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+PASS A: every NPC body is the shared mannequin.
+PASS A: NpcLod has NPCs in both tiers (near 13, far 16).
+PASS A: far NPC (Civilian, 68 m): Animator disabled and stepped manually (5 steps in 1 s), presentation off, skinning only when visible.
+PASS A: near NPC (Civilian, 42 m): Animator, presentation and skinning fully on.
+A NpcLod now near(full)=14 far(cheap)=15
+U Toon city and heroes HERO BODY vector-body (suit Body vector-body): 19510 verts, 88 bones, 0 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+MEASURED U Toon city and heroes r1 attempt1: FPS=80.62 p95=13.31ms frames=404 drawCalls median=716 npcs=29 heat=2.96 npcLod near/far=12/17 visibleNpcBodies=40 batchUnities before/after=1/1 otherCpu before/after=51%/56% load={ 12.65 12.97 10.02 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=11.84 Render.OpaqueGeometry=2.28 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.16 PreLateUpdate.DirectorUpdateAnimationEnd=0.22 PostLateUpdate.UpdateAllSkinnedMeshes=0.80
+PASS S Standard city and heroes r2: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+PASS Built-in rendering retained.
+PASS Every palette and hero shader is supported.
+S Standard city and heroes r2 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+S Standard city and heroes HERO BODY vector-body (suit Body vector-body): 19510 verts, 88 bones, 0 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+MEASURED S Standard city and heroes r2 attempt1: FPS=84.54 p95=13.07ms frames=423 drawCalls median=270 npcs=29 heat=3.00 npcLod near/far=13/16 visibleNpcBodies=44 batchUnities before/after=1/1 otherCpu before/after=56%/62% CONTAMINATED load={ 12.33 12.86 10.03 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=11.24 Render.OpaqueGeometry=1.30 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.22 PostLateUpdate.UpdateAllSkinnedMeshes=0.83
+HYGIENE waited 5s for other batch Unity processes / other CPU load before S Standard city and heroes r2
+MEASURED S Standard city and heroes r2 attempt2: FPS=86.42 p95=12.52ms frames=433 drawCalls median=266 npcs=29 heat=3.00 npcLod near/far=11/18 visibleNpcBodies=40 batchUnities before/after=1/1 otherCpu before/after=57%/53% load={ 11.06 12.57 9.96 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=11.00 Render.OpaqueGeometry=1.25 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.22 PostLateUpdate.UpdateAllSkinnedMeshes=0.85
+PASS T Toon hero only r2: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+PASS Built-in rendering retained.
+PASS Every palette and hero shader is supported.
+T Toon hero only r2 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+T Toon hero only HERO BODY vector-body (suit Body vector-body): 19510 verts, 88 bones, 0 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+HYGIENE waited 5s for other batch Unity processes / other CPU load before T Toon hero only r2
+MEASURED T Toon hero only r2 attempt1: FPS=83.28 p95=13.69ms frames=417 drawCalls median=272 npcs=29 heat=2.67 npcLod near/far=14/15 visibleNpcBodies=46 batchUnities before/after=1/1 otherCpu before/after=56%/58% load={ 11.17 12.51 10.00 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=11.43 Render.OpaqueGeometry=1.34 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.22 PostLateUpdate.UpdateAllSkinnedMeshes=0.85
+PASS U Toon city and heroes r2: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+PASS Built-in rendering retained.
+PASS Every palette and hero shader is supported.
+U Toon city and heroes r2 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+U Toon city and heroes HERO BODY vector-body (suit Body vector-body): 19510 verts, 88 bones, 0 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+HYGIENE waited 15s for other batch Unity processes / other CPU load before U Toon city and heroes r2
+MEASURED U Toon city and heroes r2 attempt1: FPS=65.52 p95=23.91ms frames=328 drawCalls median=710 npcs=29 heat=2.95 npcLod near/far=11/18 visibleNpcBodies=36 batchUnities before/after=1/1 otherCpu before/after=131%/583% CONTAMINATED load={ 12.54 12.74 10.15 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=14.42 Render.OpaqueGeometry=2.49 Camera.Render=0.00 Culling=0.09 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.16 PreLateUpdate.DirectorUpdateAnimationEnd=0.30 PostLateUpdate.UpdateAllSkinnedMeshes=0.96

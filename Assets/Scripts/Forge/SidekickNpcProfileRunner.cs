@@ -17,14 +17,15 @@ using Unity.Profiling.LowLevel.Unsafe;
 public sealed class SidekickNpcProfileRunner : MonoBehaviour
 {
     public Action<int> Finished;
-    const string Dir="Verification/Sidekick/npc-fps";
+    static string Dir => Arg("-toonProfile") != null ? "Verification/Toon/profile" : "Verification/Sidekick/npc-fps";
     readonly List<string> lines=new List<string>();WorldSession W=>WorldSession.Instance;
     HumanoidAnimationTuning tuning;bool original;int rounds=3;float seconds=5;Camera cam;RenderTexture target;string variants="AB";
     HeroDefinition hero;GameObject heroPrefab;SidekickSuit heroSuit;
     readonly Dictionary<char,List<double>> fps=new Dictionary<char,List<double>>();
     static string Name(char v)=>v=='A'?"A mannequin NPCs":v=='B'?"B sidekick NPCs":v=='C'?"C mannequin hero":v=='D'?"D sidekick hero on the other suit shader (diagnostic)":
-        v=='E'?"E hero SkinQuality.Bone2":v=='F'?"F hero blend-shape weights zeroed (diagnostic, changes body shape)":v=='G'?"G hero updateWhenOffscreen=false":"H hero on the unoptimized prefab mesh (no suit Body)";
+        v=='S'?"S Standard city and heroes":v=='T'?"T Toon hero only":v=='U'?"U Toon city and heroes":v=='E'?"E hero SkinQuality.Bone2":v=='F'?"F hero blend-shape weights zeroed (diagnostic, changes body shape)":v=='G'?"G hero updateWhenOffscreen=false":"H hero on the unoptimized prefab mesh (no suit Body)";
     Mesh suitBody;
+    CityPalette palette; bool originalToonCity,originalToonHeroes; float originalOutline;
     Material diagnostic;
     void Log(string text){lines.Add(text);Debug.Log("[NPC PROFILE] "+text);Directory.CreateDirectory(Dir);File.WriteAllLines(Dir+"/results.txt",lines);}
     void Check(bool ok,string text){if(!ok)throw new Exception(text);Log("PASS "+text);}
@@ -34,6 +35,7 @@ public sealed class SidekickNpcProfileRunner : MonoBehaviour
         if(int.TryParse(Arg("-npcRounds"),out int r)&&r>0)rounds=r;if(float.TryParse(Arg("-npcSeconds"),out float s)&&s>0)seconds=s;if(Arg("-npcVariants") is string v)variants=v;
         foreach(char c in variants)fps[c]=new List<double>();
         tuning=Resources.Load<HumanoidAnimationTuning>("HumanoidAnimationTuning");original=tuning.SidekickNpcs;
+        palette=Resources.Load<CityPalette>("CityPalette");originalToonCity=palette.ToonCity;originalToonHeroes=palette.ToonHeroes;originalOutline=palette.HeroOutline;
         QualitySettings.vSyncCount=0;Application.targetFrameRate=-1;
         var stack=new Stack<IEnumerator>();stack.Push(Run());
         while(stack.Count>0)
@@ -46,6 +48,7 @@ public sealed class SidekickNpcProfileRunner : MonoBehaviour
     }
     void Done(int code)
     {
+        palette.ToonCity=originalToonCity;palette.ToonHeroes=originalToonHeroes;palette.HeroOutline=originalOutline;
         tuning.SidekickNpcs=original;if(hero!=null){hero.CharacterPrefab=heroPrefab;hero.Suit=heroSuit;if(heroSuit!=null)heroSuit.Body=suitBody;}
         Log($"RESTORED HumanoidAnimationTuning.SidekickNpcs={original}{(hero!=null?$", {hero.Id} CharacterPrefab={hero.CharacterPrefab?.name} Suit={hero.Suit?.name}":"")}");Finished(code);
     }
@@ -87,10 +90,13 @@ public sealed class SidekickNpcProfileRunner : MonoBehaviour
         target=new RenderTexture(1280,720,24){name="NPC profile 1280x720"};target.Create();
         for(int r=1;r<=rounds;r++)foreach(char variant in variants)
         {
+            if(variant=='S'||variant=='T'||variant=='U'){palette.ToonCity=variant=='U';palette.ToonHeroes=variant!='S';palette.HeroOutline=originalOutline;}
             bool sidekick=variant=='B';tuning.SidekickNpcs=sidekick;string label=Name(variant);
             hero.CharacterPrefab=variant=='C'?null:heroPrefab;hero.Suit=variant=='C'?null:heroSuit;if(heroSuit!=null)heroSuit.Body=variant=='H'?null:suitBody;
             Check(GameFlow.Instance.Select(mode),$"{label} r{r}: enter Free Play.");yield return Scene(GameFlow.CityScene);
             yield return Stage();Populate();yield return new WaitForSeconds(2f);Populate();
+            Check(UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline==null,"Built-in rendering retained.");
+            Check(CityMaterials.Current.Owned.All(m=>m.shader.isSupported),"Every palette and hero shader is supported.");
             var npcs=W.Npcs.Where(n=>n!=null&&!n.Dead).ToList();
             var skins=npcs.SelectMany(n=>n.GetComponentsInChildren<SkinnedMeshRenderer>(true)).ToList();
             var mats=skins.SelectMany(x=>x.sharedMaterials).Distinct().ToList();
@@ -162,7 +168,7 @@ public sealed class SidekickNpcProfileRunner : MonoBehaviour
         for(int attempt=1;attempt<=3;attempt++)
         {
             var wait=System.Diagnostics.Stopwatch.StartNew();
-            while((BatchUnities()>1||OtherCpu()>QuietCpu)&&wait.Elapsed.TotalMinutes<30){cam.Render();yield return new WaitForSecondsRealtime(5f);Populate();}
+            while((BatchUnities()>1||OtherCpu()>QuietCpu)&&wait.Elapsed.TotalMinutes<2){cam.Render();yield return new WaitForSecondsRealtime(5f);Populate();}
             if(wait.Elapsed.TotalSeconds>1)Log($"HYGIENE waited {wait.Elapsed.TotalSeconds:F0}s for other batch Unity processes / other CPU load before {label} r{round}");
             Populate();yield return new WaitForSecondsRealtime(.4f);int before=BatchUnities();double cpuBefore=OtherCpu();
             var handles=new List<ProfilerRecorderHandle>();ProfilerRecorderHandle.GetAvailable(handles);

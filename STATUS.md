@@ -2544,3 +2544,23 @@ Codex independently rebuilt this exact source with the bundled Unity dotnet SDK:
 Sidekick + the local L1–L3 fixes are merged on main at `f3040c7`. Codex reran `SidekickVerification.Run` (exit 0) and `SidekickVerification.Reload` in a separate Unity process (exit 0) on the merged source in wt-sidekick. Evidence: `Verification/Continuation/Sidekick/`. Original package/Sidekick-database working changes on main were preserved.
 
 Push of main failed: `fatal: could not read Username for 'https://github.com': Device not configured`. Local commits remain intact; no credentials were changed.
+
+
+## Overnight Phase 2: Built-in toon measured, runtime adoption rejected — 2026-09-27
+
+OVERNIGHT DECISION: both CityPalette toon switches remain OFF. Standard rendering, cached Sidekick suit recolouring, mannequin NPCs, vendor assets and Built-in RP are retained. Unity Toon Shader 0.15.1-preview installed through Package Manager Client.Add; optional setup/configuration retained. Corrected Built-in keyword fixed the initially pink images; rendered magenta guard added. Forge before/after captures inspected: outlines obscure suit detail, so no improvement is claimed.
+
+Dense Downtown 1280x720 Ultra, VECTOR optimized body, 24 civilians + five police, same gameplay camera: clean Standard round-2 sample 86.42 FPS / 266 draws / opaque 1.25ms; hero-only toon round-2 83.28 FPS / 272 draws / 1.34ms (-3.63% FPS); city+hero toon round-1 80.62 FPS / 716 draws / 2.28ms. Cross-round FPS is not a paired mean. The three-round run was stopped during its round-2 retry after sustained background CPU contamination; raw clean and contaminated attempts remain, and no full-profile pass is claimed. Draw-call increase and preview loss justify rejecting adoption. Future hygiene waits bounded to two minutes.
+
+Evidence and reproducible setup: docs/toon-evaluation.md and Verification/Toon. Historical evidence restored rather than replaced. Corrected Toon and restored-Standard HeroForge Run both exit 0; final restored Standard Unity compile and SDK compile pass (SDK 0 warnings, 0 errors). Checks:
+
+- checks/Sidekick/results.txt: 101 PASS, 0 FAIL
+- checks/Sidekick/reload.txt: 8 PASS, 0 FAIL
+- checks/Art/results.txt: 31 PASS, 0 FAIL
+- checks/Humanoid/results.txt: 54 PASS, 0 FAIL
+- checks/FirstPersonVerification.Run.txt: 207 PASS, 0 FAIL
+- checks/FirstPersonVerification.Reload.txt: 5 PASS, 0 FAIL
+- forge-toon/results.txt: 131 PASS, 0 FAIL
+- forge-standard/results.txt: 131 PASS, 0 FAIL
+
+Limits: editor throughput only, no player-build shader-inclusion/performance test and no human feel review. Cloud feature repairs remain isolated; Phase 3 is next.

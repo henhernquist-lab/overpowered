@@ -41,3 +41,10 @@ MonoBehaviour:
   - {r: 0.66, g: 0.74, b: 0.82, a: 1}
   - {r: 0.42, g: 0.64, b: 0.34, a: 1}
   Smoothness: 0.08
+  ToonCity: 0
+  ToonHeroes: 0
+  ToonShade: 0.65
+  ToonDeepShade: 0.42
+  ToonStep: 0.5
+  ToonFeather: 0.04
+  HeroOutline: 0.35

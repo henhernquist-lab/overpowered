@@ -1,0 +1,5 @@
+PASS SECOND PROCESS restores first-person preference in existing save.
+PASS Existing loadout/progression preserved.
+PASS Fresh save CONTROL defaults to third-person.
+PASS Old save without camera field CONTROL keeps progression and defaults third-person.
+PASS SECOND PROCESS gameplay camera actually starts first-person.

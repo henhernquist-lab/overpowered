@@ -50,7 +50,7 @@ public sealed class SidekickVerificationRunner : MonoBehaviour
     Color32 AssertSuit(SkinnedMeshRenderer skin,HeroDefinition hero,CityColor a,CityColor b,string where)
     {
         var mat=skin.sharedMaterial;var suit=hero.Suit;
-        var shader=suit.AuthoredShader?suit.Source.shader:Shader.Find("Standard");
+        var shader=suit.AuthoredShader?suit.Source.shader:Shader.Find(Palette.ToonHeroes?"Toon/Toon":"Standard");
         Check(mat!=null&&mat!=suit.Source&&mat.shader==shader&&mat.name==$"Suit/{suit.name}/{a}+{b}"&&!F.SuitColors.Any(c=>mat==CityMaterials.Get(c)),$"{where}: {hero.DisplayName} renderer uses the cached suit material '{mat?.name}' ({mat?.shader.name}; not the vendor material, not a flat palette material).");
         var map=SidekickSuit.MapOf(mat) as Texture2D;
         Check(map!=null&&map!=suit.Source.GetTexture(SidekickSuit.ColorMapProperty)&&map.filterMode==FilterMode.Point,$"{where}: _ColorMap is the generated point-filtered suit map, not the authored texture.");
@@ -90,7 +90,9 @@ public sealed class SidekickVerificationRunner : MonoBehaviour
     {
         int cols=cells.GetLength(0),rows=cells.GetLength(1),w=cells[0,0].width,h=cells[0,0].height;var sheet=new Texture2D(w*cols,h*rows,TextureFormat.RGB24,false);
         for(int x=0;x<cols;x++)for(int y=0;y<rows;y++)sheet.SetPixels(x*w,(rows-1-y)*h,w,h,cells[x,y].GetPixels());
-        sheet.Apply();File.WriteAllBytes($"{Dir}/{file}",sheet.EncodeToPNG());Destroy(sheet);
+        sheet.Apply();
+        if(Palette.ToonHeroes) Check(sheet.GetPixels32().Count(c=>c.r>245&&c.b>245&&c.g<10)<sheet.width*sheet.height/1000,"Rendered toon heroes contain no magenta error surface (Built-in variant actually renders).");
+        File.WriteAllBytes($"{Dir}/{file}",sheet.EncodeToPNG());Destroy(sheet);
     }
     int LiveSuitMaterials=>Resources.FindObjectsOfTypeAll<Material>().Count(m=>m!=null&&m.name.StartsWith("Suit/"));
 

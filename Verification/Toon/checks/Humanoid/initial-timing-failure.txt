@@ -1,0 +1,29 @@
+PASS Home camera retained.
+PASS Player uses supplied valid Humanoid with two skinned meshes, no capsule renderer.
+PASS CONTROL: player collider unchanged: height=1.800m radius=.380m; NPC capsule=1.800m/.350m.
+PASS SAME controller asset on player and all 33 civilians/cops/criminals.
+BLEND requested=0.00 actual controller=0.000 animator Speed=0.000 m/s: Idle=1.000
+PASS Continuous actual-speed parameter tracks measured motion.
+BLEND requested=0.90 actual controller=0.900 animator Speed=0.891 m/s: Idle=0.505, Walking=0.495
+PASS Continuous actual-speed parameter tracks measured motion.
+BLEND requested=1.80 actual controller=1.800 animator Speed=1.781 m/s: Idle=0.012, Walking=0.988
+PASS Continuous actual-speed parameter tracks measured motion.
+BLEND requested=3.40 actual controller=3.400 animator Speed=3.353 m/s: Walking=0.516, Jog Forward=0.484
+PASS Continuous actual-speed parameter tracks measured motion.
+PASS Intermediate-speed CONTROL has two nonzero clip weights, not a snapped state.
+BLEND requested=5.00 actual controller=5.000 animator Speed=4.947 m/s: Walking=0.019, Jog Forward=0.981
+PASS Continuous actual-speed parameter tracks measured motion.
+BLEND requested=7.00 actual controller=7.000 animator Speed=6.933 m/s: Jog Forward=0.519, Standing Run Forward=0.481
+PASS Continuous actual-speed parameter tracks measured motion.
+PASS Intermediate-speed CONTROL has two nonzero clip weights, not a snapped state.
+BLEND requested=9.00 actual controller=9.000 animator Speed=8.948 m/s: Jog Forward=0.015, Standing Run Forward=0.985
+PASS Continuous actual-speed parameter tracks measured motion.
+PASS Negative actual local velocity selects Standing Run Back.
+PASS Normal charged punch accepted.
+PASS Cooldown CONTROL refuses immediate second punch.
+PASS Windup CONTROL has no premature force.
+PUNCH source start=0.3667s impact=0.5667s playback=1.60; configured windup=125.00ms; visual marker t=3.96731 frame=287; real force t=4.10277 frame=298; offset=135.46ms/11 frames.
+FAIL System.Exception: Actual force and evaluated clip impact marker align within two rendered frames.
+  at HumanoidVerificationRunner.Check (System.Boolean condition, System.String text) [0x0001b] in /private/tmp/overpowered-animation-m3Zl0B/Assets/Scripts/HumanoidVerificationRunner.cs:16
+  at HumanoidVerificationRunner+<Punch>d__13.MoveNext () [0x00346] in /private/tmp/overpowered-animation-m3Zl0B/Assets/Scripts/HumanoidVerificationRunner.cs:78
+  at HumanoidVerificationRunner+<Start>d__8.MoveNext () [0x00047] in /private/tmp/overpowered-animation-m3Zl0B/Assets/Scripts/HumanoidVerificationRunner.cs:23
