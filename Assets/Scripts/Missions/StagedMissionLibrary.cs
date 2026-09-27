@@ -31,7 +31,9 @@ public static class StagedMissionLibrary
         // Every shipped mission varies per spawn: layout rotated / mirrored, +1 hostile per 2 bands (max 3), timers 5% tighter
         // per band (floor 70%); band = successes / 2 in the session.
         s.RandomYaw = true; s.RandomMirror = true; s.DifficultyStep = 2; s.ExtraActorsPerBand = .5f; s.MaxExtraActors = 3; s.TimeoutScalePerBand = .95f; s.MinTimeoutScale = .7f;
-        entry.Build(s); return s;
+        entry.Build(s);
+        if (s.Bonuses.Length > 0) s.Hint += " Bonus: " + string.Join(", ", Array.ConvertAll(s.Bonuses, b => b.Label.ToLowerInvariant())) + ".";
+        return s;
     }
     // ---------------------------------------------------------------- builders
     static MissionPoint P(string id, float angle, float distance) => new MissionPoint { Id = id, Angle = angle, Distance = distance };
@@ -43,6 +45,7 @@ public static class StagedMissionLibrary
     static MissionStageSpec Stage(StageKind kind, string label, string group = null, string point = null, float timeout = 0f)
         => new MissionStageSpec { Kind = kind, Label = label, Group = group, Point = point, Timeout = timeout };
     static MissionStageSpec Start(this MissionStageSpec s, params StageAction[] onStart) { s.OnStart = onStart; return s; }
+    static BonusObjective Bonus(string label, BonusKind kind, float value = 0f, int xp = 30, string group = null) => new BonusObjective { Label = label, Kind = kind, Value = value, RewardXp = xp, Group = group };
     static MissionStageSpec Then(this MissionStageSpec s, params StageAction[] onComplete) { s.OnComplete = onComplete; return s; }
     static MissionStageSpec With(this MissionStageSpec s, Action<MissionStageSpec> set) { set(s); return s; }
     static EnemyArchetype Enemy(string name) => Resources.Load<EnemyArchetype>("Enemies/" + name);
@@ -51,6 +54,7 @@ public static class StagedMissionLibrary
     /// runner falls; return it. Speed, Ice / Poison roots and positioning matter; nothing here is a hold-R loop.
     static void Pursuit(StagedScenario s)
     {
+        s.Bonuses = new[] { Bonus("UNDER 70 S", BonusKind.UnderSeconds, 70f, 40), Bonus("UNTOUCHED", BonusKind.NoDamageTaken, 0f, 30) };
         s.Hint = "A getaway crew crashed. Get close and they scatter for the exits; take each runner down (or freeze / root one and hold R to cuff). Cut one off and it changes route.";
         s.Points = new[] { P("exit-n", 0, 60), P("exit-e", 100, 60), P("exit-s", 190, 60), P("exit-w", 270, 60), P("bank", 0, 0) };
         s.Actors = new[] { new ActorGroupSpec { Id = "runners", Role = NpcRole.Criminal, Count = 3, Ring = 2.5f, HealthMultiplier = .6f, Speed = 4.6f, Behavior = ActorBehavior.HoldPost, BehaviorArgument = "exit-n,exit-e,exit-s,exit-w" } };
@@ -67,6 +71,7 @@ public static class StagedMissionLibrary
     /// then the gunmen pour out and the weapon crates only become breakable once the gunmen are down.
     static void ConvoyIntercept(StagedScenario s)
     {
+        s.Bonuses = new[] { Bonus("UNDER 80 S", BonusKind.UnderSeconds, 80f, 40), Bonus("UNTOUCHED", BonusKind.NoDamageTaken, 0f, 30) };
         s.Hint = "Two hijacked trucks are about to leave. Stop both before either gets away: Ice freezes one, a heavy hit knocks it out, or wreck it. Then drop the gunmen and smash the weapon crates.";
         s.VehicleSpeed = 9f; s.VehicleEscapeDistance = 90f;
         s.Targets = new[]
@@ -87,6 +92,7 @@ public static class StagedMissionLibrary
     /// or race them. Lights on, looters are caught in the open.
     static void Blackout(StagedScenario s)
     {
+        s.Bonuses = new[] { Bonus("UNDER 90 S", BonusKind.UnderSeconds, 90f, 30), Bonus("UNTOUCHED", BonusKind.NoDamageTaken, 0f, 30) };
         s.Hint = "The block's relays are down. Hold R at each one to restore it - a saboteur left standing next to a restored relay knocks it out again. Then clear the looters.";
         s.Targets = new[] { new TargetGroupSpec { Id = "relays", Kind = TargetKind.Hardpoint, Count = 3, Ring = 13f, Health = 999f } };
         s.Actors = new[]
@@ -104,6 +110,7 @@ public static class StagedMissionLibrary
     /// enforcer; the residents follow you once you walk up to them, and the raiders are still around.
     static void HoldTheBlock(StagedScenario s)
     {
+        s.Bonuses = new[] { Bonus("NOBODY LOST", BonusKind.NoLosses, 0f, 50, "residents") };
         s.Hint = "Raiders are hitting the residents. Keep them alive until the patrol arrives, beat the gang's enforcer, then walk up to the residents and lead them to the shelter.";
         s.Points = new[] { P("shelter", 135, 34) };
         s.Actors = new[]
@@ -126,6 +133,7 @@ public static class StagedMissionLibrary
     /// response team that keeps arriving while you grab the cash on a timer; then reach the pickup.
     static void ArmoredHeist(StagedScenario s)
     {
+        s.Bonuses = new[] { Bonus("LOW PROFILE (MAX 2 STARS)", BonusKind.MaxHeatStars, 2f, 50), Bonus("UNDER 120 S", BonusKind.UnderSeconds, 120f, 30) };
         s.Hint = "An armoured strongroom. Its guards must go down before the door can be worked; breaching it brings a response team, so grab the cash fast and reach the pickup.";
         s.Points = new[] { P("street", 90, 30), P("pickup", 200, 55) };
         s.Actors = new[]
@@ -151,6 +159,7 @@ public static class StagedMissionLibrary
     /// (hits on the others are wasted), guarded posts, then get clear of the last one.
     static void SabotageRun(StagedScenario s)
     {
+        s.Bonuses = new[] { Bonus("UNDER 90 S", BonusKind.UnderSeconds, 90f, 40) };
         s.Hint = "Knock out the three security nodes IN ORDER before each lockdown timer runs out - only the current node can be damaged - then get clear.";
         s.Points = new[] { P("node-a", 30, 24), P("node-b", 150, 28), P("node-c", 270, 26) };
         s.Targets = new[]
@@ -176,6 +185,7 @@ public static class StagedMissionLibrary
     /// stage), drop the escort that climbs out, hold R at the stopped car, take the bags and get away.
     static void ConvoyRobbery(StagedScenario s)
     {
+        s.Bonuses = new[] { Bonus("UNTOUCHED", BonusKind.NoDamageTaken, 0f, 40) };
         s.Hint = "An armoured car is moving the city's cash. Stop it WITHOUT wrecking it (a wreck burns the cargo): Ice or one heavy hit. Drop the escort, hold R at the car to crack it, take the bags and get away.";
         s.VehicleSpeed = 9f; s.VehicleEscapeDistance = 90f;
         s.Targets = new[]
@@ -197,6 +207,7 @@ public static class StagedMissionLibrary
     /// Heat as a tool: raise it on purpose, slip the cordon that answers, cross town to the real target and crack it.
     static void Distraction(StagedScenario s)
     {
+        s.Bonuses = new[] { Bonus("UNDER 120 S", BonusKind.UnderSeconds, 120f, 40) };
         s.Hint = "Make a loud scene (reach 2 Heat stars) so the police converge here, slip out of their cordon, then crack the real target across town while they're busy.";
         s.Points = new[] { P("target", 200, 70) };
         s.Targets = new[] { new TargetGroupSpec { Id = "safe", Kind = TargetKind.Hardpoint, AtPoint = "target", Health = 999f } };
@@ -213,6 +224,7 @@ public static class StagedMissionLibrary
     /// the pursuit that meets you at the van.
     static void Getaway(StagedScenario s)
     {
+        s.Bonuses = new[] { Bonus("NOBODY LEFT BEHIND", BonusKind.NoLosses, 0f, 50, "crew"), Bonus("UNTOUCHED", BonusKind.NoDamageTaken, 0f, 30) };
         s.Hint = "Your crew is pinned with the take. Walk up to them so they follow you, protect them from the hunters on the way to the van, then shake the pursuit.";
         s.Points = new[] { P("van", 160, 40) };
         s.Actors = new[]

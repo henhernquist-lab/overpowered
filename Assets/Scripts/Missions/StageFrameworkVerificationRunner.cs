@@ -1,5 +1,7 @@
 #if UNITY_EDITOR
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// See StageFrameworkVerification. The stage layer itself, with IN-MEMORY StagedScenario definitions spawned through the real
@@ -18,6 +20,9 @@ public sealed class StageFrameworkVerificationRunner : StagedMissionRunner
         yield return Failure();
         yield return Timeout();
         yield return HoldGate();
+        // A fresh session (the hero mode ends at 5 successes): bonus goals first, then variation with 2 successes banked.
+        yield return Session("ice", "strength", "hero");
+        yield return Bonuses();
         yield return Variation();
         Log("LIMIT: hero moved by teleport; blasts through CombatImpact.Blast (the punch / Fire / synergy path) rather than input. NPCs, NavMesh and physics are live.");
     }
@@ -117,6 +122,45 @@ public sealed class StageFrameworkVerificationRunner : StagedMissionRunner
         yield return Outcome(e, 3f);
         Check(Ended(e) && !Result(e).Success && Result(e).Reason == "Timed out: get there" && s.Completed[0] == 0, $"Stage timeout fails the mission: {Describe(e)}.");
         Check(e.Definition.Deadline > 100f, $"The failure came from the stage timeout, not the encounter deadline ({e.Definition.Deadline} s).");
+    }
+    // ---------------------------------------------------------------- bonus goals
+    IEnumerator Bonuses()
+    {
+        Log("---- BONUS GOALS (paid once, on success only)");
+        StagedScenario Mission()
+        {
+            var sc = Staged(new MissionStageSpec { Kind = StageKind.Survive, Label = "WAIT", Seconds = .6f });
+            sc.Actors = new[] { new ActorGroupSpec { Id = "vips", Role = NpcRole.Civilian, Count = 2, Behavior = ActorBehavior.Idle } };
+            sc.Bonuses = new[]
+            {
+                new BonusObjective { Label = "FAST", Kind = BonusKind.UnderSeconds, Value = 5f, RewardXp = 20 },
+                new BonusObjective { Label = "UNTOUCHED", Kind = BonusKind.NoDamageTaken, RewardXp = 30 },
+                new BonusObjective { Label = "QUIET", Kind = BonusKind.MaxHeatStars, Value = 5f, RewardXp = 10 },
+                new BonusObjective { Label = "NOBODY LOST", Kind = BonusKind.NoLosses, Group = "vips", RewardXp = 15 },
+            };
+            return sc;
+        }
+        var grants = new List<XpGrant>(); W.Progression.XpGranted += grants.Add;
+        var clean = Spawn(Definition("Verification staged bonus clean", Mission())); Away(clean);
+        yield return Outcome(clean, 3f);
+        var cs = (StagedState)clean.Scenario; int cleanBonus = grants.Where(g => g.Reason == "bonus").Sum(g => g.Amount);
+        Check(Ended(clean) && Result(clean).Success && cleanBonus == 75 && cs.BonusXp == 75 && cs.BonusesEarned.Count == 4 && grants.Count(g => g.Reason == "bonus") == 1,
+            $"Clean run: all four goals met ({string.Join(", ", cs.BonusesEarned)}), one bonus grant of {cleanBonus} XP.");
+        grants.Clear();
+        var messy = Spawn(Definition("Verification staged bonus messy", Mission())); Away(messy); var ms = (StagedState)messy.Scenario;
+        ms.Group("vips")[0].Npc.Damage(99999f, null); yield return null;
+        W.DamagePlayer(1f, true);
+        yield return Outcome(messy, 3f);
+        int messyBonus = grants.Where(g => g.Reason == "bonus").Sum(g => g.Amount);
+        Check(Ended(messy) && Result(messy).Success && messyBonus == 30 && ms.DamageTaken >= 1f && ms.BonusesEarned.SequenceEqual(new[] { "FAST", "QUIET" }),
+            $"CONTROL: a lost VIP and 1 damage taken forfeit those two goals; FAST + QUIET still pay {messyBonus} XP.");
+        grants.Clear();
+        var failing = Staged(new MissionStageSpec { Kind = StageKind.ReachArea, Label = "NEVER", Point = "far", Radius = 1f, Timeout = .5f });
+        failing.Points = new[] { new MissionPoint { Id = "far", Distance = 40 } }; failing.Bonuses = Mission().Bonuses;
+        var lost = Spawn(Definition("Verification staged bonus failed", failing)); Away(lost);
+        yield return Outcome(lost, 3f);
+        Check(Ended(lost) && !Result(lost).Success && !grants.Any(g => g.Reason == "bonus") && ((StagedState)lost.Scenario).BonusesEarned.Count == 0, "CONTROL: a FAILED mission pays no bonus even though FAST / UNTOUCHED / QUIET would hold.");
+        W.Progression.XpGranted -= grants.Add;
     }
     // ---------------------------------------------------------------- per-spawn variation
     IEnumerator Variation()

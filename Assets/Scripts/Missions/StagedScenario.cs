@@ -30,6 +30,8 @@ public sealed class StagedScenario : EncounterScenario
     public ActorGroupSpec[] Actors = new ActorGroupSpec[0];
     public TargetGroupSpec[] Targets = new TargetGroupSpec[0];
     public MissionStageSpec[] Stages = new MissionStageSpec[0];
+    [Tooltip("Optional bonus goals (a choice: speed vs care vs stealth). Checked once when the mission SUCCEEDS; each met goal pays its XP once.")]
+    public BonusObjective[] Bonuses = new BonusObjective[0];
     [Header("Shared rules")]
     public float InteractRadius = 3f, HoldSeconds = 1.5f, CuffSeconds = 1f, PickupRadius = 1.8f, FollowRadius = 3.5f, FollowGap = 1.8f;
     [Tooltip("A fleeing actor that has moved less than this in StuckSeconds (or has no complete path) switches to its next exit.")]
@@ -88,6 +90,18 @@ public enum StageActionKind { SpawnActors, SpawnTargets, SetBehavior, AddHeat, H
     public StageAction[] OnStart = new StageAction[0], OnComplete = new StageAction[0];
 }
 public enum MissionTerminal { Running, Complete, Failed }
+public enum BonusKind
+{
+    /// Whole mission within Value seconds.
+    UnderSeconds,
+    /// The player took no damage during the mission.
+    NoDamageTaken,
+    /// No member of Group lost (dead, not captured).
+    NoLosses,
+    /// Heat never above Value stars during the mission.
+    MaxHeatStars,
+}
+[Serializable] public sealed class BonusObjective { public string Label = "BONUS"; public BonusKind Kind; public string Group; public float Value; [Min(0)] public int RewardXp = 25; }
 public sealed class StagedState : ScenarioState
 {
     public sealed class Actor { public CityNpc Npc; public Vector3 Post; public Vector3? LastSeen; public bool Captured, Escaped; public int ExitIndex; public float StuckTimer; public Vector3 StuckFrom; public bool Following; public float HarassTimer; }
@@ -115,6 +129,14 @@ public sealed class StagedState : ScenarioState
     public int ExtraActors { get; private set; }
     public float TimeoutScale { get; private set; } = 1f;
     public static int? SeedOverride;
+    /// Mission clock (sum of ticks), player damage taken and the highest Heat stars seen, for the bonus goals.
+    public float MissionElapsed { get; private set; }
+    public float DamageTaken { get; private set; }
+    public int PeakStars { get; private set; }
+    /// Labels of the bonus goals met (filled once, when the mission succeeds) and the XP they paid.
+    public readonly List<string> BonusesEarned = new List<string>();
+    public int BonusXp { get; private set; }
+    float healthSeen;
     public float TimeoutOf(MissionStageSpec s) => s.Timeout * TimeoutScale;
     public void Setup(CrimeEncounter e, StagedScenario scenario)
     {
@@ -133,6 +155,7 @@ public sealed class StagedState : ScenarioState
             Vector3 at = e.Site + Quaternion.Euler(0, angle, 0) * Vector3.forward * p.Distance;
             points[p.Id] = p.Sidewalk ? e.World.City.NearestSidewalk(at) : at;
         }
+        healthSeen = e.World.Health; PeakStars = e.World.Stars;
         foreach (var g in d.Actors) { Actors[g.Id] = new List<Actor>(); if (g.SpawnAtStart) SpawnActors(g.Id, g.Count + Extra(g)); }
         foreach (var t in d.Targets) { TargetsById[t.Id] = new List<Target>(); if (t.SpawnAtStart) SpawnTargets(t.Id); }
         if (d.Stages.Length == 0) { Terminal = MissionTerminal.Complete; return; }
@@ -246,7 +269,10 @@ public sealed class StagedState : ScenarioState
     {
         if (Terminal != MissionTerminal.Running) return;
         var s = Stage; if (s == null) return;
-        StageElapsed += dt;
+        StageElapsed += dt; MissionElapsed += dt;
+        // Health only drops through damage (respawn / refill raise it): count every drop as damage taken.
+        float health = World.Health; if (health < healthSeen) DamageTaken += healthSeen - health; healthSeen = health;
+        PeakStars = Mathf.Max(PeakStars, World.Stars);
         TickActors(dt);
         if (Terminal != MissionTerminal.Running) return;
         if (!string.IsNullOrEmpty(s.RepeatGroup) && s.RepeatSeconds > 0f)
@@ -264,8 +290,32 @@ public sealed class StagedState : ScenarioState
         int index = StageIndex; var s = d.Stages[index];
         Completed[index]++; Run(s.OnComplete); StageCompleted?.Invoke(index);
         if (Terminal != MissionTerminal.Running) return;
-        if (index + 1 >= d.Stages.Length) { Terminal = MissionTerminal.Complete; Encounter.TryComplete(); return; }
+        if (index + 1 >= d.Stages.Length) { Terminal = MissionTerminal.Complete; PayBonuses(); Encounter.TryComplete(); return; }
         BeginStage(index + 1);
+    }
+    /// Runs exactly once (the Complete latch): each met bonus goal pays its XP through the normal grant.
+    void PayBonuses()
+    {
+        if (d.Bonuses == null) return;
+        float health = World.Health; if (health < healthSeen) DamageTaken += healthSeen - health; healthSeen = health;
+        foreach (var b in d.Bonuses)
+        {
+            if (b == null || !BonusMet(b)) continue;
+            BonusesEarned.Add(b.Label); BonusXp += Mathf.Max(0, b.RewardXp);
+        }
+        // The grant's reason "bonus" reaches the HUD's XP popup; the outcome banner that follows keeps its own text.
+        if (BonusXp > 0) World.Progression.AddXp(BonusXp, Encounter.Site, "bonus");
+    }
+    public bool BonusMet(BonusObjective b)
+    {
+        switch (b.Kind)
+        {
+            case BonusKind.UnderSeconds: return MissionElapsed <= b.Value;
+            case BonusKind.NoDamageTaken: return DamageTaken <= 0f;
+            case BonusKind.MaxHeatStars: return PeakStars <= Mathf.RoundToInt(b.Value);
+            case BonusKind.NoLosses: { var g = Group(b.Group); if (g == null) return true; foreach (var a in g) if (Lost(a)) return false; return true; }
+        }
+        return false;
     }
     public Vector3 ReachPoint(MissionStageSpec s)
     {
