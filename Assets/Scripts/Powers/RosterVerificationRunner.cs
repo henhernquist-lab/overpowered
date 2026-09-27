@@ -387,6 +387,99 @@ public sealed class RosterVerificationRunner : MonoBehaviour
         Check(g.Dead && !On(g2), $"CONTROL: generation {effect.MaxGenerations} (the cap) does not spread further.");
         Poisoned.Spreading -= onSpread;
     }
-    IEnumerator RosterSynergies() { yield break; }
+    // ---------------------------------------------------------------- the capped synergies
+    static readonly string[] Capped = { "sonic-slam", "thermal-shock", "solar-flare", "void-grasp", "eclipse-beam" };
+    IEnumerator RosterSynergies()
+    {
+        Log("---- SYNERGIES (capped at five)");
+        Check(Capped.All(id => F.Synergies.Count(x => x != null && x.Id == id) == 1), "The five in-scope synergies exist exactly once: " + string.Join(", ", Capped));
+        var all = Resources.LoadAll<PowerDefinition>("Powers").Where(p => !p.Id.StartsWith("verification-")).ToArray();
+        int newPairs = 0;
+        for (int i = 0; i < all.Length; i++) for (int j = i + 1; j < all.Length; j++)
+            {
+                if (!NewPowers.Contains(all[i].Id) && !NewPowers.Contains(all[j].Id)) continue;
+                var s = F.Resolve(all[i], all[j]);
+                Check(s == null || Capped.Contains(s.Id), $"Pair {all[i].Id} + {all[j].Id} -> {(s != null ? s.Id : "none")} (only capped synergies allowed).");
+                if (s != null) newPairs++;
+            }
+        Check(newPairs == 3, "Exactly three pairs involving a new power have a synergy (Solar Flare, Void Grasp, Eclipse Beam).");
+        Log("REPORT legacy synergies outside the cap, left in place (not deleted): " + string.Join(", ", F.Synergies.Where(x => x != null && !Capped.Contains(x.Id)).Select(x => x.Id)));
+        yield return SolarFlare();
+        yield return VoidGrasp();
+        yield return EclipseBeam();
+    }
+    IEnumerator Cooldown(SynergyRunner r, PowerSynergyDefinition d)
+    {
+        Check(!r.TryActivate() && r.Feedback == "Synergy cooling down", $"{d.DisplayName}: mid-cooldown use refused ({r.Cooldown:F1} s left).");
+        Check(r.Cooldown > 30 && d.Cooldown >= 40, $"{d.DisplayName}: long cooldown {d.Cooldown} s (normal powers <= 1 s).");
+        yield break;
+    }
+    IEnumerator SolarFlare()
+    {
+        yield return Enter("fire", "laser-eyes"); Isolate();
+        var r = W.Powers.SynergyRunner; var d = r.Definition;
+        Check(d != null && d.Id == "solar-flare", "Fire + Laser Eyes resolves to Solar Flare (no unlock step).");
+        var v = Actor(new Vector3(0, 150, 12), NpcRole.Criminal, 1000); var v2 = Actor(new Vector3(3, 150, 12), NpcRole.Criminal, 1000);
+        var outside = Actor(new Vector3(12, 150, 12), NpcRole.Criminal, 1000);
+        yield return new WaitForSeconds(.3f);
+        Aim(W.Hero.transform.position + new Vector3(0, 60, 10));
+        Check(!r.TryActivate() && r.Cooldown == 0, "CONTROL: no target under the crosshair refuses with no cooldown.");
+        Aim(Chest(v)); Check(r.TryActivate(), "Solar Flare fires immediately when equipped.");
+        yield return null; Check(PowerVfx.Get().BeamVisible, "Focusing beam drawn."); Capture("solar-flare-beam.png");
+        float until = Time.time + 4; while (r.Busy && Time.time < until) yield return null;
+        Check(r.Impacts == 1 && Mathf.Abs(1000 - v.Health - d.Damage) < .01f && Mathf.Abs(1000 - v2.Health - d.Damage) < .01f,
+            $"Eruption hits both enemies in {d.Radius} m for {d.Damage}: {1000 - v.Health:F1} / {1000 - v2.Health:F1}.");
+        Check(v.Burning && v2.Burning, "Targets left burning (feeds Thermal Shock's bonus rule).");
+        Check(outside.Health == 1000, "CONTROL: the enemy 12 m away is untouched.");
+        Check(!PowerVfx.Get().BeamVisible, "Beam hidden after the eruption.");
+        yield return Cooldown(r, d);
+    }
+    IEnumerator VoidGrasp()
+    {
+        yield return Enter("darkness", "telekinesis"); Isolate();
+        var r = W.Powers.SynergyRunner; var d = r.Definition;
+        Check(d != null && d.Id == "void-grasp", "Darkness + Telekinesis resolves to Void Grasp.");
+        var a = Actor(new Vector3(4, 150, 10), NpcRole.Criminal, 1000); var b = Actor(new Vector3(-5, 150, 12), NpcRole.Criminal, 1000);
+        var c = Actor(new Vector3(0, 150, 16), NpcRole.Criminal, 1000); var civ = Actor(new Vector3(2, 150, 7), NpcRole.Civilian, 1000);
+        var outside = Actor(new Vector3(0, 150, 22), NpcRole.Criminal, 1000);
+        yield return new WaitForSeconds(.3f);
+        Aim(new Vector3(-15, 150, 18));
+        Check(!r.TryActivate() && r.Cooldown == 0, "CONTROL: a singularity with no enemy in reach is refused with no cooldown.");
+        Vector3 core = new Vector3(0, 150, 10); Aim(core); core += Vector3.up * ((VoidGraspEffect)d.Effect).CoreHeight;
+        var pulled = new[] { a, b, c }; var start = pulled.Select(n => Vector3.Distance(n.transform.position, core)).ToArray();
+        Vector3 civStart = civ.transform.position, outsideStart = outside.transform.position;
+        Check(r.TryActivate(), "Void Grasp opens immediately when equipped.");
+        yield return new WaitForSeconds(d.Duration * .8f);
+        var mid = pulled.Select(n => Vector3.Distance(n.transform.position, core)).ToArray();
+        Log($"MEASURED pull: distance to core {string.Join(", ", start.Select(x => x.ToString("F2")))} -> {string.Join(", ", mid.Select(x => x.ToString("F2")))} m.");
+        Check(VoidGraspEffect.LastPulled.Count == 3 && VoidGraspEffect.LastPulled.All(pulled.Contains), "Exactly the three enemies in reach are grasped.");
+        Check(Enumerable.Range(0, 3).All(i => mid[i] < start[i] - 1.5f), "Each grasped enemy is physically pulled >1.5 m toward the core.");
+        Check(Vector3.Distance(civStart, civ.transform.position) < .05f, "CONTROL: the civilian inside the radius is not pulled.");
+        Check(Vector3.Distance(outsideStart, outside.transform.position) < .05f && outside.Health == 1000, "CONTROL: the enemy outside the radius is untouched.");
+        Capture("void-grasp.png");
+        float until = Time.time + 4; while (r.Busy && Time.time < until) yield return null;
+        Check(r.Impacts == 1 && pulled.All(n => 1000 - n.Health >= d.Damage - .01f), $"Collapse blast damages every grasped enemy ({d.Damage}).");
+        Check(pulled.All(n => n.Rooted), $"Survivors left rooted for {d.FreezeSeconds} s.");
+        yield return Cooldown(r, d);
+    }
+    IEnumerator EclipseBeam()
+    {
+        yield return Enter("darkness", "laser-eyes"); Isolate();
+        var r = W.Powers.SynergyRunner; var d = r.Definition;
+        Check(d != null && d.Id == "eclipse-beam", "Darkness + Laser Eyes resolves to Eclipse Beam.");
+        var t = Actor(new Vector3(0, 150, 12), NpcRole.Criminal, 1000); var bystander = Actor(new Vector3(1.2f, 150, 12.5f), NpcRole.Criminal, 1000);
+        yield return new WaitForSeconds(.3f);
+        Aim(new Vector3(-6, 150, 8));
+        Check(!r.TryActivate() && r.Cooldown == 0, "CONTROL: aiming at the floor (no enemy) refuses with no cooldown.");
+        Aim(Chest(t)); Check(r.TryActivate(), "Eclipse Beam starts on the aimed enemy.");
+        yield return new WaitForSeconds(d.LiftSeconds * .5f);
+        Check(t.Rooted && t.Health == 1000, "Darkness field roots the target before any damage.");
+        yield return new WaitForSeconds(d.LiftSeconds * .5f + .1f);
+        Check(PowerVfx.Get().BeamVisible, "Beam fires through the field."); Capture("eclipse-beam.png");
+        float until = Time.time + 4; while (r.Busy && Time.time < until) yield return null;
+        Check(Mathf.Abs(1000 - t.Health - d.Damage) < .01f && Mathf.Abs(EclipseBeamEffect.LastDamage - d.Damage) < .01f, $"One single-target hit of {d.Damage} ({1000 - t.Health:F1}).");
+        Check(bystander.Health == 1000, "CONTROL: the enemy 1.3 m beside the target takes nothing (no area blast).");
+        yield return Cooldown(r, d);
+    }
 }
 #endif
