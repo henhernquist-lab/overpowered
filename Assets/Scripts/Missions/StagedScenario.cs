@@ -113,8 +113,9 @@ public sealed class StagedState : ScenarioState
     }
     // ---------------------------------------------------------------- lookups and spawning
     public Vector3 Point(string id) => !string.IsNullOrEmpty(id) && points.TryGetValue(id, out var p) ? p : Encounter.Site;
-    public ActorGroupSpec ActorSpec(string id) => Array.Find(d.Actors, g => g.Id == id);
-    TargetGroupSpec TargetSpec(string id) => Array.Find(d.Targets, t => t.Id == id);
+    // Looked up every frame per group (TickActors) and per NPC repath (Drive): plain loops, no closures.
+    public ActorGroupSpec ActorSpec(string id) { foreach (var g in d.Actors) if (g.Id == id) return g; return null; }
+    TargetGroupSpec TargetSpec(string id) { foreach (var t in d.Targets) if (t.Id == id) return t; return null; }
     public List<Actor> Group(string id) => id != null && Actors.TryGetValue(id, out var list) ? list : null;
     public List<Target> TargetGroup(string id) => id != null && TargetsById.TryGetValue(id, out var list) ? list : null;
     static bool Gone(Actor a) => a.Npc == null || a.Npc.Dead || a.Captured;
@@ -429,7 +430,8 @@ public sealed class StagedState : ScenarioState
         if (Terminal != MissionTerminal.Running) return false;
         Vector3 hero = World.Hero.transform.position;
         var target = dt > 0f ? InteractCandidate(hero) : null;
-        foreach (var x in AllTargets()) if (x != target) x.Hold = 0f;
+        // Runs every frame: plain loops, no iterator allocation.
+        foreach (var list in TargetsById.Values) foreach (var x in list) if (x != target) x.Hold = 0f;
         if (target != null)
         {
             target.Hold += dt; Encounter.InteractionHint = $"Working… {Mathf.Clamp01(target.Hold / d.HoldSeconds):P0}";

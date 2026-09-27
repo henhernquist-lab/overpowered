@@ -58,7 +58,8 @@ public sealed class FireState : ScenarioState
     }
     public override bool Drive(CityNpc npc)
     {
-        var a = Encounter.Civilians.Find(x => x.Npc == npc); if (a == null) return false;
+        EncounterActor a = null; foreach (var c in Encounter.Civilians) if (c.Npc == npc) { a = c; break; }   // every NPC frame: no closure
+        if (a == null) return false;
         if (a.Saved) { npc.Agent.isStopped = false; npc.DirectTo(SafePoint + (SafePoint - Encounter.Site).normalized * 6f, d.EscortSpeed); return true; }
         if (Trapped(a)) { npc.Agent.isStopped = true; Following.Remove(a); return true; }
         Vector3 hero = World.Hero.transform.position;

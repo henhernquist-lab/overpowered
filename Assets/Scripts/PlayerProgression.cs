@@ -77,7 +77,8 @@ public sealed class PlayerProgression : MonoBehaviour
         SavePath = path ?? Path.Combine(Application.persistentDataPath, settings.SaveFilename);
         Load();
     }
-    public int Tier(PowerDefinition definition) => Data.Powers.Find(p => p.Id == definition.Id)?.Tier ?? -1;
+    /// Called for every power every frame (PowerUser.Stats): a plain loop, no per-call closure.
+    public int Tier(PowerDefinition definition) { var powers = Data.Powers; string id = definition.Id; for (int i = 0; i < powers.Count; i++) if (powers[i].Id == id) return powers[i].Tier; return -1; }
     public bool Owns(PowerDefinition definition) => Tier(definition) >= 0;
     public void SetFirstPerson(bool enabled) { Data.FirstPerson = enabled; Save(); }
     public HeroDefinition SelectedHero => Resources.Load<ForgeCatalog>("ForgeCatalog")?.Hero(Data.Loadout?.HeroId);
@@ -155,7 +156,7 @@ public sealed class PlayerProgression : MonoBehaviour
     {
         if (string.IsNullOrEmpty(id)) return null;
         if (Data.Challenges == null) Data.Challenges = new List<ChallengeProgress>();
-        var c = Data.Challenges.Find(x => x.Id == id);
+        ChallengeProgress c = null; var list = Data.Challenges; for (int i = 0; i < list.Count; i++) if (list[i].Id == id) { c = list[i]; break; }   // per kill: no closure
         if (c == null && create) Data.Challenges.Add(c = new ChallengeProgress { Id = id });
         return c;
     }
@@ -194,7 +195,7 @@ public sealed class PlayerProgression : MonoBehaviour
     {
         if (string.IsNullOrEmpty(id)) return null;
         if (Data.PowerStats == null) Data.PowerStats = new List<PowerUsage>();
-        var u = Data.PowerStats.Find(x => x.Id == id);
+        PowerUsage u = null; var list = Data.PowerStats; for (int i = 0; i < list.Count; i++) if (list[i].Id == id) { u = list[i]; break; }   // per hit: no closure
         if (u == null && create) Data.PowerStats.Add(u = new PowerUsage { Id = id });
         return u;
     }

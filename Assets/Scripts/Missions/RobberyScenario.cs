@@ -75,7 +75,8 @@ public sealed class RobberyState : ScenarioState
     bool Stopped(EncounterActor a) => !a.Escaped && (a.Captured || a.Npc == null || a.Npc.Dead);
     public override bool Drive(CityNpc npc)
     {
-        var a = Encounter.Robbers.Find(x => x.Npc == npc); if (a == null) return false;
+        EncounterActor a = null; foreach (var r in Encounter.Robbers) if (r.Npc == npc) { a = r; break; }   // per repath: no closure
+        if (a == null) return false;
         if (a.Captured || a.Escaped) return true;
         var car = CarOf(a);
         // No car to reach any more (gone, wrecked, stalled, or it left without them): bail to a far exit on foot.

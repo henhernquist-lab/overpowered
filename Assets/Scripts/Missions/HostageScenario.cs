@@ -54,7 +54,7 @@ public sealed class HostageState : ScenarioState
     public bool Freed(EncounterActor hostage) => Encounter.BarrierCleared(hostage);
     public override bool Drive(CityNpc npc)
     {
-        var hostage = Encounter.Civilians.Find(a => a.Npc == npc);
+        EncounterActor hostage = null; foreach (var c in Encounter.Civilians) if (c.Npc == npc) { hostage = c; break; }   // every NPC frame: no closure
         if (hostage != null)
         {
             if (hostage.Saved || !Freed(hostage)) { npc.Agent.isStopped = true; return true; }

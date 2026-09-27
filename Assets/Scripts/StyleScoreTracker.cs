@@ -73,7 +73,8 @@ public sealed class StyleScoreTracker : MonoBehaviour
             reason = "kill"; points += Settings.KillPoints;
             var hero = WorldSession.Instance != null ? WorldSession.Instance.Hero : null;
             if (hero != null && !hero.PresentationState.Grounded) { points += Settings.AirborneKillBonus; reason = "airborne kill"; }
-            kills.RemoveAll(k => Time.time - k > Settings.MultiKillWindow); kills.Add(Time.time);
+            for (int k = kills.Count - 1; k >= 0; k--) if (Time.time - kills[k] > Settings.MultiKillWindow) kills.RemoveAt(k);
+            kills.Add(Time.time);
             if (kills.Count > 1) { points += Settings.MultiKillBonus * (kills.Count - 1); reason = kills.Count + "x multi-kill"; }
             targets.Remove(hit.Npc);
         }
@@ -82,7 +83,8 @@ public sealed class StyleScoreTracker : MonoBehaviour
     void Award(int basePoints, string id, string reason)
     {
         float now = Time.time; lastEvent = now; Events++;
-        recent.RemoveAll(r => now - r.time > Settings.VarietyWindow); recent.Add((now, id));
+        for (int r = recent.Count - 1; r >= 0; r--) if (now - recent[r].time > Settings.VarietyWindow) recent.RemoveAt(r);   // per event: no closure
+        recent.Add((now, id));
         int distinct = 0; for (int i = 0; i < recent.Count; i++) { bool seen = false; for (int j = 0; j < i; j++) if (recent[j].id == recent[i].id) { seen = true; break; } if (!seen) distinct++; }
         Multiplier = Mathf.Min(Settings.MaxMultiplier, 1f + Settings.VarietyStep * (distinct - 1));
         PeakMultiplier = Mathf.Max(PeakMultiplier, Multiplier);
