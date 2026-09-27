@@ -93,9 +93,9 @@ MonoBehaviour:
     SaveFilename: overpowered-progression.json
   Heat:
     MaximumStars: 5
+    HeroThreshold: 4
     FriendlyPatrolCount: 2
     CopsPerStar: 2
-    HeroThreshold: 4
     DestructionHeat: 0.35
     AssaultHeat: 0.25
     DefeatHeat: 0.5
@@ -168,6 +168,11 @@ MonoBehaviour:
     FlightFovSpeed: 8
     FlightFovResponse: 5
   Feel:
+    CartoonImpact: {fileID: 3432958286849152088, guid: 87ee7299dd44ed747af24dbb91bcd33b, type: 3}
+    CartoonImpacts: 1
+    CartoonPoolSize: 4
+    CartoonMinimumInterval: 0.18
+    CartoonLifetime: 0.8
     HeavyImpulse: 1000
     HeavyIncomingDamage: 15
     HitPauseSeconds: 0.06

@@ -13,6 +13,7 @@ using UnityEngine.SceneManagement;
 /// existing Strength charge pool and CombatImpact.Blast) and pairs each with a control.
 public sealed class BackflipHurricaneVerificationRunner : MonoBehaviour
 {
+    public string HeroId="";
     public Action<int> Finished;readonly List<string> lines=new List<string>();WorldSession W=>WorldSession.Instance;
     HumanoidPresentation P=>W.Hero.GetComponent<HumanoidPresentation>();
     void Log(string text){lines.Add(text);Debug.Log("[ABILITIES VERIFY] "+text);File.WriteAllLines("Verification/Abilities/results.txt",lines);}
@@ -74,6 +75,11 @@ public sealed class BackflipHurricaneVerificationRunner : MonoBehaviour
     IEnumerator Run()
     {
         yield return Scene("Home");Check(Camera.main!=null,"CONTROL: Home camera retained.");
+        if(HeroId!="")
+        {
+            var profile=FindAnyObjectByType<ModeScreens>().Profile;var selected=Resources.Load<ForgeCatalog>("ForgeCatalog").Hero(HeroId);
+            Check(selected.Id==HeroId&&profile.SetLoadout(selected,profile.EquippedA,profile.EquippedB,selected.Primary,selected.Secondary),"Gesture hero selected through progression: "+selected.DisplayName);
+        }
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene("Prototype");
         W.MenuOpen=true; // Verification drives the abilities directly; the hero keeps its normal physics.
         Check(P.Animator!=null&&P.Animator.runtimeAnimatorController!=null,"CONTROL: shared humanoid Animator is live before the gestures.");

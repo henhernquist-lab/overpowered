@@ -105,6 +105,11 @@ public sealed class GameTuning : ScriptableObject
 }
 [Serializable] public sealed class FeelSettings
 {
+    [Header("Pooled Cartoon FX heavy impacts")]
+    public GameObject CartoonImpact;
+    public bool CartoonImpacts=true;
+    public int CartoonPoolSize=4;
+    public float CartoonMinimumInterval=.18f, CartoonLifetime=.8f;
     [Header("Heavy hit definition")]
     [Tooltip("An outgoing CombatImpact.Blast that touches at least one body/NPC is HEAVY at or above this impulse (N·s). Super Strength punch 1350, kick 2025, synergies 1500-3400 = heavy; Forge basic melee 160 and Fire Blast 450 = light.")]
     public float HeavyImpulse = 1000f;

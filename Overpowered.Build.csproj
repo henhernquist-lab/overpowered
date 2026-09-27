@@ -12,6 +12,7 @@
     <Compile Include="Assets/Scripts/**/*.cs" />
     <Compile Include="Assets/Editor/**/*.cs" />
     <Reference Include="$(UnityManaged)/UnityEngine/*.dll" />
+    <Reference Include="Library/ScriptAssemblies/Unity.Animation.Rigging.dll" />
     <Reference Include="Assets/Plugins/Demigiant/DOTween/DOTween.dll" />
   </ItemGroup>
   <Target Name="CheckUnity" BeforeTargets="ResolveReferences">

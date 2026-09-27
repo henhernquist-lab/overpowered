@@ -13,6 +13,7 @@ public static class BackflipHurricaneVerification
     static BackflipHurricaneVerification(){EditorApplication.update+=()=>{if(deadline>0&&EditorApplication.timeSinceStartup>deadline){Debug.LogError("BACKFLIP/HURRICANE verification timeout");Finish(1);}};}
     public static void Run()
     {
+        var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-overpoweredHero");SessionState.SetString(Key+"hero",at>=0&&at+1<args.Length?args[at+1]:"");
         Directory.CreateDirectory("Verification/Abilities");SessionState.SetBool(Key,true);
         EditorSceneManager.OpenScene("Assets/Scenes/Home.unity");EditorApplication.isPlaying=true;
     }
@@ -57,7 +58,7 @@ public static class BackflipHurricaneVerification
         WorldSession.VerificationSavePath=Path.GetFullPath("Verification/Abilities/save-"+Guid.NewGuid().ToString("N")+".json");GameFlow.VerificationSandbox=false;
     }
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void Launch(){if(!SessionState.GetBool(Key,false))return;var obj=new GameObject("Backflip/hurricane verification");UnityEngine.Object.DontDestroyOnLoad(obj);var runner=obj.AddComponent<BackflipHurricaneVerificationRunner>();runner.Finished=Finish;}
-    static void Finish(int code){SessionState.EraseBool(Key);deadline=0;EditorApplication.UnlockReloadAssemblies();EditorApplication.Exit(code);}
+    static void Launch(){if(!SessionState.GetBool(Key,false))return;var obj=new GameObject("Backflip/hurricane verification");UnityEngine.Object.DontDestroyOnLoad(obj);var runner=obj.AddComponent<BackflipHurricaneVerificationRunner>();runner.HeroId=SessionState.GetString(Key+"hero","");runner.Finished=Finish;}
+    static void Finish(int code){SessionState.EraseBool(Key);SessionState.EraseString(Key+"hero");deadline=0;EditorApplication.UnlockReloadAssemblies();EditorApplication.Exit(code);}
 }
 #endif

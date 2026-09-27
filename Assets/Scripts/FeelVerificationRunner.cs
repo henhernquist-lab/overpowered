@@ -410,6 +410,7 @@ public sealed class FeelVerificationRunner : MonoBehaviour
         yield return Realtime(.5f);
         var pool = D.Particles; int poolCount = pool.PoolCount; var cube = GameObject.CreatePrimitive(PrimitiveType.Cube); Mesh builtin = cube.GetComponent<MeshFilter>().sharedMesh; Destroy(cube);
         int materials0 = Resources.FindObjectsOfTypeAll<Material>().Length, systems0 = FindObjectsByType<ParticleSystem>(FindObjectsInactive.Include).Length;
+        int cartoonBefore=D.Cartoon.Bursts;int cartoonPool=D.Cartoon.PoolCount;
         int bursts0 = pool.Bursts, emitted0 = pool.ParticlesEmitted; var s = W.Powers.Strength.Definition;
         for (int i = 0; i < 6; i++)
         {
@@ -422,6 +423,8 @@ public sealed class FeelVerificationRunner : MonoBehaviour
         Log($"MEASURED particles: bursts {bursts0} -> {pool.Bursts}, particles emitted {emitted0} -> {pool.ParticlesEmitted}; pool {poolCount} -> {pool.PoolCount}; ParticleSystems in scene {systems0} -> {systems1}; Material objects {materials0} -> {materials1}.");
         Check(pool.Bursts - bursts0 == 12, $"12 bursts from real hits (6) + real breaks (6) ({pool.Bursts - bursts0}).");
         Check(pool.PoolCount == poolCount && poolCount == shipped.ParticlePoolSize && systems1 == systems0, $"Pool size constant ({poolCount} = Feel.ParticlePoolSize) and no ParticleSystem instantiated per hit ({systems0} -> {systems1}).");
+        Check(D.Cartoon.Bursts>cartoonBefore&&D.Cartoon.PoolCount==cartoonPool&&cartoonPool==shipped.CartoonPoolSize&&D.Cartoon.ActiveCount<=cartoonPool,"Cartoon FX heavy-impact positive control bursts from a bounded fixed pool.");
+        Check(!D.Cartoon.GetComponentsInChildren<Light>(true).Any(x=>x.enabled),"Cartoon FX CONTROL creates no active point lights or second camera impulses.");
         Check(materials1 == materials0, $"0 new Material objects created by the hits/breaks/particles ({materials0} -> {materials1}).");
         var palette = new HashSet<Material>(CityMaterials.Current.All);
         var roles = new[] { shipped.HitDebris, shipped.HeavyDebris, shipped.BreakDebris, shipped.LandingDebris }.Select(CityMaterials.Get).ToList();
@@ -434,6 +437,12 @@ public sealed class FeelVerificationRunner : MonoBehaviour
         int alive = Enumerable.Range(0, pool.PoolCount).Sum(i => pool.Slot(i).particleCount);
         Check(alive > 0, $"Debris particles alive right after the bursts: {alive}.");
         yield return Composite(new Vector2Int(1920, 1080), "particles-hits-and-breaks-1920x1080");
+        yield return Realtime(.85f);
+        var showcase=Crate(spot+Vector3.forward*7f,"Cartoon capture target");
+        CombatImpact.Blast(W.Powers,showcase.position+Vector3.back*.8f,s.Radius,s.Force,s.Damage,s.UpwardForce);
+        yield return Realtime(.08f);
+        Check(D.Cartoon.ActiveCount>0,"Cartoon impact capture positive control has a live slot.");
+        yield return Composite(new Vector2Int(1920,1080),"cartoon-heavy-impact-live-1920x1080");
         Clear();
         foreach (var b in parkedProps) if (b != null) b.gameObject.SetActive(true);
         Log($"TEST HARNESS: {parkedProps.Count(b => b != null && b.gameObject.activeSelf)}/{parkedProps.Count} parked street BreakableProp(s) re-activated.");
@@ -445,29 +454,31 @@ public sealed class FeelVerificationRunner : MonoBehaviour
         Clear(); Place(spot); yield return Grounded(); yield return Realtime(.3f);
         var target = new RenderTexture(1920, 1080, 24) { name = "Feel FPS" }; target.Create();
         bool was = cam.enabled; cam.targetTexture = target; cam.enabled = false; hud.Panel.targetTexture = target; hud.OverlayPanel.targetTexture = target;
-        var off = Clone(shipped); off.LightHitParticles = off.HeavyHitParticles = off.BreakParticles = off.LandingParticles = 0;
-        var rows = new List<(string label, double fps, double mean, double p95, int maxAlive)>();
+        var off = Clone(shipped); off.LightHitParticles = off.HeavyHitParticles = off.BreakParticles = off.LandingParticles = 0;off.CartoonImpacts=false;
+        var rows = new List<(string label, double fps, double mean, double p95, int maxAlive, int maxCartoon, int draws)>();
         Vector3 at = spot + Vector3.forward * 6f + Vector3.up * .8f;
         foreach (bool particles in new[] { true, false, true, false })
         {
             D.Settings = particles ? shipped : off;
             var warm = System.Diagnostics.Stopwatch.StartNew(); while (warm.Elapsed.TotalSeconds < 1) { cam.Render(); yield return null; }
-            var watch = System.Diagnostics.Stopwatch.StartNew(); var frames = new List<double>(); double last = 0, nextHit = 0; int maxAlive = 0;
+            var watch = System.Diagnostics.Stopwatch.StartNew(); var frames = new List<double>(); double last = 0, nextHit = 0; int maxAlive = 0,maxCartoon=0,draws=0;
             while (watch.Elapsed.TotalSeconds < 4)
             {
                 if (watch.Elapsed.TotalSeconds >= nextHit) { nextHit += .1f; FeelDirector.Impact(at + new Vector3(UnityEngine.Random.Range(-2f, 2f), 0, UnityEngine.Random.Range(-1f, 1f)), shipped.HeavyImpulse + 350f, 35f, 1); }
                 cam.Render(); yield return null; double now = watch.Elapsed.TotalSeconds; frames.Add((now - last) * 1000); last = now;
+                maxCartoon=Mathf.Max(maxCartoon,D.Cartoon.ActiveCount);draws+=UnityEditor.UnityStats.drawCalls;
                 maxAlive = Mathf.Max(maxAlive, Enumerable.Range(0, D.Particles.PoolCount).Sum(i => D.Particles.Slot(i).particleCount));
             }
             frames.Sort(); string label = particles ? "A particles ON " : "B particles OFF";
-            rows.Add((label, frames.Count / watch.Elapsed.TotalSeconds, frames.Average(), frames[(int)(frames.Count * .95)], maxAlive));
+            rows.Add((label, frames.Count / watch.Elapsed.TotalSeconds, frames.Average(), frames[(int)(frames.Count * .95)], maxAlive,maxCartoon,draws/Mathf.Max(1,frames.Count)));
             var row = rows.Last();
-            Log($"MEASURED {row.label}: frames={frames.Count}, FPS={row.fps:F1}, mean={row.mean:F2}ms, p95={row.p95:F2}ms, peak live debris={row.maxAlive} (heavy impact every 100 ms via the CombatImpact hook; hit pauses rate-limited; gameplay camera single render 1920x1080 + HUD).");
+            Log($"MEASURED {row.label}: frames={frames.Count}, FPS={row.fps:F1}, mean={row.mean:F2}ms, p95={row.p95:F2}ms, peak live debris={row.maxAlive}, Cartoon slots={row.maxCartoon}, draws={row.draws} (heavy impact every 100 ms via the CombatImpact hook; hit pauses rate-limited; gameplay camera single render 1920x1080 + HUD).");
         }
         D.Settings = shipped;
         cam.targetTexture = null; cam.enabled = was; hud.Panel.targetTexture = null; hud.OverlayPanel.targetTexture = null; target.Release(); Destroy(target);
         double a = (rows[0].fps + rows[2].fps) * .5, b = (rows[1].fps + rows[3].fps) * .5;
         Log($"MEASURED particles A/B summary: ON mean {a:F1} FPS, OFF mean {b:F1} FPS ({(a - b) / b:+0.0%;-0.0%}); frame-time delta {1000 / a - 1000 / b:+0.00;-0.00} ms. Editor batch-mode throughput, not a player build.");
+        Check(rows[0].maxCartoon>0&&rows[1].maxCartoon==0,"FX FPS positive/negative controls include Cartoon pool ON/OFF.");
         Check(rows[0].maxAlive > 0 && rows[1].maxAlive == 0, "FPS A/B really toggled the debris (ON had live particles, OFF had none).");
         yield return Realtime(shipped.HitPauseMinInterval);
     }

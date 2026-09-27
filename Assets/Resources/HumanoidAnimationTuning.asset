@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4de0c250a28d4acfbadcf0385ae8ac2, type: 3}
   m_Name: HumanoidAnimationTuning
   m_EditorClassIdentifier: Assembly-CSharp::HumanoidAnimationTuning
-  Model: {fileID: 919132149155446097, guid: ed152317b748045198b07297110945ad, type: 3}
+  Model: {fileID: 1233560108492731643, guid: 6ee7ef03e504f4e63ac4f1abbd2ab422, type: 3}
   Controller: {fileID: 9100000, guid: e4311d7ff3ea44b2fadda00e08c18ef3, type: 2}
   SidekickNpcs: 0
   NpcLooks:
@@ -20,6 +20,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6a95daf0bea14417cbd789a5a7513de5, type: 2}
   - {fileID: 11400000, guid: 9b9b29062b35e40e7955d36e3cebc50a, type: 2}
   - {fileID: 11400000, guid: 655664477e3c04bab9c74af6eb92ea06, type: 2}
+  LookWeight: 0.22
+  HoldWeight: 0.75
+  LookLimit: 55
+  LookDistance: 12
+  NpcLookDistance: 14
+  RigResponse: 10
+  HoldReach: 0.7
+  HoldHandSpread: 0.12
   Idle: {fileID: -203655887218126122, guid: ed152317b748045198b07297110945ad, type: 3}
   Walk: {fileID: -203655887218126122, guid: 849dedbeb722747a984ad026cedacc54, type: 3}
   Jog: {fileID: -203655887218126122, guid: 3e5d482bc8c7f4b5094d1fcb2f956198, type: 3}

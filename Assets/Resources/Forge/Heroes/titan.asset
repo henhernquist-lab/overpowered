@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HeroDefinition
   Id: titan
   DisplayName: TITAN
-  CharacterPrefab: {fileID: 1664552536257148490, guid: fce66a12cf7a45043bbbe1c0087175b5, type: 3}
+  CharacterPrefab: {fileID: 747924979710426673, guid: 211c4e779490a4a5490517ca0b69ef15, type: 3}
   Suit: {fileID: 11400000, guid: 2c42b5d4a0d584f07a1aeeb423fbefce, type: 2}
   Portrait: {fileID: 0}
   Primary: 5

@@ -8,6 +8,10 @@ public sealed class HumanoidAnimationTuning : ScriptableObject
     [Header("NPC bodies: off = the shared mannequin above; on = a Sidekick look per NPC, recoloured by role (one cached material per look+colours)")]
     public bool SidekickNpcs;
     public SidekickSuit[] NpcLooks;
+    [Header("Awareness and telekinesis rig (visual only)")]
+    [Range(0,1)] public float LookWeight=.22f, HoldWeight=.75f;
+    public float LookLimit=55f, LookDistance=12f, NpcLookDistance=14f, RigResponse=10f;
+    public float HoldReach=.7f, HoldHandSpread=.12f;
     [Header("Clips (Backflip and Hurricane Kick are dispatched by those two gestures)")]
     public AnimationClip Idle, Walk, Jog, Run, Back, Jump, Land, Punch, Hit, Death, Cast, ArmedRun, Shoot, Backflip, HurricaneKick;
     [Header("Continuous locomotion: metres/second")]

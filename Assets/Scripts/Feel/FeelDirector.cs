@@ -12,6 +12,7 @@ public sealed class FeelDirector : MonoBehaviour
     /// The live values. Defaults to WorldSession.Tuning.Feel; verification may point it at a CLONE (never the asset).
     public FeelSettings Settings { get; set; }
     public ImpactParticlePool Particles { get; private set; }
+    public CartoonImpactPool Cartoon { get; private set; }
     public int HeavyImpacts { get; private set; }
     public int LightImpacts { get; private set; }
     public int HeavyIncoming { get; private set; }
@@ -29,6 +30,8 @@ public sealed class FeelDirector : MonoBehaviour
         Instance = this; Settings = world.Tuning.Feel;
         Particles = new GameObject("Impact debris pool").AddComponent<ImpactParticlePool>();
         Particles.transform.SetParent(transform, false); Particles.Initialize(Settings);
+        Cartoon=new GameObject("Cartoon heavy impact pool").AddComponent<CartoonImpactPool>();
+        Cartoon.transform.SetParent(transform,false);Cartoon.Initialize(Settings);
         hero = world.Hero; if (hero != null) hero.Landed += OnLanded;
         BreakableProp.Destroyed += OnPropDestroyed;
     }
@@ -50,6 +53,7 @@ public sealed class FeelDirector : MonoBehaviour
         d.LastImpactOrigin = origin; d.LastImpactImpulse = impulse; d.LastImpactHeavy = heavy;
         d.Particles.Burst(origin, heavy ? f.HeavyDebris : f.HitDebris, heavy ? f.HeavyHitParticles : f.LightHitParticles);
         if (!heavy) { d.LightImpacts++; d.LastEvent = $"light impact {impulse:0} N·s"; return; }
+        if(f.CartoonImpacts)d.Cartoon.Burst(origin);
         d.HeavyImpacts++; d.LastEvent = $"HEAVY impact {impulse:0} N·s";
         d.Heavy(origin, 1f);
     }
