@@ -2539,3 +2539,8 @@ Codex independently rebuilt this exact source with the bundled Unity dotnet SDK:
 - Preserve previous screenshots that the interrupted evidence cleanup had deleted.
 - Retain the optimized hero meshes and disabled Sidekick NPC setting; the prior controls support both choices.
 - Resume the queue in order. Cloud integration still requires fixes and fresh regression evidence before shipping missions.
+
+## Phase 1 merged verification — Codex, 2026-09-27
+Sidekick + the local L1–L3 fixes are merged on main at `f3040c7`. Codex reran `SidekickVerification.Run` (exit 0) and `SidekickVerification.Reload` in a separate Unity process (exit 0) on the merged source in wt-sidekick. Evidence: `Verification/Continuation/Sidekick/`. Original package/Sidekick-database working changes on main were preserved.
+
+Push of main failed: `fatal: could not read Username for 'https://github.com': Device not configured`. Local commits remain intact; no credentials were changed.
