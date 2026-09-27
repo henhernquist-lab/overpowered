@@ -16,6 +16,12 @@ public sealed class CityPalette : ScriptableObject
         new Color(.12f,.78f,1f),new Color(1f,.29f,.16f),new Color(.24f,.15f,.40f),
         new Color(.13f,.37f,.47f),new Color(.66f,.74f,.82f),new Color(.42f,.64f,.34f)};
     [Range(0,1)] public float Smoothness=.08f;
+    [Header("Built-in toon presentation")]
+    public bool ToonCity, ToonHeroes;
+    [Range(0,1)] public float ToonShade=.65f, ToonDeepShade=.42f;
+    [Range(0,1)] public float ToonStep=.5f, ToonFeather=.04f;
+    [Range(0,2)] public float HeroOutline=.35f;
+
 }
 
 // Materials are shared, owned by the generated city and updated live from the palette asset.
@@ -27,7 +33,11 @@ public sealed class CityMaterials : MonoBehaviour
     public CityPalette Palette {get;private set;}
     readonly Dictionary<CityColor,Material> materials=new Dictionary<CityColor,Material>();
     readonly Dictionary<CityColor,Color> applied=new Dictionary<CityColor,Color>();
-    float appliedSmoothness=float.NaN;
+    float appliedSmoothness=float.NaN; int appliedToonHash;
+    int ToonHash
+    {
+        get { unchecked { int h=Palette.ToonCity?1:0; h=h*31+(Palette.ToonHeroes?1:0); h=h*31+Palette.ToonShade.GetHashCode(); h=h*31+Palette.ToonDeepShade.GetHashCode(); h=h*31+Palette.ToonStep.GetHashCode(); h=h*31+Palette.ToonFeather.GetHashCode(); return h*31+Palette.HeroOutline.GetHashCode(); } }
+    }
     public IEnumerable<Material> All=>materials.Values;
     // Sidekick suits: ONE material + colour map per (suit, primary, secondary), shared by every renderer that asks, rebuilt
     // in place when the palette changes, destroyed with this owner. Never per frame or per character.
@@ -48,6 +58,7 @@ public sealed class CityMaterials : MonoBehaviour
         entry=new SuitEntry{Primary=Palette.Colors[(int)primary],Secondary=Palette.Colors[(int)secondary],Trim=Palette.Colors[(int)suit.Trim]};
         entry.Map=suit.Build(entry.Primary,entry.Secondary,entry.Trim);
         entry.Material=suit.CreateMaterial(entry.Map,$"Suit/{suit.name}/{primary}+{secondary}",Palette.Smoothness);
+        if(!suit.AuthoredShader)Surface(entry.Material,Color.white,entry.Map,true);
         suits.Add((suit,primary,secondary),entry);SuitsCreated++;return entry.Material;
     }
     public void Initialize(CityPalette palette) {Current=this;Palette=palette;}
@@ -64,18 +75,39 @@ public sealed class CityMaterials : MonoBehaviour
     public void Apply()
     {
         foreach(var pair in materials)
-        {var color=Palette.Colors[(int)pair.Key];pair.Value.color=color;pair.Value.SetFloat("_Glossiness",Palette.Smoothness);applied[pair.Key]=color;}
-        appliedSmoothness=Palette.Smoothness;
+        {var color=Palette.Colors[(int)pair.Key];Surface(pair.Value,color,null,false);applied[pair.Key]=color;}
+        appliedSmoothness=Palette.Smoothness; appliedToonHash=ToonHash;
         foreach(var pair in suits)
         {
             var e=pair.Value;var (suit,primary,secondary)=pair.Key;
             e.Primary=Palette.Colors[(int)primary];e.Secondary=Palette.Colors[(int)secondary];e.Trim=Palette.Colors[(int)suit.Trim];suit.Write(e.Map,e.Primary,e.Secondary,e.Trim);
-            if(!suit.AuthoredShader)e.Material.SetFloat("_Glossiness",Palette.Smoothness);
+            if(!suit.AuthoredShader)Surface(e.Material,Color.white,e.Map,true);
         }
+    }
+    public void Surface(Material material,Color color,Texture map,bool hero)
+    {
+        bool toon=hero?Palette.ToonHeroes:Palette.ToonCity;
+        var shader=Shader.Find(toon?"Toon/Toon":"Standard");
+        if(shader==null||!shader.isSupported)throw new System.InvalidOperationException("Requested surface shader unavailable: "+(toon?"Toon/Toon":"Standard"));
+        if(material.shader!=shader)material.shader=shader;
+        material.color=color;material.SetTexture("_MainTex",map);
+        if(!toon){material.SetFloat("_Glossiness",Palette.Smoothness);return;}
+        material.SetColor("_BaseColor",color);material.SetColor("_Color",color);
+        material.SetColor("_1st_ShadeColor",color*Palette.ToonShade);material.SetColor("_2nd_ShadeColor",color*Palette.ToonDeepShade);
+        material.SetFloat("_Use_BaseAs1st",1);material.SetFloat("_Use_1stAs2nd",1);
+        material.SetFloat("_BaseColor_Step",Palette.ToonStep);material.SetFloat("_BaseShade_Feather",Palette.ToonFeather);
+        material.SetFloat("_ShadeColor_Step",.15f);material.SetFloat("_1st2nd_Shades_Feather",Palette.ToonFeather);
+        material.SetFloat("_HighColor_Power",0);material.SetFloat("_RimLight",0);material.SetFloat("_MatCap",0);
+        material.SetColor("_Outline_Color",Palette.Colors[(int)CityColor.UiNavy]);material.SetFloat("_Is_LightColor_Outline",0);
+        material.SetFloat("_Outline_Width",hero?Palette.HeroOutline:0);material.EnableKeyword("_OUTLINE_NML");
+        bool outline=hero&&Palette.HeroOutline>0;material.SetShaderPassEnabled("Outline",outline);
+        if(outline)material.DisableKeyword("_DISABLE_OUTLINE");else material.EnableKeyword("_DISABLE_OUTLINE");
+        material.EnableKeyword("UTS_RP_BUILTIN");
+        material.EnableKeyword("_IS_CLIPPING_OFF");material.EnableKeyword("_EMISSIVE_SIMPLE");
     }
     bool Changed()
     {
-        if(!appliedSmoothness.Equals(Palette.Smoothness))return true;
+        if(!appliedSmoothness.Equals(Palette.Smoothness)||appliedToonHash!=ToonHash)return true;
         foreach(var pair in materials)if(!applied.TryGetValue(pair.Key,out var color)||!color.Equals(Palette.Colors[(int)pair.Key]))return true;
         foreach(var pair in suits)
             if(!pair.Value.Primary.Equals(Palette.Colors[(int)pair.Key.Item2])||!pair.Value.Secondary.Equals(Palette.Colors[(int)pair.Key.Item3])||!pair.Value.Trim.Equals(Palette.Colors[(int)pair.Key.Item1.Trim]))return true;

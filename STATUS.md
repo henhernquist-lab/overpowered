@@ -2556,3 +2556,23 @@ Experimental controls clarify the existing feedback, but are not shipping verifi
 - On the experiment: Roster + Reload, Melee, HeroStats, Mission, HeroForge + Reload exit 0. SynergyAvailability still fails the exact floating-point 40x comparison at displayed 32 s vs 0.8 s; use an explicit small numerical tolerance and log precise values, preserving the scoped assertion. No broad integration sweep claimed.
 
 Main's latest user commit `49ffbed` includes the preserved vendor database, explicit FBX dependency, and queue; origin/main matched it on refresh. The command-line credential failure remains separate from that successful external push.
+
+
+## Overnight Phase 2: Built-in toon measured, runtime adoption rejected — 2026-09-27
+
+OVERNIGHT DECISION: both CityPalette toon switches remain OFF. Standard rendering, cached Sidekick suit recolouring, mannequin NPCs, vendor assets and Built-in RP are retained. Unity Toon Shader 0.15.1-preview installed through Package Manager Client.Add; optional setup/configuration retained. Corrected Built-in keyword fixed the initially pink images; rendered magenta guard added. Forge before/after captures inspected: outlines obscure suit detail, so no improvement is claimed.
+
+Dense Downtown 1280x720 Ultra, VECTOR optimized body, 24 civilians + five police, same gameplay camera: clean Standard round-2 sample 86.42 FPS / 266 draws / opaque 1.25ms; hero-only toon round-2 83.28 FPS / 272 draws / 1.34ms (-3.63% FPS); city+hero toon round-1 80.62 FPS / 716 draws / 2.28ms. Cross-round FPS is not a paired mean. The three-round run was stopped during its round-2 retry after sustained background CPU contamination; raw clean and contaminated attempts remain, and no full-profile pass is claimed. Draw-call increase and preview loss justify rejecting adoption. Future hygiene waits bounded to two minutes.
+
+Evidence and reproducible setup: docs/toon-evaluation.md and Verification/Toon. Historical evidence restored rather than replaced. Corrected Toon and restored-Standard HeroForge Run both exit 0; final restored Standard Unity compile and SDK compile pass (SDK 0 warnings, 0 errors). Checks:
+
+- checks/Sidekick/results.txt: 101 PASS, 0 FAIL
+- checks/Sidekick/reload.txt: 8 PASS, 0 FAIL
+- checks/Art/results.txt: 31 PASS, 0 FAIL
+- checks/Humanoid/results.txt: 54 PASS, 0 FAIL
+- checks/FirstPersonVerification.Run.txt: 207 PASS, 0 FAIL
+- checks/FirstPersonVerification.Reload.txt: 5 PASS, 0 FAIL
+- forge-toon/results.txt: 131 PASS, 0 FAIL
+- forge-standard/results.txt: 131 PASS, 0 FAIL
+
+Limits: editor throughput only, no player-build shader-inclusion/performance test and no human feel review. Cloud feature repairs remain isolated; Phase 3 is next.
