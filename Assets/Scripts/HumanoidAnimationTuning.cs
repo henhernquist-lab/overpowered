@@ -5,6 +5,9 @@ public sealed class HumanoidAnimationTuning : ScriptableObject
 {
     public GameObject Model;
     public RuntimeAnimatorController Controller;
+    [Header("NPC bodies: off = the shared mannequin above; on = a Sidekick look per NPC, recoloured by role (one cached material per look+colours)")]
+    public bool SidekickNpcs;
+    public SidekickSuit[] NpcLooks;
     [Header("Clips (Backflip and Hurricane Kick are dispatched by those two gestures)")]
     public AnimationClip Idle, Walk, Jog, Run, Back, Jump, Land, Punch, Hit, Death, Cast, ArmedRun, Shoot, Backflip, HurricaneKick;
     [Header("Continuous locomotion: metres/second")]

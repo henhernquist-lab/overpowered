@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HeroDefinition
   Id: vector
   DisplayName: VECTOR
-  CharacterPrefab: {fileID: 919132149155446097, guid: ed152317b748045198b07297110945ad, type: 3}
+  CharacterPrefab: {fileID: 7808259262855837012, guid: 3a1ae0fe117759d48a13a9df68c7554a, type: 3}
+  Suit: {fileID: 11400000, guid: ad441009d48464a42b609676dee30656, type: 2}
   Portrait: {fileID: 0}
   Primary: 14
   Secondary: 15

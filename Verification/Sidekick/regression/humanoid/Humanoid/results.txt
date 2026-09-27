@@ -1,0 +1,72 @@
+PASS Home camera retained.
+HERO under test: VECTOR = Starter_03
+PASS Player uses the selected hero's valid Humanoid (Starter_03: 1 skinned mesh(es)), no capsule renderer.
+PASS CONTROL: player collider unchanged: height=1.800m radius=.380m; NPC capsule=1.800m/.350m.
+PASS Reference skinned vertices height=1.7658m, visual scale=1.0194, fitted height=1.8000m; exactly one authoritative player collider.
+PASS SAME controller asset on player and all 33 civilians/cops/criminals.
+BLEND requested=0.00 actual controller=0.000 animator Speed=0.000 m/s: Idle=1.000
+PASS Continuous actual-speed parameter tracks measured motion.
+BLEND requested=0.90 actual controller=0.900 animator Speed=0.899 m/s: Idle=0.501, Walking=0.499
+PASS Continuous actual-speed parameter tracks measured motion.
+BLEND requested=1.80 actual controller=1.800 animator Speed=1.799 m/s: Idle=0.001, Walking=0.999
+PASS Continuous actual-speed parameter tracks measured motion.
+BLEND requested=3.40 actual controller=3.400 animator Speed=3.398 m/s: Walking=0.501, Jog Forward=0.499
+PASS Continuous actual-speed parameter tracks measured motion.
+PASS Intermediate-speed CONTROL has two nonzero clip weights, not a snapped state.
+BLEND requested=5.00 actual controller=5.000 animator Speed=4.998 m/s: Walking=0.001, Jog Forward=0.999
+PASS Continuous actual-speed parameter tracks measured motion.
+BLEND requested=7.00 actual controller=7.000 animator Speed=6.998 m/s: Jog Forward=0.501, Standing Run Forward=0.499
+PASS Continuous actual-speed parameter tracks measured motion.
+PASS Intermediate-speed CONTROL has two nonzero clip weights, not a snapped state.
+BLEND requested=9.00 actual controller=9.000 animator Speed=8.998 m/s: Jog Forward=0.001, Standing Run Forward=0.999
+PASS Continuous actual-speed parameter tracks measured motion.
+PASS Negative actual local velocity selects Standing Run Back.
+PASS Normal charged punch accepted.
+PASS Cooldown CONTROL refuses immediate second punch.
+PASS Windup CONTROL has no premature force.
+PUNCH source start=0.3667s impact=0.5667s playback=1.60; configured windup=125.00ms; visual marker t=6.24408 frame=691; real force t=6.24408 frame=691; offset=0.00ms/0 frames.
+PASS Actual force and evaluated clip impact marker align within two rendered frames.
+PASS Real force=1350 N·s, mass=45kg, velocity=17.192m/s, displacement=3.438m.
+PASS Zero-charge CONTROL refuses punch.
+PASS Rejected punches emit no extra impact.
+PASS Original 1.25s charge recharge retained.
+FLIGHT fuel 6 -> 4.000
+PASS Fuel drains 4 -> 0; empty-flight control blocks.
+PASS Grounded fuel recharge 0 -> 2.500 in 1s.
+PASS Real NPC damage triggers Hit Reaction.
+PASS Undamaged NPC CONTROL plays neither hit nor death.
+PASS Lethal damage triggers Death, disables navigation/collision; no root 90-degree flip.
+PASS Real player damage triggers Hit Reaction.
+FLIGHT hover weight=0.998 pitch=0.00 hand=(-0.389, 0.925, 0.090)
+FLIGHT transition frame 4: blend=0.259, pitch=20.22
+FLIGHT transition frame 12: blend=0.542, pitch=42.29
+FLIGHT transition frame 59: blend=0.971, pitch=75.76
+PASS Hover vs forward distinct: body difference=75.76deg, hand height 0.925->1.931m; maximum rendered-frame pitch change=4.61deg.
+PASS Uncaptured live transition CONTROL stays below 20 degrees per rendered frame.
+PASS Landing transition releases flight bones/root smoothly.
+PASS Normal-jog CONTROL is not alarmed and has no panic overlay.
+PASS Live fleeing civilian: Standing Run Forward at 1.45x, lean=23.55deg, raised/flailing hand Y=1.08..1.70m; head yaw=-54.2..51.0deg.
+PANIC path deviation sample=1.496m, configured amplitude=1.50m; NavMesh sampling remains authoritative.
+PASS Actual controller fall: 1 impact at 15.573m/s; Land clip played with single existing squash minY=0.786, recovered=1.000; collider=1.800m.
+PASS Existing grounded jump accepted.
+PASS Jump presentation comes from real movement event.
+PASS Fire Blast and Ice both configured for shared Casting Spell presentation.
+PASS Fire Blast and Ice owned through earned points but NOT equipped (session loadout flight + strength).
+PASS CONTROL: unequipped Fire Blast and Ice refused by the equip gate (Select/Use false, "Power not equipped").
+PASS CONTROL: refused unequipped casts charged nothing (Fire charges 3->3, Ice charges 2->2, energy 100.00->100.00).
+PASS CONTROL: refused unequipped casts spawned no projectile (0 before/after), froze nothing, raised no Activated event and played no Casting Spell (state=Locomotion).
+MEASURED populated skinned/Animator city: civilians=26, cops=7, active animators=37; 1280x720, frames=360, seconds=5.002, FPS=71.98, p95=14.79ms, drawcalls median/max=576/586; previous city seed2409=50.25 FPS (43.2%), historical155=(-53.6%); AMD Radeon Pro 5300.
+PASS Owned Fire Blast + Ice equipped through PlayerProgression.SetLoadout before the session.
+PASS New session receives equipped pair fire + ice.
+PASS Real Fire Blast activation succeeds.
+PASS Successful Fire Blast triggers Casting Spell.
+PASS Real Ice activation succeeds.
+PASS Successful Ice triggers same Casting Spell and freezes actual body.
+PASS Villain mode spawns same humanoid/controller and renders.
+COP gait sample: phase=Approach, agent speed=0.140m/s, measured speed=0.140m/s, state=Armed, windup frames skipped=0, budget left=7.08s of 10s.
+PASS Moving cop (phase=Approach) actual speed=0.140m/s selects shared Pistol Run.
+PASS CONTROL: patrol cop at 0 stars is hostile=False (per-side data, hostile from 1).
+PASS Heat raised to 1 star(s): the same patrol cop is now hostile.
+PASS Live hostile cop attack: HP 100->90; shared controller plays Shooting Gun.
+COP shooting clip sample: left hand local=(0.105, 1.591, 0.553), presentation yaw=90.0deg; physics root still navigates normally.
+PASS Hero and Villain return Home without camera regression.

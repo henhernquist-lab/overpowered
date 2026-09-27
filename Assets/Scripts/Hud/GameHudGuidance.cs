@@ -53,6 +53,8 @@ public sealed partial class GameHud
     public string BriefingDismissedBy { get; private set; }
     public int BriefingShows { get; private set; }
     public bool BriefingActive => briefingActive;
+    /// The briefing's own timeout clock: unscaled seconds accumulated since it opened while the game was running (not paused, no menu).
+    public float BriefingElapsed => briefingElapsed;
 
     // ---- objective (main panel) + waypoint (overlay)
     public CrimeEncounter ObjectiveEncounter { get; private set; }

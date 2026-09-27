@@ -1,0 +1,159 @@
+PASS NpcLooks: HumanSpecies_01 (5883 verts), HumanSpecies_02 (8973 verts), HumanSpecies_03 (6748 verts), HumanSpecies_04 (7630 verts); mannequin Idle (28374 verts in 2 skinned meshes).
+ENV GPU=AMD Radeon Pro 5300 CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz quality='Ultra' load={ 5.63 4.63 4.27 } batchUnities=1 rounds=3 seconds/sample=5
+SCENARIO free-play: 24 civilians, Heat topped to 3 stars; sessions cycle ACEFG each round: A = mannequin NPCs + Sidekick hero VECTOR=Starter_03; B = Sidekick NPCs + same hero; C = mannequin NPCs + the mannequin as hero (hero definition's prefab/suit cleared for that session only, restored at exit).
+PASS A mannequin NPCs r1: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+A mannequin NPCs r1 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+PASS A: every NPC body is the shared mannequin.
+PASS A: NpcLod has NPCs in both tiers (near 13, far 16).
+PASS A: far NPC (Civilian, 81 m): Animator disabled and stepped manually (5 steps in 1 s), presentation off, skinning only when visible.
+PASS A: near NPC (Civilian, 28 m): Animator, presentation and skinning fully on.
+A NpcLod now near(full)=13 far(cheap)=16
+A mannequin NPCs HERO BODY Starter_03: 19510 verts, 2992 bones, 84 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+HYGIENE waited 213s for other batch Unity processes / other CPU load before A mannequin NPCs r1
+MEASURED A mannequin NPCs r1 attempt1: FPS=100.18 p95=11.02ms frames=501 drawCalls median=264 npcs=29 heat=2.94 npcLod near/far=6/23 visibleNpcBodies=36 batchUnities before/after=1/1 otherCpu before/after=29%/21% load={ 10.60 8.07 5.89 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=9.46 Render.OpaqueGeometry=1.22 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.11 PreLateUpdate.DirectorUpdateAnimationEnd=0.18 PostLateUpdate.UpdateAllSkinnedMeshes=0.99
+PASS C mannequin hero r1: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+C mannequin hero r1 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=0 animators=30
+C mannequin hero HERO BODY Beta_Joints: 12473 verts, 64 bones, 0 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+PASS C: hero body is the two-mesh mannequin.
+MEASURED C mannequin hero r1 attempt1: FPS=90.06 p95=11.84ms frames=451 drawCalls median=271 npcs=29 heat=3.00 npcLod near/far=13/16 visibleNpcBodies=46 batchUnities before/after=1/1 otherCpu before/after=22%/24% load={ 9.35 7.89 5.85 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=10.49 Render.OpaqueGeometry=1.29 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.19 PostLateUpdate.UpdateAllSkinnedMeshes=0.85
+PASS E hero SkinQuality.Bone2 r1: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+E hero SkinQuality.Bone2 r1 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+PASS A: every NPC body is the shared mannequin.
+PASS A: NpcLod has NPCs in both tiers (near 13, far 16).
+PASS A: far NPC (Civilian, 76 m): Animator disabled and stepped manually (5 steps in 1 s), presentation off, skinning only when visible.
+PASS A: near NPC (Civilian, 34 m): Animator, presentation and skinning fully on.
+A NpcLod now near(full)=13 far(cheap)=16
+E hero SkinQuality.Bone2 HERO BODY Starter_03: 19510 verts, 2992 bones, 84 blend shapes (0 non-zero before, 0 now), quality=Bone2, updateWhenOffscreen=True, skinnedMotionVectors=True
+HYGIENE waited 5s for other batch Unity processes / other CPU load before E hero SkinQuality.Bone2 r1
+MEASURED E hero SkinQuality.Bone2 r1 attempt1: FPS=89.76 p95=12.15ms frames=449 drawCalls median=266 npcs=29 heat=3.00 npcLod near/far=7/22 visibleNpcBodies=40 batchUnities before/after=1/1 otherCpu before/after=89%/115% CONTAMINATED load={ 14.13 9.18 6.36 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=10.55 Render.OpaqueGeometry=1.26 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.12 PreLateUpdate.DirectorUpdateAnimationEnd=0.19 PostLateUpdate.UpdateAllSkinnedMeshes=1.10
+HYGIENE waited 5s for other batch Unity processes / other CPU load before E hero SkinQuality.Bone2 r1
+MEASURED E hero SkinQuality.Bone2 r1 attempt2: FPS=98.67 p95=11.35ms frames=494 drawCalls median=262 npcs=29 heat=3.00 npcLod near/far=5/24 visibleNpcBodies=35 batchUnities before/after=1/1 otherCpu before/after=71%/25% CONTAMINATED load={ 13.75 9.27 6.43 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=9.59 Render.OpaqueGeometry=1.21 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.10 PreLateUpdate.DirectorUpdateAnimationEnd=0.18 PostLateUpdate.UpdateAllSkinnedMeshes=0.96
+MEASURED E hero SkinQuality.Bone2 r1 attempt3: FPS=102.50 p95=10.66ms frames=513 drawCalls median=258 npcs=29 heat=2.91 npcLod near/far=6/23 visibleNpcBodies=30 batchUnities before/after=1/1 otherCpu before/after=29%/25% load={ 12.89 9.16 6.41 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=9.23 Render.OpaqueGeometry=1.19 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.11 PreLateUpdate.DirectorUpdateAnimationEnd=0.18 PostLateUpdate.UpdateAllSkinnedMeshes=0.91
+PASS F hero blend-shape weights zeroed (diagnostic, changes body shape) r1: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+F hero blend-shape weights zeroed (diagnostic, changes body shape) r1 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+PASS A: every NPC body is the shared mannequin.
+PASS A: NpcLod has NPCs in both tiers (near 14, far 15).
+PASS A: far NPC (Civilian, 79 m): Animator disabled and stepped manually (5 steps in 1 s), presentation off, skinning only when visible.
+PASS A: near NPC (Civilian, 29 m): Animator, presentation and skinning fully on.
+A NpcLod now near(full)=14 far(cheap)=15
+F hero blend-shape weights zeroed (diagnostic, changes body shape) HERO BODY Starter_03: 19510 verts, 2992 bones, 84 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+MEASURED F hero blend-shape weights zeroed (diagnostic, changes body shape) r1 attempt1: FPS=82.57 p95=13.11ms frames=413 drawCalls median=268 npcs=29 heat=2.96 npcLod near/far=14/15 visibleNpcBodies=48 batchUnities before/after=1/1 otherCpu before/after=88%/36% CONTAMINATED load={ 13.61 9.53 6.58 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=11.52 Render.OpaqueGeometry=1.29 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.21 PostLateUpdate.UpdateAllSkinnedMeshes=1.19
+MEASURED F hero blend-shape weights zeroed (diagnostic, changes body shape) r1 attempt2: FPS=84.74 p95=12.77ms frames=424 drawCalls median=270 npcs=29 heat=3.00 npcLod near/far=13/16 visibleNpcBodies=44 batchUnities before/after=1/1 otherCpu before/after=27%/39% load={ 14.20 9.72 6.67 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=11.15 Render.OpaqueGeometry=1.27 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.20 PostLateUpdate.UpdateAllSkinnedMeshes=1.16
+PASS G hero updateWhenOffscreen=false r1: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+G hero updateWhenOffscreen=false r1 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+PASS A: every NPC body is the shared mannequin.
+PASS A: NpcLod has NPCs in both tiers (near 13, far 16).
+PASS A: far NPC (Civilian, 81 m): Animator disabled and stepped manually (5 steps in 1 s), presentation off, skinning only when visible.
+PASS A: near NPC (Civilian, 38 m): Animator, presentation and skinning fully on.
+A NpcLod now near(full)=13 far(cheap)=16
+G hero updateWhenOffscreen=false HERO BODY Starter_03: 19510 verts, 2992 bones, 84 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=False, skinnedMotionVectors=True
+HYGIENE waited 97s for other batch Unity processes / other CPU load before G hero updateWhenOffscreen=false r1
+MEASURED G hero updateWhenOffscreen=false r1 attempt1: FPS=113.51 p95=10.11ms frames=568 drawCalls median=256 npcs=29 heat=3.00 npcLod near/far=6/23 visibleNpcBodies=30 batchUnities before/after=1/2 otherCpu before/after=32%/376% CONTAMINATED load={ 10.03 9.68 7.03 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=8.29 Render.OpaqueGeometry=1.27 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.11 PreLateUpdate.DirectorUpdateAnimationEnd=0.21 PostLateUpdate.UpdateAllSkinnedMeshes=0.59
+HYGIENE waited 46s for other batch Unity processes / other CPU load before G hero updateWhenOffscreen=false r1
+MEASURED G hero updateWhenOffscreen=false r1 attempt2: FPS=114.65 p95=9.53ms frames=574 drawCalls median=257 npcs=29 heat=3.00 npcLod near/far=13/16 visibleNpcBodies=32 batchUnities before/after=1/1 otherCpu before/after=23%/27% load={ 11.34 10.20 7.38 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=8.17 Render.OpaqueGeometry=1.22 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.20 PostLateUpdate.UpdateAllSkinnedMeshes=0.69
+PASS A mannequin NPCs r2: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+A mannequin NPCs r2 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+A mannequin NPCs HERO BODY Starter_03: 19510 verts, 2992 bones, 84 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+MEASURED A mannequin NPCs r2 attempt1: FPS=88.13 p95=12.07ms frames=441 drawCalls median=264 npcs=29 heat=3.00 npcLod near/far=15/14 visibleNpcBodies=38 batchUnities before/after=1/1 otherCpu before/after=40%/29% load={ 10.85 10.17 7.42 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=10.74 Render.OpaqueGeometry=1.23 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.19 PostLateUpdate.UpdateAllSkinnedMeshes=1.17
+PASS C mannequin hero r2: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+C mannequin hero r2 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=0 animators=30
+C mannequin hero HERO BODY Beta_Joints: 12473 verts, 64 bones, 0 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+PASS C: hero body is the two-mesh mannequin.
+MEASURED C mannequin hero r2 attempt1: FPS=93.09 p95=11.73ms frames=466 drawCalls median=271 npcs=29 heat=3.00 npcLod near/far=15/14 visibleNpcBodies=44 batchUnities before/after=1/1 otherCpu before/after=28%/19% load={ 9.80 9.96 7.38 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=10.11 Render.OpaqueGeometry=1.30 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.20 PostLateUpdate.UpdateAllSkinnedMeshes=0.87
+PASS E hero SkinQuality.Bone2 r2: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+E hero SkinQuality.Bone2 r2 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+E hero SkinQuality.Bone2 HERO BODY Starter_03: 19510 verts, 2992 bones, 84 blend shapes (0 non-zero before, 0 now), quality=Bone2, updateWhenOffscreen=True, skinnedMotionVectors=True
+MEASURED E hero SkinQuality.Bone2 r2 attempt1: FPS=86.73 p95=12.73ms frames=434 drawCalls median=264 npcs=29 heat=3.00 npcLod near/far=10/19 visibleNpcBodies=37 batchUnities before/after=1/1 otherCpu before/after=25%/25% load={ 10.03 10.00 7.43 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=10.94 Render.OpaqueGeometry=1.24 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.15 PreLateUpdate.DirectorUpdateAnimationEnd=0.21 PostLateUpdate.UpdateAllSkinnedMeshes=1.06
+PASS F hero blend-shape weights zeroed (diagnostic, changes body shape) r2: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+F hero blend-shape weights zeroed (diagnostic, changes body shape) r2 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+F hero blend-shape weights zeroed (diagnostic, changes body shape) HERO BODY Starter_03: 19510 verts, 2992 bones, 84 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+HYGIENE waited 5s for other batch Unity processes / other CPU load before F hero blend-shape weights zeroed (diagnostic, changes body shape) r2
+MEASURED F hero blend-shape weights zeroed (diagnostic, changes body shape) r2 attempt1: FPS=87.80 p95=12.25ms frames=440 drawCalls median=264 npcs=29 heat=2.67 npcLod near/far=12/17 visibleNpcBodies=36 batchUnities before/after=1/1 otherCpu before/after=27%/34% load={ 8.46 9.66 7.35 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=10.80 Render.OpaqueGeometry=1.22 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.15 PreLateUpdate.DirectorUpdateAnimationEnd=0.20 PostLateUpdate.UpdateAllSkinnedMeshes=1.14
+PASS G hero updateWhenOffscreen=false r2: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+G hero updateWhenOffscreen=false r2 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+G hero updateWhenOffscreen=false HERO BODY Starter_03: 19510 verts, 2992 bones, 84 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=False, skinnedMotionVectors=True
+MEASURED G hero updateWhenOffscreen=false r2 attempt1: FPS=96.93 p95=11.12ms frames=485 drawCalls median=264 npcs=29 heat=3.00 npcLod near/far=14/15 visibleNpcBodies=42 batchUnities before/after=1/1 otherCpu before/after=31%/24% load={ 7.41 9.36 7.29 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=9.73 Render.OpaqueGeometry=1.25 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.15 PreLateUpdate.DirectorUpdateAnimationEnd=0.20 PostLateUpdate.UpdateAllSkinnedMeshes=0.88
+PASS A mannequin NPCs r3: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+A mannequin NPCs r3 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+A mannequin NPCs HERO BODY Starter_03: 19510 verts, 2992 bones, 84 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+HYGIENE waited 66s for other batch Unity processes / other CPU load before A mannequin NPCs r3
+MEASURED A mannequin NPCs r3 attempt1: FPS=96.79 p95=11.38ms frames=484 drawCalls median=258 npcs=29 heat=2.95 npcLod near/far=8/21 visibleNpcBodies=30 batchUnities before/after=1/1 otherCpu before/after=22%/123% CONTAMINATED load={ 7.16 9.01 7.34 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=9.79 Render.OpaqueGeometry=1.20 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.13 PreLateUpdate.DirectorUpdateAnimationEnd=0.19 PostLateUpdate.UpdateAllSkinnedMeshes=0.98
+HYGIENE waited 15s for other batch Unity processes / other CPU load before A mannequin NPCs r3
+MEASURED A mannequin NPCs r3 attempt2: FPS=98.50 p95=11.86ms frames=493 drawCalls median=256 npcs=29 heat=3.00 npcLod near/far=8/21 visibleNpcBodies=30 batchUnities before/after=1/2 otherCpu before/after=27%/147% CONTAMINATED load={ 8.94 9.28 7.48 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=9.60 Render.OpaqueGeometry=1.21 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.13 PreLateUpdate.DirectorUpdateAnimationEnd=0.21 PostLateUpdate.UpdateAllSkinnedMeshes=0.92
+HYGIENE waited 51s for other batch Unity processes / other CPU load before A mannequin NPCs r3
+MEASURED A mannequin NPCs r3 attempt3: FPS=104.40 p95=10.27ms frames=522 drawCalls median=256 npcs=29 heat=2.95 npcLod near/far=10/19 visibleNpcBodies=26 batchUnities before/after=1/1 otherCpu before/after=38%/21% load={ 12.70 10.43 8.03 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=9.05 Render.OpaqueGeometry=1.19 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.20 PostLateUpdate.UpdateAllSkinnedMeshes=0.94
+PASS C mannequin hero r3: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+C mannequin hero r3 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=0 animators=30
+C mannequin hero HERO BODY Beta_Joints: 12473 verts, 64 bones, 0 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+PASS C: hero body is the two-mesh mannequin.
+MEASURED C mannequin hero r3 attempt1: FPS=102.17 p95=10.89ms frames=511 drawCalls median=269 npcs=29 heat=3.00 npcLod near/far=12/17 visibleNpcBodies=42 batchUnities before/after=1/1 otherCpu before/after=24%/154% CONTAMINATED load={ 11.77 10.30 8.01 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=9.20 Render.OpaqueGeometry=1.29 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.20 PostLateUpdate.UpdateAllSkinnedMeshes=0.81
+HYGIENE waited 66s for other batch Unity processes / other CPU load before C mannequin hero r3
+MEASURED C mannequin hero r3 attempt2: FPS=115.98 p95=9.46ms frames=580 drawCalls median=259 npcs=29 heat=3.00 npcLod near/far=13/16 visibleNpcBodies=34 batchUnities before/after=1/1 otherCpu before/after=26%/29% load={ 10.50 10.40 8.26 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=8.07 Render.OpaqueGeometry=1.24 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.20 PostLateUpdate.UpdateAllSkinnedMeshes=0.65
+PASS E hero SkinQuality.Bone2 r3: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+E hero SkinQuality.Bone2 r3 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+E hero SkinQuality.Bone2 HERO BODY Starter_03: 19510 verts, 2992 bones, 84 blend shapes (0 non-zero before, 0 now), quality=Bone2, updateWhenOffscreen=True, skinnedMotionVectors=True
+MEASURED E hero SkinQuality.Bone2 r3 attempt1: FPS=89.73 p95=11.93ms frames=449 drawCalls median=268 npcs=29 heat=3.00 npcLod near/far=12/17 visibleNpcBodies=42 batchUnities before/after=1/1 otherCpu before/after=24%/30% load={ 9.12 10.11 8.18 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=10.55 Render.OpaqueGeometry=1.25 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.20 PostLateUpdate.UpdateAllSkinnedMeshes=1.12
+PASS F hero blend-shape weights zeroed (diagnostic, changes body shape) r3: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+F hero blend-shape weights zeroed (diagnostic, changes body shape) r3 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+F hero blend-shape weights zeroed (diagnostic, changes body shape) HERO BODY Starter_03: 19510 verts, 2992 bones, 84 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=True, skinnedMotionVectors=True
+MEASURED F hero blend-shape weights zeroed (diagnostic, changes body shape) r3 attempt1: FPS=77.84 p95=14.96ms frames=390 drawCalls median=270 npcs=29 heat=3.00 npcLod near/far=10/19 visibleNpcBodies=44 batchUnities before/after=1/2 otherCpu before/after=30%/291% CONTAMINATED load={ 10.39 10.32 8.28 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=12.24 Render.OpaqueGeometry=1.31 Camera.Render=0.00 Culling=0.08 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.15 PreLateUpdate.DirectorUpdateAnimationEnd=0.27 PostLateUpdate.UpdateAllSkinnedMeshes=1.23
+HYGIENE waited 46s for other batch Unity processes / other CPU load before F hero blend-shape weights zeroed (diagnostic, changes body shape) r3
+MEASURED F hero blend-shape weights zeroed (diagnostic, changes body shape) r3 attempt2: FPS=109.10 p95=10.15ms frames=546 drawCalls median=256 npcs=29 heat=3.00 npcLod near/far=10/19 visibleNpcBodies=28 batchUnities before/after=1/1 otherCpu before/after=29%/26% load={ 9.99 10.30 8.39 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=8.63 Render.OpaqueGeometry=1.21 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.21 PostLateUpdate.UpdateAllSkinnedMeshes=0.87
+PASS G hero updateWhenOffscreen=false r3: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+G hero updateWhenOffscreen=false r3 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+G hero updateWhenOffscreen=false HERO BODY Starter_03: 19510 verts, 2992 bones, 84 blend shapes (0 non-zero before, 0 now), quality=Auto, updateWhenOffscreen=False, skinnedMotionVectors=True
+HYGIENE waited 5s for other batch Unity processes / other CPU load before G hero updateWhenOffscreen=false r3
+MEASURED G hero updateWhenOffscreen=false r3 attempt1: FPS=110.34 p95=10.01ms frames=552 drawCalls median=262 npcs=29 heat=2.67 npcLod near/far=9/20 visibleNpcBodies=36 batchUnities before/after=1/1 otherCpu before/after=28%/24% load={ 8.91 10.04 8.33 }
+   PROFILE ms/frame: Gfx.PresentFrame=0.00 Gfx.WaitForGfxCommandsFromMainThread=0.00 Gfx.WaitForPresentOnGfxThread=0.00 PlayerLoop=8.52 Render.OpaqueGeometry=1.23 Camera.Render=0.00 Culling=0.07 Shadows.RenderShadowMap=0.00 PreLateUpdate.DirectorUpdateAnimationBegin=0.14 PreLateUpdate.DirectorUpdateAnimationEnd=0.20 PostLateUpdate.UpdateAllSkinnedMeshes=0.75
+SUMMARY A mannequin NPCs: FPS per session [100.18, 88.13, 104.40] mean=97.57 (10.25 ms) median=100.18
+SUMMARY C mannequin hero: FPS per session [90.06, 93.09, 115.98] mean=99.71 (10.03 ms) median=93.09
+SUMMARY E hero SkinQuality.Bone2: FPS per session [102.50, 86.73, 89.73] mean=92.99 (10.75 ms) median=89.73
+SUMMARY F hero blend-shape weights zeroed (diagnostic, changes body shape): FPS per session [84.74, 87.80, 109.10] mean=93.88 (10.65 ms) median=87.80
+SUMMARY G hero updateWhenOffscreen=false: FPS per session [114.65, 96.93, 110.34] mean=107.30 (9.32 ms) median=110.34
+SUMMARY C mannequin hero vs A (medians): -7.1% FPS, +0.76 ms/frame
+SUMMARY E hero SkinQuality.Bone2 vs A (medians): -10.4% FPS, +1.16 ms/frame
+SUMMARY F hero blend-shape weights zeroed (diagnostic, changes body shape) vs A (medians): -12.4% FPS, +1.41 ms/frame
+SUMMARY G hero updateWhenOffscreen=false vs A (medians): +10.1% FPS, -0.92 ms/frame
+SUMMARY C mannequin hero vs A: +2.2% FPS, -0.22 ms/frame
+SUMMARY E hero SkinQuality.Bone2 vs A: -4.7% FPS, +0.51 ms/frame
+SUMMARY F hero blend-shape weights zeroed (diagnostic, changes body shape) vs A: -3.8% FPS, +0.40 ms/frame
+SUMMARY G hero updateWhenOffscreen=false vs A: +10.0% FPS, -0.93 ms/frame
+LIMIT: Editor Play Mode batch throughput at 1280x720, hero parked, idle input; not a standalone-player figure.
+RESTORED HumanoidAnimationTuning.SidekickNpcs=False, vector CharacterPrefab=Starter_03 Suit=vector-suit

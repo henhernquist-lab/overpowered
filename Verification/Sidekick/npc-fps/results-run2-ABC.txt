@@ -1,0 +1,60 @@
+PASS NpcLooks: HumanSpecies_01 (5883 verts), HumanSpecies_02 (8973 verts), HumanSpecies_03 (6748 verts), HumanSpecies_04 (7630 verts); mannequin Idle (28374 verts in 2 skinned meshes).
+ENV GPU=AMD Radeon Pro 5300 CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz quality='Ultra' load={ 6.66 5.21 4.49 } batchUnities=1 rounds=3 seconds/sample=5
+SCENARIO free-play: 24 civilians, Heat topped to 3 stars; sessions cycle ABC each round: A = mannequin NPCs + Sidekick hero VECTOR=Starter_03; B = Sidekick NPCs + same hero; C = mannequin NPCs + the mannequin as hero (hero definition's prefab/suit cleared for that session only, restored at exit).
+PASS A mannequin NPCs r1: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+A mannequin NPCs r1 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+PASS A: every NPC body is the shared mannequin.
+PASS A: NpcLod has NPCs in both tiers (near 13, far 16).
+PASS A: far NPC (Civilian, 78 m): Animator disabled and stepped manually (4 steps in 1 s), presentation off, skinning only when visible.
+PASS A: near NPC (Civilian, 45 m): Animator, presentation and skinning fully on.
+A NpcLod now near(full)=13 far(cheap)=16
+MEASURED A mannequin NPCs r1 attempt1: FPS=9.98 p95=27.60ms frames=71 drawCalls median=266 npcs=29 heat=3.00 npcLod near/far=12/17 visibleNpcBodies=43 batchUnities before/after=1/1
+PASS B sidekick NPCs r1: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+B sidekick NPCs r1 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=29 npcSkinnedVertices=208279 distinctNpcMaterials=6 suitMaterials=7 animators=30
+PASS B: every NPC body is one NpcLooks skinned mesh.
+PASS B: 6 shared suit materials for 29 NPCs = the cache's distinct (look, role colour, accent) entries (+1 hero suit), never per NPC: Suit/npc-humanspecies_03-suit/Amber+Metal, Suit/npc-humanspecies_02-suit/Amber+Metal, Suit/npc-humanspecies_04-suit/Amber+Metal, Suit/npc-humanspecies_01-suit/Amber+Metal, Suit/npc-humanspecies_03-suit/Teal+Cyan, Suit/npc-humanspecies_01-suit/Teal+Cyan.
+PASS B: NpcLod has NPCs in both tiers (near 13, far 16).
+PASS B: far NPC (Civilian, 67 m): Animator disabled and stepped manually (4 steps in 1 s), presentation off, skinning only when visible.
+PASS B: near NPC (Civilian, 37 m): Animator, presentation and skinning fully on.
+B NpcLod now near(full)=14 far(cheap)=15
+MEASURED B sidekick NPCs r1 attempt1: FPS=41.07 p95=26.20ms frames=206 drawCalls median=246 npcs=29 heat=2.96 npcLod near/far=13/16 visibleNpcBodies=21 batchUnities before/after=1/1
+PASS C mannequin hero r1: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+C mannequin hero r1 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=0 animators=30
+PASS C: hero body is the two-mesh mannequin.
+MEASURED C mannequin hero r1 attempt1: FPS=99.13 p95=12.85ms frames=496 drawCalls median=267 npcs=29 heat=3.00 npcLod near/far=12/17 visibleNpcBodies=42 batchUnities before/after=1/0
+PASS A mannequin NPCs r2: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+A mannequin NPCs r2 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+MEASURED A mannequin NPCs r2 attempt1: FPS=69.31 p95=16.20ms frames=347 drawCalls median=268 npcs=29 heat=3.00 npcLod near/far=13/16 visibleNpcBodies=42 batchUnities before/after=1/1
+PASS B sidekick NPCs r2: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+B sidekick NPCs r2 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=29 npcSkinnedVertices=208222 distinctNpcMaterials=7 suitMaterials=8 animators=30
+MEASURED B sidekick NPCs r2 attempt1: FPS=49.45 p95=24.25ms frames=248 drawCalls median=246 npcs=29 heat=3.00 npcLod near/far=13/16 visibleNpcBodies=20 batchUnities before/after=1/1
+PASS C mannequin hero r2: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+C mannequin hero r2 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=0 animators=30
+PASS C: hero body is the two-mesh mannequin.
+MEASURED C mannequin hero r2 attempt1: FPS=92.82 p95=12.44ms frames=465 drawCalls median=269 npcs=29 heat=3.00 npcLod near/far=14/15 visibleNpcBodies=40 batchUnities before/after=1/1
+PASS A mannequin NPCs r3: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+A mannequin NPCs r3 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=1 animators=30
+MEASURED A mannequin NPCs r3 attempt1: FPS=64.66 p95=24.27ms frames=325 drawCalls median=264 npcs=29 heat=3.00 npcLod near/far=13/16 visibleNpcBodies=38 batchUnities before/after=1/1
+PASS B sidekick NPCs r3: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+B sidekick NPCs r3 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=29 npcSkinnedVertices=198622 distinctNpcMaterials=7 suitMaterials=8 animators=30
+MEASURED B sidekick NPCs r3 attempt1: FPS=12.39 p95=224.47ms frames=63 drawCalls median=249 npcs=29 heat=3.00 npcLod near/far=14/15 visibleNpcBodies=24 batchUnities before/after=1/1
+PASS C mannequin hero r3: enter Free Play.
+VIEW densest crossing of the island: Downtown (-28.00, 0.03, -24.00) (722 m of building height within 60 m); hero (-36.50, 0.12, -52.00); camera (-36.50, 4.91, -58.53)
+C mannequin hero r3 STRUCTURE npcs=29 (civilians 24, cops 5) npcSkinnedRenderers=58 npcSkinnedVertices=822846 distinctNpcMaterials=4 suitMaterials=0 animators=30
+PASS C: hero body is the two-mesh mannequin.
+MEASURED C mannequin hero r3 attempt1: FPS=53.28 p95=38.52ms frames=267 drawCalls median=271 npcs=29 heat=3.00 npcLod near/far=14/15 visibleNpcBodies=48 batchUnities before/after=1/1
+SUMMARY A mannequin NPCs: FPS per session [9.98, 69.31, 64.66] mean=47.98 (20.84 ms)
+SUMMARY B sidekick NPCs: FPS per session [41.07, 49.45, 12.39] mean=34.30 (29.15 ms)
+SUMMARY C mannequin hero: FPS per session [99.13, 92.82, 53.28] mean=81.74 (12.23 ms)
+SUMMARY B sidekick NPCs vs A: -28.5% FPS, +8.31 ms/frame
+SUMMARY C mannequin hero vs A: +70.4% FPS, -8.61 ms/frame
+LIMIT: Editor Play Mode batch throughput at 1280x720, hero parked, idle input; not a standalone-player figure.
+RESTORED HumanoidAnimationTuning.SidekickNpcs=False, vector CharacterPrefab=Starter_03 Suit=vector-suit

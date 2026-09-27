@@ -1,0 +1,33 @@
+PASS Seed 2409: 63 buildings, every one styled from its district's list, 7 archetypes; distribution=Slate tower=7,Teal offices=9,Glass high-rise=13,Brick warehouse=18,Sandstone terraces=6,Townhouse=7,Harbour shed=3
+PASS Seed 2409: props=523, rooftop=268, street=255; Lamp=61,Bench=35,Trash=31,Hydrant=20,BusStop=18,Newspaper=22,Planter=28,Car=40,HVAC=63,Vent=63,WaterTower=24,Antenna=38,RoofAccess=63,Billboard=17
+PASS Existing seeded height/layout variety retained.
+PASS Layout CONTROL: original CityLayout placements/heights/reward records are unchanged by art generation.
+PASS Same-seed CONTROL regenerates exact placement records.
+PASS Authored placement CONTROL preserves explicit position/yaw instead of regenerating over edits.
+PASS ALL live renderers use shared materials from CityPalette (palette + 1 palette-coloured suit material(s)); unregistered material count=0.
+PASS Palette CONTROL: changed ONE Amber swatch RGBA(1.000, 0.700, 0.260, 1.000) -> RGBA(0.310, 0.860, 0.800, 1.000); 295 renderers sharing it updated (windows, lamps, vehicle lights, actors).
+PASS Palette restore CONTROL returns all shared Amber surfaces to the original swatch.
+PASS Existing sun intensity=1.2, rotation=(45,-35,0), ambient=(.45,.5,.6) unchanged.
+PASS Existing Built-in render pipeline retained; no active post-processing Volume was present/added.
+PASS Populated benchmark: civilians=26, on-NavMesh cops=7 (patrols 5 >= 5 = 2 + 3 stars x 1 from GameTuning.Heat, side Hero).
+MEASURED seed=2409: 1280x720 Editor actual renders, frames=294, seconds=8.449, FPS=34.80, p95=20.81ms, draw calls median/max=600/604, SetPass median=112; vs recorded 155 FPS=-77.6%; GPU=AMD Radeon Pro 5300.
+PASS New newspaper box uses the EXISTING BreakableProp and one real Rigidbody, no parallel damage implementation.
+PASS Real charged punch accepted against the newly styled newspaper box.
+PASS Animated punch strikes the newly styled newspaper box after windup.
+PASS New prop physics: mass=45kg, punch=1350 N·s, displacement=10.172m, velocity=25.119m/s.
+PASS Existing break/shard path removes the damaged compound prop (not an extra prop implementation).
+PASS Seed 3226: 77 buildings, every one styled from its district's list, 7 archetypes; distribution=Slate tower=18,Glass high-rise=8,Teal offices=9,Brick warehouse=17,Sandstone terraces=12,Townhouse=8,Harbour shed=5
+PASS Seed 3226: props=607, rooftop=352, street=255; Lamp=61,Bench=35,Trash=28,Hydrant=20,BusStop=18,Newspaper=30,Planter=23,Car=40,HVAC=77,Vent=77,WaterTower=41,Antenna=60,RoofAccess=77,Billboard=20
+PASS Existing seeded height/layout variety retained.
+PASS Layout CONTROL: original CityLayout placements/heights/reward records are unchanged by art generation.
+PASS Same-seed CONTROL regenerates exact placement records.
+PASS Different-seed CONTROL changes styles, rooftop equipment selection, street jitter and existing heights.
+PASS Authored placement CONTROL preserves explicit position/yaw instead of regenerating over edits.
+PASS ALL live renderers use shared materials from CityPalette (palette + 1 palette-coloured suit material(s)); unregistered material count=0.
+PASS Palette CONTROL: changed ONE Amber swatch RGBA(1.000, 0.700, 0.260, 1.000) -> RGBA(0.310, 0.860, 0.800, 1.000); 310 renderers sharing it updated (windows, lamps, vehicle lights, actors).
+PASS Palette restore CONTROL returns all shared Amber surfaces to the original swatch.
+PASS Existing sun intensity=1.2, rotation=(45,-35,0), ambient=(.45,.5,.6) unchanged.
+PASS Existing Built-in render pipeline retained; no active post-processing Volume was present/added.
+PASS Populated benchmark: civilians=26, on-NavMesh cops=7 (patrols 5 >= 5 = 2 + 3 stars x 1 from GameTuning.Heat, side Hero).
+MEASURED seed=3226: 1280x720 Editor actual renders, frames=314, seconds=5.006, FPS=62.72, p95=16.80ms, draw calls median/max=614/614, SetPass median=102; vs recorded 155 FPS=-59.5%; GPU=AMD Radeon Pro 5300.
+PASS Camera repair retained through both seeded mode runs and return Home.

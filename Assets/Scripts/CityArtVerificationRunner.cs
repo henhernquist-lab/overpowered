@@ -80,8 +80,9 @@ public sealed class CityArtVerificationRunner : MonoBehaviour
     IEnumerator PaletteControl()
     {
         var renderer=UnityEngine.Object.FindObjectsByType<Renderer>();
-        var palette=CityMaterials.Current;var allowed=new HashSet<Material>(palette.All);
-        Check(renderer.All(r=>r.sharedMaterials.All(allowed.Contains)),"ALL live renderers use shared materials from CityPalette; unregistered material count=0.");
+        // Sidekick hero suits are generated from CityPalette colours and owned by the same CityMaterials (CityMaterials.Owned).
+        var palette=CityMaterials.Current;var allowed=new HashSet<Material>(palette.Owned);
+        Check(renderer.All(r=>r.sharedMaterials.All(allowed.Contains)),$"ALL live renderers use shared materials from CityPalette (palette + {palette.SuitCount} palette-coloured suit material(s)); unregistered material count=0.");
         var amber=CityMaterials.Get(CityColor.Amber);int affected=renderer.Count(r=>r.sharedMaterials.Contains(amber));Color before=palette.Palette.Colors[(int)CityColor.Amber];
         try
         {

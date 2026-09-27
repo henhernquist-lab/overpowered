@@ -46,6 +46,13 @@ public sealed class PlayerProgression : MonoBehaviour
     public void Initialize(ProgressionSettings settings, PowerDefinition[] powers, string path = null)
     {
         config = settings; definitions = powers;
+        // Batch mode is only ever automated verification: if a harness failed to set its sandbox path (e.g. a Reload whose
+        // Run aborted before writing its save pointer), use a throwaway file, never the player's real progression save.
+        if (path == null && Application.isBatchMode)
+        {
+            path = Path.Combine(Application.temporaryCachePath, "batch-unsandboxed-" + Guid.NewGuid().ToString("N") + ".json");
+            Debug.LogWarning("PlayerProgression: batch mode without a verification save path; using throwaway " + path);
+        }
         SavePath = path ?? Path.Combine(Application.persistentDataPath, settings.SaveFilename);
         Load();
     }

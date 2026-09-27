@@ -12,6 +12,7 @@
     <Compile Include="Assets/Scripts/**/*.cs" />
     <Compile Include="Assets/Editor/**/*.cs" />
     <Reference Include="$(UnityManaged)/UnityEngine/*.dll" />
+    <Reference Include="Assets/Plugins/Demigiant/DOTween/DOTween.dll" />
   </ItemGroup>
   <Target Name="CheckUnity" BeforeTargets="ResolveReferences">
     <Error Condition="!Exists('$(UnityManaged)/UnityEngine/UnityEngine.CoreModule.dll')" Text="Set UnityEditorPath to your Unity 6000.6.0f1 Unity.app directory." />

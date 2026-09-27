@@ -380,10 +380,25 @@ public sealed class HudPhase2VerificationRunner : MonoBehaviour
         var e = FirstEncounter(); e.enabled = false; Log("TEST HARNESS: villain encounter clock paused (enabled=false).");
         yield return BriefingShown(villain, "Villain");
         yield return Composite(new Vector2Int(1920, 1080), "briefing-villain-1920x1080");
-        float opened = Time.realtimeSinceStartup; yield return Realtime(villain.BriefingSeconds - 1.5f);
-        Check(hud.BriefingActive && GameHud.Shown(hud.Briefing), $"CONTROL: with no input the briefing is still up after {Time.realtimeSinceStartup - opened:0.0}s (< BriefingSeconds {villain.BriefingSeconds}).");
-        yield return Until(() => !hud.BriefingActive, 4f, "briefing timeout");
-        Check(hud.BriefingDismissedBy == "timeout", $"CONTROL: no input -> dismissed by TIMEOUT after {Time.realtimeSinceStartup - opened:0.0}s (unscaled, BriefingSeconds {villain.BriefingSeconds}).");
+        // Measured on the HUD's own briefing clock (BriefingElapsed: unscaled seconds since the card opened, while running), not
+        // from a realtime stamp taken after the capture above: the HUD clock already includes the capture, so that stamp ran
+        // behind it and the CONTROL failed whenever the capture (or an editor stall) took > 1.5 s. Every frame until the card
+        // closes: it must stay up while its clock is < BriefingSeconds, be seen up inside [BriefingSeconds - 1.5, BriefingSeconds),
+        // close by TIMEOUT on the first update past BriefingSeconds, and its clock must have advanced with real time.
+        float seconds = villain.BriefingSeconds, controlAt = seconds - 1.5f, h0 = hud.BriefingElapsed, r0 = Time.realtimeSinceStartup;
+        Log($"TIMING villain briefing: the HUD briefing clock already reads {h0:0.00}s of {seconds}s when the 1920x1080 composite returns.");
+        float lastUp = -1f, seenInWindow = -1f, longestFrame = 0f; int frames = 0; bool downEarly = false;
+        while (hud.BriefingActive)
+        {
+            if (Time.realtimeSinceStartup - r0 > seconds + 4f) throw new Exception($"Timed out waiting for the briefing timeout (HUD clock {hud.BriefingElapsed:0.00}s).");
+            float h = hud.BriefingElapsed; lastUp = h; if (!GameHud.Shown(hud.Briefing)) downEarly = true;
+            if (h >= controlAt && h < seconds) seenInWindow = h;
+            longestFrame = Mathf.Max(longestFrame, Time.unscaledDeltaTime); frames++; yield return null;
+        }
+        float closedAt = hud.BriefingElapsed, real = Time.realtimeSinceStartup - r0; longestFrame = Mathf.Max(longestFrame, Time.unscaledDeltaTime);
+        Check(!downEarly && seenInWindow >= controlAt, $"CONTROL: with no input the briefing is still up at {seenInWindow:0.00}s on the HUD briefing clock (>= {controlAt:0.0}s, < BriefingSeconds {seconds}); {frames} frames watched, longest {longestFrame:0.00}s.");
+        Check(hud.BriefingDismissedBy == "timeout" && lastUp < seconds && closedAt >= seconds, $"CONTROL: no input -> dismissed by TIMEOUT on the first update past BriefingSeconds {seconds}: last seen up at {lastUp:0.00}s, closed at {closedAt:0.00}s on the HUD briefing clock (unscaled).");
+        Check(Mathf.Abs((closedAt - h0) - real) <= longestFrame + .05f, $"HUD briefing clock runs at real (unscaled) time: +{closedAt - h0:0.00}s on the HUD clock over {real:0.00}s real (tolerance one frame, {longestFrame:0.00}s).");
         yield return Realtime(.5f);
 
         var rules = villain.Rules; string L(ObjectiveTask t) => rules.Tasks.First(x => x.Task == t).Label;

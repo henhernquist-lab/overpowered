@@ -47,6 +47,35 @@ public sealed class AudioVerificationRunner : MonoBehaviour
     void Move(Vector3 p){var cc=W.Hero.GetComponent<CharacterController>();cc.enabled=false;W.Hero.transform.position=p;cc.enabled=true;W.Hero.transform.forward=Vector3.forward;Physics.SyncTransforms();}
     void Energy(float amount){typeof(PowerUser).GetProperty("Energy").SetValue(W.Powers,amount);}
     void Submit(Button button){using(var e=NavigationSubmitEvent.GetPooled()){e.target=button;button.SendEvent(e);}}
+    // Measured on the AUDIO clock. Scene()'s 1.1 s realtime settle can end in the very frame AudioDirector first calls Play()
+    // on the music (whenever the first play-mode frame alone takes > 1.1 s, e.g. editor windows opening at startup or a busy
+    // machine): no mixer block has run yet, so timeSamples is still 0 although nothing is silenced. So sample the cursor, let
+    // AudioSettings.dspTime advance (bounded in real time, so an output device that never advances the DSP clock still FAILS),
+    // then require the cursor to have moved with that clock: at least half the expected samples (stream start latency) and no
+    // more than the clock allows (a jumping cursor is bookkeeping, not playback).
+    long cursorAdvanced;double cursorDsp,cursorExpected;int cursorFrom,cursorTo;
+    IEnumerator Cursor(AudioSource source,double dspSeconds)
+    {
+        double dsp0=AudioSettings.dspTime;cursorFrom=source.timeSamples;int frame0=Time.frameCount;float until=Time.realtimeSinceStartup+(float)dspSeconds+6;
+        while(AudioSettings.dspTime-dsp0<dspSeconds||Time.frameCount==frame0)
+        {
+            if(Time.realtimeSinceStartup>until)throw new Exception($"Music DSP sample cursor advances: the DSP clock advanced only {AudioSettings.dspTime-dsp0:F3}s of {dspSeconds}s in {dspSeconds+6}s real time (audio output not running).");
+            yield return null;
+        }
+        cursorDsp=AudioSettings.dspTime-dsp0;cursorTo=source.timeSamples;cursorAdvanced=cursorTo-cursorFrom;if(cursorAdvanced<0)cursorAdvanced+=source.clip.samples;
+        cursorExpected=cursorDsp*source.clip.frequency; // at pitch 1
+    }
+    IEnumerator MusicCursor()
+    {
+        var music=PlayingSource(AudioCue.Music);
+        yield return Cursor(music,2);
+        Check(music.isPlaying&&PlayingSource(AudioCue.Music)==music&&cursorAdvanced>=cursorExpected*.5&&cursorAdvanced<=cursorExpected*1.25+4096,
+            $"Music DSP sample cursor advances (not just bookkeeping): {cursorFrom} -> {cursorTo} = {cursorAdvanced} samples over {cursorDsp:F3} s of DSP clock ({cursorExpected:F0} expected at {music.clip.frequency} Hz; 50-125% required).");
+        // CONTROL: the same measurement fails a cursor that stalls while the source still reports isPlaying (pitch 0 stops the
+        // channel's playback cursor; the DSP clock keeps running). Restored to the bed's pitch 1 afterwards.
+        music.pitch=0;yield return null;yield return Cursor(music,.5);music.pitch=1;
+        Check(music.isPlaying&&cursorAdvanced<cursorExpected*.5,$"CONTROL: stalled music cursor (pitch 0, isPlaying={music.isPlaying}) moved {cursorAdvanced} samples over {cursorDsp:F3} s of DSP clock (< 50% of {cursorExpected:F0}) -> the measurement rejects it.");
+    }
     IEnumerator Checks()
     {
         yield return Scene(GameFlow.HomeScene);Check(A!=null&&A.Sources.Length==24,"Single automatic director, exactly 24 preallocated AudioSources.");
@@ -57,7 +86,7 @@ public sealed class AudioVerificationRunner : MonoBehaviour
         }
         Check(A.Tuning.Cues.Length==Enum.GetValues(typeof(AudioCue)).Length,$"All {A.Tuning.Cues.Length} cue types / {count} clip assignments populated (no silent placeholders).");
         foreach(var key in new[]{"MasterVolume","MusicVolume","SFXVolume","UIVolume","AmbientVolume"})Check(A.Tuning.Mixer.GetFloat(key,out float value),$"Exposed mixer parameter {key} is valid.");
-        SourceCheck(AudioCue.Music);Check(PlayingSource(AudioCue.Music).timeSamples>0,"Music DSP sample cursor advances (not just bookkeeping).");
+        SourceCheck(AudioCue.Music);yield return MusicCursor();
         var menu=FindAnyObjectByType<ModeScreens>();var disabledButton=new Button(()=>GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/free-play"))){name="verification-disabled"};disabledButton.SetEnabled(false);menu.Root.Add(disabledButton);yield return null;A.StopAll();Submit(disabledButton);Check(Playing(AudioCue.UiClick)==0&&!GameFlow.Instance.Loading,"Disabled UI CONTROL emits no click and launches nothing.");
         using(var hover=PointerOverEvent.GetPooled()){hover.target=menu.ModeButtons["hero"];menu.ModeButtons["hero"].SendEvent(hover);}SourceCheck(AudioCue.UiHover);
         Submit(menu.ModeButtons["hero"]);SourceCheck(AudioCue.UiClick);yield return Scene(GameFlow.CityScene);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum CityColor { Road, Pavement, Cream, Brick, Sand, Teal, Slate, Roof, Glass, Amber, Metal, Wood, Leaf, Red, Blue, Cyan, Fire, UiNavy, UiPanel, UiMuted, UiInk, HeroAccent, VillainAccent, UiPurple, Water, Haze, Lawn }
@@ -28,6 +29,27 @@ public sealed class CityMaterials : MonoBehaviour
     readonly Dictionary<CityColor,Color> applied=new Dictionary<CityColor,Color>();
     float appliedSmoothness=float.NaN;
     public IEnumerable<Material> All=>materials.Values;
+    // Sidekick suits: ONE material + colour map per (suit, primary, secondary), shared by every renderer that asks, rebuilt
+    // in place when the palette changes, destroyed with this owner. Never per frame or per character.
+    sealed class SuitEntry{public Material Material;public Texture2D Map;public Color Primary,Secondary,Trim;}
+    readonly Dictionary<(SidekickSuit,CityColor,CityColor),SuitEntry> suits=new Dictionary<(SidekickSuit,CityColor,CityColor),SuitEntry>();
+    public int SuitCount=>suits.Count;
+    /// Palette materials plus the suit materials generated from palette colours (both owned and destroyed here).
+    public IEnumerable<Material> Owned=>materials.Values.Concat(suits.Values.Select(e=>e.Material));
+    public static int SuitsCreated {get;private set;}
+    public static Material Suit(SidekickSuit suit,CityColor primary,CityColor secondary)
+    {
+        if(Current==null)throw new System.InvalidOperationException("City palette must be initialized before geometry.");
+        return Current.SuitMaterial(suit,primary,secondary);
+    }
+    public Material SuitMaterial(SidekickSuit suit,CityColor primary,CityColor secondary)
+    {
+        if(suits.TryGetValue((suit,primary,secondary),out var entry))return entry.Material;
+        entry=new SuitEntry{Primary=Palette.Colors[(int)primary],Secondary=Palette.Colors[(int)secondary],Trim=Palette.Colors[(int)suit.Trim]};
+        entry.Map=suit.Build(entry.Primary,entry.Secondary,entry.Trim);
+        entry.Material=suit.CreateMaterial(entry.Map,$"Suit/{suit.name}/{primary}+{secondary}",Palette.Smoothness);
+        suits.Add((suit,primary,secondary),entry);SuitsCreated++;return entry.Material;
+    }
     public void Initialize(CityPalette palette) {Current=this;Palette=palette;}
     public static Material Get(CityColor color)
     {
@@ -44,13 +66,26 @@ public sealed class CityMaterials : MonoBehaviour
         foreach(var pair in materials)
         {var color=Palette.Colors[(int)pair.Key];pair.Value.color=color;pair.Value.SetFloat("_Glossiness",Palette.Smoothness);applied[pair.Key]=color;}
         appliedSmoothness=Palette.Smoothness;
+        foreach(var pair in suits)
+        {
+            var e=pair.Value;var (suit,primary,secondary)=pair.Key;
+            e.Primary=Palette.Colors[(int)primary];e.Secondary=Palette.Colors[(int)secondary];e.Trim=Palette.Colors[(int)suit.Trim];suit.Write(e.Map,e.Primary,e.Secondary,e.Trim);
+            if(!suit.AuthoredShader)e.Material.SetFloat("_Glossiness",Palette.Smoothness);
+        }
     }
     bool Changed()
     {
         if(!appliedSmoothness.Equals(Palette.Smoothness))return true;
         foreach(var pair in materials)if(!applied.TryGetValue(pair.Key,out var color)||!color.Equals(Palette.Colors[(int)pair.Key]))return true;
+        foreach(var pair in suits)
+            if(!pair.Value.Primary.Equals(Palette.Colors[(int)pair.Key.Item2])||!pair.Value.Secondary.Equals(Palette.Colors[(int)pair.Key.Item3])||!pair.Value.Trim.Equals(Palette.Colors[(int)pair.Key.Item1.Trim]))return true;
         return false;
     }
     void LateUpdate(){if(Changed())Apply();}
-    void OnDestroy(){foreach(var mat in materials.Values)Destroy(mat);if(Current==this)Current=null;}
+    void OnDestroy()
+    {
+        foreach(var mat in materials.Values)Destroy(mat);
+        foreach(var e in suits.Values){Destroy(e.Material);Destroy(e.Map);}suits.Clear();
+        if(Current==this)Current=null;
+    }
 }

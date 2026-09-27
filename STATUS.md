@@ -2433,3 +2433,420 @@ Retargeted existing suites: `HeroForgeVerification` (synergy coverage for the ca
   a playtest should decide whether to keep it.
 - Robbers left behind when their car departs, stalls or is wrecked run for a far exit on foot, so stalling a car is not a
   free win.
+## Local agent Phase 0: ground truth, packages, DOTween — 2026-09-27 (appended)
+
+Verified in an isolated clone (the user's Editor was open on the real tree at the start); real tree only received the
+verified files. Evidence: session scratchpad `phase0/` (logs, reflection dumps, tween test, Sidekick renders).
+
+- **Imported, now committed:** Synty Sidekick (was already in `ef63fdb`), DOTween 1.3.030 (`Assets/Plugins/Demigiant`),
+  Cartoon FX Remaster FREE (`Assets/JMO Assets`). Cartoon FX IS present.
+- **Baseline compile of the tree as the user left it FAILED** (1 error, third-party):
+  `Synty/.../Editor/ModularCharacterWindow.cs(25,13): error CS0234: 'VisualScripting' does not exist in 'Unity'`. Because
+  Sidekick's editor assembly failed, Assembly-CSharp-Editor (all our verifiers) could not rebuild. Fixed by adding
+  `com.unity.visualscripting 1.9.12` (ships with the editor; Sidekick's asmdef already references Unity.VisualScripting.Core).
+- **Package audit:** 0 references in our code/asmdefs AND 0 of 5,309 package GUIDs in 420,013 serialized project GUIDs for
+  Entities, Unity Physics, Multiplayer Services, Transport, QoS, Wire, Deployment. Removed `com.unity.physics` then
+  `com.unity.services.multiplayer`, recompiling after each (0 errors, no new warnings; 67 → 61 → 53 packages). Kept:
+  characters-animation (Rigging/Cinemachine/Timeline/FBX, needed later), shadergraph (Sidekick shader), ai.* (App UI
+  settings referenced), probuilder/collab/multiplayer.center (unreferenced but harmless — left by default).
+- **DOTween setup** run by its real API (the Utility Panel's "Setup DOTween" chain, found by reflecting DOTweenEditor.dll):
+  created `Assets/Resources/DOTweenSettings.asset`, deleted DOTweenUpgradeManager files, `DOTWEEN` scripting define added to
+  every build target (DOTween's own post-processor). Proven: an unscaled (`SetUpdate(true)`) tween advances at timeScale 0
+  (0.333 at 1.001 s real, completes to 1.000); CONTROL scaled tween stays 0.000, then moves once timeScale is 1.
+- **Compile gate:** `Overpowered.Build.csproj` now references `DOTween.dll` so gameplay code may use DOTween; 0/0.
+  Unity batch compile of the final clone: 0 errors. Third-party warnings only (CFXR WelcomeScreen CS0618, Synty ToolDownloader
+  CS0618); our code 0 CS warnings.
+- **Smoke regressions on the final package set:** City 54 + Reload PASS, HUD P1 316, Humanoid 54 — all exit 0.
+- **Sidekick facts (Phase 1 input):** 8 prefabs (Starter_01–04, HumanSpecies_01–04), each 1 Animator with a valid Humanoid
+  avatar (55 mapped bones, a superset of our Mixamo 52), Unreal-style bone names (irrelevant: HumanoidPresentation uses
+  HumanBodyBones). SharedHumanoid.controller plays Idle on Starter_01. Sidekick_ShaderGraph has a Built-in target and renders
+  non-pink on Built-in (0.00% magenta; error-shader control 100%). Colours come from a 32x32 point-filtered `_ColorMap`
+  (2x2 swatches) + masks — so HumanoidPresentation's current "replace every material with a palette material" would flatten
+  Sidekick characters to one colour; Phase 1 must recolour the colour map instead.
+
+### OVERNIGHT DECISIONS
+- Added `com.unity.visualscripting` (not in the brief): the only non-invasive fix for Sidekick's compile error; patching vendor
+  code was the alternative.
+- Removed only the two direct manifest entries the brief named (their dependents went with them). Left unreferenced
+  probuilder / collab-proxy / multiplayer.center: the brief said "if unsure, leave it", and they cost nothing at runtime.
+- Committed Cartoon FX + DOTween vendor files to git (same as Synty was), so the cloud agent and fresh clones compile.
+- `Side_Kick_Data.db` (tracked) is rewritten by Sidekick's Character Creator window when play mode toggles in an Editor where
+  it auto-opened (`file_exists` flips on 58 rows). Left tracked; verification runs restore it. If it keeps showing up as a
+  diff, set the EditorPref `syntySkAutoOpenState` false (per-machine, not in the repo).
+- `SyntyPackageHelper` may prompt in the Editor to add `com.unity.formats.fbx` as a direct dependency (it's already present
+  transitively) — safe to decline or accept.
+
+
+## CLOUD FEEDBACK — local integration #1 of `cloud/gameplay-depth` (2026-09-27, local agent, Unity 6000.6.0f1 macOS Intel)
+
+**Integrated state.** Branch `integrate/cloud-1` in a scratch worktree:
+- `b789375`: merge of cloud `f315f31`.
+- `fc7d254`: RosterSetup assets.
+- `9535325`: merge of cloud `4c6f51d` (the Vault heist, MissionSetup, MissionVerification and STATUS commits pushed while this run was going on).
+- `6b44a08`: MissionSetup assets.
+
+The base was local main `540379e`. After `fc7d254`, only new files and STATUS changed, so the sweep results below, taken at `fc7d254`, still hold for `6b44a08`.
+
+**Compile and setup: all clean.**
+- The dotnet gate reported 0 warnings and 0 errors after both merges.
+- The Unity batch compile reported 0 CS errors and 0 CS warnings in our code. The only warnings were the two analyzer warnings that already existed (UAC0005 in AudioSetup.cs:46, UAC1001 in HumanoidPresentation.cs:34).
+- `RosterSetup.Batch` created 40 files. `MissionSetup.Batch` created 17 files.
+- Both are idempotent. A second run of each changed no file: 2679 and 2704 files hash-identical, and `git status` identical.
+- `MissionSetup.BatchUseInModes` was **not** run. The cloud STATUS says to run it only after the full sweep passes, and the sweep did not pass.
+
+**Result: NOT ready to merge.** Every failure below comes from test harness bugs or one mission logic bug. With the harness bug patched in memory only (never committed), every new power, all three synergies and the loadout reload pass.
+
+### Failures to fix on the cloud branch
+
+1. **Roster, Melee and HeroStats: the harness never runs `PowerUser.Tick`.** Classification: cloud **test bug**.
+   - `RosterVerification.Run`: exit 1, 41 PASS. `FAIL System.Exception: Restart after cooldown.` at `RosterVerificationRunner.cs:165`. The suite aborted inside Laser Eyes, so Lightning, Force Field, Speed, Poison and the synergy sections never ran.
+   - `RosterVerification.Reload`: exit 1. `FAIL System.Exception: SECOND PROCESS restores the new-power loadout: vector laser-eyes + strength.` This is a cascade: Run aborted before it saved the nova laser-eyes + poison loadout.
+   - `MeleeVerification.Run`: exit 1, 4 PASS. `FAIL System.Exception: Tap 2 inside the window = stage 2 (punch).` at `MeleeVerificationRunner.cs:30`.
+   - `HeroStatsVerification.Run`: exit 1, 40 PASS. `FAIL System.Exception: Second Ice cast (energy for the regen sample).` at `HeroStatsVerificationRunner.cs:89`.
+   - **Cause:** `SessionVerificationRunner.PlaceHero` sets `W.Hero.enabled = keepEnabled` (false by default, `SessionVerificationRunner.cs:78`). `Isolate()` calls it at `:72`. The only per-frame caller of `PowerUser.Tick` is `SuperHeroController.Update` (`SuperHeroController.cs:71`). With the controller disabled, no cooldown or recharge ever counts down, so `WaitForSeconds(stats.Cooldown)` waits forever in game terms.
+   - **Evidence from the diagnostic run.** I ran with a patch that decrements `PowerRuntime.Cooldown` by `Time.deltaTime` while the hero is disabled, plus non-throwing checks:
+     - Roster: exit 0, **194 PASS, 0 failures**. Roster Reload: 3 PASS.
+     - Melee: **43 PASS, 0 failures**.
+     - HeroStats: 82 PASS, 1 failure (item 2 below).
+   - **Hint:** follow the existing local verifiers. After disabling the hero they call `W.Powers.Tick(dt, true)` themselves (for example `IceVerificationRunner.cs:149` and `FirstPersonVerificationRunner.cs:119`). Either tick in the shared waits in `SessionVerificationRunner`, or pass `keepEnabled: true` wherever time must pass.
+
+2. **HeroStats: the Ice measurement is occluded.** Classification: cloud **test bug**. It is hidden behind item 1 until that is fixed.
+   - Diagnostic failure: `PowerDamage x1.5 (in-memory hero): Ice 7.50 vs VECTOR 0.00.` at `HeroStatsVerificationRunner.cs:48`.
+   - In `Measure()` (`:80`) the melee actor at (0,150,2.2) stands on the crosshair line to `far` at (0,150,12), so the Ice cast hits the near actor.
+   - As a result, `MEASURED` Ice damage is 0.00 for VECTOR, TITAN and NOVA, although the data value is 5. The "same Ice damage" check at `:46` passes vacuously (0 == 0).
+   - The value 7.50 is correct (5 × 1.5), so `PowerDamage` itself works.
+   - **Hint:** move the melee actor off the aim line, or remove it before the Ice casts. Assert that the measured Ice damage equals the data value.
+
+3. **SynergyAvailability was not retargeted to 13 synergies.** Classification: **test not retargeted**. The runner is local code, but the cloud's data change broke it.
+   - `SynergyAvailabilityVerification.Run`: exit 1, 0 PASS. `FAIL System.Exception: All ten synergy cooldowns are long (25-45 s): sonic-slam=35, phoenix-dive=40, frostwake=25, orbit-throw=30, thermal-shock=30, meteor-punch=40, inferno-orbit=45, glacier-fist=30, cryo-crush=30, meteor-slam=35, solar-flare=40, void-grasp=40, eclipse-beam=45` at `SynergyAvailabilityVerificationRunner.cs:59` (`F.Synergies.Length==10`).
+   - The same `Length==10` assumption is at `:124`: `Catalog restored to its 10 shipping synergies; never dirtied or saved.`
+   - With non-throwing checks, Run gave 33 PASS and exactly 3 failures (`:59`, `:62`, `:124`). Reload passed 9.
+   - `SynergyAvailabilityVerification.Reload`: exit 1. `FAIL System.Exception: SECOND PROCESS: old save without Fire/Ice/Telekinesis now owns them at tier 0 (loader grants InitiallyUnlocked).` This is a cascade: Run aborted before writing `Verification/Synergy/saves/old-save-path.txt`. See local issue L3.
+   - **Hint:** compare against the catalog's real count, or the capped set plus the legacy set, instead of the literal 10.
+
+4. **Design question: the synergy-to-power cooldown ratio.** For the cloud agent or the user to decide.
+   - Diagnostic failure: `Shortest synergy cooldown 25 s is >= 40x the longest normal power cooldown 1 s.` at `SynergyAvailabilityVerificationRunner.cs:62`.
+   - Force Field has a 1.0 s cooldown, so the rule needs 40 s. Laser Eyes and Lightning (0.8 s) would need 32 s. The shortest synergy is Frostwake at 25 s.
+   - Pick one:
+     - lower the new powers' `Cooldown` to 0.625 s or less;
+     - scope the 40× rule to instant offensive powers (Force Field's real gate is its 12 s charge recharge);
+     - raise Frostwake.
+   - Do not simply delete the assertion.
+
+5. **Mission: the robbery getaway car never drives.** Classification: cloud **logic bug** (mission physics).
+   - `MissionVerification.Run`: exit 1, 12 PASS. `FAIL System.Exception: The getaway car really drives: 0.0 m in 1.5 s.` at `MissionVerificationRunner.cs:74`.
+   - Diagnostic state logging, six samples over 1.25 s after "Getaway car 1 departs with 1":
+     - position stayed at (20.48, 0.12, 23.31) and velocity at about 0;
+     - isKinematic False, not sleeping, constraints None, mass 400, `RobberyState` enabled, timeScale 1;
+     - the route has 4 corners. Corner 0 is the car's own position, so the corner index jumped to 1 at once; corner 1 is (-16.17, 0.20, 20.67), about 37 m away.
+   - `FixedUpdate` adds `ClampMagnitude(dir*CarSpeed - v, CarAcceleration*fixedDt)` as VelocityChange: at most 0.18 m/s per step (9 m/s²). That is barely above ground friction on a 400 kg box (μg ≈ 5.9 m/s² at default friction), and the car is parked by `NearestSidewalk`, possibly against a curb.
+   - Because the car never moves, the fail path ends as "A robber escaped on foot." instead of "The getaway car got away…".
+   - **Hint:** log the contact and friction state. Consider lifting the car slightly, using a low-friction physic material, `MovePosition` along the route, or a stronger drive force, and assert the actual displacement.
+
+6. **Mission: robbery cuff completion.** Undetermined whether cloud logic or the test; only seen with non-throwing checks.
+   - Diagnostic failure: `Cuffing him (hold R on a frozen robber) completes the mission: SUCCESS.` at `MissionVerificationRunner.cs:97`.
+   - The steps before it passed: Ice stalls the car, the robber bails out, the CONTROL cuff of an un-frozen robber is refused, and the bailed robber freezes.
+   - The check does not log `last.Captured`, `Ended(e)` or `Result`.
+   - **Hint:** include those three values in the check text, and assert the cuff's `InteractableNear` range from the standing point you use.
+   - Hostage, Building fire and Vault heist **passed every check** in the same diagnostic run: 78 PASS in total, 2 failures, both in Robbery.
+
+### AGENTS.md review of the new code
+
+Items that pass:
+- Shared palette materials only. No runtime `new Material` in any cloud code; every line, trail, ring and flame uses `CityMaterials.Get(...)` through `sharedMaterial`.
+- Power VFX is pooled. There is one `PowerVfx` pool of 16 lines plus 1 beam, and particles come from the Feel `ImpactParticlePool`. Per-actor helpers (`PlayerShield`, `DashTrail`, `RootedLook`, `Poisoned`, `BeamState`) are added once per actor and reused, not created per cast.
+- No mode-ID switches. `MissionSetup`'s "mode switch" is a data edit of `Modes/hero|villain.asset` Encounters.
+- Equip and ownership gates are respected. Channeled start goes through `Use` → `IsEquipped` / `Owns`, and `Channel()` ends the channel on unequip or reselect. Number keys go through `PowerForSlot` → `Select` gates.
+- The physics root is not animated. The dash uses `CharacterController.Move`.
+
+Items that need attention:
+- **Violation: synergy cap.** `ForgeCatalog` ships **13** synergies against the "5 named only" cap: Sonic Slam, Thermal Shock, Solar Flare, Void Grasp and Eclipse Beam, plus 8 legacy ones (Phoenix Dive, Frostwake, Orbit Throw, Meteor Punch, Inferno Orbit, Glacier Fist, Cryo Crush, Meteor Slam). The cloud reported this knowingly and did not delete them. Removing them needs a decision, because `HeroForgeVerification.AllSynergies` still exercises all 10 legacy synergies and currently passes (177).
+- **Minor: fire flames are not pooled.** `FireScenario` spots each add their own `ParticleSystem`, 4 per fire encounter, on the shared Fire material. This is set-piece geometry like encounter nodes, not a per-cast effect, but it is outside the pool.
+- **Minor: small per-cast allocations.** Lightning allocates a `HashSet` per cast and Poison a `List` per spread.
+- **Presentation contract change.** A tap-E punch now fires on key release, up to 0.2 s later than before. Payment is still immediate at the call. The cloud flagged this for playtest.
+- **Visual observation, not a failure.** In the diagnostic captures, the Laser Eyes beam is a thin dark line that is hard to read. The Void Grasp capture is dominated by large dark navy screen-crossing rings.
+
+### Suites that passed on the merged branch
+
+All exited 0. Counts are PASS lines.
+- **City and powers:** City 54 + Reload 5, CityArt 31, Humanoid 54, Combat 170.
+- **Modes:** Mode 79 + Reload 2, ModeExpansion 111 + Reload 10.
+- **Powers and forge:** HeroForge 177 + Reload 3, Feel 139, Ice.After 34, Balance.After 8, BackflipHurricane 63, PowerPayoff 91.
+- **Camera, menus and world:** FirstPerson 207 + Reload 5, Camera.Verify 45, MenuPresentation 42, World 57 + Reload 3.
+- **HUD:** HUD P1 316. HUD P3 562 + Reload 11 on its rerun (see L4).
+
+### Lead decisions for the cloud agent (OVERNIGHT DECISIONS, local agent)
+- **Synergy cap: remove the 8 legacy synergies.** The user's instruction is explicit ("synergies are capped at exactly 5
+  named ones — Sonic Slam, Thermal Shock, Solar Flare, Void Grasp, Eclipse Beam — not full pair coverage"). Remove Phoenix
+  Dive, Frostwake, Orbit Throw, Meteor Punch, Inferno Orbit, Glacier Fist, Cryo Crush, Meteor Slam from `ForgeCatalog`
+  (keep their effect code only if a capped synergy reuses it) and retarget `HeroForgeVerification.AllSynergies` and
+  `SynergyAvailabilityVerification` to the capped five (assert the exact five IDs, not a count).
+- **Cooldown-ratio rule (item 4): scope it, don't delete it.** Apply "shortest synergy >= 40x longest power cooldown" to
+  instant offensive powers only; Force Field's real gate is its charge recharge, and channeled powers (Laser Eyes) are gated
+  by drain. Assert the scoped rule explicitly and list which powers are excluded and why.
+- **Missions stay out of the shipping modes** until the robbery car drives and the full sweep passes: do not run
+  `MissionSetup.BatchUseInModes` on your side; the local agent runs it after the next green integration.
+- **Laser Eyes beam readability** is local presentation work (Phase 9 / addendum) — don't restyle it on the cloud side.
+
+### Local issues found during this integration (handled by the local agent, listed for transparency)
+- Audio music-DSP check fails on local main since Phase 0 (not cloud) — being bisected locally.
+- HUD Phase 2 briefing CONTROL is timing-sensitive under parallel Unity load (fails on untouched main too) — local test fix.
+- A Reload whose Run aborted could fall back to the player's real save (read-only, file verified unchanged) — local harness
+  guard added in `PlayerProgression.Initialize` (batch mode never touches the real save).
+- `MenuPresentationSetup.Create` re-serializes the original five power assets with the cloud's new fields at defaults
+  (`Activation: 0`, `DrainPerSecond: 0`) — harmless; will be committed with the next merge.
+
+## Local issues L1–L3 fixed: real-save guard, music DSP race, briefing clock (2026-09-27, branch `fix/local-issues`, appended)
+These are the local issues from CLOUD FEEDBACK #1. All runs were on this Mac (Unity 6000.6.0f1). The user's real save
+`overpowered-progression.json` was checked with md5 before and after every run. It never changed (`9047e6ee…`).
+
+- **L3: a Reload could load the user's real save (commit `5e833b6`).**
+  - **Fix:** in batch mode, `PlayerProgression.Initialize` no longer falls back to `persistentDataPath` when no path is set.
+    It uses a throwaway `temporaryCachePath` file and logs a warning.
+  - **Negative control:** I ran `SynergyAvailabilityVerification.Reload` with no `old-save-path.txt`. The log shows the
+    FileNotFoundException and then the warning. The run fails cleanly on its assertion "Old progression preserved exactly"
+    (exit 1). The real save was unchanged.
+  - **Control:** a normal Run passed 36 and its Reload passed 9, with no warning.
+- **L1: "Music DSP sample cursor advances" was a test race, not silenced audio (commit `cc78bd1`).**
+  - **Cause:** the check read `timeSamples` after `Scene(Home)` plus a 1.1 s realtime wait that starts in play-mode
+    frame 1. `AudioDirector` first calls `Play()` on the music in frame 2. When frame 1 alone took more than 1.1 s, the check
+    ran in the same frame as `Play()`, before any mixer block, and read 0.
+  - **Frame timing, measured with non-perturbing logs:**
+
+    | State | Frame 1 → 2 | When the check ran | Result |
+    |---|---|---|---|
+    | HEAD | 1.53 s / 1.50 s | same frame as the music `Play()`, ts=0 | FAIL |
+    | `ada0a2e` | 0.68 s / 0.66 s | frames 61 / 3, ts=18815 / 21638 | PASS |
+
+  - **Not a Phase 0 commit regression:**
+    - Unmodified `ada0a2e` failed the same way under load at 04:48. It passed at 04:27, 05:05 and 05:09, and also passed
+      2 more runs with timing logs added.
+    - The check already flaked on 09-24, before Phase 0.
+    - Phase 0 made frame 1 longer: editor windows are created in it, and `DOTweenSettings.asset` is imported and refreshed.
+      That turned an occasional flake into a near-constant failure.
+    - With Sidekick's auto-open skipped, frame 1 still took 1.11–1.43 s under load 17–34. So no single component is proven
+      to cause the longer frame.
+  - **Fix:** the check now uses the audio clock.
+    - It waits for 2 s of `AudioSettings.dspTime`. The wait is bounded in real time, so a dead output device still fails.
+    - The cursor must then advance by 50–125 % of dspTime × clip frequency. This is stronger than `ts > 0`.
+  - **New CONTROL:** at pitch 0 the source still reports `isPlaying`, but its cursor stalls. The same measurement rejects it
+    (990 samples in 0.51 s, below 50 % of 22579).
+- **L2: HUD P2 briefing CONTROL (commits `61a3c04` + `e744053`).**
+  - **Mechanism:** the test's realtime stamp starts after the 1920×1080 composite. The HUD's timeout clock
+    (`BriefingElapsed`, unscaled) already includes that capture.
+  - **The actual trigger was an editor stall.** In every HUD P2 run, one frame of 5.47–5.75 s landed near the villain
+    briefing.
+    - A PlayerLoop and editor-update probe placed the 5.3 s inside the editor's `HostView.SendUpdate`, right after
+      `Synty…ModularCharacterWindow.AnimationUpdate`. This is Sidekick's Character Creator window, which
+      `MenuBootstrapController` auto-opens even in batch mode. It is editor-only, not a game hitch.
+    - When the stall landed inside the capture, the old test failed. When it landed after the capture, the old test passed
+      by luck: the check ran in the stall frame, before the HUD's LateUpdate counted it.
+  - **Fixes:**
+    - `Assets/Editor/BatchModeSidekickQuiet.cs` sets Sidekick's own per-session flag (`SessionState` "FirstInitDone") in
+      batch mode only. This changes no vendor file and no EditorPrefs.
+    - The test watches the HUD clock every frame. The card must be seen up in [5.5, 7) s. It must stay up while the clock is
+      below 7 s. It must close by timeout on the first update past 7 s. The HUD clock must advance with real time, within one
+      frame.
+  - **Result:** the longest frame across the briefing window is now 0.02 s. As a side effect, `Side_Kick_Data.db` was no
+    longer rewritten by these runs.
+
+**Final regression sweep on `e744053`** (runs back to back, wt-sidekick's Unity sometimes busy in parallel, load 10–13):
+
+| Suite | Exit | PASS | Reload exit | Reload PASS |
+|---|---|---|---|---|
+| AudioVerification | 0 | 128 | 0 | 50 |
+| HudPhase2Verification | 0 | 483 | 0 | 31 |
+| SynergyAvailabilityVerification | 0 | 36 | 0 | 9 |
+| CityVerification | 0 | 54 | 0 | 5 |
+| HudVerification (P1) | 0 | 316 | — | — |
+| HudPhase3Verification (extra) | 0 | 561 | 0 | 11 |
+
+- **Earlier HUD P2 proof runs** (while wt-sidekick was profiling): 484 + Reload 31, then 483 + Reload 31.
+- **PASS counts that vary by one:**
+  - HUD P2 has 483 or 484 PASS lines, and HUD P3 has 561 or 562.
+  - The difference is always the same thing: a prompt card that is or is not on screen in one capture, which adds or drops
+    one "composite contains hud-prompt" line. This variation already existed.
+- **dotnet gate:** 0 warnings, 0 errors.
+- **Limits:**
+  - The audio check proves the DSP cursor advances. It does not prove the sound is audible on a speaker.
+  - If some other editor stall longer than 1.5 s ever lands inside the briefing window, the HUD P2 CONTROL will fail. The
+    failure message states the longest frame.
+  - I did not re-run L4 (HUD P3 timing) in isolation. Its failure signature matches the same editor stall.
+
+## Local agent Phase 1: Synty Sidekick heroes — 2026-09-27 (appended; branch feat/sidekick)
+
+The three Hero Forge heroes are now Synty Sidekick characters inside the existing Forge architecture (same
+HeroDefinition/ForgeCatalog/PlayerProgression/HumanoidPresentation path, no parallel character system). NPCs stay the
+Mixamo mannequin (measured below). Evidence: `Verification/Sidekick/**`.
+
+### Load-bearing check first: the shared Mixamo clips on the Sidekick rig — PLAY CORRECTLY
+`SidekickClipCheck.Run` (edit mode) evaluates every SharedHumanoid clip through the Humanoid retarget path on the
+mannequin and on all 8 Sidekick prefabs at the same normalized times (15 clips, 232 Sidekick samples), captures
+mannequin | Starter_02 | HumanSpecies_01 front-3/4 + side (`clips/<clip>-<n>.png`) and measures pose metrics
+(`clips/results.txt`). Looked at walk, run, punch, hurricane kick, backflip, cast, death (+ the rest):
+- **Walk / run / jog / back**: same gait phase and arm swing, feet planted; no broken wrists, spine not twisted.
+- **Punch**: at the impact marker (0.567 s) the left fist is forward: 0.60–0.68 m ahead of the chest on the 8 Sidekicks vs
+  0.648 m on the mannequin (1.27 vs 1.15 of each rig's own arm length — Sidekick arms are shorter, hands reach further).
+- **Hurricane kick / backflip / jump**: same shapes (airborne spin kick, inverted tuck) but Sidekick bodies travel lower:
+  kick lowest foot 0.25–0.31 m vs 0.41 m; backflip mid-flip lowest vertex 0.48–0.72 m vs 1.00 m.
+- **Cast**: same crouched two-hand stance. **Death**: lies on its back; Starter_02's tail/backpack (and any bulky back
+  attachment) pass up to 0.70 m through the ground.
+- Proportions: at the same 1.8 m fit Sidekick hips ride lower (idle hips 0.88 m vs 1.03 m).
+- **Feet**: without foot IK, Sidekick feet sat 3–9 cm lower than the mannequin's; worst: run at 25% had Starter_03 and
+  HumanSpecies_03 feet 9.4–9.5 cm BELOW the ground while the mannequin's were 6 cm above. With IK on feet that sample is
+  −1.4…+1.1 cm. **Foot IK is now ON for every state of the SHARED controller** (see decisions).
+
+### Heroes and recolour
+| Hero (width) | Sidekick prefab | Look | Vertices |
+|---|---|---|---|
+| VECTOR (1.0) | Starter_03 | hooded plate armour | 19,510 |
+| TITAN (1.2) | Starter_01 | bearded knight, plumed helmet, back weapon | 26,338 |
+| NOVA (0.92) | Starter_02 | fox-mask sci-fi samurai, tail + backpack | 26,575 |
+
+`SidekickSetup.CreateHeroes` (menu **Overpowered > Forge > Sidekick heroes**, idempotent) assigns the prefabs and builds
+one `SidekickSuit` per hero (`Resources/Forge/Sidekick/*-suit.asset`): a readable copy of the authored 32×32 colour map
+plus the role of every swatch the mesh's UVs use, read from Sidekick's own colour table (`sk_color_property` via
+`/usr/bin/sqlite3 -readonly`, edit time only). Keep = Species (skin, hair, eyes, mouth, nails, brows), Elements, unmapped,
+glow/glass/screen/gem; Trim (authored luminance < 0.30) = CityPalette Metal; Outfits group = loadout Primary;
+Attachments + material parts = loadout Secondary (TITAN 16/9/9/29 swatches Primary/Secondary/Trim/Keep, NOVA 12/10/16/33,
+VECTOR 15/5/9/26). `CityMaterials.Suit` builds ONE material + colour map per (suit, primary, secondary), shares it, rewrites
+it when the palette changes and destroys it with its CityMaterials (city teardown / Forge preview). No Sidekick runtime
+API, database or SQLite at runtime (Sidekick's runtime API needs its DB — rejected). The suit material uses the Standard
+shader with the suit colour map (+ Sidekick's emission map); `SidekickSuit.AuthoredShader` restores Sidekick_ShaderGraph
+(`shader-compare.png`: the two look near-identical). The Forge preview now frames by posed skinned vertices.
+
+**Optimized hero bodies.** Sidekick's combined prefab mesh lists one skeleton copy per part in `bones[]` (VECTOR 2,992
+entries, TITAN 3,176, NOVA 2,793, vs the mannequin's 64). The setup writes `<hero>-body.asset` with duplicate (bone,
+bind pose) entries merged (88 / 96 / 130 left), weights remapped and Sidekick's 84 editor blend shapes dropped (all weights
+were 0); `SidekickSuit.ApplyBody` swaps it in at spawn and in the preview. Same bone transforms, so Animator,
+HumanoidPresentation bones and first-person hiding are untouched. CONTROL: both meshes skinned in the same non-trivial
+pose differ by at most 0.001 mm (setup fails above 1 mm). Assets: 3.7–5.0 MB each.
+
+### Verification (real Play Mode, controls)
+- `SidekickVerification.Run` **exit 0, 99 PASS** / `.Reload` (separate process) **exit 0, 7 PASS**: all 3 heroes × 2
+  colour pairs through the Forge UI (`heroes-recolour.png`: top = defaults, bottom = VECTOR Red/Cream, TITAN
+  UiPurple/Cyan, NOVA Amber/Teal) — every used swatch asserted exactly (e.g. NOVA 71 swatches: 12 Primary, 10 Secondary,
+  16 Trim, 33 Keep); **CONTROL skin**: swatch (0,5) identical for both pairs and equal to the authored map (VECTOR/NOVA
+  191,144,98; TITAN 213,165,123); vendor materials untouched. Per hero: Forge → SAVE & BACK → Hero session spawns that
+  prefab (same mesh + avatar, shared controller, no root motion, Animator not on the physics root), ONE cached suit material,
+  60 frames later none created (live suit materials = 1); Ice FrozenLook shows the shared Cyan material and thaw restores
+  the same suit material + map; first person → ShadowsOnly → back to On; returning Home destroyed the material and map
+  (`session-heroes.png`). Reload: NOVA Amber/Teal restored in a new process, swatches re-asserted; fresh-save CONTROL = hero
+  defaults (`reload-session.png`).
+- `SidekickClipCheck.Run` exit 0 (gross gate 0/232; see decisions for the tight counts).
+
+### FPS: NPC bodies A/B, then the hero — NPCs stay mannequins, hero cost removed
+`SidekickNpcProfile.Run`: fresh Free Play sessions cycling A/B/C/D × 4 rounds, Heat topped to 3 stars, hero parked on the
+sidewalk of the densest crossing of the island (Downtown, 722 m of building height within 60 m), real ThirdPersonCamera
+placement, single render per frame at 1280×720, 5 s samples; a sample is retaken when another batch Unity ran or other
+processes used > 60% CPU (4 of 20 retaken). Final run `npc-fps/results-run5-final.txt` (Radeon Pro 5300, i9-10910):
+
+| Variant | FPS per session | median | vs A |
+|---|---|---|---|
+| A mannequin NPCs + Sidekick hero (shipping) | 91.42, 86.23, 84.39, 81.39 | 85.31 | — |
+| B Sidekick NPCs (HumanSpecies_01–04) + Sidekick hero | 111.08*, 55.74, 56.94, 55.51 | 56.34 | **−34.0% (+6.0 ms)** |
+| C mannequin NPCs + mannequin hero | 100.17, 102.07, 97.93, 86.88 | 99.05 | +16.1% (−1.6 ms) |
+| D = A with the hero on Sidekick_ShaderGraph | 87.29, 87.98, 85.22, 80.32 | 86.25 | +1.1% (none) |
+
+*B r1 was taken after a 107 s hygiene wait with only 15 NPC bodies visible; the median ignores it. B had 29 NPC skinned
+renderers / 208k vertices vs A's 58 / 823k, yet skinning cost 3.2–3.3 ms vs 1.0–1.2 ms and the frame +6 ms (the NPC looks
+are unoptimized prefab meshes with thousands of bone entries — see below). NpcLod still works on both (far NPC: Animator
+disabled and stepped manually 4–5×/s, presentation off, skinning only when visible; near NPC fully on).
+
+Run 5 also showed **the Sidekick hero itself cost ~1.6 ms/frame (−14%) vs the mannequin hero** (the suit shader made no
+difference). One bounded A/B on cheap fixes (`results-run6-hero-knobs.txt`, noisy): SkinQuality.Bone2 and zeroed blend
+shapes gave nothing; `updateWhenOffscreen=false` gave ~+10%, pointing at per-bone work — the renderer had 2,992 bone
+entries. After the optimized body (`results-run7-body-final.txt`, 4 rounds, same method):
+
+| Variant | FPS per session | median | vs A |
+|---|---|---|---|
+| A Sidekick hero with optimized body (shipping) | 106.17, 94.57, 96.20, 95.98 | 96.09 | — |
+| C mannequin hero | 91.70, 96.69, 96.64, 96.26 | 96.45 | +0.4% |
+| H Sidekick hero, unoptimized prefab mesh | 85.59, 95.08, 86.56, 87.71 | 87.13 | −9.3% (+1.07 ms) |
+| G = A + `updateWhenOffscreen=false` (not adopted) | 171.00*, 98.37, 109.11, 98.47 | 103.79 | +8.0% |
+
+Skinning (UpdateAllSkinnedMeshes) A 0.66–0.84 ms, C 0.80–0.85, H 1.01–1.17. **Remaining hero cost vs the mannequin: none
+measurable (+0.4% for the mannequin, inside run-to-run noise of about ±5%).** G is not adopted: its gain rests on one
+171-FPS sample after a 218 s wait, and fixed bounds risk culling/shadow errors in flight poses and first person.
+*Other agents' Unity instances (wt-cloud, wt-local) ran during these runs; 17 samples were retaken by the hygiene rule.
+Earlier runs are kept: run 1 A/B 74.79 vs 47.85 (−36%); run 3 suggested the ShaderGraph cost 1.9 ms but ran at load
+average 9–12; run 4 was contaminated (load 12–23, 12 FPS outliers) and is not used.
+
+### Regressions (exit codes; evidence `Verification/Sidekick/regression/<suite>/`)
+| Suite | Result |
+|---|---|
+| Humanoid (VECTOR) / TITAN / NOVA (`-overpoweredHero`) | exit 0 — 54 / 55 / 55 PASS |
+| Humanoid DeathControl | exit 0 — 5 PASS |
+| HeroForge + Reload | exit 0 — 131 PASS + 3 PASS |
+| SynergyAvailability + Reload | exit 0 — 36 + 9 PASS |
+| FirstPerson + Reload | exit 0 — 207 + 5 PASS |
+| Ice.After | exit 0 — 34 PASS |
+| Feel | exit 0 — 139 PASS |
+| City + Reload | exit 0 — 54 + 5 PASS |
+| HUD P1 | exit 0 — 316 PASS |
+| MenuPresentation | exit 0 — 42 PASS |
+| BackflipHurricane | **first run exit 1** (20 PASS, then FAIL "Backflip returns the presentation to locomotion once the dash ends"; the cloud agent's Unity was running); 3 re-runs exit 0, 63 PASS each |
+| Combat (mannequin NPCs, foot IK on) | exit 0 — 170 PASS |
+| CityArt | exit 0 — 31 PASS |
+
+Humanoid's populated-city benchmark read 44.14 / 13.99 / 43.31 FPS for VECTOR / TITAN / NOVA; the TITAN figure ran while
+another Unity was busy and is not a hero difference (that harness has no contention check). Compile gate
+`dotnet build Overpowered.Build.csproj` 0 warnings / 0 errors; Unity: only the pre-existing analyzer warnings.
+Mannequin-specific test assumption retargeted: HumanoidVerification's "two skinned meshes" now means "the selected hero
+model's own count" (1 for Sidekick) and additionally requires no MeshRenderer under the visual root. The CityArt palette
+check now accepts the palette-coloured suit materials owned by CityMaterials (`CityMaterials.Owned`).
+
+### OVERNIGHT DECISIONS
+- **Clip-check gate changed after seeing results.** Tolerances fixed before the first run (max bone-direction change 20°,
+  mean 6°, foot within 5 cm of the mannequin, punch reach within 0.10 arm lengths) flagged **133/232** samples without foot
+  IK and **138/232** with it — mostly mean bone differences of 6–15°, feet a few cm lower and reach +0.12, which the captures
+  show are proportion effects, not broken poses. The committed exit gate is gross breakage (a chain moving > 35° differently,
+  or a grounded foot > 0.15 m off); the tight counts are still printed. That gate caught 2/232 without foot IK (feet 9.4–9.5 cm
+  below ground) → next item.
+- **Foot IK ON for all 15 states of the SHARED controller** (`HumanoidSetup.FootIK`, applied in place by
+  `HumanoidSetup.ApplyFootIK`, also used by future rebuilds). It changes the mannequin NPCs too; measured mannequin foot
+  heights are essentially unchanged (run 25%: 0.061 vs 0.060 m) and Humanoid (all 3 heroes), DeathControl and Combat pass
+  with mannequin NPCs. Its per-animator CPU cost was not isolated.
+- **NPCs stay mannequins**: Sidekick NPC bodies cost −34% FPS in the densest district, and the light Sidekick variants
+  (HumanSpecies) are underwear bodies that don't read as civilians/cops (`npc-fps/street-B-sidekick-npcs-run5.png`). The
+  data path is kept but off (`HumanoidAnimationTuning.SidekickNpcs=false`, 4 NpcLooks suits generated).
+- **Heroes = Starter_01/02/03 as shipped**; no new meshes were assembled from Sidekick parts (that needs Sidekick's DB-backed
+  runtime at edit time). HumanSpecies (underwear) and Starter_04 (pumpkin head, underwear) were not used for heroes.
+- **Suit roles by Sidekick colour group** (cloth → Primary, armour/attachments → Secondary, dark → Metal trim) instead of
+  "largest colour cluster → Primary": the first attempt made Primary a small dark accent. Roles are editable data.
+- **Suit shader = Standard** (+ Sidekick emission map), not Sidekick_ShaderGraph: taken after a noisy run suggested 1.9 ms;
+  the clean run shows no difference, so it stands on consistency with palette materials and the near-identical look.
+  Toggle `SidekickSuit.AuthoredShader` to go back.
+- **Optimized hero bodies** (lead request: one bounded A/B on the hero's 14% cost): new generated mesh assets instead of
+  the vendor prefab mesh at runtime; Sidekick's blend shapes (body/face sliders of its editor) are not available in game.
+  The four NPC-look suits did not get optimized bodies (NPCs are off).
+- The existing hero fit (reference-pose vertices → 1.8 m) was kept; plumes/back items count toward it, so TITAN's body is
+  shorter than VECTOR's (posed heights 1.63 m vs 1.84 m, NOVA 1.68 m). VisualScale.y kept at 1 (docs rule).
+- `Side_Kick_Data.db` restored with `git checkout --` after runs / before every commit.
+
+### Human playtest list
+1. Each hero running, sprinting, jumping, punching, kicking, backflipping in the city: feet contact (foot IK now on), hands
+   at punch reach, whether the lower airborne arcs of kick/backflip read well.
+2. TITAN looks shorter than the others (plume/back weapon in the height fit) — acceptable, or fit by skeleton instead?
+3. Recolour taste per hero across the 8 suit colours (cloth = Primary, armour = Secondary, dark parts = Metal). NOVA's large
+   dark areas become Metal; TITAN's armour follows Secondary.
+4. Forge preview framing and HUD with the new heroes; first-person body hiding while flying/punching.
+5. Death: bulky attachments (NOVA's tail/backpack) clip through the ground while lying.
+6. Mannequin NPC walking/running with foot IK now on (knees/feet on slopes, kerbs).
+7. Frame rate feel with the Sidekick hero (measured equal to the mannequin hero after the body optimization; Editor batch
+   figures only, no standalone build measured).
+
+## Codex continuation: Sidekick final body checkpoint — 2026-09-27
+Recovered the previous session's uncommitted optimized bodies and completed `reg2-summary.txt` in the original scratchpad. All 21 Run/Reload entries exited 0 after the body replacement, including all three hero Humanoid runs, Combat, FirstPerson, Ice, Forge, and BackflipHurricane. Earlier failed/noisy evidence and the pre-body regression are retained. These are recovered prior-session measurements, not newly run Codex playtests.
+
+Codex independently rebuilt this exact source with the bundled Unity dotnet SDK: **0 warnings, 0 errors**. Removed the stale suit inspector claim of a proven 1.9 ms shader cost; the clean comparison did not establish that cost. No gameplay or verification thresholds were changed during this continuation.
+
+### OVERNIGHT DECISIONS
+- Preserve previous screenshots that the interrupted evidence cleanup had deleted.
+- Retain the optimized hero meshes and disabled Sidekick NPC setting; the prior controls support both choices.
+- Resume the queue in order. Cloud integration still requires fixes and fresh regression evidence before shipping missions.
+
+## Phase 1 merged verification — Codex, 2026-09-27
+Sidekick + the local L1–L3 fixes are merged on main at `f3040c7`. Codex reran `SidekickVerification.Run` (exit 0) and `SidekickVerification.Reload` in a separate Unity process (exit 0) on the merged source in wt-sidekick. Evidence: `Verification/Continuation/Sidekick/`. Original package/Sidekick-database working changes on main were preserved.
+
+Push of main failed: `fatal: could not read Username for 'https://github.com': Device not configured`. Local commits remain intact; no credentials were changed.
