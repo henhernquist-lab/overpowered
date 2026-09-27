@@ -62,6 +62,7 @@ public sealed class WorldSession : MonoBehaviour
         ReconcilePolice();
         if(Mode!=null) Mode.Begin();
         else for (int i=0;i<tuning.Crimes.MaximumActive;i++) SpawnCrime((CrimeKind)(i%3),city.Sidewalks[(i*7)%city.Sidewalks.Count]);
+        if (DistrictDiagnostics.Requested()) DistrictDiagnostics.Attach(this);   // OFF unless LOCAL enables it (read-only)
     }
     void Update()
     {
