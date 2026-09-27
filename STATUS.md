@@ -2126,3 +2126,46 @@ completed payoff run. Run commands (on an isolated copy, omit `-quit`):
 `-executeMethod PowerPayoffVerification.Run` and `-executeMethod PowerPayoffBenchmark.Run`.
 Supplemental dotnet build: **0 warnings / 0 errors** (`Verification/Payoff/build.txt`). All 18 changed/new asset,
 source and metadata files byte-match the final tested copy. `git diff --check` passes.
+
+## Local agent Phase 0: ground truth, packages, DOTween — 2026-09-27 (appended)
+
+Verified in an isolated clone (the user's Editor was open on the real tree at the start); real tree only received the
+verified files. Evidence: session scratchpad `phase0/` (logs, reflection dumps, tween test, Sidekick renders).
+
+- **Imported, now committed:** Synty Sidekick (was already in `ef63fdb`), DOTween 1.3.030 (`Assets/Plugins/Demigiant`),
+  Cartoon FX Remaster FREE (`Assets/JMO Assets`). Cartoon FX IS present.
+- **Baseline compile of the tree as the user left it FAILED** (1 error, third-party):
+  `Synty/.../Editor/ModularCharacterWindow.cs(25,13): error CS0234: 'VisualScripting' does not exist in 'Unity'`. Because
+  Sidekick's editor assembly failed, Assembly-CSharp-Editor (all our verifiers) could not rebuild. Fixed by adding
+  `com.unity.visualscripting 1.9.12` (ships with the editor; Sidekick's asmdef already references Unity.VisualScripting.Core).
+- **Package audit:** 0 references in our code/asmdefs AND 0 of 5,309 package GUIDs in 420,013 serialized project GUIDs for
+  Entities, Unity Physics, Multiplayer Services, Transport, QoS, Wire, Deployment. Removed `com.unity.physics` then
+  `com.unity.services.multiplayer`, recompiling after each (0 errors, no new warnings; 67 → 61 → 53 packages). Kept:
+  characters-animation (Rigging/Cinemachine/Timeline/FBX, needed later), shadergraph (Sidekick shader), ai.* (App UI
+  settings referenced), probuilder/collab/multiplayer.center (unreferenced but harmless — left by default).
+- **DOTween setup** run by its real API (the Utility Panel's "Setup DOTween" chain, found by reflecting DOTweenEditor.dll):
+  created `Assets/Resources/DOTweenSettings.asset`, deleted DOTweenUpgradeManager files, `DOTWEEN` scripting define added to
+  every build target (DOTween's own post-processor). Proven: an unscaled (`SetUpdate(true)`) tween advances at timeScale 0
+  (0.333 at 1.001 s real, completes to 1.000); CONTROL scaled tween stays 0.000, then moves once timeScale is 1.
+- **Compile gate:** `Overpowered.Build.csproj` now references `DOTween.dll` so gameplay code may use DOTween; 0/0.
+  Unity batch compile of the final clone: 0 errors. Third-party warnings only (CFXR WelcomeScreen CS0618, Synty ToolDownloader
+  CS0618); our code 0 CS warnings.
+- **Smoke regressions on the final package set:** City 54 + Reload PASS, HUD P1 316, Humanoid 54 — all exit 0.
+- **Sidekick facts (Phase 1 input):** 8 prefabs (Starter_01–04, HumanSpecies_01–04), each 1 Animator with a valid Humanoid
+  avatar (55 mapped bones, a superset of our Mixamo 52), Unreal-style bone names (irrelevant: HumanoidPresentation uses
+  HumanBodyBones). SharedHumanoid.controller plays Idle on Starter_01. Sidekick_ShaderGraph has a Built-in target and renders
+  non-pink on Built-in (0.00% magenta; error-shader control 100%). Colours come from a 32x32 point-filtered `_ColorMap`
+  (2x2 swatches) + masks — so HumanoidPresentation's current "replace every material with a palette material" would flatten
+  Sidekick characters to one colour; Phase 1 must recolour the colour map instead.
+
+### OVERNIGHT DECISIONS
+- Added `com.unity.visualscripting` (not in the brief): the only non-invasive fix for Sidekick's compile error; patching vendor
+  code was the alternative.
+- Removed only the two direct manifest entries the brief named (their dependents went with them). Left unreferenced
+  probuilder / collab-proxy / multiplayer.center: the brief said "if unsure, leave it", and they cost nothing at runtime.
+- Committed Cartoon FX + DOTween vendor files to git (same as Synty was), so the cloud agent and fresh clones compile.
+- `Side_Kick_Data.db` (tracked) is rewritten by Sidekick's Character Creator window when play mode toggles in an Editor where
+  it auto-opened (`file_exists` flips on 58 rows). Left tracked; verification runs restore it. If it keeps showing up as a
+  diff, set the EditorPref `syntySkAutoOpenState` false (per-machine, not in the repo).
+- `SyntyPackageHelper` may prompt in the Editor to add `com.unity.formats.fbx` as a direct dependency (it's already present
+  transitively) — safe to decline or accept.
