@@ -1,0 +1,65 @@
+[ABILITIES VERIFY] PASS CONTROL: Home camera retained.
+[ABILITIES VERIFY] PASS Gesture hero selected through progression: NOVA
+RIG BIND root=NOVA builderAnimator=55574:256 expected=55574:256 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[ABILITIES VERIFY] PASS CONTROL: shared humanoid Animator is live before the gestures.
+[ABILITIES VERIFY] PASS CONTROL: hero reached real ground contact.
+[ABILITIES VERIFY] PASS CONTROL: backflip surface starts Ready with zero uses.
+[ABILITIES VERIFY] PASS Backflip accepted from the ground.
+[ABILITIES VERIFY] PASS Backflip dispatches the shared humanoid's Backflip state (previously named Unwired Backflip).
+[ABILITIES VERIFY] PASS Presentation reports the backflip as the active action from one real event.
+[ABILITIES VERIFY] PASS Accepted backflip opens its dash window and counts one use.
+[ABILITIES VERIFY] PASS Backflip repositioned the hero -4.23m backward against a configured 4.2m.
+[ABILITIES VERIFY] PASS Backflip hop actually left the ground: peak rise 0.601m at 5.50m/s launch, brought back down by the existing gravity.
+[ABILITIES VERIFY] PASS Backflip does not rotate the physics root or turn the hero.
+[ABILITIES VERIFY] PASS Backflip dash window closes when its configured window ends.
+[ABILITIES VERIFY] PASS Cooldown CONTROL refuses an immediate second backflip.
+[ABILITIES VERIFY] PASS Refusal is the backflip cooldown ('Blocked: cooldown') with 1.43s of 2.50s still remaining.
+[ABILITIES VERIFY] PASS Refused backflip neither counted a use nor emitted a presentation event.
+[ABILITIES VERIFY] PASS Airborne CONTROL is genuinely off the ground.
+[ABILITIES VERIFY] PASS Airborne CONTROL refuses the grounded-only backflip ('Blocked: airborne').
+[ABILITIES VERIFY] PASS CONTROL: hero reached real ground contact.
+[ABILITIES VERIFY] PASS CONTROL: backflip cooldown counts down to exactly zero.
+[ABILITIES VERIFY] PASS Recharged backflip fires again (use 2), so the cooldown is a real gate rather than a permanent block.
+[ABILITIES VERIFY] PASS Backflip returns the presentation to locomotion once the dash ends (state=Locomotion, grounded=True, local velocity=(0.00, 0.00, 0.00)).
+[ABILITIES VERIFY] PASS CONTROL: existing grounded jump still accepted after the backflip.
+[ABILITIES VERIFY] PASS CONTROL: jump still dispatches its existing presentation event.
+[ABILITIES VERIFY] PASS CONTROL: movement presentation still recovers after a jump.
+[ABILITIES VERIFY] PASS CONTROL: three Super Strength charges available.
+[ABILITIES VERIFY] PASS CONTROL: standard punch still accepted.
+[ABILITIES VERIFY] PASS Punch spends one charge from the shared pool (3 -> 2).
+[ABILITIES VERIFY] PASS Cooldown CONTROL refuses the kick immediately after the punch.
+[ABILITIES VERIFY] PASS Kick refusal is the shared Super Strength cooldown ('Blocked: cooldown'), not a separate kick resource.
+[ABILITIES VERIFY] PASS Hurricane Kick accepted once the shared cooldown clears.
+[ABILITIES VERIFY] PASS Kick spends from the same charge pool (2 -> 1).
+[ABILITIES VERIFY] PASS Zero-charge CONTROL refuses the kick.
+[ABILITIES VERIFY] PASS Kick zero-charge refusal reuses the existing message ('Blocked: 0 charges').
+[ABILITIES VERIFY] PASS Existing 1.25 s charge recharge still restores the pool after kicks (0 -> 1).
+[ABILITIES VERIFY] PASS CONTROL: charged punch accepted with a fresh pool.
+[ABILITIES VERIFY] PASS CONTROL: punch force resolved within 2.0s.
+[ABILITIES VERIFY] PASS CONTROL: the punch's 5.00m reach touched only the near target (1 body; the 5.6m target stayed at 0.000m/s).
+[ABILITIES VERIFY] PASS Hurricane Kick accepted through the Super Strength runtime.
+[ABILITIES VERIFY] PASS Hurricane Kick dispatches the shared humanoid's Hurricane Kick state (previously Unwired Hurricane Kick).
+[ABILITIES VERIFY] PASS CONTROL: kick force resolved within 2.0s.
+[ABILITIES VERIFY] PASS CONTROL: kick animation impact marker resolved within 1.0s.
+[ABILITIES VERIFY] PASS Kick force and its evaluated clip impact marker align within two rendered frames, exactly like the punch.
+[ABILITIES VERIFY] PASS Kick applies more force than the punch: 2025 N·s vs 1350 N·s (x1.50).
+[ABILITIES VERIFY] PASS Kick throws the same 45kg mass harder than the punch: 30.889m/s vs 22.273m/s.
+[ABILITIES VERIFY] PASS Kick is wider than the punch: the same two targets give 2 bodies hit and 5.431m/s on the 5.6m one, versus 1 body and 0.000m/s for the punch (5.00m reach vs 6.00m).
+[ABILITIES VERIFY] PASS CONTROL: a cop spawns on the NavMesh as a damage target.
+[ABILITIES VERIFY] PASS CONTROL: a clear ground position faces the Cop target.
+[ABILITIES VERIFY] PASS CONTROL: hero reached real ground contact.
+[ABILITIES VERIFY] PASS CONTROL: punch accepted against a live NPC.
+[ABILITIES VERIFY] PASS CONTROL: punch damage resolved within 2.0s.
+[ABILITIES VERIFY] PASS CONTROL: the punch really damaged the cop (65.0 of 65 health); no geometry shielded it.
+[ABILITIES VERIFY] PASS CONTROL: a second identical cop spawns for the kick comparison.
+[ABILITIES VERIFY] PASS CONTROL: a clear ground position faces the second Cop target.
+[ABILITIES VERIFY] PASS CONTROL: hero reached real ground contact.
+[ABILITIES VERIFY] PASS Hurricane Kick accepted against a live NPC.
+[ABILITIES VERIFY] PASS CONTROL: kick damage resolved within 2.0s.
+[ABILITIES VERIFY] PASS Kick deals more real NPC damage than the punch: 89.5 vs 65.0 on same-role cops.
+[ABILITIES VERIFY] PASS CONTROL: movement constants unchanged (walk 5.2 / run 9 / jump 8.5 m/s).
+[ABILITIES VERIFY] PASS CONTROL: Super Strength tier-0 punch stats unchanged (1350 N·s / 3.3 m / 35 dmg / 3 charges / 0.45 s).
+[ABILITIES VERIFY] PASS CONTROL: punch still fires after a backflip and two kicks in the same session.
+[ABILITIES VERIFY] PASS CONTROL: punch regression force resolved within 2.0s.
+[ABILITIES VERIFY] PASS Punch force is still exactly the configured strength value (1350 N·s); the kick multipliers did not leak into it.
+[ABILITIES VERIFY] PASS Hero mode returns Home without camera regression.

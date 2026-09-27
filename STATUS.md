@@ -2576,3 +2576,15 @@ Evidence and reproducible setup: docs/toon-evaluation.md and Verification/Toon. 
 - forge-standard/results.txt: 131 PASS, 0 FAIL
 
 Limits: editor throughput only, no player-build shader-inclusion/performance test and no human feel review. Cloud feature repairs remain isolated; Phase 3 is next.
+
+## Overnight Phase 3: authored rigs, HUD tweens and bounded Cartoon impacts — 2026-09-27
+
+OVERNIGHT DECISIONS: SharedHumanoid.controller and the existing combat/first-person camera remain authoritative. Owned rigged prefabs add restrained head awareness and two-hand telekinesis IK. Flight/actions/death/first person yield or suppress weights; far NPCs disable the graph. Sidekick NPCs remain OFF. Vendor prefabs/database unchanged. DOTween drives unscaled HUD banner slide/fade only. Four pooled Cartoon ground-hit slots add heavy impacts; original debris remains, vendor scripts/lights disabled, burst interval 180ms.
+
+PresentationSetup.Configure ran and repeated with every Resources file byte-identical. Unity and SDK compilation pass (SDK zero warnings/errors). Native animation stream binding initially failed because constraints were outside avatarRoot; fixed and native exceptions now fail verification. First-person/cleanup test fixture mistakes fixed separately. No unresolved runtime failure concealed. See docs/presentation-packages.md; current evidence in Verification/Presentation without replacing historical evidence.
+
+Final Humanoid: VECTOR/TITAN/NOVA 69 PASS each. BackflipHurricane: all three 64 each. Sidekick Run 102 / Reload 7. FirstPerson Run 207 / Reload 5. HUD Run 316; HUD2 Run 484 / Reload 31; HUD3 Run 562 / Reload 11. Feel initial run 142; final live-capture run 143. All exit 0, 0 FAIL. The initial driver omitted bracket-prefixed HUD/Feel output; counts above come from the actual logs, not its zero-count extraction bug.
+
+Combined effects stress at 1920x1080: ON mean 308.4 FPS vs OFF 340.4 (-9.4%, +0.30ms/frame); draws ON 233–234 vs OFF 225–226. Peak Cartoon slots 4; materials 91→91; ParticleSystems 22→22. Editor measurement compares Cartoon plus existing debris against both OFF; no isolated rig/Cartoon A/B or player-build benchmark. Human look/feel and NPC dense-scene rig overhead remain untested.
+
+Final live-capture Feel rerun: 143 PASS, 0 FAIL. ON 317.4/321.9 FPS vs OFF 341.0/337.2; means 319.7 vs 339.1 (-5.7%, +0.18ms/frame). Same pool/draw bounds. Both runs retained; throughput variability is not an isolated effect-cost result. Live heavy-impact capture inspected: an amber impact flash supplements the existing cube debris.

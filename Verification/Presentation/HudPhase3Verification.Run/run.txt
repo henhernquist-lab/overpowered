@@ -1,0 +1,568 @@
+[HUD3] PASS Fresh isolated main save CONTROL: level 1, 0 XP, no sessions.
+[HUD3] PASS GameFlow.Select launches hero phase3 clone (no timed spawns)
+RIG BIND root=VECTOR builderAnimator=55575:256 expected=55575:256 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD3] PASS hero phase3 clone (no timed spawns): session runs this definition; GameHud + overlay exist.
+[HUD3] PASS Real jump dismisses the briefing (SuperHeroController.TryJump).
+[HUD3] PASS Briefing dismissed by input: jump
+[HUD3] PASS Hero: initial encounter Bank break-out (robbers 3, civilians 2, hazards 0).
+[HUD3] PASS HUD glyphs (minus '−', dash '—'): every glyph of "−0.35 — +105 XP LEVEL UP TAB TO UPGRADE OBJECTIVE COMPLETE FAILED WAVE CLEARED SCORE POINTS 0123456789" exists in the HUD font LegacyRuntime.
+[HUD3] PASS Real destruction (blockade, BreakableProp.TakeDamage) -> Heat 0.00 -> 0.35: ONE heat flash showing "+0.35" (expected +0.35).
+[HUD3] PASS Heat delta: every glyph of "+0.35" exists in the HUD font LegacyRuntime.
+[HUD3] PASS CONTROL: Hero-side destruction grants 0 XP (GameTuning: Villain only) -> NO popup.
+[HUD3] PASS Gameplay camera found for heat-flash-hero-destruction-1920x1080
+[HUD3] PASS heat-flash-hero-destruction-1920x1080 1920x1080: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS heat-flash-hero-destruction-1920x1080 1920x1080: all 71 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS heat-flash-hero-destruction-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS heat-flash-hero-destruction-1920x1080 1920x1080: no visible label truncated.
+[HUD3] PASS heat-flash-hero-destruction-1920x1080 1920x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(636.2,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-waypoint(610.8,271.7 100x90.8)
+[HUD3] PASS heat-flash-hero-destruction-1920x1080 1920x1080: waypoint hud-waypoint(610.8,271.7 100x90.8) does not cover the crosshair box (787.1,437.1 25.8x25.8).
+[HUD3] PASS heat-flash-hero-destruction-1920x1080 1920x1080: no XP popup covers an edge HUD group or the banner (0 popup(s) shown).
+[HUD3] PASS heat-flash-hero-destruction-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre.
+[HUD3] PASS heat-flash-hero-destruction-1920x1080: heat-delta '' is shown in this capture (opacity 1.00).
+[HUD3] PASS heat-flash-hero-destruction-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS heat-flash-hero-destruction-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.2 %).
+[HUD3] PASS heat-flash-hero-destruction-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.4 %).
+[HUD3] PASS heat-flash-hero-destruction-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS heat-flash-hero-destruction-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS heat-flash-hero-destruction-1920x1080: composite contains hud-waypoint (pixels changed vs camera-only: 41.2 %).
+[HUD3] PASS heat-flash-hero-destruction-1920x1080: heat-delta visibly drawn in the image (25.4 % of its box changed vs camera-only).
+[HUD3] PASS heat-flash-hero-destruction-1920x1080: 1 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8): heat-delta(1302.5,35.5 58.3x22.5)
+[HUD3] PASS heat-flash-hero-destruction-1920x1080: PIXEL centre-clear — 315632 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Real rescue (CrimeEncounter.Interact, the R hold): civilian saved, GameModeSession.Rescues +1.
+[HUD3] PASS CONTROL: a rescue grants 0 XP today (score +20 only) -> NO XP popup (popups only show XP actually granted).
+[HUD3] PASS Real defeat (robber): XP actually granted 35 (Progression delta; tuning value 35).
+[HUD3] PASS Real defeat (robber): ONE new popup "+35 XP" == XP granted (35); popups started +1, merges +0.
+[HUD3] PASS Real defeat (robber): popup anchored at the event's world position (27.2,0.1,-18.8) (reason "defeat"; anchor 27.197,0.073,-18.792, |d| 0.0000 m; timeScale 1).
+[HUD3] PASS Real defeat (robber): popup base point (911.35, 474.37) == projection of the event's world position (27.2,0.1,-18.8) + 2.2 m ((911.35, 474.37)).
+[HUD3] PASS Real defeat (robber): label drawn at the projection minus its rise 2.3 (label centre (912.50, 472.50)).
+[HUD3] PASS Popup mid-flight: risen 18.8 of 64 px, opacity 1.00.
+[HUD3] PASS Popup: every glyph of "+35 XP" exists in the HUD font LegacyRuntime.
+[HUD3] PASS Gameplay camera found for popup-defeat-1280x720
+[HUD3] PASS popup-defeat-1280x720 1280x720: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS popup-defeat-1280x720 1280x720: all 76 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS popup-defeat-1280x720 1280x720: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS popup-defeat-1280x720 1280x720: no visible label truncated.
+[HUD3] PASS popup-defeat-1280x720 1280x720: no two HUD groups/cards/banner overlap: hud-level(27.5,27.5 285x77.5) hud-heat(1367.5,27.5 205x81.3) hud-top-centre(635.6,27.5 328.8x76.3) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,757.5 378.8x115) hud-prompt(1445,807.5 127.5x65) hud-waypoint(997.5,337.5 100x92.5)
+[HUD3] PASS popup-defeat-1280x720 1280x720: waypoint hud-waypoint(997.5,337.5 100x92.5) does not cover the crosshair box (786.9,436.9 26.3x26.3).
+[HUD3] PASS popup-defeat-1280x720 1280x720: no XP popup covers an edge HUD group or the banner (1 popup(s) shown).
+[HUD3] PASS popup-defeat-1280x720 1280x720: crosshair centre 640,360 px vs screen centre.
+[HUD3] PASS popup-defeat-1280x720: xp-popup '+35 XP' is shown in this capture (opacity 1.00).
+[HUD3] PASS popup-defeat-1280x720: composite contains hud-level (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS popup-defeat-1280x720: composite contains hud-heat (pixels changed vs camera-only: 98.8 %).
+[HUD3] PASS popup-defeat-1280x720: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS popup-defeat-1280x720: composite contains hud-vitals (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS popup-defeat-1280x720: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS popup-defeat-1280x720: composite contains hud-prompt (pixels changed vs camera-only: 98.3 %).
+[HUD3] PASS popup-defeat-1280x720: composite contains hud-waypoint (pixels changed vs camera-only: 39.1 %).
+[HUD3] PASS popup-defeat-1280x720: xp-popup visibly drawn in the image (98.9 % of its box changed vs camera-only).
+[HUD3] PASS popup-defeat-1280x720: 1 transient feedback element(s) shown, none overlapping the crosshair box (786.9,436.9 26.3x26.3): xp-popup(822.5,313.8 122.5x37.5)
+[HUD3] PASS popup-defeat-1280x720: PIXEL centre-clear — 134944 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS CONTROL: defeats 1.0 s apart (1.2 m apart) -> 2 separate popups [+35, +35], no merge; XP +70.
+[HUD3] PASS Real XP crossed a level: 1 -> 2 (PlayerProgression.LevelUp raised once).
+[HUD3] PASS Level badge burst: badge scale peaked at 1.25, ring shown.
+[HUD3] PASS Level-up banner "LEVEL 2 / LEVEL UP — TAB TO UPGRADE / 1 POINT" (key from HudBindings.MenuKey = WorldSession's Tab toggle).
+[HUD3] PASS Level-up banner: every glyph of "LEVEL UP — TAB TO UPGRADE" exists in the HUD font LegacyRuntime.
+[HUD3] PASS Never pauses: timeScale 1 on all 113 sampled frames, session not paused, session clock advanced 0.81s in 0.81s real, 27/27 free NPCs moved > 0.3 m during the banner.
+[HUD3] PASS CONTROL: two defeats in one frame 12.0 m apart (> 4 m) -> 2 popups, no merge.
+[HUD3] PASS MERGE: three defeats within 0.019s (< 0.3s) -> ONE popup "+105 XP" (3 grants) == XP granted 105.
+[HUD3] PASS Merged popup (anchored at the first defeat): popup base point (800.00, 436.40) == projection of the event's world position (25.7,0.1,-15.8) + 2.2 m ((800.00, 436.40)).
+[HUD3] PASS Merged popup (anchored at the first defeat): label drawn at the projection minus its rise 4.1 (label centre (800.00, 432.50)).
+[HUD3] PASS Gameplay camera found for popup-merged-1920x1080
+[HUD3] PASS popup-merged-1920x1080 1920x1080: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS popup-merged-1920x1080 1920x1080: all 83 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS popup-merged-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS popup-merged-1920x1080 1920x1080: no visible label truncated.
+[HUD3] PASS popup-merged-1920x1080 1920x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(636.2,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-prompt(1441.7,807.5 130x64.2) hud-waypoint(997.5,337.5 100x90.8) hud-banner(501.7,112.3 596.7x71.7)
+[HUD3] PASS popup-merged-1920x1080 1920x1080: waypoint hud-waypoint(997.5,337.5 100x90.8) does not cover the crosshair box (787.1,437.1 25.8x25.8).
+[HUD3] PASS popup-merged-1920x1080 1920x1080: no XP popup covers an edge HUD group or the banner (1 popup(s) shown).
+[HUD3] PASS popup-merged-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre.
+[HUD3] PASS popup-merged-1920x1080: xp-popup '+105 XP' is shown in this capture (opacity 1.00).
+[HUD3] PASS popup-merged-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS popup-merged-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 98.8 %).
+[HUD3] PASS popup-merged-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS popup-merged-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS popup-merged-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS popup-merged-1920x1080: composite contains hud-prompt (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS popup-merged-1920x1080: composite contains hud-waypoint (pixels changed vs camera-only: 37.8 %).
+[HUD3] PASS popup-merged-1920x1080: composite contains hud-banner (pixels changed vs camera-only: 94.9 %).
+[HUD3] PASS popup-merged-1920x1080: xp-popup visibly drawn in the image (98.3 % of its box changed vs camera-only).
+[HUD3] PASS popup-merged-1920x1080: 1 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8): xp-popup(712.8,295.7 174.4x43.6)
+[HUD3] PASS popup-merged-1920x1080: PIXEL centre-clear — 300852 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Real XP crossed a level: 2 -> 3 (PlayerProgression.LevelUp raised once).
+[HUD3] PASS Level badge burst: badge scale peaked at 1.17, ring shown.
+[HUD3] PASS Level-up banner "LEVEL 3 / LEVEL UP — TAB TO UPGRADE / 2 POINTS" (key from HudBindings.MenuKey = WorldSession's Tab toggle).
+[HUD3] PASS Level-up banner: every glyph of "LEVEL UP — TAB TO UPGRADE" exists in the HUD font LegacyRuntime.
+[HUD3] PASS Gameplay camera found for level-up-banner-1280x720
+[HUD3] PASS level-up-banner-1280x720 1280x720: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS level-up-banner-1280x720 1280x720: all 81 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS level-up-banner-1280x720 1280x720: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS level-up-banner-1280x720 1280x720: no visible label truncated.
+[HUD3] PASS level-up-banner-1280x720 1280x720: no two HUD groups/cards/banner overlap: hud-level(27.5,27.5 285x77.5) hud-heat(1367.5,27.5 205x81.3) hud-top-centre(635.6,27.5 328.8x76.3) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,757.5 378.8x115) hud-prompt(1445,807.5 127.5x65) hud-waypoint(997.5,337.5 100x92.5) hud-banner(501.9,117.5 596.3x71.3)
+[HUD3] PASS level-up-banner-1280x720 1280x720: waypoint hud-waypoint(997.5,337.5 100x92.5) does not cover the crosshair box (786.9,436.9 26.3x26.3).
+[HUD3] PASS level-up-banner-1280x720 1280x720: no XP popup covers an edge HUD group or the banner (0 popup(s) shown).
+[HUD3] PASS level-up-banner-1280x720 1280x720: crosshair centre 640,360 px vs screen centre.
+[HUD3] PASS level-up-banner-1280x720: hud-banner 'LEVEL UP — TAB TO UPGRADE' is shown in this capture (opacity 1.00).
+[HUD3] PASS level-up-banner-1280x720: composite contains hud-level (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS level-up-banner-1280x720: composite contains hud-heat (pixels changed vs camera-only: 98.8 %).
+[HUD3] PASS level-up-banner-1280x720: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS level-up-banner-1280x720: composite contains hud-vitals (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS level-up-banner-1280x720: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS level-up-banner-1280x720: composite contains hud-prompt (pixels changed vs camera-only: 98.3 %).
+[HUD3] PASS level-up-banner-1280x720: composite contains hud-waypoint (pixels changed vs camera-only: 39.1 %).
+[HUD3] PASS level-up-banner-1280x720: composite contains hud-banner (pixels changed vs camera-only: 99.7 %).
+[HUD3] PASS level-up-banner-1280x720: hud-banner visibly drawn in the image (99.7 % of its box changed vs camera-only).
+[HUD3] PASS level-up-banner-1280x720: 0 transient feedback element(s) shown, none overlapping the crosshair box (786.9,436.9 26.3x26.3).
+[HUD3] PASS level-up-banner-1280x720: PIXEL centre-clear — 139564 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Gameplay camera found for level-up-banner-1920x1080
+[HUD3] PASS level-up-banner-1920x1080 1920x1080: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS level-up-banner-1920x1080 1920x1080: all 81 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS level-up-banner-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS level-up-banner-1920x1080 1920x1080: no visible label truncated.
+[HUD3] PASS level-up-banner-1920x1080 1920x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(636.2,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-prompt(1441.7,807.5 130x64.2) hud-waypoint(997.5,337.5 100x90.8) hud-banner(501.7,120 596.7x71.7)
+[HUD3] PASS level-up-banner-1920x1080 1920x1080: waypoint hud-waypoint(997.5,337.5 100x90.8) does not cover the crosshair box (787.1,437.1 25.8x25.8).
+[HUD3] PASS level-up-banner-1920x1080 1920x1080: no XP popup covers an edge HUD group or the banner (0 popup(s) shown).
+[HUD3] PASS level-up-banner-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre.
+[HUD3] PASS level-up-banner-1920x1080: hud-banner 'LEVEL UP — TAB TO UPGRADE' is shown in this capture (opacity 1.00).
+[HUD3] PASS level-up-banner-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS level-up-banner-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 98.8 %).
+[HUD3] PASS level-up-banner-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS level-up-banner-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS level-up-banner-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS level-up-banner-1920x1080: composite contains hud-prompt (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS level-up-banner-1920x1080: composite contains hud-waypoint (pixels changed vs camera-only: 37.8 %).
+[HUD3] PASS level-up-banner-1920x1080: composite contains hud-banner (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS level-up-banner-1920x1080: hud-banner visibly drawn in the image (99.6 % of its box changed vs camera-only).
+[HUD3] PASS level-up-banner-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD3] PASS level-up-banner-1920x1080: PIXEL centre-clear — 315504 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Gameplay camera found for level-up-banner-2560x1080
+[HUD3] PASS level-up-banner-2560x1080 2560x1080: both panels 2133.3x900 logical (expected 2133.3x900).
+[HUD3] PASS level-up-banner-2560x1080 2560x1080: all 81 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS level-up-banner-2560x1080 2560x1080: centre 40%x40% (640,270 853.3x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS level-up-banner-2560x1080 2560x1080: no visible label truncated.
+[HUD3] PASS level-up-banner-2560x1080 2560x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1903.3,28.3 201.7x78.3) hud-top-centre(902.9,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,759.2 377.5x112.5) hud-prompt(1975,807.5 130x64.2) hud-waypoint(1264.2,337.5 100x90.8) hud-banner(768.3,120 596.7x71.7)
+[HUD3] PASS level-up-banner-2560x1080 2560x1080: waypoint hud-waypoint(1264.2,337.5 100x90.8) does not cover the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD3] PASS level-up-banner-2560x1080 2560x1080: no XP popup covers an edge HUD group or the banner (0 popup(s) shown).
+[HUD3] PASS level-up-banner-2560x1080 2560x1080: crosshair centre 1280,540 px vs screen centre.
+[HUD3] PASS level-up-banner-2560x1080: hud-banner 'LEVEL UP — TAB TO UPGRADE' is shown in this capture (opacity 1.00).
+[HUD3] PASS level-up-banner-2560x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS level-up-banner-2560x1080: composite contains hud-heat (pixels changed vs camera-only: 98.7 %).
+[HUD3] PASS level-up-banner-2560x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS level-up-banner-2560x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS level-up-banner-2560x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS level-up-banner-2560x1080: composite contains hud-prompt (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS level-up-banner-2560x1080: composite contains hud-waypoint (pixels changed vs camera-only: 37.8 %).
+[HUD3] PASS level-up-banner-2560x1080: composite contains hud-banner (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS level-up-banner-2560x1080: hud-banner visibly drawn in the image (99.6 % of its box changed vs camera-only).
+[HUD3] PASS level-up-banner-2560x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD3] PASS level-up-banner-2560x1080: PIXEL centre-clear — 426096 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Never pauses: timeScale 1 on all 114 sampled frames, session not paused, session clock advanced 1.75s in 1.77s real, 26/27 free NPCs moved > 0.3 m during the banner.
+[HUD3] PASS HONESTY Hero after the fights: SUM(popup XP) 280 == HUD shown total 280 == XP gained 280 (level/XP, GameTuning formula) == XpAwarded sum 280; 6 popups for 8 grants (2 merged).
+[HUD3] PASS Real defeat (robber): XP actually granted 35 (Progression delta; tuning value 35).
+[HUD3] PASS Real defeat (robber): ONE new popup "+35 XP" == XP granted (35); popups started +1, merges +0.
+[HUD3] PASS Real defeat (robber): popup anchored at the event's world position (29.9,0.1,-19.5) (reason "defeat"; anchor 29.912,0.051,-19.479, |d| 0.0000 m; timeScale 1).
+[HUD3] PASS Real defeat (robber): popup base point (800.00, 459.79) == projection of the event's world position (29.9,0.1,-19.5) + 2.2 m ((800.00, 459.79)).
+[HUD3] PASS Real defeat (robber): label drawn at the projection minus its rise 1.3 (label centre (800.00, 457.50)).
+[HUD3] PASS Real defeat (robber): XP actually granted 35 (Progression delta; tuning value 35).
+[HUD3] PASS Real defeat (robber): ONE new popup "+35 XP" == XP granted (35); popups started +1, merges +0.
+[HUD3] PASS Real defeat (robber): popup anchored at the event's world position (28.2,0.1,-18.0) (reason "defeat"; anchor 28.201,0.065,-18.041, |d| 0.0000 m; timeScale 1).
+[HUD3] PASS Real defeat (robber): popup base point (800.00, 459.79) == projection of the event's world position (28.2,0.1,-18.0) + 2.2 m ((800.00, 459.79)).
+[HUD3] PASS Real defeat (robber): label drawn at the projection minus its rise 1.5 (label centre (800.00, 457.50)).
+[HUD3] PASS Encounter still open before the last rescue.
+[HUD3] PASS Real last rescue (R hold) completes the encounter (CrimeEncounter.TryComplete -> GameModeSession.EncounterEnded success).
+[HUD3] PASS Objective XP popup "+60 XP" anchored at the encounter site (28.0,0.0,-24.0) == XP granted 60 (GameModeDefinition.SuccessXp).
+[HUD3] PASS Objective popup: popup base point (768.74, 445.93) == projection of the event's world position (28.0,0.0,-24.0) + 2.2 m ((768.74, 445.93)).
+[HUD3] PASS Objective popup: label drawn at the projection minus its rise 8.8 (label centre (767.50, 437.50)).
+[HUD3] PASS Objective-complete banner: "OBJECTIVE COMPLETE / BANK BREAK-OUT / +60 XP" (name from EncounterDefinition.DisplayName, XP from the definition).
+[HUD3] PASS Banner in the Hero side colour.
+[HUD3] PASS Success Heat -1 -> flash "−0.58" (expected −0.58).
+[HUD3] PASS The new encounter's alert is QUEUED behind the banner (not showing).
+[HUD3] PASS Gameplay camera found for objective-complete-banner-1280x720
+[HUD3] PASS objective-complete-banner-1280x720 1280x720: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS objective-complete-banner-1280x720 1280x720: all 73 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS objective-complete-banner-1280x720 1280x720: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS objective-complete-banner-1280x720 1280x720: no visible label truncated.
+[HUD3] PASS objective-complete-banner-1280x720 1280x720: no two HUD groups/cards/banner overlap: hud-level(27.5,27.5 285x77.5) hud-heat(1367.5,27.5 205x81.3) hud-top-centre(650,27.5 300x32.5) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,757.5 378.8x115) hud-banner(600,73.5 400x71.3)
+[HUD3] PASS objective-complete-banner-1280x720 1280x720: no XP popup covers an edge HUD group or the banner (1 popup(s) shown).
+[HUD3] PASS objective-complete-banner-1280x720 1280x720: crosshair centre 640,360 px vs screen centre.
+[HUD3] PASS objective-complete-banner-1280x720: hud-banner 'BANK BREAK-OUT' is shown in this capture (opacity 0.98).
+[HUD3] PASS objective-complete-banner-1280x720: composite contains hud-level (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS objective-complete-banner-1280x720: composite contains hud-heat (pixels changed vs camera-only: 98.7 %).
+[HUD3] PASS objective-complete-banner-1280x720: composite contains hud-top-centre (pixels changed vs camera-only: 99.0 %).
+[HUD3] PASS objective-complete-banner-1280x720: composite contains hud-vitals (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS objective-complete-banner-1280x720: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS objective-complete-banner-1280x720: composite contains hud-banner (pixels changed vs camera-only: 99.0 %).
+[HUD3] PASS objective-complete-banner-1280x720: hud-banner visibly drawn in the image (99.0 % of its box changed vs camera-only).
+[HUD3] PASS objective-complete-banner-1280x720: 2 transient feedback element(s) shown, none overlapping the crosshair box (786.9,436.9 26.3x26.3): xp-popup(715,288.8 122.5x37.5) heat-delta(1300,34.1 58.8x22.5)
+[HUD3] PASS objective-complete-banner-1280x720: PIXEL centre-clear — 142160 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Gameplay camera found for objective-complete-banner-1920x1080
+[HUD3] PASS objective-complete-banner-1920x1080 1920x1080: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS objective-complete-banner-1920x1080 1920x1080: all 73 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS objective-complete-banner-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS objective-complete-banner-1920x1080 1920x1080: no visible label truncated.
+[HUD3] PASS objective-complete-banner-1920x1080 1920x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(650,28.3 300x35) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-banner(600,77.5 400x71.7)
+[HUD3] PASS objective-complete-banner-1920x1080 1920x1080: no XP popup covers an edge HUD group or the banner (1 popup(s) shown).
+[HUD3] PASS objective-complete-banner-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre.
+[HUD3] PASS objective-complete-banner-1920x1080: hud-banner 'BANK BREAK-OUT' is shown in this capture (opacity 1.00).
+[HUD3] PASS objective-complete-banner-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS objective-complete-banner-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 98.9 %).
+[HUD3] PASS objective-complete-banner-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 98.7 %).
+[HUD3] PASS objective-complete-banner-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS objective-complete-banner-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS objective-complete-banner-1920x1080: composite contains hud-banner (pixels changed vs camera-only: 99.3 %).
+[HUD3] PASS objective-complete-banner-1920x1080: hud-banner visibly drawn in the image (99.3 % of its box changed vs camera-only).
+[HUD3] PASS objective-complete-banner-1920x1080: 2 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8): xp-popup(715.4,272.5 122.5x35) heat-delta(1302.5,31.6 58.3x22.5)
+[HUD3] PASS objective-complete-banner-1920x1080: PIXEL centre-clear — 322320 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Gameplay camera found for objective-complete-banner-2560x1080
+[HUD3] PASS objective-complete-banner-2560x1080 2560x1080: both panels 2133.3x900 logical (expected 2133.3x900).
+[HUD3] PASS objective-complete-banner-2560x1080 2560x1080: all 73 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS objective-complete-banner-2560x1080 2560x1080: centre 40%x40% (640,270 853.3x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS objective-complete-banner-2560x1080 2560x1080: no visible label truncated.
+[HUD3] PASS objective-complete-banner-2560x1080 2560x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1903.3,28.3 201.7x78.3) hud-top-centre(916.7,28.3 300x35) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,759.2 377.5x112.5) hud-banner(866.7,77.5 400x71.7)
+[HUD3] PASS objective-complete-banner-2560x1080 2560x1080: no XP popup covers an edge HUD group or the banner (1 popup(s) shown).
+[HUD3] PASS objective-complete-banner-2560x1080 2560x1080: crosshair centre 1280,540 px vs screen centre.
+[HUD3] PASS objective-complete-banner-2560x1080: hud-banner 'BANK BREAK-OUT' is shown in this capture (opacity 1.00).
+[HUD3] PASS objective-complete-banner-2560x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS objective-complete-banner-2560x1080: composite contains hud-heat (pixels changed vs camera-only: 99.2 %).
+[HUD3] PASS objective-complete-banner-2560x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.0 %).
+[HUD3] PASS objective-complete-banner-2560x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.8 %).
+[HUD3] PASS objective-complete-banner-2560x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS objective-complete-banner-2560x1080: composite contains hud-banner (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS objective-complete-banner-2560x1080: hud-banner visibly drawn in the image (99.6 % of its box changed vs camera-only).
+[HUD3] PASS objective-complete-banner-2560x1080: 2 transient feedback element(s) shown, none overlapping the crosshair box (1053.8,437.1 25.8x25.8): xp-popup(982.1,255.8 122.5x35) heat-delta(1835.8,30.7 58.3x22.5)
+[HUD3] PASS objective-complete-banner-2560x1080: PIXEL centre-clear — 436112 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS ORDER: objective banner 23.61-26.16 (held 2.55s), THEN the alert 'Street ambush' at 26.16; 0 frames with both.
+[HUD3] PASS Hero after success: alerts and banners never overlapped in time: banner:LevelUp 'LEVEL UP — TAB TO UPGRADE' 15.12-17.68 | banner:LevelUp 'LEVEL UP — TAB TO UPGRADE' 18.37-20.93 | banner:ObjectiveComplete 'BANK BREAK-OUT' 23.61-26.16 | alert 'Street ambush' 26.16-now
+[HUD3] PASS HONESTY Hero after the objective: SUM(popup XP) 410 == HUD shown total 410 == XP gained 410 (level/XP, GameTuning formula) == XpAwarded sum 410; 9 popups for 11 grants (2 merged).
+[HUD3] PASS Failure banner: "OBJECTIVE FAILED / STREET AMBUSH / A ROBBER ESCAPED OR A CIVILIAN WAS LOST.", no reward chip.
+[HUD3] PASS Failure banner is MUTED (UiMuted), not the side colour.
+[HUD3] PASS While the result banner is up the objective line does not repeat the result (body ""; message line hidden).
+[HUD3] PASS The bottom message line does not repeat the result either.
+[HUD3] PASS CONTROL: failure grants no XP -> no popup.
+[HUD3] PASS Failure Heat -> flash "+0.75".
+[HUD3] PASS Gameplay camera found for objective-failed-banner-1920x1080
+[HUD3] PASS objective-failed-banner-1920x1080 1920x1080: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS objective-failed-banner-1920x1080 1920x1080: all 72 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS objective-failed-banner-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS objective-failed-banner-1920x1080 1920x1080: no visible label truncated.
+[HUD3] PASS objective-failed-banner-1920x1080 1920x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(650,28.3 300x35) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-banner(626.7,77.5 346.7x90)
+[HUD3] PASS objective-failed-banner-1920x1080 1920x1080: no XP popup covers an edge HUD group or the banner (0 popup(s) shown).
+[HUD3] PASS objective-failed-banner-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre.
+[HUD3] PASS objective-failed-banner-1920x1080: hud-banner 'STREET AMBUSH' is shown in this capture (opacity 1.00).
+[HUD3] PASS objective-failed-banner-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS objective-failed-banner-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 98.9 %).
+[HUD3] PASS objective-failed-banner-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 100.0 %).
+[HUD3] PASS objective-failed-banner-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS objective-failed-banner-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS objective-failed-banner-1920x1080: composite contains hud-banner (pixels changed vs camera-only: 98.1 %).
+[HUD3] PASS objective-failed-banner-1920x1080: hud-banner visibly drawn in the image (98.1 % of its box changed vs camera-only).
+[HUD3] PASS objective-failed-banner-1920x1080: 1 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8): heat-delta(1302.5,32.1 58.3x22.5)
+[HUD3] PASS objective-failed-banner-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Real spawn for the waypoint checks: Arson attack
+[HUD3] PASS Waypoint ON-SCREEN marker shown.
+[HUD3] PASS Gameplay camera found for waypoint-onscreen-1280x720
+[HUD3] PASS waypoint-onscreen-1280x720 1280x720: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS waypoint-onscreen-1280x720 1280x720: all 76 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS waypoint-onscreen-1280x720 1280x720: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS waypoint-onscreen-1280x720 1280x720: no visible label truncated.
+[HUD3] PASS waypoint-onscreen-1280x720 1280x720: no two HUD groups/cards/banner overlap: hud-level(27.5,27.5 285x77.5) hud-heat(1367.5,27.5 205x81.3) hud-top-centre(635.6,27.5 328.8x76.3) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,757.5 378.8x115) hud-prompt(1445,807.5 127.5x65) hud-waypoint(876.3,323.8 100x92.5)
+[HUD3] PASS waypoint-onscreen-1280x720 1280x720: waypoint hud-waypoint(876.3,323.8 100x92.5) does not cover the crosshair box (786.9,436.9 26.3x26.3).
+[HUD3] PASS waypoint-onscreen-1280x720 1280x720: no XP popup covers an edge HUD group or the banner (0 popup(s) shown).
+[HUD3] PASS waypoint-onscreen-1280x720 1280x720: crosshair centre 640,360 px vs screen centre.
+[HUD3] PASS waypoint-onscreen-1280x720: hud-waypoint '' is shown in this capture (opacity 1.00).
+[HUD3] PASS waypoint-onscreen-1280x720: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-onscreen-1280x720: composite contains hud-heat (pixels changed vs camera-only: 99.4 %).
+[HUD3] PASS waypoint-onscreen-1280x720: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-onscreen-1280x720: composite contains hud-vitals (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-onscreen-1280x720: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS waypoint-onscreen-1280x720: composite contains hud-prompt (pixels changed vs camera-only: 98.3 %).
+[HUD3] PASS waypoint-onscreen-1280x720: composite contains hud-waypoint (pixels changed vs camera-only: 39.0 %).
+[HUD3] PASS waypoint-onscreen-1280x720: hud-waypoint visibly drawn in the image (39.0 % of its box changed vs camera-only).
+[HUD3] PASS waypoint-onscreen-1280x720: 0 transient feedback element(s) shown, none overlapping the crosshair box (786.9,436.9 26.3x26.3).
+[HUD3] PASS waypoint-onscreen-1280x720: PIXEL centre-clear — 139564 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS 1280x720: distance label "7 M" 16.8 px font (20 px line; Phase 2 was 14 x 0.8 = 11.2 px), count 12 px, diamond 34 px (was 24).
+[HUD3] PASS Gameplay camera found for waypoint-onscreen-1920x1080
+[HUD3] PASS waypoint-onscreen-1920x1080 1920x1080: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS waypoint-onscreen-1920x1080 1920x1080: all 76 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS waypoint-onscreen-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS waypoint-onscreen-1920x1080 1920x1080: no visible label truncated.
+[HUD3] PASS waypoint-onscreen-1920x1080 1920x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(636.2,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-prompt(1441.7,807.5 130x64.2) hud-waypoint(876.7,324.2 100x90.8)
+[HUD3] PASS waypoint-onscreen-1920x1080 1920x1080: waypoint hud-waypoint(876.7,324.2 100x90.8) does not cover the crosshair box (787.1,437.1 25.8x25.8).
+[HUD3] PASS waypoint-onscreen-1920x1080 1920x1080: no XP popup covers an edge HUD group or the banner (0 popup(s) shown).
+[HUD3] PASS waypoint-onscreen-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre.
+[HUD3] PASS waypoint-onscreen-1920x1080: hud-waypoint '' is shown in this capture (opacity 1.00).
+[HUD3] PASS waypoint-onscreen-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-onscreen-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.4 %).
+[HUD3] PASS waypoint-onscreen-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-onscreen-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS waypoint-onscreen-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS waypoint-onscreen-1920x1080: composite contains hud-prompt (pixels changed vs camera-only: 98.6 %).
+[HUD3] PASS waypoint-onscreen-1920x1080: composite contains hud-waypoint (pixels changed vs camera-only: 37.8 %).
+[HUD3] PASS waypoint-onscreen-1920x1080: hud-waypoint visibly drawn in the image (37.8 % of its box changed vs camera-only).
+[HUD3] PASS waypoint-onscreen-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD3] PASS waypoint-onscreen-1920x1080: PIXEL centre-clear — 315504 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Gameplay camera found for waypoint-onscreen-2560x1080
+[HUD3] PASS waypoint-onscreen-2560x1080 2560x1080: both panels 2133.3x900 logical (expected 2133.3x900).
+[HUD3] PASS waypoint-onscreen-2560x1080 2560x1080: all 76 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS waypoint-onscreen-2560x1080 2560x1080: centre 40%x40% (640,270 853.3x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS waypoint-onscreen-2560x1080 2560x1080: no visible label truncated.
+[HUD3] PASS waypoint-onscreen-2560x1080 2560x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1903.3,28.3 201.7x78.3) hud-top-centre(902.9,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,759.2 377.5x112.5) hud-prompt(1975,807.5 130x64.2) hud-waypoint(1143.3,324.2 100x90.8)
+[HUD3] PASS waypoint-onscreen-2560x1080 2560x1080: waypoint hud-waypoint(1143.3,324.2 100x90.8) does not cover the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD3] PASS waypoint-onscreen-2560x1080 2560x1080: no XP popup covers an edge HUD group or the banner (0 popup(s) shown).
+[HUD3] PASS waypoint-onscreen-2560x1080 2560x1080: crosshair centre 1280,540 px vs screen centre.
+[HUD3] PASS waypoint-onscreen-2560x1080: hud-waypoint '' is shown in this capture (opacity 1.00).
+[HUD3] PASS waypoint-onscreen-2560x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-onscreen-2560x1080: composite contains hud-heat (pixels changed vs camera-only: 99.3 %).
+[HUD3] PASS waypoint-onscreen-2560x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-onscreen-2560x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS waypoint-onscreen-2560x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS waypoint-onscreen-2560x1080: composite contains hud-prompt (pixels changed vs camera-only: 98.7 %).
+[HUD3] PASS waypoint-onscreen-2560x1080: composite contains hud-waypoint (pixels changed vs camera-only: 37.8 %).
+[HUD3] PASS waypoint-onscreen-2560x1080: hud-waypoint visibly drawn in the image (37.8 % of its box changed vs camera-only).
+[HUD3] PASS waypoint-onscreen-2560x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD3] PASS waypoint-onscreen-2560x1080: PIXEL centre-clear — 426096 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Drawn marker (876.7,324.2 100x90.8) fits its declared box (876.3,324 100x99.8) (1920x1080 panels).
+[HUD3] PASS Crosshair clearance: the enlarged marker box (-50,-22 100x99.8) pushed to radius 114 clears the crosshair (787.5,587.5 25x25) in all 72 directions (5° steps).
+[HUD3] PASS Target behind: edge arrow shown (-135.7°).
+[HUD3] PASS Gameplay camera found for waypoint-offscreen-1280x720
+[HUD3] PASS waypoint-offscreen-1280x720 1280x720: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS waypoint-offscreen-1280x720 1280x720: all 71 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS waypoint-offscreen-1280x720 1280x720: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS waypoint-offscreen-1280x720 1280x720: no visible label truncated.
+[HUD3] PASS waypoint-offscreen-1280x720 1280x720: no two HUD groups/cards/banner overlap: hud-level(27.5,27.5 285x77.5) hud-heat(1367.5,27.5 205x81.3) hud-top-centre(635.6,27.5 328.8x76.3) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,757.5 378.8x115) hud-waypoint-edge(488.8,693.8 61.3x62.5)
+[HUD3] PASS waypoint-offscreen-1280x720 1280x720: waypoint hud-waypoint-edge(488.8,693.8 61.3x62.5) does not cover the crosshair box (786.9,436.9 26.3x26.3).
+[HUD3] PASS waypoint-offscreen-1280x720 1280x720: no XP popup covers an edge HUD group or the banner (0 popup(s) shown).
+[HUD3] PASS waypoint-offscreen-1280x720 1280x720: crosshair centre 640,360 px vs screen centre.
+[HUD3] PASS waypoint-offscreen-1280x720: hud-waypoint-edge '' is shown in this capture (opacity 1.00).
+[HUD3] PASS waypoint-offscreen-1280x720: composite contains hud-level (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS waypoint-offscreen-1280x720: composite contains hud-heat (pixels changed vs camera-only: 99.1 %).
+[HUD3] PASS waypoint-offscreen-1280x720: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-offscreen-1280x720: composite contains hud-vitals (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-offscreen-1280x720: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-offscreen-1280x720: composite contains hud-waypoint-edge (pixels changed vs camera-only: 33.0 %).
+[HUD3] PASS waypoint-offscreen-1280x720: hud-waypoint-edge visibly drawn in the image (33.0 % of its box changed vs camera-only).
+[HUD3] PASS waypoint-offscreen-1280x720: 0 transient feedback element(s) shown, none overlapping the crosshair box (786.9,436.9 26.3x26.3).
+[HUD3] PASS waypoint-offscreen-1280x720: PIXEL centre-clear — 146780 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS 1280x720: edge label "9 M · 3" 16.8 px font (was 9.6), arrow 59.4 px (was 27.2).
+[HUD3] PASS Gameplay camera found for waypoint-offscreen-1920x1080
+[HUD3] PASS waypoint-offscreen-1920x1080 1920x1080: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS waypoint-offscreen-1920x1080 1920x1080: all 71 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS waypoint-offscreen-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS waypoint-offscreen-1920x1080 1920x1080: no visible label truncated.
+[HUD3] PASS waypoint-offscreen-1920x1080 1920x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(636.2,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-waypoint-edge(488.3,694.2 61.7x61.7)
+[HUD3] PASS waypoint-offscreen-1920x1080 1920x1080: waypoint hud-waypoint-edge(488.3,694.2 61.7x61.7) does not cover the crosshair box (787.1,437.1 25.8x25.8).
+[HUD3] PASS waypoint-offscreen-1920x1080 1920x1080: no XP popup covers an edge HUD group or the banner (0 popup(s) shown).
+[HUD3] PASS waypoint-offscreen-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre.
+[HUD3] PASS waypoint-offscreen-1920x1080: hud-waypoint-edge '' is shown in this capture (opacity 1.00).
+[HUD3] PASS waypoint-offscreen-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-offscreen-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.2 %).
+[HUD3] PASS waypoint-offscreen-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-offscreen-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS waypoint-offscreen-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS waypoint-offscreen-1920x1080: composite contains hud-waypoint-edge (pixels changed vs camera-only: 32.4 %).
+[HUD3] PASS waypoint-offscreen-1920x1080: hud-waypoint-edge visibly drawn in the image (32.4 % of its box changed vs camera-only).
+[HUD3] PASS waypoint-offscreen-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD3] PASS waypoint-offscreen-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Gameplay camera found for waypoint-offscreen-2560x1080
+[HUD3] PASS waypoint-offscreen-2560x1080 2560x1080: both panels 2133.3x900 logical (expected 2133.3x900).
+[HUD3] PASS waypoint-offscreen-2560x1080 2560x1080: all 71 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS waypoint-offscreen-2560x1080 2560x1080: centre 40%x40% (640,270 853.3x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS waypoint-offscreen-2560x1080 2560x1080: no visible label truncated.
+[HUD3] PASS waypoint-offscreen-2560x1080 2560x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1903.3,28.3 201.7x78.3) hud-top-centre(902.9,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,759.2 377.5x112.5) hud-waypoint-edge(755,694.2 61.7x61.7)
+[HUD3] PASS waypoint-offscreen-2560x1080 2560x1080: waypoint hud-waypoint-edge(755,694.2 61.7x61.7) does not cover the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD3] PASS waypoint-offscreen-2560x1080 2560x1080: no XP popup covers an edge HUD group or the banner (0 popup(s) shown).
+[HUD3] PASS waypoint-offscreen-2560x1080 2560x1080: crosshair centre 1280,540 px vs screen centre.
+[HUD3] PASS waypoint-offscreen-2560x1080: hud-waypoint-edge '' is shown in this capture (opacity 1.00).
+[HUD3] PASS waypoint-offscreen-2560x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-offscreen-2560x1080: composite contains hud-heat (pixels changed vs camera-only: 99.2 %).
+[HUD3] PASS waypoint-offscreen-2560x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS waypoint-offscreen-2560x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.6 %).
+[HUD3] PASS waypoint-offscreen-2560x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS waypoint-offscreen-2560x1080: composite contains hud-waypoint-edge (pixels changed vs camera-only: 32.4 %).
+[HUD3] PASS waypoint-offscreen-2560x1080: hud-waypoint-edge visibly drawn in the image (32.4 % of its box changed vs camera-only).
+[HUD3] PASS waypoint-offscreen-2560x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD3] PASS waypoint-offscreen-2560x1080: PIXEL centre-clear — 441072 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Hero session: alerts and banners never overlapped in time: banner:LevelUp 'LEVEL UP — TAB TO UPGRADE' 15.12-17.68 | banner:LevelUp 'LEVEL UP — TAB TO UPGRADE' 18.37-20.93 | banner:ObjectiveComplete 'BANK BREAK-OUT' 23.61-26.16 | alert 'Street ambush' 26.16-30.07 | banner:ObjectiveFailed 'STREET AMBUSH' 30.08-32.63 | alert 'Arson attack' 32.64-36.54
+[HUD3] PASS HONESTY Hero session: SUM(popup XP) 410 == HUD shown total 410 == XP gained 410 (level/XP, GameTuning formula) == XpAwarded sum 410; 9 popups for 11 grants (2 merged).
+[HUD3] PASS GameFlow.Select launches villain phase3 clone (no timed spawns)
+RIG BIND root=VECTOR builderAnimator=55570:768 expected=55570:768 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD3] PASS villain phase3 clone (no timed spawns): session runs this definition; GameHud + overlay exist.
+[HUD3] PASS Real jump dismisses the briefing (SuperHeroController.TryJump).
+[HUD3] PASS Briefing dismissed by input: jump
+[HUD3] PASS Villain encounter Bank break-out has 8 breakable props.
+[HUD3] PASS Real destruction (Encounter supply crate): XP actually granted 12 (Progression delta; tuning value 12).
+[HUD3] PASS Real destruction (Encounter supply crate): ONE new popup "+12 XP" == XP granted (12); popups started +1, merges +0.
+[HUD3] PASS Real destruction (Encounter supply crate): popup anchored at the event's world position (25.0,0.6,-12.0) (reason "destruction"; anchor 25.000,0.550,-12.000, |d| 0.0000 m; timeScale 1).
+[HUD3] PASS Real destruction (Encounter supply crate): popup base point (677.38, 407.91) == projection of the event's world position (25.0,0.6,-12.0) + 2.2 m ((677.38, 407.91)).
+[HUD3] PASS Real destruction (Encounter supply crate): label drawn at the projection minus its rise 1.5 (label centre (677.50, 407.50)).
+[HUD3] PASS Same destruction: Heat flash "+0.35" (Heat 0.00 -> 0.35).
+[HUD3] PASS Gameplay camera found for popup-heat-destruction-1280x720
+[HUD3] PASS popup-heat-destruction-1280x720 1280x720: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS popup-heat-destruction-1280x720 1280x720: all 85 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS popup-heat-destruction-1280x720 1280x720: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS popup-heat-destruction-1280x720 1280x720: no visible label truncated.
+[HUD3] PASS popup-heat-destruction-1280x720 1280x720: no two HUD groups/cards/banner overlap: hud-level(27.5,27.5 285x77.5) hud-heat(1367.5,27.5 205x81.3) hud-top-centre(650,27.5 300x76.3) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,757.5 378.8x115) hud-prompt(1445,807.5 127.5x65) hud-waypoint-edge(355,677.5 61.3x61.3) hud-banner(501.9,115.7 596.3x71.3)
+[HUD3] PASS popup-heat-destruction-1280x720 1280x720: waypoint hud-waypoint-edge(355,677.5 61.3x61.3) does not cover the crosshair box (786.9,436.9 26.3x26.3).
+[HUD3] PASS popup-heat-destruction-1280x720 1280x720: no XP popup covers an edge HUD group or the banner (1 popup(s) shown).
+[HUD3] PASS popup-heat-destruction-1280x720 1280x720: crosshair centre 640,360 px vs screen centre.
+[HUD3] PASS popup-heat-destruction-1280x720: xp-popup '+12 XP' is shown in this capture (opacity 1.00).
+[HUD3] PASS popup-heat-destruction-1280x720: heat-delta '' is shown in this capture (opacity 1.00).
+[HUD3] PASS popup-heat-destruction-1280x720: composite contains hud-level (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS popup-heat-destruction-1280x720: composite contains hud-heat (pixels changed vs camera-only: 98.9 %).
+[HUD3] PASS popup-heat-destruction-1280x720: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS popup-heat-destruction-1280x720: composite contains hud-vitals (pixels changed vs camera-only: 99.7 %).
+[HUD3] PASS popup-heat-destruction-1280x720: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS popup-heat-destruction-1280x720: composite contains hud-prompt (pixels changed vs camera-only: 98.3 %).
+[HUD3] PASS popup-heat-destruction-1280x720: composite contains hud-waypoint-edge (pixels changed vs camera-only: 32.8 %).
+[HUD3] PASS popup-heat-destruction-1280x720: composite contains hud-banner (pixels changed vs camera-only: 97.9 %).
+[HUD3] PASS popup-heat-destruction-1280x720: xp-popup visibly drawn in the image (98.7 % of its box changed vs camera-only).
+[HUD3] PASS popup-heat-destruction-1280x720: heat-delta visibly drawn in the image (29.7 % of its box changed vs camera-only).
+[HUD3] PASS popup-heat-destruction-1280x720: 2 transient feedback element(s) shown, none overlapping the crosshair box (786.9,436.9 26.3x26.3): xp-popup(643.8,265.5 127.4x39) heat-delta(1300,34.8 58.8x22.5)
+[HUD3] PASS popup-heat-destruction-1280x720: PIXEL centre-clear — 142904 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Real destruction (Encounter throwable car): XP actually granted 12 (Progression delta; tuning value 12).
+[HUD3] PASS Real destruction (Encounter throwable car): ONE new popup "+12 XP" == XP granted (12); popups started +1, merges +0.
+[HUD3] PASS Real destruction (Encounter throwable car): popup anchored at the event's world position (25.0,0.0,-24.0) (reason "destruction"; anchor 25.000,0.000,-24.000, |d| 0.0000 m; timeScale 1).
+[HUD3] PASS Real destruction (Encounter throwable car): popup base point (678.81, 441.61) == projection of the event's world position (25.0,0.0,-24.0) + 2.2 m ((678.81, 441.61)).
+[HUD3] PASS Real destruction (Encounter throwable car): label drawn at the projection minus its rise 1.5 (label centre (680.00, 440.00)).
+[HUD3] PASS Same destruction: Heat flash "+0.35" (Heat 0.35 -> 0.70).
+[HUD3] PASS Gameplay camera found for popup-heat-destruction-2560x1080
+[HUD3] PASS popup-heat-destruction-2560x1080 2560x1080: both panels 2133.3x900 logical (expected 2133.3x900).
+[HUD3] PASS popup-heat-destruction-2560x1080 2560x1080: all 84 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS popup-heat-destruction-2560x1080 2560x1080: centre 40%x40% (640,270 853.3x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS popup-heat-destruction-2560x1080 2560x1080: no visible label truncated.
+[HUD3] PASS popup-heat-destruction-2560x1080 2560x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1903.3,28.3 201.7x78.3) hud-top-centre(916.7,28.3 300x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,759.2 377.5x112.5) hud-prompt(1860.8,807.5 244.2x64.2) hud-waypoint(868.3,304.2 100x90.8) hud-banner(768.3,111.4 596.7x71.7)
+[HUD3] PASS popup-heat-destruction-2560x1080 2560x1080: waypoint hud-waypoint(868.3,304.2 100x90.8) does not cover the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD3] PASS popup-heat-destruction-2560x1080 2560x1080: no XP popup covers an edge HUD group or the banner (1 popup(s) shown).
+[HUD3] PASS popup-heat-destruction-2560x1080 2560x1080: crosshair centre 1280,540 px vs screen centre.
+[HUD3] PASS popup-heat-destruction-2560x1080: xp-popup '+12 XP' is shown in this capture (opacity 1.00).
+[HUD3] PASS popup-heat-destruction-2560x1080: heat-delta '' is shown in this capture (opacity 1.00).
+[HUD3] PASS popup-heat-destruction-2560x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS popup-heat-destruction-2560x1080: composite contains hud-heat (pixels changed vs camera-only: 99.3 %).
+[HUD3] PASS popup-heat-destruction-2560x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS popup-heat-destruction-2560x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.8 %).
+[HUD3] PASS popup-heat-destruction-2560x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS popup-heat-destruction-2560x1080: composite contains hud-prompt (pixels changed vs camera-only: 99.2 %).
+[HUD3] PASS popup-heat-destruction-2560x1080: composite contains hud-waypoint (pixels changed vs camera-only: 49.8 %).
+[HUD3] PASS popup-heat-destruction-2560x1080: composite contains hud-banner (pixels changed vs camera-only: 96.9 %).
+[HUD3] PASS popup-heat-destruction-2560x1080: xp-popup visibly drawn in the image (98.8 % of its box changed vs camera-only).
+[HUD3] PASS popup-heat-destruction-2560x1080: heat-delta visibly drawn in the image (25.5 % of its box changed vs camera-only).
+[HUD3] PASS popup-heat-destruction-2560x1080: 2 transient feedback element(s) shown, none overlapping the crosshair box (1053.8,437.1 25.8x25.8): xp-popup(910.9,293.1 130x37.1) heat-delta(1835.8,34.2 58.3x22.5)
+[HUD3] PASS popup-heat-destruction-2560x1080: PIXEL centre-clear — 419670 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Two props broken in the same frame 3.0 m apart -> ONE popup +24 XP == granted 24.
+[HUD3] PASS ...and ONE heat flash with the summed delta "+0.7" (two AddHeat calls).
+[HUD3] PASS Real rooftop claim (PlayerProgression.ClaimRoof).
+[HUD3] PASS Positionless XP (+25) -> fallback popup right of the level group at (416.19, 67.50), label (333.7,40.1 162.6x49.8) clear of the group (27.5,27.5 290x80).
+[HUD3] PASS Gameplay camera found for popup-fallback-level-badge-1920x1080
+[HUD3] PASS popup-fallback-level-badge-1920x1080 1920x1080: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS popup-fallback-level-badge-1920x1080 1920x1080: all 77 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS popup-fallback-level-badge-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS popup-fallback-level-badge-1920x1080 1920x1080: no visible label truncated.
+[HUD3] PASS popup-fallback-level-badge-1920x1080 1920x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(650,28.3 300x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-prompt(1327.5,807.5 244.2x64.2) hud-waypoint-edge(1469.2,532.5 61.7x62.5)
+[HUD3] PASS popup-fallback-level-badge-1920x1080 1920x1080: waypoint hud-waypoint-edge(1469.2,532.5 61.7x62.5) does not cover the crosshair box (787.1,437.1 25.8x25.8).
+[HUD3] PASS popup-fallback-level-badge-1920x1080 1920x1080: no XP popup covers an edge HUD group or the banner (1 popup(s) shown).
+[HUD3] PASS popup-fallback-level-badge-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre.
+[HUD3] PASS popup-fallback-level-badge-1920x1080: xp-popup '+25 XP' is shown in this capture (opacity 1.00).
+[HUD3] PASS popup-fallback-level-badge-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS popup-fallback-level-badge-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.2 %).
+[HUD3] PASS popup-fallback-level-badge-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.3 %).
+[HUD3] PASS popup-fallback-level-badge-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS popup-fallback-level-badge-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS popup-fallback-level-badge-1920x1080: composite contains hud-prompt (pixels changed vs camera-only: 97.9 %).
+[HUD3] PASS popup-fallback-level-badge-1920x1080: composite contains hud-waypoint-edge (pixels changed vs camera-only: 32.4 %).
+[HUD3] PASS popup-fallback-level-badge-1920x1080: xp-popup visibly drawn in the image (94.0 % of its box changed vs camera-only).
+[HUD3] PASS popup-fallback-level-badge-1920x1080: 1 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8): xp-popup(334.2,35.8 151.7x43.3)
+[HUD3] PASS popup-fallback-level-badge-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Player alive (health 71).
+[HUD3] PASS Real loot grab (R hold).
+[HUD3] PASS Real loot grab (R hold).
+[HUD3] PASS Real destruction (wreck task): XP actually granted 12 (Progression delta; tuning value 12).
+[HUD3] PASS Real destruction (wreck task): ONE new popup "+12 XP" == XP granted (12); popups started +1, merges +0.
+[HUD3] PASS Real destruction (wreck task): popup anchored at the event's world position (32.5,0.6,-27.0) (reason "destruction"; anchor 32.500,0.550,-27.000, |d| 0.0000 m; timeScale 1).
+[HUD3] PASS Real destruction (wreck task): popup base point (1528.37, 488.19) == projection of the event's world position (32.5,0.6,-27.0) + 2.2 m ((1528.37, 488.19)).
+[HUD3] PASS Escape past 22 m -> CrimeEncounter.TryComplete (what its Tick calls) succeeds.
+[HUD3] PASS Villain objective XP +60 shown as a popup at the site (on screen: False).
+[HUD3] PASS Villain objective banner "BANK BREAK-OUT +60 XP" in the VILLAIN colour.
+[HUD3] PASS Gameplay camera found for objective-complete-villain-1920x1080
+[HUD3] PASS objective-complete-villain-1920x1080 1920x1080: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS objective-complete-villain-1920x1080 1920x1080: all 77 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS objective-complete-villain-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS objective-complete-villain-1920x1080 1920x1080: no visible label truncated.
+[HUD3] PASS objective-complete-villain-1920x1080 1920x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(650,28.3 300x35) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-prompt(1327.5,807.5 244.2x64.2) hud-banner(600,77.1 400x71.7)
+[HUD3] PASS objective-complete-villain-1920x1080 1920x1080: no XP popup covers an edge HUD group or the banner (0 popup(s) shown).
+[HUD3] PASS objective-complete-villain-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre.
+[HUD3] PASS objective-complete-villain-1920x1080: hud-banner 'BANK BREAK-OUT' is shown in this capture (opacity 0.97).
+[HUD3] PASS objective-complete-villain-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.4 %).
+[HUD3] PASS objective-complete-villain-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.4 %).
+[HUD3] PASS objective-complete-villain-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 98.7 %).
+[HUD3] PASS objective-complete-villain-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.6 %).
+[HUD3] PASS objective-complete-villain-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS objective-complete-villain-1920x1080: composite contains hud-prompt (pixels changed vs camera-only: 99.2 %).
+[HUD3] PASS objective-complete-villain-1920x1080: composite contains hud-banner (pixels changed vs camera-only: 99.4 %).
+[HUD3] PASS objective-complete-villain-1920x1080: hud-banner visibly drawn in the image (99.4 % of its box changed vs camera-only).
+[HUD3] PASS objective-complete-villain-1920x1080: 1 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8): heat-delta(1335,33.4 25.8x22.5)
+[HUD3] PASS objective-complete-villain-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Villain session: alerts and banners never overlapped in time: banner:LevelUp 'LEVEL UP — TAB TO UPGRADE' 42.70-45.54 | banner:ObjectiveComplete 'BANK BREAK-OUT' 51.00-now
+[HUD3] PASS HONESTY Villain session: SUM(popup XP) 145 == HUD shown total 145 == XP gained 145 (level/XP, GameTuning formula) == XpAwarded sum 145; 6 popups for 7 grants (1 merged).
+[HUD3] PASS GameFlow.Select launches endless-fight
+RIG BIND root=VECTOR builderAnimator=50172:1280 expected=50172:1280 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD3] PASS endless-fight: session runs this definition; GameHud + overlay exist.
+[HUD3] PASS Real jump dismisses the briefing (SuperHeroController.TryJump).
+[HUD3] PASS Briefing dismissed by input: jump
+[HUD3] PASS Endless director state.
+[HUD3] PASS Wave 1: 3 spread-out defeats -> popups [+35x1, +35x1, +35x1] sum == XP granted 105.
+[HUD3] PASS Wave-clear banner "3 DEFEATED / WAVE 1 CLEARED / +50 SCORE" == director values (WaveClearBonus 50 x wave 1); score +80.
+[HUD3] PASS Gameplay camera found for wave-clear-banner-1920x1080
+[HUD3] PASS wave-clear-banner-1920x1080 1920x1080: both panels 1600x900 logical (expected 1600x900).
+[HUD3] PASS wave-clear-banner-1920x1080 1920x1080: all 71 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS wave-clear-banner-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS wave-clear-banner-1920x1080 1920x1080: no visible label truncated.
+[HUD3] PASS wave-clear-banner-1920x1080 1920x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-top-centre(626.7,28.3 346.7x75.8) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-banner(582.1,118 435.8x71.7)
+[HUD3] PASS wave-clear-banner-1920x1080 1920x1080: no XP popup covers an edge HUD group or the banner (0 popup(s) shown).
+[HUD3] PASS wave-clear-banner-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre.
+[HUD3] PASS wave-clear-banner-1920x1080: hud-banner 'WAVE 1 CLEARED' is shown in this capture (opacity 0.97).
+[HUD3] PASS wave-clear-banner-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS wave-clear-banner-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS wave-clear-banner-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD3] PASS wave-clear-banner-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS wave-clear-banner-1920x1080: composite contains hud-banner (pixels changed vs camera-only: 99.4 %).
+[HUD3] PASS wave-clear-banner-1920x1080: hud-banner visibly drawn in the image (99.4 % of its box changed vs camera-only).
+[HUD3] PASS wave-clear-banner-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD3] PASS wave-clear-banner-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Endless crowd: 5 defeats in 0.030s at one spot -> ONE popup +175 XP (5 grants) == XP granted 175; no spam.
+[HUD3] PASS Gameplay camera found for popup-endless-crowd-2560x1080
+[HUD3] PASS popup-endless-crowd-2560x1080 2560x1080: both panels 2133.3x900 logical (expected 2133.3x900).
+[HUD3] PASS popup-endless-crowd-2560x1080 2560x1080: all 73 visible HUD / overlay / popup elements inside the 28px safe margin.
+[HUD3] PASS popup-endless-crowd-2560x1080 2560x1080: centre 40%x40% (640,270 853.3x360) holds only the crosshair, waypoint, popups (transients) and a briefing.
+[HUD3] PASS popup-endless-crowd-2560x1080 2560x1080: no visible label truncated.
+[HUD3] PASS popup-endless-crowd-2560x1080 2560x1080: no two HUD groups/cards/banner overlap: hud-level(28.3,28.3 283.3x75) hud-top-centre(893.3,28.3 346.7x75.8) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,759.2 377.5x112.5) hud-banner(768.3,116.1 596.7x71.7)
+[HUD3] PASS popup-endless-crowd-2560x1080 2560x1080: no XP popup covers an edge HUD group or the banner (1 popup(s) shown).
+[HUD3] PASS popup-endless-crowd-2560x1080 2560x1080: crosshair centre 1280,540 px vs screen centre.
+[HUD3] PASS popup-endless-crowd-2560x1080: xp-popup '+175 XP' is shown in this capture (opacity 1.00).
+[HUD3] PASS popup-endless-crowd-2560x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS popup-endless-crowd-2560x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD3] PASS popup-endless-crowd-2560x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.8 %).
+[HUD3] PASS popup-endless-crowd-2560x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD3] PASS popup-endless-crowd-2560x1080: composite contains hud-banner (pixels changed vs camera-only: 99.4 %).
+[HUD3] PASS popup-endless-crowd-2560x1080: xp-popup visibly drawn in the image (98.4 % of its box changed vs camera-only).
+[HUD3] PASS popup-endless-crowd-2560x1080: 1 transient feedback element(s) shown, none overlapping the crosshair box (1053.8,437.1 25.8x25.8): xp-popup(989.4,274 154.5x38.6)
+[HUD3] PASS popup-endless-crowd-2560x1080: PIXEL centre-clear — 429588 centre-zone pixels outside the crosshair/waypoint/popup boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD3] PASS Endless session: alerts and banners never overlapped in time: banner:Milestone 'WAVE 1 CLEARED' 56.10-58.65 | banner:LevelUp 'LEVEL UP — TAB TO UPGRADE' 60.14-now
+[HUD3] PASS HONESTY Endless session: SUM(popup XP) 280 == HUD shown total 280 == XP gained 280 (level/XP, GameTuning formula) == XpAwarded sum 280; 4 popups for 8 grants (4 merged).
+[HUD3] PASS GameFlow.Select launches hero idle clone (no encounters, no briefing)
+RIG BIND root=VECTOR builderAnimator=54361:2816 expected=54361:2816 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD3] PASS hero idle clone (no encounters, no briefing): session runs this definition; GameHud + overlay exist.
+[HUD3] PASS Idle clone: no briefing, no encounters.
+[HUD3] PASS IDLE CONTROL: 30 s, 4313 frames, no input -> ZERO popups (XP unchanged).
+[HUD3] PASS IDLE CONTROL: ZERO banners, ZERO alerts.
+[HUD3] PASS IDLE CONTROL: Heat decayed 0.70 -> 0.00 over 1491 frames.
+[HUD3] PASS IDLE CONTROL: 1490 frames of decay WITHOUT a star change produced ZERO heat flashes (flashes outside a star drop: 0).
+[HUD3] PASS IDLE CONTROL: the only flashes are the 1 star-count drop(s) through decay, exactly one each ("−1*" — '*' = the star glyph element). NOTE: with DecayDelay 10s and 0.07/s, ANY 30 s window that decays loses >= 1.4 Heat and must cross a star boundary.
+[HUD3] PASS A star-count drop via decay flashed once.
+[HUD3] LIMIT: no hardware keyboard/mouse in batch mode; defeats use CityNpc.Damage(amount, player PowerUser) and destruction BreakableProp.TakeDamage(amount, player PowerUser) — the entry points every player power hit calls. Captures are batch-mode Metal render targets, not a physical display. Nothing here measures how the rhythm FEELS.
+[HUD3] PASS GameFlow.Select launches hero
+RIG BIND root=VECTOR builderAnimator=55575:1280 expected=55575:1280 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD3] PASS hero: session runs this definition; GameHud + overlay exist.
+[HUD3] PASS Real jump dismisses the briefing (SuperHeroController.TryJump).
+[HUD3] PASS Briefing dismissed by input: jump
+[HUD3] PASS Nudge control runs on its own isolated save.
+[HUD3] PASS CONTROL: a popup anchored ON the crosshair (anchor viewport 0.500,0.500) is nudged off it: box (731.4,363 137.2x45.7), nearest edge 41.3 px from centre (keep-out 33.2), crosshair (787.1,437.1 25.8x25.8).
+[HUD3] PASS Transient feedback NEVER overlapped the crosshair box: 2929 popup/heat-delta samples over 14832 HUD frames (keep-out radius 33.2).

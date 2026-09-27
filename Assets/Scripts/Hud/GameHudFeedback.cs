@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using DG.Tweening;
 
 /// HUD Phase 3, "connect the dots": every meaningful action visibly feeds a system.
 /// - Floating "+XP" popups (overlay panel) at the world position of the event that granted the XP. HONEST: one popup
@@ -105,6 +106,7 @@ public sealed partial class GameHud
 
     HudStar heatDeltaStar; float heatDeltaValue, heatAddedAt = -100f; bool heatAddedThisRefresh, heatDeltaIsStars, heatBorderLit, levelBurstLit;
     readonly Queue<HudBanner> bannerQueue = new Queue<HudBanner>();
+    Sequence bannerTween; float bannerOpacity;
     float bannerStartedAt; int bannerTimelineIndex = -1, bannerIds, popupIds;
     PlayerProgression boundProgression; GameModeSession boundSession; ModeDirectorState boundDirector;
 
@@ -345,18 +347,32 @@ public sealed partial class GameHud
             CurrentBanner = bannerQueue.Dequeue(); bannerStartedAt = now; BannersStarted++; StyleBanner(CurrentBanner, accent);
             Timeline.Add(new TimelineEntry { Kind = "banner:" + CurrentBanner.Kind, Name = CurrentBanner.Title, StartedAt = now, EndedAt = -1f }); bannerTimelineIndex = Timeline.Count - 1;
             Show(Banner, true);
+            StartBannerTween();
         }
         float t = now - bannerStartedAt, total = BannerInSeconds + BannerHoldSeconds + BannerOutSeconds;
         if (t >= total)
         {
             var entry = Timeline[bannerTimelineIndex]; entry.EndedAt = now; Timeline[bannerTimelineIndex] = entry;
+            bannerTween?.Kill();bannerTween=null;
             CurrentBanner = null; Show(Banner, false); return;
         }
-        float fade = t < BannerInSeconds ? Ease(t / BannerInSeconds) : t > BannerInSeconds + BannerHoldSeconds ? 1f - (t - BannerInSeconds - BannerHoldSeconds) / BannerOutSeconds : 1f;
-        Banner.style.opacity = Mathf.Clamp01(fade);
-        Banner.style.translate = new Translate(Length.Percent(-50), -14f * (1f - Mathf.Clamp01(fade)));
         Banner.style.top = Shown(TopCentre) ? TopCentre.layout.yMax + BannerGap : SafeMargin + 40f;
     }
+    void StartBannerTween()
+    {
+        bannerTween?.Kill(); bannerOpacity=0; PaintBanner(0);
+        bannerTween=DOTween.Sequence().SetUpdate(true).SetLink(gameObject);
+        bannerTween.Append(DOTween.To(()=>bannerOpacity,PaintBanner,1f,BannerInSeconds).SetEase(DG.Tweening.Ease.OutQuad));
+        bannerTween.AppendInterval(BannerHoldSeconds);
+        bannerTween.Append(DOTween.To(()=>bannerOpacity,PaintBanner,0f,BannerOutSeconds).SetEase(DG.Tweening.Ease.Linear));
+    }
+    void PaintBanner(float opacity)
+    {
+        bannerOpacity=Mathf.Clamp01(opacity);
+        Banner.style.opacity=bannerOpacity;
+        Banner.style.translate=new Translate(Length.Percent(-50),-14f*(1f-bannerOpacity));
+    }
+    void StopFeedbackTweens(){bannerTween?.Kill();bannerTween=null;}
     void StyleBanner(HudBanner b, Color accent)
     {
         bool failed = b.Kind == BannerKind.ObjectiveFailed; var colour = failed ? C(CityColor.UiMuted) : accent;

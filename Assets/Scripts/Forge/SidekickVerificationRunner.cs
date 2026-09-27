@@ -142,6 +142,7 @@ public sealed class SidekickVerificationRunner : MonoBehaviour
             var p=W.Hero.GetComponent<HumanoidPresentation>();var skins=p.VisualRoot.GetComponentsInChildren<SkinnedMeshRenderer>();
             Check(skins.Length==1&&IsBody(skins[0],hero)&&p.Animator.avatar==hero.CharacterPrefab.GetComponent<Animator>().avatar&&p.Animator.gameObject.name==hero.DisplayName,$"Session spawns {hero.DisplayName} as {hero.CharacterPrefab.name} (same mesh + Humanoid avatar), shared controller {p.Animator.runtimeAnimatorController.name}, root motion {p.Animator.applyRootMotion}.");
             Check(!p.Animator.applyRootMotion&&p.Animator.transform!=W.Hero.transform&&p.VisualRoot.GetComponentsInChildren<MeshRenderer>().Length==0,"CONTROL: no root motion, Animator not on the physics root, no capsule MeshRenderer.");
+            Check(p.Rigging!=null&&p.Rigging.Builder.graph.IsValid(),"Animation Rigging builds on this Sidekick humanoid avatar.");
             AssertSuit(skins[0],hero,a,b,"Session");
             var suitMaterial=skins[0].sharedMaterial;var suitMap=SidekickSuit.MapOf(suitMaterial);
             Check(suitMaterial==CityMaterials.Suit(hero.Suit,a,b)&&CityMaterials.Current.SuitCount==1&&CityMaterials.SuitsCreated==created+1,$"ONE suit material for (hero, primary, secondary) cached by the city's CityMaterials (count {CityMaterials.Current.SuitCount}, created this session {CityMaterials.SuitsCreated-created}).");

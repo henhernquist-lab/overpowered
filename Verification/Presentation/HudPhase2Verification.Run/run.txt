@@ -1,0 +1,494 @@
+[HUD2] PASS Fresh isolated main save CONTROL: level 1, no sessions, no seen prompts.
+[HUD2] PASS GameFlow.Select launches hero
+RIG BIND root=VECTOR builderAnimator=55574:256 expected=55574:256 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD2] PASS hero: session runs this definition; GameHud + overlay panel exist.
+[HUD2] PASS Hero: the initial encounter exists: Bank break-out
+[HUD2] PASS Hero: the initial encounter (spawned before the HUD binds, covered by the briefing) raises no alert.
+[HUD2] PASS Hero: mission briefing card shown at session start.
+[HUD2] PASS Hero: briefing text == definition data: GOAL "Protect the city from crime." / WIN "Resolve 5 crimes within 15 minutes." / LOSE "3 failed crimes or 3 knockouts.".
+[HUD2] PASS Hero: empty WIN/LOSE rows hidden, filled rows shown.
+[HUD2] PASS Hero: card in the Hero side colour (HeroAccent #1FC7FF).
+[HUD2] PASS Gameplay camera found for briefing-hero-1280x720
+[HUD2] PASS briefing-hero-1280x720 1280x720: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS briefing-hero-1280x720 1280x720: all 81 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS briefing-hero-1280x720 1280x720: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS briefing-hero-1280x720 1280x720: no visible label truncated.
+[HUD2] PASS briefing-hero-1280x720 1280x720: no two HUD groups/cards overlap: hud-level(27.5,27.5 285x77.5) hud-heat(1367.5,27.5 205x81.3) hud-top-centre(635.6,27.5 328.8x76.3) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,757.5 378.8x115)
+[HUD2] PASS briefing-hero-1280x720 1280x720: crosshair centre 640,360 px vs screen centre (|d| 0 px).
+[HUD2] PASS briefing-hero-1280x720: composite contains hud-level (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS briefing-hero-1280x720: composite contains hud-heat (pixels changed vs camera-only: 99.0 %).
+[HUD2] PASS briefing-hero-1280x720: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS briefing-hero-1280x720: composite contains hud-vitals (pixels changed vs camera-only: 99.7 %).
+[HUD2] PASS briefing-hero-1280x720: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS briefing-hero-1280x720: composite contains hud-briefing (pixels changed vs camera-only: 99.4 %).
+[HUD2] PASS briefing-hero-1280x720: 0 transient feedback element(s) shown, none overlapping the crosshair box (786.9,436.9 26.3x26.3).
+[HUD2] PASS briefing-hero-1280x720: PIXEL centre-clear — 57344 centre-zone pixels outside the crosshair/waypoint/briefing boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Gameplay camera found for briefing-hero-1920x1080
+[HUD2] PASS briefing-hero-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS briefing-hero-1920x1080 1920x1080: all 81 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS briefing-hero-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS briefing-hero-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS briefing-hero-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(636.2,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5)
+[HUD2] PASS briefing-hero-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS briefing-hero-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS briefing-hero-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.2 %).
+[HUD2] PASS briefing-hero-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS briefing-hero-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD2] PASS briefing-hero-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS briefing-hero-1920x1080: composite contains hud-briefing (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS briefing-hero-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS briefing-hero-1920x1080: PIXEL centre-clear — 133632 centre-zone pixels outside the crosshair/waypoint/briefing boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Gameplay camera found for briefing-hero-2560x1080
+[HUD2] PASS briefing-hero-2560x1080 2560x1080: both panels 2133.3x900 logical (overlay 2133.3x900; expected 2133.3x900).
+[HUD2] PASS briefing-hero-2560x1080 2560x1080: all 81 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS briefing-hero-2560x1080 2560x1080: centre 40%x40% (640,270 853.3x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS briefing-hero-2560x1080 2560x1080: no visible label truncated.
+[HUD2] PASS briefing-hero-2560x1080 2560x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1903.3,28.3 201.7x78.3) hud-top-centre(902.9,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,759.2 377.5x112.5)
+[HUD2] PASS briefing-hero-2560x1080 2560x1080: crosshair centre 1280,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS briefing-hero-2560x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS briefing-hero-2560x1080: composite contains hud-heat (pixels changed vs camera-only: 99.2 %).
+[HUD2] PASS briefing-hero-2560x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS briefing-hero-2560x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.8 %).
+[HUD2] PASS briefing-hero-2560x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS briefing-hero-2560x1080: composite contains hud-briefing (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS briefing-hero-2560x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD2] PASS briefing-hero-2560x1080: PIXEL centre-clear — 242160 centre-zone pixels outside the crosshair/waypoint/briefing boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Hero: while the briefing is up, no waypoint and no prompt are drawn.
+[HUD2] PASS Real jump (SuperHeroController.TryJump, the Jump-button handler).
+[HUD2] PASS Briefing dismissed by the gameplay input (input: jump) after 1 show(s).
+[HUD2] PASS Briefing card hidden after its fade.
+[HUD2] PASS Objective follows the nearest encounter (Bank break-out); first incomplete task = Robbers.
+[HUD2] PASS Objective line == rules-asset label + progress: "STOP THE ROBBERS 0/3" (Hero.asset Tasks: Robbers=STOP THE ROBBERS | Civilians=RESCUE CIVILIANS | Hazards=PUT OUT THE FIRES).
+[HUD2] PASS '+N more' hint: "+1 MORE TASK  ·  210s LEFT" (N=1 from data: civilians 2, hazards 0).
+[HUD2] PASS Objective header carries EncounterDefinition.DisplayName: "BANK BREAK-OUT  ·  0/5 DONE".
+[HUD2] PASS ModeRules.Objective() (F3 panel / suites) is built from the same data: "STOP THE ROBBERS 0/3 · RESCUE CIVILIANS 0/2".
+[HUD2] PASS Waypoint ON-SCREEN marker shown (target ahead-right).
+[HUD2] PASS Waypoint targets the NEAREST unresolved robber (27.5,0.1,-20.5) (HUD (27.5,0.1,-20.5)).
+[HUD2] PASS Marker drawn at the target's screen position (994.33, 441.07) (HUD point (994.33, 441.07), marker box (945,420 100x85)).
+[HUD2] PASS Marker text: distance "9 M" (8.5 m), count "3 LEFT".
+[HUD2] PASS Marker does not cover the crosshair.
+[HUD2] PASS Gameplay camera found for objective-waypoint-onscreen-1280x720
+[HUD2] PASS objective-waypoint-onscreen-1280x720 1280x720: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS objective-waypoint-onscreen-1280x720 1280x720: all 69 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS objective-waypoint-onscreen-1280x720 1280x720: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS objective-waypoint-onscreen-1280x720 1280x720: no visible label truncated.
+[HUD2] PASS objective-waypoint-onscreen-1280x720 1280x720: no two HUD groups/cards overlap: hud-level(27.5,27.5 285x77.5) hud-heat(1367.5,27.5 205x81.3) hud-top-centre(635.6,27.5 328.8x76.3) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,757.5 378.8x115) hud-waypoint(896.3,308.8 100x92.5)
+[HUD2] PASS objective-waypoint-onscreen-1280x720 1280x720: waypoint hud-waypoint(896.3,308.8 100x92.5) does not cover the crosshair box (786.9,436.9 26.3x26.3).
+[HUD2] PASS objective-waypoint-onscreen-1280x720 1280x720: crosshair centre 640,360 px vs screen centre (|d| 0 px).
+[HUD2] PASS objective-waypoint-onscreen-1280x720: marker at the target's projection (945.75, 330.80) in this capture (HUD (945.75, 330.80)).
+[HUD2] PASS objective-waypoint-onscreen-1280x720: composite contains hud-level (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS objective-waypoint-onscreen-1280x720: composite contains hud-heat (pixels changed vs camera-only: 98.7 %).
+[HUD2] PASS objective-waypoint-onscreen-1280x720: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-onscreen-1280x720: composite contains hud-vitals (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-onscreen-1280x720: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-onscreen-1280x720: composite contains hud-waypoint (pixels changed vs camera-only: 39.1 %).
+[HUD2] PASS objective-waypoint-onscreen-1280x720: 0 transient feedback element(s) shown, none overlapping the crosshair box (786.9,436.9 26.3x26.3).
+[HUD2] PASS objective-waypoint-onscreen-1280x720: PIXEL centre-clear — 139564 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Gameplay camera found for objective-waypoint-onscreen-1920x1080
+[HUD2] PASS objective-waypoint-onscreen-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS objective-waypoint-onscreen-1920x1080 1920x1080: all 69 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS objective-waypoint-onscreen-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS objective-waypoint-onscreen-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS objective-waypoint-onscreen-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(636.2,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-waypoint(895.8,309.2 100x90)
+[HUD2] PASS objective-waypoint-onscreen-1920x1080 1920x1080: waypoint hud-waypoint(895.8,309.2 100x90) does not cover the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS objective-waypoint-onscreen-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS objective-waypoint-onscreen-1920x1080: marker at the target's projection (945.75, 330.80) in this capture (HUD (945.75, 330.80)).
+[HUD2] PASS objective-waypoint-onscreen-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-onscreen-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 98.8 %).
+[HUD2] PASS objective-waypoint-onscreen-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.4 %).
+[HUD2] PASS objective-waypoint-onscreen-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD2] PASS objective-waypoint-onscreen-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS objective-waypoint-onscreen-1920x1080: composite contains hud-waypoint (pixels changed vs camera-only: 37.8 %).
+[HUD2] PASS objective-waypoint-onscreen-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS objective-waypoint-onscreen-1920x1080: PIXEL centre-clear — 315632 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Gameplay camera found for objective-waypoint-onscreen-2560x1080
+[HUD2] PASS objective-waypoint-onscreen-2560x1080 2560x1080: both panels 2133.3x900 logical (overlay 2133.3x900; expected 2133.3x900).
+[HUD2] PASS objective-waypoint-onscreen-2560x1080 2560x1080: all 69 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS objective-waypoint-onscreen-2560x1080 2560x1080: centre 40%x40% (640,270 853.3x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS objective-waypoint-onscreen-2560x1080 2560x1080: no visible label truncated.
+[HUD2] PASS objective-waypoint-onscreen-2560x1080 2560x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1903.3,28.3 201.7x78.3) hud-top-centre(902.9,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,759.2 377.5x112.5) hud-waypoint(1162.5,309.2 100x90)
+[HUD2] PASS objective-waypoint-onscreen-2560x1080 2560x1080: waypoint hud-waypoint(1162.5,309.2 100x90) does not cover the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD2] PASS objective-waypoint-onscreen-2560x1080 2560x1080: crosshair centre 1280,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS objective-waypoint-onscreen-2560x1080: marker at the target's projection (1212.41, 330.80) in this capture (HUD (1212.41, 330.80)).
+[HUD2] PASS objective-waypoint-onscreen-2560x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-onscreen-2560x1080: composite contains hud-heat (pixels changed vs camera-only: 98.7 %).
+[HUD2] PASS objective-waypoint-onscreen-2560x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.4 %).
+[HUD2] PASS objective-waypoint-onscreen-2560x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.6 %).
+[HUD2] PASS objective-waypoint-onscreen-2560x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS objective-waypoint-onscreen-2560x1080: composite contains hud-waypoint (pixels changed vs camera-only: 37.8 %).
+[HUD2] PASS objective-waypoint-onscreen-2560x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD2] PASS objective-waypoint-onscreen-2560x1080: PIXEL centre-clear — 426224 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Target inside the crosshair radius: marker pushed to 114 px, box (715,687.5 100x85) clear of crosshair (787.5,587.5 25x25).
+[HUD2] PASS Gameplay camera found for waypoint-crosshair-clearance-1920x1080
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080 1920x1080: all 74 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(636.2,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-prompt(1441.7,807.5 130x64.2) hud-waypoint(715.8,536.7 100x90.8)
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080 1920x1080: waypoint hud-waypoint(715.8,536.7 100x90.8) does not cover the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 98.8 %).
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080: composite contains hud-prompt (pixels changed vs camera-only: 98.5 %).
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080: composite contains hud-waypoint (pixels changed vs camera-only: 41.2 %).
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS waypoint-crosshair-clearance-1920x1080: PIXEL centre-clear — 315632 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Target BEHIND the camera (camera-local z -1.3): edge arrow shown, marker hidden.
+[HUD2] PASS Edge arrow angle -141.7° (drawn -141.7°) matches the independent camera-local bearing -141.7° (|d| 0.00° < 2°).
+[HUD2] PASS Behind -> arrow points down (-141.7°) and sits in the bottom band (y 1025 of 1200).
+[HUD2] PASS Edge arrow away from the crosshair.
+[HUD2] PASS Gameplay camera found for objective-waypoint-offscreen-1280x720
+[HUD2] PASS objective-waypoint-offscreen-1280x720 1280x720: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS objective-waypoint-offscreen-1280x720 1280x720: all 74 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS objective-waypoint-offscreen-1280x720 1280x720: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS objective-waypoint-offscreen-1280x720 1280x720: no visible label truncated.
+[HUD2] PASS objective-waypoint-offscreen-1280x720 1280x720: no two HUD groups/cards overlap: hud-level(27.5,27.5 285x77.5) hud-heat(1367.5,27.5 205x81.3) hud-top-centre(635.6,27.5 328.8x76.3) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,757.5 378.8x115) hud-prompt(1445,807.5 127.5x65) hud-waypoint-edge(572.5,657.5 61.3x61.3)
+[HUD2] PASS objective-waypoint-offscreen-1280x720 1280x720: waypoint hud-waypoint-edge(572.5,657.5 61.3x61.3) does not cover the crosshair box (786.9,436.9 26.3x26.3).
+[HUD2] PASS objective-waypoint-offscreen-1280x720 1280x720: crosshair centre 640,360 px vs screen centre (|d| 0 px).
+[HUD2] PASS objective-waypoint-offscreen-1280x720: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-offscreen-1280x720: composite contains hud-heat (pixels changed vs camera-only: 98.9 %).
+[HUD2] PASS objective-waypoint-offscreen-1280x720: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-offscreen-1280x720: composite contains hud-vitals (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-offscreen-1280x720: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-offscreen-1280x720: composite contains hud-prompt (pixels changed vs camera-only: 98.8 %).
+[HUD2] PASS objective-waypoint-offscreen-1280x720: composite contains hud-waypoint-edge (pixels changed vs camera-only: 32.2 %).
+[HUD2] PASS objective-waypoint-offscreen-1280x720: 0 transient feedback element(s) shown, none overlapping the crosshair box (786.9,436.9 26.3x26.3).
+[HUD2] PASS objective-waypoint-offscreen-1280x720: PIXEL centre-clear — 146780 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Gameplay camera found for objective-waypoint-offscreen-1920x1080
+[HUD2] PASS objective-waypoint-offscreen-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS objective-waypoint-offscreen-1920x1080 1920x1080: all 74 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS objective-waypoint-offscreen-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS objective-waypoint-offscreen-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS objective-waypoint-offscreen-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(636.2,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-prompt(1441.7,807.5 130x64.2) hud-waypoint-edge(567.5,663.3 61.7x61.7)
+[HUD2] PASS objective-waypoint-offscreen-1920x1080 1920x1080: waypoint hud-waypoint-edge(567.5,663.3 61.7x61.7) does not cover the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS objective-waypoint-offscreen-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS objective-waypoint-offscreen-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-offscreen-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 98.9 %).
+[HUD2] PASS objective-waypoint-offscreen-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-offscreen-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD2] PASS objective-waypoint-offscreen-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS objective-waypoint-offscreen-1920x1080: composite contains hud-prompt (pixels changed vs camera-only: 98.8 %).
+[HUD2] PASS objective-waypoint-offscreen-1920x1080: composite contains hud-waypoint-edge (pixels changed vs camera-only: 32.9 %).
+[HUD2] PASS objective-waypoint-offscreen-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS objective-waypoint-offscreen-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Gameplay camera found for objective-waypoint-offscreen-2560x1080
+[HUD2] PASS objective-waypoint-offscreen-2560x1080 2560x1080: both panels 2133.3x900 logical (overlay 2133.3x900; expected 2133.3x900).
+[HUD2] PASS objective-waypoint-offscreen-2560x1080 2560x1080: all 74 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS objective-waypoint-offscreen-2560x1080 2560x1080: centre 40%x40% (640,270 853.3x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS objective-waypoint-offscreen-2560x1080 2560x1080: no visible label truncated.
+[HUD2] PASS objective-waypoint-offscreen-2560x1080 2560x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1903.3,28.3 201.7x78.3) hud-top-centre(902.9,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,759.2 377.5x112.5) hud-prompt(1975,807.5 130x64.2) hud-waypoint-edge(834.2,663.3 61.7x61.7)
+[HUD2] PASS objective-waypoint-offscreen-2560x1080 2560x1080: waypoint hud-waypoint-edge(834.2,663.3 61.7x61.7) does not cover the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD2] PASS objective-waypoint-offscreen-2560x1080 2560x1080: crosshair centre 1280,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS objective-waypoint-offscreen-2560x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-offscreen-2560x1080: composite contains hud-heat (pixels changed vs camera-only: 98.7 %).
+[HUD2] PASS objective-waypoint-offscreen-2560x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-offscreen-2560x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD2] PASS objective-waypoint-offscreen-2560x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS objective-waypoint-offscreen-2560x1080: composite contains hud-prompt (pixels changed vs camera-only: 98.8 %).
+[HUD2] PASS objective-waypoint-offscreen-2560x1080: composite contains hud-waypoint-edge (pixels changed vs camera-only: 32.9 %).
+[HUD2] PASS objective-waypoint-offscreen-2560x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD2] PASS objective-waypoint-offscreen-2560x1080: PIXEL centre-clear — 441072 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Target to the RIGHT (local (18.0,-0.3,7.0)): arrow 91.0° vs bearing 91.0°, on the right edge (x 1500 of 1600).
+[HUD2] PASS Gameplay camera found for objective-waypoint-offscreen-right-1920x1080
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080 1920x1080: all 69 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(636.2,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-waypoint-edge(1469.2,418.3 61.7x62.5)
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080 1920x1080: waypoint hud-waypoint-edge(1469.2,418.3 61.7x62.5) does not cover the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.4 %).
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.4 %).
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.7 %).
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080: composite contains hud-waypoint-edge (pixels changed vs camera-only: 32.2 %).
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS objective-waypoint-offscreen-right-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Waypoint is on the robber about to be stopped.
+[HUD2] PASS Real stop: CrimeEncounter.Interact (the R-hold path) captured the targeted robber; stopped 1/3.
+[HUD2] PASS Waypoint RETARGETED in one frame to the next-nearest unresolved robber (28.0,0.1,-18.0); count 3 -> 2.
+[HUD2] PASS Progress advanced on the objective line: "STOP THE ROBBERS 1/3".
+[HUD2] PASS GameFlow.Select launches villain
+RIG BIND root=VECTOR builderAnimator=55568:768 expected=55568:768 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD2] PASS villain: session runs this definition; GameHud + overlay panel exist.
+[HUD2] PASS Villain: mission briefing card shown at session start.
+[HUD2] PASS Villain: briefing text == definition data: GOAL "Pull off heists across the city." / WIN "Complete 5 heists within 15 minutes." / LOSE "3 failed heists or 3 knockouts.".
+[HUD2] PASS Villain: empty WIN/LOSE rows hidden, filled rows shown.
+[HUD2] PASS Villain: card in the Villain side colour (VillainAccent #FF4A29).
+[HUD2] PASS Gameplay camera found for briefing-villain-1920x1080
+[HUD2] PASS briefing-villain-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS briefing-villain-1920x1080 1920x1080: all 81 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS briefing-villain-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS briefing-villain-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS briefing-villain-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(650,28.3 300x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5)
+[HUD2] PASS briefing-villain-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS briefing-villain-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS briefing-villain-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 98.9 %).
+[HUD2] PASS briefing-villain-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.2 %).
+[HUD2] PASS briefing-villain-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.8 %).
+[HUD2] PASS briefing-villain-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS briefing-villain-1920x1080: composite contains hud-briefing (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS briefing-villain-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS briefing-villain-1920x1080: PIXEL centre-clear — 133632 centre-zone pixels outside the crosshair/waypoint/briefing boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS CONTROL: with no input the briefing is still up at 7.00s on the HUD briefing clock (>= 5.5s, < BriefingSeconds 7); 660 frames watched, longest 0.02s.
+[HUD2] PASS CONTROL: no input -> dismissed by TIMEOUT on the first update past BriefingSeconds 7: last seen up at 7.00s, closed at 7.01s on the HUD briefing clock (unscaled).
+[HUD2] PASS HUD briefing clock runs at real (unscaled) time: +5.89s on the HUD clock over 5.88s real (tolerance one frame, 0.02s).
+[HUD2] PASS Villain objective line from Villain.asset: "GRAB THE LOOT 0/2" · meta "+1 MORE TASK  ·  210s LEFT".
+[HUD2] PASS Villain waypoint on the nearest loot node; 2 left.
+[HUD2] PASS Real loot grab (R-hold path).
+[HUD2] PASS Real loot grab (R-hold path).
+[HUD2] PASS Loot done -> next task from data: "WRECK PROPS 0/3".
+[HUD2] PASS Waypoint moved to an intact encounter prop.
+[HUD2] PASS Props wrecked (8) -> "ESCAPE THE SCENE 20 M".
+[HUD2] PASS Escape waypoint on the PlayerEscapeDistance circle (22.00 m of 22) straight out from the site past the player.
+[HUD2] PASS Gameplay camera found for villain-escape-objective-1920x1080
+[HUD2] PASS villain-escape-objective-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS villain-escape-objective-1920x1080 1920x1080: all 72 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS villain-escape-objective-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS villain-escape-objective-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS villain-escape-objective-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(627.9,28.3 344.2x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-waypoint-edge(1469.2,415.8 61.7x61.7)
+[HUD2] PASS villain-escape-objective-1920x1080 1920x1080: waypoint hud-waypoint-edge(1469.2,415.8 61.7x61.7) does not cover the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS villain-escape-objective-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS villain-escape-objective-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS villain-escape-objective-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.1 %).
+[HUD2] PASS villain-escape-objective-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS villain-escape-objective-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.8 %).
+[HUD2] PASS villain-escape-objective-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS villain-escape-objective-1920x1080: composite contains hud-waypoint-edge (pixels changed vs camera-only: 32.7 %).
+[HUD2] PASS villain-escape-objective-1920x1080: 7 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8): xp-popup(1176.3,532.5 122.5x35) xp-popup(146.3,438.3 122.5x35) xp-popup(811.2,303.3 122.5x35) xp-popup(457.1,266.7 122.5x35) xp-popup(784.6,243.3 122.5x35) xp-popup(544.6,227.5 122.5x35) heat-delta(1315,31.5 45.8x22.5)
+[HUD2] PASS villain-escape-objective-1920x1080: PIXEL centre-clear — 313736 centre-zone pixels outside the crosshair/waypoint/transient-feedback boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS GameFlow.Select launches free-play
+RIG BIND root=VECTOR builderAnimator=54355:1280 expected=54355:1280 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD2] PASS free-play: session runs this definition; GameHud + overlay panel exist.
+[HUD2] PASS Free Play: mission briefing card shown at session start.
+[HUD2] PASS Free Play: briefing text == definition data: GOAL "No rules. Go wild." / WIN "" / LOSE "".
+[HUD2] PASS Free Play: empty WIN/LOSE rows hidden, filled rows shown.
+[HUD2] PASS Free Play: card in the Villain side colour (VillainAccent #FF4A29).
+[HUD2] PASS Free Play briefing: "No rules. Go wild." only.
+[HUD2] PASS Gameplay camera found for briefing-freeplay-1920x1080
+[HUD2] PASS briefing-freeplay-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS briefing-freeplay-1920x1080 1920x1080: all 68 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS briefing-freeplay-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS briefing-freeplay-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS briefing-freeplay-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x45) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5)
+[HUD2] PASS briefing-freeplay-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS briefing-freeplay-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS briefing-freeplay-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 98.3 %).
+[HUD2] PASS briefing-freeplay-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.8 %).
+[HUD2] PASS briefing-freeplay-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS briefing-freeplay-1920x1080: composite contains hud-briefing (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS briefing-freeplay-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS briefing-freeplay-1920x1080: PIXEL centre-clear — 192000 centre-zone pixels outside the crosshair/waypoint/briefing boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Real punch (TryPunch, the E handler).
+[HUD2] PASS Free Play briefing dismissed by the punch input.
+[HUD2] PASS Free Play: no objective line, no waypoint, no alert.
+[HUD2] PASS GameFlow.Select launches endless-fight
+RIG BIND root=VECTOR builderAnimator=50172:1792 expected=50172:1792 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD2] PASS endless-fight: session runs this definition; GameHud + overlay panel exist.
+[HUD2] PASS Endless: mission briefing card shown at session start.
+[HUD2] PASS Endless: briefing text == definition data: GOAL "Survive endless waves of criminals." / WIN "Beat your best wave and score." / LOSE "One knockout ends the run.".
+[HUD2] PASS Endless: empty WIN/LOSE rows hidden, filled rows shown.
+[HUD2] PASS Endless: card in the Hero side colour (HeroAccent #1FC7FF).
+[HUD2] PASS Gameplay camera found for briefing-endless-1920x1080
+[HUD2] PASS briefing-endless-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS briefing-endless-1920x1080 1920x1080: all 81 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS briefing-endless-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS briefing-endless-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS briefing-endless-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-top-centre(626.7,28.3 346.7x75.8) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5)
+[HUD2] PASS briefing-endless-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS briefing-endless-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS briefing-endless-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS briefing-endless-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.8 %).
+[HUD2] PASS briefing-endless-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS briefing-endless-1920x1080: composite contains hud-briefing (pixels changed vs camera-only: 99.4 %).
+[HUD2] PASS briefing-endless-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS briefing-endless-1920x1080: PIXEL centre-clear — 133632 centre-zone pixels outside the crosshair/waypoint/briefing boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Real backflip (TryBackflip, the Q handler).
+[HUD2] PASS Endless briefing dismissed by the backflip input.
+[HUD2] PASS Endless keeps its wave panel; no objective line or waypoint.
+[HUD2] PASS GameFlow.Select launches endless-fight-villain
+RIG BIND root=VECTOR builderAnimator=50174:2304 expected=50174:2304 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD2] PASS endless-fight-villain: session runs this definition; GameHud + overlay panel exist.
+[HUD2] PASS Endless (Villain): mission briefing card shown at session start.
+[HUD2] PASS Endless (Villain): briefing text == definition data: GOAL "Survive endless waves of police." / WIN "Beat your best wave and score." / LOSE "One knockout ends the run.".
+[HUD2] PASS Endless (Villain): empty WIN/LOSE rows hidden, filled rows shown.
+[HUD2] PASS Endless (Villain): card in the Villain side colour (VillainAccent #FF4A29).
+[HUD2] PASS GameFlow.Select launches hero empty-briefing + label-control clone
+RIG BIND root=VECTOR builderAnimator=55579:1280 expected=55579:1280 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD2] PASS hero empty-briefing + label-control clone: session runs this definition; GameHud + overlay panel exist.
+[HUD2] PASS CONTROL: a cloned definition with empty briefing fields shows NO card.
+[HUD2] PASS CONTROL: label edited on a CLONED rules asset -> objective line "CATCH THE CROOKS 0/3"; Objective() "CATCH THE CROOKS 0/3 · RESCUE CIVILIANS 0/2".
+[HUD2] PASS CONTROL: live edit of the cloned label -> "NAB THE THIEVES 0/3".
+[HUD2] PASS Gameplay camera found for control-cloned-label-no-briefing-1920x1080
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080 1920x1080: all 71 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(650,28.3 300x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(507.9,705 584.2x166.7) hud-waypoint-edge(1469.2,488.3 61.7x61.7)
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080 1920x1080: waypoint hud-waypoint-edge(1469.2,488.3 61.7x61.7) does not cover the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.2 %).
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.3 %).
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 69.9 %).
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080: composite contains hud-waypoint-edge (pixels changed vs camera-only: 32.6 %).
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS control-cloned-label-no-briefing-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Shipping Hero.asset label and hero briefing untouched.
+[HUD2] PASS GameFlow.Select launches hero alert clone (no timed spawns)
+RIG BIND root=VECTOR builderAnimator=55580:1792 expected=55580:1792 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD2] PASS hero alert clone (no timed spawns): session runs this definition; GameHud + overlay panel exist.
+[HUD2] PASS CONTROL: 30 s of idle with no spawn (11031 frames): EncounterSpawned 0, alerts 0, alert card shown on 0 frames.
+[HUD2] PASS Real spawn through GameModeSession.SpawnNext (the path the spawn timer uses): Street ambush
+[HUD2] PASS Alert card slides in for the new encounter (EncounterSpawned raised once).
+[HUD2] PASS Alert name "STREET AMBUSH" == EncounterDefinition.DisplayName.
+[HUD2] PASS Alert DIRECTION arrow 126.6° matches the independent camera-relative bearing 126.6° (Vector3.SignedAngle).
+[HUD2] PASS Alert distance "87 M AWAY".
+[HUD2] PASS While the alert plays the objective line still follows Bank break-out although Street ambush is nearer (it updates after the alert).
+[HUD2] PASS Slide-in: translate x 181.9 -> 0 (held on screen).
+[HUD2] PASS Gameplay camera found for alert-1280x720
+[HUD2] PASS alert-1280x720 1280x720: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS alert-1280x720 1280x720: all 77 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS alert-1280x720 1280x720: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS alert-1280x720 1280x720: no visible label truncated.
+[HUD2] PASS alert-1280x720 1280x720: no two HUD groups/cards overlap: hud-level(27.5,27.5 285x77.5) hud-heat(1367.5,27.5 205x81.3) hud-top-centre(635.6,27.5 328.8x76.3) hud-vitals(27.5,773.8 330x98.8) hud-bottom-centre(610.6,757.5 378.8x115) hud-alert(1272.5,121.3 300x75) hud-waypoint-edge(1468.8,512.5 62.5x62.5)
+[HUD2] PASS alert-1280x720 1280x720: waypoint hud-waypoint-edge(1468.8,512.5 62.5x62.5) does not cover the crosshair box (786.9,436.9 26.3x26.3).
+[HUD2] PASS alert-1280x720 1280x720: crosshair centre 640,360 px vs screen centre (|d| 0 px).
+[HUD2] PASS alert-1280x720: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS alert-1280x720: composite contains hud-heat (pixels changed vs camera-only: 99.4 %).
+[HUD2] PASS alert-1280x720: composite contains hud-top-centre (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS alert-1280x720: composite contains hud-vitals (pixels changed vs camera-only: 99.7 %).
+[HUD2] PASS alert-1280x720: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.7 %).
+[HUD2] PASS alert-1280x720: composite contains hud-alert (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS alert-1280x720: composite contains hud-waypoint-edge (pixels changed vs camera-only: 33.5 %).
+[HUD2] PASS alert-1280x720: 0 transient feedback element(s) shown, none overlapping the crosshair box (786.9,436.9 26.3x26.3).
+[HUD2] PASS alert-1280x720: PIXEL centre-clear — 146780 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Gameplay camera found for alert-1920x1080
+[HUD2] PASS alert-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS alert-1920x1080 1920x1080: all 77 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS alert-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS alert-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS alert-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(636.2,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-alert(1271.7,118.3 300x72.5) hud-waypoint-edge(1469.2,513.3 61.7x61.7)
+[HUD2] PASS alert-1920x1080 1920x1080: waypoint hud-waypoint-edge(1469.2,513.3 61.7x61.7) does not cover the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS alert-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS alert-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.1 %).
+[HUD2] PASS alert-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.4 %).
+[HUD2] PASS alert-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.4 %).
+[HUD2] PASS alert-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.8 %).
+[HUD2] PASS alert-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.7 %).
+[HUD2] PASS alert-1920x1080: composite contains hud-alert (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS alert-1920x1080: composite contains hud-waypoint-edge (pixels changed vs camera-only: 32.6 %).
+[HUD2] PASS alert-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS alert-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Gameplay camera found for alert-2560x1080
+[HUD2] PASS alert-2560x1080 2560x1080: both panels 2133.3x900 logical (overlay 2133.3x900; expected 2133.3x900).
+[HUD2] PASS alert-2560x1080 2560x1080: all 77 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS alert-2560x1080 2560x1080: centre 40%x40% (640,270 853.3x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS alert-2560x1080 2560x1080: no visible label truncated.
+[HUD2] PASS alert-2560x1080 2560x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1903.3,28.3 201.7x78.3) hud-top-centre(902.9,28.3 327.5x77.5) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(877.9,759.2 377.5x112.5) hud-alert(1805,118.3 300x72.5) hud-waypoint-edge(2002.5,553.3 61.7x62.5)
+[HUD2] PASS alert-2560x1080 2560x1080: waypoint hud-waypoint-edge(2002.5,553.3 61.7x62.5) does not cover the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD2] PASS alert-2560x1080 2560x1080: crosshair centre 1280,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS alert-2560x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS alert-2560x1080: composite contains hud-heat (pixels changed vs camera-only: 99.4 %).
+[HUD2] PASS alert-2560x1080: composite contains hud-top-centre (pixels changed vs camera-only: 99.4 %).
+[HUD2] PASS alert-2560x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.8 %).
+[HUD2] PASS alert-2560x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.7 %).
+[HUD2] PASS alert-2560x1080: composite contains hud-alert (pixels changed vs camera-only: 99.3 %).
+[HUD2] PASS alert-2560x1080: composite contains hud-waypoint-edge (pixels changed vs camera-only: 32.7 %).
+[HUD2] PASS alert-2560x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (1053.8,437.1 25.8x25.8).
+[HUD2] PASS alert-2560x1080: PIXEL centre-clear — 441072 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Alert slid out after ~3.9s.
+[HUD2] PASS THEN the objective line updates to the new, nearer encounter: "STREET AMBUSH  ·  0/5 DONE" / "STOP THE ROBBERS 0/3" (pulsing).
+[HUD2] PASS Exactly one alert for one spawn.
+[HUD2] PASS GameFlow.Select launches hero prompt clone
+RIG BIND root=VECTOR builderAnimator=54367:2816 expected=54367:2816 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD2] PASS hero prompt clone: session runs this definition; GameHud + overlay panel exist.
+[HUD2] PASS Prompt save is fresh (no seen prompts).
+[HUD2] PASS Grounded at start -> MOVE prompt "SPACE JUMP · F HOLD IN THE AIR TO FLY" (keys from HudBindings; flight equipped).
+[HUD2] PASS Gameplay camera found for prompt-move-1920x1080
+[HUD2] PASS prompt-move-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS prompt-move-1920x1080 1920x1080: all 72 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS prompt-move-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS prompt-move-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS prompt-move-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(650,28.3 300x35) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(507.9,705 584.2x166.7) hud-prompt(1155.8,807.5 415.8x64.2)
+[HUD2] PASS prompt-move-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS prompt-move-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS prompt-move-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.2 %).
+[HUD2] PASS prompt-move-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 98.7 %).
+[HUD2] PASS prompt-move-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD2] PASS prompt-move-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 69.9 %).
+[HUD2] PASS prompt-move-1920x1080: composite contains hud-prompt (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS prompt-move-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS prompt-move-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS CONTROL: without the action the prompt stays up.
+[HUD2] PASS Real jump.
+[HUD2] PASS Jump performed -> prompt gone; saved SeenHints: move.
+[HUD2] PASS CONTROL: nothing hostile near, no telegraph, no interactable -> no prompt.
+[HUD2] PASS Hostile within 8 m -> PUNCH prompt "E PUNCH".
+[HUD2] PASS Gameplay camera found for prompt-punch-1920x1080
+[HUD2] PASS prompt-punch-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS prompt-punch-1920x1080 1920x1080: all 69 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS prompt-punch-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS prompt-punch-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS prompt-punch-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(650,28.3 300x35) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(507.9,705 584.2x166.7) hud-prompt(1441.7,807.5 130x64.2)
+[HUD2] PASS prompt-punch-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS prompt-punch-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS prompt-punch-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.2 %).
+[HUD2] PASS prompt-punch-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 98.7 %).
+[HUD2] PASS prompt-punch-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD2] PASS prompt-punch-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 69.9 %).
+[HUD2] PASS prompt-punch-1920x1080: composite contains hud-prompt (pixels changed vs camera-only: 97.3 %).
+[HUD2] PASS prompt-punch-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS prompt-punch-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Real punch.
+[HUD2] PASS Punch performed -> prompt gone; saved: move,punch.
+[HUD2] PASS CONTROL: frozen hostile (no telegraph) -> no dodge prompt.
+[HUD2] PASS Enemy telegraph targets the player -> DODGE prompt "Q BACKFLIP TO DODGE".
+[HUD2] PASS Gameplay camera found for prompt-dodge-1920x1080
+[HUD2] PASS prompt-dodge-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS prompt-dodge-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 99.2 %).
+[HUD2] PASS prompt-dodge-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 98.7 %).
+[HUD2] PASS prompt-dodge-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.5 %).
+[HUD2] PASS prompt-dodge-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS prompt-dodge-1920x1080: composite contains hud-prompt (pixels changed vs camera-only: 99.2 %).
+[HUD2] PASS prompt-dodge-1920x1080: 1 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8): xp-popup(738.7,288.3 122.5x35)
+[HUD2] PASS prompt-dodge-1920x1080: PIXEL centre-clear — 321840 centre-zone pixels outside the crosshair/waypoint/transient-feedback boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Dodge prompt still up right before the action (lingers 1.5 s past the telegraph).
+[HUD2] PASS Real backflip: BACKFLIP: 4.2 m backward in 0.90s
+[HUD2] PASS Backflip performed -> prompt gone; saved: move,punch,dodge.
+[HUD2] PASS CONTROL: 10 m from the robber (outside InteractRadius) -> no interact prompt.
+[HUD2] PASS Next to an interactable objective -> "R HOLD TO INTERACT".
+[HUD2] PASS Gameplay camera found for prompt-interact-1920x1080
+[HUD2] PASS prompt-interact-1920x1080 1920x1080: both panels 1600x900 logical (overlay 1600x900; expected 1600x900).
+[HUD2] PASS prompt-interact-1920x1080 1920x1080: all 76 visible HUD + overlay elements inside the 28px safe margin.
+[HUD2] PASS prompt-interact-1920x1080 1920x1080: centre 40%x40% (480,270 640x360) holds only the crosshair, the waypoint and (while shown) the briefing.
+[HUD2] PASS prompt-interact-1920x1080 1920x1080: no visible label truncated.
+[HUD2] PASS prompt-interact-1920x1080 1920x1080: no two HUD groups/cards overlap: hud-level(28.3,28.3 283.3x75) hud-heat(1370,28.3 201.7x78.3) hud-top-centre(650,28.3 300x35) hud-vitals(28.3,775 330x96.7) hud-bottom-centre(611.2,759.2 377.5x112.5) hud-alert(1271.7,118.3 300x72.5) hud-prompt(1340,807.5 231.7x64.2)
+[HUD2] PASS prompt-interact-1920x1080 1920x1080: crosshair centre 960,540 px vs screen centre (|d| 0 px).
+[HUD2] PASS prompt-interact-1920x1080: composite contains hud-level (pixels changed vs camera-only: 99.5 %).
+[HUD2] PASS prompt-interact-1920x1080: composite contains hud-heat (pixels changed vs camera-only: 98.9 %).
+[HUD2] PASS prompt-interact-1920x1080: composite contains hud-top-centre (pixels changed vs camera-only: 98.7 %).
+[HUD2] PASS prompt-interact-1920x1080: composite contains hud-vitals (pixels changed vs camera-only: 98.8 %).
+[HUD2] PASS prompt-interact-1920x1080: composite contains hud-bottom-centre (pixels changed vs camera-only: 99.6 %).
+[HUD2] PASS prompt-interact-1920x1080: composite contains hud-alert (pixels changed vs camera-only: 99.3 %).
+[HUD2] PASS prompt-interact-1920x1080: composite contains hud-prompt (pixels changed vs camera-only: 97.9 %).
+[HUD2] PASS prompt-interact-1920x1080: 0 transient feedback element(s) shown, none overlapping the crosshair box (787.1,437.1 25.8x25.8).
+[HUD2] PASS prompt-interact-1920x1080: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair/waypoint boxes identical to the camera-only render (max diff 0, 0 > 3).
+[HUD2] PASS Interact prompt still up right before the hold.
+[HUD2] PASS R hold progressing (CrimeEncounter.Interact) -> prompt gone; saved: move,punch,dodge,interact.
+[HUD2] PASS All four prompts shown in context and completed by the real action: move,punch,dodge,interact.
+[HUD2] PASS GameFlow.Select launches hero prompt clone
+RIG BIND root=VECTOR builderAnimator=54368:3328 expected=54368:3328 lookChild=True sourceChild=True avatarRoot=root, lookInsideAvatar=True, hierarchy=True
+[HUD2] PASS hero prompt clone: session runs this definition; GameHud + overlay panel exist.
+[HUD2] PASS Fresh-save CONTROL: MOVE prompt shows again.
+[HUD2] PASS Fresh-save CONTROL: PUNCH prompt shows again.
+[HUD2] PASS Fresh-save CONTROL: DODGE prompt shows again.
+[HUD2] PASS Fresh-save CONTROL: INTERACT prompt shows again.
+[HUD2] PASS The prompt save still holds its four seen prompts for the separate-process Reload: move,punch,dodge,interact
+[HUD2] LIMIT: no hardware keyboard/mouse in batch mode. Briefing dismissal and prompt completion use the methods the input handlers call (TryJump/TryPunch/TryBackflip, CrimeEncounter.Interact, GameModeSession.SpawnNext); the HUD's Input.anyKeyDown path is not exercised. Captures are batch-mode Metal render targets, not a physical display.
+[HUD2] PASS Transient feedback NEVER overlapped the crosshair box: 509 popup/heat-delta samples over 14646 HUD frames (keep-out radius 33.2).

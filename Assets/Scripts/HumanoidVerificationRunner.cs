@@ -15,13 +15,17 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
     HumanoidPresentation P=>W.Hero.GetComponent<HumanoidPresentation>();
     void Log(string text){lines.Add(text);Debug.Log("[HUMANOID VERIFY] "+text);File.WriteAllLines("Verification/Humanoid/results.txt",lines);}
     void Check(bool condition,string text){if(!condition)throw new Exception(text);Log("PASS "+text);}
+    string runtimeFailure;
+    void Awake(){Application.logMessageReceived+=Observe;}
+    void OnDestroy(){Application.logMessageReceived-=Observe;}
+    void Observe(string message,string trace,LogType kind){if(kind==LogType.Exception||message.Contains("PropertyStreamHandle")||message.Contains("because it is not a child Transform"))runtimeFailure=message;}
     IEnumerator Start()
     {
         var stack=new Stack<IEnumerator>();stack.Push(Run());
         while(stack.Count>0)
         {
             bool more=false;object value=null;
-            try{more=stack.Peek().MoveNext();if(more)value=stack.Peek().Current;}catch(Exception e){Log("FAIL "+e);Finished(1);yield break;}
+            try{if(runtimeFailure!=null)throw new Exception("Runtime error: "+runtimeFailure);more=stack.Peek().MoveNext();if(more)value=stack.Peek().Current;}catch(Exception e){Log("FAIL "+e);Finished(1);yield break;}
             if(!more){stack.Pop();continue;}if(value is IEnumerator nested)stack.Push(nested);else yield return value;
         }
         Finished(0);
@@ -52,7 +56,7 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
         Check(W.Hero.GetComponent<CharacterController>().height==1.8f&&W.Hero.GetComponent<CharacterController>().radius==.38f,"CONTROL: player collider unchanged: height=1.800m radius=.380m; NPC capsule=1.800m/.350m.");
         Check(W.Hero.GetComponentsInChildren<Collider>().Length==1,$"Reference skinned vertices height={P.ReferenceMeshHeight:F4}m, visual scale={P.ModelScale:F4}, fitted height={P.ReferenceMeshHeight*P.ModelScale:F4}m; exactly one authoritative player collider.");
         Check(W.Npcs.All(n=>n.GetComponent<HumanoidPresentation>().Animator.runtimeAnimatorController==P.Animator.runtimeAnimatorController),$"SAME controller asset on player and all {W.Npcs.Count} civilians/cops/criminals.");
-        yield return Locomotion();yield return Punch();yield return Damage();yield return Flight();yield return Panic();yield return Landing();yield return Casting();yield return Benchmark();yield return EquippedCasting();
+        yield return Locomotion();yield return Punch();yield return Damage();yield return Flight();yield return Panic();yield return Landing();yield return Casting();yield return Benchmark();yield return EquippedCasting();yield return RiggingControls();
         W.Hero.enabled=false;GameFlow.Instance.Home();yield return Scene("Home");
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/villain"));yield return Scene("Prototype");W.Hero.enabled=false;
         Check(P.Animator.runtimeAnimatorController==Resources.Load<HumanoidAnimationTuning>("HumanoidAnimationTuning").Controller&&Camera.main!=null,"Villain mode spawns same humanoid/controller and renders.");
@@ -144,7 +148,8 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
         for(int i=0;i<60;i++){yield return null;maxStep=Mathf.Max(maxStep,Quaternion.Angle(prior,P.PoseRoot.localRotation));prior=P.PoseRoot.localRotation;if(i==4||i==12||i==59)Log($"FLIGHT transition frame {i}: blend={P.ForwardFlight:F3}, pitch={P.PoseRoot.localEulerAngles.x:F2}");}
         Vector3 forwardHand=P.PoseRoot.InverseTransformPoint(P.Animator.GetBoneTransform(HumanBodyBones.LeftHand).position);
         Check(Quaternion.Angle(hover,P.PoseRoot.localRotation)>60&&forwardHand.y>hoverHand.y+.5f,$"Hover vs forward distinct: body difference={Quaternion.Angle(hover,P.PoseRoot.localRotation):F2}deg, hand height {hoverHand.y:F3}->{forwardHand.y:F3}m; maximum rendered-frame pitch change={maxStep:F2}deg.");
-        Check(maxStep<20,"Uncaptured live transition CONTROL stays below 20 degrees per rendered frame.");Capture("forward-flight",P.transform.position);
+        Check(maxStep<20,"Uncaptured live transition CONTROL stays below 20 degrees per rendered frame.");
+        Check(P.Rigging.LookWeight<.01f,"Flight CONTROL gives the original flight head overlay full ownership after the gaze fade.");Capture("forward-flight",P.transform.position);
         P.VerificationState=new HeroPresentationState(Vector3.zero,true,false);yield return new WaitForSeconds(1);
         Check(P.FlightWeight<.01f&&Quaternion.Angle(P.PoseRoot.localRotation,Quaternion.identity)<2,"Landing transition releases flight bones/root smoothly.");
     }
@@ -203,6 +208,43 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
         Move(W.City.Spawn+Vector3.up*15);W.Powers.Select(fire);Check(W.Powers.Use(fire),"Real Fire Blast activation succeeds.");yield return null;Check(P.State=="Cast","Successful Fire Blast triggers Casting Spell.");
         var target=GameObject.CreatePrimitive(PrimitiveType.Cube);W.Powers.Select(ice);target.transform.position=W.Powers.AimOrigin+W.Powers.AimDirection*3;target.AddComponent<Rigidbody>().useGravity=false;Physics.SyncTransforms();
         Check(W.Powers.Use(ice),"Real Ice activation succeeds.");yield return null;Check(P.State=="Cast"&&target.GetComponent<FrozenBody>()!=null,"Successful Ice triggers same Casting Spell and freezes actual body.");Destroy(target);
+    }
+    IEnumerator RiggingControls()
+    {
+        GameFlow.Instance.Home();yield return Scene("Home");
+        var profile=FindAnyObjectByType<ModeScreens>().Profile;
+        var tk=Resources.Load<PowerDefinition>("Powers/telekinesis");
+        if(!profile.Owns(tk))Check(profile.Buy(tk),"Unlock telekinesis through earned points for the rig test.");
+        Check(profile.SetLoadout(profile.SelectedHero,tk,fireDefinition,profile.Data.Loadout.Primary,profile.Data.Loadout.Secondary),"Equip telekinesis through progression for the rig test.");
+        GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene("Prototype");W.Hero.enabled=false;W.MenuOpen=true;
+        Move(W.City.Spawn+Vector3.up*15);
+        var rig=P.Rigging;Check(rig!=null&&rig.Builder.graph.IsValid()&&!P.Animator.applyRootMotion,"Animation Rigging graph is live on the visual Animator; root motion stays off.");
+        var power=W.Powers.Powers.First(x=>x.Definition==tk);Check(W.Powers.Select(power),"Select equipped telekinesis.");
+        var box=GameObject.CreatePrimitive(PrimitiveType.Cube);box.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Wood);
+        box.transform.position=W.Powers.AimOrigin+W.Powers.AimDirection*3;var body=box.AddComponent<Rigidbody>();body.useGravity=false;body.mass=45;Physics.SyncTransforms();
+        Check(W.Powers.Use(power)&&W.Powers.HeldBody==body,"Actual telekinesis cast acquires the real movable prop.");
+        var root=W.Hero.transform.position;yield return new WaitForSeconds(.8f);
+        var chest=P.Animator.GetBoneTransform(HumanBodyBones.Spine);
+        var lh=P.Animator.GetBoneTransform(HumanBodyBones.LeftHand);var rh=P.Animator.GetBoneTransform(HumanBodyBones.RightHand);
+        var toward=(body.worldCenterOfMass-chest.position).normalized;
+        float left=Vector3.Dot((lh.position-chest.position).normalized,toward),right=Vector3.Dot((rh.position-chest.position).normalized,toward);
+        Log($"RIG held arms: left alignment={left:F3}, right={right:F3}, weight={rig.HoldWeight:F3}, root drift={Vector3.Distance(root,W.Hero.transform.position):F5}m.");
+        Check(rig.HoldWeight>.5f&&left>.45f&&right>.45f&&Vector3.Distance(root,W.Hero.transform.position)<.001f,"Both hands aim toward the held prop through real IK without moving the physics root.");Capture("telekinesis-rig",root);
+        var camera=Camera.main.GetComponent<ThirdPersonCamera>();W.MenuOpen=false;Check(camera.ToggleView(),"Rigged hero can enter first person.");yield return new WaitForSeconds(.4f);
+        Check(camera.FirstPerson&&rig.LookWeight<.01f&&rig.HoldWeight>.5f,"First-person CONTROL removes gaze while preserving the hidden Animator and hold pose.");camera.ToggleView();W.MenuOpen=true;
+        W.Powers.Release(false);yield return new WaitForSeconds(.8f);Check(rig.HoldWeight<.01f,"Release fades arm rig back to Animator ownership.");
+        var civilian=W.Npcs.First(x=>x.Role==NpcRole.Civilian&&!x.Dead&&!x.Fleeing);
+        var npcPose=civilian.GetComponent<HumanoidPresentation>();var npcRig=npcPose.Rigging;
+        civilian.enabled=false;civilian.Agent.isStopped=true;
+        Move(civilian.transform.position+civilian.transform.forward*6);
+        yield return new WaitForSeconds(.8f);
+        Check(npcRig.LookWeight>.1f,"Nearby civilian awareness turns toward the hero within the restrained forward cone.");
+        NpcLod.Current.Force(civilian,true);Check(!npcRig.Builder.enabled,"Far-tier CONTROL disables the rig graph and retains cheap Animator stepping.");
+        NpcLod.Current.Force(civilian,false);yield return null;Check(npcRig.Builder.enabled&&npcRig.Builder.graph.IsValid(),"Near promotion rebuilds the awareness rig.");
+        civilian.Agent.isStopped=false;civilian.enabled=true;
+        P.Damage(false);yield return null;yield return null;Check(rig.LookWeight==0&&rig.HoldWeight==0,"Hit clip CONTROL has zero rig weights.");
+        yield return new WaitForSeconds(.6f);W.DamagePlayer(W.Health);yield return null;yield return null;
+        Check(P.IsDead&&rig.LookWeight==0&&rig.HoldWeight==0,"Death CONTROL clears both rig weights.");Destroy(box);
     }
     IEnumerator Benchmark()
     {

@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9667e1a11864f4b41bc85edec6d61fc7, type: 3}
   m_Name: npc-humanspecies_02-suit
   m_EditorClassIdentifier: Assembly-CSharp::SidekickSuit
-  Prefab: {fileID: 8775361858079592817, guid: 8616497cdbf068945ba63b6866dba035, type: 3}
+  Prefab: {fileID: 6127890035902760549, guid: 9abf707b4e0a74f4e995f05077a63009, type: 3}
   Source: {fileID: 2100000, guid: 9eb70278da22d2d4e841ae43f507c46c, type: 2}
   BaseColorMap: {fileID: -2436200437256692475}
   Trim: 10
@@ -186,4 +186,4 @@ MonoBehaviour:
     Vertices: 16
   Body: {fileID: 0}
   SourceMesh: {fileID: 0}
-  BodyBones:
+  BodyBones: 

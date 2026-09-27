@@ -7,6 +7,9 @@ using UnityEngine;
 public sealed class HumanoidPresentation : MonoBehaviour
 {
     public Animator Animator { get; private set; }
+    public HumanoidRigging Rigging { get; private set; }
+    public bool ActionActive => Time.time < actionUntil;
+    public bool IsDead => dead;
     public HumanoidAnimationTuning Tuning { get; private set; }
     public Transform PoseRoot { get; private set; }
     public float FlightWeight { get; private set; }
@@ -91,8 +94,13 @@ public sealed class HumanoidPresentation : MonoBehaviour
             procedural.Initialize(hero,squash,null,Resources.Load<ProceduralAnimationTuning>("ProceduralAnimationTuning"));
         }
         if(npc!=null){npc.Damaged+=presentation.Damage;npc.Attacked+=presentation.Attack;npc.AttackWindupStarted+=presentation.AttackWindup;npc.AttackCanceled+=presentation.AttackCanceled;}
-        presentation.Change("Locomotion",true);return presentation;
+        presentation.Change("Locomotion",true);
+        presentation.Rigging=animator.GetComponent<HumanoidRigging>();
+        if(presentation.Rigging!=null)presentation.Rigging.Initialize(presentation,hero,npc);
+        return presentation;
     }
+    void OnDisable(){if(Rigging!=null)Rigging.SetNear(false);}
+    void OnEnable(){if(Rigging!=null)Rigging.SetNear(true);}
     void OnDestroy()
     {
         if(world!=null){world.PlayerDamaged-=Damage;world.PlayerRespawned-=Revive;}
@@ -231,7 +239,8 @@ public sealed class HumanoidPresentation : MonoBehaviour
         PoseRoot.localPosition=Vector3.up*(Mathf.Sin(Time.time*t.HoverBobFrequency*Mathf.PI*2)*t.HoverBobAmplitude*FlightWeight*(1-ForwardFlight));
         // Restore/override from a neutral humanoid pose, not last frame's modified pose.
         // Active action clips retain upper-body authority, including aerial punches/casts.
-        bool acting=Time.time<actionUntil;
+        bool clipActing=Time.time<actionUntil;
+        bool acting=clipActing||(Rigging!=null&&Rigging.HoldWeight>.01f);
         var hips=Animator.GetBoneTransform(HumanBodyBones.Hips);hips.localPosition=Vector3.Lerp(hips.localPosition,neutralHipsPosition,FlightWeight);
         foreach(var item in neutral)
         {
@@ -260,7 +269,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
             leg.localRotation*=Quaternion.Euler(t.HoverKneeBend*(1-ForwardFlight)*FlightWeight,0,0);
         }
         var head=Animator.GetBoneTransform(HumanBodyBones.Head);
-        if(!acting)head.localRotation*=Quaternion.Euler(-t.FlightHeadLift*ForwardFlight*FlightWeight,Mathf.Sin((Time.time*t.PanicLookBackFrequency+phase)*Mathf.PI*2)*t.PanicLookBackDegrees*PanicWeight*(1-FlightWeight),0);
+        if(!clipActing)head.localRotation*=Quaternion.Euler(-t.FlightHeadLift*ForwardFlight*FlightWeight*(1-Mathf.Clamp01(Rigging!=null?Rigging.LookWeight/Mathf.Max(.01f,t.LookWeight):0)),Mathf.Sin((Time.time*t.PanicLookBackFrequency+phase)*Mathf.PI*2)*t.PanicLookBackDegrees*PanicWeight*(1-FlightWeight),0);
     }
     Transform Bone(int side,HumanBodyBones left,HumanBodyBones right)=>Animator.GetBoneTransform(side<0?left:right);
     void Aim(Transform bone,Transform child,Vector3 localDirection,float weight)
