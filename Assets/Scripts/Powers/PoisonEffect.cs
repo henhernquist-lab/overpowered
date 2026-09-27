@@ -62,6 +62,8 @@ public sealed class Poisoned : MonoBehaviour
     void Update()
     {
         if (!Active) { enabled = false; return; }
+        // An ended session (results pending) must not keep killing NPCs and paying XP; pause already stops Time.time.
+        var world = WorldSession.Instance; if (world != null && world.Mode != null && world.Mode.Ended) { enabled = false; return; }
         if (Time.time < nextTick) return;
         nextTick += settings.TickSeconds; ticksLeft--;
         float damage = dps * settings.TickSeconds;

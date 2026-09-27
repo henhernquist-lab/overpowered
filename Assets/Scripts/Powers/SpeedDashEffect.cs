@@ -42,6 +42,8 @@ public sealed class DashTrail : MonoBehaviour
     readonly Collider[] nearby = new Collider[32];
     /// Hostile NPCs clipped by the current (or last) dash.
     public readonly HashSet<CityNpc> Passed = new HashSet<CityNpc>();
+    /// Frozen enemies shattered by dashes through this trail (verification).
+    public int LastShatters { get; private set; }
     public System.Action Step { get; private set; }
     public void Begin(PowerUser owner, SpeedDashEffect effect, float hitDamage, CityColor tint)
     { user = owner; settings = effect; damage = hitDamage; color = tint; credit = owner != null ? owner.Crediting : null; Passed.Clear(); if (Step == null) Step = OnStep; }
@@ -55,7 +57,11 @@ public sealed class DashTrail : MonoBehaviour
         {
             var npc = nearby[i].GetComponentInParent<CityNpc>();
             if (npc == null || npc.Dead || !npc.Hostile || !Passed.Add(npc)) continue;
-            using (user != null ? user.Credit(credit) : default) npc.Damage(damage, user);
+            // Base interaction (same rule as melee): a physical hit consumes an existing freeze and shatters it for Ice's
+            // ShatterDamage. Not a synergy: any freeze source counts, and no pair has to be equipped.
+            float shatter = user != null ? IceEffect.Shatter(user, npc, centre, settings.PassRadius * 2f) : 0f;
+            using (user != null ? user.Credit(credit) : default) npc.Damage(damage + shatter, user);
+            if (shatter > 0f) { LastShatters++; CombatImpact.PreserveDeathLaunch(npc); }
             FeelDirector.Instance?.Particles.Burst(npc.transform.position + Vector3.up, color, settings.PassParticles);
         }
     }
