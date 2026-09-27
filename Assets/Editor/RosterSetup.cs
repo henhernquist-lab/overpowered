@@ -35,7 +35,9 @@ public static class RosterSetup
         Define("lightning", "Lightning", Effect<LightningEffect>("Lightning"), d =>
         {
             d.Description = "Chain bolt: strikes the aimed enemy, then arcs to up to five nearby enemies (weaker each jump).";
-            d.Charges = 2; d.ChargeRecharge = 2.5f; d.Cooldown = .8f; d.ResourceCost = 18f;
+            // 0.75 s cooldown: synergy cooldowns must be >= 40x every instant offensive power's (Thermal Shock 30 s); its real
+            // pacing gate is 2 charges with a 2.5 s recharge.
+            d.Charges = 2; d.ChargeRecharge = 2.5f; d.Cooldown = .75f; d.ResourceCost = 18f;
             d.Damage = 24f; d.Force = 300f; d.Range = 24f;
             d.PaletteColor = CityColor.Cream; d.MenuIcon = MenuGlyph.Chevron; d.CastingPresentation = true;
         });
@@ -84,9 +86,10 @@ public static class RosterSetup
         configure(d);
         AssetDatabase.CreateAsset(d, path);
     }
-    /// The synergy set is CAPPED (Sonic Slam, Thermal Shock, Solar Flare, Void Grasp, Eclipse Beam are the five in scope).
-    /// Only the three new capped pairs are created here; the eight other legacy synergies are left untouched (reported in
-    /// STATUS, not deleted). No other pair is ever created.
+    /// The synergy set is CAPPED at exactly five: Sonic Slam, Thermal Shock, Solar Flare, Void Grasp, Eclipse Beam. The three
+    /// new-power synergies are created here; EnforceSynergyCap then leaves the shipping catalog with exactly those five (any
+    /// other entry, e.g. a legacy pair synergy restored from an old checkout, is dropped from the catalog).
+    public static readonly string[] ShippingSynergies = { "sonic-slam", "thermal-shock", "solar-flare", "void-grasp", "eclipse-beam" };
     static void AddSynergies()
     {
         var catalog = AssetDatabase.LoadAssetAtPath<ForgeCatalog>("Assets/Resources/ForgeCatalog.asset");
@@ -122,7 +125,17 @@ public static class RosterSetup
         Add("eclipse-beam", "Eclipse Beam", "darkness", "laser-eyes", NewEffect<EclipseBeamEffect>("eclipse-beam"),
             "Wrap one enemy in darkness, then burn straight through it. Single target, enormous damage.",
             d => { d.Cooldown = 45; d.Range = 30; d.LiftSeconds = .6f; d.Duration = .5f; d.Damage = 160; d.Force = 3000; d.Radius = 1.5f; d.Primary = CityColor.Red; d.Secondary = CityColor.UiPurple; });
-        catalog.Synergies = entries.ToArray(); EditorUtility.SetDirty(catalog);
+        catalog.Synergies = entries.ToArray(); EnforceSynergyCap(catalog);
+    }
+    [MenuItem("Overpowered/Roster/Enforce the five-synergy cap")]
+    public static void EnforceSynergyCap() { var c = AssetDatabase.LoadAssetAtPath<ForgeCatalog>("Assets/Resources/ForgeCatalog.asset"); if (c != null) EnforceSynergyCap(c); AssetDatabase.SaveAssets(); }
+    static void EnforceSynergyCap(ForgeCatalog catalog)
+    {
+        var capped = ShippingSynergies.Select(id => catalog.Synergies.FirstOrDefault(s => s != null && s.Id == id)).ToArray();
+        for (int i = 0; i < capped.Length; i++) if (capped[i] == null) Debug.LogError("Synergy cap: missing shipping synergy " + ShippingSynergies[i]);
+        var dropped = catalog.Synergies.Where(s => s == null || Array.IndexOf(ShippingSynergies, s.Id) < 0).Select(s => s != null ? s.Id : "<null>").ToArray();
+        if (dropped.Length > 0) Debug.Log("Synergy cap: removed from the shipping catalog: " + string.Join(", ", dropped));
+        catalog.Synergies = capped.Where(s => s != null).ToArray(); EditorUtility.SetDirty(catalog);
     }
     /// Every shipping hero may equip every shipping power (the existing heroes were created with the whole list).
     static void AddToHeroes()
