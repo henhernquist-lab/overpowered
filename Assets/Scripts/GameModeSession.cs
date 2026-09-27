@@ -30,6 +30,8 @@ public sealed class GameModeSession : MonoBehaviour
     float spawnClock; int nextEncounter, siteDistrict=-1;
     /// Optional GameModeDefinition.Selection state (null = round robin over Encounters, unchanged).
     public EncounterSelectionState Selection {get;private set;}
+    /// Spawns where the Selection had no eligible option and the round-robin list was used instead.
+    public int SelectionFallbacks {get;private set;}
     /// The value EncounterSelection.Difficulty reads (before DifficultyStep).
     public int SelectionDifficulty
     {
@@ -91,6 +93,9 @@ public sealed class GameModeSession : MonoBehaviour
             site=>!World.Crimes.Exists(c=>c!=null&&c.Encounter!=null&&Vector3.Distance(c.Encounter.Site,site)<Definition.SiteSeparation),ref siteDistrict,out var chosen)) return null;
         if(Selection==null) return World.SpawnEncounter(Definition.Encounters[nextEncounter++%Definition.Encounters.Length],chosen);
         var picked=Selection.Pick(SelectionDifficulty,World.City.DistrictDefinitions[World.City.DistrictAt(chosen)].Name);
+        // Nothing eligible (every option banded / filtered out): fall back to the mode's own list rather than spawn nothing
+        // forever (a success goal would become unreachable). An empty list keeps "no spawn this cycle".
+        if(picked==null&&!noList){SelectionFallbacks++;picked=Definition.Encounters[nextEncounter++%Definition.Encounters.Length];}
         return picked!=null?World.SpawnEncounter(picked,chosen):null;
     }
     public void EncounterEnded(CrimeEncounter encounter,bool success,string reason)

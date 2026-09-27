@@ -105,6 +105,13 @@ public sealed class EncounterSelectionVerificationRunner : StagedMissionRunner
         var spawned = W.Crimes.Where(c => c != null && c.Encounter != null).Select(c => c.Encounter.Definition).ToList();
         Check(W.Mode.Selection != null && spawned.Count >= 1 && spawned.All(d => d == bank) && W.Mode.Selection.History.Count == spawned.Count,
             $"Mode with a Selection and an EMPTY Encounters list spawns from its options through SpawnNext ({spawned.Count} x {bank.DisplayName}; history {W.Mode.Selection.History.Count}).");
+        // Soft-lock guard: every option banded out (band 0 < MinDifficulty 5) -> the mode's own list is used instead.
+        var guarded = Instantiate(hero); var listFirst = hero.Encounters[0];
+        guarded.Selection = Selection(1, true, 42, O(bank, 1, 5));
+        yield return Home();
+        GameFlow.Instance.Select(guarded); yield return Scene(GameFlow.CityScene);
+        var got = W.Crimes.Where(c => c != null && c.Encounter != null).Select(c => c.Encounter.Definition).ToList();
+        Check(W.Mode.SelectionFallbacks >= 1 && got.Count >= 1 && got[0] == listFirst, $"No eligible option (all banded out): SpawnNext falls back to the mode's list ({got.FirstOrDefault()?.DisplayName}; {W.Mode.SelectionFallbacks} fallback(s)) instead of spawning nothing.");
     }
 }
 #endif
