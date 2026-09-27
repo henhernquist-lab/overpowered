@@ -2289,3 +2289,80 @@ All exited 0. Counts are PASS lines.
   guard added in `PlayerProgression.Initialize` (batch mode never touches the real save).
 - `MenuPresentationSetup.Create` re-serializes the original five power assets with the cloud's new fields at defaults
   (`Activation: 0`, `DrainPerSecond: 0`) — harmless; will be committed with the next merge.
+
+## Local issues L1–L3 fixed: real-save guard, music DSP race, briefing clock (2026-09-27, branch `fix/local-issues`, appended)
+These are the local issues from CLOUD FEEDBACK #1. All runs were on this Mac (Unity 6000.6.0f1). The user's real save
+`overpowered-progression.json` was checked with md5 before and after every run. It never changed (`9047e6ee…`).
+
+- **L3: a Reload could load the user's real save (commit `5e833b6`).**
+  - **Fix:** in batch mode, `PlayerProgression.Initialize` no longer falls back to `persistentDataPath` when no path is set.
+    It uses a throwaway `temporaryCachePath` file and logs a warning.
+  - **Negative control:** I ran `SynergyAvailabilityVerification.Reload` with no `old-save-path.txt`. The log shows the
+    FileNotFoundException and then the warning. The run fails cleanly on its assertion "Old progression preserved exactly"
+    (exit 1). The real save was unchanged.
+  - **Control:** a normal Run passed 36 and its Reload passed 9, with no warning.
+- **L1: "Music DSP sample cursor advances" was a test race, not silenced audio (commit `cc78bd1`).**
+  - **Cause:** the check read `timeSamples` after `Scene(Home)` plus a 1.1 s realtime wait that starts in play-mode
+    frame 1. `AudioDirector` first calls `Play()` on the music in frame 2. When frame 1 alone took more than 1.1 s, the check
+    ran in the same frame as `Play()`, before any mixer block, and read 0.
+  - **Frame timing, measured with non-perturbing logs:**
+
+    | State | Frame 1 → 2 | When the check ran | Result |
+    |---|---|---|---|
+    | HEAD | 1.53 s / 1.50 s | same frame as the music `Play()`, ts=0 | FAIL |
+    | `ada0a2e` | 0.68 s / 0.66 s | frames 61 / 3, ts=18815 / 21638 | PASS |
+
+  - **Not a Phase 0 commit regression:**
+    - Unmodified `ada0a2e` failed the same way under load at 04:48. It passed at 04:27, 05:05 and 05:09, and also passed
+      2 more runs with timing logs added.
+    - The check already flaked on 09-24, before Phase 0.
+    - Phase 0 made frame 1 longer: editor windows are created in it, and `DOTweenSettings.asset` is imported and refreshed.
+      That turned an occasional flake into a near-constant failure.
+    - With Sidekick's auto-open skipped, frame 1 still took 1.11–1.43 s under load 17–34. So no single component is proven
+      to cause the longer frame.
+  - **Fix:** the check now uses the audio clock.
+    - It waits for 2 s of `AudioSettings.dspTime`. The wait is bounded in real time, so a dead output device still fails.
+    - The cursor must then advance by 50–125 % of dspTime × clip frequency. This is stronger than `ts > 0`.
+  - **New CONTROL:** at pitch 0 the source still reports `isPlaying`, but its cursor stalls. The same measurement rejects it
+    (990 samples in 0.51 s, below 50 % of 22579).
+- **L2: HUD P2 briefing CONTROL (commits `61a3c04` + `e744053`).**
+  - **Mechanism:** the test's realtime stamp starts after the 1920×1080 composite. The HUD's timeout clock
+    (`BriefingElapsed`, unscaled) already includes that capture.
+  - **The actual trigger was an editor stall.** In every HUD P2 run, one frame of 5.47–5.75 s landed near the villain
+    briefing.
+    - A PlayerLoop and editor-update probe placed the 5.3 s inside the editor's `HostView.SendUpdate`, right after
+      `Synty…ModularCharacterWindow.AnimationUpdate`. This is Sidekick's Character Creator window, which
+      `MenuBootstrapController` auto-opens even in batch mode. It is editor-only, not a game hitch.
+    - When the stall landed inside the capture, the old test failed. When it landed after the capture, the old test passed
+      by luck: the check ran in the stall frame, before the HUD's LateUpdate counted it.
+  - **Fixes:**
+    - `Assets/Editor/BatchModeSidekickQuiet.cs` sets Sidekick's own per-session flag (`SessionState` "FirstInitDone") in
+      batch mode only. This changes no vendor file and no EditorPrefs.
+    - The test watches the HUD clock every frame. The card must be seen up in [5.5, 7) s. It must stay up while the clock is
+      below 7 s. It must close by timeout on the first update past 7 s. The HUD clock must advance with real time, within one
+      frame.
+  - **Result:** the longest frame across the briefing window is now 0.02 s. As a side effect, `Side_Kick_Data.db` was no
+    longer rewritten by these runs.
+
+**Final regression sweep on `e744053`** (runs back to back, wt-sidekick's Unity sometimes busy in parallel, load 10–13):
+
+| Suite | Exit | PASS | Reload exit | Reload PASS |
+|---|---|---|---|---|
+| AudioVerification | 0 | 128 | 0 | 50 |
+| HudPhase2Verification | 0 | 483 | 0 | 31 |
+| SynergyAvailabilityVerification | 0 | 36 | 0 | 9 |
+| CityVerification | 0 | 54 | 0 | 5 |
+| HudVerification (P1) | 0 | 316 | — | — |
+| HudPhase3Verification (extra) | 0 | 561 | 0 | 11 |
+
+- **Earlier HUD P2 proof runs** (while wt-sidekick was profiling): 484 + Reload 31, then 483 + Reload 31.
+- **PASS counts that vary by one:**
+  - HUD P2 has 483 or 484 PASS lines, and HUD P3 has 561 or 562.
+  - The difference is always the same thing: a prompt card that is or is not on screen in one capture, which adds or drops
+    one "composite contains hud-prompt" line. This variation already existed.
+- **dotnet gate:** 0 warnings, 0 errors.
+- **Limits:**
+  - The audio check proves the DSP cursor advances. It does not prove the sound is audible on a speaker.
+  - If some other editor stall longer than 1.5 s ever lands inside the briefing window, the HUD P2 CONTROL will fail. The
+    failure message states the longest frame.
+  - I did not re-run L4 (HUD P3 timing) in isolation. Its failure signature matches the same editor stall.
