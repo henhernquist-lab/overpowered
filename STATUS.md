@@ -2006,3 +2006,123 @@ Fire aim MISS 0.001–0.004 m at 5/8/15 m, 0.102 m at 22 m, 0.705 m at 30 m (bey
 particles A/B ON 338.4 vs OFF 347.7 FPS (−2.7%) and 342.7 vs 356.5 FPS (−3.9%), Editor batch-mode.
 `IceVerification.Before` shares the placement code and also runs clean (exit 0, 27 PASS + 7 "OBSERVED yes"); its
 output was NOT committed so the historical pre-fix `results-before.txt` / `before-*.png` evidence stays as recorded.
+
+## Ice shatter + directed Telekinesis throw — 2026-09-26 (appended)
+
+Started from clean `main` at `a94d967`, after reading AGENTS, STATUS and the merged history. No world, rebalance,
+Fire effect, Flight, Forge/synergy source or existing power resource numbers were changed.
+
+**Ice:** a punch or Hurricane Kick against an already frozen NPC/prop consumes the freeze, restores the visible pose/material
+and prop constraints immediately, adds **30 damage** to the same damage call, emits **28 Cyan ice fragments** through the
+existing fixed Feel particle pool, and applies **1,800 N.s additional AddExplosionForce** (lift 0.65). The normal melee
+force still applies. Tuning lives on `Assets/Resources/Effects/Ice.asset`, linked by `Powers/ice.asset`; these are flat
+additive values, not another upgrade tree. Damage is awarded once, preserving the existing defeat/XP/Heat path.
+The only controller edits label the two existing punch/kick Blast calls `melee:true`; timing, charge payment, cooldown,
+normal damage/force and Strength upgrades are unchanged. Non-melee Blast callers default to false.
+
+NPCs use the existing `SynergySuspension` physics/navigation handoff (80 kg capsule, not a ragdoll). A lethal hit keeps
+that capsule dynamic through the existing death-presentation lifetime, rather than letting navigation recovery stop
+the corpse next frame. Existing dead/defeat checks still apply. `FreezeStartedFrame` prevents a melee attack from
+consuming a freeze it just established itself: Glacier Fist's first hit still freezes, and a later follow-up can shatter.
+No synergy effect, cooldown or rule was edited. An expired/consumed freeze cannot produce another bonus.
+
+**Telekinesis:** LMB grabs, LMB again throws the already-paid hold (release still works with no charges or during cooldown).
+The old second-click path already existed but launched parallel to the shoulder's ray from the prop's different position;
+its NPC collision handler only dealt flat damage. `PowerUser.AimPoint` now exposes the exact existing Fire crosshair query
+(hero-relative range and behind-hero exclusion retained), and `AimDirection` delegates to it. A held body is excluded from
+its own aim query. Throw converges from the body's actual centre of mass to that point, compensates existing velocity
+and gravity, and calls `AddForce(..., ForceMode.Impulse)` once. There is no teleport, homing, new aiming system or change
+to Fire's origin/wall sweep.
+
+Throw tuning lives on `Assets/Resources/Effects/Telekinesis.asset`: launch speed = power Force / body mass, clamped to
+**22–40 m/s** so a 400 kg car can reach the crosshair instead of dropping at 4.5 m/s. This deliberately means heavy-object
+launch impulses exceed the old flat 1,800 N.s. Damage = power Damage × sqrt(mass / **45 kg**), clamped to **0.5–3×**.
+Actual collision momentum transfers **0.65×**, capped at **2,400 N.s**, with **0.3 lift**, into the existing NPC physics
+handoff. The struck actor hosts the handoff coroutine so destroying the projectile cannot cancel it. The initiating
+projectile/actor collision is ignored for **0.2 s** and restored; without this separation, the original contact was
+mistaken for a landing and canceled the launch (caught by the live test). Damage remains one-shot in `ThrownProp`.
+Legacy synergy callers of `ThrownProp.Initialize` retain their original damage/force behavior via optional settings.
+
+While Orbit Throw (or Inferno Orbit, which uses the same effect type) is holding props, the same Telekinesis LMB input
+calls its existing `RequestRelease`. The existing coroutine owns every sequential release, interval and cooldown;
+neither it nor its launch algorithm was duplicated or modified. The original C-key release remains available.
+
+**Verification:** `PowerPayoffVerification.Run` in an isolated APFS project copy, isolated temporary save, Unity 6000.6.0f1
+with graphics enabled: **91 PASS, exit 0**. Evidence: `Verification/Payoff/results.txt`.
+
+```text
+PUNCH unfrozen: 35.00 damage, 0.000 m/s NPC speed; frozen: 65.00 damage, 31.425 m/s.
+KICK unfrozen: 59.50 damage, 0.000 m/s NPC speed; frozen: 89.50 damage, 37.768 m/s.
+Base impulse unchanged: punch 1350 / kick 2025 N.s; shatter adds 1800 N.s.
+Normal hit 14 pooled particles; frozen hit 42 = 14 normal + 28 ice.
+Non-melee CONTROL: exactly 7 damage, still frozen, no shatter.
+Consumed/thawed CONTROL: next punch has only its original 35 damage.
+Frozen prop constraints restored: launch speed 52.76 m/s.
+Lethal shatter of a normal 65HP enemy: dead body still moving at 32.12 m/s.
+```
+
+Throws at an NPC ~18 m from the hero (about 14 m of prop travel), stationary clear-lane fixtures in the actual city scene:
+
+| View / mass | Crosshair-to-contact miss | Actual AddForce impulse | Impact damage | NPC impulse / launch speed |
+|---|---:|---:|---:|---:|
+| Third / 45 kg | 0.0261 m | 1,922.4 N.s | 35.00 | 1,176.3 N.s / 15.416 m/s |
+| Third / 400 kg | 0.0467 m | 10,468.3 N.s | 104.35 | 2,400 N.s / 30.727 m/s |
+| First / 45 kg | 0.0369 m | 1,924.7 N.s | 35.00 | 1,177.4 N.s / 15.425 m/s |
+| First / 400 kg | 0.0573 m | 10,396.3 N.s | 104.35 | 2,400 N.s / 30.724 m/s |
+
+Gravity was enabled on the thrown body before grabbing and restored on release. Off-axis NPCs took **zero damage**;
+the wall control recorded an actual wall collision and the target behind it stayed unharmed. Repeated collision did
+not pay damage twice. A lethal 400 kg hit still launched its dead target. Orbit captured three real bodies and released
+all three through the existing path at **0.152 / 0.151 s** intervals (configured 0.150); cooldown remained active.
+
+Limits: tests call the same entry points as input and advance real PhysX frames; no human feel acceptance or hardware
+input injection. Accuracy is measured against stationary NPCs; throws do not predict moving enemies or steer around
+obstacles. Physics fixtures are lifted above the city to isolate force/aim controls. Living NPC recovery retains the
+existing suspension's NavMesh fallback; no ragdoll or new recovery system. Shatter is geometric pooled ice debris,
+not a new particle asset. Inspector balance values are design decisions that still need playtesting.
+
+**Combat FPS, actual before/after:** the identical `PowerPayoffBenchmark.Run` harness was run on two isolated project
+copies, one with the nine changed shipping files restored to `a94d967`, one with the finished feature. Sequential runs
+(no concurrent Unity), same seed, one enabled 1280x720 gameplay camera, **26 civilians + 7 cops**, ambient AI active,
+15 repeated Ice/punch/Telekinesis cycles over 30 seconds per run. Only test-player health is restored to sustain combat;
+the close combo target is a controlled fixture, and successful casts are counted. Throws completed 15/15 per baseline
+run and 15/15 then 14/15 after (one live obstruction prevented a grab). Draws use UnityStats, as in WorldProfile.
+
+| Run | Three 10-second FPS samples | Mean FPS | Draw-call range |
+|---|---|---:|---:|
+| Before 1 | 94.54 / 96.25 / 85.74 | 92.18 | 256.4–259.6 |
+| After 1 | 79.84 / 81.58 / 84.00 | 81.81 | 257.0–262.1 |
+| After 2 | 83.27 / 86.20 / 82.93 | 84.13 | 256.6–260.8 |
+| Before 2 | 74.01 / 73.76 / 77.37 | 75.05 | 252.9–256.6 |
+
+Pooled means **83.61 before → 82.97 after (−0.77%, about +0.09 ms/frame)**. No measurable regression at this run's
+noise level; **this is not proof of zero cost**. Baseline drift (92.18 → 75.05) is much larger than that pooled delta,
+so the first pair's apparent 11% loss and the second pair's apparent gain cannot establish a stable effect. Per-run
+data is retained in `Verification/Payoff/benchmark-{before,after}-{1,2}.txt`; the table pairs by version, while actual
+execution was After 1 → Before 1 → After 2 → Before 2. An earlier exploratory baseline (81.75/83.85/93.11) used an
+unsupported ProfilerRecorder counter (zero draws) and overlapped a brief dotnet compile; it is retained as
+`benchmark-before-initial.txt`, explicitly excluded from the comparison. No detail, population or VFX was cut.
+All figures are Editor batch throughput, not standalone player FPS or a controlled hardware laboratory result.
+
+**Regression fixture correction:** CityVerification originally failed its Ice-prop assertion after the new capped-speed
+throw. Its `Destroy(held)` is deferred until end of frame, but it immediately creates and casts at the next fixture.
+Actual diagnostic output: `aimed old thrown body=True, aimed Ice body=False; old position=(-28.00, 1.12, 8.74),
+new position=(-28.00, 1.12, 10.00)`. The old 4 kg / 1,800 N.s throw had already flown past; the 40 m/s prop was still
+blocking the ray. The test now disables its retired fixture before querying Ice and adds an explicit target-selection
+control. The original Ice freeze/expiry assertions are unchanged; the final City run passes **54** (previous 53 + the
+new fixture control). Original failure and final output are both retained in `Verification/Payoff/regression/`.
+
+**Final regression gate, all exit 0:** HeroForge **131**, BackflipHurricane **63**, FirstPerson **207**, Ice **34**,
+Feel **139**, City **54**, Combat **170**. Full text output is retained under `Verification/Payoff/regression/`.
+FirstPerson's Fire contacts remain **0.0951 m third / 0.0846 m first**, in both Hero and Villain sessions; Feel also
+rechecks the hero-relative range fix. Forge exercises all ten synergies, original C-key Orbit release, Glacier freeze,
+Strength charge refusal and original force, and flight fuel. The historical abilities runner freezes its NPC fixtures
+to hold them still, so its recorded melee damages now correctly include shatter; the new suite separately proves
+the unchanged **unfrozen** 35 / 59.5 controls. No existing assertions were weakened.
+
+Unity **6000.6.0f1 batch compile passed with no C# errors/warnings**; the pre-existing Editor Search indexing
+`ArgumentOutOfRangeException` still appears at startup, separately from gameplay. No gameplay errors occurred in the
+completed payoff run. Run commands (on an isolated copy, omit `-quit`):
+`-executeMethod PowerPayoffVerification.Run` and `-executeMethod PowerPayoffBenchmark.Run`.
+Supplemental dotnet build: **0 warnings / 0 errors** (`Verification/Payoff/build.txt`). All 18 changed/new asset,
+source and metadata files byte-match the final tested copy. `git diff --check` passes.

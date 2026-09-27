@@ -2,6 +2,31 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Overpowered/Effects/Freeze")]
 public sealed class IceEffect : PowerEffect
 {
+    [Header("Melee shatter (additive to the paid melee hit)")]
+    public float ShatterDamage = 30f, ShatterImpulse = 1800f, ShatterLift = .65f;
+    public int ShatterParticles = 28;
+    public static float Shatter(PowerUser user, Component target, Vector3 origin, float radius)
+    {
+        var npc=target.GetComponent<CityNpc>();var frozen=target.GetComponent<FrozenBody>();
+        // Glacier Fist applies its freeze in this same melee call. It must establish a freeze, not immediately consume
+        // its own new effect; shatter is a follow-up against a freeze that existed before this frame.
+        if(npc!=null ? npc.Dead||!npc.Frozen||npc.FreezeStartedFrame==Time.frameCount : frozen==null||!frozen.Frozen)return 0;
+        var power=user.Powers.Find(p=>p.Definition.Effect is IceEffect);
+        if(power==null)return 0;
+        var settings=(IceEffect)power.Definition.Effect;
+        Rigidbody body;
+        if(npc!=null)
+        {
+            npc.Thaw();
+            var suspension=npc.GetComponent<SynergySuspension>();if(suspension==null)suspension=npc.gameObject.AddComponent<SynergySuspension>();
+            body=suspension.Begin(npc);body.useGravity=true;suspension.Release();
+        }
+        else { body=frozen.GetComponent<Rigidbody>();frozen.Thaw(); }
+        target.GetComponent<FrozenLook>()?.Clear();
+        body.AddExplosionForce(settings.ShatterImpulse,origin,radius,settings.ShatterLift,ForceMode.Impulse);
+        FeelDirector.Instance?.Particles.Burst(target.transform.position+Vector3.up*.8f,power.Definition.PaletteColor,settings.ShatterParticles);
+        return settings.ShatterDamage;
+    }
     public override bool Execute(PowerUser user, PowerRuntime power)
     {
         var stats = user.Stats(power);
@@ -34,6 +59,8 @@ public sealed class IceEffect : PowerEffect
 public sealed class FrozenBody : MonoBehaviour
 {
     Rigidbody body; RigidbodyConstraints prior; float until; bool applied;
+    public bool Frozen => applied && enabled && Time.time < until;
+    public void Thaw() { enabled=false; Destroy(this); }
     public void Apply(float seconds, CityColor color)
     {
         if (!applied) { body = GetComponent<Rigidbody>(); prior = body.constraints; applied = true; }
@@ -50,6 +77,7 @@ public sealed class FrozenLook : MonoBehaviour
 {
     Renderer[] renderers; Material[][] original; Animator animator; float animatorSpeed; System.Func<bool> active; bool shown;
     public bool Shown => shown;
+    public void Clear() { Restore(); }
     public static FrozenLook Show(GameObject target, CityColor color, System.Func<bool> stillFrozen)
     {
         var look = target.GetComponent<FrozenLook>(); if (look == null) look = target.AddComponent<FrozenLook>();

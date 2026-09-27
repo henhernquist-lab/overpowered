@@ -1,0 +1,42 @@
+PASS World bootstrapped with city, powers, and progression.
+PASS Seeded city: 63 solid buildings (== planned 63) across 3 districts; civilians=24
+PASS Same seed reproduced layout samples.
+PASS NavMesh has complete sidewalk-to-sidewalk route.
+PASS Fresh progression: level=1, points=0.
+PASS Unspent CONTROL: level=2, points=1, force unchanged=1350.
+PASS Spent one point on strength.
+PASS Upgraded strength: force=1890, max charges=4, points=0.
+PASS Zero-point upgrade CONTROL rejected.
+PASS Seventh power discovered from DATA only; exact same projectile effect asset as Fire Blast.
+PASS Seventh power owned but NOT equipped (session loadout flight + strength).
+PASS CONTROL: unequipped seventh power refused by the equip gate (Select/Use false, "Power not equipped"); charges 3->3, cooldown 0.00->0.00, energy 100.00->100.00.
+PASS CONTROL: refused seventh power spawned no projectile (0 before/after) and the target did not move: displacement=0.0000m.
+PASS Real flight resource path: start=6, after 2s=4, after 6s=0; empty rejects.
+PASS Ground recharge after 1s=2.5s.
+PASS Charged punch normal CONTROL fires.
+PASS Punch cooldown rejects immediate retry.
+PASS Three punches exhausted charges; zero-charge fire rejected.
+PASS Time-driven recharge restored a working punch.
+PASS Telekinesis and Ice owned from the start at tier 0 (InitiallyUnlocked data); the 3 earned points stay unspent for tiers.
+PASS CONTROL: unequipped Telekinesis and Ice refused by the equip gate (Select/Use false); nothing grabbed, frozen or charged.
+PASS Test hero 'verification-hero' registered in memory only (no asset file; catalog not dirty); roster=verification-7+strength.
+PASS CONTROL: live in-session loadout change refused (seventh power + Strength).
+PASS CONTROL: hero vector whose roster lacks the pair cannot equip seventh power + Strength.
+PASS Equipped owned seventh power + Strength on verification-hero through PlayerProgression.SetLoadout before the session.
+PASS New sandbox session receives verification-7 + strength and keeps progression level=5.
+PASS Seventh power activated via normal selected-power path.
+PASS Seventh projectile hit real Rigidbody: impulse setting=200 N·s; displacement=13.642m; velocity=32.550m/s.
+PASS CONTROL: live in-session loadout change refused (Telekinesis + Ice).
+PASS CONTROL: hero verification-hero whose roster lacks the pair cannot equip Telekinesis + Ice.
+PASS Equipped owned Telekinesis + Ice on vector through PlayerProgression.SetLoadout before the session.
+PASS New sandbox session receives telekinesis + ice and keeps progression level=5.
+PASS Catalog restored to its 3 shipping heroes once the Telekinesis + Ice session started; never marked dirty.
+LIMIT: the seventh-power test hero is registered in the loaded ForgeCatalog IN MEMORY ONLY (ScriptableObject.CreateInstance, no asset file, catalog never marked dirty or saved) and removed as soon as the Telekinesis + Ice session (shipping hero vector) has started; the shipping roster itself cannot equip verification-7.
+PASS Telekinesis grabs the aimed Rigidbody.
+PASS Second activation hurls the already-paid grab.
+PASS Telekinesis hurl velocity=40.000m/s.
+FAIL Ice freezes a targeted Rigidbody.
+EXCEPTION System.InvalidOperationException: Ice freezes a targeted Rigidbody.
+  at CityVerificationRunner.Check (System.Boolean condition, System.String text) [0x00051] in /private/tmp/op-payoff-oAynMK/Assets/Scripts/CityVerificationRunner.cs:26
+  at CityVerificationRunner+<Run>d__9.MoveNext () [0x017d2] in /private/tmp/op-payoff-oAynMK/Assets/Scripts/CityVerificationRunner.cs:156
+  at CityVerificationRunner+<Start>d__8.MoveNext () [0x00036] in /private/tmp/op-payoff-oAynMK/Assets/Scripts/CityVerificationRunner.cs:35

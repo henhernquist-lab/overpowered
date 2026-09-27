@@ -132,7 +132,7 @@ public sealed class SuperHeroController : MonoBehaviour
         if(powers.SynergyRunner!=null)stats=powers.SynergyRunner.ModifyMelee(stats,transform.position+Vector3.up*definition.OriginHeight+transform.forward*definition.OriginOffset);
         LastForce = stats.Force;
         LastAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * definition.OriginHeight + transform.forward * definition.OriginOffset,
-            stats.Radius, stats.Force, stats.Damage, definition.UpwardForce);
+            stats.Radius, stats.Force, stats.Damage, definition.UpwardForce, melee:true);
         LastPunchResult = $"PUNCH: {LastAffectedBodies} bodies hit @ {LastForce:0} N·s";
         LastImpactTime=Time.time;LastImpactFrame=Time.frameCount;PunchImpacted?.Invoke();
     }
@@ -195,7 +195,7 @@ public sealed class SuperHeroController : MonoBehaviour
         if(powers.SynergyRunner!=null)stats=powers.SynergyRunner.ModifyMelee(stats,transform.position+Vector3.up*HeroAbilityTuning.KickOriginHeight+transform.forward*HeroAbilityTuning.KickOriginOffset);
         LastKickForce = stats.Force * HeroAbilityTuning.KickForceMultiplier;
         LastKickAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * HeroAbilityTuning.KickOriginHeight + transform.forward * HeroAbilityTuning.KickOriginOffset,
-            HeroAbilityTuning.KickRadius, LastKickForce, stats.Damage * HeroAbilityTuning.KickDamageMultiplier, HeroAbilityTuning.KickUpwardForce);
+            HeroAbilityTuning.KickRadius, LastKickForce, stats.Damage * HeroAbilityTuning.KickDamageMultiplier, HeroAbilityTuning.KickUpwardForce, melee:true);
         LastKickResult = $"HURRICANE KICK: {LastKickAffectedBodies} bodies hit @ {LastKickForce:0} N\u00b7s";
         LastKickImpactTime=Time.time;LastKickImpactFrame=Time.frameCount;HurricaneKickImpacted?.Invoke();
     }

@@ -153,6 +153,13 @@ public sealed class CityVerificationRunner : MonoBehaviour
         Check(held.linearVelocity.magnitude>10,$"Telekinesis hurl velocity={held.linearVelocity.magnitude:F3}m/s."); Destroy(held.gameObject);
         var frozen=Target(w.Powers.AimOrigin+Vector3.forward*6); frozen.useGravity=false;
         w.Powers.Select(ice); Physics.SyncTransforms();
+        // Destroy is deferred to end of frame. The now speed-capped thrown fixture can still sit in front of the
+        // newly created Ice fixture during this same coroutine tick; retire its collider before testing Ice.
+        w.Powers.FindTarget(w.Powers.Stats(ice).Range,out var beforeCleanup);
+        lines.Add($"FIXTURE Ice before deferred-destroy cleanup: aimed old thrown body={beforeCleanup.rigidbody==held}, aimed Ice body={beforeCleanup.rigidbody==frozen}; old position={held?.position}, new position={frozen.position}.");
+        if(held!=null)held.gameObject.SetActive(false);
+        Physics.SyncTransforms();
+        Check(w.Powers.FindTarget(w.Powers.Stats(ice).Range,out var iceProbe)&&iceProbe.rigidbody==frozen,"Ice fixture CONTROL: retired throw collider no longer occludes new target.");
         Check(w.Powers.Use(ice)&&frozen.constraints==RigidbodyConstraints.FreezeAll,"Ice freezes a targeted Rigidbody.");
         yield return new WaitForSeconds(w.Powers.Stats(ice).Duration+.1f);
         Check(frozen.constraints!=RigidbodyConstraints.FreezeAll,"Ice expires and restores original physics constraints."); Destroy(frozen.gameObject);

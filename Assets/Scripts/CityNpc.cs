@@ -88,7 +88,9 @@ public sealed class CityNpc : MonoBehaviour
         world.Npcs.Add(npc); Spawned?.Invoke(npc); return npc;
     }
     public void Alarm(Vector3 position) { alarm=position; fleeUntil=Time.time+world.Tuning.Npcs.FleeSeconds; nextPath=0; }
-    public void Freeze(float duration) { frozenUntil=Mathf.Max(frozenUntil,Time.time+duration); if(duration>0f) CancelAttack(); }
+    public int FreezeStartedFrame { get; private set; } = -1;
+    public void Freeze(float duration) { if(!Frozen&&duration>0)FreezeStartedFrame=Time.frameCount; frozenUntil=Mathf.Max(frozenUntil,Time.time+duration); if(duration>0f) CancelAttack(); }
+    public void Thaw() { frozenUntil=Time.time; }
     public void Damage(float amount, PowerUser source)
     {
         if (Dead || amount <= 0f) return;

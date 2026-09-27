@@ -1,0 +1,17 @@
+Unity 6000.6.0f1 batch: PowerPayoffVerification.Run exit 0, 91 PASS.
+No C# warning/error lines in the final payoff and seven passing regression logs.
+Known unrelated UnityEditor.Search startup ArgumentOutOfRangeException remains.
+
+Supplemental command:
+/Applications/Unity/Hub/Editor/6000.6.0f1/Unity.app/Contents/Resources/Scripting/DotNetSdk/dotnet build Overpowered.Build.csproj --no-restore -p:UseSharedCompilation=false
+
+  Overpowered.Build -> /Users/melaniehernquist/Documents/ChatGPT/op/bin/Debug/netstandard2.1/Overpowered.Build.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:06.40
+
+All 18 changed/new Assets source, tuning and metadata files byte-match the final tested project copy.
+git diff --check: passed.

@@ -1,0 +1,5 @@
+POPULATION civilians=26, cops=7; 1280x720 single camera, AI active; test-only health restore.
+MEASURED fight sample=0 FPS=83.27 draws=256.6 frames=833 seconds=10.003 freezes=5 punches=5 grabs=4 throws=4 particles=284
+MEASURED fight sample=1 FPS=86.20 draws=258.8 frames=862 seconds=10.001 freezes=10 punches=10 grabs=9 throws=9 particles=554
+MEASURED fight sample=2 FPS=82.93 draws=260.8 frames=830 seconds=10.008 freezes=15 punches=15 grabs=14 throws=14 particles=838
+PASS repeated real Ice / melee / Telekinesis use in populated city; no manual camera double render. Editor throughput, not standalone or human feel.

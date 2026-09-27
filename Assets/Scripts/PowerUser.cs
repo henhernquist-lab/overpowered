@@ -31,21 +31,23 @@ public sealed class PowerUser : MonoBehaviour
     }
     public Vector3 AimDirection
     {
-        get
-        {
-            var camera = UnityEngine.Camera.main;
-            if (camera == null) return transform.forward;
-            // Aim from the shoulder toward the camera crosshair, excluding the player.
-            Ray ray = camera.ViewportPointToRay(new Vector3(.5f, .5f, 0));
-            // The power's reach is measured from the hero, not from the camera behind it, and anything between the
-            // camera and the hero (a lamppost behind you) is never the aim target.
-            float near = Mathf.Max(0f, Vector3.Dot(AimOrigin - ray.origin, ray.direction));
-            float distance = near + (Selected == null ? Strength.Definition.Range : Stats(Selected).Range);
-            Vector3 target = ray.GetPoint(distance);
-            foreach (var hit in Physics.RaycastAll(ray, distance))
-                if (!hit.collider.isTrigger && hit.collider.transform.root != transform && hit.distance > near && hit.distance < distance) { distance = hit.distance; target = hit.point; }
-            return (target - AimOrigin).normalized;
-        }
+        get => (AimPoint(Selected == null ? Strength.Definition.Range : Stats(Selected).Range, HeldBody) - AimOrigin).normalized;
+    }
+    // Shared crosshair convergence for Fire and throws; a held prop must not become its own aim target.
+    public Vector3 AimPoint(float range, Rigidbody ignore = null)
+    {
+        var camera = UnityEngine.Camera.main;
+        if (camera == null) return AimOrigin + transform.forward * range;
+        // Aim from the shoulder toward the camera crosshair, excluding the player.
+        Ray ray = camera.ViewportPointToRay(new Vector3(.5f, .5f, 0));
+        // The power's reach is measured from the hero, not from the camera behind it, and anything between the
+        // camera and the hero (a lamppost behind you) is never the aim target.
+        float near = Mathf.Max(0f, Vector3.Dot(AimOrigin - ray.origin, ray.direction));
+        float distance = near + range;
+        Vector3 target = ray.GetPoint(distance);
+        foreach (var hit in Physics.RaycastAll(ray, distance))
+            if (!hit.collider.isTrigger && hit.collider.transform.root != transform && (ignore == null || hit.rigidbody != ignore) && hit.distance > near && hit.distance < distance) { distance = hit.distance; target = hit.point; }
+        return target;
     }
     PowerRuntime heldPower; bool heldGravity; float heldUntil;
     MovementSettings config;
@@ -97,7 +99,12 @@ public sealed class PowerUser : MonoBehaviour
     public bool Use(PowerRuntime power)
     {
         if(power==null||!Powers.Contains(power)||!IsEquipped(power.Definition)){Message="Power not equipped";return false;}
-        if(SynergyRunner!=null&&SynergyRunner.Busy){Message="Synergy in progress";return false;}
+        if(SynergyRunner!=null&&SynergyRunner.Busy)
+        {
+            if(power.Definition.Effect is TelekinesisEffect && SynergyRunner.Definition.Effect is OrbitThrowEffect && SynergyRunner.HeldCount>0)
+            { SynergyRunner.RequestRelease(); Message="Throw orbit"; return true; }
+            Message="Synergy in progress";return false;
+        }
         if (power == null || !Progression.Owns(power.Definition)) { Message = "Power locked"; return false; }
         if (HeldBody != null && power == heldPower) { Release(true); return true; } // Hurl is the second half of the paid grab.
         if (power.Cooldown > 0f) { Message = "Blocked: cooldown"; return false; }
@@ -129,10 +136,8 @@ public sealed class PowerUser : MonoBehaviour
         HeldBody.useGravity = heldGravity;
         if (hurl)
         {
-            HeldBody.AddForce(AimDirection * Stats(heldPower).Force, ForceMode.Impulse);
-            var impact = HeldBody.GetComponent<ThrownProp>();
-            if (impact == null) impact = HeldBody.gameObject.AddComponent<ThrownProp>();
-            impact.Initialize(this, Stats(heldPower).Damage, Stats(heldPower).Duration);
+            ((TelekinesisEffect)heldPower.Definition.Effect).Throw(this, heldPower, HeldBody);
+            Message = "Thrown";
         }
         HeldBody = null; heldPower = null;
     }
@@ -150,11 +155,47 @@ public sealed class PowerUser : MonoBehaviour
 public sealed class ThrownProp : MonoBehaviour
 {
     PowerUser owner; float damage, expiry; bool spent;
-    public void Initialize(PowerUser user, float value, float duration) { owner = user; damage = value; expiry = Time.time + duration; spent = false; }
+    TelekinesisEffect throwSettings;
+    public Vector3 LastContact { get; private set; }
+    public float LastDamage { get; private set; }
+    public float LastImpulse { get; private set; }
+    public Vector3 LaunchImpulse { get; private set; }
+    public bool Spent => spent;
+    public void Initialize(PowerUser user, float value, float duration, TelekinesisEffect settings = null, Vector3 launchImpulse = default)
+    { owner = user; damage = value; expiry = Time.time + duration; spent = false; throwSettings = settings; LastDamage=LastImpulse=0; LaunchImpulse=launchImpulse; }
     void OnCollisionEnter(Collision other)
     {
-        if (spent || Time.time > expiry || other.transform.root == owner.transform) return;
+        if (spent || Time.time > expiry || owner == null || other.transform.root == owner.transform) return;
         var npc = other.collider.GetComponentInParent<CityNpc>(); if (npc == null) return;
-        npc.Damage(damage, owner); spent = true;
+        if(npc.Dead)return;
+        LastContact=other.GetContact(0).point;
+        if(throwSettings!=null)
+        {
+            LastImpulse=Mathf.Min(throwSettings.MaxImpactImpulse, GetComponent<Rigidbody>().mass * other.relativeVelocity.magnitude * throwSettings.MomentumTransfer);
+            Vector3 direction=(npc.transform.position-transform.position).normalized;
+            // Hosted on the struck actor: a breakable projectile may destroy itself in this very collision.
+            npc.StartCoroutine(LaunchAfterContact(npc,(direction+Vector3.up*throwSettings.ImpactLift).normalized*LastImpulse,
+                GetComponentsInChildren<Collider>(),throwSettings.ImpactSeparationSeconds));
+            FeelDirector.Impact(LastContact,LastImpulse,damage,1);
+        }
+        LastDamage=damage;npc.Damage(damage, owner); spent = true;
+    }
+    static System.Collections.IEnumerator LaunchAfterContact(CityNpc npc,Vector3 impulse,Collider[] projectileColliders,float separation)
+    {
+        // Let this collision's callbacks finish before enabling suspension: otherwise its OnCollisionEnter treats
+        // the initiating projectile as a landing and immediately cancels the launch.
+        var targetCollider=npc.GetComponent<Collider>();
+        var changed=new List<Collider>();
+        foreach(var c in projectileColliders)
+            if(c!=null&&!Physics.GetIgnoreCollision(c,targetCollider)){Physics.IgnoreCollision(c,targetCollider,true);changed.Add(c);}
+        yield return new WaitForFixedUpdate();
+        if(npc==null)yield break;
+        var suspension=npc.GetComponent<SynergySuspension>();
+        if(suspension==null)suspension=npc.gameObject.AddComponent<SynergySuspension>();
+        var target=suspension.Begin(npc);target.useGravity=true;suspension.Release();
+        target.AddForce(impulse,ForceMode.Impulse);
+        CombatImpact.PreserveDeathLaunch(npc);
+        yield return new WaitForSeconds(separation);
+        foreach(var c in changed)if(c!=null&&targetCollider!=null)Physics.IgnoreCollision(c,targetCollider,false);
     }
 }

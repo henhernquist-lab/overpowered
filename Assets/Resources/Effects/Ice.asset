@@ -12,3 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d19afaaabfa314005804b412c26dbc72, type: 3}
   m_Name: Ice
   m_EditorClassIdentifier: Assembly-CSharp::IceEffect
+  ShatterDamage: 30
+  ShatterImpulse: 1800
+  ShatterLift: 0.65
+  ShatterParticles: 28

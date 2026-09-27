@@ -1,0 +1,95 @@
+PASS Equip ice + strength
+PASS Punch accepted
+PASS Waited for actual melee impact after windup
+PASS PUNCH frozen=False: damage=35.00, expected=35.00, speed=0.000m/s, base impulse=1350, shatter impulse=0 N.s
+PASS Frozen-state CONTROL: only frozen melee launches, freeze consumed
+PASS Shatter particle CONTROL: total=14, ice-only bonus=0
+PASS Real paid Ice freeze before melee
+PASS Punch accepted
+PASS Waited for actual melee impact after windup
+PASS PUNCH frozen=True: damage=65.00, expected=65.00, speed=31.425m/s, base impulse=1350, shatter impulse=1800 N.s
+PASS Frozen-state CONTROL: only frozen melee launches, freeze consumed
+PASS Shatter particle CONTROL: total=42, ice-only bonus=28
+PASS Frozen look and pose hold clear immediately
+PASS Second punch on consumed freeze accepted
+PASS Consumed freeze CONTROL: next hit has no second bonus
+PASS Kick accepted
+PASS Waited for actual melee impact after windup
+PASS KICK frozen=False: damage=59.50, expected=59.50, speed=0.000m/s, base impulse=2025, shatter impulse=0 N.s
+PASS Frozen-state CONTROL: only frozen melee launches, freeze consumed
+PASS Shatter particle CONTROL: total=14, ice-only bonus=0
+PASS Real paid Ice freeze before melee
+PASS Kick accepted
+PASS Waited for actual melee impact after windup
+PASS KICK frozen=True: damage=89.50, expected=89.50, speed=37.768m/s, base impulse=2025, shatter impulse=1800 N.s
+PASS Frozen-state CONTROL: only frozen melee launches, freeze consumed
+PASS Shatter particle CONTROL: total=42, ice-only bonus=28
+PASS Frozen look and pose hold clear immediately
+PASS Second punch on consumed freeze accepted
+PASS Consumed freeze CONTROL: next hit has no second bonus
+PASS Real Ice freezes prop
+PASS Frozen prop constraints control
+PASS Punch frozen prop accepted
+PASS Prop shatter restores physics: speed=52.76m/s
+PASS Freeze normal 65HP enemy
+PASS Lethal shatter punch
+PASS Lethal shatter CONTROL: dead body still launches at 32.12m/s, uses existing death lifetime
+PASS Freeze before non-melee CONTROL
+PASS Non-melee blast CONTROL: 7 damage, still frozen, no shatter
+PASS Thawed target punch
+PASS Thawed CONTROL has no bonus
+PASS Equip ice + telekinesis
+PASS Grab 45kg in third person
+PASS Second click throws despite zero charges/cooldown: already paid grab
+PASS Release costs no extra charges or energy
+PASS Throw contacts aimed NPC: 45kg, first=False
+PASS Throw MISS=0.0261m, contact=(-26.000, 201.042, 21.668), crosshair=(-26.026, 201.045, 21.669), AddForce impulse=1922.4N.s, measured velocity delta~1917.4N.s, displacement=14.03m
+PASS Impact damage=35.00, transferred impulse=1176.3N.s; off-axis CONTROL 0 damage
+PASS NPC launch speed=15.416m/s
+PASS Collision pays damage once
+PASS Grab 400kg in third person
+PASS Second click throws despite zero charges/cooldown: already paid grab
+PASS Release costs no extra charges or energy
+PASS Throw contacts aimed NPC: 400kg, first=False
+PASS Throw MISS=0.0467m, contact=(-26.000, 201.084, 21.668), crosshair=(-26.026, 201.045, 21.669), AddForce impulse=10468.3N.s, measured velocity delta~10339.3N.s, displacement=13.98m
+PASS Impact damage=104.35, transferred impulse=2400.0N.s; off-axis CONTROL 0 damage
+PASS NPC launch speed=30.727m/s
+PASS Collision pays damage once
+PASS Grab 45kg in first person
+PASS Second click throws despite zero charges/cooldown: already paid grab
+PASS Release costs no extra charges or energy
+PASS Throw contacts aimed NPC: 45kg, first=True
+PASS Throw MISS=0.0369m, contact=(-26.000, 201.036, 21.668), crosshair=(-26.037, 201.034, 21.670), AddForce impulse=1924.7N.s, measured velocity delta~1920.5N.s, displacement=14.00m
+PASS Impact damage=35.00, transferred impulse=1177.4N.s; off-axis CONTROL 0 damage
+PASS NPC launch speed=15.425m/s
+PASS Collision pays damage once
+PASS Grab 400kg in first person
+PASS Second click throws despite zero charges/cooldown: already paid grab
+PASS Release costs no extra charges or energy
+PASS Throw contacts aimed NPC: 400kg, first=True
+PASS Throw MISS=0.0573m, contact=(-26.000, 201.078, 21.668), crosshair=(-26.037, 201.034, 21.670), AddForce impulse=10396.3N.s, measured velocity delta~10275.3N.s, displacement=14.00m
+PASS Impact damage=104.35, transferred impulse=2400.0N.s; off-axis CONTROL 0 damage
+PASS NPC launch speed=30.724m/s
+PASS Collision pays damage once
+PASS Grab 400kg in third person
+PASS Second click throws despite zero charges/cooldown: already paid grab
+PASS Release costs no extra charges or energy
+PASS Throw contacts aimed NPC: 400kg, first=False
+PASS Throw MISS=0.0467m, contact=(-26.000, 201.084, 21.668), crosshair=(-26.026, 201.045, 21.669), AddForce impulse=10468.3N.s, measured velocity delta~10339.3N.s, displacement=13.98m
+PASS Impact damage=65.00, transferred impulse=2400.0N.s; off-axis CONTROL 0 damage
+PASS NPC launch speed=30.727m/s
+PASS Lethal throw preserves physical launch through death animation
+PASS Collision pays damage once
+PASS Wall CONTROL grab
+PASS Wall CONTROL throw
+PASS Real wall collision blocks throw; NPC behind wall unharmed
+PASS Equip flight + telekinesis
+PASS Existing Orbit Throw gathers three real props
+PASS Same LMB power input requests existing Orbit Throw volley
+ORBIT release 1: t=16.1612s velocity=4.711m/s
+ORBIT release 2: t=16.3136s velocity=6.861m/s
+ORBIT release 3: t=16.4644s velocity=8.454m/s
+PASS All three released through existing sequential coroutine
+PASS Orbit intervals=0.152/0.151s; configured=0.150s
+PASS Release did not reset or bypass synergy cooldown
+LIMIT: real gameplay entry points and PhysX steps, not hardware input or human feel acceptance. FPS is in the separate PowerPayoffBenchmark run.

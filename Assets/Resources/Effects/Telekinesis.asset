@@ -12,3 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b72973768a4184a7197507592349941b, type: 3}
   m_Name: Telekinesis
   m_EditorClassIdentifier: Assembly-CSharp::TelekinesisEffect
+  MinimumThrowSpeed: 22
+  MaximumThrowSpeed: 40
+  DamageReferenceMass: 45
+  MinimumDamageScale: 0.5
+  MaximumDamageScale: 3
+  MomentumTransfer: 0.65
+  MaxImpactImpulse: 2400
+  ImpactLift: 0.3
+  ImpactSeparationSeconds: 0.2
