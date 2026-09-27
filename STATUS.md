@@ -2326,3 +2326,110 @@ basic-melee cooldown without Strength. Force and damage go through `CombatImpact
 - "−20% power cooldowns" applies to the 10 non-melee, non-flight powers only: not synergies (their cooldown is the
   balancing lever) and not charge recharge.
 - PowerDamage exists and is applied, but no shipping hero changes it, per the brief.
+
+## Cloud branch: readable missions + session summary — 2026-09-27 (appended; CLOUD agent, NO Unity)
+
+**Everything below is written, unverified, and awaiting a local run.** Nothing here was compiled by Unity or executed.
+
+### Missions (the earlier "Phase 3" brief, done last per the overnight order)
+Built as an **opt-in scenario layer** inside the existing encounter architecture:
+- `EncounterDefinition.Scenario` (an `EncounterScenario` asset) adds a per-encounter `ScenarioState`, the same split as
+  `ModeDirector`. Null keeps the original mixed encounter byte-for-byte in behaviour.
+- `CrimeEncounter` still owns spawning helpers, deadline, rewards and ending. It delegates tick, win/fail, NPC driving and
+  interaction to the scenario.
+- The HUD needed no change: `ModeRules.Current` / `Targets` show the scenario's own task labels, and new `ObjectiveTask`
+  kinds (`Threats, Hostages, Fires, Carry, Vault, Extract`) read progress and waypoints from the state.
+- `MissionTarget` lets mission objects receive `CombatImpact.Blast` hits, Ice casts and Laser Eyes ticks.
+
+| Mission (encounter) | Objective line | How you play it (not just hold R) | Win | Fail |
+|---|---|---|---|---|
+| Bank robbery getaway (`mission-robbery`) | STOP THE GETAWAY n/3 | robbers run to 2 parked cars; a car leaves 5 s after the first robber boards (or once all are in) and **drives a NavMesh route**; take robbers down, wreck a car (robbers inside caught), or stall it (Ice freeze / flip / pin 2.5 s) so they bail on foot; hold R 1 s cuffs only a frozen or rooted robber | every robber stopped | a car with a robber gets 70 m away, or a robber escapes on foot |
+| Hostage standoff (`mission-hostage`) | TAKE DOWN THE GUNMEN n/3 → FREE THE HOSTAGES n/3 | 3 ranged gunmen hold their posts; coming within 18 m (or hitting one) starts a 15 s clock, after which hostages bleed; take the gunmen down, then move each hostage's 250 kg debris 2 m with powers; freed hostages run to the safe point | gunmen down + all hostages safe | a hostage lost (area attacks count) |
+| Apartment fire (`mission-fire`) | PUT OUT THE FIRE n/4 → LEAD CIVILIANS OUT n/2 | 4 regrowing fire spots ring 2 trapped civilians; Ice cast −0.55, any ≥600 N·s blast −0.35, hold R spray −0.2/s (slow fallback); freed civilians follow you when approached; lead them to the safe point; trapped ones burn after 25 s | all spots out + civilians safe | a civilian lost |
+| Vault heist, villain (`mission-heist`) | CRACK THE VAULT n/100 → GRAB THE LOOT n/3 → REACH THE GETAWAY VAN n M | 350 HP vault takes any blast or beam (Ice does nothing); first hit brings a 3-cop response in 4 s on top of 2 guards; cracking adds Heat and spills 3 bags (run over them); reach the blue van 30 m away | all three | mode deadline / defeat limit |
+
+All numbers live on the scenario assets (`Resources/Missions/*.asset`) and encounter assets.
+
+**Local agent — missions:**
+1. `MissionSetup.Batch` (menu *Overpowered/Missions/Create missing mission assets*) creates the 4 scenario assets and 4
+   `mission-*` encounter assets. Commit them.
+2. `MissionVerification.Run` (`Verification/Missions/results.txt`). For each mission it checks the objective line text,
+   the mechanics, the win path and the fail path; fail paths needing minutes use in-memory clones with one timing value
+   shortened.
+3. **Only after it passes:** run `MissionSetup.BatchUseInModes`. That is the content switch: Hero = robbery → hostage →
+   fire, Villain = heist. Then re-run HUD P2/P3, Mode, ModeExpansion, World and Audio, which read the mode's encounter
+   list. Those suites encode the original mixed encounters, so expect them to need retargeting to the missions. That was
+   not done blind here.
+
+### Every commit on `cloud/gameplay-depth`
+```
+52cdb4e Extend the power model for channeled and defensive powers
+8684f34 Add Darkness (Shadow Tendrils): root the aimed enemy
+6d0b56b Add Laser Eyes: a held beam that drains energy
+ad435b4 Add Lightning: a chain bolt that arcs between enemies
+9741893 Add Force Field: a damage-absorbing shield on the player
+f33fef8 Add Speed: a short combat burst dash
+dd14326 Add Poison: damage over time that spreads on death
+59e60ad Retarget City and Forge verifiers to the eleven-power roster
+0c5b4f8 Poison: count whole ticks so total damage is exactly dps x duration
+ebf05f5 Add RosterVerification for the six new powers
+b4bef1c Add Solar Flare (Fire Blast + Laser Eyes) synergy
+e3884e6 Add Void Grasp (Darkness + Telekinesis) synergy
+49cde9a Add Eclipse Beam (Darkness + Laser Eyes) synergy
+184ddab Verify the capped synergy set and the three new synergies
+5eb2e5c STATUS: cloud roster expansion and capped synergies (unverified)
+e6c84fa Add melee depth: combo string, charged heavy, ground pound
+4801ee9 Add MeleeVerification and a shared session verification base
+1286b54 Add hero stat archetypes and Hero Forge comparison bars
+ff8452d Add HeroStatsVerification for the hero archetypes
+4785a1b STATUS: cloud melee depth and hero archetypes (unverified)
+e3d2190 Add an opt-in mission scenario layer to encounters
+bb6c280 Add the Robbery getaway mission scenario
+15cf5fc Add the Hostage rescue mission scenario
+f315f31 Add the Building fire mission scenario
+3686385 Add the Vault heist (villain) mission scenario
+c1c5636 Add MissionSetup: mission assets and an explicit mode switch
+3c6f7f3 Add MissionVerification for the four mission scenarios
+```
+
+### New suites (all written, none run)
+| Suite | Checks |
+|---|---|
+| `RosterVerification.Run` / `.Reload` | the six powers and three capped synergies with controls; the synergy cap; a second-process loadout reload (details in the roster section above) |
+| `MeleeVerification.Run` | combo stages and finisher, heavy scaling and cap, ground pound; basic-melee pause control |
+| `HeroStatsVerification.Run` | every archetype stat against the VECTOR control in real play; the Forge bars |
+| `MissionVerification.Run` | four missions: objective text, mechanics, win and fail paths |
+
+Retargeted existing suites: `HeroForgeVerification` (synergy coverage for the capped roster) and `CityVerification`
+(power count from data).
+
+### Full local run order
+1. Compile. The branch has only ever passed a Roslyn/Mono approximation against Unity 2021 reference DLLs.
+2. `RosterSetup.Batch` (powers, synergies, archetypes), then `MissionSetup.Batch`. Commit the generated assets.
+3. Run `RosterVerification.Run` + `.Reload`, then `MeleeVerification.Run`, `HeroStatsVerification.Run` and
+   `MissionVerification.Run`.
+4. Full regression sweep. Shared code changed under all of it: `PowerUser`, `SuperHeroController` (E routing, dash),
+   `CityNpc` (root, damage overload, knockback resistance), `WorldSession` (MaxHealth, shield), `CombatImpact` and
+   `IceEffect` (mission targets), and `GameHud` / `PrototypeHUD` (max-value reads only). Suites: HeroForge + Reload,
+   City + Reload, Combat, HUD P1–3, Feel, FirstPerson + Reload, Ice, PowerPayoff, SynergyAvailability + Reload,
+   Humanoid, BackflipHurricane, Mode + Reload, ModeExpansion + Reload, Audio, World.
+5. Only then `MissionSetup.BatchUseInModes`, followed by the mode/HUD re-runs above.
+
+### Untested — needs a human playtest (none of it is claimed to work, let alone feel good)
+- Compile and runtime of every commit above.
+- FPS cost of the line pools, flame particles, the channel beam and car driving.
+- Balance of every number, and whether the tap-on-release timing feels laggy.
+- Readability of the lit line VFX, and whether the getaway cars' NavMesh routes look like driving.
+- Whether escorting civilians is fun, whether the hostage clock is fair, and mission pacing and difficulty.
+- The new powers and missions have no audio cues.
+
+### OVERNIGHT DECISIONS (missions)
+- Missions are opt-in data. The shipping modes are unchanged until `MissionSetup.UseInModes` runs, so no existing suite
+  regresses silently on a content change nobody has run.
+- Villain mode gets one mission type (the vault heist, repeated). The brief asked for heist objectives only.
+- Hero missions post no friendly responding cops (`RespondingCops = 0`), so the player does the work. The heist keeps 2
+  guards plus a 3-cop response.
+- Blasts and area powers can hurt hostages and trapped civilians. This is a deliberate risk/skill element, not a bug;
+  a playtest should decide whether to keep it.
+- Robbers left behind when their car departs, stalls or is wrecked run for a far exit on foot, so stalling a car is not a
+  free win.
