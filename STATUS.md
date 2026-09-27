@@ -2169,3 +2169,123 @@ verified files. Evidence: session scratchpad `phase0/` (logs, reflection dumps, 
   diff, set the EditorPref `syntySkAutoOpenState` false (per-machine, not in the repo).
 - `SyntyPackageHelper` may prompt in the Editor to add `com.unity.formats.fbx` as a direct dependency (it's already present
   transitively) — safe to decline or accept.
+
+
+## CLOUD FEEDBACK — local integration #1 of `cloud/gameplay-depth` (2026-09-27, local agent, Unity 6000.6.0f1 macOS Intel)
+
+**Integrated state.** Branch `integrate/cloud-1` in a scratch worktree:
+- `b789375`: merge of cloud `f315f31`.
+- `fc7d254`: RosterSetup assets.
+- `9535325`: merge of cloud `4c6f51d` (the Vault heist, MissionSetup, MissionVerification and STATUS commits pushed while this run was going on).
+- `6b44a08`: MissionSetup assets.
+
+The base was local main `540379e`. After `fc7d254`, only new files and STATUS changed, so the sweep results below, taken at `fc7d254`, still hold for `6b44a08`.
+
+**Compile and setup: all clean.**
+- The dotnet gate reported 0 warnings and 0 errors after both merges.
+- The Unity batch compile reported 0 CS errors and 0 CS warnings in our code. The only warnings were the two analyzer warnings that already existed (UAC0005 in AudioSetup.cs:46, UAC1001 in HumanoidPresentation.cs:34).
+- `RosterSetup.Batch` created 40 files. `MissionSetup.Batch` created 17 files.
+- Both are idempotent. A second run of each changed no file: 2679 and 2704 files hash-identical, and `git status` identical.
+- `MissionSetup.BatchUseInModes` was **not** run. The cloud STATUS says to run it only after the full sweep passes, and the sweep did not pass.
+
+**Result: NOT ready to merge.** Every failure below comes from test harness bugs or one mission logic bug. With the harness bug patched in memory only (never committed), every new power, all three synergies and the loadout reload pass.
+
+### Failures to fix on the cloud branch
+
+1. **Roster, Melee and HeroStats: the harness never runs `PowerUser.Tick`.** Classification: cloud **test bug**.
+   - `RosterVerification.Run`: exit 1, 41 PASS. `FAIL System.Exception: Restart after cooldown.` at `RosterVerificationRunner.cs:165`. The suite aborted inside Laser Eyes, so Lightning, Force Field, Speed, Poison and the synergy sections never ran.
+   - `RosterVerification.Reload`: exit 1. `FAIL System.Exception: SECOND PROCESS restores the new-power loadout: vector laser-eyes + strength.` This is a cascade: Run aborted before it saved the nova laser-eyes + poison loadout.
+   - `MeleeVerification.Run`: exit 1, 4 PASS. `FAIL System.Exception: Tap 2 inside the window = stage 2 (punch).` at `MeleeVerificationRunner.cs:30`.
+   - `HeroStatsVerification.Run`: exit 1, 40 PASS. `FAIL System.Exception: Second Ice cast (energy for the regen sample).` at `HeroStatsVerificationRunner.cs:89`.
+   - **Cause:** `SessionVerificationRunner.PlaceHero` sets `W.Hero.enabled = keepEnabled` (false by default, `SessionVerificationRunner.cs:78`). `Isolate()` calls it at `:72`. The only per-frame caller of `PowerUser.Tick` is `SuperHeroController.Update` (`SuperHeroController.cs:71`). With the controller disabled, no cooldown or recharge ever counts down, so `WaitForSeconds(stats.Cooldown)` waits forever in game terms.
+   - **Evidence from the diagnostic run.** I ran with a patch that decrements `PowerRuntime.Cooldown` by `Time.deltaTime` while the hero is disabled, plus non-throwing checks:
+     - Roster: exit 0, **194 PASS, 0 failures**. Roster Reload: 3 PASS.
+     - Melee: **43 PASS, 0 failures**.
+     - HeroStats: 82 PASS, 1 failure (item 2 below).
+   - **Hint:** follow the existing local verifiers. After disabling the hero they call `W.Powers.Tick(dt, true)` themselves (for example `IceVerificationRunner.cs:149` and `FirstPersonVerificationRunner.cs:119`). Either tick in the shared waits in `SessionVerificationRunner`, or pass `keepEnabled: true` wherever time must pass.
+
+2. **HeroStats: the Ice measurement is occluded.** Classification: cloud **test bug**. It is hidden behind item 1 until that is fixed.
+   - Diagnostic failure: `PowerDamage x1.5 (in-memory hero): Ice 7.50 vs VECTOR 0.00.` at `HeroStatsVerificationRunner.cs:48`.
+   - In `Measure()` (`:80`) the melee actor at (0,150,2.2) stands on the crosshair line to `far` at (0,150,12), so the Ice cast hits the near actor.
+   - As a result, `MEASURED` Ice damage is 0.00 for VECTOR, TITAN and NOVA, although the data value is 5. The "same Ice damage" check at `:46` passes vacuously (0 == 0).
+   - The value 7.50 is correct (5 × 1.5), so `PowerDamage` itself works.
+   - **Hint:** move the melee actor off the aim line, or remove it before the Ice casts. Assert that the measured Ice damage equals the data value.
+
+3. **SynergyAvailability was not retargeted to 13 synergies.** Classification: **test not retargeted**. The runner is local code, but the cloud's data change broke it.
+   - `SynergyAvailabilityVerification.Run`: exit 1, 0 PASS. `FAIL System.Exception: All ten synergy cooldowns are long (25-45 s): sonic-slam=35, phoenix-dive=40, frostwake=25, orbit-throw=30, thermal-shock=30, meteor-punch=40, inferno-orbit=45, glacier-fist=30, cryo-crush=30, meteor-slam=35, solar-flare=40, void-grasp=40, eclipse-beam=45` at `SynergyAvailabilityVerificationRunner.cs:59` (`F.Synergies.Length==10`).
+   - The same `Length==10` assumption is at `:124`: `Catalog restored to its 10 shipping synergies; never dirtied or saved.`
+   - With non-throwing checks, Run gave 33 PASS and exactly 3 failures (`:59`, `:62`, `:124`). Reload passed 9.
+   - `SynergyAvailabilityVerification.Reload`: exit 1. `FAIL System.Exception: SECOND PROCESS: old save without Fire/Ice/Telekinesis now owns them at tier 0 (loader grants InitiallyUnlocked).` This is a cascade: Run aborted before writing `Verification/Synergy/saves/old-save-path.txt`. See local issue L3.
+   - **Hint:** compare against the catalog's real count, or the capped set plus the legacy set, instead of the literal 10.
+
+4. **Design question: the synergy-to-power cooldown ratio.** For the cloud agent or the user to decide.
+   - Diagnostic failure: `Shortest synergy cooldown 25 s is >= 40x the longest normal power cooldown 1 s.` at `SynergyAvailabilityVerificationRunner.cs:62`.
+   - Force Field has a 1.0 s cooldown, so the rule needs 40 s. Laser Eyes and Lightning (0.8 s) would need 32 s. The shortest synergy is Frostwake at 25 s.
+   - Pick one:
+     - lower the new powers' `Cooldown` to 0.625 s or less;
+     - scope the 40× rule to instant offensive powers (Force Field's real gate is its 12 s charge recharge);
+     - raise Frostwake.
+   - Do not simply delete the assertion.
+
+5. **Mission: the robbery getaway car never drives.** Classification: cloud **logic bug** (mission physics).
+   - `MissionVerification.Run`: exit 1, 12 PASS. `FAIL System.Exception: The getaway car really drives: 0.0 m in 1.5 s.` at `MissionVerificationRunner.cs:74`.
+   - Diagnostic state logging, six samples over 1.25 s after "Getaway car 1 departs with 1":
+     - position stayed at (20.48, 0.12, 23.31) and velocity at about 0;
+     - isKinematic False, not sleeping, constraints None, mass 400, `RobberyState` enabled, timeScale 1;
+     - the route has 4 corners. Corner 0 is the car's own position, so the corner index jumped to 1 at once; corner 1 is (-16.17, 0.20, 20.67), about 37 m away.
+   - `FixedUpdate` adds `ClampMagnitude(dir*CarSpeed - v, CarAcceleration*fixedDt)` as VelocityChange: at most 0.18 m/s per step (9 m/s²). That is barely above ground friction on a 400 kg box (μg ≈ 5.9 m/s² at default friction), and the car is parked by `NearestSidewalk`, possibly against a curb.
+   - Because the car never moves, the fail path ends as "A robber escaped on foot." instead of "The getaway car got away…".
+   - **Hint:** log the contact and friction state. Consider lifting the car slightly, using a low-friction physic material, `MovePosition` along the route, or a stronger drive force, and assert the actual displacement.
+
+6. **Mission: robbery cuff completion.** Undetermined whether cloud logic or the test; only seen with non-throwing checks.
+   - Diagnostic failure: `Cuffing him (hold R on a frozen robber) completes the mission: SUCCESS.` at `MissionVerificationRunner.cs:97`.
+   - The steps before it passed: Ice stalls the car, the robber bails out, the CONTROL cuff of an un-frozen robber is refused, and the bailed robber freezes.
+   - The check does not log `last.Captured`, `Ended(e)` or `Result`.
+   - **Hint:** include those three values in the check text, and assert the cuff's `InteractableNear` range from the standing point you use.
+   - Hostage, Building fire and Vault heist **passed every check** in the same diagnostic run: 78 PASS in total, 2 failures, both in Robbery.
+
+### AGENTS.md review of the new code
+
+Items that pass:
+- Shared palette materials only. No runtime `new Material` in any cloud code; every line, trail, ring and flame uses `CityMaterials.Get(...)` through `sharedMaterial`.
+- Power VFX is pooled. There is one `PowerVfx` pool of 16 lines plus 1 beam, and particles come from the Feel `ImpactParticlePool`. Per-actor helpers (`PlayerShield`, `DashTrail`, `RootedLook`, `Poisoned`, `BeamState`) are added once per actor and reused, not created per cast.
+- No mode-ID switches. `MissionSetup`'s "mode switch" is a data edit of `Modes/hero|villain.asset` Encounters.
+- Equip and ownership gates are respected. Channeled start goes through `Use` → `IsEquipped` / `Owns`, and `Channel()` ends the channel on unequip or reselect. Number keys go through `PowerForSlot` → `Select` gates.
+- The physics root is not animated. The dash uses `CharacterController.Move`.
+
+Items that need attention:
+- **Violation: synergy cap.** `ForgeCatalog` ships **13** synergies against the "5 named only" cap: Sonic Slam, Thermal Shock, Solar Flare, Void Grasp and Eclipse Beam, plus 8 legacy ones (Phoenix Dive, Frostwake, Orbit Throw, Meteor Punch, Inferno Orbit, Glacier Fist, Cryo Crush, Meteor Slam). The cloud reported this knowingly and did not delete them. Removing them needs a decision, because `HeroForgeVerification.AllSynergies` still exercises all 10 legacy synergies and currently passes (177).
+- **Minor: fire flames are not pooled.** `FireScenario` spots each add their own `ParticleSystem`, 4 per fire encounter, on the shared Fire material. This is set-piece geometry like encounter nodes, not a per-cast effect, but it is outside the pool.
+- **Minor: small per-cast allocations.** Lightning allocates a `HashSet` per cast and Poison a `List` per spread.
+- **Presentation contract change.** A tap-E punch now fires on key release, up to 0.2 s later than before. Payment is still immediate at the call. The cloud flagged this for playtest.
+- **Visual observation, not a failure.** In the diagnostic captures, the Laser Eyes beam is a thin dark line that is hard to read. The Void Grasp capture is dominated by large dark navy screen-crossing rings.
+
+### Suites that passed on the merged branch
+
+All exited 0. Counts are PASS lines.
+- **City and powers:** City 54 + Reload 5, CityArt 31, Humanoid 54, Combat 170.
+- **Modes:** Mode 79 + Reload 2, ModeExpansion 111 + Reload 10.
+- **Powers and forge:** HeroForge 177 + Reload 3, Feel 139, Ice.After 34, Balance.After 8, BackflipHurricane 63, PowerPayoff 91.
+- **Camera, menus and world:** FirstPerson 207 + Reload 5, Camera.Verify 45, MenuPresentation 42, World 57 + Reload 3.
+- **HUD:** HUD P1 316. HUD P3 562 + Reload 11 on its rerun (see L4).
+
+### Lead decisions for the cloud agent (OVERNIGHT DECISIONS, local agent)
+- **Synergy cap: remove the 8 legacy synergies.** The user's instruction is explicit ("synergies are capped at exactly 5
+  named ones — Sonic Slam, Thermal Shock, Solar Flare, Void Grasp, Eclipse Beam — not full pair coverage"). Remove Phoenix
+  Dive, Frostwake, Orbit Throw, Meteor Punch, Inferno Orbit, Glacier Fist, Cryo Crush, Meteor Slam from `ForgeCatalog`
+  (keep their effect code only if a capped synergy reuses it) and retarget `HeroForgeVerification.AllSynergies` and
+  `SynergyAvailabilityVerification` to the capped five (assert the exact five IDs, not a count).
+- **Cooldown-ratio rule (item 4): scope it, don't delete it.** Apply "shortest synergy >= 40x longest power cooldown" to
+  instant offensive powers only; Force Field's real gate is its charge recharge, and channeled powers (Laser Eyes) are gated
+  by drain. Assert the scoped rule explicitly and list which powers are excluded and why.
+- **Missions stay out of the shipping modes** until the robbery car drives and the full sweep passes: do not run
+  `MissionSetup.BatchUseInModes` on your side; the local agent runs it after the next green integration.
+- **Laser Eyes beam readability** is local presentation work (Phase 9 / addendum) — don't restyle it on the cloud side.
+
+### Local issues found during this integration (handled by the local agent, listed for transparency)
+- Audio music-DSP check fails on local main since Phase 0 (not cloud) — being bisected locally.
+- HUD Phase 2 briefing CONTROL is timing-sensitive under parallel Unity load (fails on untouched main too) — local test fix.
+- A Reload whose Run aborted could fall back to the player's real save (read-only, file verified unchanged) — local harness
+  guard added in `PlayerProgression.Initialize` (batch mode never touches the real save).
+- `MenuPresentationSetup.Create` re-serializes the original five power assets with the cloud's new fields at defaults
+  (`Activation: 0`, `DrainPerSecond: 0`) — harmless; will be committed with the next merge.
