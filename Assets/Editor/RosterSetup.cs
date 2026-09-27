@@ -64,6 +64,7 @@ public static class RosterSetup
             d.PaletteColor = CityColor.Leaf; d.MenuIcon = MenuGlyph.Crystal; d.CastingPresentation = true;
         });
         AddToHeroes();
+        AddSynergies();
         AssetDatabase.SaveAssets(); AssetDatabase.Refresh();
     }
     public static void Batch() { Create(); EditorApplication.Exit(0); }
@@ -81,6 +82,40 @@ public static class RosterSetup
         d.Id = id; d.DisplayName = title; d.Effect = effect; d.InitiallyUnlocked = true; d.Color = Color.white;
         configure(d);
         AssetDatabase.CreateAsset(d, path);
+    }
+    /// The synergy set is CAPPED (Sonic Slam, Thermal Shock, Solar Flare, Void Grasp, Eclipse Beam are the five in scope).
+    /// Only the three new capped pairs are created here; the eight other legacy synergies are left untouched (reported in
+    /// STATUS, not deleted). No other pair is ever created.
+    static void AddSynergies()
+    {
+        var catalog = AssetDatabase.LoadAssetAtPath<ForgeCatalog>("Assets/Resources/ForgeCatalog.asset");
+        if (catalog == null) { HeroForgeSetup.Create(); catalog = AssetDatabase.LoadAssetAtPath<ForgeCatalog>("Assets/Resources/ForgeCatalog.asset"); }
+        Directory.CreateDirectory("Assets/Resources/Forge/Synergies"); Directory.CreateDirectory("Assets/Resources/Forge/Effects");
+        var entries = catalog.Synergies.Where(s => s != null).ToList();
+        T NewEffect<T>(string id) where T : SynergyEffect
+        {
+            string path = "Assets/Resources/Forge/Effects/" + id + ".asset";
+            var existing = AssetDatabase.LoadAssetAtPath<T>(path); if (existing != null) return existing;
+            var effect = ScriptableObject.CreateInstance<T>(); AssetDatabase.CreateAsset(effect, path); return effect;
+        }
+        void Add(string id, string title, string a, string b, SynergyEffect effect, string description, Action<PowerSynergyDefinition> configure)
+        {
+            if (entries.Any(s => s.Id == id)) return;
+            string path = "Assets/Resources/Forge/Synergies/" + id + ".asset";
+            var d = AssetDatabase.LoadAssetAtPath<PowerSynergyDefinition>(path);
+            if (d == null)
+            {
+                d = ScriptableObject.CreateInstance<PowerSynergyDefinition>(); d.Id = id; d.DisplayName = title; d.Description = description;
+                d.PowerA = AssetDatabase.LoadAssetAtPath<PowerDefinition>("Assets/Resources/Powers/" + a + ".asset");
+                d.PowerB = AssetDatabase.LoadAssetAtPath<PowerDefinition>("Assets/Resources/Powers/" + b + ".asset");
+                d.Effect = effect; configure(d); AssetDatabase.CreateAsset(d, path);
+            }
+            entries.Add(d);
+        }
+        Add("solar-flare", "Solar Flare", "fire", "laser-eyes", NewEffect<SolarFlareEffect>("solar-flare"),
+            "Focus the beam, then the target point erupts and burns.",
+            d => { d.Cooldown = 40; d.Range = 30; d.LiftSeconds = .5f; d.Damage = 60; d.Radius = 6; d.Force = 2600; d.BurnSeconds = 4; d.Primary = CityColor.Fire; d.Secondary = CityColor.Red; });
+        catalog.Synergies = entries.ToArray(); EditorUtility.SetDirty(catalog);
     }
     /// Every shipping hero may equip every shipping power (the existing heroes were created with the whole list).
     static void AddToHeroes()
