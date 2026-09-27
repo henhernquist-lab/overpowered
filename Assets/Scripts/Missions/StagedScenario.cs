@@ -104,7 +104,7 @@ public enum BonusKind
 [Serializable] public sealed class BonusObjective { public string Label = "BONUS"; public BonusKind Kind; public string Group; public float Value; [Min(0)] public int RewardXp = 25; }
 public sealed class StagedState : ScenarioState
 {
-    public sealed class Actor { public CityNpc Npc; public Vector3 Post; public Vector3? LastSeen; public bool Captured, Escaped; public int ExitIndex; public float StuckTimer; public Vector3 StuckFrom; public bool Following; public float HarassTimer; }
+    public sealed class Actor { public CityNpc Npc; public Vector3 Post; public Vector3? LastSeen; public bool Captured, Escaped; public int ExitIndex; public float StuckSince; public Vector3 StuckFrom; public bool Following; public float HarassTimer; }
     public sealed class Target { public GameObject Go; public DamageTarget Hardpoint; public MissionVehicle Vehicle; public EncounterNode Pickup; public bool Done; public float Hold; public bool Missing => Go == null && Pickup == null; }
     StagedScenario d;
     readonly Dictionary<string, Vector3> points = new Dictionary<string, Vector3>();
@@ -183,7 +183,7 @@ public sealed class StagedState : ScenarioState
             if (g.HealthMultiplier != 1f) npc.SetCombatStats(npc.MaxHealth * g.HealthMultiplier, npc.ContactDamage);
             if (g.Role == NpcRole.Civilian) npc.GetComponentInChildren<Renderer>().sharedMaterial = CityMaterials.Get(CityColor.Cyan);
             // Each member starts on its own exit (a fleeing group scatters); blocked, it moves on to the next one.
-            list.Add(new Actor { Npc = npc, Post = npc.transform.position, StuckFrom = npc.transform.position, ExitIndex = list.Count }); made++;
+            list.Add(new Actor { Npc = npc, Post = npc.transform.position, StuckFrom = npc.transform.position, StuckSince = Time.time, ExitIndex = list.Count }); made++;
         }
         return made;
     }
@@ -262,7 +262,13 @@ public sealed class StagedState : ScenarioState
         return null;
     }
     readonly Dictionary<string, ActorBehavior> behaviorOverride = new Dictionary<string, ActorBehavior>();
-    void SetBehavior(string group, ActorBehavior behavior) { if (group != null) behaviorOverride[group] = behavior; }
+    void SetBehavior(string group, ActorBehavior behavior)
+    {
+        if (group == null) return;
+        behaviorOverride[group] = behavior;
+        // A new behaviour starts its own stuck window (a runner that was holding its post is not "stuck" on its first check).
+        var g = Group(group); if (g != null) foreach (var a in g) if (a.Npc != null) { a.StuckSince = Time.time; a.StuckFrom = a.Npc.transform.position; }
+    }
     ActorBehavior BehaviorOf(string group, ActorGroupSpec spec) => behaviorOverride.TryGetValue(group, out var b) ? b : spec.Behavior;
     void Fail(string reason) { if (Terminal != MissionTerminal.Running) return; Terminal = MissionTerminal.Failed; FailReason = reason; }
     public override void Tick(float dt)
@@ -448,12 +454,12 @@ public sealed class StagedState : ScenarioState
                     Vector3 exit = exits[a.ExitIndex % exits.Length];
                     npc.Agent.isStopped = npc.Rooted; npc.DirectTo(exit, spec.Speed);
                     // Blocked or stuck: take the next exit (the route changes when the way is cut off).
-                    a.StuckTimer += Time.deltaTime;
-                    if (a.StuckTimer >= d.StuckSeconds)
+                    // Wall-clock window, not accumulated frame time: a far NPC's AI (and so Drive) runs at the LOD think rate.
+                    if (Time.time - a.StuckSince >= d.StuckSeconds)
                     {
                         bool stuck = Vector3.Distance(a.StuckFrom, npc.transform.position) < d.StuckDistance || (npc.Agent.hasPath && npc.Agent.pathStatus != NavMeshPathStatus.PathComplete);
                         if (stuck && exits.Length > 1) a.ExitIndex++;
-                        a.StuckTimer = 0f; a.StuckFrom = npc.transform.position;
+                        a.StuckSince = Time.time; a.StuckFrom = npc.transform.position;
                     }
                     return true;
                 }
