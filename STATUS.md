@@ -2850,3 +2850,136 @@ Codex independently rebuilt this exact source with the bundled Unity dotnet SDK:
 Sidekick + the local L1–L3 fixes are merged on main at `f3040c7`. Codex reran `SidekickVerification.Run` (exit 0) and `SidekickVerification.Reload` in a separate Unity process (exit 0) on the merged source in wt-sidekick. Evidence: `Verification/Continuation/Sidekick/`. Original package/Sidekick-database working changes on main were preserved.
 
 Push of main failed: `fatal: could not read Username for 'https://github.com': Device not configured`. Local commits remain intact; no credentials were changed.
+
+## CLOUD READY — `cloud/gameplay-depth` repaired after CLOUD FEEDBACK #1 (2026-09-27, appended; CLOUD agent, NO Unity)
+
+**Nothing in this section has been run in Unity.** The Mono/Roslyn diff check against Unity 2021 reference DLLs showed no
+new errors in any commit. `origin/main` (`49ffbed`) is merged in (`4d4392d`); the only conflicts were `HeroForgeScreen`
+(kept both `StatsPanel` and `PreviewModel`) and STATUS.md (kept both sides).
+
+### Repair commits (in order)
+| Commit | Fixes |
+|---|---|
+| `4d4392d` | merge `origin/main` into the branch |
+| `0f5c825` | #1.1 verifier power clock |
+| `9127078` | #1.2 HeroStats Ice occlusion; asserts measured Ice damage == data |
+| `9567b22` | #1.3 exact five shipping synergies; #1.4 scoped 40x cooldown rule |
+| `1821152` | deleted code used only by the eight removed synergies |
+| `ff9f666` | #1.5 getaway car really drives; #1.6 cuff completion |
+| `e8397f5` | per-cast collection allocations (Lightning, Poison, Speed, Void Grasp) |
+| `6e72cf3` | fire looks pooled; fire gameplay independent of visuals |
+
+### What each repair does
+- **#1.1 Power clock** (test bug): `SessionVerificationRunner.Update` now calls `W.Powers.Tick(Time.deltaTime, true)` once
+  per frame while `SuperHeroController` is disabled. That is the same call the controller makes, and frames where the
+  controller runs are never double-ticked.
+  - Cooldown assertions are unchanged.
+  - Laser Eyes' energy check now expects the real net drain (drain − regen).
+  - The below-start-cost control clears the cooldown in the same frame the channel ran dry, because regen would otherwise
+    refill the start cost during that cooldown.
+- **#1.2 HeroStats Ice**:
+  - The melee actor is removed before any Ice cast, and the suite asserts the crosshair line reaches the far actor.
+  - Each hero's measured Ice damage must equal data damage × PowerDamage and be non-zero; the ×1.5 test hero is checked
+    against data × 1.5.
+  - The regen sample is now 0.5 s, so NOVA cannot hit its cap.
+- **#1.3 Exact five shipping synergies:** `sonic-slam`, `thermal-shock`, `solar-flare`, `void-grasp`, `eclipse-beam`.
+  - `ForgeCatalog.asset` references only Sonic Slam and Thermal Shock; `RosterSetup` adds the other three.
+  - The 8 legacy synergy definitions and their 8 effect assets are deleted.
+  - `HeroForgeSetup` no longer creates them. `RosterSetup.EnforceSynergyCap` (also menu *Overpowered/Roster/Enforce the
+    five-synergy cap*) leaves exactly the five and logs anything it drops.
+  - `HeroForgeVerification.Run` and `SynergyAvailabilityVerification.Run` now run `RosterSetup.Create()` first.
+  - Assertions check exact IDs, not counts:
+    - Forge: the five IDs; the removed 8 are not loadable from Resources; of all 55 pairs, exactly the 5 capped pairs
+      resolve (each to its own id) and the other 50 resolve none.
+    - SynergyAvailability: the five IDs, also after its in-memory restore; the pair-change check now uses Solar Flare;
+      new control: Fire + Strength shows "No synergy"; the unequipped-Ice control now expects no synergy.
+    - PowerPayoff: the Orbit Throw section is replaced by "Flight + Telekinesis has no synergy; LMB Telekinesis still grabs
+      and throws".
+- **#1.4 40× rule, scoped:**
+  - Compared (instant offensive powers): darkness, fire, ice, lightning, poison, speed, strength, telekinesis. The suite
+    logs the list.
+  - Excluded, and asserted to be exactly these: flight (fuel), force-field (lifetime + 12 s charge recharge), laser-eyes
+    (channel drain).
+  - **Lightning cooldown 0.8 → 0.75 s**, so 40× equals Thermal Shock's 30 s. Its real pacing gate is still 2 charges with
+    a 2.5 s recharge.
+  - Nothing else was retuned.
+- **Dead code removed** (the only users were the removed synergies): `FrostwakeEffect`, `OrbitThrowEffect`,
+  `MeteorPunchEffect`, `GlacierFistEffect`, `LiftSlamEffect`, `SynergyPayload`.
+  - Also removed: their `SynergyRunner` helpers, PowerUser's Orbit Throw LMB branch, and SuperHeroController's two no-op
+    `ModifyMelee` calls.
+  - `SynergyRunner.Cancel` now finishes any `SynergySuspension` a Void Grasp started, so dying mid-grasp never leaves an NPC
+    suspended.
+- **#1.5 Getaway car** (logic bug):
+  - Parked, it is an ordinary physics prop.
+  - On depart it becomes **kinematic** and moves with `MovePosition` at `CarSpeed` along its NavMesh route corners,
+    following the NavMesh height, with a straight-line fallback if no route exists. Friction and curbs cannot hold it.
+  - It escapes after `EscapeDistance` driven or at the route's end. Fail reasons are now distinct: "The getaway car got
+    away with N robber(s) aboard." vs "A robber escaped on foot."
+  - Ice freezes a driving car in place and stops it. A hit ≥ `StopImpulse` (1200 N·s; a punch is 1350, Fire Blast 450
+    is not) knocks it out of its drive. A stopped car turns dynamic with its drive velocity and the robbers bail.
+  - `CombatImpact.Blast` now damages kinematic breakables (no force), so a driving car can still be wrecked with the
+    robbers inside.
+- **#1.6 Cuff** (test bug): `CrimeEncounter.Update` calls `Interact(0)` every frame R is not held, and that reset the cuff
+  timer under the test's own coroutine calls.
+  - `CrimeEncounter.ScriptedHold` now behaves exactly like holding R on that Update path.
+  - The suite logs Captured, scenario Finished, outcome, Result and standing distance, and asserts the cuff radius.
+  - Unfrozen-robber control; frozen robber → SUCCESS.
+- **Allocations:**
+  - Lightning and Void Grasp use `UnityEngine.Pool` `HashSetPool`/`ListPool`, rented per cast, so a nested cast cannot
+    share a set.
+  - Poison keeps the nearest targets by insertion into a pooled list.
+  - Speed reuses a per-hero set, buffer and cached delegate.
+- **Fire looks:** `FireSpot` is gameplay only. Its placeholder look is rented from a 12-slot session `FireVisualPool` and
+  returned. With the pool exhausted, a spot still burns and douses (the suite tests this).
+
+### Files changed since the merge
+- **Editor setup and verification entry points:** `HeroForgeSetup`, `RosterSetup`, `HeroForgeVerification`,
+  `SynergyAvailabilityVerification`.
+- **Data:** `ForgeCatalog.asset`; 16 legacy assets deleted.
+- **Gameplay code:** `CombatImpact`, `CrimeEncounter`, `IceEffect`, `PowerUser`, `SuperHeroController`, `Forge/SynergyRunner`,
+  `Forge/VoidGraspEffect`, `Missions/RobberyScenario`, `Missions/FireScenario`, `Powers/LightningEffect`,
+  `Powers/PoisonEffect`, `Powers/SpeedDashEffect`.
+- **Verification runners:** `Powers/SessionVerificationRunner`, `Powers/RosterVerificationRunner`,
+  `Forge/HeroStatsVerificationRunner`, `Forge/HeroForgeVerificationRunner`,
+  `Forge/SynergyAvailabilityVerificationRunner`, `PowerPayoffVerificationRunner`, `Missions/MissionVerificationRunner`.
+- **Deleted:** 6 effect scripts.
+
+### Migrations
+- Saves: none. Loadouts store power IDs, and every one of the 11 powers remains.
+- Catalog: the 8 removed synergies simply no longer resolve.
+- A local tree already holding integration #1's generated assets (13-entry catalog, Lightning at 0.8) is corrected by
+  `RosterSetup.EnforceSynergyCap`. The existing `lightning.asset` keeps 0.8 until changed by hand or regenerated, because
+  setup never overwrites. Regenerate it, or the SynergyAvailability 40× check will fail by design.
+
+### Setup scripts LOCAL must run (none overwrite existing assets)
+1. `RosterSetup.Batch`: 6 powers, heroes' `AvailablePowers`, the 3 new synergies + cap enforcement, and archetypes. Then
+   commit the generated assets.
+2. `MissionSetup.Batch`: mission assets. **Do NOT run `MissionSetup.BatchUseInModes`.** LOCAL enables missions after its
+   green sweep.
+
+### Verification entry points
+- **New suites:** `RosterVerification.Run` + `.Reload`, `MeleeVerification.Run`, `HeroStatsVerification.Run`,
+  `MissionVerification.Run`.
+- **Retargeted suites:** `HeroForgeVerification.Run` + `.Reload`, `SynergyAvailabilityVerification.Run` + `.Reload`,
+  `PowerPayoffVerification.Run`, `CityVerification.Run` + `.Reload`.
+
+### Exact local integration order
+1. Merge `cloud/gameplay-depth` into a scratch integration branch from current main, then batch compile.
+2. Run `RosterSetup.Batch`, then `MissionSetup.Batch`. On an old integration tree, also regenerate or fix `lightning.asset`
+   (0.75).
+3. Run the new suites: Roster Run + Reload, Melee, HeroStats, Mission.
+4. Run the retargeted suites: HeroForge Run + Reload, SynergyAvailability Run + Reload, PowerPayoff, City Run + Reload.
+5. Full regression sweep: Combat, HUD P1–3, Feel, FirstPerson + Reload, Ice, Humanoid, BackflipHurricane, Mode +
+   Reload, ModeExpansion + Reload, Audio + Reload, World, CityArt, Camera, MenuPresentation.
+6. If green: merge to main. Only then decide on `MissionSetup.BatchUseInModes` and the suites that read the mode
+   encounter lists.
+
+### Still unverified or needing Henry's playtest
+- Everything above is unrun in Unity.
+- Whether the kinematic getaway drive looks right on real streets (route corners, turn rate).
+- Whether 1200 N·s is the right stopping hit.
+- All balance numbers; the lower Lightning cooldown.
+- Missions stay out of the shipping modes.
+
+Further work continues on **`cloud/replayability-depth`**, branched from this repaired head. `cloud/gameplay-depth` gets
+no more features.
