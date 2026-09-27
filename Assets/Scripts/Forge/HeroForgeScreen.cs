@@ -97,6 +97,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
         var animator=model.GetComponent<Animator>();animator.runtimeAnimatorController=tuning.Controller;animator.applyRootMotion=false;animator.cullingMode=AnimatorCullingMode.AlwaysAnimate;
         animator.Play("Locomotion");animator.Update(0);
         var renderers=model.GetComponentsInChildren<SkinnedMeshRenderer>();
+        if(hero.Suit!=null)foreach(var r in renderers)hero.Suit.ApplyBody(r);
         // Frame by the posed skinned vertices (as HumanoidPresentation fits the body): skinned-renderer bounds are conservative
         // envelopes, far larger than a Sidekick character, which left it small in the frame.
         Bounds Posed()

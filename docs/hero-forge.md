@@ -66,6 +66,13 @@ CityMaterials (city teardown, or the Forge preview's own cache). No Sidekick run
 database or SQLite is used at runtime. Roles are plain data: edit a suit's swatch list in
 the Inspector to move a part between Primary/Secondary/Trim/Keep.
 
+Sidekick's combined prefab mesh lists one skeleton copy per part in `bones[]` (2,793–3,176 entries). The setup also
+writes an optimized body per hero (`<hero>-body.asset`, referenced by `SidekickSuit.Body`): duplicate (bone, bind pose)
+entries merged (88–130 left), bone weights remapped, Sidekick's editor blend shapes dropped (all weights were zero).
+`SidekickSuit.ApplyBody` swaps it in on spawn/preview; bone transforms are unchanged, so the Animator,
+HumanoidPresentation's weighted bones and first-person hiding work as before. The setup's control skins both meshes
+in the same pose and fails above 1 mm difference (measured ≤ 0.001 mm).
+
 Regenerate with **Overpowered > Forge > Sidekick heroes (suits + character prefabs)**
 (idempotent; macOS: reads Sidekick's SQLite colour table with `/usr/bin/sqlite3 -readonly`
 at edit time). It also creates the four candidate NPC looks listed in

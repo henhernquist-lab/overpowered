@@ -22,7 +22,9 @@ public sealed class SidekickNpcProfileRunner : MonoBehaviour
     HumanoidAnimationTuning tuning;bool original;int rounds=3;float seconds=5;Camera cam;RenderTexture target;string variants="AB";
     HeroDefinition hero;GameObject heroPrefab;SidekickSuit heroSuit;
     readonly Dictionary<char,List<double>> fps=new Dictionary<char,List<double>>();
-    static string Name(char v)=>v=='A'?"A mannequin NPCs":v=='B'?"B sidekick NPCs":v=='C'?"C mannequin hero":"D sidekick hero on the other suit shader (diagnostic)";
+    static string Name(char v)=>v=='A'?"A mannequin NPCs":v=='B'?"B sidekick NPCs":v=='C'?"C mannequin hero":v=='D'?"D sidekick hero on the other suit shader (diagnostic)":
+        v=='E'?"E hero SkinQuality.Bone2":v=='F'?"F hero blend-shape weights zeroed (diagnostic, changes body shape)":v=='G'?"G hero updateWhenOffscreen=false":"H hero on the unoptimized prefab mesh (no suit Body)";
+    Mesh suitBody;
     Material diagnostic;
     void Log(string text){lines.Add(text);Debug.Log("[NPC PROFILE] "+text);Directory.CreateDirectory(Dir);File.WriteAllLines(Dir+"/results.txt",lines);}
     void Check(bool ok,string text){if(!ok)throw new Exception(text);Log("PASS "+text);}
@@ -44,7 +46,7 @@ public sealed class SidekickNpcProfileRunner : MonoBehaviour
     }
     void Done(int code)
     {
-        tuning.SidekickNpcs=original;if(hero!=null){hero.CharacterPrefab=heroPrefab;hero.Suit=heroSuit;}
+        tuning.SidekickNpcs=original;if(hero!=null){hero.CharacterPrefab=heroPrefab;hero.Suit=heroSuit;if(heroSuit!=null)heroSuit.Body=suitBody;}
         Log($"RESTORED HumanoidAnimationTuning.SidekickNpcs={original}{(hero!=null?$", {hero.Id} CharacterPrefab={hero.CharacterPrefab?.name} Suit={hero.Suit?.name}":"")}");Finished(code);
     }
     IEnumerator Scene(string name)
@@ -80,13 +82,13 @@ public sealed class SidekickNpcProfileRunner : MonoBehaviour
         yield return Scene(GameFlow.HomeScene);var mode=Resources.Load<GameModeDefinition>("Modes/free-play");
         Check(tuning.NpcLooks!=null&&tuning.NpcLooks.Length>0&&tuning.NpcLooks.All(l=>l!=null&&l.Prefab!=null),$"NpcLooks: {string.Join(", ",tuning.NpcLooks.Select(l=>$"{l.Prefab.name} ({l.Prefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh.vertexCount} verts)"))}; mannequin {tuning.Model.name} ({tuning.Model.GetComponentsInChildren<SkinnedMeshRenderer>().Sum(x=>x.sharedMesh.vertexCount)} verts in {tuning.Model.GetComponentsInChildren<SkinnedMeshRenderer>().Length} skinned meshes).");
         Log($"ENV GPU={SystemInfo.graphicsDeviceName} CPU={SystemInfo.processorType} quality='{QualitySettings.names[QualitySettings.GetQualityLevel()]}' load={Shell("/usr/sbin/sysctl","-n vm.loadavg")} batchUnities={BatchUnities()} rounds={rounds} seconds/sample={seconds}");
-        hero=FindAnyObjectByType<ModeScreens>().Profile.SelectedHero;heroPrefab=hero.CharacterPrefab;heroSuit=hero.Suit;
+        hero=FindAnyObjectByType<ModeScreens>().Profile.SelectedHero;heroPrefab=hero.CharacterPrefab;heroSuit=hero.Suit;suitBody=heroSuit!=null?heroSuit.Body:null;
         Log($"SCENARIO {mode.Id}: {mode.Civilians} civilians, Heat topped to 3 stars; sessions cycle {variants} each round: A = mannequin NPCs + Sidekick hero {hero.DisplayName}={heroPrefab.name}; B = Sidekick NPCs + same hero; C = mannequin NPCs + the mannequin as hero (hero definition's prefab/suit cleared for that session only, restored at exit).");
         target=new RenderTexture(1280,720,24){name="NPC profile 1280x720"};target.Create();
         for(int r=1;r<=rounds;r++)foreach(char variant in variants)
         {
             bool sidekick=variant=='B';tuning.SidekickNpcs=sidekick;string label=Name(variant);
-            hero.CharacterPrefab=variant=='C'?null:heroPrefab;hero.Suit=variant=='C'?null:heroSuit;
+            hero.CharacterPrefab=variant=='C'?null:heroPrefab;hero.Suit=variant=='C'?null:heroSuit;if(heroSuit!=null)heroSuit.Body=variant=='H'?null:suitBody;
             Check(GameFlow.Instance.Select(mode),$"{label} r{r}: enter Free Play.");yield return Scene(GameFlow.CityScene);
             yield return Stage();Populate();yield return new WaitForSeconds(2f);Populate();
             var npcs=W.Npcs.Where(n=>n!=null&&!n.Dead).ToList();
@@ -102,11 +104,19 @@ public sealed class SidekickNpcProfileRunner : MonoBehaviour
                 diagnostic=suit.CreateMaterial(map,"Diagnostic other-shader suit",Resources.Load<CityPalette>("CityPalette").Smoothness);suit.AuthoredShader=!suit.AuthoredShader;
                 body.sharedMaterial=diagnostic;Log($"D: hero body material -> {diagnostic.name} ({diagnostic.shader.name}) with the suit colour map.");
             }
+            {
+                var body=W.Hero.GetComponent<HumanoidPresentation>().VisualRoot.GetComponentInChildren<SkinnedMeshRenderer>();var m=body.sharedMesh;
+                int nonzero=Enumerable.Range(0,m.blendShapeCount).Count(i=>body.GetBlendShapeWeight(i)!=0);
+                if(variant=='E')body.quality=SkinQuality.Bone2;
+                if(variant=='F')for(int i=0;i<m.blendShapeCount;i++)body.SetBlendShapeWeight(i,0);
+                if(variant=='G')body.updateWhenOffscreen=false;
+                Log($"{label} HERO BODY {m.name} (suit Body {(heroSuit!=null&&heroSuit.Body!=null?heroSuit.Body.name:"none")}): {m.vertexCount} verts, {body.bones.Length} bones, {m.blendShapeCount} blend shapes ({nonzero} non-zero before, {Enumerable.Range(0,m.blendShapeCount).Count(i=>body.GetBlendShapeWeight(i)!=0)} now), quality={body.quality}, updateWhenOffscreen={body.updateWhenOffscreen}, skinnedMotionVectors={body.skinnedMotionVectors}");
+            }
             if(variant=='C')Check(W.Hero.GetComponent<HumanoidPresentation>().VisualRoot.GetComponentsInChildren<SkinnedMeshRenderer>().Length==2,"C: hero body is the two-mesh mannequin.");
             cam=Camera.main;cam.enabled=false;cam.targetTexture=target;
             var warm=System.Diagnostics.Stopwatch.StartNew();while(warm.Elapsed.TotalSeconds<2){cam.Render();yield return null;}
             yield return Measure(label,r,variant);
-            if(r==1)Save(target,variant=='A'?"street-A-mannequin-npcs":variant=='B'?"street-B-sidekick-npcs":variant=='C'?"street-C-mannequin-hero":"street-D-other-suit-shader");
+            if(r==1)Save(target,"street-"+variant);
             cam.targetTexture=null;cam.enabled=true;
             GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);
             if(diagnostic!=null){Destroy(diagnostic);diagnostic=null;}

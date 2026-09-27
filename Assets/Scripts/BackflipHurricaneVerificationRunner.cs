@@ -119,7 +119,7 @@ public sealed class BackflipHurricaneVerificationRunner : MonoBehaviour
         Check(W.Hero.BackflipCooldown==0f,"CONTROL: backflip cooldown counts down to exactly zero.");
         Check(W.Hero.TryBackflip()&&W.Hero.BackflipCount==2&&events==2,"Recharged backflip fires again (use 2), so the cooldown is a real gate rather than a permanent block.");
         yield return new WaitForSeconds(HeroAbilityTuning.BackflipSeconds+.45f);
-        Check(P.State=="Locomotion","Backflip returns the presentation to locomotion once the dash ends.");
+        Check(P.State=="Locomotion",$"Backflip returns the presentation to locomotion once the dash ends (state={P.State}, grounded={W.Hero.GetComponent<CharacterController>().isGrounded}, local velocity={W.Hero.PresentationState.LocalVelocity:F2}).");
         Check(W.Hero.TryJump(),"CONTROL: existing grounded jump still accepted after the backflip.");
         yield return null;Check(P.State=="Jump","CONTROL: jump still dispatches its existing presentation event.");
         yield return new WaitForSeconds(1.6f);

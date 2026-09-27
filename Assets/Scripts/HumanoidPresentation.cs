@@ -48,6 +48,8 @@ public sealed class HumanoidPresentation : MonoBehaviour
         var model=Instantiate(definition!=null&&definition.CharacterPrefab!=null?definition.CharacterPrefab:look!=null?look.Prefab:tuning.Model,pose);model.name=definition!=null?definition.DisplayName:look!=null?look.Prefab.name:"Shared Mixamo humanoid";
         var animator=model.GetComponent<Animator>();animator.enabled=false;
         var renderers=model.GetComponentsInChildren<SkinnedMeshRenderer>();
+        var suit=definition!=null?definition.Suit:look;
+        if(suit!=null)foreach(var r in renderers)suit.ApplyBody(r);
         // Skin bounds are conservative animation envelopes, not actual character proportions.
         // Measure the imported reference pose's vertices once at spawn, then fit feet-to-crown.
         Bounds bounds=new Bounds();bool hasBounds=false;
@@ -61,7 +63,6 @@ public sealed class HumanoidPresentation : MonoBehaviour
         model.transform.localPosition-=Vector3.up*(bounds.min.y-pose.position.y)*scale;
         if(definition!=null)model.transform.localScale=Vector3.Scale(model.transform.localScale,definition.VisualScale);
         var loadout=definition!=null?WorldSession.Instance.Progression.Data.Loadout:null;
-        var suit=definition!=null?definition.Suit:look;
         // Player: Hero Forge loadout colours. NPCs: role sets the body colour, the archetype (if any) sets the joints accent.
         // A Sidekick suit recolours its colour map with the same two roles: one shared material per (suit, primary, secondary).
         var accent=npc!=null&&npc.Archetype!=null?npc.Archetype.Accent:CityColor.Metal;

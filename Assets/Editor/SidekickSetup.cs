@@ -88,6 +88,49 @@ public static class SidekickSetup
         }
         return suit;
     }
+    /// Optimized body mesh: Sidekick's combined prefab mesh carries one skeleton copy per part in bones[]/bindposes (2,992
+    /// entries on Starter_03). Entries with the same bone transform AND the same bind pose are merged, bone weights remapped;
+    /// blend shapes (Sidekick's editor sliders, unused by the game) are dropped after baking any non-zero prefab weight.
+    /// Verified: the same posed skeleton skins both meshes to the same vertices (max error logged).
+    static void BuildBody(string id,GameObject prefab,SidekickSuit suit,StringBuilder log)
+    {
+        var skin=prefab.GetComponentInChildren<SkinnedMeshRenderer>();var src=skin.sharedMesh;var bones=skin.bones;var binds=src.bindposes;
+        var unique=new List<int>();var map=new int[bones.Length];
+        bool Same(Matrix4x4 a,Matrix4x4 b){for(int i=0;i<16;i++)if(Mathf.Abs(a[i]-b[i])>1e-5f)return false;return true;}
+        for(int i=0;i<bones.Length;i++)
+        {
+            int k=unique.FindIndex(u=>bones[u]==bones[i]&&Same(binds[u],binds[i]));
+            if(k<0){k=unique.Count;unique.Add(i);}map[i]=k;
+        }
+        var mesh=new Mesh{name=id+" body (deduplicated bones)",indexFormat=src.indexFormat};
+        var vertices=src.vertices;var normals=src.normals;var tangents=src.tangents;int baked=0;
+        for(int s=0;s<src.blendShapeCount;s++)
+        {
+            float w=skin.GetBlendShapeWeight(s);if(w==0)continue;int frame=src.GetBlendShapeFrameCount(s)-1;float full=src.GetBlendShapeFrameWeight(s,frame);
+            var dv=new Vector3[vertices.Length];var dn=new Vector3[vertices.Length];var dt=new Vector3[vertices.Length];src.GetBlendShapeFrameVertices(s,frame,dv,dn,dt);float f=w/full;baked++;
+            for(int v=0;v<vertices.Length;v++){vertices[v]+=dv[v]*f;if(normals.Length>0)normals[v]+=dn[v]*f;if(tangents.Length>0){var t=tangents[v];tangents[v]=new Vector4(t.x+dt[v].x*f,t.y+dt[v].y*f,t.z+dt[v].z*f,t.w);}}
+        }
+        mesh.vertices=vertices;if(normals.Length>0)mesh.normals=normals.Select(n=>n.normalized).ToArray();if(tangents.Length>0)mesh.tangents=tangents;
+        for(int c=0;c<8;c++)if(src.HasVertexAttribute(UnityEngine.Rendering.VertexAttribute.TexCoord0+c)){var uv=new List<Vector4>();src.GetUVs(c,uv);mesh.SetUVs(c,uv);}
+        if(src.HasVertexAttribute(UnityEngine.Rendering.VertexAttribute.Color))mesh.colors32=src.colors32;
+        mesh.subMeshCount=src.subMeshCount;for(int m=0;m<src.subMeshCount;m++)mesh.SetTriangles(src.GetTriangles(m),m);
+        var perVertex=src.GetBonesPerVertex();var weights=src.GetAllBoneWeights();
+        var remapped=new Unity.Collections.NativeArray<BoneWeight1>(weights.Length,Unity.Collections.Allocator.Temp);
+        for(int i=0;i<weights.Length;i++){var w=weights[i];w.boneIndex=map[w.boneIndex];remapped[i]=w;}
+        mesh.SetBoneWeights(perVertex,remapped);remapped.Dispose();
+        mesh.bindposes=unique.Select(i=>binds[i]).ToArray();mesh.bounds=src.bounds;
+        string path=$"{SuitFolder}/{id}-body.asset";var existing=AssetDatabase.LoadAssetAtPath<Mesh>(path);
+        if(existing==null)AssetDatabase.CreateAsset(mesh,path);else{EditorUtility.CopySerialized(mesh,existing);UnityEngine.Object.DestroyImmediate(mesh);mesh=existing;}
+        suit.Body=mesh;suit.SourceMesh=src;suit.BodyBones=unique.ToArray();EditorUtility.SetDirty(suit);
+        // CONTROL: identical skinning. Two instances, the same non-trivial pose, original vs optimized body.
+        var a=UnityEngine.Object.Instantiate(prefab);var b=UnityEngine.Object.Instantiate(prefab);
+        var sa=a.GetComponentInChildren<SkinnedMeshRenderer>();var sb=b.GetComponentInChildren<SkinnedMeshRenderer>();suit.ApplyBody(sb);
+        foreach(var go in new[]{a,b}){var an=go.GetComponent<Animator>();foreach(var (bone,euler) in new[]{(HumanBodyBones.Spine,new Vector3(20,15,5)),(HumanBodyBones.LeftUpperArm,new Vector3(10,40,-60)),(HumanBodyBones.RightLowerArm,new Vector3(0,-70,0)),(HumanBodyBones.LeftUpperLeg,new Vector3(-50,0,10)),(HumanBodyBones.Head,new Vector3(15,30,0))})an.GetBoneTransform(bone).localRotation*=Quaternion.Euler(euler);}
+        var ma=new Mesh();var mb=new Mesh();sa.BakeMesh(ma);sb.BakeMesh(mb);var va=ma.vertices;var vb=mb.vertices;float err=0;for(int v=0;v<va.Length;v++)err=Mathf.Max(err,Vector3.Distance(va[v],vb[v]));
+        UnityEngine.Object.DestroyImmediate(a);UnityEngine.Object.DestroyImmediate(b);UnityEngine.Object.DestroyImmediate(ma);UnityEngine.Object.DestroyImmediate(mb);
+        log.AppendLine($"   BODY {path}: bones[] {bones.Length} -> {unique.Count} (distinct transforms {bones.Distinct().Count()}), blend shapes {src.blendShapeCount} -> 0 (non-zero baked: {baked}), vertices {src.vertexCount}; CONTROL posed skinning max vertex difference {err*1000:F3} mm");
+        if(err>.001f)throw new Exception($"{id}: optimized body skins differently ({err*1000:F2} mm)");
+    }
     [MenuItem("Overpowered/Forge/Sidekick heroes (suits + character prefabs)")]
     public static void CreateHeroes()
     {
@@ -99,6 +142,7 @@ public static class SidekickSetup
             if(hero==null)throw new Exception("Missing hero definition "+heroId+" (run Overpowered > Forge > Create missing assets first).");
             var prefab=AssetDatabase.LoadAssetAtPath<GameObject>(SidekickClipCheck.PrefabPath(prefabPath));
             var suit=Suit(heroId,prefab,props,log,$"hero {heroId} ({hero.DisplayName}, default Primary={hero.Primary} Secondary={hero.Secondary})");
+            BuildBody(heroId,prefab,suit,log);
             hero.CharacterPrefab=prefab;hero.Suit=suit;EditorUtility.SetDirty(hero);
         }
         var tuning=AssetDatabase.LoadAssetAtPath<HumanoidAnimationTuning>("Assets/Resources/HumanoidAnimationTuning.asset");

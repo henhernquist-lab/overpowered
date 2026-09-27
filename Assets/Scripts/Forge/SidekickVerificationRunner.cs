@@ -67,6 +67,14 @@ public sealed class SidekickVerificationRunner : MonoBehaviour
         Check(skinSwatch.Role==SuitRole.Keep&&skinSwatch.Name.Contains("Skin"),$"{where}: swatch (0,5) is '{skinSwatch.Name}' and kept.");
         return SidekickSuit.Pixel(map,skinCell);
     }
+    /// The hero's body: the suit's optimized Body (same bone transforms, one bones[] entry per distinct bone) when generated,
+    /// else the prefab mesh. The prefab mesh must be the one the Body replaces.
+    static bool IsBody(SkinnedMeshRenderer r,HeroDefinition hero)
+    {
+        var prefabMesh=hero.CharacterPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh;var suit=hero.Suit;
+        if(suit.Body==null)return r.sharedMesh==prefabMesh;
+        return suit.SourceMesh==prefabMesh&&r.sharedMesh==suit.Body&&r.bones.Length==suit.BodyBones.Length&&r.bones.All(b=>b!=null)&&r.bones.Length<hero.CharacterPrefab.GetComponentInChildren<SkinnedMeshRenderer>().bones.Length;
+    }
     Texture2D Read(RenderTexture rt)
     {
         var previous=RenderTexture.active;RenderTexture.active=rt;var image=new Texture2D(rt.width,rt.height,TextureFormat.RGB24,false);image.ReadPixels(new Rect(0,0,rt.width,rt.height),0,0);image.Apply();RenderTexture.active=previous;return image;
@@ -102,7 +110,7 @@ public sealed class SidekickVerificationRunner : MonoBehaviour
             {
                 Check(screen.SelectHero(hero)&&screen.SetColors(pairs[j].Item1,pairs[j].Item2),$"Forge: {hero.DisplayName} {pairs[j].Item1}/{pairs[j].Item2} saved.");
                 var skinned=screen.PreviewModel.GetComponentsInChildren<SkinnedMeshRenderer>();
-                Check(skinned.Length==1&&skinned[0].sharedMesh==hero.CharacterPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh,$"Forge preview instantiates {hero.CharacterPrefab.name} ({skinned[0].sharedMesh.vertexCount} vertices, 1 skinned mesh).");
+                Check(skinned.Length==1&&IsBody(skinned[0],hero),$"Forge preview instantiates {hero.CharacterPrefab.name} ({skinned[0].sharedMesh.vertexCount} vertices, 1 skinned mesh '{skinned[0].sharedMesh.name}', {skinned[0].bones.Length} bone entries).");
                 skin[j]=AssertSuit(skinned[0],hero,pairs[j].Item1,pairs[j].Item2,"Forge preview");
                 {
                     var baked=new Mesh();skinned[0].BakeMesh(baked);var lo=float.MaxValue;var hi=float.MinValue;foreach(var v in baked.vertices){float y=skinned[0].transform.TransformPoint(v).y;lo=Mathf.Min(lo,y);hi=Mathf.Max(hi,y);}Destroy(baked);
@@ -130,7 +138,7 @@ public sealed class SidekickVerificationRunner : MonoBehaviour
             Check(GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero")),"Enter Hero session.");yield return Scene(GameFlow.CityScene);
             yield return new WaitForSeconds(1.5f);
             var p=W.Hero.GetComponent<HumanoidPresentation>();var skins=p.VisualRoot.GetComponentsInChildren<SkinnedMeshRenderer>();
-            Check(skins.Length==1&&skins[0].sharedMesh==hero.CharacterPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh&&p.Animator.avatar==hero.CharacterPrefab.GetComponent<Animator>().avatar&&p.Animator.gameObject.name==hero.DisplayName,$"Session spawns {hero.DisplayName} as {hero.CharacterPrefab.name} (same mesh + Humanoid avatar), shared controller {p.Animator.runtimeAnimatorController.name}, root motion {p.Animator.applyRootMotion}.");
+            Check(skins.Length==1&&IsBody(skins[0],hero)&&p.Animator.avatar==hero.CharacterPrefab.GetComponent<Animator>().avatar&&p.Animator.gameObject.name==hero.DisplayName,$"Session spawns {hero.DisplayName} as {hero.CharacterPrefab.name} (same mesh + Humanoid avatar), shared controller {p.Animator.runtimeAnimatorController.name}, root motion {p.Animator.applyRootMotion}.");
             Check(!p.Animator.applyRootMotion&&p.Animator.transform!=W.Hero.transform&&p.VisualRoot.GetComponentsInChildren<MeshRenderer>().Length==0,"CONTROL: no root motion, Animator not on the physics root, no capsule MeshRenderer.");
             AssertSuit(skins[0],hero,a,b,"Session");
             var suitMaterial=skins[0].sharedMaterial;var suitMap=SidekickSuit.MapOf(suitMaterial);
@@ -168,7 +176,7 @@ public sealed class SidekickVerificationRunner : MonoBehaviour
         Check(l.HeroId==hero.Id&&l.Primary==a&&l.Secondary==b,$"SECOND PROCESS restores {hero.DisplayName} {a}/{b} from the save.");
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);yield return new WaitForSeconds(1.5f);
         var skin=W.Hero.GetComponent<HumanoidPresentation>().VisualRoot.GetComponentInChildren<SkinnedMeshRenderer>();
-        Check(skin.sharedMesh==hero.CharacterPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh,$"Reloaded session spawns {hero.CharacterPrefab.name}.");
+        Check(IsBody(skin,hero),$"Reloaded session spawns {hero.CharacterPrefab.name}.");
         AssertSuit(skin,hero,a,b,"Reloaded session");
         var cells=new Texture2D[1,1];cells[0,0]=CaptureHero(W.Hero.transform);SaveSheet(cells,"reload-session.png");
         GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);

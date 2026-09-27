@@ -17,9 +17,21 @@ public sealed class SidekickSuit : ScriptableObject
     [Tooltip("Readable RGBA32 copy of Source's authored _ColorMap.")] public Texture2D BaseColorMap;
     public CityColor Trim=CityColor.Metal;
     [Tooltip("Off (default): the suit colour map is drawn by the Standard shader like every palette material, plus the source's emission map. " +
-        "On: a copy of the authored Sidekick_ShaderGraph material. Measured in the densest street: the ShaderGraph hero cost +1.9 ms/frame (STATUS).")]
+        "On: a copy of the authored Sidekick_ShaderGraph material. Clean interleaved measurements found no material shader cost beyond noise; see STATUS.")]
     public bool AuthoredShader;
     public Swatch[] Swatches;
+    [Header("Optimized body (generated): the prefab's combined mesh lists every part's copy of the skeleton (Starter_03: 2,992 bone entries)")]
+    [Tooltip("The prefab mesh with duplicate bone entries merged and unused blend shapes dropped; null = use the prefab mesh.")] public Mesh Body;
+    [Tooltip("The prefab renderer's mesh that Body replaces.")] public Mesh SourceMesh;
+    [HideInInspector] public int[] BodyBones;
+    /// Swap the renderer to the optimized body: same bone transforms (so Animator/HumanoidPresentation bones are untouched),
+    /// one bones[] entry per distinct (bone, bind pose) instead of one per part. Call once on a fresh instance.
+    public void ApplyBody(SkinnedMeshRenderer renderer)
+    {
+        if(Body==null||BodyBones==null||renderer.sharedMesh!=SourceMesh)return;
+        var old=renderer.bones;var bones=new Transform[BodyBones.Length];for(int i=0;i<bones.Length;i++)bones[i]=old[BodyBones[i]];
+        renderer.bones=bones;renderer.sharedMesh=Body;
+    }
     public const string ColorMapProperty="_ColorMap";
     public const int CellPixels=2;
     /// A new point-filtered colour map with the given palette colours. Callers own and cache it (CityMaterials.Suit).
