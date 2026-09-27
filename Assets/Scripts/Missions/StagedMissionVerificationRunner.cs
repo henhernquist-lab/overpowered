@@ -50,6 +50,30 @@ public sealed class StagedMissionVerificationRunner : StagedMissionRunner
             Check(!sequences.ContainsKey(key), $"{entry.Asset}: stage sequence differs from every other mission{(sequences.TryGetValue(key, out var other) ? " (same as " + other + ")" : "")}.");
             sequences[key] = entry.Asset;
         }
+        Rotations();
+    }
+    /// The rotation assets (StagedMissionSetup.CreateRotations): every staged mission of the side present with its weight /
+    /// band / districts, the mode's current encounters kept, no dangling option; the shipping modes still have no Selection;
+    /// and the pure selection rule over the real options honours the first-band rule.
+    void Rotations()
+    {
+        foreach (var side in new[] { PlayerSide.Hero, PlayerSide.Villain })
+        {
+            string id = side == PlayerSide.Hero ? "hero" : "villain";
+            var rotation = Resources.Load<EncounterSelection>("Rotations/" + id + "-rotation"); var mode = Resources.Load<GameModeDefinition>("Modes/" + id);
+            Check(rotation != null && rotation.Options.All(o => o != null && o.Encounter != null && o.Weight > 0f), $"{id}-rotation exists with {rotation?.Options.Length} valid options.");
+            Check(mode.Selection == null, $"CONTROL: the shipping {id} mode still has no Selection (the rotation is dormant until the content switch).");
+            Check(mode.Encounters.Where(e => e != null).All(e => rotation.Options.Any(o => o.Encounter == e)), $"{id}-rotation keeps all {mode.Encounters.Length} of the mode's current encounters.");
+            foreach (var entry in StagedMissionLibrary.All.Where(e => e.Side == side))
+            {
+                var o = rotation.Options.FirstOrDefault(x => x.Encounter != null && x.Encounter.name == entry.Asset);
+                Check(o != null && Mathf.Approximately(o.Weight, entry.Weight) && o.MinDifficulty == entry.MinBand && o.Districts.SequenceEqual(entry.Districts), $"{id}-rotation: {entry.Asset} weight {entry.Weight}, from band {entry.MinBand}, districts [{string.Join(", ", entry.Districts)}].");
+            }
+            var recent = new List<EncounterDefinition>(); var scratch = new List<int>(); var random = new System.Random(5); var picked = new HashSet<string>();
+            for (int i = 0; i < 400; i++) { int k = EncounterSelection.Choose(rotation.Options, 0, "Downtown", recent, rotation.AntiRepeatWindow, true, random.NextDouble(), scratch); if (k >= 0) { recent.Add(rotation.Options[k].Encounter); picked.Add(rotation.Options[k].Encounter.name); } }
+            var late = StagedMissionLibrary.All.Where(e => e.Side == side && e.MinBand > 0).Select(e => e.Asset).ToArray();
+            Check(late.All(n => !picked.Contains(n)) && picked.Count >= 3, $"Band 0 in Downtown over 400 picks: {picked.Count} different encounters, none of the later-band missions ({string.Join(", ", late)}).");
+        }
     }
     static bool References(StagedScenario d, out string problem)
     {

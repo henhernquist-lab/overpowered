@@ -12,7 +12,7 @@ public static class StagedMissionVerification
 {
     const string Key = "Overpowered.StagedMissionVerification"; const string Folder = "Verification/StagedMissions/"; static double deadline;
     static StagedMissionVerification() { EditorApplication.update += () => { if (deadline > 0 && EditorApplication.timeSinceStartup > deadline) { Debug.LogError("Staged mission verification timeout"); Finish(1); } }; }
-    public static void Run() { RosterSetup.Create(); StagedMissionSetup.Create(); Directory.CreateDirectory(Folder + "saves"); SessionState.SetString(Key, "run"); EditorSceneManager.OpenScene("Assets/Scenes/Home.unity"); EditorApplication.isPlaying = true; }
+    public static void Run() { RosterSetup.Create(); StagedMissionSetup.CreateRotations(); Directory.CreateDirectory(Folder + "saves"); SessionState.SetString(Key, "run"); EditorSceneManager.OpenScene("Assets/Scenes/Home.unity"); EditorApplication.isPlaying = true; }
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void Configure()
     {

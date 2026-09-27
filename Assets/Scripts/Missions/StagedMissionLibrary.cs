@@ -10,19 +10,22 @@ public static class StagedMissionLibrary
     public sealed class Entry
     {
         public string Id, Title; public PlayerSide Side; public CrimeKind Kind; public float Deadline; public Action<StagedScenario> Build;
+        /// Rotation data (StagedMissionSetup.CreateRotations -> EncounterSelection options): weight, first difficulty band
+        /// (session successes), and the CityLayout districts whose streets suit the mission (empty = any).
+        public float Weight = 1f; public int MinBand; public string[] Districts = new string[0];
         public string Asset => "staged-" + Id;
     }
     public static readonly Entry[] All =
     {
-        new Entry { Id = "pursuit", Title = "Street pursuit", Side = PlayerSide.Hero, Kind = CrimeKind.Robbery, Deadline = 200f, Build = Pursuit },
-        new Entry { Id = "convoy-intercept", Title = "Convoy intercept", Side = PlayerSide.Hero, Kind = CrimeKind.Robbery, Deadline = 200f, Build = ConvoyIntercept },
-        new Entry { Id = "blackout", Title = "Blackout response", Side = PlayerSide.Hero, Kind = CrimeKind.Mugging, Deadline = 200f, Build = Blackout },
-        new Entry { Id = "hold-the-block", Title = "Hold the block", Side = PlayerSide.Hero, Kind = CrimeKind.Mugging, Deadline = 220f, Build = HoldTheBlock },
-        new Entry { Id = "armored-heist", Title = "Armoured strongroom", Side = PlayerSide.Villain, Kind = CrimeKind.Robbery, Deadline = 240f, Build = ArmoredHeist },
-        new Entry { Id = "sabotage-run", Title = "Sabotage run", Side = PlayerSide.Villain, Kind = CrimeKind.Robbery, Deadline = 200f, Build = SabotageRun },
-        new Entry { Id = "convoy-robbery", Title = "Armoured car robbery", Side = PlayerSide.Villain, Kind = CrimeKind.Robbery, Deadline = 240f, Build = ConvoyRobbery },
+        new Entry { Id = "pursuit", Title = "Street pursuit", Side = PlayerSide.Hero, Kind = CrimeKind.Robbery, Deadline = 200f, Build = Pursuit, Weight = 1.2f, Districts = new[] { "Downtown", "Residential" } },
+        new Entry { Id = "convoy-intercept", Title = "Convoy intercept", Side = PlayerSide.Hero, Kind = CrimeKind.Robbery, Deadline = 200f, Build = ConvoyIntercept, Districts = new[] { "Docks", "Downtown", "West Boulevard", "East Boulevard", "Harbour Boulevard" } },
+        new Entry { Id = "blackout", Title = "Blackout response", Side = PlayerSide.Hero, Kind = CrimeKind.Mugging, Deadline = 200f, Build = Blackout, Districts = new[] { "Downtown", "Residential" } },
+        new Entry { Id = "hold-the-block", Title = "Hold the block", Side = PlayerSide.Hero, Kind = CrimeKind.Mugging, Deadline = 220f, Build = HoldTheBlock, MinBand = 1, Districts = new[] { "Residential", "Downtown" } },
+        new Entry { Id = "armored-heist", Title = "Armoured strongroom", Side = PlayerSide.Villain, Kind = CrimeKind.Robbery, Deadline = 240f, Build = ArmoredHeist, MinBand = 1, Districts = new[] { "Downtown" } },
+        new Entry { Id = "sabotage-run", Title = "Sabotage run", Side = PlayerSide.Villain, Kind = CrimeKind.Robbery, Deadline = 200f, Build = SabotageRun, MinBand = 2, Districts = new[] { "Docks", "Downtown" } },
+        new Entry { Id = "convoy-robbery", Title = "Armoured car robbery", Side = PlayerSide.Villain, Kind = CrimeKind.Robbery, Deadline = 240f, Build = ConvoyRobbery, Districts = new[] { "Docks", "West Boulevard", "East Boulevard", "Harbour Boulevard" } },
         new Entry { Id = "distraction", Title = "The distraction job", Side = PlayerSide.Villain, Kind = CrimeKind.Robbery, Deadline = 220f, Build = Distraction },
-        new Entry { Id = "getaway", Title = "Getaway", Side = PlayerSide.Villain, Kind = CrimeKind.Robbery, Deadline = 200f, Build = Getaway },
+        new Entry { Id = "getaway", Title = "Getaway", Side = PlayerSide.Villain, Kind = CrimeKind.Robbery, Deadline = 200f, Build = Getaway, Weight = 1.2f },
     };
     public static Entry Find(string id) => Array.Find(All, e => e.Id == id);
     public static StagedScenario Create(Entry entry)
