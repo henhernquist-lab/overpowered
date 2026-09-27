@@ -1,0 +1,54 @@
+DATA ice: damage=5, freeze duration=4s, range=20m, charges=2, cooldown=0.6s, energy=10, palette colour=Cyan.
+PASS Equip Ice + Strength through the saved loadout.
+FIXTURE third-person: hero (-28.0, 0.3, 4.0); target start (-28.0, 0.1, 20.0) (16.0 m, range 20 m); control start (-16.5, 0.2, 7.1) (11.9 m, 75 deg off the lane).
+PASS third-person: live Rusher target and off-axis CONTROL spawned on the NavMesh.
+MEASURED third-person target approach speed BEFORE=7.00 m/s at 8.3 m; control speed=6.99 m/s.
+PASS third-person: target is genuinely moving under its own AI before the cast (7.00 m/s).
+PASS third-person: crosshair ray selects the live target (Criminal).
+PASS third-person: real Ice cast accepted and paid (Ice activated).
+MEASURED third-person damage dealt=5 (health 500 -> 495); Frozen flag=True; agent.isStopped=False.
+PASS third-person: aimed NPC Frozen flag set; off-axis CONTROL not frozen.
+MEASURED third-person visible state during freeze: 2/2 body renderers use the shared Cyan palette material; Animator.speed=0.
+MEASURED third-person target speed DURING freeze=0.00 m/s; attack phase=Approach.
+MEASURED third-person freeze lasted 4.01s (configured 4s).
+MEASURED third-person target speed AFTER thaw=3.81 m/s; cyan renderers after thaw=0; Animator.speed=1.
+PASS third-person: off-axis CONTROL untouched (health 500, never frozen).
+PASS third-person: NPC locomotion halted during the freeze (7.00 -> 0.00 m/s).
+PASS third-person: freeze duration 4.01s matches Stats.Duration.
+PASS third-person: NPC resumes moving after thaw (3.81 m/s mean over 1.5 s).
+PASS third-person: Ice dealt its configured damage (5 = Stats.Damage 5).
+MEASURED third-person cast VFX bursts from the shared Feel pool: 2.
+PASS third-person: the cast shows pooled ice bursts at the hand and at the target (2).
+PASS third-person: frozen NPC is VISIBLY frozen (shared Cyan palette material on all 2 renderers, pose held).
+PASS third-person: visible state clears on thaw (original materials, Animator.speed 1).
+FIXTURE first-person: hero (-28.0, 0.3, 4.0); target start (-28.0, 0.1, 20.0) (16.0 m, range 20 m); control start (-16.5, 0.2, 7.1) (11.9 m, 75 deg off the lane).
+PASS first-person: live Rusher target and off-axis CONTROL spawned on the NavMesh.
+MEASURED first-person target approach speed BEFORE=7.00 m/s at 8.3 m; control speed=7.00 m/s.
+PASS first-person: target is genuinely moving under its own AI before the cast (7.00 m/s).
+PASS first-person: crosshair ray selects the live target (Criminal).
+PASS first-person: real Ice cast accepted and paid (Ice activated).
+MEASURED first-person damage dealt=5 (health 500 -> 495); Frozen flag=True; agent.isStopped=False.
+PASS first-person: aimed NPC Frozen flag set; off-axis CONTROL not frozen.
+MEASURED first-person visible state during freeze: 2/2 body renderers use the shared Cyan palette material; Animator.speed=0.
+MEASURED first-person target speed DURING freeze=0.00 m/s; attack phase=Approach.
+MEASURED first-person freeze lasted 4.00s (configured 4s).
+MEASURED first-person target speed AFTER thaw=2.72 m/s; cyan renderers after thaw=0; Animator.speed=1.
+PASS first-person: off-axis CONTROL untouched (health 500, never frozen).
+PASS first-person: NPC locomotion halted during the freeze (7.00 -> 0.00 m/s).
+PASS first-person: freeze duration 4.00s matches Stats.Duration.
+PASS first-person: NPC resumes moving after thaw (2.72 m/s mean over 1.5 s).
+PASS first-person: Ice dealt its configured damage (5 = Stats.Damage 5).
+MEASURED first-person cast VFX bursts from the shared Feel pool: 2.
+PASS first-person: the cast shows pooled ice bursts at the hand and at the target (2).
+PASS first-person: frozen NPC is VISIBLY frozen (shared Cyan palette material on all 2 renderers, pose held).
+PASS first-person: visible state clears on thaw (original materials, Animator.speed 1).
+PASS Prop: found a clear drop column 9 m from the hero.
+PASS Prop: Ice cast on a falling 45 kg crate accepted.
+MEASURED prop speed BEFORE=11.04 m/s, DURING=0.00 m/s (drift 0.000 m), freeze 4.01s, AFTER=7.20 m/s; control crate speed=0.00 m/s.
+PASS Prop: falling crate stops in mid-air for the freeze and falls again after.
+PASS Prop: off-axis CONTROL crate never frozen.
+MEASURED prop visible state: frozen crate shared Cyan material=True; restored to shared Wood after thaw=True; control crate Wood=True.
+PASS Prop: frozen crate shows the shared Cyan palette material and returns to its own shared material after thaw; control untouched.
+PASS Out-of-range CONTROL setup: an NPC on the crosshair beyond range with nothing else inside range (last blocker: ).
+PASS Out-of-range CONTROL: NPC 28.0 m away (range 20 m) on the crosshair -> refused ("No valid target"), not frozen, not damaged, no charge spent.
+LIMIT: casts go through PowerUser.Use (the method the mouse button calls) with the crosshair aimed by the test; no hardware input or human feel test.

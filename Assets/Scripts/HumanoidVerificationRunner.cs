@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 public sealed class HumanoidVerificationRunner : MonoBehaviour
 {
     public Action<int> Finished;readonly List<string> lines=new List<string>();WorldSession W=>WorldSession.Instance;
-    public bool OnlyDeathControl;
+    public bool OnlyDeathControl;public string HeroId="";
     HumanoidPresentation P=>W.Hero.GetComponent<HumanoidPresentation>();
     void Log(string text){lines.Add(text);Debug.Log("[HUMANOID VERIFY] "+text);File.WriteAllLines("Verification/Humanoid/results.txt",lines);}
     void Check(bool condition,string text){if(!condition)throw new Exception(text);Log("PASS "+text);}
@@ -36,10 +36,19 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
     IEnumerator Run()
     {
         yield return Scene("Home");Check(Camera.main!=null,"Home camera retained.");
+        if(HeroId!="")
+        {
+            var profile=UnityEngine.Object.FindAnyObjectByType<ModeScreens>().Profile;var chosen=Resources.Load<ForgeCatalog>("ForgeCatalog").Hero(HeroId);
+            Check(chosen.Id==HeroId&&profile.SetLoadout(chosen,profile.EquippedA,profile.EquippedB,chosen.Primary,chosen.Secondary),$"Hero under test selected through PlayerProgression.SetLoadout: {chosen.DisplayName}.");
+        }
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene("Prototype");
+        var selected=W.Progression.SelectedHero;var model=selected!=null&&selected.CharacterPrefab!=null?selected.CharacterPrefab:P.Tuning.Model;
+        Log($"HERO under test: {(selected!=null?selected.DisplayName:"(none)")} = {model.name}");
         W.Hero.enabled=false;W.MenuOpen=true;Move(W.City.Spawn+Vector3.up*15);
         if(OnlyDeathControl){yield return DeathInterrupt();yield break;}
-        Check(P.Animator.isHuman&&P.Animator.avatar.isValid&&W.Hero.GetComponentsInChildren<SkinnedMeshRenderer>().Length==2,"Player uses supplied valid Humanoid with two skinned meshes, no capsule renderer.");
+        // Retargeted from the mannequin-only "two skinned meshes": the count must equal the selected hero model's own count.
+        int expectedSkins=model.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length;
+        Check(P.Animator.isHuman&&P.Animator.avatar.isValid&&expectedSkins>0&&W.Hero.GetComponentsInChildren<SkinnedMeshRenderer>().Length==expectedSkins&&P.VisualRoot.GetComponentsInChildren<MeshRenderer>().Length==0,$"Player uses the selected hero's valid Humanoid ({model.name}: {expectedSkins} skinned mesh(es)), no capsule renderer.");
         Check(W.Hero.GetComponent<CharacterController>().height==1.8f&&W.Hero.GetComponent<CharacterController>().radius==.38f,"CONTROL: player collider unchanged: height=1.800m radius=.380m; NPC capsule=1.800m/.350m.");
         Check(W.Hero.GetComponentsInChildren<Collider>().Length==1,$"Reference skinned vertices height={P.ReferenceMeshHeight:F4}m, visual scale={P.ModelScale:F4}, fitted height={P.ReferenceMeshHeight*P.ModelScale:F4}m; exactly one authoritative player collider.");
         Check(W.Npcs.All(n=>n.GetComponent<HumanoidPresentation>().Animator.runtimeAnimatorController==P.Animator.runtimeAnimatorController),$"SAME controller asset on player and all {W.Npcs.Count} civilians/cops/criminals.");

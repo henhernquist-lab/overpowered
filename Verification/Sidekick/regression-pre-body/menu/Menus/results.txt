@@ -1,0 +1,56 @@
+PASS Menu component exists in Home
+PASS Actual retained UI layout 1440x810 logical pixels.
+PASS Hero/Villain cards are genuinely side by side.
+PASS Original shield/city and angular flame use distinct shared Hero/Villain palette colors.
+PASS Fresh-save CONTROL starts level 1 / XP 0 / points 0.
+PASS Visible ENABLED extras-row button free-play below the side cards.
+PASS Visible ENABLED extras-row button endless-fight below the side cards.
+PASS Visible ENABLED extras-row button endless-fight-villain below the side cards.
+PASS Coming Soon strip is empty: no non-playable mode definitions remain.
+PASS Flow-guard CONTROL: a Playable=false definition still does not launch.
+CAPTURE home.png (actual UI Toolkit target texture, not a mockup)
+PASS Hover lifts Hero card -7.97 logical pixels; configured -8.
+CAPTURE home-hover.png (actual UI Toolkit target texture, not a mockup)
+PASS Skyline uses 63 actual seeded buildings; one-time capture 180.8ms; cached 768x432.
+MEASURED home static A: motion=False, frames=2403, seconds=4.003, FPS=600.24, mean=1.665ms, p95=2.780ms, drawCalls=2.0, 1280x720 Editor UI render.
+MEASURED home animated B: motion=True, frames=674, seconds=5.947, FPS=113.33, mean=8.823ms, p95=3.888ms, drawCalls=4.0, 1280x720 Editor UI render.
+MEASURED home animated B2: motion=True, frames=3435, seconds=4.001, FPS=858.60, mean=1.165ms, p95=1.325ms, drawCalls=4.0, 1280x720 Editor UI render.
+MEASURED home static A2: motion=False, frames=7369, seconds=4.001, FPS=1841.70, mean=0.543ms, p95=0.676ms, drawCalls=2.0, 1280x720 Editor UI render.
+PASS Actual Free Play extras-button submit loads Free Play (side not locked).
+PASS Menu component exists in Home
+PASS Actual retained UI layout 1440x810 logical pixels.
+PASS Actual Hero card submit loads Hero gameplay.
+PASS Menu component exists in Results
+PASS Actual retained UI layout 1440x810 logical pixels.
+PASS Hero result: CITY SAVED, shared cyan, exactly four stats.
+PASS Animated XP: early L1 0.262 -> final L2 0.296; saved 40/135.
+PASS Actual XP level-up exposes three upgrade choices.
+CAPTURE hero-results-level-up.png (actual UI Toolkit target texture, not a mockup)
+PASS Real upgrade button -> PlayerProgression.Buy: Strength tier 0->1, points 1->0, force 1350->1890.
+PASS Zero-point repeated purchase CONTROL rejected.
+CAPTURE hero-results-upgraded.png (actual UI Toolkit target texture, not a mockup)
+PASS PLAY AGAIN loads Hero; purchased upgrade reloaded from save.
+PASS Menu component exists in Results
+PASS Actual retained UI layout 1440x810 logical pixels.
+PASS Hero loss / no-level-up CONTROL: MISSION FAILED, no reward choices.
+CAPTURE hero-results-loss.png (actual UI Toolkit target texture, not a mockup)
+PASS Menu component exists in Home
+PASS Actual retained UI layout 1440x810 logical pixels.
+PASS HOME progression preview reloads real level and power tier.
+PASS Actual Villain card submit loads Villain gameplay.
+PASS Menu component exists in Results
+PASS Actual retained UI layout 1440x810 logical pixels.
+PASS Villain result: ESCAPED THE HEAT, shared orange, same component/layout, four stats.
+PASS Peak Heat snapshot records actual WorldSession.AddHeat updates.
+CAPTURE villain-results.png (actual UI Toolkit target texture, not a mockup)
+MEASURED villain results animated: motion=True, frames=2924, seconds=4.001, FPS=730.78, mean=1.368ms, p95=1.749ms, drawCalls=5.0, 1280x720 Editor UI render.
+PASS PLAY AGAIN loads Villain.
+PASS Menu component exists in Results
+PASS Actual retained UI layout 1440x810 logical pixels.
+PASS Villain loss shows CAUGHT.
+CAPTURE villain-results-loss.png (actual UI Toolkit target texture, not a mockup)
+PASS Menu component exists in Home
+PASS Actual retained UI layout 1440x810 logical pixels.
+PASS Both modes complete Home -> Play -> Results -> Home; saved upgrade remains across mode switch.
+CAPTURE home-progress.png (actual UI Toolkit target texture, not a mockup)
+LIMIT: UI events are automated navigation-submit/pointer-enter events, not hardware mouse input. Gameplay completion/XP grants accelerated via existing methods; no claim of full hands-on sessions. Performance is isolated Editor UI throughput, not standalone gameplay FPS.

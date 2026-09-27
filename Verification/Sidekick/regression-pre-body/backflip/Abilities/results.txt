@@ -1,0 +1,26 @@
+PASS CONTROL: Home camera retained.
+PASS CONTROL: shared humanoid Animator is live before the gestures.
+CONFIG backflip: cooldown=2.50s dash=0.90s distance=4.2m hop=5.50m/s; clip start=0.600s length=2.1667s fitted playback=1.74x
+CONFIG hurricane kick: start=0.333s impact=0.933s playback=2.00x -> configured windup=300.0ms; force x1.50 damage x1.70 radius=4.60m vs punch radius 3.30m
+PASS CONTROL: hero reached real ground contact.
+PASS CONTROL: backflip surface starts Ready with zero uses.
+PASS Backflip accepted from the ground.
+PASS Backflip dispatches the shared humanoid's Backflip state (previously named Unwired Backflip).
+PASS Presentation reports the backflip as the active action from one real event.
+PASS Accepted backflip opens its dash window and counts one use.
+PASS Backflip repositioned the hero -4.22m backward against a configured 4.2m.
+PASS Backflip hop actually left the ground: peak rise 0.580m at 5.50m/s launch, brought back down by the existing gravity.
+PASS Backflip does not rotate the physics root or turn the hero.
+PASS Backflip dash window closes when its configured window ends.
+PASS Cooldown CONTROL refuses an immediate second backflip.
+PASS Refusal is the backflip cooldown ('Blocked: cooldown') with 1.42s of 2.50s still remaining.
+PASS Refused backflip neither counted a use nor emitted a presentation event.
+PASS Airborne CONTROL is genuinely off the ground.
+PASS Airborne CONTROL refuses the grounded-only backflip ('Blocked: airborne').
+PASS CONTROL: hero reached real ground contact.
+PASS CONTROL: backflip cooldown counts down to exactly zero.
+PASS Recharged backflip fires again (use 2), so the cooldown is a real gate rather than a permanent block.
+FAIL System.Exception: Backflip returns the presentation to locomotion once the dash ends.
+  at BackflipHurricaneVerificationRunner.Check (System.Boolean condition, System.String text) [0x0001b] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/wt-sidekick/Assets/Scripts/BackflipHurricaneVerificationRunner.cs:19 
+  at BackflipHurricaneVerificationRunner+<Backflip>d__19.MoveNext () [0x00608] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/wt-sidekick/Assets/Scripts/BackflipHurricaneVerificationRunner.cs:122 
+  at BackflipHurricaneVerificationRunner+<Start>d__8.MoveNext () [0x00047] in /private/tmp/claude-501/-Users-melaniehernquist-Documents-ChatGPT-op/da48ca15-bdf3-4711-bc91-29bca88e21cf/scratchpad/wt-sidekick/Assets/Scripts/BackflipHurricaneVerificationRunner.cs:26 

@@ -75,7 +75,7 @@ public static class HumanoidSetup
         var tree=new BlendTree{name="Continuous actual speed",blendType=BlendTreeType.Simple1D,blendParameter="Blend",useAutomaticThresholds=false};AssetDatabase.AddObjectToAsset(tree,controller);
         tree.AddChild(t.Idle,0);tree.AddChild(t.Walk,1);tree.AddChild(t.Jog,2);tree.AddChild(t.Run,3);
         AnimatorState Add(string name,Motion clip,string rate)
-        {var state=machine.AddState(name);state.motion=clip;state.writeDefaultValues=true;state.speedParameterActive=true;state.speedParameter=rate;return state;}
+        {var state=machine.AddState(name);state.motion=clip;state.writeDefaultValues=true;state.speedParameterActive=true;state.speedParameter=rate;state.iKOnFeet=FootIK;return state;}
         machine.defaultState=Add("Locomotion",tree,"GaitRate");
         Add("Back",t.Back,"GaitRate");Add("Armed",t.ArmedRun,"GaitRate");Add("Panic",t.Run,"GaitRate");
         Add("Air",t.Jump,"GaitRate");Add("Fly",t.Idle,"GaitRate");
@@ -84,6 +84,17 @@ public static class HumanoidSetup
         t.Controller=controller;EditorUtility.SetDirty(t);EditorUtility.SetDirty(controller);
         foreach(var power in Resources.LoadAll<PowerDefinition>("Powers"))if(power.Effect is FireBlastEffect||power.Effect is IceEffect){power.CastingPresentation=true;EditorUtility.SetDirty(power);}
         AssetDatabase.SaveAssets();
+    }
+    // Foot IK re-targets each foot to the clip's own foot goal. Sidekick bodies (larger heads, shorter legs than the Mixamo
+    // source) otherwise sink up to ~0.09m below the ground mid-run (Verification/Sidekick/clips); the mannequin is unchanged.
+    public const bool FootIK=true;
+    /// Applies FootIK to the existing controller's states without re-importing clips or rebuilding the controller.
+    [MenuItem("Overpowered/Animation/Apply foot IK setting to shared controller")]
+    public static void ApplyFootIK()
+    {
+        var controller=AssetDatabase.LoadAssetAtPath<AnimatorController>("Assets/Resources/SharedHumanoid.controller");
+        foreach(var layer in controller.layers)foreach(var child in layer.stateMachine.states){child.state.iKOnFeet=FootIK;EditorUtility.SetDirty(child.state);}
+        EditorUtility.SetDirty(controller);AssetDatabase.SaveAssets();
     }
     public static void BuildBatch(){try{Build();EditorApplication.Exit(0);}catch(Exception e){Debug.LogException(e);EditorApplication.Exit(1);}}
     public static void ImportBatch(){try{Import();EditorApplication.Exit(0);}catch(Exception e){Debug.LogException(e);EditorApplication.Exit(1);}}

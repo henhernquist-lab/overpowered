@@ -1,0 +1,21 @@
+humanoid HumanoidVerification.Run  -> exit 0 58s
+humanoid-titan HumanoidVerification.Run -overpoweredHero titan -> exit 0 65s
+humanoid-nova HumanoidVerification.Run -overpoweredHero nova -> exit 0 64s
+death HumanoidVerification.DeathControl  -> exit 0 28s
+forge HeroForgeVerification.Run  -> exit 0 165s
+forge-reload HeroForgeVerification.Reload  -> exit 0 25s
+synergy SynergyAvailabilityVerification.Run  -> exit 0 96s
+synergy-reload SynergyAvailabilityVerification.Reload  -> exit 0 32s
+fp FirstPersonVerification.Run  -> exit 0 130s
+fp-reload FirstPersonVerification.Reload  -> exit 0 28s
+ice-after IceVerification.After  -> exit 0 54s
+feel FeelVerification.Run  -> exit 0 83s
+city CityVerification.Run  -> exit 0 44s
+city-reload CityVerification.Reload  -> exit 0 35s
+hud HudVerification.Run  -> exit 0 76s
+menu MenuPresentationVerification.Run  -> exit 0 69s
+backflip BackflipHurricaneVerification.Run  -> exit 1 36s
+combat CombatVerification.Run  -> exit 0 143s
+cityart CityArtVerification.Run  -> exit 0 71s
+DONE
+backflip rerun1 (diagnostic message added) BackflipHurricaneVerification.Run -> exit 0; rerun2 -> exit 0; rerun3 -> exit 0

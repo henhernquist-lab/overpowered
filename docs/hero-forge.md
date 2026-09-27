@@ -38,10 +38,45 @@ unchanged mode cards. The same loadout is read by every mode that uses BuildCity
 | SynergyRunner | Validity, cooldown, bounded execution, cleanup, physics helper methods and short FOV kick |
 | HumanoidPresentation | Existing shared Animator and bone/visual-root ownership; selected prefab replaces only the model |
 
-Three original placeholder definitions are VECTOR, TITAN and NOVA. They reuse the
-existing Mixamo mannequin at widths 1.0, 1.2 and 0.92 with different palette suits.
-These are **not three newly authored meshes**. Height remains 1.8m; CharacterController
-height/radius and movement stats are unchanged. No licensed character logos are added.
+The three heroes are Synty Sidekick characters (2026-09-27): VECTOR = `Starter_03`,
+TITAN = `Starter_01`, NOVA = `Starter_02`, at widths 1.0, 1.2 and 0.92. They are the three
+outfitted Sidekick starter prefabs, used as shipped (no new meshes were assembled). The
+shared Mixamo controller drives their Humanoid avatars; height is fitted to 1.8m from the
+reference-pose vertices as before, CharacterController height/radius and movement stats are
+unchanged. NPCs remain the mannequin (measured: Sidekick NPC bodies cost 36% FPS; see STATUS).
+
+### Sidekick suit colours
+
+Sidekick colours come from a 32x32 point-filtered `_ColorMap` of 2x2 swatches indexed by the
+mesh UVs. `HeroDefinition.Suit` references a `SidekickSuit` asset
+(`Resources/Forge/Sidekick/<hero>-suit.asset`) holding a readable copy of the authored map and
+the role of every swatch the mesh uses, taken from Sidekick's own colour table:
+
+| Role | Swatches | Colour |
+|---|---|---|
+| Keep | Species (skin, hair, eyes, mouth, nails, brows), Elements, unmapped, glow/glass/screen/gem | authored |
+| Trim | any other swatch whose authored luminance < 0.30 | `CityPalette` `Trim` (Metal) |
+| Primary | Outfits group (cloth) | loadout Primary palette colour |
+| Secondary | Attachments + material parts (armour, straps, fur...) | loadout Secondary palette colour |
+
+`CityMaterials.Suit(suit, primary, secondary)` creates ONE material (a copy of the Sidekick
+material) plus colour map per (suit, primary, secondary), reuses it for every request,
+rewrites it in place when the palette asset changes and destroys both with the owning
+CityMaterials (city teardown, or the Forge preview's own cache). No Sidekick runtime API,
+database or SQLite is used at runtime. Roles are plain data: edit a suit's swatch list in
+the Inspector to move a part between Primary/Secondary/Trim/Keep.
+
+Sidekick's combined prefab mesh lists one skeleton copy per part in `bones[]` (2,793–3,176 entries). The setup also
+writes an optimized body per hero (`<hero>-body.asset`, referenced by `SidekickSuit.Body`): duplicate (bone, bind pose)
+entries merged (88–130 left), bone weights remapped, Sidekick's editor blend shapes dropped (all weights were zero).
+`SidekickSuit.ApplyBody` swaps it in on spawn/preview; bone transforms are unchanged, so the Animator,
+HumanoidPresentation's weighted bones and first-person hiding work as before. The setup's control skins both meshes
+in the same pose and fails above 1 mm difference (measured ≤ 0.001 mm).
+
+Regenerate with **Overpowered > Forge > Sidekick heroes (suits + character prefabs)**
+(idempotent; macOS: reads Sidekick's SQLite colour table with `/usr/bin/sqlite3 -readonly`
+at edit time). It also creates the four candidate NPC looks listed in
+`HumanoidAnimationTuning.NpcLooks`; `SidekickNpcs` is off.
 
 ## Ten implemented pairs
 
@@ -98,6 +133,8 @@ To add a hero:
 
 1. Create an Overpowered/Forge/Hero asset and give it a stable unique ID.
 2. Assign a Humanoid prefab with an Animator on its root and compatible humanoid bones.
+   For a Sidekick prefab also assign a SidekickSuit (add it to `SidekickSetup.Heroes` and run
+   the menu command above); without a suit every material slot takes a palette material.
 3. Set palette roles, available/default power references and visual scale (keep Y=1 to
    preserve normalized collider height). Optional animation tuning must use the expected
    shared-controller states and clips.
@@ -113,7 +150,8 @@ To add a synergy:
    controls to HeroForgeVerificationRunner and validate physics, not just dispatch.
 
 Run HeroForgeVerification.Run, then HeroForgeVerification.Reload in a **separate Unity
-process**, without -quit. Use an isolated project copy and its generated verification save.
+process**, without -quit. Sidekick heroes: SidekickVerification.Run then .Reload (separate
+process), SidekickClipCheck.Run (edit-mode retarget captures), SidekickNpcProfile.Run (FPS A/B). Use an isolated project copy and its generated verification save.
 Evidence is under Verification/Forge. Hardware input, long play sessions and human feel
 remain unverified; the tests call the same gameplay/UI event entry points.
 

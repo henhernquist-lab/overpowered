@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HeroDefinition
   Id: nova
   DisplayName: NOVA
-  CharacterPrefab: {fileID: 919132149155446097, guid: ed152317b748045198b07297110945ad, type: 3}
+  CharacterPrefab: {fileID: 3802377507391346821, guid: 759b8668b55fe0d4686d41389db207d9, type: 3}
+  Suit: {fileID: 11400000, guid: 8c74fd89c833b41c38b5a5337bd68783, type: 2}
   Portrait: {fileID: 0}
   Primary: 23
   Secondary: 13

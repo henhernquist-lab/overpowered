@@ -1,0 +1,7 @@
+PASS SECOND PROCESS restores NOVA Amber/Teal from the save.
+PASS Reloaded session spawns Starter_02.
+PASS Reloaded session: NOVA renderer uses the cached suit material 'Suit/nova-suit/Amber+Teal' (Standard; not the vendor material, not a flat palette material).
+PASS Reloaded session: _ColorMap is the generated point-filtered suit map, not the authored texture.
+PASS Reloaded session: all 71 used swatches correct: 12 Primary=Amber RGBA(255, 178, 66, 255), 10 Secondary=Teal, 16 Trim=Metal, 33 Keep (authored).
+PASS Reloaded session: swatch (0,5) is 'Species / Skin 01' and kept.
+PASS Fresh-save CONTROL: vector Blue/Cyan (hero defaults), not the saved build.
