@@ -25,12 +25,12 @@ PASS Session resolves Thermal Shock from the equipped pair; still 0 points.
 PASS HUD synergy slot shows Thermal Shock ready (radial 0).
 PASS Thermal Shock fires immediately on a 0-point profile (no unlock step).
 PASS Activation starts the configured cooldown: 30.00s of 30s.
-PASS HUD radial reads the new cooldown: 1.000 (runner 29.97/30s).
+PASS HUD radial reads the new cooldown: 1.000 (runner 29.98/30s).
 PASS Real effect: aimed target took 25 damage (= Damage 25); out-of-radius CONTROL untouched.
-PASS Mid-cooldown activation refused (29.69s left): "Synergy cooling down".
+PASS Mid-cooldown activation refused (29.70s left): "Synergy cooling down".
 PASS Refused use caused no effect: health, impacts and VFX emissions unchanged.
-PASS Refused use did not reset or extend the cooldown: 29.69s -> 29.18s after 0.5s.
-PASS HUD radial halfway: 0.501 for 14.99/30s.
+PASS Refused use did not reset or extend the cooldown: 29.70s -> 29.19s after 0.5s.
+PASS HUD radial halfway: 0.500 for 15.00/30s.
 PASS Still refused at half cooldown.
 MEASURED Thermal Shock became ready again 30.00s (game time) after activation; configured 30s.
 PASS Cooldown elapses on schedule.
@@ -44,5 +44,5 @@ PASS CONTROL: with Ice owned but unequipped, the session's synergy is Meteor Pun
 PASS Zero-point CONTROL: tier purchase refused, Fire stays tier 0.
 PASS Earned point buys Fire tier 0 -> 1.
 PASS Zero-point CONTROL after spending: Ice tier purchase refused.
-PASS Old save written with Fire/Ice not owned (no entry in Powers): old-save-c144656835f8488fbacc2c834fe1c801.json
+PASS Old save written with Fire/Ice not owned (no entry in Powers): old-save-e32f246aa9174a29b3d70b14078b9e4f.json
 LIMIT: activation is driven through SynergyRunner.TryActivate (the method the C key calls); no hardware key injection. Cooldown lengths are a design judgment from the effect numbers, not human-playtested.
