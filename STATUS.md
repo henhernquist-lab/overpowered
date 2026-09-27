@@ -2589,6 +2589,137 @@ Combined effects stress at 1920x1080: ON mean 308.4 FPS vs OFF 340.4 (-9.4%, +0.
 
 Final live-capture Feel rerun: 143 PASS, 0 FAIL. ON 317.4/321.9 FPS vs OFF 341.0/337.2; means 319.7 vs 339.1 (-5.7%, +0.18ms/frame). Same pool/draw bounds. Both runs retained; throughput variability is not an isolated effect-cost result. Live heavy-impact capture inspected: an amber impact flash supplements the existing cube debris.
 
+
+## CLOUD FEEDBACK — local integration #2 of `cloud/gameplay-depth` (2026-09-27, local agent, Unity 6000.6.0f1 macOS Intel)
+
+**Integrated state.** Branch `codex/cloud-integration-2` in an isolated worktree. HEAD is `05fa5e8`. It contains:
+- `cf1b1f1`: Codex's merge of cloud `bfa59fa`.
+- `e442cbf`: merge of local main `87bb280` (Phase 3 presentation).
+- `acdb5a3`: RosterSetup and MissionSetup output.
+- `05fa5e8`: the five original power assets re-serialized with the new `Activation`/`DrainPerSecond` fields at their defaults (MenuPresentationSetup; no value changed).
+
+`git fetch` confirmed that `origin/cloud/gameplay-depth` is still `bfa59fa` with nothing new, and local main `87bb280` is already an ancestor of the branch. No further merge was needed.
+
+**Compile and setup: all clean.**
+- The dotnet gate (`--no-incremental`) reported 0 warnings and 0 errors.
+- The Unity batch compile exited 0, with 0 CS errors and 0 CS warnings. The analyzer warnings were:
+  - UAC0005 at `AudioSetup.cs:46` (already existed);
+  - UAC1001 at `HumanoidPresentation.cs:37` (already existed);
+  - **new:** UAC1001 at `RobberyScenario.cs:238`. `GetawayCar.Car` is not serializable. This is harmless, but mark it `[System.NonSerialized]` if you touch the file.
+- Setup is idempotent. Re-running `RosterSetup.Batch` and then `MissionSetup.Batch` over the generated assets left all 2724 files under `Assets/`, `ProjectSettings/` and `Packages/` byte-identical, and `git status` was unchanged.
+- The shipping catalog is **exactly** Sonic Slam, Thermal Shock, Solar Flare, Void Grasp and Eclipse Beam:
+  - `ForgeCatalog.asset` holds those 5 GUIDs, and `Forge/Synergies` and `Forge/Effects` hold only those 5 assets;
+  - SynergyAvailability and HeroForge both PASS "Shipping catalog is EXACTLY the five capped synergies";
+  - HeroForge PASSes "Exactly five unordered pairs resolve a synergy";
+  - `lightning.asset` has `Cooldown: 0.75`.
+- `MissionSetup.BatchUseInModes` was **not** run, because the Mission gate is red.
+
+**Result: NOT ready to merge.** There is one cloud failure, the Mission robbery parked-car CONTROL. All other cloud suites and all core regressions are green. The two local-only issues are listed separately below.
+
+### Failures to fix on the cloud branch
+
+1. **Mission: the parked getaway cars are shoved before they depart.** Classification: cloud **logic bug** (car placement). The test is correct, it is not a flake, and it is not a local merge interaction.
+   - `MissionVerification.Run`: exit 1, 11 PASS. Codex hit the same failure earlier on this branch.
+   - Verbatim: `FAIL System.Exception: CONTROL: a car does not move before the mission says depart.`
+   - The check is at `MissionVerificationRunner.cs:70`. The cause is at `RobberyScenario.cs:61`: `Vector3 park = e.World.City.NearestSidewalk(e.Site + dir * d.CarDistance);`
+   - **Evidence.** I ran with temporary logging only (reverted): the car state every FixedUpdate, its contacts, and an OverlapBox of its collider at spawn.
+     - **Overlap at spawn, in the same frame:** each 1.8 × 1.5 × 4 m car is spawned inside two things:
+       - an ambient `Civilian` capsule, a root `CapsuleCollider` with no Rigidbody (`CityNpc.cs:90`). It stands on the exact sidewalk waypoint:
+         - car 0 park (36.50, 0.12, 40.50), civilian centre (36.50, 1.18, 40.33);
+         - car 1 park (19.50, 0.12, 23.50), civilian (19.50, 1.18, 23.50).
+       - a dynamic 80 kg `City Lamp`, a seeded CityArt prop at block corners (`CityArtSettings.cs:110`):
+         - (37.54, 41.63) for car 0;
+         - (18.39, 22.49) for car 1.
+     - **First-step contacts (car 0):** `ENTER Civilian |J|=618.6`, `ENTER City Lamp |J|=787.4`.
+     - **Car 1** moves exactly 0.200 m per 0.02 s step for 6 steps. That is PhysX depenetration at `m_DefaultMaxDepenetrationVelocity: 10`. The total, 1.237 m, is the car's half-width 0.9 plus the capsule radius 0.35.
+     - **Car 0** depenetrates about 1.17 m within 0.14 s. The walking civilian (a static collider that moves with no mass limit) then keeps shoving it, with `STAY |J|` 200–550 per step.
+     - **At the check:** car 0 had moved **4.068 m** and car 1 **1.198 m**, against a 0.3 m tolerance. The robbers were never closer than 9.8 m, and the hero was 150 m up.
+   - **Why sidewalk waypoints are the wrong place to park:**
+     - `WorldSession.cs:48` spawns ambient civilians at `city.Sidewalks[i]`.
+     - `CityNpc.cs:147` wanders them between `RandomSidewalkNear` waypoints.
+     - Lamps sit at the block corners next to those waypoints.
+     - Any car parked on a sidewalk waypoint can therefore intersect a pedestrian or a lamp. This is a real gameplay bug, not only a test artefact: parked cars get launched or pushed around.
+   - **Not local:** main's presentation merge (`cf1b1f1..e442cbf`) changes nothing in `CityNpc`, `CityArt`, `CityDistrict`, `CityLayout`, `WorldSession` or the physics project settings. Its `GameTuning` diff adds only the `Feel.Cartoon*` fields and reorders `HeroThreshold`.
+   - **Everything after the CONTROL passes.** With the CONTROL downgraded to a log line in the diagnostic run, all **95** other Mission checks passed:
+     - the drive: 16.39 m straight, 16.50 m along the route in 1.5 s;
+     - the "getaway car got away" fail reason, distinct from "on foot";
+     - Ice stall and bail-out, with the unfrozen-cuff CONTROL refused;
+     - the cuff: `Captured=True, Finished=True, Result=SUCCESS`;
+     - wrecking the car (SUCCESS), the light-hit CONTROL, and the 1350 N·s ram;
+     - Hostage, Building fire and Vault heist.
+   - **Smallest hint:** park on the road, not on a pedestrian waypoint. The experiment below was temporary, reverted and not committed. The "Codex continuation experiments" note in STATUS had already suggested routing on road centrelines.
+     - I replaced `NearestSidewalk` with the nearest point on a `City.Plan.Dashes` road centreline at y = 0, and changed nothing else.
+     - There were no overlaps at spawn, both cars moved **0.000 m** in the 1 s window, and the car departed on a 2-corner NavMesh route and drove 16.43 m in 1.5 s. All 95 checks passed plus the CONTROL.
+     - Add a clearance check too: `Physics.OverlapBox` over the car's `BoxCollider` extents, ignoring the ground chunks. Step along the curb lane if it is blocked, so that a stray pedestrian or a city car can never be inside a spawned car.
+
+### Local issues seen in this sweep (handled by the local agent; listed for transparency, not cloud work)
+- **Humanoid harness catches an Editor-internal exception.** `HumanoidVerification.Run` failed 3 of 3 runs with exit 1 and 0 PASS: `[HUMANOID VERIFY] FAIL System.Exception: Runtime error: ArgumentOutOfRangeException: Index was out of range.`
+  - The exception is the Editor's own "Start Indexing on Editor startup", `UnityEditor.Search.SearchDatabase.cs:351`. It appears in 32 of 36 logs of any run on this Library.
+  - `HumanoidVerificationRunner.cs:19-21` observes every `LogType.Exception` globally, so it fails whenever the Editor's startup delayCall lands after the runner's Awake.
+  - With a temporary filter that ignores `UnityEditor.Search.` exceptions (exactly one was ignored per run; the filter is reverted), the default run passed 68, and VECTOR, TITAN and NOVA each passed 69, the same as main's Phase 3. This needs a local harness fix.
+- **Feel timing flake.** The first `FeelVerification.Run` exited 1 after 40 PASS: `[FEEL] FAIL System.Exception: Breaking the crate added Heat (Hero side: destruction = Heat, no XP) -> the HUD Heat flash tween started ('+0.35') while still inside the pause.`
+  - The probe logged `frames 0, timeScale 1`: the 0.06 s real-time hit pause had already ended before the check, with a load average of 5–9.
+  - Two reruns both exited 0 with **143 PASS**, the same as main.
+  - This is a local test timing sensitivity in `FeelVerificationRunner.cs:179`.
+- **HUD Phase 2 count.** HUD Phase 2 reported 483 PASS against main's 484. The difference is one conditional check, "composite contains hud-prompt", in the `objective-waypoint-offscreen` capture: no tutorial prompt was on screen at that moment. The other 483 lines are identical, and there is no FAIL.
+
+### Suites run on `acdb5a3` (identical sources to `05fa5e8`), one Unity process at a time
+PASS counts include the `[TAG] PASS` lines.
+
+| Suite | Exit | PASS | Note |
+|---|---|---|---|
+| RosterVerification.Run / Reload | 0 / 0 | 194 / 3 | |
+| MeleeVerification.Run | 0 | 43 | |
+| HeroStatsVerification.Run | 0 | 90 | |
+| **MissionVerification.Run** | **1** | **11** | **cloud item 1** (95 pass with the CONTROL logged only) |
+| SynergyAvailabilityVerification.Run / Reload | 0 / 0 | 39 / 9 | scoped 40× rule passes (Lightning 0.75 s × 40 = Thermal Shock 30 s) |
+| HeroForgeVerification.Run / Reload | 0 / 0 | 107 / 3 | exactly 5 synergies |
+| PowerPayoffVerification.Run | 0 | 89 | |
+| ModeVerification.Run / Reload | 0 / 0 | 79 / 2 | |
+| ModeExpansionVerification.Run / Reload | 0 / 0 | 111 / 10 | |
+| CombatVerification.Run | 0 | 170 | |
+| CameraVerification.Verify | 0 | 45 | |
+| FirstPersonVerification.Run / Reload | 0 / 0 | 207 / 5 | |
+| HudVerification.Run (P1) | 0 | 316 | |
+| HudPhase2Verification.Run / Reload | 0 / 0 | 483 / 31 | see the HUD Phase 2 local note |
+| HudPhase3Verification.Run / Reload | 0 / 0 | 562 / 11 | |
+| CityVerification.Run / Reload | 0 / 0 | 54 / 5 | |
+| HumanoidVerification.Run | 1 (×3) | 0 | local harness issue; 68 default, 69 each for vector, titan and nova with the Editor-Search filter |
+| FeelVerification.Run | 1, then 0, 0 | 40, then 143, 143 | local timing flake |
+| IceVerification.After | 0 | 34 | |
+| AudioVerification.Run / Reload | 0 / 0 | 128 / 50 | |
+| WorldVerification.Run / Reload | 0 / 0 | 57 / 3 | |
+| MenuPresentationVerification.Run | 0 | 42 | |
+| BackflipHurricaneVerification.Run | 0 | 63 | |
+| CityArtVerification.Run | 0 | 31 | |
+| BalanceVerification.After | 0 | 8 | |
+| SidekickVerification.Run / Reload | 0 / 0 | 102 / 7 | |
+
+The user's real save md5 was `0071839f3c4b4bb7fd76e9b2acfc0ade` before and after every run, so it was unchanged.
+
+### Codex's earlier experimental hints: status
+- **SynergyAvailability float tolerance (32 s vs 0.8 s):** no longer relevant. With Lightning at 0.75 s, the scoped rule compares exactly 30 ≥ 30 and passes.
+- **Car routing and parking on road centrelines:** still relevant, and it is the fix direction for item 1. Parking alone was enough in my experiment, because the new kinematic drive plus the NavMesh route already works.
+- **Rolling friction:** no longer relevant. The kinematic `MovePosition` drive moves 16.4 m in 1.5 s.
+
+### `cloud/replayability-depth` (`b3010f1`): compile-only check
+It was merged onto `acdb5a3` in a throwaway branch and worktree, which were deleted afterwards.
+- The only merge conflict was STATUS.md.
+- **dotnet:** 0 errors and 12 warnings, all CS0618 (obsolete `FindObjectsSortMode` and `FindObjectsByType<T>(FindObjectsSortMode)`) at `LoadoutMatrixVerificationRunner.cs:54-56`, 6 call sites. Use the `FindObjectsByType<T>()` overload, as the local verifiers already do.
+- **Unity batch compile:** exit 0 in 54 s, with 0 `error CS`. It printed:
+  - the same 12 CS0618 warnings;
+  - the existing analyzer warnings (UAC0005 AudioSetup, and UAC1001 in HumanoidPresentation and RobberyScenario:238);
+  - vendor CS0618 warnings in `JMO Assets/.../CFXR_WelcomeScreen.cs:52` and `Synty/.../ToolDownloader.cs:195,223`. These are not replayability code; they print only because the vendor assemblies recompiled in this Library copy.
+
+Nothing from it was run.
+
+### Local-agent notes on integration #2 (not cloud issues)
+- Humanoid's runtime-error observer (added in Phase 3) also catches the Editor's own `UnityEditor.Search.SearchDatabase`
+  startup exception on some runs — a LOCAL test issue, being fixed locally (same filter CameraVerificationRunner uses).
+- Feel `:179` hit-pause probe is load-sensitive (passed 143 on two reruns) — local, noted.
+- The real checkout was switched to a local `cloud/verification-gauntlet` branch (6 verification-only commits from a Cloud
+  worker at 15:19–15:20). Local main was not modified by it; the local agent now commits to main from a separate worktree.
+
 ## Overnight Phase 5: frozen state readable by shape, not colour — 2026-09-27 (branch `codex/freeze-readability`, appended)
 
 Finished and reviewed the uncommitted Codex work. A six-ray branched snowflake (cream fill, navy geometric border, one shared mesh, CityPalette's shared Cream/UiNavy materials) floats above every frozen NPC and prop, billboarded to the camera, from a 64-marker pool created at session start (`FreezeIndicatorPool`). The existing `FrozenLook` owns it together with the shared Cyan material swap, held Animator and the new held presentation overlay; thaw, death, destruction, disable and session unload release it. See `docs/freeze-readability.md`.
