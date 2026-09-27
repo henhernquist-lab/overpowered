@@ -21,6 +21,17 @@ public abstract class SessionVerificationRunner : MonoBehaviour
     protected Camera Cam => Camera.main;
     protected PowerDefinition Power(string id) => Resources.Load<PowerDefinition>("Powers/" + id);
     protected PowerRuntime Runtime(string id) => W.Powers.Powers.Find(p => p.Definition.Id == id);
+    /// Power clock for isolated fixtures. The only per-frame caller of PowerUser.Tick in play is SuperHeroController.Update;
+    /// PlaceHero disables that controller so fixtures stay put, which would freeze every cooldown, charge recharge and energy
+    /// regen. While the controller is disabled the harness makes exactly that call itself, once per frame, so waits pass
+    /// real game time for the powers. Frames the controller runs (keepEnabled) are not ticked twice.
+    public int PowerClockTicks { get; private set; }
+    void Update()
+    {
+        var w = WorldSession.Instance;
+        if (w == null || w.Hero == null || w.Powers == null || w.Hero.enabled || Time.deltaTime <= 0f) return;
+        w.Powers.Tick(Time.deltaTime, true); PowerClockTicks++;
+    }
     void Awake() { Application.logMessageReceived += ObserveLog; }
     void OnDestroy() { Application.logMessageReceived -= ObserveLog; }
     void ObserveLog(string message, string trace, LogType type)

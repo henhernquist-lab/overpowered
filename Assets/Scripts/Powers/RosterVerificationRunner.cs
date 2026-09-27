@@ -150,9 +150,10 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         float hp = cop.Health, e0 = W.Powers.Energy, t0 = Time.time;
         yield return Hold(1f);
         float held = Time.time - t0, dealt = hp - cop.Health, drained = e0 - W.Powers.Energy;
-        Log($"MEASURED 1 s hold: {held:F3} s held, damage {dealt:F2} (expected ~{stats.Damage * held:F1} at {stats.Damage}/s), energy drained {drained:F2} (expected ~{d.DrainPerSecond * held:F1}), Heat +{W.Heat - heat:F3}.");
+        Log($"MEASURED 1 s hold: {held:F3} s held, damage {dealt:F2} (expected ~{stats.Damage * held:F1} at {stats.Damage}/s), energy drained {drained:F2} (expected ~{(d.DrainPerSecond - W.Powers.EnergyRegen) * held:F1} = drain {d.DrainPerSecond}/s - regen {W.Powers.EnergyRegen}/s), Heat +{W.Heat - heat:F3}.");
         Check(dealt > stats.Damage * (held - .15f) && dealt <= stats.Damage * (held + .02f), "Beam damage per second matches data (0.1 s tick quantisation).");
-        Check(Mathf.Abs(drained - d.DrainPerSecond * held) < d.DrainPerSecond * .05f + .5f, "Energy drains at DrainPerSecond while held.");
+        // The harness power clock keeps regen running (as in play), so the NET loss is drain - regen per second.
+        Check(Mathf.Abs(drained - (d.DrainPerSecond - W.Powers.EnergyRegen) * held) < d.DrainPerSecond * .05f + .5f, "Energy drains at DrainPerSecond (net of regen) while held.");
         Check(Mathf.Abs((W.Heat - heat) - W.Tuning.Heat.AssaultHeat) < .02f, $"Heat rose by ONE assault ({W.Tuning.Heat.AssaultHeat}) across ~10 ticks, not one per tick.");
         Check(control.Health == 1000, "CONTROL: the cop beside the beam is untouched.");
         Check(PowerVfx.Get().BeamVisible, "Beam visible while held."); Capture("laser-beam.png");
@@ -167,9 +168,11 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         W.Powers.Select(rt); yield return new WaitForSeconds(stats.Cooldown + .05f);
         Check(W.Powers.Use(rt), "Channel again to exhaust energy.");
         float budget = 10f; while (W.Powers.Channeling != null && budget > 0) { yield return null; budget -= Time.deltaTime; W.Powers.Channel(true, Time.deltaTime); }
-        Check(W.Powers.Channeling == null && W.Powers.Message == "Blocked: energy", $"Channel ends by itself when energy runs out (energy {W.Powers.Energy:F2}).");
-        yield return new WaitForSeconds(stats.Cooldown + .05f);
-        Check(!W.Powers.Use(rt) && W.Powers.Message == "Blocked: energy", $"CONTROL: cannot start below the {d.ResourceCost} start cost.");
+        Check(W.Powers.Channeling == null && W.Powers.Message == "Blocked: energy" && Mathf.Approximately(rt.Cooldown, stats.Cooldown), $"Channel ends by itself when energy runs out (energy {W.Powers.Energy:F2}) and its cooldown starts.");
+        // Regen would refill the start cost during the 0.8 s cooldown, so the cooldown is cleared directly (as DebugSetResources
+        // does for Strength) to test the energy gate on its own, in the same frame the channel ran dry.
+        float dry = W.Powers.Energy; rt.Cooldown = 0f;
+        Check(dry < d.ResourceCost && !W.Powers.Use(rt) && W.Powers.Message == "Blocked: energy" && W.Powers.Channeling == null, $"CONTROL: cannot start below the {d.ResourceCost} start cost (energy {dry:F2}).");
     }
     // ---------------------------------------------------------------- LIGHTNING: chain
     IEnumerator Lightning()
