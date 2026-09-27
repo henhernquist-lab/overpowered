@@ -2126,3 +2126,129 @@ completed payoff run. Run commands (on an isolated copy, omit `-quit`):
 `-executeMethod PowerPayoffVerification.Run` and `-executeMethod PowerPayoffBenchmark.Run`.
 Supplemental dotnet build: **0 warnings / 0 errors** (`Verification/Payoff/build.txt`). All 18 changed/new asset,
 source and metadata files byte-match the final tested copy. `git diff --check` passes.
+
+## Cloud branch `cloud/gameplay-depth`: roster 5 → 11 powers + capped synergies — 2026-09-27 (appended; CLOUD agent, NO Unity)
+
+**Nothing in this section has been compiled by Unity or run.** Everything is written, unverified, and waiting for a local
+run. The cloud container has no Unity/.NET SDK. As a partial substitute, each commit was checked with Roslyn 4.2 on Mono
+against Unity 2021.3 reference DLLs (`UnityEngine.Modules` NuGet) and a 2021.1 `UnityEditor.dll`, diffing error sets
+against `origin/main`. Unity-6-only APIs (`linearVelocity`, `GetEntityId`, `FindObjectsByType`) show as baseline noise in
+that check. It found no new errors, but it is NOT a Unity 6000.6 compile: the local batch compile is still required.
+
+**Phase 1 (Ice shatter + Telekinesis throw):** already on main (`ada0a2e`, STATUS "Ice shatter + directed Telekinesis
+throw"), including Orbit Throw compatibility. Nothing was left to build; no change.
+
+**Synergy audit (10 existing):** all ten are fully implemented (none partial or stubbed) and exercised by
+`HeroForgeVerification.AllSynergies`.
+
+| Synergy | Pair | Status | In the 5-synergy cap? |
+|---|---|---|---|
+| Sonic Slam | Flight + Strength | full | yes (left as is) |
+| Thermal Shock | Fire + Ice | full | yes (left as is) |
+| Phoenix Dive, Frostwake, Orbit Throw, Meteor Punch, Inferno Orbit, Glacier Fist, Cryo Crush, Meteor Slam | original-five pairs | full | **no. Reported, NOT deleted, nothing more built for them** |
+| Solar Flare | Fire + Laser Eyes | NEW (this branch) | yes |
+| Void Grasp | Darkness + Telekinesis | NEW | yes |
+| Eclipse Beam | Darkness + Laser Eyes | NEW | yes |
+
+No other pair has a synergy. `HeroForgeVerification` asserted "every pair has a synergy", which cannot hold with 11
+powers and a cap. It now asserts full coverage for the original five powers only, symmetric lookup for all pairs, and
+a CONTROL that Speed + Poison resolves to none. Its per-synergy loop runs over the ten legacy ids.
+
+### Data-model changes (why the two odd powers fit cleanly)
+- `PowerDefinition.Activation` (`Instant` | `Channeled`) + `DrainPerSecond`; abstract `ChanneledEffect : PowerEffect` with
+  `Execute` (start), `Sustain(dt)` (each held frame), `Stop`. **Laser Eyes** is the only channeled power:
+  - no charge is spent; `ResourceCost` is only the energy needed to START;
+  - energy drains at `DrainPerSecond` while the fire button is held;
+  - `Cooldown` starts when the channel ends (release, reselect, synergy start, energy out, death, menu).
+  - `PowerUser.Channel(held, dt)` is called by `SuperHeroController` every frame with `GetMouseButton(0) || ScriptedHold`
+    (`ScriptedHold` exists only for verification).
+  - Its HUD slot shows one always-full pip (`Charges = 1`) plus the existing radial cooldown. The HUD was not changed.
+- **Force Field** is defensive and needs no special activation. It is an ordinary instant power whose effect raises a
+  `PlayerShield` (capacity, duration, absorb fraction). `WorldSession.DamagePlayer` routes damage through
+  `PowerUser.AbsorbIncoming` first.
+  - A fully absorbed hit changes no health and raises no `PlayerDamaged` event, so it also gives no hit feel and no
+    knockback (knockback requires a health drop).
+  - The kill plane uses the new `DamagePlayer(damage, unblockable: true)`.
+  - Upgrade tiers lengthen the field; capacity lives on the effect asset.
+- `CityNpc.Root(seconds)` / `Rooted`: navigation stops but the attack cycle continues. That is the difference from
+  Freeze: a rooted gunner still shoots, and a rooted melee enemy only hits the player inside its reach.
+- `CityNpc.Damage(amount, source, assault)`: DoT and beam ticks after the first do not add assault Heat each tick. A kill
+  still counts as a defeat.
+- Number keys: with Hero Forge, **1 = slot A, 2 = slot B** (`PowerUser.SlotNumber` / `PowerForSlot`). The old
+  list-index keys could not reach powers 10–11. `HudBindings.PowerKey` reads the same mapping (the only HUD-file edit:
+  key text, no animation). Legacy no-catalog sessions keep list-index keys.
+- `SuperHeroController`:
+  - `MoveInput`;
+  - `Dash(direction, distance, seconds, onStep)`: CharacterController only, NPC capsules ignored for the dash, stops at a
+    wall, zero-dt frames skipped as in Backflip.
+- VFX: `PowerVfx` is ONE fixed pool of 16 LineRenderers + 1 beam, parented to the WorldSession (first person keeps it).
+  - `PlayerShield` owns 3 ring lines on the player root; `DashTrail` is one TrailRenderer on the player root.
+  - Particles come from the existing Feel `ImpactParticlePool`.
+  - Every line/trail uses `CityMaterials.Get(<palette colour>)`: no runtime `new Material`, no per-cast GameObject.
+
+### The six powers (all `InitiallyUnlocked`, added to every hero's `AvailablePowers`)
+| Power (id) | Effect | Key numbers (asset) | Colour / glyph |
+|---|---|---|---|
+| Darkness `darkness` | Shadow Tendrils: root aimed NPC | 2 charges, 5 s recharge, 3.5 s root, 4 dmg, 22 m, 15 energy | UiPurple / Orbit |
+| Laser Eyes `laser-eyes` | channeled beam | 38 dmg/s, 32 energy/s drain (~5 s from full), start ≥10, 0.8 s cooldown after, 26 m | Red / Star |
+| Lightning `lightning` | chain bolt | 24 dmg ×0.85 per jump, 5 jumps (6 targets), 8 m hostile-only arcs with line of sight, 2 charges | Cream / Chevron |
+| Force Field `force-field` | shield, **0 damage** | 60 absorb, 6 s, 1 charge / 12 s, re-cast refused while up | Blue / Shield |
+| Speed `speed` | burst dash | 9 m in 0.18 s, 3 charges / 2.5 s, 0.35 s cooldown, 8 dmg to each hostile passed | Amber / Wing |
+| Poison `poison` | DoT + spread on death | 10 dmg/s × 6 s (exactly 60), spreads to ≤3 nearest enemies in 6 m, ≤3 generations | Leaf / Crystal |
+
+### New synergies (Sonic Slam pattern: `SynergyEffect` asset + `PowerSynergyDefinition`; always available on equip, cooldown is the lever)
+| Synergy | Mechanism | Numbers | Cooldown reasoning |
+|---|---|---|---|
+| Solar Flare | 0.5 s focusing beam, then `SynergyRunner.Impact` at the point | 60 dmg, 6 m, 2600 N·s, 4 s burn | 40 s: like Phoenix Dive (AoE + burn at range) |
+| Void Grasp | pulls ≤6 hostile NPCs within 9 m into a core via `SynergySuspension` for 1.4 s, then collapse `Impact` + 2.5 s root | 45 dmg, 2200 N·s | 40 s: strongest crowd control; damage is modest |
+| Eclipse Beam | roots one aimed NPC 0.6 s, beam 0.5 s, then ONE 160-damage hit to that target only | 160 single target | 45 s: highest single-target burst, so the longest cooldown |
+
+### What the local agent needs to do
+1. Batch-compile the branch (bundled SDK). The Mono/Roslyn check above is only an approximation.
+2. Run **`RosterSetup.Batch`** (menu *Overpowered/Roster/Create missing roster assets*). It creates, and never overwrites:
+   - `Resources/Effects/{Darkness,LaserEyes,Lightning,ForceField,SpeedDash,Poison}.asset`;
+   - `Resources/Powers/{darkness,laser-eyes,lightning,force-field,speed,poison}.asset`;
+   - the new entries in every hero's `AvailablePowers`;
+   - `Resources/Forge/{Effects,Synergies}/{solar-flare,void-grasp,eclipse-beam}.asset` and their `ForgeCatalog` entries.
+
+   Commit the generated assets. `RosterVerification.Run` also calls it first.
+3. Run **`RosterVerification.Run`**, then **`RosterVerification.Reload`** in a separate process. Output goes to
+   `Verification/Roster/`, with PNG captures per power/synergy. What the suite checks, all with controls:
+   - **Darkness**, on LIVE navigating criminals: speed before, during and after the root; an un-rooted control keeps
+     moving; a rooted enemy in reach still attacks while a frozen one does not; refusals for 0 charges and an empty sky.
+   - **Laser Eyes**: damage/s and energy drain against data; exactly one assault of Heat over ~10 ticks; the adjacent
+     cop is untouched; release, cooldown, reselect and energy-out each end the channel; start below the cost is refused.
+   - **Lightning**: exact chain order and per-jump damage; controls for the 7th target (cap), civilian, walled target,
+     distant target and no-enemy.
+   - **Force Field**: absorb then break (partial pass-through); full damage with the field down; re-cast refusal;
+     unblockable damage bypasses it; expiry.
+   - **Speed**: dash distance and direction; clips the enemy in its path once; civilian and side controls; NPC
+     collision restored after; a wall stops it; 0 charges refused.
+   - **Poison**: exactly 60 total damage; one Heat; spread to the 3 nearest enemies; controls for the 4th target,
+     civilian, out-of-radius, any killing blow, expired poison and the generation cap.
+   - **Synergies**: the cap, then each of the three with its no-target refusal (no cooldown spent), effect, bystander
+     controls and a mid-cooldown refusal.
+   - **Reload**: the Laser Eyes + Poison loadout survives a second process; that pair has no synergy.
+4. Re-run the retargeted `HeroForgeVerification` + `Reload` and `CityVerification` + `Reload`. Then the usual sweep
+   (Combat, HUD P1–3, Feel, FirstPerson, Ice, PowerPayoff, SynergyAvailability): powers, keys and damage routing changed
+   under all of them.
+
+### Untested / needs a human
+Everything: compile, runtime, feel, balance of all numbers above, readability of the line VFX (thin lit lines on the
+shared Standard materials, which may look flat), and FPS impact (the pool is fixed but not measured). There are no
+audio cues for the new powers: `AudioTuning.Powers` has no bindings for them, so they are silent by design until
+bindings are added. Glyphs reuse the existing 8 `MenuGlyph` shapes, so Darkness/Telekinesis share Orbit and Laser
+Eyes shares Star; colour distinguishes them.
+
+### OVERNIGHT DECISIONS
+- The queue said "build the 4 new synergies". The capped list has three new ones plus Thermal Shock, which already
+  existed, so three were built.
+- The earlier "Phase 3 missions" brief is deferred until after the overnight Phases 5 (melee depth) and 6 (hero
+  archetypes), per "continue in this order".
+- Number keys changed from list index to Forge slot (1/2) because 11 powers made list-index keys unreachable past 9.
+- The HUD was not touched beyond `HudBindings.PowerKey` key text. The channeled power shows one pip; no new HUD element
+  was added (the local agent owns the HUD).
+- Force Field capacity does not scale with upgrade tiers; tiers lengthen it (Duration) and add charges.
+- Lightning, Poison spread, Speed pass-hits and Void Grasp only affect `Hostile` NPCs, so a hero never chains into
+  civilians or friendly police. The directly aimed first target can be anyone, as with every other power.
+- Poison duration is converted to a whole tick count, so its total damage is exact (60) regardless of frame timing.
