@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// VOID GRASP (Darkness + Telekinesis): opens a dark singularity at the crosshair point and pulls up to MaxTargets hostile NPCs
-/// within Radius into it through the existing SynergySuspension physics handoff (spring force, like Orbit Throw), for Duration
+/// within Radius into it through the existing SynergySuspension physics handoff (spring force), for Duration
 /// seconds; then it collapses — the shared SynergyRunner.Impact blast — and every survivor is left rooted (CityNpc.Root) for
 /// FreezeSeconds. Needs at least one enemy in reach (a refused cast costs no cooldown).
 [CreateAssetMenu(menuName = "Overpowered/Forge/Effects/Void grasp")]
@@ -39,7 +39,7 @@ public sealed class VoidGraspEffect : SynergyEffect
         foreach (var npc in LastPulled)
         {
             var suspension = npc.GetComponent<SynergySuspension>() ?? npc.gameObject.AddComponent<SynergySuspension>();
-            bodies.Add(suspension.Begin(npc)); holds.Add(suspension);
+            bodies.Add(suspension.Begin(npc)); holds.Add(suspension); r.Track(suspension);
         }
         float elapsed = 0, nextFx = 0;
         while (elapsed < d.Duration)

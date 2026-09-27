@@ -148,7 +148,6 @@ public sealed class SuperHeroController : MonoBehaviour
     }
     void ApplyPunch(PowerDefinition definition,PowerStats stats,bool pause=false)
     {
-        if(powers.SynergyRunner!=null)stats=powers.SynergyRunner.ModifyMelee(stats,transform.position+Vector3.up*definition.OriginHeight+transform.forward*definition.OriginOffset);
         LastForce = stats.Force;
         LastAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * definition.OriginHeight + transform.forward * definition.OriginOffset,
             stats.Radius, stats.Force, stats.Damage, definition.UpwardForce, melee:true);
@@ -213,7 +212,6 @@ public sealed class SuperHeroController : MonoBehaviour
     void ApplyHurricaneKick(PowerStats stats, bool pause = false)
     {
         stats.Radius=HeroAbilityTuning.KickRadius;
-        if(powers.SynergyRunner!=null)stats=powers.SynergyRunner.ModifyMelee(stats,transform.position+Vector3.up*HeroAbilityTuning.KickOriginHeight+transform.forward*HeroAbilityTuning.KickOriginOffset);
         LastKickForce = stats.Force * HeroAbilityTuning.KickForceMultiplier;
         LastKickAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * HeroAbilityTuning.KickOriginHeight + transform.forward * HeroAbilityTuning.KickOriginOffset,
             HeroAbilityTuning.KickRadius, LastKickForce, stats.Damage * HeroAbilityTuning.KickDamageMultiplier, HeroAbilityTuning.KickUpwardForce, melee:true);

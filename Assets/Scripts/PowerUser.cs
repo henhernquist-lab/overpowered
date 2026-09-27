@@ -142,8 +142,6 @@ public sealed class PowerUser : MonoBehaviour
         if(power==null||!Powers.Contains(power)||!IsEquipped(power.Definition)){Message="Power not equipped";return false;}
         if(SynergyRunner!=null&&SynergyRunner.Busy)
         {
-            if(power.Definition.Effect is TelekinesisEffect && SynergyRunner.Definition.Effect is OrbitThrowEffect && SynergyRunner.HeldCount>0)
-            { SynergyRunner.RequestRelease(); Message="Throw orbit"; return true; }
             Message="Synergy in progress";return false;
         }
         if (power == null || !Progression.Owns(power.Definition)) { Message = "Power locked"; return false; }
