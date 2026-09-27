@@ -12,6 +12,8 @@ public sealed class HeroForgeScreen : MonoBehaviour
     public ForgeChoice SlotA {get;private set;}
     public ForgeChoice SlotB {get;private set;}
     public RenderTexture Preview {get;private set;}
+    /// The character instance of the last captured preview (verification reads its recoloured material).
+    public GameObject PreviewModel {get;private set;}
     ModeScreens menu;ForgeCatalog catalog;HeroDefinition hero;PowerDefinition a,b;
     CityColor primary,secondary;CityPalette palette;GameObject previewRoot;bool rebuilding;
     VisualElement form;Label feedback;
@@ -91,7 +93,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
         // Preview owns one palette cache, since the skyline's transient cache is disposed after capture.
         var materials=previewRoot.AddComponent<CityMaterials>();materials.Initialize(palette);
         var tuning=hero.Animation!=null?hero.Animation:Resources.Load<HumanoidAnimationTuning>("HumanoidAnimationTuning");
-        var model=Instantiate(hero.CharacterPrefab!=null?hero.CharacterPrefab:tuning.Model,previewRoot.transform);
+        var model=Instantiate(hero.CharacterPrefab!=null?hero.CharacterPrefab:tuning.Model,previewRoot.transform);PreviewModel=model;
         var animator=model.GetComponent<Animator>();animator.runtimeAnimatorController=tuning.Controller;animator.applyRootMotion=false;animator.cullingMode=AnimatorCullingMode.AlwaysAnimate;
         animator.Play("Locomotion");animator.Update(0);
         var renderers=model.GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -99,7 +101,9 @@ public sealed class HeroForgeScreen : MonoBehaviour
         float fit=1.8f/Mathf.Max(.01f,bounds.size.y);model.transform.localScale=Vector3.Scale(model.transform.localScale*fit,hero.VisualScale);
         foreach(var renderer in renderers)
         {
-            var mats=renderer.sharedMaterials;for(int i=0;i<mats.Length;i++)mats[i]=CityMaterials.Get(renderer.name.Contains("Joints")?secondary:primary);renderer.sharedMaterials=mats;
+            var mats=renderer.sharedMaterials;
+            for(int i=0;i<mats.Length;i++)mats[i]=hero.Suit!=null&&mats[i]==hero.Suit.Source?materials.SuitMaterial(hero.Suit,primary,secondary):CityMaterials.Get(renderer.name.Contains("Joints")?secondary:primary);
+            renderer.sharedMaterials=mats;
         }
         foreach(var node in previewRoot.GetComponentsInChildren<Transform>())node.gameObject.layer=30;
         var camera=new GameObject("Forge preview camera").AddComponent<Camera>();camera.transform.SetParent(previewRoot.transform,false);camera.enabled=false;camera.cullingMask=1<<30;

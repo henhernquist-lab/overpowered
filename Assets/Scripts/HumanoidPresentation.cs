@@ -58,12 +58,16 @@ public sealed class HumanoidPresentation : MonoBehaviour
         float scale=height/bounds.size.y;model.transform.localScale*=scale;
         model.transform.localPosition-=Vector3.up*(bounds.min.y-pose.position.y)*scale;
         if(definition!=null)model.transform.localScale=Vector3.Scale(model.transform.localScale,definition.VisualScale);
+        var loadout=definition!=null?WorldSession.Instance.Progression.Data.Loadout:null;
+        var suit=definition!=null?definition.Suit:null;
         foreach(var r in renderers)
         {
-            // Player: Hero Forge loadout colours. NPCs: role sets the body colour, the archetype (if any) sets the joints accent.
-            var loadout=definition!=null?WorldSession.Instance.Progression.Data.Loadout:null;
+            // Player: Hero Forge loadout colours (a Sidekick suit recolours its colour map; one shared material per hero+colours).
+            // NPCs: role sets the body colour, the archetype (if any) sets the joints accent.
             var accent=npc!=null&&npc.Archetype!=null?npc.Archetype.Accent:CityColor.Metal;
-            var mats=r.sharedMaterials;for(int i=0;i<mats.Length;i++)mats[i]=CityMaterials.Get(loadout!=null?(r.name.Contains("Joints")?loadout.Secondary:loadout.Primary):r.name.Contains("Joints")?accent:npc==null?CityColor.Blue:npc.Role==NpcRole.Civilian?CityColor.Amber:npc.Role==NpcRole.Cop?CityColor.Teal:CityColor.Red);
+            var mats=r.sharedMaterials;
+            for(int i=0;i<mats.Length;i++)mats[i]=suit!=null&&mats[i]==suit.Source?CityMaterials.Suit(suit,loadout.Primary,loadout.Secondary):
+                CityMaterials.Get(loadout!=null?(r.name.Contains("Joints")?loadout.Secondary:loadout.Primary):r.name.Contains("Joints")?accent:npc==null?CityColor.Blue:npc.Role==NpcRole.Civilian?CityColor.Amber:npc.Role==NpcRole.Cop?CityColor.Teal:CityColor.Red);
             r.sharedMaterials=mats;r.updateWhenOffscreen=true;
         }
         var presentation=owner.AddComponent<HumanoidPresentation>();presentation.hero=hero;presentation.npc=npc;presentation.Tuning=tuning;presentation.Animator=animator;presentation.PoseRoot=pose;

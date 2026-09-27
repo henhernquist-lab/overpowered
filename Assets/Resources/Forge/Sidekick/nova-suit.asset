@@ -1,0 +1,348 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!28 &-2901183335514679982
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: nova authored colour map (readable copy of T_Starter_02ColorMap.png)
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 4
+  m_Width: 32
+  m_Height: 32
+  m_CompleteImageSize: 4096
+  m_MipsStripped: 0
+  m_TextureFormat: 4
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 1
+  m_MipmapLimitGroupName: 
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_LightmapFormat: 0
+  m_ColorSpace: 0
+  m_PlatformBlob: 
+  image data: 4096
+  _typelessdata: ff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffc7986affc7986affbf9062ffbf9062ffe79a9cffe79a9cffe79a9cffe79a9cffffffffffffffffffffffffffffffffff625343ff625343ff985d41ff985d41ff00ecffff00ecffff6c624eff6c624eff63584aff63584affa32180ffa32180ffffffffffffffffffffffffffffffffffff0000ffff0000ff716152ff716152ffc7986affc7986affbf9062ffbf9062ffe79a9cffe79a9cffe79a9cffe79a9cffffffffffffffffffffffffffffffffff625343ff625343ff985d41ff985d41ff00ecffff00ecffff6c624eff6c624eff63584aff63584affa32180ffa32180ffffffffffffffffffffffffffffffffffff0000ffff0000ff716152ff716152ffaf8057ffaf8057ffaf8057ffaf8057ffaf8057ffaf8057ffb5b6b5ffb5b6b5ff503e2bff503e2bff503e2bff503e2bffcaa58effcaa58effcaa58effcaa58eff00ecffff00ecffff807663ff807663ff776b5bff776b5bffcd31a3ffcd31a3ffffffffffffffffffffffffffffffffffff0000ffff0000ff796c8aff796c8affaf8057ffaf8057ffaf8057ffaf8057ffaf8057ffaf8057ffb5b6b5ffb5b6b5ff503e2bff503e2bff503e2bff503e2bffcaa58effcaa58effcaa58effcaa58eff00ecffff00ecffff807663ff807663ff776b5bff776b5bffcd31a3ffcd31a3ffffffffffffffffffffffffffffffffffff0000ffff0000ff796c8aff796c8affc7986affc7986affaf8057ffaf8057ffaf8057ffaf8057ffe79a9cffe79a9cff262626ff262626ff262626ff262626ff1cbddcff1cbddcff26272dff26272dff88a6c4ff88a6c4ff4a4c52ff4a4c52ff826e53ff826e53ff3c626dff3c626dffffffffffffffffffffffffffffffffffff0000ffff0000ff697d9eff697d9effc7986affc7986affaf8057ffaf8057ffaf8057ffaf8057ffe79a9cffe79a9cff262626ff262626ff262626ff262626ff1cbddcff1cbddcff26272dff26272dff88a6c4ff88a6c4ff4a4c52ff4a4c52ff826e53ff826e53ff3c626dff3c626dffffffffffffffffffffffffffffffffffff0000ffff0000ff697d9eff697d9effc7986affc7986affaf8057ffaf8057ffaf8057ffaf8057ffe5d8afffe5d8afff32281dff32281dff32281dff32281dff1c78dcff1c78dcff26272dff26272dff90bae4ff90bae4ff6d6964ff6d6964ff8d7557ff8d7557ff3b8497ff3b8497ffffffffffffffffffffffffffffffffffff0000ffff0000ff6d8080ff6d8080ffc7986affc7986affaf8057ffaf8057ffaf8057ffaf8057ffe5d8afffe5d8afff32281dff32281dff32281dff32281dff1c78dcff1c78dcff26272dff26272dff90bae4ff90bae4ff6d6964ff6d6964ff8d7557ff8d7557ff3b8497ff3b8497ffffffffffffffffffffffffffffffffffff0000ffff0000ff6d8080ff6d8080ffbf9062ffbf9062ffbf9062ffbf9062ffbf9062ffbf9062fffff3cefffff3ceffd0d0d0ffd0d0d0ffd0d0d0ffd0d0d0ff503e2bff503e2bff503e2bff503e2bffc99147ffc99147ff2b2926ff2b2926ff384688ff384688ff94896fff94896fffffffffffffffffffffffffffffffffffff0000ffff0000ff7c9067ff7c9067ffbf9062ffbf9062ffbf9062ffbf9062ffbf9062ffbf9062fffff3cefffff3ceffd0d0d0ffd0d0d0ffd0d0d0ffd0d0d0ff503e2bff503e2bff503e2bff503e2bffc99147ffc99147ff2b2926ff2b2926ff384688ff384688ff94896fff94896fffffffffffffffffffffffffffffffffffff0000ffff0000ff7c9067ff7c9067ff3b3965ff3b3965ff784d49ff784d49ff784d49ff784d49ff784d49ff784d49ff784d49ff784d49ff383838ff383838ff383838ff383838ff383838ff383838ff9a9182ff9a9182ff252320ff252320ff30326dff30326dffafa382ffafa382ffffffffffffffffffffffffffffffffffff0000ffff0000ffb29a5cffb29a5cff3b3965ff3b3965ff784d49ff784d49ff784d49ff784d49ff784d49ff784d49ff784d49ff784d49ff383838ff383838ff383838ff383838ff383838ff383838ff9a9182ff9a9182ff252320ff252320ff30326dff30326dffafa382ffafa382ffffffffffffffffffffffffffffffffffff0000ffff0000ffb29a5cffb29a5cffc88946ffc88946ffb7af9effb7af9effb7af9effb7af9effa47e57ffa47e57ffa47e57ffa47e57ff383838ff383838ff383838ff383838ff8f7246ff8f7246ff121c3bff121c3bff838865ff838865ff524132ff524132ff83684fff83684fff565656ff565656ffffffffffffffffffff0000ffff0000ffad875effad875effc88946ffc88946ffb7af9effb7af9effb7af9effb7af9effa47e57ffa47e57ffa47e57ffa47e57ff383838ff383838ff383838ff383838ff8f7246ff8f7246ff121c3bff121c3bff838865ff838865ff524132ff524132ff83684fff83684fff565656ff565656ffffffffffffffffffff0000ffff0000ffad875effad875eff3b3965ff3b3965ff844b5bff844b5bff844b5bff844b5bff2b2c33ff2b2c33ff2b2c33ff2b2c33ffaa2929ffaa2929ff383838ff383838ff6f4b85ff6f4b85ff303b57ff303b57ff8d997dff8d997dff5e4a39ff5e4a39ff70563fff70563fff7b7879ff7b7879ffffffffffffffffffff0000ffff0000ffa2615cffa2615cff3b3965ff3b3965ff844b5bff844b5bff844b5bff844b5bff2b2c33ff2b2c33ff2b2c33ff2b2c33ffaa2929ffaa2929ff383838ff383838ff6f4b85ff6f4b85ff303b57ff303b57ff8d997dff8d997dff5e4a39ff5e4a39ff70563fff70563fff7b7879ff7b7879ffffffffffffffffffff0000ffff0000ffa2615cffa2615cff8d3434ff8d3434ffc88946ffc88946ffc88946ffc88946ff131737ff131737ff131737ff131737ffcdc8bbffcdc8bbff383838ff383838ff464873ff464873ff7f888dff7f888dff949aa2ff949aa2ff5b4e3fff5b4e3fff86827eff86827eff944842ff944842ffffffffffffffffffff0000ffff0000ff936b79ff936b79ff8d3434ff8d3434ffc88946ffc88946ffc88946ffc88946ff131737ff131737ff131737ff131737ffcdc8bbffcdc8bbff383838ff383838ff464873ff464873ff7f888dff7f888dff949aa2ff949aa2ff5b4e3fff5b4e3fff86827eff86827eff944842ff944842ffffffffffffffffffff0000ffff0000ff936b79ff936b79ff6d3737ff6d3737ff131737ff131737ff131737ff131737ff7379a8ff7379a8ff7379a8ff7379a8ffb88d36ffb88d36ff383838ff383838ff6b3f78ff6b3f78ffaeb6baffaeb6baff9a9fa2ff9a9fa2ffa28b77ffa28b77ff97928dff97928dffb35149ffb35149ffffffffffffffffffff0000ffff0000ffb2ada8ffb2ada8ff6d3737ff6d3737ff131737ff131737ff131737ff131737ff7379a8ff7379a8ff7379a8ff7379a8ffb88d36ffb88d36ff383838ff383838ff6b3f78ff6b3f78ffaeb6baffaeb6baff9a9fa2ff9a9fa2ffa28b77ffa28b77ff97928dff97928dffb35149ffb35149ffffffffffffffffffff0000ffff0000ffb2ada8ffb2ada8ff363433ff363433ff363433ff363433ff363433ff363433ff363433ff363433ff363433ff363433ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ffaaa5a0ffaaa5a0ff363433ff363433ff363433ff363433ff363433ff363433ff363433ff363433ff363433ff363433ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ffaaa5a0ffaaa5a0ff3f4850ff3f4850ff6f397dff6f397dff3f4850ff3f4850ff3f4850ff3f4850ff3f4850ff3f4850ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff8e8984ff8e8984ff3f4850ff3f4850ff6f397dff6f397dff3f4850ff3f4850ff3f4850ff3f4850ff3f4850ff3f4850ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff8e8984ff8e8984ffc88946ffc88946ff8d834eff8d834eff8d834eff8d834eff8d834eff8d834eff8d834eff8d834eff383838ff383838ffcca6cbffcca6cbff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff65615cff65615cffc88946ffc88946ff8d834eff8d834eff8d834eff8d834eff8d834eff8d834eff8d834eff8d834eff383838ff383838ffcca6cbffcca6cbff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff65615cff65615cff3b3965ff3b3965ff7d634cff7d634cffaa7c54ffaa7c54ff7d634cff7d634cff7d634cff7d634cff383838ff383838ffaa2929ffaa2929ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff534e49ff534e49ff3b3965ff3b3965ff7d634cff7d634cffaa7c54ffaa7c54ff7d634cff7d634cff7d634cff7d634cff383838ff383838ffaa2929ffaa2929ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff534e49ff534e49ff8d3434ff8d3434ff8d3434ff8d3434ff8d3434ff8d3434ff536236ff536236ff536236ff536236ff847159ff847159ffcdc8bbffcdc8bbff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff403c37ff403c37ff8d3434ff8d3434ff8d3434ff8d3434ff8d3434ff8d3434ff536236ff536236ff536236ff536236ff847159ff847159ffcdc8bbffcdc8bbff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff383838ff403c37ff403c37ff
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9667e1a11864f4b41bc85edec6d61fc7, type: 3}
+  m_Name: nova-suit
+  m_EditorClassIdentifier: Assembly-CSharp::SidekickSuit
+  Source: {fileID: 2100000, guid: da641484dd64a9840aceb1d4784a0efe, type: 2}
+  BaseColorMap: {fileID: -2901183335514679982}
+  Trim: 10
+  Swatches:
+  - Cell: {x: 0, y: 0}
+    Role: 0
+    Name: (unmapped)
+    Vertices: 8
+  - Cell: {x: 0, y: 5}
+    Role: 0
+    Name: Species / Skin 01
+    Vertices: 1189
+  - Cell: {x: 0, y: 6}
+    Role: 3
+    Name: Outfits / Hips Outfit 05
+    Vertices: 119
+  - Cell: {x: 0, y: 7}
+    Role: 1
+    Name: Outfits / Hips Outfit 04
+    Vertices: 229
+  - Cell: {x: 0, y: 8}
+    Role: 3
+    Name: Outfits / Hips Outfit 03
+    Vertices: 828
+  - Cell: {x: 0, y: 9}
+    Role: 1
+    Name: Outfits / Hips Outfit 02
+    Vertices: 515
+  - Cell: {x: 0, y: 10}
+    Role: 3
+    Name: Outfits / Hips Outfit 01
+    Vertices: 359
+  - Cell: {x: 0, y: 13}
+    Role: 1
+    Name: Outfits / Torso Outfit 03
+    Vertices: 213
+  - Cell: {x: 0, y: 14}
+    Role: 3
+    Name: Outfits / Torso Outfit 02
+    Vertices: 603
+  - Cell: {x: 0, y: 15}
+    Role: 1
+    Name: Outfits / Torso Outfit 01
+    Vertices: 568
+  - Cell: {x: 1, y: 1}
+    Role: 0
+    Name: Species / Nose
+    Vertices: 93
+  - Cell: {x: 1, y: 3}
+    Role: 0
+    Name: Species / Fingernails Left
+    Vertices: 27
+  - Cell: {x: 1, y: 4}
+    Role: 0
+    Name: Species / Eyelids Left
+    Vertices: 112
+  - Cell: {x: 1, y: 5}
+    Role: 0
+    Name: Species / Ear Left
+    Vertices: 101
+  - Cell: {x: 1, y: 9}
+    Role: 1
+    Name: Outfits / Leg Left Outfit 02
+    Vertices: 116
+  - Cell: {x: 1, y: 10}
+    Role: 3
+    Name: Outfits / Leg Left Outfit 01
+    Vertices: 38
+  - Cell: {x: 1, y: 14}
+    Role: 1
+    Name: Outfits / Arm Left Outfit 02
+    Vertices: 117
+  - Cell: {x: 1, y: 15}
+    Role: 1
+    Name: Outfits / Arm Left Outfit 01
+    Vertices: 352
+  - Cell: {x: 2, y: 1}
+    Role: 0
+    Name: Species / Mouth
+    Vertices: 136
+  - Cell: {x: 2, y: 3}
+    Role: 0
+    Name: Species / Fingernails Right
+    Vertices: 31
+  - Cell: {x: 2, y: 4}
+    Role: 0
+    Name: Species / Eyelids Right
+    Vertices: 112
+  - Cell: {x: 2, y: 5}
+    Role: 0
+    Name: Species / Ear Right
+    Vertices: 86
+  - Cell: {x: 2, y: 9}
+    Role: 1
+    Name: Outfits / Leg Right Outfit 02
+    Vertices: 119
+  - Cell: {x: 2, y: 10}
+    Role: 3
+    Name: Outfits / Leg Right Outfit 01
+    Vertices: 38
+  - Cell: {x: 2, y: 14}
+    Role: 1
+    Name: Outfits / Arm Right Outfit 02
+    Vertices: 112
+  - Cell: {x: 2, y: 15}
+    Role: 1
+    Name: Outfits / Arm Right Outfit 01
+    Vertices: 369
+  - Cell: {x: 3, y: 1}
+    Role: 0
+    Name: Species / Tongue
+    Vertices: 104
+  - Cell: {x: 3, y: 5}
+    Role: 0
+    Name: Species / Teeth 01
+    Vertices: 134
+  - Cell: {x: 3, y: 8}
+    Role: 3
+    Name: Outfits / Foot Left Outfit 03
+    Vertices: 263
+  - Cell: {x: 3, y: 9}
+    Role: 3
+    Name: Outfits / Foot Left Outfit 02
+    Vertices: 156
+  - Cell: {x: 3, y: 14}
+    Role: 1
+    Name: Outfits / Hand Left Outfit 02
+    Vertices: 194
+  - Cell: {x: 4, y: 1}
+    Role: 0
+    Name: Species / Eye Highlight Left
+    Vertices: 16
+  - Cell: {x: 4, y: 2}
+    Role: 0
+    Name: Species / Eye Color Left
+    Vertices: 32
+  - Cell: {x: 4, y: 3}
+    Role: 0
+    Name: Species / Eye Inner Left
+    Vertices: 20
+  - Cell: {x: 4, y: 4}
+    Role: 0
+    Name: Species / Eye Edge Left
+    Vertices: 32
+  - Cell: {x: 4, y: 5}
+    Role: 0
+    Name: Species / Eye Outer Left
+    Vertices: 82
+  - Cell: {x: 4, y: 8}
+    Role: 3
+    Name: Outfits / Foot Right Outfit 03
+    Vertices: 258
+  - Cell: {x: 4, y: 9}
+    Role: 3
+    Name: Outfits / Foot Right Outfit 02
+    Vertices: 155
+  - Cell: {x: 4, y: 14}
+    Role: 1
+    Name: Outfits / Hand Right Outfit 02
+    Vertices: 197
+  - Cell: {x: 5, y: 1}
+    Role: 0
+    Name: Species / Eye Highlight Right
+    Vertices: 16
+  - Cell: {x: 5, y: 2}
+    Role: 0
+    Name: Species / Eye Color Right
+    Vertices: 32
+  - Cell: {x: 5, y: 3}
+    Role: 0
+    Name: Species / Eye Inner Right
+    Vertices: 11
+  - Cell: {x: 5, y: 4}
+    Role: 0
+    Name: Species / Eye Edge Right
+    Vertices: 32
+  - Cell: {x: 5, y: 5}
+    Role: 0
+    Name: Species / Eye Outer Right
+    Vertices: 105
+  - Cell: {x: 5, y: 7}
+    Role: 3
+    Name: Attachments / Head Attachment 04
+    Vertices: 195
+  - Cell: {x: 5, y: 8}
+    Role: 2
+    Name: Attachments / Head Attachment 03
+    Vertices: 410
+  - Cell: {x: 5, y: 9}
+    Role: 2
+    Name: Attachments / Head Attachment 02
+    Vertices: 800
+  - Cell: {x: 5, y: 10}
+    Role: 2
+    Name: Attachments / Head Attachment 01
+    Vertices: 38
+  - Cell: {x: 6, y: 3}
+    Role: 0
+    Name: Species / Hair 02
+    Vertices: 125
+  - Cell: {x: 6, y: 4}
+    Role: 0
+    Name: Species / Hair 01
+    Vertices: 1622
+  - Cell: {x: 6, y: 5}
+    Role: 0
+    Name: Species / Eyebrow Left
+    Vertices: 64
+  - Cell: {x: 6, y: 13}
+    Role: 2
+    Name: Attachments / Shoulder Right Outfit 03
+    Vertices: 20
+  - Cell: {x: 6, y: 14}
+    Role: 2
+    Name: Attachments / Shoulder Right Outfit 02
+    Vertices: 939
+  - Cell: {x: 6, y: 15}
+    Role: 2
+    Name: Attachments / Shoulder Right Outfit 01
+    Vertices: 1866
+  - Cell: {x: 7, y: 5}
+    Role: 0
+    Name: Species / Eyebrow Right
+    Vertices: 63
+  - Cell: {x: 7, y: 8}
+    Role: 2
+    Name: Attachments / Back Attachment 03
+    Vertices: 244
+  - Cell: {x: 8, y: 1}
+    Role: 0
+    Name: Materials / Glow 02
+    Vertices: 44
+  - Cell: {x: 8, y: 2}
+    Role: 0
+    Name: Materials / Glow 01
+    Vertices: 198
+  - Cell: {x: 8, y: 7}
+    Role: 3
+    Name: Materials / Metal 04
+    Vertices: 861
+  - Cell: {x: 8, y: 8}
+    Role: 3
+    Name: Materials / Metal 03
+    Vertices: 3990
+  - Cell: {x: 8, y: 9}
+    Role: 2
+    Name: Materials / Metal 02
+    Vertices: 2390
+  - Cell: {x: 8, y: 10}
+    Role: 2
+    Name: Materials / Metal 01
+    Vertices: 670
+  - Cell: {x: 9, y: 5}
+    Role: 3
+    Name: Materials / Rubber 02
+    Vertices: 366
+  - Cell: {x: 9, y: 6}
+    Role: 3
+    Name: Materials / Rubber 01
+    Vertices: 513
+  - Cell: {x: 10, y: 6}
+    Role: 3
+    Name: Materials / Strap 01
+    Vertices: 1024
+  - Cell: {x: 10, y: 10}
+    Role: 2
+    Name: Materials / Fur 01
+    Vertices: 1453
+  - Cell: {x: 15, y: 3}
+    Role: 0
+    Name: (unmapped)
+    Vertices: 35
+  - Cell: {x: 15, y: 8}
+    Role: 0
+    Name: (unmapped)
+    Vertices: 35
+  - Cell: {x: 15, y: 10}
+    Role: 0
+    Name: (unmapped)
+    Vertices: 89
+  - Cell: {x: 15, y: 14}
+    Role: 0
+    Name: (unmapped)
+    Vertices: 40
+  - Cell: {x: 15, y: 15}
+    Role: 0
+    Name: (unmapped)
+    Vertices: 52
