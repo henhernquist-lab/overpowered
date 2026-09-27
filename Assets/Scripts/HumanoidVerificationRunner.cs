@@ -18,7 +18,14 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
     string runtimeFailure;
     void Awake(){Application.logMessageReceived+=Observe;}
     void OnDestroy(){Application.logMessageReceived-=Observe;}
-    void Observe(string message,string trace,LogType kind){if(kind==LogType.Exception||message.Contains("PropertyStreamHandle")||message.Contains("because it is not a child Transform"))runtimeFailure=message;}
+    void Observe(string message,string trace,LogType kind)
+    {
+        // The Editor's own search-index start-up exception (UnityEditor.Search.SearchDatabase via SearchInit.IndexationOnStartup)
+        // is not presentation code (same filter as CameraVerificationRunner). Anything whose stack reaches Assets/Scripts/ stays fatal.
+        if(kind==LogType.Exception&&trace!=null&&trace.Contains("UnityEditor.Search.SearchDatabase")&&!trace.Contains("Assets/Scripts/"))
+        {lines.Add("EDITOR-ONLY (not presentation code): "+message);return;}
+        if(kind==LogType.Exception||message.Contains("PropertyStreamHandle")||message.Contains("because it is not a child Transform"))runtimeFailure=message;
+    }
     IEnumerator Start()
     {
         var stack=new Stack<IEnumerator>();stack.Push(Run());

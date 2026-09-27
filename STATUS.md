@@ -2657,3 +2657,7 @@ Captures inspected: `endless-wave-6-maxalive-gameplay-camera.png` (behind the ho
 - Fixture holds in this verifier use `Freeze(x, ice:false)` (Phase 5) so audit captures do not show ice glyphs on merely held NPCs.
 
 Limits: batch entry points, not hardware input; Editor Play Mode throughput, no player build; no human feel pass. Re-run this audit (and the 11-power equip check) after the cloud merge and the catalog cut to five synergies.
+
+## Humanoid verifier: Editor search-index start-up exception ignored — 2026-09-27 (appended)
+
+`HumanoidVerificationRunner`'s Phase 3 runtime-error observer also caught the Editor's own `UnityEditor.Search.SearchDatabase` start-up exception (via `SearchInit.IndexationOnStartup`) and failed before any check on some runs (reported 3/3 in the cloud worktree). It now uses CameraVerificationRunner's filter: an Exception whose stack contains `UnityEditor.Search.SearchDatabase` and not `Assets/Scripts/` is recorded as EDITOR-ONLY; everything else (PropertyStreamHandle, child-Transform binding, any real exception) stays fatal. Controls (temporary hook, removed before commit; `Verification/Humanoid/observer-filter/`): synthetic search-only exception -> exit 0, 68 PASS, EDITOR-ONLY recorded; synthetic search stack through Assets/Scripts/ -> exit 1; real project exception -> exit 1. Final committed code: HumanoidVerification.Run exit 0, 68 PASS.
