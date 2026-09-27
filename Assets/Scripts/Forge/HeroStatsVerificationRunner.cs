@@ -43,7 +43,7 @@ public sealed class HeroStatsVerificationRunner : SessionVerificationRunner
         Check(Mathf.Abs(ti["melee"] / v["melee"] - 1.25f) < .01f && Mathf.Abs(no["melee"] / v["melee"] - 1f) < .01f, $"MeleeDamage on a real actor: {v["melee"]:F2} / {ti["melee"]:F2} / {no["melee"]:F2}.");
         Check(Mathf.Abs(ti["force"] / v["force"] - 1.25f) < .01f, $"Melee knockback force dealt: {v["force"]:F0} / {ti["force"]:F0} N.s.");
         Check(Mathf.Abs(no["cooldown"] / v["cooldown"] - .8f) < .01f && Mathf.Abs(ti["cooldown"] - v["cooldown"]) < .001f, $"Ice cooldown after a cast: {v["cooldown"]:F3} / {ti["cooldown"]:F3} / {no["cooldown"]:F3} s.");
-        Check(Mathf.Abs(no["ice"] - v["ice"]) < .01f && Mathf.Abs(ti["ice"] - v["ice"]) < .01f, "CONTROL: shipping PowerDamage is 1 for all three (same Ice damage).");
+        Check(v["ice"] > 0f && Mathf.Abs(no["ice"] - v["ice"]) < .01f && Mathf.Abs(ti["ice"] - v["ice"]) < .01f, $"CONTROL: shipping PowerDamage is 1 for all three (same, non-zero Ice damage {v["ice"]:F2}).");
         Check(v["pushed"] > 1.5f && ti["pushed"] < v["pushed"] * (1f - t.KnockbackResistance) + .3f, $"Incoming knockback from a live Brute slam: VECTOR {v["pushed"]:F2} m, TITAN {ti["pushed"]:F2} m (resist {t.KnockbackResistance}).");
         Check(measured["verification-stats"]["ice"] > v["ice"] * 1.49f && measured["verification-stats"]["ice"] < v["ice"] * 1.51f, $"PowerDamage x1.5 (in-memory hero): Ice {measured["verification-stats"]["ice"]:F2} vs VECTOR {v["ice"]:F2}.");
         Log("LIMIT: movement uses SuperHeroController.ScriptedMove (batch mode has no keyboard) through the same Update path as the axes; no human feel test; HUD bar fractions compile-checked only.");
@@ -83,15 +83,23 @@ public sealed class HeroStatsVerificationRunner : SessionVerificationRunner
         W.Hero.DebugSetResources(6, 3, 0); float hp = actor.Health;
         Check(W.Hero.TryPunch(), "Punch."); yield return new WaitForSeconds(.6f);
         m["melee"] = hp - actor.Health; m["force"] = W.Hero.LastForce;
+        // The melee actor stands on the crosshair line to `far` (integration #1: Ice hit it and every Ice sample read 0).
+        // Take it out of the scene before any Ice cast, and prove the line to `far` is clear.
+        actor.gameObject.SetActive(false); Physics.SyncTransforms();
         // Power: Ice on the far actor twice (damage + cooldown), which also spends 2 x 10 energy for the regen measurement.
         var ice = Runtime("ice"); Check(W.Powers.Select(ice), "Select Ice.");
-        Aim(Chest(far)); hp = far.Health; Check(W.Powers.Use(ice), "Ice cast."); m["ice"] = hp - far.Health; m["cooldown"] = ice.Cooldown;
+        Aim(Chest(far));
+        Check(W.Powers.FindTarget(W.Powers.Stats(ice).Range, out var aimed) && aimed.collider.GetComponentInParent<CityNpc>() == far, "Crosshair line reaches the far actor (no occluder).");
+        hp = far.Health; Check(W.Powers.Use(ice), "Ice cast."); m["ice"] = hp - far.Health; m["cooldown"] = ice.Cooldown;
+        float iceData = ice.Definition.GetStats(Mathf.Max(0, W.Progression.Tier(ice.Definition))).Damage * hero.Stats.PowerDamage;
+        Check(m["ice"] > 0f && Mathf.Abs(m["ice"] - iceData) < .01f, $"Measured Ice damage {m["ice"]:F2} == data {iceData:F2} (damage x PowerDamage {hero.Stats.PowerDamage}).");
         yield return new WaitForSeconds(ice.Cooldown + .05f); Check(W.Powers.Use(ice), "Second Ice cast (energy for the regen sample).");
         // Regen: controller running (PowerUser.Tick), standing still on the floor.
         PlaceHero(W.Hero.transform.position, true); yield return null;
-        float e0 = W.Powers.Energy, t0 = Time.time; yield return new WaitForSeconds(1f);
+        // 0.5 s sample: long enough to measure, short enough that NOVA (140 max, 16.8/s) cannot reach its cap after two casts.
+        float e0 = W.Powers.Energy, t0 = Time.time; yield return new WaitForSeconds(.5f);
         float gained = W.Powers.Energy - e0, dt = Time.time - t0;
-        Check(W.Powers.Energy < W.Powers.MaxEnergy, "Regen sample never touched the cap.");
+        Check(W.Powers.Energy < W.Powers.MaxEnergy && gained > 0f, $"Regen sample never touched the cap ({e0:F1} -> {W.Powers.Energy:F1} of {W.Powers.MaxEnergy}).");
         m["regen"] = gained / dt;
         // Run speed: real Update movement with a scripted input, on the open floor.
         W.Hero.ScriptedMove = Vector3.right; W.Hero.ScriptedRun = true; yield return new WaitForSeconds(.3f);
@@ -140,6 +148,8 @@ public sealed class HeroStatsVerificationRunner : SessionVerificationRunner
         Isolate(); var far = Actor(new Vector3(0, 150, 12), NpcRole.Criminal, 1000); yield return new WaitForSeconds(.3f);
         var ice = Runtime("ice"); W.Powers.Select(ice); Aim(Chest(far)); float hp = far.Health;
         Check(W.Powers.Use(ice), "Ice cast by the x1.5 PowerDamage hero."); m["ice"] = hp - far.Health;
+        float data = ice.Definition.GetStats(Mathf.Max(0, W.Progression.Tier(ice.Definition))).Damage * 1.5f;
+        Check(Mathf.Abs(m["ice"] - data) < .01f, $"x1.5 hero's measured Ice damage {m["ice"]:F2} == data x1.5 = {data:F2}.");
     }
 }
 #endif
