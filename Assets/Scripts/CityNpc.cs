@@ -36,7 +36,6 @@ public sealed class CityNpc : MonoBehaviour
         rootedUntil=Mathf.Max(rootedUntil,Time.time+duration);
         if(Agent!=null&&Agent.enabled&&Agent.isOnNavMesh){Agent.isStopped=true;Agent.velocity=Vector3.zero;}
     }
-    public void Unroot(){rootedUntil=Time.time;}
     public bool Burning=>Time.time<burningUntil;
     float burningUntil;
     public void MarkBurn(float duration){burningUntil=Mathf.Max(burningUntil,Time.time+duration);}

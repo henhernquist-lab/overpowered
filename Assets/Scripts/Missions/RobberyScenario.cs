@@ -43,7 +43,6 @@ public sealed class RobberyState : ScenarioState
         public readonly List<EncounterActor> Assigned = new List<EncounterActor>(), Aboard = new List<EncounterActor>();
         public bool Driving, Stalled, Escaped, Wrecked, ReachedEnd; public float DepartAt = -1f, Driven;
         public Vector3 Velocity; public string StopReason = "";
-        public float Travelled => Body != null ? Vector3.Distance(Flat(Body.position), Flat(Park)) : 0f;
     }
     RobberyScenario d;
     public readonly List<Car> Cars = new List<Car>();

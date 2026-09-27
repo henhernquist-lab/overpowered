@@ -107,6 +107,4 @@ public sealed class ChallengeTracker : MonoBehaviour
             if (value >= d.Target && Progression.PayChallenge(d)) Completed?.Invoke(d);
         }
     }
-    /// This session's value for a definition (SingleSession counting challenges); 0 when none yet.
-    public int SessionValue(ChallengeDefinition d) => session.TryGetValue(d, out int v) ? v : 0;
 }

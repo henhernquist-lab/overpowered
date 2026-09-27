@@ -39,7 +39,6 @@ public sealed class Poisoned : MonoBehaviour
     public int Ticks { get; private set; }
     /// Poisoned = ticks still owed. Duration is converted to a whole tick count, so the total is exactly dps x duration.
     public bool Active => npc != null && !npc.Dead && ticksLeft > 0;
-    public int TicksLeft => ticksLeft;
     public bool Spread => spread;
     bool lethalTick;
     /// (from, to) each time poison jumps from a dying NPC to a new one.
