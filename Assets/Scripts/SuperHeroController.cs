@@ -99,8 +99,18 @@ public sealed class SuperHeroController : MonoBehaviour
         // Report actual falls, not those resting contact transitions; this does not alter motion.
         if (!wasGrounded && controller.isGrounded && airbornePeakHeight - transform.position.y > controller.skinWidth)
             Landed?.Invoke(impactSpeed);
-        if (!acceptsInput) return;
-        if (Input.GetKeyDown(KeyCode.E)) TryPunch();
+        if (!acceptsInput) { chargeStart = -1f; return; }
+        // E: airborne (high enough) = ground pound; otherwise press starts a charge, release decides tap (combo) or heavy.
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (!controller.isGrounded && HeightAboveGround() >= Melee.PoundMinHeight) TryGroundPound();
+            else chargeStart = Time.time;
+        }
+        if (chargeStart >= 0f && !Input.GetKey(KeyCode.E))
+        {
+            float held = Time.time - chargeStart; chargeStart = -1f;
+            if (held < Melee.HeavyTapThreshold) TryComboAttack(); else TryHeavyAttack(held);
+        }
         if (Input.GetKeyDown(KeyCode.Q)) TryBackflip();
         if (Input.GetMouseButtonDown(0)) powers.Use(powers.Selected);
         if (Input.GetMouseButtonDown(1)) TryHurricaneKick();
@@ -118,20 +128,22 @@ public sealed class SuperHeroController : MonoBehaviour
     }
     public void PerformPunch(PowerDefinition definition, PowerStats stats)
     {
-        // A pending hurricane kick swaps only the executed gesture; payment, charges and cooldown
-        // still come from the Super Strength runtime that already accepted the activation.
+        // A pending ground pound / hurricane kick swaps only the executed gesture; payment, charges and cooldown
+        // still come from the Super Strength runtime (or basic melee cooldown) that already accepted the activation.
+        if (poundPending) { poundPending=false; stats=TakeModifiers(stats,out _); StartCoroutine(GroundPound(stats)); return; }
         if (hurricaneKickPending) { hurricaneKickPending=false; PerformHurricaneKick(stats); return; }
+        stats=TakeModifiers(stats,out bool pause);
         PunchStarted?.Invoke();
-        if(PunchWindupSeconds>0)StartCoroutine(PunchAfterWindup(definition,stats,PunchWindupSeconds));
-        else ApplyPunch(definition,stats);
+        if(PunchWindupSeconds>0)StartCoroutine(PunchAfterWindup(definition,stats,PunchWindupSeconds,pause));
+        else ApplyPunch(definition,stats,pause);
     }
     public void PresentPunch(){PunchStarted?.Invoke();}
-    System.Collections.IEnumerator PunchAfterWindup(PowerDefinition definition,PowerStats stats,float delay)
+    System.Collections.IEnumerator PunchAfterWindup(PowerDefinition definition,PowerStats stats,float delay,bool pause)
     {
         yield return new WaitForSeconds(delay);
-        if(WorldSession.Instance!=null&&!WorldSession.Instance.PlayerDead&&(WorldSession.Instance.Mode==null||!WorldSession.Instance.Mode.Ended))ApplyPunch(definition,stats);
+        if(WorldSession.Instance!=null&&!WorldSession.Instance.PlayerDead&&(WorldSession.Instance.Mode==null||!WorldSession.Instance.Mode.Ended))ApplyPunch(definition,stats,pause);
     }
-    void ApplyPunch(PowerDefinition definition,PowerStats stats)
+    void ApplyPunch(PowerDefinition definition,PowerStats stats,bool pause=false)
     {
         if(powers.SynergyRunner!=null)stats=powers.SynergyRunner.ModifyMelee(stats,transform.position+Vector3.up*definition.OriginHeight+transform.forward*definition.OriginOffset);
         LastForce = stats.Force;
@@ -139,6 +151,7 @@ public sealed class SuperHeroController : MonoBehaviour
             stats.Radius, stats.Force, stats.Damage, definition.UpwardForce, melee:true);
         LastPunchResult = $"PUNCH: {LastAffectedBodies} bodies hit @ {LastForce:0} N·s";
         LastImpactTime=Time.time;LastImpactFrame=Time.frameCount;PunchImpacted?.Invoke();
+        if(pause)FinisherPause();
     }
     // Backflip: a short backward dash plus a small hop, using the existing CharacterController and
     // gravity arc. Repositioning only: no invincibility window, i-frames or dodge state is added.
@@ -184,16 +197,17 @@ public sealed class SuperHeroController : MonoBehaviour
     }
     void PerformHurricaneKick(PowerStats stats)
     {
+        stats = TakeModifiers(stats, out bool pause);
         HurricaneKickStarted?.Invoke();
-        if (KickWindupSeconds > 0) StartCoroutine(HurricaneKickAfterWindup(stats, KickWindupSeconds));
-        else ApplyHurricaneKick(stats);
+        if (KickWindupSeconds > 0) StartCoroutine(HurricaneKickAfterWindup(stats, KickWindupSeconds, pause));
+        else ApplyHurricaneKick(stats, pause);
     }
-    System.Collections.IEnumerator HurricaneKickAfterWindup(PowerStats stats, float delay)
+    System.Collections.IEnumerator HurricaneKickAfterWindup(PowerStats stats, float delay, bool pause)
     {
         yield return new WaitForSeconds(delay);
-        if(WorldSession.Instance!=null&&!WorldSession.Instance.PlayerDead&&(WorldSession.Instance.Mode==null||!WorldSession.Instance.Mode.Ended))ApplyHurricaneKick(stats);
+        if(WorldSession.Instance!=null&&!WorldSession.Instance.PlayerDead&&(WorldSession.Instance.Mode==null||!WorldSession.Instance.Mode.Ended))ApplyHurricaneKick(stats, pause);
     }
-    void ApplyHurricaneKick(PowerStats stats)
+    void ApplyHurricaneKick(PowerStats stats, bool pause = false)
     {
         stats.Radius=HeroAbilityTuning.KickRadius;
         if(powers.SynergyRunner!=null)stats=powers.SynergyRunner.ModifyMelee(stats,transform.position+Vector3.up*HeroAbilityTuning.KickOriginHeight+transform.forward*HeroAbilityTuning.KickOriginOffset);
@@ -202,6 +216,103 @@ public sealed class SuperHeroController : MonoBehaviour
             HeroAbilityTuning.KickRadius, LastKickForce, stats.Damage * HeroAbilityTuning.KickDamageMultiplier, HeroAbilityTuning.KickUpwardForce, melee:true);
         LastKickResult = $"HURRICANE KICK: {LastKickAffectedBodies} bodies hit @ {LastKickForce:0} N\u00b7s";
         LastKickImpactTime=Time.time;LastKickImpactFrame=Time.frameCount;HurricaneKickImpacted?.Invoke();
+        if (pause) FinisherPause();
+    }
+    // ------------------------------------------------------------------ melee depth (GameTuning.Melee)
+    // Combo / heavy / ground pound are NEW entry points over the existing paid gestures: TryPunch / TryHurricaneKick keep
+    // their exact behaviour (other suites call them directly); only the E key is routed through these.
+    MeleeSettings Melee => WorldSession.Instance != null && WorldSession.Instance.Tuning != null ? WorldSession.Instance.Tuning.Melee : fallbackMelee;
+    static readonly MeleeSettings fallbackMelee = new MeleeSettings();
+    float pendingForce = 1f, pendingDamage = 1f, chargeStart = -1f, comboExpires = -1f; bool pendingPause, poundPending; int comboStage;
+    public int LastComboStage { get; private set; }
+    public float LastHeavyCharge { get; private set; }
+    public bool Charging => chargeStart >= 0f;
+    /// 0..1 progress of the held E charge toward its cap (presentation / HUD may read it).
+    public float Charge01 => Charging ? Mathf.Clamp01((Time.time - chargeStart - Melee.HeavyTapThreshold) / Mathf.Max(.01f, Melee.HeavyMaxChargeSeconds - Melee.HeavyTapThreshold)) : 0f;
+    public bool GroundPounding { get; private set; }
+    public int GroundPounds { get; private set; }
+    public int FinisherPauses { get; private set; }
+    public float LastPoundForce { get; private set; }
+    public float LastPoundDamage { get; private set; }
+    public int LastPoundBodies { get; private set; }
+    public float LastPoundImpactTime { get; private set; } = -1f;
+    public string LastMeleeResult { get; private set; } = "Ready";
+    public event System.Action<int> ComboHit;
+    public event System.Action<float> HeavyReleased;
+    public event System.Action GroundPoundStarted;
+    public event System.Action GroundPoundImpacted;
+    PowerStats TakeModifiers(PowerStats stats, out bool pause)
+    {
+        stats.Force *= pendingForce; stats.Damage *= pendingDamage; pause = pendingPause;
+        pendingForce = pendingDamage = 1f; pendingPause = false; return stats;
+    }
+    void ClearModifiers() { pendingForce = pendingDamage = 1f; pendingPause = false; poundPending = false; }
+    void FinisherPause()
+    {
+        var feel = WorldSession.Instance != null ? WorldSession.Instance.Tuning.Feel : null; if (feel == null) return;
+        if (TimeArbiter.RequestHitPause(Melee.FinisherHitPauseSeconds, feel.HitPauseMinInterval, feel.HitPauseTimeScale)) FinisherPauses++;
+    }
+    /// One tap: punch, punch, then the kick finisher (bigger force + damage + short hit pause). A tap after ComboWindow
+    /// restarts the string; a refused tap (cooldown / no charges) does not advance it.
+    public bool TryComboAttack()
+    {
+        var m = Melee; if (Time.time > comboExpires) comboStage = 0;
+        bool finisher = comboStage >= Mathf.Max(1, m.ComboLength) - 1;
+        if (finisher) { pendingForce = m.FinisherForceMultiplier; pendingDamage = m.FinisherDamageMultiplier; pendingPause = true; }
+        bool ok = finisher ? TryHurricaneKick() : TryPunch();
+        ClearModifiers();
+        if (!ok) { LastMeleeResult = finisher ? LastKickResult : LastPunchResult; return false; }
+        LastComboStage = finisher ? Mathf.Max(1, m.ComboLength) : comboStage + 1;
+        comboStage = finisher ? 0 : comboStage + 1; comboExpires = Time.time + m.ComboWindow;
+        LastMeleeResult = finisher ? "COMBO FINISHER" : "COMBO " + LastComboStage;
+        ComboHit?.Invoke(LastComboStage); return true;
+    }
+    /// Held E released after `heldSeconds`: one paid punch scaled linearly from x1 at the tap threshold to the caps at
+    /// HeavyMaxChargeSeconds (longer holds are capped). Resets the combo string.
+    public bool TryHeavyAttack(float heldSeconds)
+    {
+        var m = Melee;
+        float t = Mathf.Clamp01((heldSeconds - m.HeavyTapThreshold) / Mathf.Max(.01f, m.HeavyMaxChargeSeconds - m.HeavyTapThreshold));
+        pendingForce = Mathf.Lerp(1f, m.HeavyMaxForceMultiplier, t); pendingDamage = Mathf.Lerp(1f, m.HeavyMaxDamageMultiplier, t); pendingPause = false;
+        bool ok = TryPunch(); ClearModifiers();
+        if (!ok) { LastMeleeResult = LastPunchResult; return false; }
+        LastHeavyCharge = t; comboStage = 0; LastMeleeResult = $"HEAVY x{Mathf.Lerp(1f, m.HeavyMaxForceMultiplier, t):0.00}";
+        HeavyReleased?.Invoke(t); return true;
+    }
+    /// Airborne E: dive and slam with a radial knockback (PoundRadius, punch force/damage x the pound multipliers), paid
+    /// like a punch (one Strength charge, or the basic-melee cooldown). The dive runs through the normal Update movement,
+    /// so the controller must be enabled.
+    public bool TryGroundPound()
+    {
+        if (GroundPounding) { LastMeleeResult = "Blocked: already pounding"; return false; }
+        if (controller.isGrounded) { LastMeleeResult = "Blocked: grounded"; return false; }
+        poundPending = true; bool ok = TryPunch(); bool started = ok && GroundPounding; ClearModifiers();
+        LastMeleeResult = started ? "GROUND POUND" : LastPunchResult; return started;
+    }
+    System.Collections.IEnumerator GroundPound(PowerStats stats)
+    {
+        var m = Melee; GroundPounding = true; comboStage = 0; GroundPoundStarted?.Invoke();
+        float elapsed = 0f; bool landed = false;
+        while (elapsed < m.PoundMaxSeconds)
+        {
+            verticalVelocity = -m.PoundDiveSpeed;   // Update's own Move carries the dive; its Landed event reports the real impact speed
+            yield return null; elapsed += Time.deltaTime;
+            if (controller.isGrounded) { landed = true; break; }
+        }
+        GroundPounding = false;
+        var world = WorldSession.Instance;
+        if (!landed || world == null || world.PlayerDead || (world.Mode != null && world.Mode.Ended)) { LastMeleeResult = landed ? "Pound cancelled" : "Pound found no ground"; yield break; }
+        LastPoundForce = stats.Force * m.PoundForceMultiplier; LastPoundDamage = stats.Damage * m.PoundDamageMultiplier;
+        LastPoundBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * .3f, m.PoundRadius, LastPoundForce, LastPoundDamage, m.PoundLift, melee: true);
+        LastPoundImpactTime = Time.time; GroundPounds++; GroundPoundImpacted?.Invoke();
+    }
+    /// Distance from the feet to the ground below (infinity with nothing below within 200 m).
+    public float HeightAboveGround()
+    {
+        float nearest = float.PositiveInfinity;
+        foreach (var hit in Physics.RaycastAll(transform.position + Vector3.up * .1f, Vector3.down, 200f, ~0, QueryTriggerInteraction.Ignore))
+            if (hit.transform.root != transform && hit.distance < nearest) nearest = hit.distance;
+        return float.IsPositiveInfinity(nearest) ? nearest : Mathf.Max(0f, nearest - .1f);
     }
     /// Camera-relative movement input of the last frame (zero with no input / in batch mode).
     public Vector3 MoveInput { get; private set; }
