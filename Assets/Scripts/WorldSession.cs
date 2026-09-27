@@ -59,7 +59,7 @@ public sealed class WorldSession : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab)) { MenuOpen=!MenuOpen; Cursor.lockState=MenuOpen?CursorLockMode.None:CursorLockMode.Locked; Cursor.visible=MenuOpen; }
         if (Mode==null&&Input.GetKeyDown(KeyCode.Escape)) { MenuOpen=true; Cursor.lockState=CursorLockMode.None; Cursor.visible=true; }
         if (!MenuOpen && Input.GetKeyDown(KeyCode.H)) RequestSideSwitch();
-        if (!PlayerDead && Hero.transform.position.y<Tuning.Movement.KillPlane) DamagePlayer(Health);
+        if (!PlayerDead && Hero.transform.position.y<Tuning.Movement.KillPlane) DamagePlayer(Health,true);
         if (PlayerDead)
         {
             deathTimer+=Time.deltaTime;
@@ -115,7 +115,16 @@ public sealed class WorldSession : MonoBehaviour
             Progression.AddXp(npc.Role==NpcRole.Civilian?Tuning.Progression.CivilianXp:Tuning.Progression.EnemyXp,npc.transform.position,"defeat");
         if (npc.Role!=NpcRole.Criminal) AddHeat(Tuning.Heat.DefeatHeat);
     }
-    public void DamagePlayer(float damage) { if (damage>0&&!PlayerDead && (Mode==null||!Mode.Ended)) { Health=Mathf.Max(0,Health-damage); PlayerDamaged?.Invoke(PlayerDead); if (PlayerDead) {Powers.Release(false);Mode?.PlayerDefeated();} } }
+    public void DamagePlayer(float damage) { DamagePlayer(damage,false); }
+    /// unblockable: bypasses the Force Field (the kill plane). Otherwise a raised shield absorbs first; a fully absorbed hit
+    /// changes no health and raises no PlayerDamaged (so no hit feel or knockback either).
+    public void DamagePlayer(float damage,bool unblockable)
+    {
+        if (damage<=0||PlayerDead||(Mode!=null&&Mode.Ended)) return;
+        if (!unblockable&&Powers!=null) damage=Powers.AbsorbIncoming(damage);
+        if (damage<=0) return;
+        Health=Mathf.Max(0,Health-damage); PlayerDamaged?.Invoke(PlayerDead); if (PlayerDead) {Powers.Release(false);Mode?.PlayerDefeated();}
+    }
     public void ResolveCrime(CrimeEvent crime)
     {
         if(Mode!=null) {crime.Encounter?.TryComplete(); return;}

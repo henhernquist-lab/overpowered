@@ -7,6 +7,10 @@ using UnityEngine;
     public int PointCost = 1, ExtraCharges = 1;
     public float ForceMultiplier = 1.4f, DamageMultiplier = 1.4f, DurationMultiplier = 1.3f, RangeMultiplier = 1.15f, CooldownMultiplier = .9f;
 }
+/// Instant powers pay one charge + ResourceCost per activation. Channeled powers (Laser Eyes) are held: ResourceCost is only the
+/// energy needed to START, no charge is spent, DrainPerSecond is taken every frame while held, and Cooldown starts when the
+/// channel ends. Defensive powers (Force Field) are ordinary instant activations whose effect acts on the player.
+public enum PowerActivation { Instant, Channeled }
 [CreateAssetMenu(menuName = "Overpowered/Power")]
 public sealed class PowerDefinition : ScriptableObject
 {
@@ -24,6 +28,9 @@ public sealed class PowerDefinition : ScriptableObject
     public CityColor PaletteColor = CityColor.Fire;
     public bool CastingPresentation;
     public MenuGlyph MenuIcon=MenuGlyph.Star;
+    public PowerActivation Activation = PowerActivation.Instant;
+    [Tooltip("Channeled only: energy per second while the fire button is held (ResourceCost is the minimum energy to start).")]
+    public float DrainPerSecond;
     public PowerTier[] Upgrades = { new PowerTier(), new PowerTier() };
     public PowerStats GetStats(int tier)
     {
@@ -41,6 +48,12 @@ public abstract class PowerEffect : ScriptableObject
 {
     public virtual bool IsFlight => false;
     public abstract bool Execute(PowerUser user, PowerRuntime power);
+}
+/// Held powers: Execute starts the channel (true = started), Sustain runs every frame it stays held, Stop runs once when it ends.
+public abstract class ChanneledEffect : PowerEffect
+{
+    public abstract void Sustain(PowerUser user, PowerRuntime power, float dt);
+    public virtual void Stop(PowerUser user, PowerRuntime power) { }
 }
 public sealed class PowerRuntime
 {

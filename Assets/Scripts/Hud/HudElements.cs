@@ -92,8 +92,9 @@ public static class HudBindings
     {
         if (power.Definition.Effect != null && power.Definition.Effect.IsFlight) return FlightKey;
         if (power == user.Strength) return StrengthKey;
-        int index = user.Powers.IndexOf(power);
-        return index >= 0 && index < 9 ? (index + 1).ToString() : FireSelected;
+        // Same mapping SuperHeroController reads (PowerUser.SlotNumber): Forge slot A = 1, slot B = 2.
+        int number = user.SlotNumber(power);
+        return number > 0 ? number.ToString() : FireSelected;
     }
     public static string KeyName(KeyCode key)
     {

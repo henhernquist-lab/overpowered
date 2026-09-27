@@ -19,6 +19,13 @@ public sealed class PowerUser : MonoBehaviour
     public PowerSynergyDefinition Synergy {get;private set;}
     public HeroDefinition HeroDefinition {get;private set;}
     public SynergyRunner SynergyRunner {get;private set;}
+    /// The held (channeled) power, or null. See PowerActivation.
+    public PowerRuntime Channeling { get; private set; }
+    /// Verification harness: treated exactly like the fire button being held (batch mode has no mouse).
+    public bool ScriptedHold;
+    public event System.Action<PowerDefinition> ChannelEnded;
+    /// Force Field (or null): the player's damage-absorbing shield. WorldSession.DamagePlayer routes damage through it.
+    public PlayerShield Shield { get; private set; }
     public bool IsEquipped(PowerDefinition definition)=>definition!=null&&(Forge==null||definition==EquippedA||definition==EquippedB);
     public Vector3 AimOrigin
     {
@@ -76,7 +83,28 @@ public sealed class PowerUser : MonoBehaviour
     public bool Select(PowerRuntime power)
     {
         if (power==null||!Powers.Contains(power)||!IsEquipped(power.Definition)||!Progression.Owns(power.Definition)) return false;
-        Release(false); Selected = power; Message = power.Definition.Description; return true;
+        Release(false); EndChannel(); Selected = power; Message = power.Definition.Description; return true;
+    }
+    /// Number key (1-9) for a power. With Hero Forge: 1 = equipped slot A, 2 = slot B (the roster has more than nine powers,
+    /// so list positions cannot be keys). Without a catalog (legacy all-powers sessions): list position + 1. 0 = no key.
+    public int SlotNumber(PowerRuntime power)
+    {
+        if (power == null) return 0;
+        if (Forge != null) return power.Definition == EquippedA ? 1 : power.Definition == EquippedB ? 2 : 0;
+        int index = Powers.IndexOf(power); return index >= 0 && index < 9 ? index + 1 : 0;
+    }
+    public PowerRuntime PowerForSlot(int number)
+    {
+        if (Forge != null) { var d = number == 1 ? EquippedA : number == 2 ? EquippedB : null; return d == null ? null : Powers.Find(p => p.Definition == d); }
+        return number >= 1 && number <= Mathf.Min(9, Powers.Count) ? Powers[number - 1] : null;
+    }
+    /// Damage the player is about to take, after the Force Field (if raised) absorbs what it can.
+    public float AbsorbIncoming(float damage) => Shield != null ? Shield.Absorb(damage) : damage;
+    /// The player's single shield component (created on first use, then reused for every later cast).
+    public PlayerShield ShieldComponent()
+    {
+        if (Shield == null) Shield = gameObject.AddComponent<PlayerShield>();
+        return Shield;
     }
     public void Tick(float dt, bool grounded)
     {
@@ -108,6 +136,7 @@ public sealed class PowerUser : MonoBehaviour
         if (power == null || !Progression.Owns(power.Definition)) { Message = "Power locked"; return false; }
         if (HeldBody != null && power == heldPower) { Release(true); return true; } // Hurl is the second half of the paid grab.
         if (power.Cooldown > 0f) { Message = "Blocked: cooldown"; return false; }
+        if (power.Definition.Activation == PowerActivation.Channeled) return BeginChannel(power);
         if (power.Charges <= 0) { Message = "Blocked: 0 charges"; return false; }
         if (Energy < power.Definition.ResourceCost) { Message = "Blocked: energy"; return false; }
         Message = "No valid target";
@@ -117,6 +146,40 @@ public sealed class PowerUser : MonoBehaviour
         Activated?.Invoke(power.Definition);
         WorldSession.Instance?.Alarm(transform.position);
         return true;
+    }
+    bool BeginChannel(PowerRuntime power)
+    {
+        if (Channeling == power) return true;
+        if (!(power.Definition.Effect is ChanneledEffect)) { Message = "Channel effect missing"; return false; }
+        // Energy is drained while held; ResourceCost is only the minimum needed to start. No charge is spent.
+        if (Energy < power.Definition.ResourceCost) { Message = "Blocked: energy"; return false; }
+        EndChannel();
+        if (!power.Definition.Effect.Execute(this, power)) return false;
+        Channeling = power; Message = power.Definition.DisplayName + " channeling";
+        Activated?.Invoke(power.Definition);
+        WorldSession.Instance?.Alarm(transform.position);
+        return true;
+    }
+    /// Called every frame by the controller with whether the fire button is held (or ScriptedHold). Ends the channel on release,
+    /// unequip/reselect, a synergy taking over, or when the energy for this frame's drain is not there.
+    public void Channel(bool held, float dt)
+    {
+        if (Channeling == null) return;
+        var power = Channeling;
+        if (!held || Selected != power || !IsEquipped(power.Definition) || (SynergyRunner != null && SynergyRunner.Busy)) { EndChannel(); return; }
+        if (dt <= 0f) return;   // paused / hit-pause frame: nothing drains, nothing ticks
+        float cost = power.Definition.DrainPerSecond * dt;
+        if (Energy < cost) { Message = "Blocked: energy"; EndChannel(); return; }
+        Energy -= cost;
+        ((ChanneledEffect)power.Definition.Effect).Sustain(this, power, dt);
+    }
+    public void EndChannel()
+    {
+        if (Channeling == null) return;
+        var power = Channeling; Channeling = null;
+        power.Cooldown = Stats(power).Cooldown;
+        (power.Definition.Effect as ChanneledEffect)?.Stop(this, power);
+        ChannelEnded?.Invoke(power.Definition);
     }
     public bool FindTarget(float range, out RaycastHit result)
     {
@@ -149,7 +212,7 @@ public sealed class PowerUser : MonoBehaviour
         Vector3 target = AimOrigin + AimDirection * d.HoldDistance;
         HeldBody.AddForce((target - HeldBody.position) * d.HoldSpring - HeldBody.linearVelocity * d.HoldDamping, ForceMode.Acceleration);
     }
-    void OnDisable() { Release(false); }
+    void OnDisable() { Release(false); EndChannel(); }
     void OnDestroy() { if (Progression != null) Progression.Changed -= Refresh; }
 }
 public sealed class ThrownProp : MonoBehaviour

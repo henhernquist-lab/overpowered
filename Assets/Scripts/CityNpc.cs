@@ -26,6 +26,17 @@ public sealed class CityNpc : MonoBehaviour
     public void SetCombatStats(float health, float damage) { Health = MaxHealth = Mathf.Max(1f, health); explicitDamage = Mathf.Max(0f, damage); }
     public bool Dead => Health <= 0f;
     public bool Frozen=>Time.time<frozenUntil;
+    /// Darkness root: cannot move (navigation stopped) but, unlike a freeze, keeps its attack cycle, so a rooted gunner still
+    /// shoots and a rooted melee enemy only hits what is inside its reach.
+    public bool Rooted=>Time.time<rootedUntil;
+    float rootedUntil;
+    public void Root(float duration)
+    {
+        if(duration<=0f||Dead)return;
+        rootedUntil=Mathf.Max(rootedUntil,Time.time+duration);
+        if(Agent!=null&&Agent.enabled&&Agent.isOnNavMesh){Agent.isStopped=true;Agent.velocity=Vector3.zero;}
+    }
+    public void Unroot(){rootedUntil=Time.time;}
     public bool Burning=>Time.time<burningUntil;
     float burningUntil;
     public void MarkBurn(float duration){burningUntil=Mathf.Max(burningUntil,Time.time+duration);}
@@ -91,13 +102,16 @@ public sealed class CityNpc : MonoBehaviour
     public int FreezeStartedFrame { get; private set; } = -1;
     public void Freeze(float duration) { if(!Frozen&&duration>0)FreezeStartedFrame=Time.frameCount; frozenUntil=Mathf.Max(frozenUntil,Time.time+duration); if(duration>0f) CancelAttack(); }
     public void Thaw() { frozenUntil=Time.time; }
-    public void Damage(float amount, PowerUser source)
+    public void Damage(float amount, PowerUser source) { Damage(amount, source, true); }
+    /// assault=false: a continuing tick of an effect whose first hit already counted as the assault (poison, a held beam), so
+    /// it does not add Heat every tick. A kill still counts as a defeat for XP/Heat.
+    public void Damage(float amount, PowerUser source, bool assault)
     {
         if (Dead || amount <= 0f) return;
         Health = Mathf.Max(0f, Health-amount);
         if (Dead) CancelAttack(); // a killed NPC mid-windup never deals its damage
         Damaged?.Invoke(Dead);
-        if(source!=null) world.OnAssault(this);
+        if(source!=null&&assault) world.OnAssault(this);
         if (!Dead) return;
         Agent.enabled=false; GetComponent<Collider>().enabled=false;
         if(source!=null) world.OnDefeat(this); Crime?.CriminalDefeated();
@@ -111,6 +125,7 @@ public sealed class CityNpc : MonoBehaviour
         var c=world.Tuning.Npcs;
         Agent.isStopped=Time.time<frozenUntil || world.PlayerDead;
         if (Agent.isStopped) { CancelAttack(); return; }
+        if (Rooted) { Agent.isStopped=true; Agent.velocity=Vector3.zero; }
         bool combatant=Archetype!=null && Hostile;
         if (!combatant) CancelAttack();
         if (Phase==AttackPhase.Windup) { TickWindup(); return; }
@@ -204,7 +219,7 @@ public sealed class CityNpc : MonoBehaviour
             if (world.Health<before) FeelDirector.PlayerHit(before-world.Health, transform.position);   // feel only
             if (a.Knockback>0f && world.Health<before && !world.PlayerDead) StartCoroutine(Knockback(CommittedDirection, a.Knockback, a.KnockbackSeconds));
         }
-        Agent.isStopped=false;
+        Agent.isStopped=Rooted;
     }
     /// Distance of the player's CURRENT body outside the COMMITTED shape (<= 0 means hit).
     float ShapeMargin()

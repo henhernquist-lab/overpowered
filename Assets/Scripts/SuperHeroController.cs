@@ -67,11 +67,15 @@ public sealed class SuperHeroController : MonoBehaviour
         if (view == null) view = Camera.main;
         if (view == null) return;
         powers.Tick(Time.deltaTime, controller.isGrounded);
+        // Channeled powers (Laser Eyes) run while the fire button stays held; anything that takes input away ends them.
+        powers.Channel(!AbilityDriving && !WorldSession.Instance.MenuOpen && !WorldSession.Instance.PlayerDead &&
+            (Input.GetMouseButton(0) || powers.ScriptedHold), Time.deltaTime);
         if(AbilityDriving)return;
         bool acceptsInput = !WorldSession.Instance.MenuOpen && !WorldSession.Instance.PlayerDead;
         Vector3 forward = Vector3.Scale(view.transform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 right = Vector3.Scale(view.transform.right, new Vector3(1,0,1)).normalized;
         Vector3 move = acceptsInput ? (forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal")).normalized : Vector3.zero;
+        MoveInput = move;
         bool flying = acceptsInput && !controller.isGrounded && Input.GetKey(KeyCode.F) && powers.ConsumeFlight(Time.deltaTime);
         if (move.sqrMagnitude > 0f) transform.forward = Vector3.Slerp(transform.forward, move, Time.deltaTime * movement.TurnResponse);
         float speed = Input.GetKey(KeyCode.LeftShift) ? movement.RunSpeed : movement.WalkSpeed;
@@ -100,8 +104,8 @@ public sealed class SuperHeroController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q)) TryBackflip();
         if (Input.GetMouseButtonDown(0)) powers.Use(powers.Selected);
         if (Input.GetMouseButtonDown(1)) TryHurricaneKick();
-        for (int i = 0; i < Mathf.Min(9, powers.Powers.Count); i++)
-            if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha1 + i))) powers.Select(powers.Powers[i]);
+        for (int i = 1; i <= 9; i++)
+            if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha0 + i))) { var slot = powers.PowerForSlot(i); if (slot != null) powers.Select(slot); }
     }
     public void DebugSimulateFlight(float seconds) { powers.ConsumeFlight(seconds); }
     public void DebugSimulateGround(float seconds) { powers.Tick(seconds, true); }
@@ -199,6 +203,48 @@ public sealed class SuperHeroController : MonoBehaviour
         LastKickResult = $"HURRICANE KICK: {LastKickAffectedBodies} bodies hit @ {LastKickForce:0} N\u00b7s";
         LastKickImpactTime=Time.time;LastKickImpactFrame=Time.frameCount;HurricaneKickImpacted?.Invoke();
     }
+    /// Camera-relative movement input of the last frame (zero with no input / in batch mode).
+    public Vector3 MoveInput { get; private set; }
+    public bool Dashing { get; private set; }
+    public int DashCount { get; private set; }
+    public event System.Action DashStarted;
+    /// Speed power: a short horizontal burst through the CharacterController (never the physics root's rigidbody, never root
+    /// motion). NPC capsules are ignored for the dash so it can cut through a crowd; stops early at a wall.
+    /// onStep runs once per moved frame (the effect uses it for its pass-through hit).
+    public bool Dash(Vector3 direction, float distance, float seconds, System.Action onStep)
+    {
+        direction.y = 0f;
+        if (Dashing || direction.sqrMagnitude < .0001f || distance <= 0f) return false;
+        StartCoroutine(DashRoutine(direction.normalized, distance, Mathf.Max(.02f, seconds), onStep));
+        return true;
+    }
+    System.Collections.IEnumerator DashRoutine(Vector3 direction, float distance, float seconds, System.Action onStep)
+    {
+        Dashing = true; DashCount++; DashStarted?.Invoke();
+        var ignored = new System.Collections.Generic.List<Collider>();
+        if (WorldSession.Instance != null)
+            foreach (var npc in WorldSession.Instance.Npcs)
+            {
+                var c = npc != null ? npc.GetComponent<Collider>() : null;
+                if (c != null && c.enabled) { Physics.IgnoreCollision(controller, c, true); ignored.Add(c); }
+            }
+        transform.forward = direction;
+        float speed = distance / seconds, moved = 0f;
+        while (moved < distance)
+        {
+            if (Time.deltaTime > 0f)   // frozen frame (hit pause): no zero Move, ground contact kept
+            {
+                float step = Mathf.Min(distance - moved, speed * Time.deltaTime);
+                var flags = controller.Move(direction * step);
+                moved += step; onStep?.Invoke();
+                if ((flags & CollisionFlags.Sides) != 0) break;
+            }
+            yield return null;
+        }
+        foreach (var c in ignored) if (c != null && controller != null) Physics.IgnoreCollision(controller, c, false);
+        Dashing = false;
+    }
+    void OnDisable() { Dashing = false; }
     public bool TryJump()
     {
         if(!controller.isGrounded)return false;
