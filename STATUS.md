@@ -1,5 +1,73 @@
 # Prototype Status
 
+## Verification gauntlet (branch `cloud/verification-gauntlet`) — 2026-09-27, Cloud worker — NEW VERIFICATION ONLY, NO GAMEPLAY CHANGES
+
+Added a **verification gauntlet** on top of the existing suites (nothing under `Assets/Scripts/` shipping logic, no scenes,
+packages, resources, tuning, materials/shaders or runtime files of Hero Forge / CityNpc / WorldSession / PlayerProgression /
+GameModeSession were modified — verified with `git diff --stat`, only NEW files + this STATUS + one doc). New files:
+`Assets/Scripts/GauntletVerificationSupport.cs` (save-safety sentinel + Unity-contention metadata + evidence/manifest writers),
+`Assets/Scripts/GauntletFlow.cs` (drives the real GameFlow Home/city/results waits), `Assets/Scripts/VerificationInventoryRunner.cs`
+(inventory + hard-code audit), `Assets/Scripts/StaticStateVerificationRunner.cs` (flow matrix + static-state audit),
+`Assets/Scripts/LongSessionWatchdogRunner.cs` (opt-in leak watchdog), `Assets/Editor/VerificationGauntlet.cs` (repeatability),
+`Assets/Editor/VerificationGauntletMaster.cs` (master orchestrator), `Assets/Editor/VerificationGauntletInventory.cs`,
+`Assets/Editor/StaticStateVerification.cs`, `Assets/Editor/LongSessionWatchdog.cs`,
+`Assets/Editor/VerificationGauntletReloadChain.cs`, `docs/verification-gauntlet.md`.
+
+What each item delivers (full details in `docs/verification-gauntlet.md`):
+1. **Master orchestrator** (`VerificationGauntletMaster.Run`): runs the EXISTING suites unchanged, each in its own Unity
+   process against a fresh working copy of the project (`Assets`/`Packages`/`ProjectSettings`, no Library), producing
+   `Verification/Gauntlet/master/manifest.tsv` (suite, entry, process exit, PASS, FAIL, duration, PID, evidence, commit) and
+   `summary.md`. No suite is rewritten; `OP_GAUNTLET_EXTENDED=1` adds profile/benchmark suites, `OP_GAUNTLET_ONLY` subsets.
+2. **Save-safety sentinel**: before/after every gauntlet batch (and after every orchestrated suite batch) the user's real
+   progression save (`Application.persistentDataPath/<SaveFilename>`) is SHA-256-hashed + metadata-stamped; any change FAILS
+   loudly. Only hashes/metadata are written to evidence — never save contents.
+3. **Repeatability runner** (`VerificationGauntlet.Repeatability`, `OP_GAUNTLET_REPEATS=N`): N rounds over HUD Phase 2/3,
+   Audio, Sidekick, Humanoid and BackflipHurricane workloads, per-round PASS/FAIL/seed-state lines and the first failing
+   round recorded per suite.
+4. **Contention sentinel**: every gauntlet evidence file records other live Unity processes; performance lines are labelled
+   `PERF INVALID (Unity contention detected)` instead of being read as hero differences. Never kills processes (the
+   orchestrator kills only its own timed-out child).
+5. **Run/Reload chain validation** (`VerificationGauntletReloadChain.Run`): audits every Run/Reload pair, proves each
+   handoff pointer lives in the sandbox tree, and demonstrates in batch mode that `PlayerProgression.Initialize(null)` after
+   a failed Run binds a THROWAWAY save (shipping PlayerProgression untouched).
+6. **Verification inventory** (`VerificationGauntletInventory.Run`): entry point ↔ runner ↔ evidence mapping for all suites,
+   flagging entries without runners, runners without entries, Reload-without-Run, stale doc references and suites still
+   assuming Coming Soon Free Play/Endless.
+7. **Hard-code audit** (`VerificationGauntletInventory.HardCodeAudit`): report-only exact file:line scan for literal power/
+   synergy/NPC counts, city-grid coordinates, literal mode IDs and fixed resolutions. It does not rewrite anything.
+8. **Game-flow matrix** (`StaticStateVerification.Run`): Home → Hero/Villain/Free Play/Endless Hero/Endless Villain →
+   Results (where the mode ends) → Home, two full cycles, checking repeated cycles leak no static state.
+9. **Static-state audit**: census (GameObjects/renderers/materials/particles/audio/NPCs/crimes/managed bytes) across the
+   matrix plus explicit contract checks on WorldSession/GameFlow/CityMaterials/EnemyRoster/NpcLod/TimeArbiter/audio
+   director/Feel caches; exact offender type/field reported, nothing fixed here.
+10. **Long-session watchdog** (`LongSessionWatchdog.Run`, opt-in): accelerated Free Play session with periodic census
+    sampling; monotonic growth reported as slope/game-hour, judged against an optional `OP_WATCHDOG_CONTROL` baseline
+    census, never invented thresholds.
+11. **Reports**: `Verification/Gauntlet/<area>/{results.txt,summary.txt,summary.md,census.csv,manifest.tsv}`.
+
+**What Cloud could NOT execute (no Unity available in the Cloud sandbox):** every Play-Mode verifier above was compiled
+(`dotnet build Overpowered.Build.csproj -p:UseSharedCompilation=false` — 0 errors, 0 warnings) but NOT executed; there are
+therefore **no gauntlet PASS counts to claim and none are claimed**. The master orchestrator's working-copy isolation and
+every in-process verifier need their first LOCAL run before any of this is treated as passing. Suite behaviour claims in
+earlier STATUS entries are unchanged and still rest on their own committed evidence.
+
+**Exact LOCAL command order** (Unity 6000.6.0f1, idle machine, no other Unity process open):
+
+```sh
+U=/Applications/Unity/Hub/Editor/6000.6.0f1/Unity.app/Contents/MacOS/Unity
+# 1. static, seconds:
+"$U" -batchmode -projectPath . -executeMethod VerificationGauntletInventory.Run -quit -logFile Verification/Gauntlet/inventory/run.log
+"$U" -batchmode -projectPath . -executeMethod VerificationGauntletInventory.HardCodeAudit -quit -logFile Verification/Gauntlet/hardcode-audit/run.log
+"$U" -batchmode -projectPath . -executeMethod VerificationGauntletReloadChain.Run -quit -logFile Verification/Gauntlet/reload-chain/run.log
+# 2. play-mode, self-exiting (no -quit):
+"$U" -batchmode -projectPath . -executeMethod StaticStateVerification.Run -logFile Verification/Gauntlet/static-state/run.log
+OP_GAUNTLET_REPEATS=3 "$U" -batchmode -projectPath . -executeMethod VerificationGauntlet.Repeatability -logFile Verification/Gauntlet/repeatability/run.log
+# 3. opt-in watchdog:
+"$U" -batchmode -projectPath . -executeMethod LongSessionWatchdog.Run -logFile Verification/Gauntlet/watchdog/run.log
+# 4. full orchestrated regression (long):
+"$U" -batchmode -projectPath . -executeMethod VerificationGauntletMaster.Run -logFile Verification/Gauntlet/master/run.log
+```
+
 ## Phase 4: game feel + HUD-pass final verification — 2026-09-25 (current)
 
 **Every feel value lives in ONE place:** the new `FeelSettings Feel` section of `GameTuning.asset`, beside the existing
