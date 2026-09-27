@@ -32,12 +32,15 @@ public sealed class PoisonEffect : PowerEffect
 public sealed class Poisoned : MonoBehaviour
 {
     CityNpc npc; PowerUser source; PoisonEffect settings; CityColor color;
-    float dps, until, nextTick, baseSeconds; bool assaulted, spread;
+    float dps, nextTick, baseSeconds; int ticksLeft; bool assaulted, spread;
     public int Generation { get; private set; }
     public float TotalDamage { get; private set; }
     public int Ticks { get; private set; }
-    public bool Active => npc != null && !npc.Dead && Time.time < until;
+    /// Poisoned = ticks still owed. Duration is converted to a whole tick count, so the total is exactly dps x duration.
+    public bool Active => npc != null && !npc.Dead && ticksLeft > 0;
+    public int TicksLeft => ticksLeft;
     public bool Spread => spread;
+    bool lethalTick;
     /// (from, to) each time poison jumps from a dying NPC to a new one.
     public static event System.Action<CityNpc, CityNpc> Spreading;
     static readonly Collider[] nearby = new Collider[64];
@@ -48,7 +51,8 @@ public sealed class Poisoned : MonoBehaviour
         bool wasActive = p.Active;
         p.source = user; p.settings = settings; p.color = color; p.baseSeconds = seconds;
         p.dps = wasActive ? Mathf.Max(p.dps, dps) : dps;
-        p.until = Mathf.Max(wasActive ? p.until : 0f, Time.time + seconds);
+        int ticks = Mathf.Max(1, Mathf.RoundToInt(seconds / Mathf.Max(.01f, settings.TickSeconds)));
+        p.ticksLeft = wasActive ? Mathf.Max(p.ticksLeft, ticks) : ticks;
         p.Generation = wasActive ? Mathf.Min(p.Generation, generation) : generation;
         if (!wasActive) { p.nextTick = Time.time + settings.TickSeconds; p.assaulted = false; p.spread = false; }
         p.enabled = true;
@@ -58,17 +62,19 @@ public sealed class Poisoned : MonoBehaviour
     {
         if (!Active) { enabled = false; return; }
         if (Time.time < nextTick) return;
-        nextTick += settings.TickSeconds;
+        nextTick += settings.TickSeconds; ticksLeft--;
         float damage = dps * settings.TickSeconds;
         TotalDamage += damage; Ticks++;
         bool first = !assaulted; assaulted = true;
         FeelDirector.Instance?.Particles.Burst(npc.transform.position + Vector3.up * 1.2f, color, settings.TickParticles);
+        lethalTick = true;
         npc.Damage(damage, source, first);   // a lethal tick raises Damaged(true) -> OnDamaged spreads
+        lethalTick = false;
     }
     void OnDamaged(bool died)
     {
-        // Still poisoned at the moment of death (until has not passed): spread once.
-        if (!died || spread || settings == null || Time.time >= until) return;
+        // Still poisoned at the moment of death: spread once. The lethal poison tick itself counts (it was owed while alive).
+        if (!died || spread || settings == null || (ticksLeft <= 0 && !lethalTick)) return;
         spread = true; enabled = false;
         if (Generation >= settings.MaxGenerations) return;
         Vector3 origin = transform.position;
