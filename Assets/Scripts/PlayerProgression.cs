@@ -240,6 +240,9 @@ public sealed class PlayerProgression : MonoBehaviour
                 var when = File.GetLastWriteTimeUtc(candidate);
                 if (loaded == null || when > newest) { loaded = copy; newest = when; RecoveredFrom = candidate; }
             }
+            // Recovered over an unreadable save: remove it (its copy is in .corrupt) so the next Save() creates the file fresh
+            // and leaves the good .bak alone, instead of File.Replace moving the corrupt file over that backup.
+            if (loaded != null && error != null) { try { File.Delete(SavePath); } catch (Exception delete) { Debug.LogWarning("Could not remove the unreadable save: " + delete.Message); } }
             if (loaded == null && error != null) Debug.LogWarning("Save unreadable and no readable backup; fresh progression in memory: " + error);
             else if (RecoveredFrom != null) Debug.LogWarning("Progression recovered from " + RecoveredFrom + (error != null ? " (save unreadable: " + error + ")" : " (save missing)"));
         }

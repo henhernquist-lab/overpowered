@@ -124,6 +124,7 @@ public static class SaveRobustnessVerification
         p.Save(); Done(p);
         var again = Load(path);
         Check(again.LastError == null && again.RecoveredFrom == null && again.Data.Level == 7, "After the next save the main file is valid again (level 7, no error).");
+        Check(File.Exists(path + ".bak") && File.ReadAllText(path + ".bak") == Save(7, 3), "The good .bak was NOT overwritten by the corrupt file (the corrupt save was removed after being preserved).");
         Done(again);
         string alone = Fresh("corrupt-alone"); File.WriteAllText(alone, "{ not json");
         var q = Load(alone);
