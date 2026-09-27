@@ -18,6 +18,8 @@ public sealed class WorldSession : MonoBehaviour
     public float Heat { get; private set; }
     /// District gameplay layer (profiles per district; all neutral unless Resources/DistrictProfiles is enabled).
     public DistrictContext Districts { get; private set; }
+    /// Villain / open-world pursuit state (Clear / Alerted / Pursued / Searching / Escaped); read-only facts for missions.
+    public PursuitTracker Pursuit { get; private set; }
     public int Stars => Mathf.Clamp(Mathf.CeilToInt(Heat),0,Tuning.Heat.MaximumStars);
     public float Health { get; private set; }
     public bool PlayerDead => Health<=0;
@@ -45,6 +47,7 @@ public sealed class WorldSession : MonoBehaviour
         hero.Initialize(Powers,tuning.Movement);
         Health=MaxHealth;
         Districts=gameObject.AddComponent<DistrictContext>(); Districts.Initialize(this);
+        Pursuit=gameObject.AddComponent<PursuitTracker>(); Pursuit.Initialize(this);
         if(GameFlow.Instance!=null&&GameFlow.Instance.ActiveMode!=null)
         { Mode=gameObject.AddComponent<GameModeSession>(); Mode.Initialize(this,GameFlow.Instance.ActiveMode); Message=Mode.Definition.Description; }
         int civilians=Mode==null?tuning.City.Civilians:Mode.Definition.Civilians;
@@ -73,7 +76,7 @@ public sealed class WorldSession : MonoBehaviour
             if (deathTimer>=Tuning.Movement.RespawnDelay)
             {
                 var cc=Hero.GetComponent<CharacterController>(); cc.enabled=false; Hero.transform.position=City.Spawn+Vector3.up*Tuning.Movement.Height; cc.enabled=true;
-                Hero.ResetMotion(); Health=MaxHealth; deathTimer=0; Heat=0; ReconcilePolice();
+                Hero.ResetMotion(); Health=MaxHealth; deathTimer=0; Heat=0; ReconcilePolice(); Pursuit.ResetState();
                 PlayerRespawned?.Invoke();
             }
         }

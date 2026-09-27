@@ -126,7 +126,7 @@ public sealed class GameModeSession : MonoBehaviour
     public void Finish(SessionOutcome outcome,string reason,bool home=false)
     {
         if(Ended) return;
-        Ended=true; World.MenuOpen=true; World.Powers.Release(false);
+        Ended=true; World.MenuOpen=true; World.Powers.Release(false); World.Pursuit?.ResetState();
         home|=!Definition.ShowResults;
         var result=new SessionResult {ModeId=Definition.Id,ModeName=Definition.DisplayName,Outcome=outcome,Reason=reason,Score=Score,Xp=XpEarned,Successes=Successes,Failures=Failures,Defeats=Defeats,Seconds=Elapsed,
             Side=World.Progression.Data.Side,Rescues=Rescues,PeakHeat=PeakHeat,TimeLimit=Definition.SessionSeconds,StartLevel=startLevel,StartXp=startXp,Layout=Definition.Results};
