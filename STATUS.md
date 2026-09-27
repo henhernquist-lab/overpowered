@@ -3260,3 +3260,186 @@ Content switch, **not run**: "Use mission rotations in Hero and Villain modes". 
   - Draws are seeded by (run seed, wave). `RandomizePerRun` is on by default; off means every run uses the asset `Seed`.
     `EndlessWaveState.RunSeed` is exposed for replays.
   - EndlessSimulation checks that the same seed replays the same sequence and a different seed differs.
+
+## CLOUD WORLD DEPTH — `cloud/world-depth` (2026-09-27, appended; CLOUD agent, NO Unity)
+
+Branched from `cloud/replayability-depth` at `b3010f1`. `origin/main` (`49ffbed`) was already merged at every checkpoint, and
+there was no CLOUD FEEDBACK newer than #1. **Nothing here has run in Unity: every item is written, unverified, and
+awaiting a local run.** Compile check was the usual approximation (Roslyn C# 9 against Unity 2021.3 DLLs, diffed against the
+`origin/main` baseline): no new errors except Unity-6-only APIs the project already uses (`FindObjectsByType`).
+
+Ownership kept: no scenes, prefabs, shaders, materials, lighting, camera, Timeline / Cinemachine / Splines, character art or
+animation, HUD layout, packages or hand-written YAML. New assets come only from editor menus. **Every feature is OFF or
+neutral until LOCAL switches it on.**
+
+### Commits (oldest first)
+| Commit | What |
+|---|---|
+| `e5b4214` | **District gameplay profiles** (W1): data layer, neutral defaults, hooks, `DistrictProfileVerification` |
+| `1711898` | **Pursuit state model** (W5): Clear / Alerted / Pursued / Searching / Escaped, `PursuitVerification` |
+| `e294864` | **Stage framework**: multi-point groups, multi-group stages, SearchTargets / DefendTargets / LosePursuit, cross-district points with repair (W3), framework checks |
+| `6a72f2b` | **Twelve world missions** (W2 + W3): two per district plus four cross-district, dormant (rotations only) |
+| `a2a753e` | **Heat response tiers** (W4): `HeatResponseProfile`, neutral by default, `HeatResponseVerification` |
+| `d294188` | `HeatResponseSetup`: dormant suggested villain tiers |
+| `27805cb` | **Civilian outcome ledger** (W6): session events + summary, `CivilianLedgerVerification` |
+| `d8394d3` | **Per-district diagnostics** (W7): OFF by default, CSV + JSON, `DistrictDiagnosticsVerification` |
+
+### W1 District gameplay profiles
+- `DistrictGameplayProfile` (SO) holds:
+  - category weights, mission / enemy / activity tags, `DifficultyOffset`;
+  - multipliers `CivilianDensity`, `PoliceResponse`, `HeatResponse`, `DestructionReward` (default 1).
+- `DistrictProfileSet` (`Resources/DistrictProfiles`) maps CityLayout district names to profiles. It has an `Enabled` flag
+  and ships disabled.
+- `WorldSession.Districts` (`DistrictContext`) exposes:
+  - `PlayerDistrict`, `PlayerProfile`, `DistrictChanged`;
+  - `ProfileAt` and the hook values.
+  - When inactive, every hook returns exactly 1 / 0 / null.
+- Hooks:
+  - civilian spawn (the old loop is used unless active);
+  - Heat from destruction / assault / defeat / crime;
+  - destruction XP;
+  - police count and district archetype (by `EnemyArchetype.Tags`);
+  - encounter selection: option `Tags` must meet the district's MissionTags, and `Category` weights apply;
+  - staged mission band offset.
+- The name scan in the verifier proves gameplay code has no district-name literals. Names appear only in layout / art data
+  and the editor setup.
+
+### W2 / W3 World missions and cross-district stages
+- `StagedMissionLibrary.World.cs` has 12 recipes with unique stage sequences:
+  - Downtown: highrise-panic (hero), corporate-raid (villain).
+  - Docks: smuggler-intercept (hero), dockyard-score (villain).
+  - Park: public-event-attack (hero), park-chaos (villain).
+  - Residential: neighbourhood-siege (hero), safehouse-break-in (villain).
+  - Cross-district: citywide-pursuit and emergency-relay (hero); multi-point-heist and cross-town-getaway (villain).
+- Actors are placeholders (existing roles / archetypes).
+- They go only into the dormant rotation assets. The shipping mode lists are unchanged.
+- `MissionPoint.Placement = OtherDistrict`, with optional `DistrictTag` and `NotInDistrictsOf`, picks a sidewalk in
+  another district from the mission's seeded random.
+  - Fallbacks, in order: drop the tag → exclude only the own district → the site. Each fallback is recorded in
+    `PointFallbacks`.
+  - `BeginStage` repairs a destination that became invalid (`DestinationRepairs`), so stages cannot soft-lock.
+  - HUD targets go through the existing `ModeRules.Targets` / objective API.
+- New stage kinds:
+  - `SearchTargets`: one seeded real target; decoys run `OnDecoy`.
+  - `DefendTargets`: besiegeable hardpoints; fails when losses exceed `AllowedLosses`.
+  - `LosePursuit`: completes after `Seconds` while Escaped / Clear, or Alerted with no contact for `SearchSeconds`.
+    Being 30 m away while still engaged stays Pursued, and the framework checks this control.
+- Losing a critical escorted actor fails the mission.
+
+### W4 Heat response tiers
+- `HeatResponseProfile` (`Resources/HeatResponse`) has `Enabled` and `ApplyToHero` (both default off).
+- Each tier has:
+  - `MinStars`;
+  - arrival / count multipliers;
+  - hostile archetype and share;
+  - elite health;
+  - `Persistent`;
+  - pursued-decay multiplier;
+  - `RoadblockEligible` (event only, no visuals).
+- `WorldSession.Response` applies the current tier through multipliers: 1 = the old expression exactly. There is no star
+  switch in WorldSession.
+- Dropping below a tier removes its modifiers from police already spawned.
+- Hero police keep their non-hostile defaults. Endless explicit stats stay Heat-independent.
+
+### W5 Pursuit
+- `WorldSession.Pursuit` (`PursuitTracker`) samples every 0.25 s. Contact = a hostile Cop / PursuingHero NPC within range
+  with a clear raycast.
+- Transitions:
+  - Alerted → Pursued (contact);
+  - Pursued → Searching after `LoseContactSeconds`;
+  - Searching → Escaped after `SearchSeconds` and `EscapeDistance`;
+  - Escaped holds for `EscapedHoldSeconds`.
+- Session end and respawn call `ResetState`. Hero play never enters pursuit.
+- Optional tuning asset: `Resources/PursuitSettings`. The code defaults apply without it.
+
+### W6 Civilian outcomes
+- `WorldSession.Civilians` (`CivilianLedger`) tracks each outcome once per civilian instance, within the session only:
+  - Rescued, SafelyEscorted;
+  - HarmedByHostile / HarmedByPlayer / HarmedByEnvironment;
+  - Killed, LostInMission.
+- Attribution:
+  - player-sourced damage counts as player harm;
+  - damage inside `HarmContext.Hostile()` counts as hostile harm (crime danger, hostage damage, staged harass);
+  - everything else counts as environment (fire burn is scoped explicitly).
+- Despawn / mission cleanup is not a death.
+- The summary is copied to `SessionResult.Civilians`. Instance ids are never saved.
+- There is no morality UI and no rebalancing.
+
+### W7 Per-district diagnostics (for LOCAL)
+- `DistrictDiagnostics` is attached only by:
+  - **Overpowered > Diagnostics > Record District Diagnostics** (EditorPrefs toggle, off by default);
+  - the `-districtDiagnostics` command-line flag;
+  - a verifier.
+- It is read-only. **Sampled** data, per district:
+  - every `SampleSeconds` (default 1 s): active civilians, hostile NPCs, NPCs within 40 m of the player, active encounters,
+    active mission stage (per kind / label), Heat, and time per pursuit state;
+  - every 5 s: breakable props;
+  - at start / end and every 30 s: enabled and visible renderers.
+- **Event counts**:
+  - player hits and kills;
+  - player damage events and defeats;
+  - mission successes / failures (by site);
+  - encounters spawned, style points, XP (at the grant position), Heat gained, pursuits started;
+  - civilian outcomes;
+  - time and entries per district.
+- Data is aggregated into 60 s buckets plus session totals. Nothing is logged per frame.
+- Output: at session end, or via **Write District Diagnostics Now**, it writes
+  `Verification/DistrictDiagnostics/district-diagnostics-<mode>-<time>{-buckets.csv,-totals.csv,.json}`. In builds it
+  writes to `persistentDataPath`.
+- The JSON records the measured sampling cost (`samplingMilliseconds`).
+
+### Setup menus and content switches (none run by CLOUD)
+| Create (safe, idempotent) | Content switch (LOCAL decides) |
+|---|---|
+| Overpowered > Districts > Create missing district profiles | Overpowered > Districts > Enable district profiles |
+| Overpowered > Heat > Create missing Heat response profile | Overpowered > Heat > Enable Heat response tiers |
+| Overpowered > Missions > Create missing staged missions / mission rotations | Overpowered > Missions > Use mission rotations in Hero and Villain modes |
+| — | Overpowered > Diagnostics > Record District Diagnostics (per machine) |
+
+Batch entries: `DistrictProfileSetup.Batch`, `HeatResponseSetup.Batch`, `StagedMissionSetup.Batch`. Run
+`MissionSetup.Batch` before `StagedMissionSetup.Batch` if the rotations should include the scenario missions.
+
+### Suggested local test order
+1. Compile; then restore `Side_Kick_Data.db` after every Play Mode run.
+2. Regression, because the changed files are shared:
+   - `StageFrameworkVerification.Run`, `StagedMissionVerification.Run` (creates the missing mission and rotation assets);
+   - `EncounterSelectionVerification`, `MissionVerification`, `ModeVerification`;
+   - `ChallengeVerification` (XP grants); `EndlessEventsVerification` (police / Heat paths).
+3. New suites, all in-memory (they never enable the shipped assets):
+   - `DistrictProfileVerification.Run`, `PursuitVerification.Run`, `HeatResponseVerification.Run`;
+   - `CivilianLedgerVerification.Run`, `DistrictDiagnosticsVerification.Run`.
+4. Only after they pass, play-test with the content switches one at a time and a diagnostics recording.
+
+### Cherry-pick groups and conflict files
+The commits are layered, so **merge the branch whole** rather than cherry-picking. If it must be split, keep this order:
+1. W1 `e5b4214`;
+2. W5 `1711898`;
+3. framework `e294864` (needs 1–2);
+4. missions `6a72f2b` (needs 3);
+5. Heat `a2a753e` + `d294188`;
+6. civilians `27805cb` (needs 3);
+7. diagnostics `d8394d3` (needs 1, 2, 6).
+
+Files LOCAL may also be touching:
+- `WorldSession.cs`, `GameModeSession.cs`, `GameFlow.cs` (`SessionResult.Civilians`);
+- `CityNpc.cs` (one ledger line in `Damage`), `CrimeEncounter.cs`, `EncounterSelection.cs`;
+- `Missions/StagedScenario.cs`, `FireScenario.cs`, `HostageScenario.cs`, `EnemyArchetype.cs` (`Tags`).
+
+There are no scene, prefab, material or package changes.
+
+### Unverified / limits
+- None of it has run.
+- Unknowns:
+  - Travel time between cross-district points versus stage timeouts is unplayed.
+  - The suggested district and tier values are guesses.
+  - Placeholder actors only.
+  - The roadblock hook raises an event and nothing else.
+  - Pursuit contact uses a single raycast (no vision cones, by design).
+- Diagnostics cost is measured only inside its verifier (no build, no long session).
+- District civilian density redistributes civilians only when the layer is active.
+
+### Henry decides
+- Whether and when to enable the district profiles, Heat tiers and mission rotations, and their values.
+- Pursuit timings, and whether LosePursuit stages feel fair.
+- Whether any world mission graduates from the dormant rotations into shipping mode lists.
+- Whether civilian outcomes ever feed UI or rewards (currently data only).
