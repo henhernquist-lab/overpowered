@@ -1,0 +1,12 @@
+HOME ambientMode=Skybox ambientLight=RGBA(0.212, 0.227, 0.259, 1.000) skybox=Default-Skybox/Skybox/Procedural fog=False
+LIGHT Sun color=RGBA(1.000, 1.000, 1.000, 1.000) intensity=1.2 shadows=None shadowStrength=1 renderMode=Auto cullingMask=-1 bias=0.05/0.4 rot=(45.00, 325.00, 0.00) colorTemp=False/6570
+RENDER ambientMode=Skybox ambientLight=RGBA(0.450, 0.500, 0.600, 1.000) sky=RGBA(0.450, 0.500, 0.600, 1.000) eq=RGBA(0.114, 0.125, 0.133, 1.000) ground=RGBA(0.047, 0.043, 0.035, 1.000) intensity=1 sun=Sun skybox=Default-Skybox/Skybox/Procedural reflMode=Skybox reflInt=1 fog=True Exponential 0.0016 RGBA(0.660, 0.740, 0.820, 1.000)
+PROBE up=RGBA(0.139, 0.218, 0.376, 1.000) down=RGBA(0.151, 0.136, 0.121, 1.000) fwd=RGBA(0.188, 0.235, 0.308, 1.000) right=RGBA(0.202, 0.257, 0.349, 1.000)
+SKY _SunDisk=1
+SKY _SunSize=0.04
+SKY _SunSizeConvergence=5
+SKY _AtmosphereThickness=1
+SKY _Exposure=1.3
+SKY _SkyTint=RGBA(0.500, 0.500, 0.500, 1.000)
+SKY _GroundColor=RGBA(0.369, 0.349, 0.341, 1.000)
+CAMERA clear=Skybox bg=RGBA(0.045, 0.055, 0.140, 1.000) hdr=True path=Forward colorSpace=Gamma pixelLights=4 shadows=All dist=150 cascades=4

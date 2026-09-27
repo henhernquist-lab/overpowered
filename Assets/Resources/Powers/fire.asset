@@ -40,6 +40,13 @@ MonoBehaviour:
   Color: {r: 1, g: 0.25, b: 0.03, a: 1}
   PaletteColor: 16
   CastingPresentation: 1
+  Light:
+    Enabled: 1
+    Color: 16
+    Intensity: 3
+    Range: 8
+    Seconds: 0.32
+    Travel: 0.6
   MenuIcon: 1
   Upgrades:
   - Name: Upgrade
