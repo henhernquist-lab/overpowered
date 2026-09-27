@@ -117,6 +117,9 @@ public sealed class EndlessWaveState : ModeDirectorState
     /// MaxAlive slots in use: 1 per regular enemy, EliteAliveCost / MinibossAliveCost for elites / the miniboss.
     public int AliveCost { get; private set; }
     public int PeakAlive { get; private set; }
+    /// Seed of this run's wave plans (Events.Seed, or random per run when Events.RandomizePerRun). Verification may fix it.
+    public int RunSeed { get; private set; }
+    public static int? RunSeedOverride;
     public int PeakAliveCost { get; private set; }
     public int EliteKills { get; private set; }
     public int MinibossKills { get; private set; }
@@ -132,6 +135,8 @@ public sealed class EndlessWaveState : ModeDirectorState
     {
         Attach(session); Tuning = tuning; path = new NavMeshPath();
         World.PlayerDamaged += OnPlayerDamaged;
+        var events = tuning.Events;
+        RunSeed = RunSeedOverride ?? (events != null && events.RandomizePerRun ? Random.Range(int.MinValue, int.MaxValue) : events != null ? events.Seed : 0); RunSeedOverride = null;
         Arena = ArenaCentre();
         Intermission = true; IntermissionLeft = Tuning.IntermissionSeconds;
     }
@@ -167,7 +172,7 @@ public sealed class EndlessWaveState : ModeDirectorState
     void StartWave(int wave)
     {
         Wave = wave; Spawned = 0; WaveKills = 0; Intermission = false; IntermissionLeft = 0f; hitThisWave = false;
-        Plan = Tuning.Events != null ? Tuning.Events.Plan(Tuning, wave) : null;
+        Plan = Tuning.Events != null ? Tuning.Events.Plan(Tuning, wave, RunSeed) : null;
         World.Message = $"WAVE {Wave}: {Size} enemies";
         if (Plan != null && (Plan.Modifiers.Count > 0 || Plan.Miniboss))
         {

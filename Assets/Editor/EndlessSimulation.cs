@@ -85,6 +85,9 @@ public static class EndlessSimulation
             if (w % 5 == 0 || w == 1) log.Add($"WAVE {w,2}: {plan.Size,3} enemies ({plan.Elites} elite{(plan.Miniboss ? ", miniboss" : "")}){(plan.Modifiers.Count > 0 ? " [" + plan.Names + "]" : "")}; regular hp {rHp:F0} dmg {rDmg:F1}; total hp {totalHp:F0}; peak alive {peak} (cost {peakCost}/{target}); full-clear score {clear} (cumulative {cumulative}); est. {seconds:F0} s at {ReferenceDps} dps.");
         }
         json.Append("]\n");
+        string Sequence(int seed) { var parts = new List<string>(); for (int w = 1; w <= 50; w++) parts.Add(events.Plan(director, w, seed).Names); return string.Join("|", parts); }
+        Check(log, Sequence(11) == Sequence(11) && Sequence(11) != Sequence(12) && Sequence(events.Seed) == Sequence(events.Seed),
+            $"Run seeds: the same seed replays the same 50-wave modifier sequence; a different seed draws a different one (RandomizePerRun {events.RandomizePerRun}).");
         File.WriteAllText(Folder + "waves.csv", csv.ToString()); File.WriteAllText(Folder + "waves.json", json.ToString());
         log.Add("PASS Waves 1-50: deterministic plans, modifier rules, exact elite/miniboss slot counts, finite stats, no alive-budget deadlock, peak alive <= MaxAlive and cost <= target (a lone heavy enemy excepted).");
         log.Add("NOTE est_clear_seconds assumes a constant " + ReferenceDps + " dps with no travel, misses or defensive time: a ratio between waves, not a playtest number.");

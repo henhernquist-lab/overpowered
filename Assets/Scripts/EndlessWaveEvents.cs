@@ -37,17 +37,20 @@ public sealed class EndlessWaveEvents : ScriptableObject
     [Min(1)] public int MinibossAliveCost = 4;
     [Header("Scoring (each x wave)")]
     public int EliteKillScore = 25, MinibossKillScore = 150, FlawlessBonus = 40;
-    [Tooltip("Modifier draws are seeded by (Seed, wave).")] public int Seed = 7331;
+    [Tooltip("Modifier draws are seeded by (run seed, wave). The run seed is Seed, or a fresh random one per run.")] public int Seed = 7331;
+    [Tooltip("Each Endless run draws its own modifier sequence (replayability); off = every run uses Seed.")] public bool RandomizePerRun = true;
 
     public enum Slot { Regular, Elite, Miniboss }
-    public WavePlan Plan(EndlessWaveDirector director, int wave)
+    public WavePlan Plan(EndlessWaveDirector director, int wave) => Plan(director, wave, Seed);
+    /// The plan for `wave` of a run seeded with `runSeed` (EndlessWaveState.RunSeed): same seed, same waves.
+    public WavePlan Plan(EndlessWaveDirector director, int wave, int runSeed)
     {
         var plan = new WavePlan { Wave = wave, Health = 1f, Damage = 1f, Count = 1f, Score = 1f, Modifiers = new List<WaveModifier>() };
         if (wave >= ModifierFromWave && (wave - ModifierFromWave) % ModifierEvery == 0 && Modifiers != null)
         {
             int want = Mathf.Min(MaxModifiersPerWave, 1 + (wave - ModifierFromWave) / ExtraModifierEvery);
             var pool = new List<WaveModifier>(); foreach (var m in Modifiers) if (m != null && m.Weight > 0f && wave >= m.FromWave) pool.Add(m);
-            var random = new System.Random(unchecked(Seed * 7919 + wave * 104729));
+            var random = new System.Random(unchecked(runSeed * 7919 + wave * 104729));
             while (plan.Modifiers.Count < want && pool.Count > 0)
             {
                 float total = 0f; foreach (var m in pool) total += m.Weight;

@@ -63,11 +63,12 @@ public sealed class EndlessEventsVerificationRunner : SessionVerificationRunner
         Check(Profile.SetLoadout(F.Heroes[0], Power("ice"), Power("strength"), F.Heroes[0].Primary, F.Heroes[0].Secondary), "Loadout saved.");
         GameFlow.Instance.Select(mode); yield return Scene(GameFlow.CityScene);
         events.Clear(); State.Scored += events.Add;
+        Log($"Run seed {State.RunSeed} (RandomizePerRun {ev.RandomizePerRun}).");
         for (int wave = 1; wave <= 3; wave++)
         {
             yield return WaitWave(wave);
             var plan = State.Plan; int score = W.Mode.Score, first = events.Count; bool hit = wave == 2;
-            Check(plan != null && plan.Size == ev.Plan(d, wave).Size, $"Wave {wave} plan: {plan.Size} enemies, {plan.Elites} elites, miniboss {plan.Miniboss}, modifiers [{plan.Names}], x{plan.Health:0.##} hp x{plan.Damage:0.##} dmg x{plan.Score:0.##} score.");
+            Check(plan != null && plan.Size == ev.Plan(d, wave, State.RunSeed).Size && plan.Names == ev.Plan(d, wave, State.RunSeed).Names, $"Wave {wave} plan: {plan.Size} enemies, {plan.Elites} elites, miniboss {plan.Miniboss}, modifiers [{plan.Names}], x{plan.Health:0.##} hp x{plan.Damage:0.##} dmg x{plan.Score:0.##} score.");
             if (hit) { W.DamagePlayer(1f, true); Log("Player takes 1 damage during wave 2 (flawless CONTROL)."); }
             var seen = new HashSet<CityNpc>(); int budgetViolations = 0, statViolations = 0, bosses = 0, elites = 0; float until = Time.time + 30f;
             while (!State.Intermission && Time.time < until)
