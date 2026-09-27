@@ -2544,3 +2544,15 @@ Codex independently rebuilt this exact source with the bundled Unity dotnet SDK:
 Sidekick + the local L1–L3 fixes are merged on main at `f3040c7`. Codex reran `SidekickVerification.Run` (exit 0) and `SidekickVerification.Reload` in a separate Unity process (exit 0) on the merged source in wt-sidekick. Evidence: `Verification/Continuation/Sidekick/`. Original package/Sidekick-database working changes on main were preserved.
 
 Push of main failed: `fatal: could not read Username for 'https://github.com': Device not configured`. Local commits remain intact; no credentials were changed.
+
+## CLOUD FEEDBACK — Codex continuation experiments, 2026-09-27
+Recovered the original local-agent brief from the prior local transcript: cloud code is to be repaired by the Cloud agent, except trivial compile errors. The repairs made before recovering that constraint are preserved on **`codex/cloud-repair-experiment`**, not merged to main. Await `origin/cloud/gameplay-depth` repair commits and run a fresh complete integration sweep.
+
+Experimental controls clarify the existing feedback, but are not shipping verification:
+- Full production resource tick in disabled-controller fixtures exposed two further test assumptions: Laser net energy drain must subtract regeneration (measured 20.06/s for 32 drain - 12 regeneration); waiting its cooldown refills enough energy to pass the start gate, so the low-energy negative control must be immediate with cooldown isolated.
+- HeroStats' 1 s sample reached NOVA's energy cap; a bounded 0.4 s sample with headroom checks passed. Ice measured 5.00 for VECTOR, 7.50 for the x1.5 test hero; Brute push 2.50 m / 1.00 m.
+- Robbery cuff holds were reset by absent hardware R input in CrimeEncounter.Update. Disabling that input fixture also disables its Tick; preserve both explicitly in a test harness. Then cuff captured/ended/success all passed.
+- Rolling friction alone did not fix the car (1.4 m/1.5 s). Parking/routing on CityLayout's road centerlines rather than pedestrian sidewalks moved **9.7 m/1.5 s** and exercised genuine getaway failure, frozen bailout, cuff success, and wreck success. This is an experimental implementation hint, not approved cloud code.
+- On the experiment: Roster + Reload, Melee, HeroStats, Mission, HeroForge + Reload exit 0. SynergyAvailability still fails the exact floating-point 40x comparison at displayed 32 s vs 0.8 s; use an explicit small numerical tolerance and log precise values, preserving the scoped assertion. No broad integration sweep claimed.
+
+Main's latest user commit `49ffbed` includes the preserved vendor database, explicit FBX dependency, and queue; origin/main matched it on refresh. The command-line credential failure remains separate from that successful external push.
