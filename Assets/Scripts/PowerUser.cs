@@ -35,13 +35,19 @@ public sealed class PowerUser : MonoBehaviour
         public CreditScope(PowerUser owner, string id) { user = owner; previous = owner != null ? owner.Crediting : null; if (owner != null) owner.Crediting = id; }
         public void Dispose() { if (user != null) user.Crediting = previous; }
     }
+    /// Every successful activation (power id or "synergy:<id>"), after it is recorded. Listeners: style, challenges.
+    public event System.Action<string> Used;
+    /// Every NPC hit this user caused (credited or not), after the NPC took it. Listeners: style, challenges.
+    public event System.Action<PowerHit> Hit;
     /// A successful activation of `id` (stats only).
-    public void RecordUse(string id) { var u = Progression != null ? Progression.Usage(id, true) : null; if (u != null) u.Uses++; }
-    /// Called by CityNpc.Damage for damage this user caused: health actually removed and whether it killed.
-    public void ReportDamage(float dealt, bool killed)
+    public void RecordUse(string id) { var u = Progression != null ? Progression.Usage(id, true) : null; if (u != null) u.Uses++; Used?.Invoke(id); }
+    /// Called by CityNpc.Damage for damage this user caused: health actually removed, whether it killed, and whether it was
+    /// an assault (false = a continuing tick of poison / a held beam).
+    public void ReportDamage(CityNpc npc, float dealt, bool killed, bool assault)
     {
-        if (Crediting == null || Progression == null || dealt <= 0f) return;
-        var u = Progression.Usage(Crediting, true); u.Hits++; u.Damage += dealt; if (killed) u.Kills++;
+        if (dealt <= 0f) return;
+        if (Crediting != null && Progression != null) { var u = Progression.Usage(Crediting, true); u.Hits++; u.Damage += dealt; if (killed) u.Kills++; }
+        Hit?.Invoke(new PowerHit(npc, Crediting, dealt, killed, assault));
     }
     /// Force Field (or null): the player's damage-absorbing shield. WorldSession.DamagePlayer routes damage through it.
     public PlayerShield Shield { get; private set; }
@@ -250,6 +256,12 @@ public sealed class PowerUser : MonoBehaviour
     }
     void OnDisable() { Release(false); EndChannel(); }
     void OnDestroy() { if (Progression != null) Progression.Changed -= Refresh; }
+}
+/// One NPC hit caused by the player (see PowerUser.Hit). Credit = power id, "melee", "synergy:<id>" or null (uncredited).
+public readonly struct PowerHit
+{
+    public readonly CityNpc Npc; public readonly string Credit; public readonly float Dealt; public readonly bool Killed, Assault;
+    public PowerHit(CityNpc npc, string credit, float dealt, bool killed, bool assault) { Npc = npc; Credit = credit; Dealt = dealt; Killed = killed; Assault = assault; }
 }
 public sealed class ThrownProp : MonoBehaviour
 {

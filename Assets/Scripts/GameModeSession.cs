@@ -56,8 +56,11 @@ public sealed class GameModeSession : MonoBehaviour
         if(definition.Selection!=null) Selection=definition.Selection.Begin();
         Feedback=definition.Description;
     }
+    /// Session style score (separate from Score; never changes rewards). Best per mode is saved at the end of the session.
+    public StyleScoreTracker Style {get;private set;}
     public void Begin()
     {
+        Style=gameObject.AddComponent<StyleScoreTracker>(); Style.Begin(World.Powers);
         if(Definition.Director!=null) Director=Definition.Director.Begin(this);
         for(int i=0;i<Definition.InitialEncounters;i++) SpawnNext();
     }
@@ -120,6 +123,7 @@ public sealed class GameModeSession : MonoBehaviour
             Side=World.Progression.Data.Side,Rescues=Rescues,PeakHeat=PeakHeat,TimeLimit=Definition.SessionSeconds,StartLevel=startLevel,StartXp=startXp,Layout=Definition.Results};
         if(Director!=null) Director.Describe(result);
         int previousBest=World.Progression.BestScore(Definition.Id);
+        if(Style!=null) { Style.End(); World.Progression.RecordStyle(Definition.Id,Style.Total); }
         World.Progression.RecordSession(Definition.Id,outcome==SessionOutcome.Won,Score,XpEarned,result.Wave);
         result.BestScore=Mathf.Max(previousBest,Score); result.NewBest=Score>previousBest;
         result.EndLevel=World.Progression.Data.Level; result.EndXp=World.Progression.Data.Xp;

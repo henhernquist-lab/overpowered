@@ -6,7 +6,7 @@ using UnityEngine;
 public enum PlayerSide { Hero, Villain }
 [Serializable] public sealed class PowerOwnership { public string Id; public int Tier; }
 /// Per-mode personal records (e.g. Endless Fight best score). Saves written before this field existed load with an empty list.
-[Serializable] public sealed class ModeRecord { public string Id; public int BestScore, BestWave, Runs; }
+[Serializable] public sealed class ModeRecord { public string Id; public int BestScore, BestWave, Runs; public int BestStyle; }
 /// Per-power instrumentation (no gameplay effect): uses, damage instances, damage dealt (health actually removed), kills
 /// and sessions the power was equipped in. Id = power id, "melee" (basic melee without Super Strength) or "synergy:<id>".
 /// Saves written before this field existed load with an empty list.
@@ -148,6 +148,13 @@ public sealed class PlayerProgression : MonoBehaviour
         }
         Save();
     }
+    /// Best session style per mode (saved with the RecordSession that follows it).
+    public void RecordStyle(string mode, int style)
+    {
+        if (string.IsNullOrEmpty(mode) || style <= 0) return;
+        var record = Record(mode); if (record == null) Data.ModeRecords.Add(record = new ModeRecord { Id = mode });
+        record.BestStyle = Mathf.Max(record.BestStyle, style);
+    }
     public bool HintSeen(string id) => Data.SeenHints != null && Data.SeenHints.Contains(id);
     /// Records that the player performed a prompted action; saves immediately. False if already recorded.
     public bool MarkHintSeen(string id)
@@ -258,10 +265,10 @@ public sealed class PlayerProgression : MonoBehaviour
         foreach (var r in d.ModeRecords)
         {
             if (r == null || string.IsNullOrEmpty(r.Id)) { Note("empty mode record"); continue; }
-            r.BestScore = Mathf.Max(0, r.BestScore); r.BestWave = Mathf.Max(0, r.BestWave); r.Runs = Mathf.Max(0, r.Runs);
+            r.BestScore = Mathf.Max(0, r.BestScore); r.BestWave = Mathf.Max(0, r.BestWave); r.Runs = Mathf.Max(0, r.Runs); r.BestStyle = Mathf.Max(0, r.BestStyle);
             var same = records.Find(x => x.Id == r.Id);
             if (same == null) records.Add(r);
-            else { same.BestScore = Mathf.Max(same.BestScore, r.BestScore); same.BestWave = Mathf.Max(same.BestWave, r.BestWave); same.Runs = Mathf.Max(same.Runs, r.Runs); Note("duplicate mode record " + r.Id); }
+            else { same.BestScore = Mathf.Max(same.BestScore, r.BestScore); same.BestWave = Mathf.Max(same.BestWave, r.BestWave); same.Runs = Mathf.Max(same.Runs, r.Runs); same.BestStyle = Mathf.Max(same.BestStyle, r.BestStyle); Note("duplicate mode record " + r.Id); }
         }
         d.ModeRecords = records;
         if (d.PowerStats == null) d.PowerStats = new List<PowerUsage>();
