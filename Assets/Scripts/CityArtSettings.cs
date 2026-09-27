@@ -176,16 +176,16 @@ public sealed class CityArtSettings : ScriptableObject
             P(Box,0,20,-26,.15f,13,.15f,CityColor.Metal,detail:true),P(Box,0,13,-26,1.4f,1,1.4f,CityColor.Red,detail:true)}},
         new StructureRecipe{Name="Meridian Spire",Pieces=new[]{
             P(Box,0,3,0,26,6,26,CityColor.Slate,true),P(Box,0,6.2f,0,26.4f,.4f,26.4f,CityColor.Cream,detail:true),
-            P(Box,0,36,0,19,60,19,CityColor.Teal,true),P(Box,0,21,0,19.4f,.6f,19.4f,CityColor.Amber,detail:true),P(Box,0,41,0,19.4f,.6f,19.4f,CityColor.Amber,detail:true),P(Box,0,61,0,19.4f,.6f,19.4f,CityColor.Amber,detail:true),
-            P(Box,0,84,0,14,36,14,CityColor.Glass,true),P(Box,0,66.2f,0,19.6f,.4f,19.6f,CityColor.Cream,true),P(Box,0,93,0,14.4f,.6f,14.4f,CityColor.Amber,detail:true),
-            P(Box,0,110,0,9,16,9,CityColor.Teal,true),P(Box,0,102.2f,0,14.6f,.4f,14.6f,CityColor.Cream,true),P(Box,0,119,0,11,2,11,CityColor.Amber,true),
-            P(Cyl,0,136,0,1.3f,32,1.3f,CityColor.Metal,true),P(Box,0,153,0,2.2f,2.2f,2.2f,CityColor.Red)}},
+            P(Box,0,36,0,19,60,19,CityColor.Teal,true),P(Box,0,21,0,19.4f,.6f,19.4f,CityColor.LitWindow,detail:true),P(Box,0,41,0,19.4f,.6f,19.4f,CityColor.LitWindow,detail:true),P(Box,0,61,0,19.4f,.6f,19.4f,CityColor.LitWindow,detail:true),
+            P(Box,0,84,0,14,36,14,CityColor.Glass,true),P(Box,0,66.2f,0,19.6f,.4f,19.6f,CityColor.Cream,true),P(Box,0,93,0,14.4f,.6f,14.4f,CityColor.LitWindow,detail:true),
+            P(Box,0,110,0,9,16,9,CityColor.Teal,true),P(Box,0,102.2f,0,14.6f,.4f,14.6f,CityColor.Cream,true),P(Box,0,119,0,11,2,11,CityColor.LitWindow,true),
+            P(Cyl,0,136,0,1.3f,32,1.3f,CityColor.Metal,true),P(Box,0,153,0,2.2f,2.2f,2.2f,CityColor.Beacon)}},
         new StructureRecipe{Name="Harbour Light",Pieces=new[]{
             P(Cyl,0,2,0,12,4,12,CityColor.Slate,true),P(Cyl,0,9,0,7,10,7,CityColor.Cream,true),P(Cyl,0,19,0,6.6f,10,6.6f,CityColor.Red,true),P(Cyl,0,29,0,6.2f,10,6.2f,CityColor.Cream,true),
-            P(Cyl,0,39,0,5.8f,10,5.8f,CityColor.Red,true),P(Cyl,0,44.5f,0,8.4f,1,8.4f,CityColor.Metal,true),P(Cyl,0,47,0,4.6f,4,4.6f,CityColor.Amber,true),P(Cyl,0,50,0,5.6f,2,5.6f,CityColor.Red,true),
+            P(Cyl,0,39,0,5.8f,10,5.8f,CityColor.Red,true),P(Cyl,0,44.5f,0,8.4f,1,8.4f,CityColor.Metal,true),P(Cyl,0,47,0,4.6f,4,4.6f,CityColor.LampGlow,true),P(Cyl,0,50,0,5.6f,2,5.6f,CityColor.Red,true),
             P(Box,0,52,0,.4f,2,.4f,CityColor.Metal)}},
         new StructureRecipe{Name="Lookout Tower",Pieces=new[]{
-            P(Box,0,1.5f,0,14,3,14,CityColor.Slate,true),P(Cyl,0,37,0,6,68,6,CityColor.Cream,true),P(Cyl,0,69.5f,0,14,1,14,CityColor.Amber,true),
-            P(Cyl,0,74,0,18,7,18,CityColor.Glass,true),P(Cyl,0,78,0,19,1.2f,19,CityColor.Cream,true),P(Cyl,0,90,0,1,24,1,CityColor.Metal),P(Box,0,102.8f,0,1.8f,1.8f,1.8f,CityColor.Red)}}
+            P(Box,0,1.5f,0,14,3,14,CityColor.Slate,true),P(Cyl,0,37,0,6,68,6,CityColor.Cream,true),P(Cyl,0,69.5f,0,14,1,14,CityColor.LitWindow,true),
+            P(Cyl,0,74,0,18,7,18,CityColor.Glass,true),P(Cyl,0,78,0,19,1.2f,19,CityColor.Cream,true),P(Cyl,0,90,0,1,24,1,CityColor.Metal),P(Box,0,102.8f,0,1.8f,1.8f,1.8f,CityColor.Beacon)}}
     };
 }

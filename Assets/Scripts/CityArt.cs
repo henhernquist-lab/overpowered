@@ -158,7 +158,8 @@ public sealed class CityArt : MonoBehaviour
         }
         Part(t,"Shop canopy",new Vector3(0,entry,-d*.5f-.3f),new Vector3(w*.6f,.25f,.7f),CityColor.Teal,false,true);
         Part(t,"Shop sign",new Vector3(0,entry-.5f,-d*.5f-.36f),new Vector3(w*.5f,.65f,.12f),CityColor.Brick,false,true);
-        for(int i=0;i<3;i++)Part(t,"Abstract shop glyph",new Vector3((i-1)*w*.13f,entry-.5f,-d*.5f-.44f),new Vector3(w*.09f,.16f,.035f),CityColor.Cream,false,true);
+        // Neon: cream by day (unchanged look), glows at night (CityPalette.Emissive).
+        for(int i=0;i<3;i++)Part(t,"Abstract shop glyph",new Vector3((i-1)*w*.13f,entry-.5f,-d*.5f-.44f),new Vector3(w*.09f,.16f,.035f),CityColor.Neon,false,true);
         if(Meshes)FlushOwner(t);
         StaticRoot(root);
     }
@@ -180,7 +181,8 @@ public sealed class CityArt : MonoBehaviour
                     float along=(i-(count-1)*.5f)*spacing;float side=face%2==0?-1:1;
                     var pos=acrossX?new Vector3(along,wy,side*(d*.5f+.015f)):new Vector3(side*(w*.5f+.015f),wy,along);
                     var size=acrossX?new Vector3(Settings.WindowWidth,wh,.035f):new Vector3(.035f,wh,Settings.WindowWidth);
-                    Part(root,"Window",pos,size,(seed+i+face+(int)y)%5==0?CityColor.Amber:CityColor.Glass,false,true);
+                    // LitWindow = the amber "lit" windows (same day colour as Amber); they glow at night.
+                    Part(root,"Window",pos,size,(seed+i+face+(int)y)%5==0?CityColor.LitWindow:CityColor.Glass,false,true);
                 }
             }
         }
@@ -411,7 +413,7 @@ public sealed class CityArt : MonoBehaviour
                 box("Crossbar",new Vector3(0,.86f,0),new Vector3(1,.07f,.18f),CityColor.Cream);
                 if(placement.Kind==CityPropKind.Lamp)
                 {
-                    box("Light housing",new Vector3(0,.96f,0),new Vector3(.85f,.08f,.85f),CityColor.Amber);
+                    box("Light housing",new Vector3(0,.96f,0),new Vector3(.85f,.08f,.85f),CityColor.LampGlow);
                     box("Street sign",new Vector3(.3f,.65f,0),new Vector3(.85f,.1f,.1f),CityColor.Teal);
                     box("Street sign glyph",new Vector3(.3f,.65f,-.07f),new Vector3(.5f,.025f,.04f),CityColor.Cream);
                 }
@@ -452,7 +454,7 @@ public sealed class CityArt : MonoBehaviour
             case CityPropKind.Billboard:
                 foreach(float side in new[]{-1f,1f})box("Sign support",new Vector3(side*.35f,.35f,0),new Vector3(.06f,.7f,.3f),CityColor.Metal);
                 box("Billboard",new Vector3(0,.72f,0),new Vector3(1,.56f,.3f),CityColor.Teal);
-                for(int i=0;i<3;i++)box("Abstract sign glyph",new Vector3((i-1)*.25f,.72f,-.2f),new Vector3(.12f,.3f,.05f),i==1?CityColor.Amber:CityColor.Cream);break;
+                for(int i=0;i<3;i++)box("Abstract sign glyph",new Vector3((i-1)*.25f,.72f,-.2f),new Vector3(.12f,.3f,.05f),i==1?CityColor.LitWindow:CityColor.Neon);break;
             default:
                 box("Cabinet",new Vector3(0,.48f,0),new Vector3(.92f,.96f,.92f),placement.Kind==CityPropKind.Newspaper?CityColor.Red:CityColor.Slate);
                 box("Lid",new Vector3(0,.97f,0),new Vector3(1,.06f,1),CityColor.Cream);
