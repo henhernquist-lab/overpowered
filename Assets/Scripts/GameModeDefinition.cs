@@ -39,14 +39,15 @@ public sealed class GameModeDefinition : ScriptableObject
 }
 /// The kinds of task an encounter can ask of the player. Counts and targets come from the CrimeEncounter lists;
 /// the player-facing words come from the ModeRules asset (ObjectiveTaskLabel), never from code.
-public enum ObjectiveTask { Robbers, Civilians, Hazards, Loot, Wreck, Escape }
+/// Threats..Extract are mission-scenario tasks (EncounterScenario); their progress/targets come from the ScenarioState.
+public enum ObjectiveTask { Robbers, Civilians, Hazards, Loot, Wreck, Escape, Threats, Hostages, Fires, Carry, Vault, Extract }
 [Serializable] public sealed class ObjectiveTaskLabel { public ObjectiveTask Task; public string Label; }
 /// One task of one encounter: its data label and live progress. Escape is a distance task (Done/Total are metres).
 public readonly struct ObjectiveStep
 {
     public readonly ObjectiveTask Task; public readonly string Label; public readonly int Done, Total, More; public readonly bool Valid;
     public ObjectiveStep(ObjectiveTask task, string label, int done, int total, int more) { Task=task; Label=label; Done=done; Total=total; More=more; Valid=true; }
-    public bool Distance => Task==ObjectiveTask.Escape;
+    public bool Distance => Task==ObjectiveTask.Escape||Task==ObjectiveTask.Extract;
     /// "STOP THE ROBBERS 2/3" or, for escape, "ESCAPE THE SCENE 14 M".
     public string Text => !Valid ? "" : Distance ? $"{Label} {Mathf.Max(0,Total-Done)} M" : $"{Label} {Done}/{Total}";
 }
@@ -58,24 +59,27 @@ public abstract class ModeRules : ScriptableObject
     public virtual string Objective(CrimeEncounter encounter)
     {
         var parts=new System.Collections.Generic.List<string>();
-        foreach(var t in Tasks) if(t!=null&&Progress(encounter,t.Task,out int done,out int total)&&total>0) parts.Add(new ObjectiveStep(t.Task,t.Label,done,total,0).Text);
+        foreach(var t in TasksFor(encounter)) if(t!=null&&Progress(encounter,t.Task,out int done,out int total)&&total>0) parts.Add(new ObjectiveStep(t.Task,t.Label,done,total,0).Text);
         return string.Join(" · ",parts);
     }
     /// The first incomplete task (in Tasks order) and how many other tasks are still incomplete; Valid=false when none.
     public ObjectiveStep Current(CrimeEncounter encounter)
     {
         ObjectiveStep first=default; int more=0;
-        foreach(var t in Tasks)
+        foreach(var t in TasksFor(encounter))
         {
             if(t==null||!Progress(encounter,t.Task,out int done,out int total)||total<=0||done>=total) continue;
             if(!first.Valid) first=new ObjectiveStep(t.Task,t.Label,done,total,0); else more++;
         }
         return first.Valid ? new ObjectiveStep(first.Task,first.Label,first.Done,first.Total,more) : first;
     }
+    /// A mission-scenario encounter shows its scenario's task labels; every other encounter shows this rule set's.
+    ObjectiveTaskLabel[] TasksFor(CrimeEncounter e)=>e!=null&&e.Definition!=null&&e.Definition.Scenario!=null ? e.Definition.Scenario.Tasks : Tasks;
     /// Live progress of one task kind. Escape reports metres from the site (capped) out of PlayerEscapeDistance.
     public static bool Progress(CrimeEncounter e, ObjectiveTask task, out int done, out int total)
     {
         done=total=0; if(e==null||e.Definition==null) return false;
+        if(e.Scenario!=null&&e.Scenario.Progress(task,out done,out total)) return true;
         switch(task)
         {
             case ObjectiveTask.Robbers: done=e.StoppedRobbers; total=e.Robbers.Count; return true;
@@ -96,6 +100,7 @@ public abstract class ModeRules : ScriptableObject
     public static void Targets(CrimeEncounter e, ObjectiveTask task, System.Collections.Generic.List<Vector3> into)
     {
         into.Clear(); if(e==null) return;
+        if(e.Scenario!=null) { e.Scenario.Targets(task,into); if(into.Count>0||task>=ObjectiveTask.Threats) return; }
         switch(task)
         {
             case ObjectiveTask.Robbers: foreach(var a in e.Robbers) if(!a.Captured&&!a.Escaped&&a.Npc!=null&&!a.Npc.Dead) into.Add(a.Npc.transform.position); break;

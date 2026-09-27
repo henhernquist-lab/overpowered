@@ -39,6 +39,8 @@ public sealed class IceEffect : PowerEffect
             if (!npc.Dead) FrozenLook.Show(npc.gameObject, power.Definition.PaletteColor, () => npc != null && !npc.Dead && npc.Frozen);
             Cast(user, power, hit.point); return true;
         }
+        var mission = hit.collider.GetComponentInParent<MissionTarget>();   // e.g. a mission fire spot: Ice douses it
+        if (mission != null && mission.Freeze(user, stats)) { Cast(user, power, hit.point); return true; }
         if (hit.rigidbody == null || hit.rigidbody.isKinematic) return false;
         var frozen = hit.rigidbody.GetComponent<FrozenBody>();
         if (frozen == null) frozen = hit.rigidbody.gameObject.AddComponent<FrozenBody>();

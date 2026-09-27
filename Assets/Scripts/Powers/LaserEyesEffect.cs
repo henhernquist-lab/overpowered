@@ -39,6 +39,7 @@ public sealed class LaserEyesEffect : ChanneledEffect
             return;
         }
         state.LastTarget = null;
+        target.collider.GetComponentInParent<MissionTarget>()?.Hit(stats.Damage * seconds, stats.Force * seconds, user);
         var body = target.rigidbody;
         if (body != null && !body.isKinematic) body.AddForceAtPosition(user.AimDirection * stats.Force * seconds, target.point, ForceMode.Impulse);
         var prop = target.collider.GetComponentInParent<BreakableProp>();

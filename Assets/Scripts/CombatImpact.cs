@@ -5,7 +5,7 @@ public static class CombatImpact
 {
     public static int Blast(PowerUser source, Vector3 origin, float radius, float impulse, float damage, float lift,float burnSeconds=0,bool displaceNpcs=false,bool melee=false)
     {
-        var bodies = new HashSet<Rigidbody>(); var npcs = new HashSet<CityNpc>();
+        var bodies = new HashSet<Rigidbody>(); var npcs = new HashSet<CityNpc>(); var missions = new HashSet<MissionTarget>();
         foreach (var hit in Physics.OverlapSphere(origin, radius))
         {
             if (hit.transform.root == source.transform) continue;
@@ -16,6 +16,8 @@ public static class CombatImpact
                 if (barrier.collider != hit && barrier.rigidbody == null && barrier.collider.GetComponentInParent<CityNpc>() == null && barrier.transform.root != source.transform && !barrier.collider.isTrigger)
                     blocked = true;
             if (blocked) continue;
+            var mission = hit.GetComponentInParent<MissionTarget>();   // mission objects (fire spot, vault) read area hits
+            if (mission != null && missions.Add(mission)) mission.Hit(damage, impulse, source);
             var npc = hit.GetComponentInParent<CityNpc>();
             if (npc != null && npcs.Add(npc))
             {
