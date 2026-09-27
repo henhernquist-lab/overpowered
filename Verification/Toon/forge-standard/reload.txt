@@ -1,3 +1,0 @@
-PASS Three selectable data-defined heroes.
-PASS SECOND PROCESS restores exact hero, pair and suit roles.
-PASS Fresh save CONTROL starts level 1 / default pair.
