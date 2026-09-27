@@ -40,7 +40,8 @@ PASS Exposed mixer parameter SFXVolume is valid.
 PASS Exposed mixer parameter UIVolume is valid.
 PASS Exposed mixer parameter AmbientVolume is valid.
 PASS Music: actual AudioSource.isPlaying, assigned clip=music, volume=0.072, group=Music, spatialBlend=0.
-PASS Music DSP sample cursor advances (not just bookkeeping).
+PASS Music DSP sample cursor advances (not just bookkeeping): 0 -> 87494 = 87494 samples over 2.005 s of DSP clock (88435 expected at 44100 Hz; 50-125% required).
+PASS CONTROL: stalled music cursor (pitch 0, isPlaying=True) moved 49 samples over 0.512 s of DSP clock (< 50% of 22579) -> the measurement rejects it.
 PASS Disabled UI CONTROL emits no click and launches nothing.
 PASS UiHover: actual AudioSource.isPlaying, assigned clip=ui-hover, volume=0.160, group=UI, spatialBlend=0.
 PASS UiClick: actual AudioSource.isPlaying, assigned clip=ui-click, volume=0.600, group=UI, spatialBlend=0.
