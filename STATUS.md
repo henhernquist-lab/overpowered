@@ -3250,3 +3250,13 @@ Content switch, **not run**: "Use mission rotations in Hero and Villain modes". 
 - the variation strength and whether mirroring reads well;
 - the bonus goal thresholds and XP;
 - the rotation weights, bands and district lists, and whether to switch the rotations on.
+- `44908c5` **Save recovery keeps the good backup.**
+  - Before: after loading from `.bak` / `.tmp` over an unreadable save, the next `File.Replace` moved the corrupt file over
+    the good `.bak`.
+  - Now: the corrupt file (already copied to `.corrupt`) is deleted after a successful recovery. The next save creates the
+    main file fresh and leaves `.bak` intact.
+  - SaveRobustness checks the `.bak` content survives.
+- `fa01ef2` **Endless events: a fresh modifier sequence per run.**
+  - Draws are seeded by (run seed, wave). `RandomizePerRun` is on by default; off means every run uses the asset `Seed`.
+    `EndlessWaveState.RunSeed` is exposed for replays.
+  - EndlessSimulation checks that the same seed replays the same sequence and a different seed differs.
