@@ -2628,3 +2628,32 @@ Failed attempts kept in `Verification/FreezeReadability/regression/failed-attemp
 - Verified against the CURRENT 10-synergy catalog (4 freezing synergies). Re-run `FreezeReadabilityVerification.Run` after the cloud catalog cut to five.
 
 Limits: batch captures, not human readability or colour-vision review; no dense-freeze benchmark; the glyph uses the lit palette material, so night lighting (Phase 6) must re-check it; editor only, no player build.
+
+## Overnight Phase 4: Free Play + Endless current-state audit — 2026-09-27 (branch `codex/freeze-readability`, on top of Phase 5, appended)
+
+Audit only; the modes were not rebuilt and **no gameplay regression was found, so no gameplay code changed.** Audited on the current main content (5 powers, 10-synergy catalog, district map, Sidekick heroes, Phase 3 presentation, Phase 5 freeze glyph). The cloud features are not merged, so **"all 11 powers can be equipped" is pending the cloud merge**; all 5 current powers were verified instead.
+
+Existing coverage reused and cited (`ModeExpansionVerification`, all 111 earlier PASS lines still present): Home -> Free Play via the real button; Rules=null, 0 encounter definitions; 150 s accelerated with 0 crimes / 0 CrimeEvent / 0 CrimeEncounter / 0 criminals; HUD has no objective/timer/director line, Heat shown; 4 deaths (> Hero DefeatLimit) each respawn at 100 HP without ending the session; real prop break raises Heat and police respond (cops 2 -> 3); H side switch (Hero -> Villain, saved, hostility flips, cooldown CONTROL); pause offers only Resume/Return home; relaunch keeps the saved side; results request lands on Home. Hero-mode CONTROL still spawns encounters and locks side. Endless Hero waves 1-6 -> real wave-6 NPC attacks kill the player -> Survival results (wave 6, 37 defeated, score 2120, new best) -> PLAY AGAIN lower-score CONTROL keeps the best -> HOME. Endless Villain waves 1-2 (hostile cops, no police spawn) -> death -> results -> Home. Explicit per-wave health/damage independent of 3 Heat stars; MaxAlive 12 with reinforcements; per-mode records saved.
+
+Added to the same verifier (45 new PASS lines):
+- **Free Play powers:** three Free Play sessions launched from Home after `PlayerProgression.SetLoadout` (fire+ice, flight+strength, telekinesis+fire) use all five current powers for real: Fire projectile reaches/pushes a crate, Ice freezes it (with the Phase 5 glyph), Telekinesis holds then hurls it, Strength punch 35.0 damage consuming a Strength charge, Flight's held-flight fuel gate 6.00 -> 5.75 (Flight is deliberately not a click cast). CONTROLs: unequipped click power refused ("Power not equipped"), unequipped Flight fuel gate refuses, basic melee without Strength 8.0 < 35.0 with Strength charges untouched; each session 0 objective lines / 0 encounters; original loadout restored through the same save API.
+- **Composition over the current roster:** EndlessWaves references the current Rusher/Gunner/Brute assets; live waves equal the director's deterministic mix: wave 1 3 Rusher; wave 3 4 Rusher / 2 Gunner / 1 Brute; wave 5 5/4/2; wave 6 6/4/2; Villain wave 1 3 Rusher (as cops).
+- **MaxAlive:** every sample and every tick of every cleared wave asserts alive <= 12.
+- **Late representative wave FPS:** wave 6 is the first wave held at MaxAlive (every later wave is the same 12-enemy crowd; only per-enemy stats scale).
+
+FPS (existing single-render method, real gameplay camera, 1280x720 Editor Play Mode, i9-10910 / Radeon Pro 5300; **no other batch Unity process in any of 43 two-second samples during the run**, `phase4-audit/ModeExpansionVerification.Run/contention-samples.txt`): wave 1 (4 humanoids) 242.40 FPS, mean 4.13 ms; wave 5 (12) 130.90 FPS, mean 7.64 ms, p95 10.30 ms; **wave 6 MaxAlive (13 humanoids) 122.96 FPS, mean 8.13 ms, p95 11.24 ms**, skinning 0.415 ms, batch-mode overhead 2.598 ms. Previous committed run (84c4129, pre-districts/Sidekick): wave 1 217.43, wave 5 129.06 — different code and a single unpaired run each, not a regression measurement.
+
+| Suite (wt-sidekick) | exit | PASS | FAIL |
+|---|---|---|---|
+| ModeExpansionVerification.Run | 0 | 156 | 0 |
+| ModeExpansionVerification.Reload (separate process: bests 2120 / wave 6 and villain 80 reload; legacy/invalid/fresh saves) | 0 | 10 | 0 |
+| ModeVerification.Run / Reload (Hero/Villain mode regression) | 0 / 0 | 79 / 2 | 0 |
+
+Captures inspected: `endless-wave-6-maxalive-gameplay-camera.png` (behind the hovering Sidekick hero over the Downtown arena intersection; red Rushers/Gunners and a larger purple-jointed Brute converging), `endless-results-new-best.png` ("WAVE 6 REACHED / NEW BEST": 6 / 37 / 2120 / 2120, HOME + PLAY AGAIN), `home-extras.png` (FREE PLAY / ENDLESS FIGHT (HERO) / ENDLESS FIGHT (VILLAIN) row under the side cards).
+
+### OVERNIGHT DECISIONS
+- Treated wave 6 as the late representative wave: the MaxAlive cap makes every later wave the same crowd size, and pushing further would change the verifier's score bookkeeping for no new rendering load.
+- Flight is verified at its real gate (`ConsumeFlight`, the held-F path) rather than a click cast, matching its data model.
+- Fixture holds in this verifier use `Freeze(x, ice:false)` (Phase 5) so audit captures do not show ice glyphs on merely held NPCs.
+
+Limits: batch entry points, not hardware input; Editor Play Mode throughput, no player build; no human feel pass. Re-run this audit (and the 11-power equip check) after the cloud merge and the catalog cut to five synergies.

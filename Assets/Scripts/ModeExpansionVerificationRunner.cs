@@ -102,7 +102,7 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         }
         Check(ui.Root.Query<Label>().ToList().All(l=>l.text!="COMING SOON"),"No COMING SOON placeholder remains on Home.");
         Capture(uiTarget,"home-extras");
-        if(only!="endless"){yield return FreePlay();yield return FreePlayControls();}
+        if(only!="endless"){yield return FreePlay();yield return FreePlayControls();yield return FreePlayPowers();}
         if(only!="freeplay"){yield return EndlessHero();yield return EndlessVillain();}
         Log("LIMIT: no hardware keyboard/mouse in batch mode. H key = WorldSession.RequestSideSwitch (the method the H handler calls); pause buttons = PrototypeHUD.ChoosePause (the method the IMGUI buttons call). Session time is accelerated via GameModeSession.Tick; NPC AI, attacks, respawn and police response run in real frames.");
     }
@@ -140,8 +140,8 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         Check(Count(NpcRole.Cop)==expectedCops&&Count(NpcRole.Cop)>cops,$"Police respond in real time: cops {cops} -> {Count(NpcRole.Cop)} (= {W.Progression.Data.Side} patrol {police.PatrolCount} + {W.Stars} star x {police.CopsPerStar}).");
         // Side switch flips Data.Side AND which NPCs are hostile.
         var far=W.City.Sidewalks.OrderByDescending(p=>(p-W.Hero.transform.position).sqrMagnitude).First();
-        var criminal=CityNpc.Spawn(W,far,NpcRole.Criminal);criminal.Freeze(120);
-        foreach(var npc in W.Npcs)if(npc!=null)npc.Freeze(120); // keep the newly hostile side from interfering with later steps
+        var criminal=CityNpc.Spawn(W,far,NpcRole.Criminal);criminal.Freeze(120,ice:false);
+        foreach(var npc in W.Npcs)if(npc!=null)npc.Freeze(120,ice:false); // keep the newly hostile side from interfering with later steps
         Check(W.Progression.Data.Side==PlayerSide.Hero&&criminal.Hostile&&Hostiles(NpcRole.Cop)==0&&Hostiles(NpcRole.Civilian)==0,$"Before switch (Hero): criminal hostile, 0/{Count(NpcRole.Cop)} cops hostile, 0 civilians hostile.");
         string message=W.RequestSideSwitch();
         Check(message.StartsWith("Side changed")&&W.Progression.Data.Side==PlayerSide.Villain&&Disk().Side==PlayerSide.Villain,$"H action: '{message}' -> Data.Side=Villain, saved to disk.");
@@ -185,6 +185,66 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         yield return Menu();
     }
 
+    // ---------------------------------------------------------------- FREE PLAY POWERS (Phase 4 audit, 2026-09-27)
+    /// Every power of the CURRENT catalog is equipped through the real save gates and used in a real Free Play session
+    /// launched from the Home button. Sessions cache their two equipped powers, so three sessions cover all five.
+    IEnumerator FreePlayPowers()
+    {
+        var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");var all=Resources.LoadAll<PowerDefinition>("Powers");
+        PowerDefinition P(string id)=>all.First(p=>p.Id==id);
+        var ids=all.Select(p=>p.Id).OrderBy(i=>i).ToArray();
+        Check(ids.SequenceEqual(new[]{"fire","flight","ice","strength","telekinesis"}),"Current power catalog = "+string.Join(", ",ids)+" (5 powers; the 11-power check is pending the cloud merge).");
+        var original=ui.Profile.Data.Loadout;string heroId=original.HeroId,oa=original.PowerA,ob=original.PowerB;CityColor op=original.Primary,os=original.Secondary;
+        var used=new HashSet<string>();float basic=-1,strong=-1;
+        foreach(var (a,b) in new[]{("fire","ice"),("flight","strength"),("telekinesis","fire")})
+        {
+            Check(ui.Profile.SetLoadout(forge.Heroes[0],P(a),P(b),CityColor.Blue,CityColor.Cyan),$"Save {a} + {b} through PlayerProgression.SetLoadout (ownership/equip gates).");
+            Submit(ui.ModeButtons["free-play"]);yield return Scene(GameFlow.CityScene);
+            var session=W.Mode;var U=W.Powers;
+            Check(session.Definition==freePlay&&U.EquippedA==P(a)&&U.EquippedB==P(b)&&PrototypeHUD.ObjectiveLines(W).Count==0&&FindObjectsByType<CrimeEncounter>().Length==0,$"Real Home button -> Free Play session equips {a} + {b}; 0 objective lines, 0 encounters.");
+            // Isolated platform above the city: nothing else in the aim lines.
+            var cam=Camera.main;cam.GetComponent<ThirdPersonCamera>().enabled=false;
+            var floor=GameObject.CreatePrimitive(PrimitiveType.Cube);floor.transform.position=new Vector3(0,149.5f,0);floor.transform.localScale=new Vector3(30,1,30);
+            Move(new Vector3(0,150,0));W.Hero.transform.rotation=Quaternion.LookRotation(Vector3.left);
+            var victim=CityNpc.Spawn(W,W.City.Sidewalks[0],NpcRole.Criminal);victim.enabled=false;victim.Agent.enabled=false;victim.transform.position=new Vector3(-1.2f,150,0);victim.SetCombatStats(1000,0);Physics.SyncTransforms();yield return null;
+            // Melee: Strength charges when equipped, the weaker basic melee otherwise (both through TryPunch, the E/RMB entry).
+            U.Tick(100,true);int charges=U.Strength.Charges;float hp=victim.Health;
+            Check(W.Hero.TryPunch(),$"E-punch accepted ({(U.IsEquipped(P("strength"))?"Strength equipped":"basic melee")}).");
+            yield return new WaitForSeconds(W.Hero.PunchWindupSeconds+.15f);
+            float dealt=hp-victim.Health;
+            if(U.IsEquipped(P("strength"))){Check(dealt>0&&U.Strength.Charges==charges-1,$"Strength punch after windup: {dealt:F1} damage, Strength charges {charges} -> {U.Strength.Charges}.");strong=dealt;used.Add("strength");}
+            else{Check(dealt>0&&U.Strength.Charges==charges,$"Basic melee without Strength after windup: {dealt:F1} damage; Strength charges untouched ({U.Strength.Charges}).");basic=dealt;}
+            Destroy(victim.gameObject);yield return null;
+            foreach(var id in new[]{a,b})
+            {
+                var rt=U.Powers.Find(r=>r.Definition==P(id));
+                if(id=="flight")
+                {
+                    U.Tick(100,true);float fuel=U.Flight.Fuel;
+                    Check(!U.Use(rt)&&U.ConsumeFlight(.25f)&&U.Flight.Fuel<fuel,$"Flight equipped: held-flight fuel gate consumes {fuel:F2} -> {U.Flight.Fuel:F2} (Flight is not a click cast: '{U.Message}').");
+                    used.Add(id);continue;
+                }
+                if(id=="strength")continue;
+                var crate=GameObject.CreatePrimitive(PrimitiveType.Cube);crate.transform.position=new Vector3(0,151.2f,7);var body=crate.AddComponent<Rigidbody>();body.mass=45;body.useGravity=false;Physics.SyncTransforms();
+                cam.transform.position=W.Hero.transform.position+new Vector3(0,1.7f,-1);cam.transform.LookAt(crate.transform.position);Physics.SyncTransforms();
+                U.Tick(100,true);Check(U.Select(rt),$"Select equipped {id}.");int before=rt.Charges;
+                Check(U.Use(rt)&&rt.Charges==before-1,$"{id} real cast accepted in Free Play; charges {before} -> {rt.Charges}.");
+                if(id=="ice"){yield return null;Check(body.constraints==RigidbodyConstraints.FreezeAll&&crate.GetComponent<FrozenLook>()!=null&&crate.GetComponent<FrozenLook>().Indicator!=null,"Ice froze the crate with the shared frost glyph.");}
+                else if(id=="telekinesis"){Check(U.HeldBody==body,"Telekinesis holds the aimed crate.");Check(U.Use(rt)&&U.HeldBody==null,"Second click hurls the held crate.");}
+                else if(id=="fire"){float until=Time.time+2;while(crate!=null&&body.linearVelocity.sqrMagnitude<.01f&&Time.time<until)yield return null;Check(crate==null||body.linearVelocity.magnitude>.1f,"Fire projectile reached and pushed the crate: "+(crate==null?"destroyed":body.linearVelocity.magnitude.ToString("F2")+" m/s")+".");}
+                used.Add(id);if(crate!=null)Destroy(crate);yield return null;
+            }
+            // Unequipped CONTROLs: one click-cast power and Flight's fuel gate.
+            var other=all.First(p=>!U.IsEquipped(p)&&!p.Effect.IsFlight&&p.Id!="strength");
+            Check(!U.Use(U.Powers.Find(r=>r.Definition==other))&&U.Message=="Power not equipped",$"Unequipped {other.Id} CONTROL refused: '{U.Message}'.");
+            if(!U.IsEquipped(P("flight")))Check(!U.ConsumeFlight(.25f),"Unequipped Flight CONTROL: fuel gate refuses.");
+            session.ReturnHome();yield return Scene(GameFlow.HomeScene);yield return Menu();
+        }
+        Check(used.OrderBy(i=>i).SequenceEqual(ids),"All 5 current powers equipped and used in Free Play: "+string.Join(", ",used.OrderBy(i=>i))+".");
+        Check(strong>basic&&basic>0,$"Basic melee stays weaker without Strength: basic {basic:F1} vs Strength {strong:F1}.");
+        Check(ui.Profile.SetLoadout(forge.Hero(heroId),P(oa),P(ob),op,os),"Original loadout restored through the same save API ("+oa+" + "+ob+").");
+    }
+
     // ---------------------------------------------------------------- ENDLESS
     sealed class WaveSample { public int Wave, Alive; public float Health, MaxHealth, Damage; }
     EndlessWaveState State=>W.Mode.Director as EndlessWaveState;
@@ -200,11 +260,12 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
     }
     IEnumerator ClearWave()
     {
-        var s=State;int wave=s.Wave,guard=0;
+        var s=State;int wave=s.Wave,guard=0,peak=s.Alive.Count;
         while(s.Wave==wave&&!s.Intermission)
         {
             foreach(var npc in s.Alive.ToArray())npc.Damage(100000,W.Powers);
-            W.Mode.Tick(.01f);yield return null;
+            W.Mode.Tick(.01f);peak=Mathf.Max(peak,s.Alive.Count);yield return null;
+            if(peak>waves.MaxAlive)throw new Exception($"Wave {wave}: {peak} alive exceeds MaxAlive {waves.MaxAlive}");
             if(++guard>300)throw new Exception("Wave "+wave+" never cleared");
         }
         Check(s.Intermission&&s.Wave==wave&&s.WaveKills==waves.WaveSize(wave),$"Wave {wave} cleared: {s.WaveKills} kills = WaveSize; score {W.Mode.Score}.");
@@ -223,6 +284,15 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
             float ring=Flat(npc.transform.position,s.Arena);
             if(ring>waves.SpawnRadius+W.Tuning.Npcs.NavSampleRadius+.01f)throw new Exception($"{label}: {npc.name} {ring:F1}m from arena centre");
         }
+        if(alive.Count>waves.MaxAlive)throw new Exception($"{label}: {alive.Count} alive exceeds MaxAlive {waves.MaxAlive}");
+        // Phase 4 audit: the live mix is exactly the director's deterministic composition over the current roster.
+        if(s.Spawned==alive.Count)
+        {
+            var expectedMix=Enumerable.Range(0,s.Spawned).Select(i=>waves.ArchetypeFor(s.Wave,i).name).OrderBy(n=>n).ToArray();
+            var liveMix=alive.Select(n=>n.Archetype.name).OrderBy(n=>n).ToArray();
+            int eligible=waves.Composition.Count(c=>c.Archetype!=null&&c.Weight>0&&s.Wave>=c.FromWave);
+            Check(liveMix.SequenceEqual(expectedMix)&&liveMix.Distinct().Count()==Mathf.Min(eligible,alive.Count),$"{label} composition matches EndlessWaves over the current roster: {string.Join(", ",liveMix.GroupBy(n=>n).Select(g=>g.Count()+" "+g.Key))} ({eligible} archetypes eligible); alive {alive.Count} <= MaxAlive {waves.MaxAlive}.");
+        }
         var sample=new WaveSample{Wave=s.Wave,Alive=alive.Count,Health=waveHealth,MaxHealth=waveHealth,Damage=waveDamage};
         Log($"RECORD {label}: wave={sample.Wave}, alive={sample.Alive}, wave health={sample.MaxHealth:F2}, wave damage={sample.Damage:F2} (per enemy x archetype: {string.Join(", ",alive.Select(n=>$"{n.Archetype.name} {n.MaxHealth:F1}/{n.ContactDamage:F2}"))}), role={first.Role}, Heat stars={W.Stars}; spawn distances from player {string.Join(",",alive.Select(n=>Flat(n.transform.position,W.Hero.transform.position).ToString("F1")))}m; ring radii {string.Join(",",alive.Select(n=>Flat(n.transform.position,s.Arena).ToString("F1")))}m.");
         return sample;
@@ -231,7 +301,7 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
     IEnumerator ContactHit(string label)
     {
         var s=State;var attacker=s.Alive.OrderBy(n=>Flat(n.transform.position,HoverPoint)).First();
-        foreach(var npc in s.Alive)if(npc!=attacker)npc.Freeze(8);
+        foreach(var npc in s.Alive)if(npc!=attacker)npc.Freeze(8,ice:false);
         float before=W.Health,expected=attacker.ContactDamage;
         Move(attacker.transform.position+attacker.transform.forward*.9f);
         float until=Time.realtimeSinceStartup+6;
@@ -282,6 +352,9 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
     {
         Check(waves!=null&&endless.Director==waves&&endlessVillain.Director==waves,"endless-fight and endless-fight-villain reference the ONE Resources/ModeDirectors/EndlessWaves asset.");
         Check(endless.Side==PlayerSide.Hero&&endlessVillain.Side==PlayerSide.Villain&&endless.Results==ResultsLayout.Survival&&endless.DefeatLimit==1&&endless.Civilians==0&&!endless.SpawnPolice,"Endless definitions are pure data: Survival layout, DefeatLimit 1, 0 civilians, no police.");
+        var roster=Resources.LoadAll<EnemyArchetype>("Enemies");
+        Check(waves.Composition.Length==3&&waves.Composition.All(c=>c.Archetype!=null&&roster.Contains(c.Archetype))&&waves.Composition.Select(c=>c.Archetype.name).SequenceEqual(new[]{"Rusher","Gunner","Brute"}),
+            "EndlessWaves composition references current roster assets: "+string.Join(", ",waves.Composition.Select(c=>$"{c.Archetype.name} from wave {c.FromWave} weight {c.Weight}"))+"; roster: "+string.Join(", ",roster.Select(r=>r.name))+".");
         Submit(ui.ModeButtons["endless-fight"]);yield return Scene(GameFlow.CityScene);
         var session=W.Mode;var s=State;
         Check(session.Definition==endless&&s!=null&&s.Tuning==waves&&W.Progression.Data.Side==PlayerSide.Hero&&W.Progression.SideLocked,"Real Home button launched Endless Fight (Hero): EndlessWaveState runtime component created by the director; side Hero, locked.");
@@ -295,7 +368,7 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         Check(State.Alive.Count==w1.Alive&&!W.PlayerDead,"Hovering hero unreachable during the sample (no deaths, no kills).");
         yield return ContactHit("Wave 1 contact damage");
         // Real punch against a wave enemy.
-        var victim=s.Alive.OrderBy(n=>Flat(n.transform.position,HoverPoint)).Last();victim.Freeze(3);float h0=victim.Health;
+        var victim=s.Alive.OrderBy(n=>Flat(n.transform.position,HoverPoint)).Last();victim.Freeze(3,ice:false);float h0=victim.Health;
         Vector3 dir=(victim.transform.position-HoverPoint);dir.y=0;dir.Normalize();
         Move(victim.transform.position-dir*1.2f);W.Hero.transform.rotation=Quaternion.LookRotation(dir);W.Hero.DebugSetResources(6,3,0);
         Check(W.Hero.TryPunch(),"Real E-punch accepted.");yield return new WaitForSeconds(W.Hero.PunchWindupSeconds+.1f);
@@ -308,7 +381,7 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         Check(s.Wave==2&&!s.Intermission&&s.Alive.Count==1&&s.Remaining==1&&!keep.Dead,$"Advance CONTROL: one wave-2 enemy alive after {waves.IntermissionSeconds*3}s -> still wave {s.Wave}, LEFT {s.Remaining}, no intermission.");
         keep.Damage(100000,W.Powers);session.Tick(.01f);
         Check(s.Intermission&&s.Wave==2,"Last enemy defeated -> intermission begins.");
-        yield return StartNextWave();Check(s.Alive.Count==waves.AliveTarget(3),$"Wave 3 spawned {s.Alive.Count} = FirstWaveCount + 2*EnemiesPerWave.");
+        yield return StartNextWave();Check(s.Alive.Count==waves.AliveTarget(3),$"Wave 3 spawned {s.Alive.Count} = FirstWaveCount + 2*EnemiesPerWave.");Sample("WAVE 3");
         yield return ClearWave();yield return StartNextWave();
         // Heat must NOT scale endless enemies: 3 stars are active when wave 5 spawns. (Waited out during wave 4's
         // fight, not its intermission, because the intermission also counts down in real time.)
@@ -325,6 +398,11 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         Log($"FPS SUMMARY gameplay camera: wave 1 ({t1.Humanoids} humanoids) {t1.Fps:F2} FPS / skinning {t1.Skinning:F3}ms / batch-mode overhead {t1.BatchMode:F3}ms  ->  wave 5 ({t5.Humanoids} humanoids) {t5.Fps:F2} FPS / skinning {t5.Skinning:F3}ms / batch-mode overhead {t5.BatchMode:F3}ms; skinning per added humanoid {(t5.Skinning-t1.Skinning)/Mathf.Max(1,t5.Humanoids-t1.Humanoids):F3}ms.");
         yield return ContactHit("Wave 5 contact damage (3 Heat stars active)");
         yield return ClearWave();yield return StartNextWave();
+        // Phase 4 audit: late representative wave. From wave 6 on every wave is held at MaxAlive, so this is the steady
+        // late-game crowd (full Rusher/Gunner/Brute mix); only per-enemy health/damage keep scaling.
+        Sample("WAVE 6");var t6=new Timing();yield return MeasureFps("Endless wave 6 MaxAlive",t6);
+        Log($"FPS LATE WAVE gameplay camera: wave 6 ({t6.Humanoids} humanoids, {State.Alive.Count} alive = MaxAlive {waves.MaxAlive}) {t6.Fps:F2} FPS, mean {t6.Mean:F2}ms, p95 {t6.P95:F2}ms, skinning {t6.Skinning:F3}ms.");
+        Check(!W.PlayerDead&&!session.Ended,"Late-wave FPS sample leaves the run alive (heal fixture).");
         // MaxAlive cap: wave 6 has WaveSize 13 > MaxAlive 12.
         Check(waves.WaveSize(6)>waves.MaxAlive&&s.Alive.Count==waves.MaxAlive&&s.Spawned==waves.MaxAlive&&s.Remaining==waves.WaveSize(6),$"MaxAlive cap: wave 6 size {waves.WaveSize(6)}, alive {s.Alive.Count}, spawned {s.Spawned}.");
         s.Alive[0].Damage(100000,W.Powers);session.Tick(.01f);

@@ -1,5 +1,5 @@
 PASS Menu component exists in Home
-PASS SECOND UNITY PROCESS: Home profile reloaded the exact save (4 mode records, level 6, sessions 6).
+PASS SECOND UNITY PROCESS: Home profile reloaded the exact save (4 mode records, level 6, sessions 9).
 PASS Reloaded per-mode bests: endless-fight 2120 (wave 6), endless-fight-villain 80.
 PASS In-game HUD after reload: GET READY · WAVE 1 IN 4s · SCORE 0 · BEST 2120
 PASS Abandoning a 0-score run after reload keeps best 2120 (runs 2 -> 3).
