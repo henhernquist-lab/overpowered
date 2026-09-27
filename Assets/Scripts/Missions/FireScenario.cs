@@ -117,31 +117,23 @@ public sealed class FireState : ScenarioState
         return false;
     }
 }
-/// One burning spot: heat 0..1, regrows while lit. A solid sphere (so Ice / the beam can target it and it blocks walking
-/// through flames) with a looping flame ParticleSystem on the shared Fire palette material; emission follows heat.
+/// One burning spot — GAMEPLAY ONLY: heat 0..1 (regrows while lit) and a solid sphere so Ice / the beam can target it and it
+/// blocks walking through flames. Its look is rented from the session FireVisualPool and returned when it goes out or is
+/// destroyed; with the pool exhausted (or no pool) the spot still burns, douses and blocks exactly the same.
 public sealed class FireSpot : MissionTarget
 {
-    FireScenario d; ParticleSystem flames; Transform ember;
+    FireScenario d; int visual = -1;
     public float Heat { get; private set; } = 1f;
     public bool Out => Heat <= 0f;
     public int IceHits { get; private set; }
     public int ImpactHits { get; private set; }
+    public bool HasVisual => visual >= 0;
     public void Setup(FireScenario scenario)
     {
         d = scenario;
         var col = gameObject.AddComponent<SphereCollider>(); col.radius = .8f; col.center = Vector3.up;
-        var cube = GameObject.CreatePrimitive(PrimitiveType.Cube); Destroy(cube.GetComponent<Collider>());
-        cube.name = "Ember"; cube.transform.SetParent(transform, false); cube.transform.localPosition = Vector3.up * .3f;
-        cube.GetComponent<Renderer>().sharedMaterial = CityMaterials.Get(CityColor.Fire); ember = cube.transform;
-        var mesh = cube.GetComponent<MeshFilter>().sharedMesh;
-        flames = gameObject.AddComponent<ParticleSystem>(); flames.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-        var main = flames.main; main.loop = true; main.playOnAwake = false; main.startLifetime = d.FlameLifetime; main.startSize = d.FlameSize;
-        main.startSpeed = d.FlameSpeed; main.gravityModifier = -.2f; main.simulationSpace = ParticleSystemSimulationSpace.World; main.maxParticles = 64;
-        var shape = flames.shape; shape.shapeType = ParticleSystemShapeType.Circle; shape.radius = .6f; shape.rotation = new Vector3(-90f, 0f, 0f);
-        var size = flames.sizeOverLifetime; size.enabled = true; size.size = new ParticleSystem.MinMaxCurve(1f, AnimationCurve.Linear(0f, 1f, 1f, 0f));
-        var r = GetComponent<ParticleSystemRenderer>(); r.renderMode = ParticleSystemRenderMode.Mesh; r.mesh = mesh;
-        r.sharedMaterial = CityMaterials.Get(CityColor.Fire); r.shadowCastingMode = ShadowCastingMode.Off; r.receiveShadows = false;
-        flames.Play(); Apply();
+        visual = FireVisualPool.Get().Rent(transform.position, d);
+        Apply();
     }
     public void Douse(float amount)
     {
@@ -158,11 +150,74 @@ public sealed class FireSpot : MissionTarget
     }
     void Apply()
     {
-        var emission = flames.emission; emission.rateOverTime = d.FlameRate * Heat;
-        ember.localScale = Vector3.one * Mathf.Lerp(.15f, .9f, Heat);
+        if (visual >= 0) FireVisualPool.Instance?.SetHeat(visual, Heat);
         if (!Out) return;
-        flames.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-        ember.GetComponent<Renderer>().sharedMaterial = CityMaterials.Get(CityColor.Slate);
         var col = GetComponent<Collider>(); if (col != null) col.enabled = false;
+        ReturnVisual();
     }
+    void ReturnVisual() { if (visual >= 0) FireVisualPool.Instance?.Release(visual); visual = -1; }
+    void OnDestroy() { ReturnVisual(); }
+}
+/// Session-level fixed pool of fire looks (a looping flame ParticleSystem + an ember block per slot), parented to the
+/// WorldSession and built once. Shared palette materials and the built-in cube mesh; no per-spot GameObject, Material or
+/// ParticleSystem is created. Placeholder presentation — LOCAL owns the final fire look (e.g. pooled Cartoon FX).
+public sealed class FireVisualPool : MonoBehaviour
+{
+    public const int Capacity = 12;
+    sealed class Slot { public GameObject Root; public ParticleSystem Flames; public Transform Ember; public Renderer EmberRenderer; public FireScenario Settings; public bool Busy; }
+    Slot[] slots;
+    public static FireVisualPool Instance { get; private set; }
+    public int InUse { get { int n = 0; if (slots != null) foreach (var s in slots) if (s.Busy) n++; return n; } }
+    public static FireVisualPool Get()
+    {
+        if (Instance != null) return Instance;
+        var root = new GameObject("Pooled fire visuals"); root.transform.SetParent(WorldSession.Instance != null ? WorldSession.Instance.transform : null, false);
+        Instance = root.AddComponent<FireVisualPool>(); Instance.Build(); return Instance;
+    }
+    void Build()
+    {
+        var template = GameObject.CreatePrimitive(PrimitiveType.Cube); var mesh = template.GetComponent<MeshFilter>().sharedMesh; Destroy(template.GetComponent<Collider>());
+        slots = new Slot[Capacity];
+        for (int i = 0; i < Capacity; i++)
+        {
+            var go = new GameObject("Pooled fire " + i); go.transform.SetParent(transform, false);
+            var ember = GameObject.CreatePrimitive(PrimitiveType.Cube); Destroy(ember.GetComponent<Collider>());
+            ember.name = "Ember"; ember.transform.SetParent(go.transform, false); ember.transform.localPosition = Vector3.up * .3f;
+            var er = ember.GetComponent<Renderer>(); er.sharedMaterial = CityMaterials.Get(CityColor.Fire);
+            var ps = go.AddComponent<ParticleSystem>(); ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            var main = ps.main; main.loop = true; main.playOnAwake = false; main.gravityModifier = -.2f; main.simulationSpace = ParticleSystemSimulationSpace.World; main.maxParticles = 64;
+            var shape = ps.shape; shape.shapeType = ParticleSystemShapeType.Circle; shape.radius = .6f; shape.rotation = new Vector3(-90f, 0f, 0f);
+            var size = ps.sizeOverLifetime; size.enabled = true; size.size = new ParticleSystem.MinMaxCurve(1f, AnimationCurve.Linear(0f, 1f, 1f, 0f));
+            var r = go.GetComponent<ParticleSystemRenderer>(); r.renderMode = ParticleSystemRenderMode.Mesh; r.mesh = mesh;
+            r.sharedMaterial = CityMaterials.Get(CityColor.Fire); r.shadowCastingMode = ShadowCastingMode.Off; r.receiveShadows = false;
+            go.SetActive(false);
+            slots[i] = new Slot { Root = go, Flames = ps, Ember = ember.transform, EmberRenderer = er };
+        }
+        Destroy(template);
+    }
+    /// A slot index, or -1 when every slot is in use (the spot then simply has no look).
+    public int Rent(Vector3 position, FireScenario settings)
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            var s = slots[i]; if (s.Busy) continue;
+            s.Busy = true; s.Settings = settings; s.Root.transform.position = position; s.Root.SetActive(true);
+            var main = s.Flames.main; main.startLifetime = settings.FlameLifetime; main.startSize = settings.FlameSize; main.startSpeed = settings.FlameSpeed;
+            s.EmberRenderer.sharedMaterial = CityMaterials.Get(CityColor.Fire);
+            s.Flames.Clear(); s.Flames.Play(); return i;
+        }
+        return -1;
+    }
+    public void SetHeat(int index, float heat)
+    {
+        if (slots == null || index < 0 || index >= slots.Length || !slots[index].Busy) return;
+        var s = slots[index]; var emission = s.Flames.emission; emission.rateOverTime = s.Settings.FlameRate * heat;
+        s.Ember.localScale = Vector3.one * Mathf.Lerp(.15f, .9f, heat);
+    }
+    public void Release(int index)
+    {
+        if (slots == null || index < 0 || index >= slots.Length || !slots[index].Busy) return;
+        var s = slots[index]; s.Busy = false; s.Flames.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear); s.Root.SetActive(false);
+    }
+    void OnDestroy() { if (Instance == this) Instance = null; }
 }

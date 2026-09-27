@@ -199,6 +199,19 @@ public sealed class MissionVerificationRunner : SessionVerificationRunner
         Ground(s.SafePoint);
         yield return Outcome(e, 30);
         Check(Ended(e) && Result(e).Success && e.Civilians.All(c => c.Saved), "Leading them to the safe point completes the mission: SUCCESS.");
+        // Visual lifetime: looks are pooled; gameplay does not depend on them.
+        var pool = FireVisualPool.Get(); int before = pool.InUse;
+        e = Spawn("mission-fire"); s = (FireState)e.Scenario; Away(e);
+        Check(s.Spots.All(x => x.HasVisual) && pool.InUse == before + 4, $"Each spot rents one pooled look ({pool.InUse}/{FireVisualPool.Capacity} in use).");
+        var g = s.Spots[0]; ice.Charges = 2; ice.Cooldown = 0; Ground(Out(g)); Aim(g.transform.position + Vector3.up); W.Powers.Use(ice); ice.Cooldown = 0; W.Powers.Use(ice);
+        Check(g.Out && !g.HasVisual && pool.InUse == before + 3, "A spot that goes out returns its look to the pool.");
+        var rented = new List<int>(); int slot; while ((slot = pool.Rent(Vector3.zero, (FireScenario)e.Definition.Scenario)) >= 0) rented.Add(slot);
+        var e2 = Spawn("mission-fire"); var s2 = (FireState)e2.Scenario; Away(e2);
+        Check(s2.Spots.All(x => !x.HasVisual && !x.Out), "CONTROL: with the pool exhausted the new spots have no look but still burn.");
+        var h = s2.Spots[0]; ice.Charges = 2; ice.Cooldown = 0;
+        Vector3 away2 = h.transform.position - e2.Site; away2.y = 0; Ground(h.transform.position + away2.normalized * 6f); Aim(h.transform.position + Vector3.up);
+        Check(W.Powers.Use(ice) && h.Heat < 1f && h.IceHits == 1, "CONTROL: a spot without a look is still an Ice target and douses (gameplay independent of visuals).");
+        foreach (var i in rented) pool.Release(i);
     }
     // ---------------------------------------------------------------- HEIST
     IEnumerator Heist()
