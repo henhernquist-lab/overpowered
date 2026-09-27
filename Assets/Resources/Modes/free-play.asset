@@ -43,6 +43,7 @@ MonoBehaviour:
   ShowResults: 0
   Results: 0
   Director: {fileID: 0}
+  Lighting: {fileID: 11400000, guid: 5cc3a34fd731043af81d9e6d0c0df38f, type: 2}
   BriefingGoal: No rules. Go wild.
   BriefingWin: 
   BriefingLose: 

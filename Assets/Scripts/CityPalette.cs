@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum CityColor { Road, Pavement, Cream, Brick, Sand, Teal, Slate, Roof, Glass, Amber, Metal, Wood, Leaf, Red, Blue, Cyan, Fire, UiNavy, UiPanel, UiMuted, UiInk, HeroAccent, VillainAccent, UiPurple, Water, Haze, Lawn }
+public enum CityColor { Road, Pavement, Cream, Brick, Sand, Teal, Slate, Roof, Glass, Amber, Metal, Wood, Leaf, Red, Blue, Cyan, Fire, UiNavy, UiPanel, UiMuted, UiInk, HeroAccent, VillainAccent, UiPurple, Water, Haze, Lawn, LitWindow, LampGlow, Neon, Beacon, DuskHaze, NightHaze }
 [CreateAssetMenu(menuName="Overpowered/City Palette")]
 public sealed class CityPalette : ScriptableObject
 {
@@ -14,14 +14,35 @@ public sealed class CityPalette : ScriptableObject
         new Color(.31f,.86f,.80f),new Color(1f,.39f,.12f),
         new Color(.045f,.055f,.14f),new Color(.095f,.105f,.23f),new Color(.61f,.67f,.80f),new Color(.96f,.96f,.91f),
         new Color(.12f,.78f,1f),new Color(1f,.29f,.16f),new Color(.24f,.15f,.40f),
-        new Color(.13f,.37f,.47f),new Color(.66f,.74f,.82f),new Color(.42f,.64f,.34f)};
+        new Color(.13f,.37f,.47f),new Color(.66f,.74f,.82f),new Color(.42f,.64f,.34f),
+        // Phase 6 lighting (appended): emissive variants keep their day colour (Amber, Amber, Cream, Red) and glow at night;
+        // dusk/night fog.
+        new Color(1f,.70f,.26f),new Color(1f,.70f,.26f),new Color(.92f,.87f,.71f),new Color(.80f,.23f,.22f),
+        new Color(.62f,.50f,.52f),new Color(.075f,.095f,.17f)};
     [Range(0,1)] public float Smoothness=.08f;
+    [Header("Emissive swatches (Phase 6 lighting)")]
+    [Tooltip("Palette materials that glow. Emission = Colors[Emission] x Strength x the session's night glow (0 by day, so the day look is unchanged).")]
+    public EmissiveSwatch[] Emissive={
+        new EmissiveSwatch{Swatch=CityColor.LitWindow,Emission=CityColor.LitWindow,Strength=1f},
+        new EmissiveSwatch{Swatch=CityColor.LampGlow,Emission=CityColor.LampGlow,Strength=1.3f},
+        new EmissiveSwatch{Swatch=CityColor.Neon,Emission=CityColor.Cyan,Strength=1.1f},
+        new EmissiveSwatch{Swatch=CityColor.Beacon,Emission=CityColor.Beacon,Strength=1.4f},
+        new EmissiveSwatch{Swatch=CityColor.Fire,Emission=CityColor.Fire,Strength=.6f},
+        new EmissiveSwatch{Swatch=CityColor.Cyan,Emission=CityColor.Cyan,Strength=.35f}};
+    public EmissiveSwatch EmissiveOf(CityColor color){if(Emissive!=null)foreach(var e in Emissive)if(e!=null&&e.Swatch==color)return e;return null;}
     [Header("Built-in toon presentation")]
     public bool ToonCity, ToonHeroes;
     [Range(0,1)] public float ToonShade=.65f, ToonDeepShade=.42f;
     [Range(0,1)] public float ToonStep=.5f, ToonFeather=.04f;
     [Range(0,2)] public float HeroOutline=.35f;
 
+}
+
+[System.Serializable] public sealed class EmissiveSwatch
+{
+    public CityColor Swatch;
+    [Tooltip("Swatch whose colour the surface emits (may differ from its own day colour, e.g. cream sign glyphs glowing cyan).")] public CityColor Emission;
+    [Min(0)] public float Strength=1;
 }
 
 // Materials are shared, owned by the generated city and updated live from the palette asset.
@@ -33,7 +54,34 @@ public sealed class CityMaterials : MonoBehaviour
     public CityPalette Palette {get;private set;}
     readonly Dictionary<CityColor,Material> materials=new Dictionary<CityColor,Material>();
     readonly Dictionary<CityColor,Color> applied=new Dictionary<CityColor,Color>();
-    float appliedSmoothness=float.NaN; int appliedToonHash;
+    float appliedSmoothness=float.NaN; int appliedToonHash, appliedEmissiveHash;
+    /// Night glow 0..1 set by the session's WorldLightingDirector (0 = day: every emissive swatch emits black).
+    public float Glow {get;private set;}
+    int EmissiveHash
+    {
+        get { unchecked { int h=17; if(Palette.Emissive!=null)foreach(var e in Palette.Emissive)if(e!=null){h=h*31+(int)e.Swatch;h=h*31+(int)e.Emission;h=h*31+e.Strength.GetHashCode();h=h*31+Palette.Colors[(int)e.Emission].GetHashCode();} return h; } }
+    }
+    /// Sets the night glow and rewrites ONLY the emissive materials (a cycle calls this as the light changes).
+    public void SetGlow(float glow)
+    {
+        glow=Mathf.Clamp01(glow);if(glow==Glow)return;Glow=glow;
+        foreach(var pair in materials)Emission(pair.Value,pair.Key);
+    }
+    /// The emission colour a swatch's material currently has (black for non-emissive swatches).
+    public Color EmissionOf(CityColor color)
+    {
+        var e=Palette.EmissiveOf(color);if(e==null)return Color.black;
+        var c=Palette.Colors[(int)e.Emission]*(e.Strength*Glow);c.a=1;return c;
+    }
+    // Standard: the _EMISSION keyword stays ON for emissive swatches (black by day), so the shader variant never switches
+    // mid-session; non-emissive swatches never get it. Toon keeps its own emissive colour property.
+    void Emission(Material material,CityColor color)
+    {
+        if(Palette.EmissiveOf(color)==null)return;
+        var c=EmissionOf(color);
+        material.EnableKeyword("_EMISSION");material.globalIlluminationFlags=MaterialGlobalIlluminationFlags.None;
+        material.SetColor("_EmissionColor",c);if(material.HasProperty("_Emissive_Color"))material.SetColor("_Emissive_Color",c);
+    }
     int ToonHash
     {
         get { unchecked { int h=Palette.ToonCity?1:0; h=h*31+(Palette.ToonHeroes?1:0); h=h*31+Palette.ToonShade.GetHashCode(); h=h*31+Palette.ToonDeepShade.GetHashCode(); h=h*31+Palette.ToonStep.GetHashCode(); h=h*31+Palette.ToonFeather.GetHashCode(); return h*31+Palette.HeroOutline.GetHashCode(); } }
@@ -75,8 +123,8 @@ public sealed class CityMaterials : MonoBehaviour
     public void Apply()
     {
         foreach(var pair in materials)
-        {var color=Palette.Colors[(int)pair.Key];Surface(pair.Value,color,null,false);applied[pair.Key]=color;}
-        appliedSmoothness=Palette.Smoothness; appliedToonHash=ToonHash;
+        {var color=Palette.Colors[(int)pair.Key];Surface(pair.Value,color,null,false);Emission(pair.Value,pair.Key);applied[pair.Key]=color;}
+        appliedSmoothness=Palette.Smoothness; appliedToonHash=ToonHash; appliedEmissiveHash=EmissiveHash;
         foreach(var pair in suits)
         {
             var e=pair.Value;var (suit,primary,secondary)=pair.Key;
@@ -107,7 +155,7 @@ public sealed class CityMaterials : MonoBehaviour
     }
     bool Changed()
     {
-        if(!appliedSmoothness.Equals(Palette.Smoothness)||appliedToonHash!=ToonHash)return true;
+        if(!appliedSmoothness.Equals(Palette.Smoothness)||appliedToonHash!=ToonHash||appliedEmissiveHash!=EmissiveHash)return true;
         foreach(var pair in materials)if(!applied.TryGetValue(pair.Key,out var color)||!color.Equals(Palette.Colors[(int)pair.Key]))return true;
         foreach(var pair in suits)
             if(!pair.Value.Primary.Equals(Palette.Colors[(int)pair.Key.Item2])||!pair.Value.Secondary.Equals(Palette.Colors[(int)pair.Key.Item3])||!pair.Value.Trim.Equals(Palette.Colors[(int)pair.Key.Item1.Trim]))return true;

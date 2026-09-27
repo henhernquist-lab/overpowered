@@ -135,3 +135,6 @@ InitTestScene*.unity*
 /Verification/Balance/saves/
 /Verification/Ice/saves/
 /Verification/Sidekick/saves/
+
+# Phase 6 lighting verification saves
+/Verification/Lighting/saves/

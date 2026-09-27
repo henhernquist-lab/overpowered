@@ -526,7 +526,7 @@ MonoBehaviour:
       Position: {x: 0, y: 21, z: 0}
       Size: {x: 19.4, y: 0.6, z: 19.4}
       Euler: {x: 0, y: 0, z: 0}
-      Color: 9
+      Color: 27
       Variant: 0
       Solid: 0
       Detail: 1
@@ -534,7 +534,7 @@ MonoBehaviour:
       Position: {x: 0, y: 41, z: 0}
       Size: {x: 19.4, y: 0.6, z: 19.4}
       Euler: {x: 0, y: 0, z: 0}
-      Color: 9
+      Color: 27
       Variant: 0
       Solid: 0
       Detail: 1
@@ -542,7 +542,7 @@ MonoBehaviour:
       Position: {x: 0, y: 61, z: 0}
       Size: {x: 19.4, y: 0.6, z: 19.4}
       Euler: {x: 0, y: 0, z: 0}
-      Color: 9
+      Color: 27
       Variant: 0
       Solid: 0
       Detail: 1
@@ -566,7 +566,7 @@ MonoBehaviour:
       Position: {x: 0, y: 93, z: 0}
       Size: {x: 14.4, y: 0.6, z: 14.4}
       Euler: {x: 0, y: 0, z: 0}
-      Color: 9
+      Color: 27
       Variant: 0
       Solid: 0
       Detail: 1
@@ -590,7 +590,7 @@ MonoBehaviour:
       Position: {x: 0, y: 119, z: 0}
       Size: {x: 11, y: 2, z: 11}
       Euler: {x: 0, y: 0, z: 0}
-      Color: 9
+      Color: 27
       Variant: 0
       Solid: 1
       Detail: 0
@@ -606,7 +606,7 @@ MonoBehaviour:
       Position: {x: 0, y: 153, z: 0}
       Size: {x: 2.2, y: 2.2, z: 2.2}
       Euler: {x: 0, y: 0, z: 0}
-      Color: 13
+      Color: 30
       Variant: 0
       Solid: 0
       Detail: 0
@@ -665,7 +665,7 @@ MonoBehaviour:
       Position: {x: 0, y: 47, z: 0}
       Size: {x: 4.6, y: 4, z: 4.6}
       Euler: {x: 0, y: 0, z: 0}
-      Color: 9
+      Color: 28
       Variant: 0
       Solid: 1
       Detail: 0
@@ -708,7 +708,7 @@ MonoBehaviour:
       Position: {x: 0, y: 69.5, z: 0}
       Size: {x: 14, y: 1, z: 14}
       Euler: {x: 0, y: 0, z: 0}
-      Color: 9
+      Color: 27
       Variant: 0
       Solid: 1
       Detail: 0
@@ -740,7 +740,7 @@ MonoBehaviour:
       Position: {x: 0, y: 102.8, z: 0}
       Size: {x: 1.8, y: 1.8, z: 1.8}
       Euler: {x: 0, y: 0, z: 0}
-      Color: 13
+      Color: 30
       Variant: 0
       Solid: 0
       Detail: 0

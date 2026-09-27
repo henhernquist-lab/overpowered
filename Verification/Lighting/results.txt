@@ -1,0 +1,33 @@
+PASS Save Fire/Ice through Forge ownership gate for real power light control.
+PASS Home launches hero
+PASS hero uses its authored cycle asset.
+PASS Hero starts at the unchanged 1.2-intensity daytime sun.
+PASS Day has zero active point lights; both pools are bounded.
+MEASURED day: 72.58 FPS, 13.78 ms/frame, draw calls 279, street=0/4, power=0/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 218 frames, AMD Radeon Pro 5300.
+PASS day respects both fixed point-light caps.
+PASS Dusk raises shared palette emission to a partial glow.
+MEASURED dusk: 76.20 FPS, 13.12 ms/frame, draw calls 323, street=3/4, power=0/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 229 frames, AMD Radeon Pro 5300.
+PASS dusk respects both fixed point-light caps.
+PASS Night keeps emissive windows/signs and nearby street lights active.
+MEASURED night: 75.14 FPS, 13.31 ms/frame, draw calls 320, street=3/4, power=0/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 226 frames, AMD Radeon Pro 5300.
+PASS night respects both fixed point-light caps.
+MEASURED night-combat-max-lights: 53.10 FPS, 18.83 ms/frame, draw calls 371, street=3/4, power=4/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 160 frames, AMD Radeon Pro 5300.
+PASS night-combat-max-lights respects both fixed point-light caps.
+PASS night-combat-max-lights keeps exactly four pooled power flashes active at the cap.
+PASS Lighting cycle and pooled flashes reuse the same shared city palette materials.
+PASS Real equipped Fire cast requests a pooled point light.
+PASS Fire leaves a visible short-lived point light while its projectile travels.
+PASS Home launches villain
+PASS villain uses its authored cycle asset.
+PASS Villain starts at the authored dusk preset.
+PASS Home launches free-play
+PASS free-play uses its authored cycle asset.
+PASS Free Play cycles through day/dusk/night from data.
+PASS Free Play's live cycle advances in game time.
+PASS Home launches endless-fight
+PASS endless-fight uses its authored cycle asset.
+PASS Hero Endless uses a stable daytime preset.
+PASS Home launches endless-fight-villain
+PASS endless-fight-villain uses its authored cycle asset.
+PASS Villain Endless uses a stable readable night preset.
+LIMIT: visual readability needs a human playtest; FPS is Editor Play Mode throughput, not player-build timing. Maximum power lights are a pool stress fixture, with Fire also exercised through its real cast.

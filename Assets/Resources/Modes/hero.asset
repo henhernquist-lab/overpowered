@@ -44,6 +44,12 @@ MonoBehaviour:
   SuccessXp: 60
   SuccessHeat: -1
   FailureHeat: 0.75
+  SideFromProfile: 0
+  AllowSideSwitch: 0
+  ShowResults: 1
+  Results: 0
+  Director: {fileID: 0}
+  Lighting: {fileID: 11400000, guid: 50f58a12356014bd086a6c8a8dcb5378, type: 2}
   BriefingGoal: Protect the city from crime.
   BriefingWin: Resolve 5 crimes within 15 minutes.
   BriefingLose: 3 failed crimes or 3 knockouts.

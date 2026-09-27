@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fde8b3087af147fbb046fe7c0b83aca4, type: 3}
+  m_Name: FreePlayCycle
+  m_EditorClassIdentifier: Assembly-CSharp::LightingCycle
+  Keys:
+  - Time: 0
+    Preset: {fileID: 11400000, guid: 68654249170714721af1276731092940, type: 2}
+  - Time: 0.4
+    Preset: {fileID: 11400000, guid: 4b000d321be64439fbb787aa4627808a, type: 2}
+  - Time: 0.68
+    Preset: {fileID: 11400000, guid: a6a0f28b94c954ff69b30331d6cce517, type: 2}
+  - Time: 0.94
+    Preset: {fileID: 11400000, guid: 68654249170714721af1276731092940, type: 2}
+  DurationSeconds: 300
+  StartTime: 0
+  Loop: 1

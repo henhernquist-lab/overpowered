@@ -22,6 +22,7 @@ public sealed class FireBlastEffect : PowerEffect
         rb.linearVelocity = direction * d.ProjectileSpeed;
         Physics.IgnoreCollision(shot.GetComponent<Collider>(), user.GetComponent<CharacterController>());
         shot.AddComponent<PowerProjectile>().Initialize(user, power);
+        WorldLightingDirector.Instance?.FollowPower(power.Definition.Light,shot.transform);
         return true;
     }
 }
