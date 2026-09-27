@@ -1,0 +1,181 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9667e1a11864f4b41bc85edec6d61fc7, type: 3}
+  m_Name: npc-humanspecies_04-suit
+  m_EditorClassIdentifier: Assembly-CSharp::SidekickSuit
+  Prefab: {fileID: 6368188429513239707, guid: 817f5c3dd9cda49459fa289e28078da4, type: 3}
+  Source: {fileID: 2100000, guid: 81c2b42dd136044468756e1bb1e2d40a, type: 2}
+  BaseColorMap: {fileID: 5874169309402233859}
+  Trim: 10
+  Swatches:
+  - Cell: {x: 0, y: 5}
+    Role: 0
+    Name: Species / Skin 01
+    Vertices: 2616
+  - Cell: {x: 0, y: 9}
+    Role: 1
+    Name: Outfits / Hips Outfit 02
+    Vertices: 414
+  - Cell: {x: 1, y: 1}
+    Role: 0
+    Name: Species / Nose
+    Vertices: 125
+  - Cell: {x: 1, y: 2}
+    Role: 0
+    Name: Species / Toenails Left
+    Vertices: 21
+  - Cell: {x: 1, y: 3}
+    Role: 0
+    Name: Species / Fingernails Left
+    Vertices: 25
+  - Cell: {x: 1, y: 4}
+    Role: 0
+    Name: Species / Eyelids Left
+    Vertices: 112
+  - Cell: {x: 1, y: 5}
+    Role: 0
+    Name: Species / Ear Left
+    Vertices: 101
+  - Cell: {x: 2, y: 1}
+    Role: 0
+    Name: Species / Mouth
+    Vertices: 136
+  - Cell: {x: 2, y: 2}
+    Role: 0
+    Name: Species / Toenails Right
+    Vertices: 21
+  - Cell: {x: 2, y: 3}
+    Role: 0
+    Name: Species / Fingernails Right
+    Vertices: 25
+  - Cell: {x: 2, y: 4}
+    Role: 0
+    Name: Species / Eyelids Right
+    Vertices: 112
+  - Cell: {x: 2, y: 5}
+    Role: 0
+    Name: Species / Ear Right
+    Vertices: 86
+  - Cell: {x: 3, y: 1}
+    Role: 0
+    Name: Species / Tongue
+    Vertices: 104
+  - Cell: {x: 3, y: 5}
+    Role: 0
+    Name: Species / Teeth 01
+    Vertices: 134
+  - Cell: {x: 4, y: 1}
+    Role: 0
+    Name: Species / Eye Highlight Left
+    Vertices: 16
+  - Cell: {x: 4, y: 2}
+    Role: 0
+    Name: Species / Eye Color Left
+    Vertices: 32
+  - Cell: {x: 4, y: 3}
+    Role: 0
+    Name: Species / Eye Inner Left
+    Vertices: 20
+  - Cell: {x: 4, y: 4}
+    Role: 0
+    Name: Species / Eye Edge Left
+    Vertices: 32
+  - Cell: {x: 4, y: 5}
+    Role: 0
+    Name: Species / Eye Outer Left
+    Vertices: 82
+  - Cell: {x: 5, y: 1}
+    Role: 0
+    Name: Species / Eye Highlight Right
+    Vertices: 16
+  - Cell: {x: 5, y: 2}
+    Role: 0
+    Name: Species / Eye Color Right
+    Vertices: 32
+  - Cell: {x: 5, y: 3}
+    Role: 0
+    Name: Species / Eye Inner Right
+    Vertices: 11
+  - Cell: {x: 5, y: 4}
+    Role: 0
+    Name: Species / Eye Edge Right
+    Vertices: 32
+  - Cell: {x: 5, y: 5}
+    Role: 0
+    Name: Species / Eye Outer Right
+    Vertices: 105
+  - Cell: {x: 6, y: 4}
+    Role: 0
+    Name: Species / Hair 01
+    Vertices: 2107
+  - Cell: {x: 6, y: 5}
+    Role: 0
+    Name: Species / Eyebrow Left
+    Vertices: 69
+  - Cell: {x: 7, y: 4}
+    Role: 0
+    Name: Species / Facial Hair 01
+    Vertices: 963
+  - Cell: {x: 7, y: 5}
+    Role: 0
+    Name: Species / Eyebrow Right
+    Vertices: 65
+  - Cell: {x: 15, y: 15}
+    Role: 0
+    Name: (unmapped)
+    Vertices: 16
+--- !u!28 &5874169309402233859
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: npc-humanspecies_04 authored colour map (readable copy of T_HumanSpecies_04ColorMap.png)
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 4
+  m_Width: 32
+  m_Height: 32
+  m_CompleteImageSize: 4096
+  m_MipsStripped: 0
+  m_TextureFormat: 4
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 1
+  m_MipmapLimitGroupName: 
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_LightmapFormat: 0
+  m_ColorSpace: 1
+  m_PlatformBlob: 
+  image data: 4096
+  _typelessdata: ff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffffff00ffff4c3b34ff4c3b34ff553d34ff553d34ffe79a9cffe79a9cffe79a9cffe79a9cffffffffffffffffffffffffffffffffffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffffffffffffffffffffffffffffffffffff0000ffff0000ff716152ff716152ff4c3b34ff4c3b34ff553d34ff553d34ffe79a9cffe79a9cffe79a9cffe79a9cffffffffffffffffffffffffffffffffffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffffffffffffffffffffffffffffffffffff0000ffff0000ff716152ff716152ff5b4c45ff5b4c45ff5d483fff5d483fff5d483fff5d483fffff0000ffff0000ff3b3125ff3b3125ff3b3125ff3b3125ffcaa58effcaa58effcaa58effcaa58effff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffffffffffffffffffffffffffffffffffff0000ffff0000ff796c8aff796c8aff5b4c45ff5b4c45ff5d483fff5d483fff5d483fff5d483fffff0000ffff0000ff3b3125ff3b3125ff3b3125ff3b3125ffcaa58effcaa58effcaa58effcaa58effff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffffffffffffffffffffffffffffffffffff0000ffff0000ff796c8aff796c8aff4c3b34ff4c3b34ff5d483fff5d483fff5d483fff5d483fffe79a9cffe79a9cff262626ff262626ff262626ff262626ff151515ff151515ff151515ff151515ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffffffffffffffffffffffffffffffffffff0000ffff0000ff697d9eff697d9eff4c3b34ff4c3b34ff5d483fff5d483fff5d483fff5d483fffe79a9cffe79a9cff262626ff262626ff262626ff262626ff151515ff151515ff151515ff151515ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffffffffffffffffffffffffffffffffffff0000ffff0000ff697d9eff697d9eff4c3b34ff4c3b34ff5d483fff5d483fff5d483fff5d483fffe5d8afffe5d8afff282119ff282119ff282119ff282119ff151515ff151515ff151515ff151515ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffffffffffffffffffffffffffffffffffff0000ffff0000ff6d8080ff6d8080ff4c3b34ff4c3b34ff5d483fff5d483fff5d483fff5d483fffe5d8afffe5d8afff282119ff282119ff282119ff282119ff151515ff151515ff151515ff151515ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffffffffffffffffffffffffffffffffffff0000ffff0000ff6d8080ff6d8080ff553d34ff553d34ff553d34ff553d34ff553d34ff553d34fffff3cefffff3ceffd0d0d0ffd0d0d0ffd0d0d0ffd0d0d0ff151515ff151515ff151515ff151515ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ff94896fff94896fffffffffffffffffffffffffffffffffffff0000ffff0000ff7c9067ff7c9067ff553d34ff553d34ff553d34ff553d34ff553d34ff553d34fffff3cefffff3ceffd0d0d0ffd0d0d0ffd0d0d0ffd0d0d0ff151515ff151515ff151515ff151515ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ff94896fff94896fffffffffffffffffffffffffffffffffffff0000ffff0000ff7c9067ff7c9067ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffafa382ffafa382ffffffffffffffffffffffffffffffffffff0000ffff0000ffb29a5cffb29a5cffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffafa382ffafa382ffffffffffffffffffffffffffffffffffff0000ffff0000ffb29a5cffb29a5cffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffffffffffffffffffff0000ffff0000ffad875effad875effff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffffffffffffffffffff0000ffff0000ffad875effad875effff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffffffffffffffffffff0000ffff0000ffa2615cffa2615cffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffffffffffffffffffff0000ffff0000ffa2615cffa2615cff514c80ff514c80ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ff944842ff944842ffffffffffffffffffff0000ffff0000ff936b79ff936b79ff514c80ff514c80ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ff944842ff944842ffffffffffffffffffff0000ffff0000ff936b79ff936b79ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffb35149ffb35149ffffffffffffffffffff0000ffff0000ffb2ada8ffb2ada8ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffb35149ffb35149ffffffffffffffffffff0000ffff0000ffb2ada8ffb2ada8ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffaaa5a0ffaaa5a0ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffaaa5a0ffaaa5a0ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ff8e8984ff8e8984ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ff8e8984ff8e8984ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ff65615cff65615cffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ff65615cff65615cff604663ff604663ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ff534e49ff534e49ff604663ff604663ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ff534e49ff534e49ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ff403c37ff403c37ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ffff0000ff403c37ff403c37ff
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 

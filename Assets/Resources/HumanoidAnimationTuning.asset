@@ -14,6 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HumanoidAnimationTuning
   Model: {fileID: 919132149155446097, guid: ed152317b748045198b07297110945ad, type: 3}
   Controller: {fileID: 9100000, guid: e4311d7ff3ea44b2fadda00e08c18ef3, type: 2}
+  SidekickNpcs: 0
+  NpcLooks:
+  - {fileID: 11400000, guid: c3d1f63585f0e490d99b7dc9f4f7c18b, type: 2}
+  - {fileID: 11400000, guid: 6a95daf0bea14417cbd789a5a7513de5, type: 2}
+  - {fileID: 11400000, guid: 9b9b29062b35e40e7955d36e3cebc50a, type: 2}
+  - {fileID: 11400000, guid: 655664477e3c04bab9c74af6eb92ea06, type: 2}
   Idle: {fileID: -203655887218126122, guid: ed152317b748045198b07297110945ad, type: 3}
   Walk: {fileID: -203655887218126122, guid: 849dedbeb722747a984ad026cedacc54, type: 3}
   Jog: {fileID: -203655887218126122, guid: 3e5d482bc8c7f4b5094d1fcb2f956198, type: 3}

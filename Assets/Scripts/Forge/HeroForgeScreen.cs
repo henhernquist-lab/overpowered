@@ -97,7 +97,15 @@ public sealed class HeroForgeScreen : MonoBehaviour
         var animator=model.GetComponent<Animator>();animator.runtimeAnimatorController=tuning.Controller;animator.applyRootMotion=false;animator.cullingMode=AnimatorCullingMode.AlwaysAnimate;
         animator.Play("Locomotion");animator.Update(0);
         var renderers=model.GetComponentsInChildren<SkinnedMeshRenderer>();
-        Bounds bounds=renderers[0].bounds;foreach(var renderer in renderers)bounds.Encapsulate(renderer.bounds);
+        // Frame by the posed skinned vertices (as HumanoidPresentation fits the body): skinned-renderer bounds are conservative
+        // envelopes, far larger than a Sidekick character, which left it small in the frame.
+        Bounds Posed()
+        {
+            Bounds result=new Bounds();bool any=false;var mesh=new Mesh();
+            foreach(var r in renderers){r.BakeMesh(mesh);foreach(var v in mesh.vertices){var p=r.transform.TransformPoint(v);if(!any){result=new Bounds(p,Vector3.zero);any=true;}else result.Encapsulate(p);}}
+            Destroy(mesh);return result;
+        }
+        Bounds bounds=Posed();
         float fit=1.8f/Mathf.Max(.01f,bounds.size.y);model.transform.localScale=Vector3.Scale(model.transform.localScale*fit,hero.VisualScale);
         foreach(var renderer in renderers)
         {
@@ -108,7 +116,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
         foreach(var node in previewRoot.GetComponentsInChildren<Transform>())node.gameObject.layer=30;
         var camera=new GameObject("Forge preview camera").AddComponent<Camera>();camera.transform.SetParent(previewRoot.transform,false);camera.enabled=false;camera.cullingMask=1<<30;
         camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=C(CityColor.UiPanel);camera.fieldOfView=32;camera.targetTexture=Preview;
-        bounds=renderers[0].bounds;foreach(var renderer in renderers)bounds.Encapsulate(renderer.bounds);
+        bounds=Posed();
         camera.transform.position=bounds.center+new Vector3(0,.1f,4.2f);camera.transform.LookAt(bounds.center);
         var sun=new GameObject("Forge preview light").AddComponent<Light>();sun.transform.SetParent(previewRoot.transform,false);sun.type=LightType.Directional;sun.cullingMask=1<<30;sun.intensity=1.4f;sun.color=C(CityColor.Cream);sun.transform.rotation=Quaternion.Euler(35,150,0);
         camera.Render();camera.targetTexture=null;

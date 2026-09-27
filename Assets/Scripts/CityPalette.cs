@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum CityColor { Road, Pavement, Cream, Brick, Sand, Teal, Slate, Roof, Glass, Amber, Metal, Wood, Leaf, Red, Blue, Cyan, Fire, UiNavy, UiPanel, UiMuted, UiInk, HeroAccent, VillainAccent, UiPurple, Water, Haze, Lawn }
@@ -33,6 +34,8 @@ public sealed class CityMaterials : MonoBehaviour
     sealed class SuitEntry{public Material Material;public Texture2D Map;public Color Primary,Secondary,Trim;}
     readonly Dictionary<(SidekickSuit,CityColor,CityColor),SuitEntry> suits=new Dictionary<(SidekickSuit,CityColor,CityColor),SuitEntry>();
     public int SuitCount=>suits.Count;
+    /// Palette materials plus the suit materials generated from palette colours (both owned and destroyed here).
+    public IEnumerable<Material> Owned=>materials.Values.Concat(suits.Values.Select(e=>e.Material));
     public static int SuitsCreated {get;private set;}
     public static Material Suit(SidekickSuit suit,CityColor primary,CityColor secondary)
     {
@@ -44,7 +47,7 @@ public sealed class CityMaterials : MonoBehaviour
         if(suits.TryGetValue((suit,primary,secondary),out var entry))return entry.Material;
         entry=new SuitEntry{Primary=Palette.Colors[(int)primary],Secondary=Palette.Colors[(int)secondary],Trim=Palette.Colors[(int)suit.Trim]};
         entry.Map=suit.Build(entry.Primary,entry.Secondary,entry.Trim);
-        entry.Material=new Material(suit.Source){name=$"Suit/{suit.name}/{primary}+{secondary}"};entry.Material.SetTexture(SidekickSuit.ColorMapProperty,entry.Map);
+        entry.Material=suit.CreateMaterial(entry.Map,$"Suit/{suit.name}/{primary}+{secondary}",Palette.Smoothness);
         suits.Add((suit,primary,secondary),entry);SuitsCreated++;return entry.Material;
     }
     public void Initialize(CityPalette palette) {Current=this;Palette=palette;}
@@ -67,6 +70,7 @@ public sealed class CityMaterials : MonoBehaviour
         {
             var e=pair.Value;var (suit,primary,secondary)=pair.Key;
             e.Primary=Palette.Colors[(int)primary];e.Secondary=Palette.Colors[(int)secondary];e.Trim=Palette.Colors[(int)suit.Trim];suit.Write(e.Map,e.Primary,e.Secondary,e.Trim);
+            if(!suit.AuthoredShader)e.Material.SetFloat("_Glossiness",Palette.Smoothness);
         }
     }
     bool Changed()

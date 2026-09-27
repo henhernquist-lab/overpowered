@@ -58,6 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9667e1a11864f4b41bc85edec6d61fc7, type: 3}
   m_Name: titan-suit
   m_EditorClassIdentifier: Assembly-CSharp::SidekickSuit
+  Prefab: {fileID: 1664552536257148490, guid: fce66a12cf7a45043bbbe1c0087175b5, type: 3}
   Source: {fileID: 2100000, guid: be6a3c9ccc7268245ba1d9880cc23b78, type: 2}
   BaseColorMap: {fileID: -989989233753084360}
   Trim: 10

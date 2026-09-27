@@ -43,7 +43,9 @@ public sealed class HumanoidPresentation : MonoBehaviour
         if(tuning==null||tuning.Model==null||tuning.Controller==null)throw new System.InvalidOperationException("Run Overpowered > Animation > Build shared humanoid presentation first.");
         var squash=new GameObject("Landing squash (visual only)").transform;squash.SetParent(owner.transform,false);
         var pose=new GameObject("Humanoid pose (visual only)").transform;pose.SetParent(squash,false);
-        var model=Instantiate(definition!=null&&definition.CharacterPrefab!=null?definition.CharacterPrefab:tuning.Model,pose);model.name=definition!=null?definition.DisplayName:"Shared Mixamo humanoid";
+        // NPC look (data): the shared mannequin, or with SidekickNpcs a Sidekick body picked per NPC from NpcLooks.
+        var look=npc!=null&&tuning.SidekickNpcs&&tuning.NpcLooks!=null&&tuning.NpcLooks.Length>0?tuning.NpcLooks[(owner.GetEntityId().GetHashCode()&int.MaxValue)%tuning.NpcLooks.Length]:null;
+        var model=Instantiate(definition!=null&&definition.CharacterPrefab!=null?definition.CharacterPrefab:look!=null?look.Prefab:tuning.Model,pose);model.name=definition!=null?definition.DisplayName:look!=null?look.Prefab.name:"Shared Mixamo humanoid";
         var animator=model.GetComponent<Animator>();animator.enabled=false;
         var renderers=model.GetComponentsInChildren<SkinnedMeshRenderer>();
         // Skin bounds are conservative animation envelopes, not actual character proportions.
@@ -59,15 +61,16 @@ public sealed class HumanoidPresentation : MonoBehaviour
         model.transform.localPosition-=Vector3.up*(bounds.min.y-pose.position.y)*scale;
         if(definition!=null)model.transform.localScale=Vector3.Scale(model.transform.localScale,definition.VisualScale);
         var loadout=definition!=null?WorldSession.Instance.Progression.Data.Loadout:null;
-        var suit=definition!=null?definition.Suit:null;
+        var suit=definition!=null?definition.Suit:look;
+        // Player: Hero Forge loadout colours. NPCs: role sets the body colour, the archetype (if any) sets the joints accent.
+        // A Sidekick suit recolours its colour map with the same two roles: one shared material per (suit, primary, secondary).
+        var accent=npc!=null&&npc.Archetype!=null?npc.Archetype.Accent:CityColor.Metal;
+        var body=npc==null?CityColor.Blue:npc.Role==NpcRole.Civilian?CityColor.Amber:npc.Role==NpcRole.Cop?CityColor.Teal:CityColor.Red;
+        var primary=loadout!=null?loadout.Primary:body;var secondary=loadout!=null?loadout.Secondary:accent;
         foreach(var r in renderers)
         {
-            // Player: Hero Forge loadout colours (a Sidekick suit recolours its colour map; one shared material per hero+colours).
-            // NPCs: role sets the body colour, the archetype (if any) sets the joints accent.
-            var accent=npc!=null&&npc.Archetype!=null?npc.Archetype.Accent:CityColor.Metal;
             var mats=r.sharedMaterials;
-            for(int i=0;i<mats.Length;i++)mats[i]=suit!=null&&mats[i]==suit.Source?CityMaterials.Suit(suit,loadout.Primary,loadout.Secondary):
-                CityMaterials.Get(loadout!=null?(r.name.Contains("Joints")?loadout.Secondary:loadout.Primary):r.name.Contains("Joints")?accent:npc==null?CityColor.Blue:npc.Role==NpcRole.Civilian?CityColor.Amber:npc.Role==NpcRole.Cop?CityColor.Teal:CityColor.Red);
+            for(int i=0;i<mats.Length;i++)mats[i]=suit!=null&&mats[i]==suit.Source?CityMaterials.Suit(suit,primary,secondary):CityMaterials.Get(r.name.Contains("Joints")?secondary:primary);
             r.sharedMaterials=mats;r.updateWhenOffscreen=true;
         }
         var presentation=owner.AddComponent<HumanoidPresentation>();presentation.hero=hero;presentation.npc=npc;presentation.Tuning=tuning;presentation.Animator=animator;presentation.PoseRoot=pose;

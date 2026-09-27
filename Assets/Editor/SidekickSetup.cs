@@ -65,6 +65,29 @@ public static class SidekickSetup
         }
         return result.ToArray();
     }
+    // Candidate NPC looks: the lighter base bodies (5.9k-9k vertices, 1 skinned mesh, vs the mannequin's 28k in 2).
+    // Used only when HumanoidAnimationTuning.SidekickNpcs is on (off unless measured FPS allows; see STATUS).
+    public static readonly string[] NpcPrefabs={"HumanSpecies/HumanSpecies_01","HumanSpecies/HumanSpecies_02","HumanSpecies/HumanSpecies_03","HumanSpecies/HumanSpecies_04"};
+    static SidekickSuit Suit(string id,GameObject prefab,List<ColorProperty> props,StringBuilder log,string header)
+    {
+        var skin=prefab.GetComponentInChildren<SkinnedMeshRenderer>();
+        string suitPath=$"{SuitFolder}/{id}-suit.asset";var suit=AssetDatabase.LoadAssetAtPath<SidekickSuit>(suitPath);
+        if(suit==null){suit=ScriptableObject.CreateInstance<SidekickSuit>();AssetDatabase.CreateAsset(suit,suitPath);}
+        var authored=ReadableColorMap(skin.sharedMaterial);
+        if(suit.BaseColorMap==null){suit.BaseColorMap=new Texture2D(authored.width,authored.height,TextureFormat.RGBA32,false);AssetDatabase.AddObjectToAsset(suit.BaseColorMap,suit);}
+        else suit.BaseColorMap.Reinitialize(authored.width,authored.height,TextureFormat.RGBA32,false);
+        suit.BaseColorMap.name=id+" authored colour map (readable copy of "+Path.GetFileName(AssetDatabase.GetAssetPath(skin.sharedMaterial.GetTexture("_ColorMap")))+")";
+        suit.BaseColorMap.filterMode=FilterMode.Point;suit.BaseColorMap.wrapMode=TextureWrapMode.Clamp;suit.BaseColorMap.SetPixels32(authored.GetPixels32());suit.BaseColorMap.Apply(false,false);
+        suit.Prefab=prefab;suit.Source=skin.sharedMaterial;suit.Trim=CityColor.Metal;suit.Swatches=Roles(UsedSwatches(prefab),authored,props);
+        UnityEngine.Object.DestroyImmediate(authored);EditorUtility.SetDirty(suit.BaseColorMap);EditorUtility.SetDirty(suit);
+        log.AppendLine($"== {header} -> {prefab.name}.prefab ({skin.sharedMesh.vertexCount} vertices), source material {suit.Source.name}; trim={suit.Trim}");
+        foreach(var role in new[]{SuitRole.Primary,SuitRole.Secondary,SuitRole.Trim,SuitRole.Keep})
+        {
+            var list=suit.Swatches.Where(x=>x.Role==role).ToArray();
+            log.AppendLine($"   {role}: {list.Length} swatches / {list.Sum(x=>x.Vertices)} verts: "+string.Join("; ",list.Select(x=>$"({x.Cell.x},{x.Cell.y}) #{ColorUtility.ToHtmlStringRGB(suit.BaseColorMap.GetPixel(x.Cell.x*2,x.Cell.y*2))} {x.Name}")));
+        }
+        return suit;
+    }
     [MenuItem("Overpowered/Forge/Sidekick heroes (suits + character prefabs)")]
     public static void CreateHeroes()
     {
@@ -74,24 +97,13 @@ public static class SidekickSetup
         {
             var hero=AssetDatabase.LoadAssetAtPath<HeroDefinition>($"Assets/Resources/Forge/Heroes/{heroId}.asset");
             if(hero==null)throw new Exception("Missing hero definition "+heroId+" (run Overpowered > Forge > Create missing assets first).");
-            var prefab=AssetDatabase.LoadAssetAtPath<GameObject>(SidekickClipCheck.PrefabPath(prefabPath));var skin=prefab.GetComponentInChildren<SkinnedMeshRenderer>();
-            string suitPath=$"{SuitFolder}/{heroId}-suit.asset";var suit=AssetDatabase.LoadAssetAtPath<SidekickSuit>(suitPath);
-            if(suit==null){suit=ScriptableObject.CreateInstance<SidekickSuit>();AssetDatabase.CreateAsset(suit,suitPath);}
-            var authored=ReadableColorMap(skin.sharedMaterial);
-            if(suit.BaseColorMap==null){suit.BaseColorMap=new Texture2D(authored.width,authored.height,TextureFormat.RGBA32,false);AssetDatabase.AddObjectToAsset(suit.BaseColorMap,suit);}
-            else suit.BaseColorMap.Reinitialize(authored.width,authored.height,TextureFormat.RGBA32,false);
-            suit.BaseColorMap.name=heroId+" authored colour map (readable copy of "+Path.GetFileName(AssetDatabase.GetAssetPath(skin.sharedMaterial.GetTexture("_ColorMap")))+")";
-            suit.BaseColorMap.filterMode=FilterMode.Point;suit.BaseColorMap.wrapMode=TextureWrapMode.Clamp;suit.BaseColorMap.SetPixels32(authored.GetPixels32());suit.BaseColorMap.Apply(false,false);
-            suit.Source=skin.sharedMaterial;suit.Trim=CityColor.Metal;suit.Swatches=Roles(UsedSwatches(prefab),authored,props);
-            UnityEngine.Object.DestroyImmediate(authored);EditorUtility.SetDirty(suit.BaseColorMap);EditorUtility.SetDirty(suit);
+            var prefab=AssetDatabase.LoadAssetAtPath<GameObject>(SidekickClipCheck.PrefabPath(prefabPath));
+            var suit=Suit(heroId,prefab,props,log,$"hero {heroId} ({hero.DisplayName}, default Primary={hero.Primary} Secondary={hero.Secondary})");
             hero.CharacterPrefab=prefab;hero.Suit=suit;EditorUtility.SetDirty(hero);
-            log.AppendLine($"== {heroId} ({hero.DisplayName}) -> {prefabPath}.prefab, source material {suit.Source.name}; default Primary={hero.Primary} Secondary={hero.Secondary}; trim={suit.Trim}");
-            foreach(var role in new[]{SuitRole.Primary,SuitRole.Secondary,SuitRole.Trim,SuitRole.Keep})
-            {
-                var list=suit.Swatches.Where(x=>x.Role==role).ToArray();
-                log.AppendLine($"   {role}: {list.Length} swatches / {list.Sum(x=>x.Vertices)} verts: "+string.Join("; ",list.Select(x=>$"({x.Cell.x},{x.Cell.y}) #{ColorUtility.ToHtmlStringRGB(suit.BaseColorMap.GetPixel(x.Cell.x*2,x.Cell.y*2))} {x.Name}")));
-            }
         }
+        var tuning=AssetDatabase.LoadAssetAtPath<HumanoidAnimationTuning>("Assets/Resources/HumanoidAnimationTuning.asset");
+        tuning.NpcLooks=NpcPrefabs.Select(p=>Suit("npc-"+Path.GetFileName(p).ToLowerInvariant(),AssetDatabase.LoadAssetAtPath<GameObject>(SidekickClipCheck.PrefabPath(p)),props,log,"NPC look (role colour = Primary, archetype accent = Secondary)")).ToArray();
+        EditorUtility.SetDirty(tuning);log.AppendLine($"HumanoidAnimationTuning.SidekickNpcs={tuning.SidekickNpcs} (left as authored), NpcLooks={tuning.NpcLooks.Length}");
         AssetDatabase.SaveAssets();Directory.CreateDirectory("Verification/Sidekick");File.WriteAllText("Verification/Sidekick/suits.txt",log.ToString());
         UnityEngine.Debug.Log("[SIDEKICK SETUP]\n"+log);
     }
@@ -124,6 +136,37 @@ public static class SidekickSetup
         }
         sheet.Apply();Directory.CreateDirectory("Verification/Sidekick");File.WriteAllBytes("Verification/Sidekick/lineup.png",sheet.EncodeToPNG());
         EditorApplication.Exit(0);
+    }
+    /// Look comparison for the shader decision: each hero (default colours) with its suit on Sidekick_ShaderGraph (left) and the
+    /// same colour map on Standard + Sidekick's emission map (right), lit like the city. Verification/Sidekick/shader-compare.png
+    public static void ShaderCompare()
+    {
+        UnityEditor.SceneManagement.EditorSceneManager.NewScene(UnityEditor.SceneManagement.NewSceneSetup.EmptyScene);
+        RenderSettings.ambientMode=UnityEngine.Rendering.AmbientMode.Flat;RenderSettings.ambientLight=new Color(.45f,.5f,.6f);
+        var sun=new GameObject("sun").AddComponent<Light>();sun.type=LightType.Directional;sun.intensity=1.2f;sun.shadows=LightShadows.Soft;sun.transform.rotation=Quaternion.Euler(45,-35+180,0);
+        var palette=AssetDatabase.LoadAssetAtPath<CityPalette>("Assets/Resources/CityPalette.asset");
+        var tuning=AssetDatabase.LoadAssetAtPath<HumanoidAnimationTuning>("Assets/Resources/HumanoidAnimationTuning.asset");
+        var cam=new GameObject("cam").AddComponent<Camera>();cam.clearFlags=CameraClearFlags.SolidColor;cam.backgroundColor=new Color(.35f,.42f,.5f);cam.fieldOfView=22;
+        int W=360,H=520;var rt=new RenderTexture(W,H,24){antiAliasing=4};cam.targetTexture=rt;var cell=new Texture2D(W,H,TextureFormat.RGB24,false);
+        var sheet=new Texture2D(W*2*Heroes.Length,H,TextureFormat.RGB24,false);int col=0;
+        foreach(var (heroId,_) in Heroes)
+        {
+            var hero=AssetDatabase.LoadAssetAtPath<HeroDefinition>($"Assets/Resources/Forge/Heroes/{heroId}.asset");var suit=hero.Suit;
+            var map=suit.Build(palette.Colors[(int)hero.Primary],palette.Colors[(int)hero.Secondary],palette.Colors[(int)suit.Trim]);
+            var sidekick=new Material(suit.Source);sidekick.SetTexture(SidekickSuit.ColorMapProperty,map);
+            var standard=new Material(Shader.Find("Standard")){mainTexture=map};standard.SetFloat("_Glossiness",palette.Smoothness);
+            var emission=suit.Source.GetTexture("_EmissionMap");if(emission!=null){standard.SetTexture("_EmissionMap",emission);standard.SetColor("_EmissionColor",Color.white);standard.EnableKeyword("_EMISSION");}
+            foreach(var mat in new[]{sidekick,standard})
+            {
+                var go=UnityEngine.Object.Instantiate(hero.CharacterPrefab);var animator=go.GetComponent<Animator>();animator.runtimeAnimatorController=tuning.Controller;animator.Update(0);animator.Update(.5f);
+                var skin=go.GetComponentInChildren<SkinnedMeshRenderer>();var mesh=new Mesh();skin.BakeMesh(mesh);
+                var proxy=new GameObject("proxy");proxy.transform.SetParent(skin.transform,false);proxy.AddComponent<MeshFilter>().sharedMesh=mesh;proxy.AddComponent<MeshRenderer>().sharedMaterial=mat;skin.enabled=false;
+                var b=proxy.GetComponent<MeshRenderer>().bounds;cam.transform.position=b.center+new Vector3(.9f,.25f,5.2f)*b.size.y/1.8f;cam.transform.LookAt(b.center);cam.Render();
+                RenderTexture.active=rt;cell.ReadPixels(new Rect(0,0,W,H),0,0);cell.Apply();RenderTexture.active=null;sheet.SetPixels(col*W,0,W,H,cell.GetPixels());col++;
+                UnityEngine.Object.DestroyImmediate(go);UnityEngine.Object.DestroyImmediate(mesh);
+            }
+        }
+        sheet.Apply();File.WriteAllBytes("Verification/Sidekick/shader-compare.png",sheet.EncodeToPNG());EditorApplication.Exit(0);
     }
     public static void Analyze()
     {

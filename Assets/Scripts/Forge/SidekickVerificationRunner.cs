@@ -50,8 +50,9 @@ public sealed class SidekickVerificationRunner : MonoBehaviour
     Color32 AssertSuit(SkinnedMeshRenderer skin,HeroDefinition hero,CityColor a,CityColor b,string where)
     {
         var mat=skin.sharedMaterial;var suit=hero.Suit;
-        Check(mat!=null&&mat!=suit.Source&&mat.shader==suit.Source.shader&&mat.name==$"Suit/{suit.name}/{a}+{b}",$"{where}: {hero.DisplayName} renderer uses the cached suit material '{mat?.name}' (Sidekick shader, not the vendor material, not a palette Standard material).");
-        var map=mat.GetTexture(SidekickSuit.ColorMapProperty) as Texture2D;
+        var shader=suit.AuthoredShader?suit.Source.shader:Shader.Find("Standard");
+        Check(mat!=null&&mat!=suit.Source&&mat.shader==shader&&mat.name==$"Suit/{suit.name}/{a}+{b}"&&!F.SuitColors.Any(c=>mat==CityMaterials.Get(c)),$"{where}: {hero.DisplayName} renderer uses the cached suit material '{mat?.name}' ({mat?.shader.name}; not the vendor material, not a flat palette material).");
+        var map=SidekickSuit.MapOf(mat) as Texture2D;
         Check(map!=null&&map!=suit.Source.GetTexture(SidekickSuit.ColorMapProperty)&&map.filterMode==FilterMode.Point,$"{where}: _ColorMap is the generated point-filtered suit map, not the authored texture.");
         int wrong=0,checkedCells=0;
         foreach(var s in suit.Swatches)
@@ -103,6 +104,11 @@ public sealed class SidekickVerificationRunner : MonoBehaviour
                 var skinned=screen.PreviewModel.GetComponentsInChildren<SkinnedMeshRenderer>();
                 Check(skinned.Length==1&&skinned[0].sharedMesh==hero.CharacterPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh,$"Forge preview instantiates {hero.CharacterPrefab.name} ({skinned[0].sharedMesh.vertexCount} vertices, 1 skinned mesh).");
                 skin[j]=AssertSuit(skinned[0],hero,pairs[j].Item1,pairs[j].Item2,"Forge preview");
+                {
+                    var baked=new Mesh();skinned[0].BakeMesh(baked);var lo=float.MaxValue;var hi=float.MinValue;foreach(var v in baked.vertices){float y=skinned[0].transform.TransformPoint(v).y;lo=Mathf.Min(lo,y);hi=Mathf.Max(hi,y);}Destroy(baked);
+                    var cam=screen.PreviewModel.transform.parent.GetComponentInChildren<Camera>(true);
+                    Log($"PREVIEW fit {hero.DisplayName}: posed skinned height={hi-lo:F3}m (target 1.8 x VisualScale.y {hero.VisualScale.y}), model scale={screen.PreviewModel.transform.localScale:F3}, renderer bounds={skinned[0].bounds.size:F2}, camera distance={Vector3.Distance(cam.transform.position,skinned[0].bounds.center):F2} fov={cam.fieldOfView}");
+                }
                 cells[i,j]=Read(screen.Preview);
             }
             Check(skin[0].Equals(skin[1])&&skin[0].Equals(SidekickSuit.Pixel(hero.Suit.BaseColorMap,new Vector2Int(0,5))),$"CONTROL: {hero.DisplayName} skin swatch identical for both colour pairs and equal to the authored map: {skin[0]}.");
@@ -127,7 +133,7 @@ public sealed class SidekickVerificationRunner : MonoBehaviour
             Check(skins.Length==1&&skins[0].sharedMesh==hero.CharacterPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh&&p.Animator.avatar==hero.CharacterPrefab.GetComponent<Animator>().avatar&&p.Animator.gameObject.name==hero.DisplayName,$"Session spawns {hero.DisplayName} as {hero.CharacterPrefab.name} (same mesh + Humanoid avatar), shared controller {p.Animator.runtimeAnimatorController.name}, root motion {p.Animator.applyRootMotion}.");
             Check(!p.Animator.applyRootMotion&&p.Animator.transform!=W.Hero.transform&&p.VisualRoot.GetComponentsInChildren<MeshRenderer>().Length==0,"CONTROL: no root motion, Animator not on the physics root, no capsule MeshRenderer.");
             AssertSuit(skins[0],hero,a,b,"Session");
-            var suitMaterial=skins[0].sharedMaterial;var suitMap=suitMaterial.GetTexture(SidekickSuit.ColorMapProperty);
+            var suitMaterial=skins[0].sharedMaterial;var suitMap=SidekickSuit.MapOf(suitMaterial);
             Check(suitMaterial==CityMaterials.Suit(hero.Suit,a,b)&&CityMaterials.Current.SuitCount==1&&CityMaterials.SuitsCreated==created+1,$"ONE suit material for (hero, primary, secondary) cached by the city's CityMaterials (count {CityMaterials.Current.SuitCount}, created this session {CityMaterials.SuitsCreated-created}).");
             for(int f=0;f<60;f++)yield return null;
             Check(CityMaterials.SuitsCreated==created+1&&skins[0].sharedMaterial==suitMaterial&&LiveSuitMaterials==1,$"60 frames later: no material created per frame (live suit materials {LiveSuitMaterials}, NPCs {W.Npcs.Count} unaffected).");
@@ -136,7 +142,7 @@ public sealed class SidekickVerificationRunner : MonoBehaviour
             bool frozen=true;var look=FrozenLook.Show(W.Hero.gameObject,CityColor.Cyan,()=>frozen);yield return null;
             Check(skins[0].sharedMaterial==CityMaterials.Get(CityColor.Cyan),"Ice frozen look shows the shared Cyan material on the Sidekick body.");
             frozen=false;yield return null;yield return null;
-            Check(skins[0].sharedMaterial==suitMaterial&&suitMaterial!=null&&suitMaterial.GetTexture(SidekickSuit.ColorMapProperty)==suitMap,"Thaw restores the same suit material and colour map.");
+            Check(skins[0].sharedMaterial==suitMaterial&&suitMaterial!=null&&SidekickSuit.MapOf(suitMaterial)==suitMap,"Thaw restores the same suit material and colour map.");
             Destroy(look);
             // First person hides the body to shadows only, and restores.
             var follow=Camera.main.GetComponent<ThirdPersonCamera>();var before=skins[0].shadowCastingMode;bool wasFirst=follow.FirstPerson;

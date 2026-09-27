@@ -12,9 +12,13 @@ public enum SuitRole : byte { Keep, Primary, Secondary, Trim }
 public sealed class SidekickSuit : ScriptableObject
 {
     [Serializable] public struct Swatch { public Vector2Int Cell; public SuitRole Role; public string Name; public int Vertices; }
+    [Tooltip("The Sidekick character prefab this suit belongs to.")] public GameObject Prefab;
     [Tooltip("The Sidekick material on the character prefab; only renderer slots using it are recoloured.")] public Material Source;
     [Tooltip("Readable RGBA32 copy of Source's authored _ColorMap.")] public Texture2D BaseColorMap;
     public CityColor Trim=CityColor.Metal;
+    [Tooltip("Off (default): the suit colour map is drawn by the Standard shader like every palette material, plus the source's emission map. " +
+        "On: a copy of the authored Sidekick_ShaderGraph material. Measured in the densest street: the ShaderGraph hero cost +1.9 ms/frame (STATUS).")]
+    public bool AuthoredShader;
     public Swatch[] Swatches;
     public const string ColorMapProperty="_ColorMap";
     public const int CellPixels=2;
@@ -36,4 +40,19 @@ public sealed class SidekickSuit : ScriptableObject
         map.SetPixels32(pixels);map.Apply(false,false);
     }
     public static Color32 Pixel(Texture2D map,Vector2Int cell)=>map.GetPixel(cell.x*CellPixels,cell.y*CellPixels);
+    /// The colour map a suit material draws with, whichever shader it uses.
+    public static Texture MapOf(Material material)=>material.HasProperty(ColorMapProperty)&&material.GetTexture(ColorMapProperty)!=null?material.GetTexture(ColorMapProperty):material.mainTexture;
+    /// ONE material for (this suit, colours); CityMaterials owns and caches it.
+    public Material CreateMaterial(Texture2D map,string materialName,float smoothness)
+    {
+        Material material;
+        if(AuthoredShader){material=new Material(Source);material.SetTexture(ColorMapProperty,map);}
+        else
+        {
+            material=new Material(Shader.Find("Standard")){enableInstancing=true,mainTexture=map};material.SetFloat("_Glossiness",smoothness);
+            var emission=Source.HasProperty("_EmissionMap")?Source.GetTexture("_EmissionMap"):null;
+            if(emission!=null){material.SetTexture("_EmissionMap",emission);material.SetColor("_EmissionColor",Color.white);material.EnableKeyword("_EMISSION");}
+        }
+        material.name=materialName;return material;
+    }
 }
