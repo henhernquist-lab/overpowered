@@ -12,6 +12,8 @@ public sealed class HeroForgeScreen : MonoBehaviour
     public ForgeChoice SlotA {get;private set;}
     public ForgeChoice SlotB {get;private set;}
     public RenderTexture Preview {get;private set;}
+    /// Archetype comparison bars under the preview (rebuilt with the form when the hero changes).
+    public VisualElement StatsPanel {get;private set;}
     ModeScreens menu;ForgeCatalog catalog;HeroDefinition hero;PowerDefinition a,b;
     CityColor primary,secondary;CityPalette palette;GameObject previewRoot;bool rebuilding;
     VisualElement form;Label feedback;
@@ -24,7 +26,10 @@ public sealed class HeroForgeScreen : MonoBehaviour
         Root.style.color=C(CityColor.UiInk);menu.Root.Add(Root);
         var title=new Label("HERO FORGE");title.style.fontSize=42;title.style.unityFontStyleAndWeight=FontStyle.Bold;title.style.color=C(CityColor.HeroAccent);Root.Add(title);
         var row=new VisualElement();row.style.flexDirection=FlexDirection.Row;row.style.flexGrow=1;Root.Add(row);
-        var image=new Image{name="hero-preview",scaleMode=ScaleMode.ScaleToFit};image.style.width=Length.Percent(42);image.style.marginRight=30;row.Add(image);
+        var column=new VisualElement{name="hero-preview-column"};column.style.width=Length.Percent(42);column.style.marginRight=30;row.Add(column);
+        var image=new Image{name="hero-preview",scaleMode=ScaleMode.ScaleToFit};image.style.flexGrow=1;column.Add(image);
+        StatsPanel=new VisualElement{name="forge-stats"};StatsPanel.style.backgroundColor=C(CityColor.UiPanel);StatsPanel.style.paddingLeft=StatsPanel.style.paddingRight=12;
+        StatsPanel.style.paddingTop=StatsPanel.style.paddingBottom=8;StatsPanel.style.marginTop=8;column.Add(StatsPanel);
         Preview=new RenderTexture(400,500,24){name="Hero Forge preview"};Preview.Create();image.image=Preview;
         form=new VisualElement();form.style.flexGrow=1;form.style.paddingTop=12;row.Add(form);
         feedback=new Label();feedback.style.fontSize=15;Root.Add(feedback);
@@ -82,7 +87,66 @@ public sealed class HeroForgeScreen : MonoBehaviour
         SynergyStatus=new Label(synergy!=null?$"READY WHEN EQUIPPED  ·  {synergy.Cooldown:0} S COOLDOWN  ·  {HudBindings.KeyName(catalog.SynergyKey)} TO USE":""){name="forge-synergy-status"};
         SynergyStatus.style.fontSize=13;SynergyStatus.style.unityFontStyleAndWeight=FontStyle.Bold;SynergyStatus.style.color=C(CityColor.UiMuted);SynergyStatus.style.marginBottom=4;form.Add(SynergyStatus);
         var detail=new Label(synergy?.Description??"");detail.style.whiteSpace=WhiteSpace.Normal;detail.style.marginBottom=12;form.Add(detail);
+        BuildStats();
         rebuilding=false;
+    }
+    /// One row per archetype stat: the selected hero's real value and a bar filled relative to the best value across the
+    /// roster (for cooldown, lower is better), so heroes compare at a glance. Values come from HeroDefinition.Stats x the
+    /// shared GameTuning baseline; named "forge-stat-<key>" (value label "forge-stat-<key>-value").
+    public static readonly string[] StatKeys={"health","energy","regen","speed","melee","power","cooldown","knockback"};
+    public static float StatValue(HeroDefinition h,string key)
+    {
+        var s=h!=null&&h.Stats!=null?h.Stats:HeroStats.Baseline;var t=Resources.Load<GameTuning>("GameTuning").Movement;
+        switch(key)
+        {
+            case "health":return t.Health*s.MaxHealth;
+            case "energy":return t.Energy*s.MaxEnergy;
+            case "regen":return t.EnergyRecharge*s.EnergyRegen;
+            case "speed":return t.RunSpeed*s.MoveSpeed;
+            case "melee":return s.MeleeDamage;
+            case "power":return s.PowerDamage;
+            case "cooldown":return s.CooldownMultiplier;
+            default:return s.KnockbackResistance;
+        }
+    }
+    /// 0..1 bar fill: value / roster best (cooldown: roster best / value; knockback: the resistance itself).
+    public float StatFill(HeroDefinition h,string key)
+    {
+        float v=StatValue(h,key);
+        if(key=="knockback")return Mathf.Clamp01(v);
+        if(key=="cooldown"){float best=catalog.Heroes.Where(x=>x!=null).Min(x=>StatValue(x,key));return Mathf.Clamp01(best/Mathf.Max(.0001f,v));}
+        float max=catalog.Heroes.Where(x=>x!=null).Max(x=>StatValue(x,key));return Mathf.Clamp01(v/Mathf.Max(.0001f,max));
+    }
+    public static string StatText(HeroDefinition h,string key)
+    {
+        float v=StatValue(h,key);
+        switch(key)
+        {
+            case "health":return $"{v:0} HP";
+            case "energy":return $"{v:0}";
+            case "regen":return $"{v:0.#}/S";
+            case "speed":return $"{v:0.#} M/S";
+            case "knockback":return $"{v*100:0}%";
+            default:return $"x{v:0.00}";
+        }
+    }
+    static readonly string[] StatTitles={"HEALTH","ENERGY","ENERGY REGEN","MOVE SPEED","MELEE DAMAGE","POWER DAMAGE","POWER COOLDOWN","KNOCKBACK RESIST"};
+    void BuildStats()
+    {
+        StatsPanel.Clear();
+        var title=new Label(hero.DisplayName+"  ·  ARCHETYPE");title.style.fontSize=12;title.style.color=C(CityColor.UiMuted);title.style.marginBottom=4;StatsPanel.Add(title);
+        for(int i=0;i<StatKeys.Length;i++)
+        {
+            string key=StatKeys[i];float fill=StatFill(hero,key);bool better=key=="cooldown"?StatValue(hero,key)<1f:key=="knockback"?StatValue(hero,key)>0f:StatValue(hero,key)>StatValue(null,key)+.0001f;
+            bool worse=key=="cooldown"?StatValue(hero,key)>1f:key!="knockback"&&StatValue(hero,key)<StatValue(null,key)-.0001f;
+            var row=new VisualElement{name="forge-stat-"+key};row.style.flexDirection=FlexDirection.Row;row.style.alignItems=Align.Center;row.style.height=18;
+            var label=new Label(StatTitles[i]);label.style.width=130;label.style.fontSize=11;label.style.color=C(CityColor.UiMuted);row.Add(label);
+            var track=new VisualElement();track.style.flexGrow=1;track.style.height=8;track.style.backgroundColor=C(CityColor.UiNavy);row.Add(track);
+            var bar=new VisualElement{name="forge-stat-"+key+"-fill"};bar.style.width=Length.Percent(fill*100f);bar.style.height=8;
+            bar.style.backgroundColor=C(better?CityColor.HeroAccent:worse?CityColor.Red:CityColor.Cream);track.Add(bar);
+            var value=new Label(StatText(hero,key)){name="forge-stat-"+key+"-value"};value.style.width=78;value.style.fontSize=11;value.style.unityTextAlign=TextAnchor.MiddleRight;row.Add(value);
+            StatsPanel.Add(row);
+        }
     }
     void Capture()
     {

@@ -19,6 +19,8 @@ public sealed class WorldSession : MonoBehaviour
     public int Stars => Mathf.Clamp(Mathf.CeilToInt(Heat),0,Tuning.Heat.MaximumStars);
     public float Health { get; private set; }
     public bool PlayerDead => Health<=0;
+    /// GameTuning.Movement.Health x the session hero's MaxHealth archetype multiplier.
+    public float MaxHealth => Tuning.Movement.Health * (Powers != null ? Powers.HeroStats.MaxHealth : 1f);
     public event System.Action<bool> PlayerDamaged;
     public event System.Action PlayerRespawned;
     /// Raised after a mode encounter has been placed and initialised (HUD alerts listen; spawning is unchanged).
@@ -39,6 +41,7 @@ public sealed class WorldSession : MonoBehaviour
         Progression.Initialize(tuning.Progression,definitions,VerificationSavePath);
         Powers=hero.gameObject.AddComponent<PowerUser>(); Powers.Initialize(hero,Progression,definitions,tuning.Movement);
         hero.Initialize(Powers,tuning.Movement);
+        Health=MaxHealth;
         if(GameFlow.Instance!=null&&GameFlow.Instance.ActiveMode!=null)
         { Mode=gameObject.AddComponent<GameModeSession>(); Mode.Initialize(this,GameFlow.Instance.ActiveMode); Message=Mode.Definition.Description; }
         int civilians=Mode==null?tuning.City.Civilians:Mode.Definition.Civilians;
@@ -66,7 +69,7 @@ public sealed class WorldSession : MonoBehaviour
             if (deathTimer>=Tuning.Movement.RespawnDelay)
             {
                 var cc=Hero.GetComponent<CharacterController>(); cc.enabled=false; Hero.transform.position=City.Spawn+Vector3.up*Tuning.Movement.Height; cc.enabled=true;
-                Hero.ResetMotion(); Health=Tuning.Movement.Health; deathTimer=0; Heat=0; ReconcilePolice();
+                Hero.ResetMotion(); Health=MaxHealth; deathTimer=0; Heat=0; ReconcilePolice();
                 PlayerRespawned?.Invoke();
             }
         }

@@ -65,6 +65,7 @@ public static class RosterSetup
         });
         AddToHeroes();
         AddSynergies();
+        HeroArchetypeSetup.Apply();
         AssetDatabase.SaveAssets(); AssetDatabase.Refresh();
     }
     public static void Batch() { Create(); EditorApplication.Exit(0); }

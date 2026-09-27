@@ -26,6 +26,10 @@ public sealed class PowerUser : MonoBehaviour
     public event System.Action<PowerDefinition> ChannelEnded;
     /// Force Field (or null): the player's damage-absorbing shield. WorldSession.DamagePlayer routes damage through it.
     public PlayerShield Shield { get; private set; }
+    /// The session hero's archetype (baseline without a Forge hero).
+    public HeroStats HeroStats => HeroDefinition != null && HeroDefinition.Stats != null ? HeroDefinition.Stats : HeroStats.Baseline;
+    public float MaxEnergy => config.Energy * HeroStats.MaxEnergy;
+    public float EnergyRegen => config.EnergyRecharge * HeroStats.EnergyRegen;
     public bool IsEquipped(PowerDefinition definition)=>definition!=null&&(Forge==null||definition==EquippedA||definition==EquippedB);
     public Vector3 AimOrigin
     {
@@ -70,12 +74,21 @@ public sealed class PowerUser : MonoBehaviour
         }
         Forge=Resources.Load<ForgeCatalog>("ForgeCatalog");
         EquippedA=progression.EquippedA;EquippedB=progression.EquippedB;HeroDefinition=progression.SelectedHero;
+        Energy = MaxEnergy;
         Synergy=Forge?.Resolve(EquippedA,EquippedB);
         Selected = Powers.Find(p=>IsEquipped(p.Definition)&&!p.Definition.Effect.IsFlight)??Strength; progression.Changed += Refresh;
         Refresh();
         if(Forge!=null){SynergyRunner=gameObject.AddComponent<SynergyRunner>();SynergyRunner.Initialize(this);}
     }
-    public PowerStats Stats(PowerRuntime power) => power.Definition.GetStats(Mathf.Max(0, Progression.Tier(power.Definition)));
+    public PowerStats Stats(PowerRuntime power)
+    {
+        var s = power.Definition.GetStats(Mathf.Max(0, Progression.Tier(power.Definition)));
+        var h = HeroStats;
+        // Hero archetype: melee (Super Strength's punch/kick) scales damage and knockback; every other power scales damage and cooldown.
+        if (power.Definition.Effect is PunchEffect) { s.Damage *= h.MeleeDamage; s.Force *= h.MeleeDamage; }
+        else if (power.Definition.Effect == null || !power.Definition.Effect.IsFlight) { s.Damage *= h.PowerDamage; s.Cooldown *= h.CooldownMultiplier; }
+        return s;
+    }
     void Refresh()
     {
         foreach (var p in Powers) { var stats = Stats(p); p.Charges = Mathf.Min(p.Charges, stats.Charges); p.Fuel = Mathf.Min(p.Fuel, stats.Duration); }
@@ -108,7 +121,7 @@ public sealed class PowerUser : MonoBehaviour
     }
     public void Tick(float dt, bool grounded)
     {
-        Energy = Mathf.Min(config.Energy, Energy + config.EnergyRecharge * dt);
+        Energy = Mathf.Min(MaxEnergy, Energy + EnergyRegen * dt);
         foreach (var power in Powers)
         {
             var s = Stats(power); power.Cooldown = Mathf.Max(0f, power.Cooldown - dt);

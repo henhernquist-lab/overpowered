@@ -217,7 +217,8 @@ public sealed class CityNpc : MonoBehaviour
             Hits++;
             float before=world.Health; world.DamagePlayer(ContactDamage);
             if (world.Health<before) FeelDirector.PlayerHit(before-world.Health, transform.position);   // feel only
-            if (a.Knockback>0f && world.Health<before && !world.PlayerDead) StartCoroutine(Knockback(CommittedDirection, a.Knockback, a.KnockbackSeconds));
+            float knockback=a.Knockback*(1f-Mathf.Clamp01(world.Powers!=null?world.Powers.HeroStats.KnockbackResistance:0f));   // hero archetype resistance
+            if (knockback>0f && world.Health<before && !world.PlayerDead) StartCoroutine(Knockback(CommittedDirection, knockback, a.KnockbackSeconds));
         }
         Agent.isStopped=Rooted;
     }

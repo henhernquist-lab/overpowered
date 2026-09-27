@@ -49,7 +49,9 @@ public sealed class SuperHeroController : MonoBehaviour
         if(!grounded&&(flags&CollisionFlags.Below)!=0&&velocity.y<0)Landed?.Invoke(-velocity.y);
         return flags;
     }
-    PowerStats BasicStats()=>new PowerStats{Damage=powers.Forge.BasicDamage,Force=powers.Forge.BasicForce,Radius=powers.Forge.BasicRadius};
+    PowerStats BasicStats()=>new PowerStats{Damage=powers.Forge.BasicDamage*powers.HeroStats.MeleeDamage,Force=powers.Forge.BasicForce*powers.HeroStats.MeleeDamage,Radius=powers.Forge.BasicRadius};
+    /// Verification only (batch mode has no keyboard): used as the camera-relative movement input when non-zero.
+    public Vector3 ScriptedMove; public bool ScriptedRun;
     bool BasicMelee(bool kick)
     {
         if(Time.time<basicReadyAt||powers.SynergyRunner.Busy)return false;
@@ -75,10 +77,11 @@ public sealed class SuperHeroController : MonoBehaviour
         Vector3 forward = Vector3.Scale(view.transform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 right = Vector3.Scale(view.transform.right, new Vector3(1,0,1)).normalized;
         Vector3 move = acceptsInput ? (forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal")).normalized : Vector3.zero;
+        if (acceptsInput && ScriptedMove.sqrMagnitude > 0f) move = Vector3.ProjectOnPlane(ScriptedMove, Vector3.up).normalized;
         MoveInput = move;
         bool flying = acceptsInput && !controller.isGrounded && Input.GetKey(KeyCode.F) && powers.ConsumeFlight(Time.deltaTime);
         if (move.sqrMagnitude > 0f) transform.forward = Vector3.Slerp(transform.forward, move, Time.deltaTime * movement.TurnResponse);
-        float speed = Input.GetKey(KeyCode.LeftShift) ? movement.RunSpeed : movement.WalkSpeed;
+        float speed = (Input.GetKey(KeyCode.LeftShift) || ScriptedRun ? movement.RunSpeed : movement.WalkSpeed) * powers.HeroStats.MoveSpeed;
         if (controller.isGrounded && verticalVelocity < 0f) verticalVelocity = -movement.GroundStickSpeed;
         if (acceptsInput && controller.isGrounded && Input.GetButtonDown("Jump")) TryJump();
         if (flying)
