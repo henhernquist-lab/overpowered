@@ -2983,3 +2983,230 @@ new errors in any commit. `origin/main` (`49ffbed`) is merged in (`4d4392d`); th
 
 Further work continues on **`cloud/replayability-depth`**, branched from this repaired head. `cloud/gameplay-depth` gets
 no more features.
+
+## CLOUD REPLAYABILITY — `cloud/replayability-depth` (2026-09-27, appended; CLOUD agent, NO Unity)
+
+Branched from the repaired `cloud/gameplay-depth` head (`bfa59fa`). `origin/main` had no new commits at any checkpoint
+during this work, and there was no newer CLOUD FEEDBACK than #1 (already addressed). **Nothing here has run in Unity.**
+Every item is **written, unverified, and awaiting a local run**. The compile check was the usual approximation: Roslyn C# 9
+against Unity 2021.3 module DLLs, diffed against the `origin/main` error baseline. It introduced no new errors.
+
+### Commits (oldest first)
+| Commit | What |
+|---|---|
+| `cf910d6` | Mission-stage layer: `StagedScenario` / `StagedState` (ordered data stages on `EncounterScenario`), `DamageTarget`, `MissionVehicle`; `ObjectiveTask.Stage` and `ScenarioState.TryCurrent`, so the HUD line shows the active stage |
+| `373ee64` | `StageFrameworkVerification` and the shared `StagedMissionRunner` harness |
+| `55c1a6e` | Nine staged missions (`StagedMissionLibrary` recipes, `StagedMissionSetup`); `StagedMissionVerification`; framework: anchored spawns, scattering exits, root-safe `Drive` |
+| `0ddaba8` | Optional `EncounterSelection` (weighted, anti-repeat, difficulty bands, district filter, seeded) on `GameModeDefinition.Selection`; `EncounterSelectionVerification` |
+| `41f01ed` | Endless wave events (`EndlessWaveEvents`: composable modifiers, elites, minibosses, alive budget, score events); `EndlessEventsSetup`, `EndlessSimulation`, `EndlessEventsVerification` |
+| `cc7fbfe` | Save robustness in `PlayerProgression` (.corrupt copy, .bak/.tmp recovery, repair, overflow guards); `SaveRobustnessVerification` + Reload |
+| `4b8c9e4` | Persistent per-power stats (instrumentation only, credit scopes); `PowerStatsVerification` + Reload |
+| `1af37e8` | `StyleScoreTracker` + `PowerUser.Hit` / `Used` events; `StyleVerification` |
+| `56add91` | Challenges (`ChallengeDefinition`, `ChallengeCatalog` switch, `ChallengeTracker`, pay-once saves); `ChallengeSetup`; `ChallengeVerification` + Reload |
+| `c5e91b7` | Status-effect audit fixes (poison stops at session end; a dash shatters freezes); `StatusEffectVerification` |
+| `ce11109` | `LoadoutMatrixVerification` (55 loadouts, 11-power lifecycle, teardown) + batched Reload |
+| `3c19724` | `ScenarioFuzzVerification` (seeded; Replay by seed) |
+| `ad1f41f` | Performance audit fixes (per-frame and per-hit allocations) |
+| `79f1474` | `BalanceReport` (scene-free CSV / JSON / text) |
+| `56294a7` | Cleanup: four clearly dead members removed |
+
+### Systems (what exists now)
+- **Staged missions.** A `StagedScenario` asset is data:
+  - points, actor groups (real `CityNpc`s with Idle / HoldPost / Flee / Follow / Pursue / Harass), target groups
+    (hardpoints, crates, pickups, driving vehicles) and ordered stages;
+  - stage kinds: DefeatTargets, ReachArea, ProtectActors, EscortActors, InteractTargets, DestroyTargets, CollectItems,
+    Survive, EscapeRadius, ChaseExit, StopVehicles, RaiseHeat;
+  - each stage has a timeout, repeat spawns, and OnStart / OnComplete actions.
+
+  One stage is active at a time. The first failure latches FAILED, and the last completion latches COMPLETE. Rewards stay in
+  `CrimeEncounter`'s single `End`. Hardpoints take damage only while their Destroy stage is active, and pickups collect only
+  during their Collect stage, so stage order matters.
+- **The nine missions.** Assets are created by `StagedMissionSetup.Create`, which only creates missing ones. The shipping
+  mode lists are not changed.
+
+  | Side | Mission | Flow |
+  |---|---|---|
+  | Hero | Street pursuit | Arrival triggers the scatter; runners take different exits and re-route when held; the bag drops at the last runner; return it |
+  | Hero | Convoy intercept | Trucks leave as you close in; stop both; gunmen come out; the crates become breakable |
+  | Hero | Blackout response | Restore spread relays while saboteurs undo them; then the looters |
+  | Hero | Hold the block | Arrive, then defend the residents against capped raiders; beat a Brute enforcer; escort the residents |
+  | Villain | Armoured strongroom | The guards gate the door; the breach adds Heat and a response team; timed cash grab; reach the pickup |
+  | Villain | Sabotage run | Three nodes, strictly in order, each with its own timer; then get clear |
+  | Villain | Armoured car robbery | Stop the car WITHOUT wrecking it (a wreck fails the crack stage); drop the escort; hold R at the car; take the bags; escape |
+  | Villain | The distraction job | Raise Heat on purpose; slip the cordon; crack the real target |
+  | Villain | Getaway | Reach the crew; escort them while hunters go for them; shake the pursuit |
+
+  **Rooftop Rescue was not built.** NPCs only exist on the ground NavMesh, and there is no rooftop NavMesh. Adding one is
+  a scene / NavMesh decision for LOCAL.
+- **EncounterSelection (optional).** Null keeps the original round robin, and the shipping modes are null. With a selection:
+  - weighted options;
+  - an anti-repeat window that relaxes instead of stalling;
+  - difficulty bands from resolved encounters, successes, player level or Heat stars, divided by a step;
+  - a district-name filter with optional fallback;
+  - a seeded, deterministic mode.
+- **Endless wave events (optional `EndlessWaveDirector.Events`).** Null keeps the original waves; the shipping director is
+  null. `Plan(wave)` is pure and deterministic:
+  - modifiers (Armoured, Frenzied, Swarm, Glass cannons, Veterans) compose multiplicatively;
+  - elites are an exact share of spawns, spread evenly;
+  - every 5th wave starts with a Brute miniboss;
+  - elites and the miniboss occupy 2 / 4 MaxAlive slots (`EndlessWaveState.Room`), so neither the threat nor the humanoid
+    count exceeds MaxAlive;
+  - `Scored` events: kill (× modifier score), elite kill, miniboss kill, wave clear, flawless.
+- **Save robustness.**
+  - An unreadable save is copied to `.corrupt`. The newest readable `.bak` / `.tmp` is then used. Before this change, the
+    next save moved the corrupt file over the good `.bak`.
+  - Missing Powers / Rooftops lists are created. They used to reset the whole profile.
+  - Duplicates are merged, empty ids dropped, counters clamped, and the level capped at 9999.
+  - `RequiredXp` saturates instead of wrapping negative. A huge saved level used to make every XP point a level-up loop.
+  - The version policy is unchanged: Version 1 only, and negative level / xp / points are still invalid.
+- **Per-power stats.** Instrumentation only; no gameplay reads them.
+  - `ProgressSave.PowerStats` records uses, hits, damage (health actually removed), kills and equipped sessions per power
+    id, `melee`, or `synergy:<id>`.
+  - Attribution uses an explicit credit scope. Deferred hits re-enter it: projectile, TK throw, poison ticks, dash steps,
+    melee impacts and synergy steps.
+- **StyleScoreTracker.** A per-session number, separate from score and rewards. The best per mode is saved as
+  `ModeRecord.BestStyle`.
+  - Points come from varied hits, kills, multi-kills and synergies against hostile enemies.
+  - Anti-exploit rules:
+    - non-hostile targets pay nothing, and killing one resets the streak;
+    - damage-over-time ticks pay no hit points;
+    - repeating one power decays its value;
+    - hit points are capped per NPC;
+    - idling resets the multiplier;
+    - a token bucket caps points per second.
+- **Challenges.** 15 definitions with stable kebab-case ids equal to their asset names.
+  - Metrics: kills (optionally per power), elite / miniboss kills, flawless waves, best Endless wave, missions completed,
+    synergy uses, best session style, and distinct powers per session.
+  - Rewards are XP and upgrade points only.
+  - `PayChallenge` writes Paid together with both rewards in one save, so nothing pays twice, even across processes.
+  - Removed ids stay in the save untouched and are never paid.
+  - **Dormant until `Resources/ChallengeCatalog.Enabled`.** Setup creates the catalog disabled.
+- **Status effects: audit result.**
+
+  | Status | How it works |
+  |---|---|
+  | Freeze / Root / Burning | Timestamps on `CityNpc` (self-expiring; pause stops them) |
+  | FrozenLook / RootedLook / Poisoned | Poll death / expiry and live on the NPC, so they are destroyed with it |
+  | Lightning | Instant |
+  | Force Field | The player's shield, deliberately not a status |
+
+  No shared status infrastructure is justified. Two fixes:
+  - poison no longer ticks, kills or pays XP after the session has ended;
+  - **base interaction:** a Speed dash consumes an existing freeze and shatters it for Ice's `ShatterDamage`, like melee.
+    It is not a synergy: any freeze source counts, and no pair has to be equipped.
+
+  Considered and rejected:
+  - fire thawing ice, because it would undercut Thermal Shock;
+  - cold pausing poison, a hidden rule;
+  - lightning bonuses on statuses, which would be new damage without a readable cue.
+
+### Performance audit (cloud code)
+`CityNpc.Update` calls its encounter's `Drive` **every frame** for every encounter NPC. The Hostage / Fire / Robbery Drive
+lookups used `List.Find` closures, so they allocated per NPC per frame. The same pattern appeared in these places, and
+all of them are now plain loops:
+
+| Where | Allocation | How often |
+|---|---|---|
+| Staged `ActorSpec` / `TargetSpec` | `Array.Find` closure | per group per frame |
+| `Interact` | `AllTargets` iterator | every frame |
+| `PlayerProgression.Usage` / `Challenge` | closure | per hit / per kill |
+| Style pruning | `RemoveAll` closure | per event |
+| `PlayerProgression.Tier` | closure | every power every frame, via `PowerUser.Stats` |
+
+Left for LOCAL, pre-existing and not cloud code: `CrimeEncounter.Drive` still uses `Robbers.Find` / `Civilians.Find`
+closures per NPC per frame. There are no profiler numbers from the cloud; LOCAL should measure.
+
+### Cleanup audit
+Every member added on the cloud branches was checked for references anywhere under `Assets`.
+- **Removed** (no references): `RobberyScenario.Car.Travelled`, `ChallengeTracker.SessionValue`, `Poisoned.TicksLeft`,
+  `CityNpc.Unroot`.
+- **Kept on purpose:** `EndlessEventsSetup.UseInEndless` (a menu item), `SuperHeroController.Charge01` (heavy-charge meter
+  hook for LOCAL's HUD), and the style / challenge events (HUD hooks).
+
+### Setup assets (editor / batch; all create-missing only)
+1. `RosterSetup.Batch` (as before)
+2. `StagedMissionSetup.Batch`
+3. `EndlessEventsSetup.Batch`
+4. `ChallengeSetup.Batch`
+
+The suites call the Create they need themselves.
+
+**Content switches (explicit menus, NOT run by cloud):**
+- Endless wave events: "Overpowered/Endless/Use wave events in Endless".
+- Challenges: "Overpowered/Challenges/Enable challenges".
+- Staged missions in the modes: no switch exists. Add them to a mode's `Encounters`, or reference them from an
+  `EncounterSelection`. This is Henry's call.
+
+### Verification entry points
+| Kind | Entry points |
+|---|---|
+| Scene-free | `EndlessSimulation.Run` (waves 1–50 CSV / JSON; formulas at 1/5/10/20/25), `BalanceReport.Run`, `SaveRobustnessVerification.Run` then `.Reload` |
+| Play mode | `StageFrameworkVerification.Run`, `StagedMissionVerification.Run`, `EncounterSelectionVerification.Run`, `EndlessEventsVerification.Run`, `PowerStatsVerification.Run` + `.Reload`, `StyleVerification.Run`, `ChallengeVerification.Run` + `.Reload`, `StatusEffectVerification.Run`, `LoadoutMatrixVerification.Run` + `.Reload`, `ScenarioFuzzVerification.Run` (replay: `.Replay -fuzzSeed <n>`) |
+
+- All of them write to `Verification/<Suite>/`.
+- No suite touches the real save. SaveRobustness fingerprints the real save before and after to prove it.
+- Missions, challenges and wave events are tested on in-memory clones or on assets that are not wired into the modes.
+
+### Exact local test order
+1. Merge `cloud/replayability-depth` into a scratch integration branch from current main, then batch compile.
+2. Run `RosterSetup.Batch`, `StagedMissionSetup.Batch`, `EndlessEventsSetup.Batch`, `ChallengeSetup.Batch`, and commit
+   the generated assets.
+3. Scene-free: `EndlessSimulation`, `BalanceReport`, `SaveRobustnessVerification` Run then Reload.
+4. New play suites, in this order: StageFramework, StagedMission, EncounterSelection, EndlessEvents, PowerStats (+ Reload),
+   Style, Challenge (+ Reload), StatusEffect, LoadoutMatrix (+ Reload, the longest at ~55 city loads), ScenarioFuzz.
+5. Regression, first the suites touching changed files:
+   - ModeExpansion + Reload (save format);
+   - Roster + Reload (dash / poison edits);
+   - Melee (credit scopes in punch / kick / pound);
+   - Mission (scenario Drive loops);
+   - HeroForge + Reload, SynergyAvailability + Reload (`SynergyRunner`);
+   - HeroStats;
+   - PowerPayoff.
+
+   Then the full sweep: Combat, HUD P1–3, Feel, FirstPerson + Reload, Ice, Humanoid, BackflipHurricane, Mode + Reload,
+   Audio + Reload, World, City + Reload, CityArt, Camera, MenuPresentation.
+
+### Cherry-picking independently (if not merging the whole branch)
+Each group below can be taken on its own:
+- **Standalone commits:** `41f01ed` (Endless events), `cc7fbfe` (save robustness), `ce11109` (loadout matrix),
+  `79f1474` (balance report).
+- **Missions:** `cf910d6` → `373ee64` → `55c1a6e` → `3c19724`.
+- **Encounter selection:** `0ddaba8`. It needs `373ee64`, because its verifier uses `StagedMissionRunner`.
+- **Stats and statuses:** `cc7fbfe` → `4b8c9e4` → `c5e91b7`.
+- **Style and challenges:** `4b8c9e4` → `1af37e8` → `56add91`. Challenges also need `41f01ed` (`EndlessScoreEvent`).
+
+`ad1f41f` (perf) and `56294a7` (cleanup) touch files from most groups, so apply them last.
+
+**Likely conflict files with LOCAL work:**
+- `GameModeSession.cs`, `GameModeDefinition.cs`, `PlayerProgression.cs`;
+- `PowerUser.cs`, `CityNpc.cs`, `SuperHeroController.cs` (credit scopes only, around the three melee `Blast` calls);
+- `Forge/SynergyRunner.cs`, `EndlessWaveDirector.cs`;
+- `Powers/SpeedDashEffect.cs`, `Powers/PoisonEffect.cs`, `FireBlastEffect.cs`;
+- `Missions/*.cs`, `STATUS.md`.
+
+### Unverified / needs Henry's playtest decisions
+- Everything above is unrun.
+- Staged missions: which to put in which mode (list or weighted `EncounterSelection` with district tags), and whether each
+  one reads well:
+  - stage labels on the HUD line;
+  - hints;
+  - timers of 35–120 s;
+  - raider / hunter pressure;
+  - Harass at 5 dps.
+- Rooftop Rescue needs a rooftop NavMesh decision.
+- Endless events: whether to switch them on, and the tuning: modifier strengths, elite share 15% → 40%, miniboss 8× health,
+  alive costs 2 / 4.
+- Challenges: whether to enable them, and the reward sizes (25–250 XP, 0–1 point).
+- Style: whether and where to show it (a HUD hook exists), and the rank thresholds.
+- Keep the dash-shatter interaction?
+- A save recovered from `.bak` still shows the "SAVE ERROR" line once (it tells the truth). Is that the wanted wording?
+- `BalanceReport` flags (power / loadout outliers) are for Henry's judgement, not failures.
+- Fuzzer: the action sequence is seeded; physics / NavMesh timing is not bit-exact across runs.
+
+### OVERNIGHT DECISIONS (cloud, this branch)
+- Rooftop Rescue skipped: no rooftop NavMesh. The other nine missions are built.
+- Every new content system ships dormant behind an explicit switch: modes unchanged, Selection null, Events null, challenge
+  catalog disabled. `MissionSetup.BatchUseInModes` was never run.
+- Style never changes mode score or rewards. Challenges pay only XP and existing upgrade points.
+- No shared status-effect framework: the audit found each status self-cleaning. Two targeted fixes instead.
+- No new synergies. The five-synergy cap is untouched; the dash shatter is a base rule, not a pair.
