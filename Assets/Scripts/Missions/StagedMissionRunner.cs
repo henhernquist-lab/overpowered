@@ -86,6 +86,23 @@ public abstract class StagedMissionRunner : SessionVerificationRunner
             case StageKind.DefeatTargets: case StageKind.ChaseExit:
                 while (!Moved() && Time.time < limit) { KillGroup(s, spec.Group); yield return null; }
                 break;
+            case StageKind.DefendTargets:
+                Ground(Floor(s.ReachPoint(spec) + Vector3.right * 3f));
+                while (!Moved() && Time.time < limit) { KillOthers(s, null); yield return null; }
+                break;
+            case StageKind.SearchTargets:
+                foreach (var t in s.TargetGroup(spec.Group).ToArray())
+                {
+                    if (Moved()) break; if (t.Done || t.Go == null) continue;
+                    Ground(Floor(t.Go.transform.position + Vector3.right * 1.8f));
+                    e.ScriptedHold = true; float until = Time.time + d.HoldSeconds + 3f;
+                    while (!t.Done && !Moved() && Time.time < until) { KillOthers(s, null); yield return null; }
+                    e.ScriptedHold = false;
+                }
+                break;
+            case StageKind.LosePursuit:
+                Away(e);   // 150 m above the site: no police contact, far from where contact was lost
+                break;
             case StageKind.ProtectActors: case StageKind.Survive:
                 Ground(s.ReachPoint(spec) + Vector3.forward * 2f);
                 while (!Moved() && Time.time < limit) { KillOthers(s, spec.Group); yield return null; }

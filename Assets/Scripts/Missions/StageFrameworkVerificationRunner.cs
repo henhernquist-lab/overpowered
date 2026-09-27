@@ -24,6 +24,11 @@ public sealed class StageFrameworkVerificationRunner : StagedMissionRunner
         yield return Session("ice", "strength", "hero");
         yield return Bonuses();
         yield return Variation();
+        // World-depth stage features (fresh sessions keep each under the mode's success / failure limits).
+        yield return Session("ice", "strength", "hero");
+        yield return MultiPointGroups(); yield return Search(); yield return Defend(); yield return CrossDistrict();
+        yield return Session("fire", "ice", "villain");
+        yield return LosePursuit(); yield return CriticalEscort();
         Log("LIMIT: hero moved by teleport; blasts through CombatImpact.Blast (the punch / Fire / synergy path) rather than input. NPCs, NavMesh and physics are live.");
     }
     // ---------------------------------------------------------------- positive path, wrong order, exactly once, one reward
@@ -189,6 +194,139 @@ public sealed class StageFrameworkVerificationRunner : StagedMissionRunner
             $"Band {band} ({successes} successes / step 1): +{extra} thugs (cap 2), protected civilians unscaled, stage timeout {vs.TimeoutOf(vs.Stage):F1} s (x{scale:F2}).");
         yield return Outcome(plain, 3f); yield return Outcome(varied, 3f);
         Check(Ended(plain) && Ended(varied) && Result(plain).Success && Result(varied).Success, "Both variation probes complete normally.");
+    }
+    // ---------------------------------------------------------------- world-depth stage features
+    static MissionPoint Pt(string id, float angle, float distance) => new MissionPoint { Id = id, Angle = angle, Distance = distance, Sidewalk = false };
+    IEnumerator MultiPointGroups()
+    {
+        Log("---- MULTI-POINT GROUPS AND MULTI-GROUP STAGES");
+        var sc = Staged(new MissionStageSpec { Kind = StageKind.ProtectActors, Label = "GUARD BOTH", Group = "left,right", Seconds = 30f, AllowedLosses = 1 });
+        sc.Points = new[] { Pt("a", 90, 10), Pt("b", 270, 10) };
+        sc.Actors = new[] { new ActorGroupSpec { Id = "left", Role = NpcRole.Civilian, Count = 2, AtPoint = "a", Ring = 1f, Behavior = ActorBehavior.Idle }, new ActorGroupSpec { Id = "right", Role = NpcRole.Civilian, Count = 2, AtPoint = "b", Ring = 1f, Behavior = ActorBehavior.Idle } };
+        sc.Targets = new[] { new TargetGroupSpec { Id = "posts", Kind = TargetKind.Hardpoint, Count = 2, AtPoint = "a,b" } };
+        var e = Spawn(Definition("Verification staged multi-group", sc)); var st = (StagedState)e.Scenario; Away(e);
+        var posts = st.TargetGroup("posts");
+        Check(Vector3.Distance(posts[0].Go.transform.position, st.Point("a")) < 1.5f && Vector3.Distance(posts[1].Go.transform.position, st.Point("b")) < 1.5f, "A target group with AtPoint \"a,b\" puts one member at each point.");
+        Check(st.Group("left").All(x => Vector3.Distance(x.Npc.transform.position, st.Point("a")) < 3f) && st.Group("left,right").Count == 4, "Actor groups spawn at their own points; the comma key \"left,right\" reads all four members.");
+        st.Group("left")[0].Npc.Damage(99999f, null); yield return new WaitForSeconds(.3f);
+        Check(!Ended(e), "CONTROL: one loss across the two groups (allowed 1) keeps the stage running.");
+        st.Group("right")[0].Npc.Damage(99999f, null);
+        yield return Outcome(e, 2f);
+        Check(Ended(e) && !Result(e).Success && Result(e).Reason.Contains("2 lost"), $"A second loss in the OTHER group fails the combined stage: {Describe(e)}.");
+    }
+    IEnumerator Search()
+    {
+        Log("---- SEARCH AMONG DECOYS");
+        StagedScenario Mission()
+        {
+            var sc = Staged(new MissionStageSpec { Kind = StageKind.SearchTargets, Label = "FIND THE STASH", Group = "houses", OnDecoy = new[] { new StageAction { Kind = StageActionKind.SpawnActors, Group = "defenders", Amount = 1, Text = "$here" } } });
+            sc.Points = new[] { Pt("a", 0, 12), Pt("b", 90, 12), Pt("c", 180, 12), Pt("d", 270, 12) };
+            sc.Targets = new[] { new TargetGroupSpec { Id = "houses", Kind = TargetKind.Hardpoint, Count = 4, AtPoint = "a,b,c,d", Health = 999 } };
+            sc.Actors = new[] { new ActorGroupSpec { Id = "defenders", Count = 1, Ring = 2f, Behavior = ActorBehavior.Idle, SpawnAtStart = false } };
+            return sc;
+        }
+        var e = Spawn(Definition("Verification staged search", Mission()), 77); var st = (StagedState)e.Scenario;
+        var houses = st.TargetGroup("houses"); int real = houses.FindIndex(h => h.Real);
+        var probe = Spawn(Definition("Verification staged search seed probe", Mission()), 77); int probeReal = ((StagedState)probe.Scenario).TargetGroup("houses").FindIndex(h => h.Real);
+        Check(houses.Count(h => h.Real) == 1 && real == probeReal, $"Exactly one real target, the same one for the same seed (index {real}).");
+        var decoy = houses.First(h => !h.Real);
+        Ground(Floor(decoy.Go.transform.position + Vector3.right * 1.8f)); e.ScriptedHold = true;
+        yield return Until(() => decoy.Done, 4f); e.ScriptedHold = false; yield return null;
+        Check(decoy.Done && st.DecoysRevealed == 1 && st.StageIndex == 0 && st.Group("defenders").Count == 1 && Vector3.Distance(st.Group("defenders")[0].Npc.transform.position, decoy.Go.transform.position) < 5f,
+            "A decoy reveals itself (stage continues) and OnDecoy spawns a defender AT that decoy ($here).");
+        var target = houses[real];
+        Ground(Floor(target.Go.transform.position + Vector3.right * 1.8f)); e.ScriptedHold = true;
+        yield return Outcome(e, 5f); e.ScriptedHold = false;
+        Check(Ended(e) && Result(e).Success && target.Done, $"Holding R at the real target completes the search: {Describe(e)}.");
+        Away(probe); probe.ScriptedHold = false;
+        yield return new WaitForSeconds(.1f);
+    }
+    IEnumerator Defend()
+    {
+        Log("---- DEFEND BESIEGED TARGETS");
+        StagedScenario Mission(float seconds)
+        {
+            var sc = Staged(new MissionStageSpec { Kind = StageKind.DefendTargets, Label = "SAVE THE HOUSES", Group = "houses", Seconds = seconds, AllowedLosses = 0 });
+            sc.Points = new[] { Pt("h", 0, 8) };
+            sc.Targets = new[] { new TargetGroupSpec { Id = "houses", Kind = TargetKind.Hardpoint, Count = 1, AtPoint = "h", Health = 20f, Besiegeable = true } };
+            sc.Actors = new[] { new ActorGroupSpec { Id = "raiders", Count = 1, AtPoint = "h", Ring = 1.5f, Behavior = ActorBehavior.Harass, BehaviorArgument = "houses" } };
+            return sc;
+        }
+        var e = Spawn(Definition("Verification staged defend", Mission(60f))); var st = (StagedState)e.Scenario; Away(e);
+        var house = st.TargetGroup("houses")[0];
+        yield return Outcome(e, 15f);
+        Check(Ended(e) && !Result(e).Success && house.Hardpoint.Destroyed && house.Hardpoint.SiegeDamage > 0f && house.Hardpoint.Hits == 0, $"An unattended raider besieges the house to destruction (siege damage {house.Hardpoint.SiegeDamage:F1}, player hits 0): {Describe(e)}.");
+        var c = Spawn(Definition("Verification staged defend control", Mission(2f))); var cs = (StagedState)c.Scenario; Away(c);
+        cs.Group("raiders")[0].Npc.Damage(99999f, W.Powers);
+        yield return Outcome(c, 5f);
+        Check(Ended(c) && Result(c).Success && !cs.TargetGroup("houses")[0].Hardpoint.Destroyed, "CONTROL: raider down -> the house survives the 2 s and the stage completes.");
+    }
+    IEnumerator CrossDistrict()
+    {
+        Log("---- CROSS-DISTRICT DESTINATIONS");
+        StagedScenario Mission()
+        {
+            var sc = Staged(StageOf(StageKind.ReachArea, "GO TO B", point: "b"), StageOf(StageKind.ReachArea, "GO TO C", point: "c"));
+            sc.Stages[0].Radius = sc.Stages[1].Radius = 4f; sc.Stages[0].Timeout = sc.Stages[1].Timeout = 120f;
+            sc.Points = new[]
+            {
+                new MissionPoint { Id = "b", Placement = PointPlacement.OtherDistrict },
+                new MissionPoint { Id = "c", Placement = PointPlacement.OtherDistrict, NotInDistrictsOf = "b", DistrictTag = "no-such-tag" },
+            };
+            return sc;
+        }
+        var e = Spawn(Definition("Verification staged cross-district", Mission()), 4242); var st = (StagedState)e.Scenario;
+        int home = W.City.DistrictAt(e.Site), db = st.DistrictOfPoint("b"), dc = st.DistrictOfPoint("c");
+        var probe = Spawn(Definition("Verification staged cross-district probe", Mission()), 4242); var ps = (StagedState)probe.Scenario;
+        Check(home != db && home != dc && db != dc && db >= 0 && dc >= 0, $"Site district {home} ({W.Districts.NameOf(home)}), B in {db} ({W.Districts.NameOf(db)}), C in {dc} ({W.Districts.NameOf(dc)}): three distinct districts.");
+        Check(ps.Point("b") == st.Point("b") && ps.Point("c") == st.Point("c"), "The same seed picks the same destinations.");
+        Check(st.PointFallbacks.Any(f => f.StartsWith("c:")), $"An unknown DistrictTag is relaxed and recorded ({string.Join("; ", st.PointFallbacks)}), not a failure.");
+        var targets = new List<Vector3>(); var step = W.Mode.Definition.Rules.Current(e);
+        ModeRules.Targets(e, step.Task, targets);
+        Check(targets.Count == 1 && targets[0] == st.Point("b"), $"The HUD objective API points at B ({step.Text}).");
+        st.Relocate("c", st.Point("c") + Vector3.down * 500f);
+        Ground(Floor(st.Point("b")));
+        yield return Until(() => st.StageIndex >= 1, 3f);
+        ModeRules.Targets(e, W.Mode.Definition.Rules.Current(e).Task, targets);
+        Check(st.StageIndex == 1 && st.DestinationRepairs == 1 && targets.Count == 1 && targets[0] == st.Point("c") && UnityEngine.AI.NavMesh.SamplePosition(st.Point("c"), out _, 6f, UnityEngine.AI.NavMesh.AllAreas),
+            $"Reaching B moves the objective to C; C had been made unreachable and was repaired at stage start (repairs {st.DestinationRepairs}), so the HUD points at a reachable C.");
+        Ground(Floor(st.Point("c")));
+        yield return Outcome(e, 3f);
+        Check(Ended(e) && Result(e).Success, $"Reaching the repaired C completes the mission: {Describe(e)}.");
+        Away(probe);
+    }
+    IEnumerator LosePursuit()
+    {
+        Log("---- LOSE PURSUIT vs ESCAPE RADIUS (villain)");
+        Isolate(); W.AddHeat(1f);
+        var lose = Staged(new MissionStageSpec { Kind = StageKind.LosePursuit, Label = "LOSE THEM", Seconds = .5f, Timeout = 120f });
+        var escape = Staged(new MissionStageSpec { Kind = StageKind.EscapeRadius, Label = "GET 25 M AWAY", Radius = 25f, Timeout = 120f });
+        var e = Spawn(Definition("Verification staged lose pursuit", lose)); var st = (StagedState)e.Scenario;
+        var x = Spawn(Definition("Verification staged escape radius", escape)); var xs = (StagedState)x.Scenario;
+        Vector3 floor = new Vector3(0, 150.05f, 0); PlaceHero(floor);
+        var cop = Actor(floor + new Vector3(0, 0, 8), NpcRole.Cop, 1000f); yield return null; W.Pursuit.Sample();
+        Check(W.Pursuit.State == PursuitState.Pursued, "A hostile cop in view: Pursued.");
+        PlaceHero(floor + new Vector3(0, 0, -22)); cop.transform.position = floor + new Vector3(0, 0, 8); Physics.SyncTransforms();
+        float until = Time.time + 4f; while (Time.time < until) { W.Pursuit.Sample(); yield return null; }
+        Check(!Ended(e) && W.Pursuit.State == PursuitState.Pursued, "CONTROL: 30 m from the cop while it still engages -> the LOSE PURSUIT stage does NOT complete.");
+        Log($"Escape-radius stage meanwhile: hero {Vector3.Distance(W.Hero.transform.position, x.Site):F0} m from its site (a literal distance rule, kept for missions that want it).");
+        cop.gameObject.SetActive(false); Away(e);
+        yield return Outcome(e, W.Pursuit.Settings.LoseContactSeconds + W.Pursuit.Settings.SearchSeconds + 4f);
+        Check(Ended(e) && Result(e).Success && st.Terminal == MissionTerminal.Complete, $"Out of sight and far away, the pursuit clears ({W.Pursuit.State}) and the stage completes: {Describe(e)}.");
+        yield return Outcome(x, 3f);
+        Check(Ended(x) && Result(x).Success, "The EscapeRadius stage completes on distance alone (it stays available).");
+    }
+    IEnumerator CriticalEscort()
+    {
+        Log("---- CRITICAL ESCORT");
+        var sc = Staged(new MissionStageSpec { Kind = StageKind.EscortActors, Label = "GET THE WITNESS OUT", Group = "witness", Point = "safe", Radius = 4f, AllowedLosses = 0, Timeout = 120f });
+        sc.Points = new[] { new MissionPoint { Id = "safe", Placement = PointPlacement.OtherDistrict } };
+        sc.Actors = new[] { new ActorGroupSpec { Id = "witness", Role = NpcRole.Civilian, Count = 1, Behavior = ActorBehavior.Follow, ScaleWithDifficulty = false } };
+        var e = Spawn(Definition("Verification staged critical escort", sc)); var st = (StagedState)e.Scenario; Away(e);
+        Check(st.DistrictOfPoint("safe") != W.City.DistrictAt(e.Site), "The escort destination is in another district.");
+        st.Group("witness")[0].Npc.Damage(99999f, null);
+        yield return Outcome(e, 2f);
+        Check(Ended(e) && !Result(e).Success && Result(e).Reason.Contains("1 lost"), $"Losing the critical escorted actor fails the mission at once: {Describe(e)}.");
     }
     // ---------------------------------------------------------------- R-hold gating
     IEnumerator HoldGate()
