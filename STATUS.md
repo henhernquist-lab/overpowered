@@ -2252,3 +2252,77 @@ Eyes shares Star; colour distinguishes them.
 - Lightning, Poison spread, Speed pass-hits and Void Grasp only affect `Hostile` NPCs, so a hero never chains into
   civilians or friendly police. The directly aimed first target can be anyone, as with every other power.
 - Poison duration is converted to a whole tick count, so its total damage is exact (60) regardless of frame timing.
+
+## Cloud branch: melee depth (Phase 5) + hero stat archetypes (Phase 6) — 2026-09-27 (appended; CLOUD agent, NO Unity)
+
+**Written, unverified, awaiting local run.** Compile-checked only with the Mono/Roslyn approximation described above.
+
+### Phase 5 — melee depth (`GameTuning.Melee`, new section; missing in the existing asset → class defaults load)
+E is routed through three NEW entry points. `TryPunch` / `TryHurricaneKick` keep their exact behaviour, so every
+existing suite that calls them is unaffected. Payment is always the existing Super Strength charge + cooldown, or the Forge
+basic-melee cooldown without Strength. Force and damage go through `CombatImpact.Blast`; the hit pause goes through
+`TimeArbiter`. No camera code was touched.
+- **Combo** (`TryComboAttack`, a tap):
+  - punch → punch → the Hurricane Kick gesture as a finisher with ×1.6 force and ×1.4 damage, plus a 0.07 s hit pause;
+  - the string restarts after 0.9 s without a hit, or after the finisher; a refused tap does not advance it.
+- **Charged heavy** (`TryHeavyAttack(held)`, hold then release): one paid punch scaled linearly from ×1 at the 0.2 s tap
+  threshold to ×2.5 force / ×2.2 damage at 1.2 s. Longer holds are capped.
+- **Ground pound** (`TryGroundPound`, E while ≥ 2 m above ground):
+  - dives through the normal Update movement, so the controller must be enabled;
+  - on landing, a radial `Blast` of 4 m at punch ×1.35 force / ×0.85 damage (Strength tier 0: 1822 N·s / 29.75, vs
+    Sonic Slam's 2600 N·s / 40 / 7 m);
+  - one charge, no synergy cooldown.
+- **Verification — `MeleeVerification.Run`** (`Verification/Melee/results.txt`):
+  - combo stage damage and force, including the finisher's kick multipliers and its hit pause;
+  - restart after the finisher, plus window-timeout and zero-charge controls;
+  - heavy scaling at 4 hold times, with a cap control;
+  - pound: charge spent, force, radial damage, a 7 m control, prop knockback, a grounded control, the second pound at
+    once (no long cooldown), and smaller than Sonic Slam;
+  - basic-melee string: light taps give no pause (control), the finisher gives its own pause.
+
+### Phase 6 — hero stat archetypes (`HeroDefinition.Stats`, multipliers of the shared baseline; 1 = baseline)
+| Stat | Applied in | VECTOR | TITAN | NOVA |
+|---|---|---|---|---|
+| MaxHealth | `WorldSession.MaxHealth` (spawn, respawn) | 1 | **1.4** | **0.75** |
+| MaxEnergy / EnergyRegen | `PowerUser.MaxEnergy` / `EnergyRegen` (Tick) | 1 / 1 | **0.8** / 1 | **1.4 / 1.4** |
+| MoveSpeed | `SuperHeroController` walk/run (and so flight's boosted move) | 1 | **0.85** | **1.1** |
+| MeleeDamage | `PowerUser.Stats` for the Punch effect (damage AND force), basic melee stats, so combo/heavy/pound too | 1 | **1.25** | 1 |
+| PowerDamage | `PowerUser.Stats` damage of every non-melee, non-flight power | 1 | 1 | 1 |
+| CooldownMultiplier | `PowerUser.Stats` cooldown of every non-melee, non-flight power (not synergies, not charge recharge) | 1 | 1 | **0.8** |
+| KnockbackResistance | `CityNpc.Release` incoming knockback distance × (1 − r) | 0 | **0.6** | 0 |
+
+- `HeroArchetypeSetup.Batch` (menu *Overpowered/Forge/Apply hero archetype stats*; `RosterSetup` also runs it) writes
+  TITAN and NOVA into the hero assets, and only while they are still all-baseline.
+- HUD health/energy fractions now divide by `WorldSession.MaxHealth` / `PowerUser.MaxEnergy`. This is a one-line data
+  read in `GameHud` and in the F3 `PrototypeHUD`; no animation code was touched.
+- Hero Forge has eight comparison bars under the preview (`forge-stat-<key>`): the real value, filled relative to the
+  roster best (lower is better for cooldown). Accent colour means better than baseline, red means worse.
+- **Verification — `HeroStatsVerification.Run`** (`Verification/HeroStats/results.txt`). Each hero plays a real session
+  and VECTOR is the control for every difference:
+  - starting maxima, and who survives a 90-damage hit (TITAN/VECTOR yes, NOVA no);
+  - measured regen per second and measured run speed (`ScriptedMove` through the real Update path);
+  - punch damage and force on a real actor, Ice damage and cooldown;
+  - knockback from a live Brute slam in the city (VECTOR vs TITAN);
+  - PowerDamage via an in-memory ×1.5 test hero (catalog restored immediately);
+  - every Forge bar's text and fill for all three heroes.
+
+### Local agent: run
+1. `RosterSetup.Batch`, which now includes the archetypes; commit the generated/updated assets.
+2. `MeleeVerification.Run`, then `HeroStatsVerification.Run`.
+3. Re-run HeroForge + Reload, which has a TITAN session whose punch now uses ×1.25. Its assertions compare against
+   `Stats()`, which includes the multiplier, so they should hold, but that needs a real run.
+
+### OVERNIGHT DECISIONS (Phases 5–6)
+- Tap vs heavy is decided on key RELEASE (tap < 0.2 s), so a tap punch fires up to 0.2 s later than before. This needs a
+  playtest; the threshold is `Melee.HeavyTapThreshold`.
+- The combo finisher reuses the Hurricane Kick gesture (the brief's "kick finisher") rather than a new clip. RMB kick is
+  unchanged.
+- With Strength, every punch is already a Feel "heavy" hit (≥ 1000 N·s) with its own pause. The finisher's extra pause
+  is therefore distinguishable only for basic melee. The suite asserts that case and records the Strength case.
+- Archetype values are multipliers, not absolutes, so GameTuning stays the single baseline; the Forge bars show resulting
+  absolute values.
+- "+25% melee damage and knockback" applies ×1.25 to melee damage and to the knockback force Titan deals. "Resists
+  knockback" is a separate 60% resistance to knockback Titan receives.
+- "−20% power cooldowns" applies to the 10 non-melee, non-flight powers only: not synergies (their cooldown is the
+  balancing lever) and not charge recharge.
+- PowerDamage exists and is applied, but no shipping hero changes it, per the brief.
