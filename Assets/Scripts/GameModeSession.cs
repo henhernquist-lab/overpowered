@@ -28,6 +28,23 @@ public sealed class GameModeSession : MonoBehaviour
     public event System.Action<EncounterOutcome> EncounterResolved;
     int startLevel,startXp;
     float spawnClock; int nextEncounter, siteDistrict=-1;
+    /// Optional GameModeDefinition.Selection state (null = round robin over Encounters, unchanged).
+    public EncounterSelectionState Selection {get;private set;}
+    /// The value EncounterSelection.Difficulty reads (before DifficultyStep).
+    public int SelectionDifficulty
+    {
+        get
+        {
+            if(Definition.Selection==null) return 0;
+            switch(Definition.Selection.Difficulty)
+            {
+                case EncounterSelection.DifficultySource.Successes: return Successes;
+                case EncounterSelection.DifficultySource.PlayerLevel: return World.Progression.Data.Level;
+                case EncounterSelection.DifficultySource.HeatStars: return World.Stars;
+                default: return Successes+Failures;
+            }
+        }
+    }
     /// District index the next SpawnNext() tries first (CityLayout.EncounterSites round robin); -1 before the first spawn.
     public int NextSiteDistrict => siteDistrict;
     public void Initialize(WorldSession world,GameModeDefinition definition)
@@ -36,6 +53,7 @@ public sealed class GameModeSession : MonoBehaviour
         world.Progression.SetModeSide(definition.SideFromProfile?world.Progression.Data.Side:definition.Side,!definition.AllowSideSwitch);
         startLevel=world.Progression.Data.Level;startXp=world.Progression.Data.Xp;PeakHeat=world.Heat;
         world.Progression.XpAwarded+=Awarded;
+        if(definition.Selection!=null) Selection=definition.Selection.Begin();
         Feedback=definition.Description;
     }
     public void Begin()
@@ -59,12 +77,15 @@ public sealed class GameModeSession : MonoBehaviour
     public CrimeEvent SpawnNext()
     {
         World.Crimes.RemoveAll(c=>c==null||c.Resolved);
-        if(Ended||World.Crimes.Count>=Definition.MaximumEncounters||Definition.Encounters==null||Definition.Encounters.Length==0) return null;
+        bool noList=Definition.Encounters==null||Definition.Encounters.Length==0;
+        if(Ended||World.Crimes.Count>=Definition.MaximumEncounters||(Selection==null&&noList)) return null;
         // Set-pieces go to the city's encounter sites (street crossings, park/dock squares), spread across districts
         // by CityLayout.EncounterSites (round robin), leaving space for physics cars and escape routes.
         if(!World.City.PickEncounterSite(World.Hero.transform.position,
             site=>!World.Crimes.Exists(c=>c!=null&&c.Encounter!=null&&Vector3.Distance(c.Encounter.Site,site)<Definition.SiteSeparation),ref siteDistrict,out var chosen)) return null;
-        return World.SpawnEncounter(Definition.Encounters[nextEncounter++%Definition.Encounters.Length],chosen);
+        if(Selection==null) return World.SpawnEncounter(Definition.Encounters[nextEncounter++%Definition.Encounters.Length],chosen);
+        var picked=Selection.Pick(SelectionDifficulty,World.City.DistrictDefinitions[World.City.DistrictAt(chosen)].Name);
+        return picked!=null?World.SpawnEncounter(picked,chosen):null;
     }
     public void EncounterEnded(CrimeEncounter encounter,bool success,string reason)
     {

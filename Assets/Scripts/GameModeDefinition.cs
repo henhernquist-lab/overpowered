@@ -13,6 +13,7 @@ public sealed class GameModeDefinition : ScriptableObject
     public PlayerSide Side;
     public ModeRules Rules;
     public EncounterDefinition[] Encounters;
+    [Tooltip("Optional weighted / banded / district-aware / seeded encounter picks. Null = round robin over Encounters (the original behaviour).")] public EncounterSelection Selection;
     public ModeHud Hud=ModeHud.All;
     [Header("Session conditions (zero disables a limit)")]
     public int SuccessGoal=5, FailureLimit=3, DefeatLimit=3;
