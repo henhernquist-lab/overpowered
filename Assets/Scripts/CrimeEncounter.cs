@@ -141,7 +141,7 @@ public sealed class CrimeEncounter : MonoBehaviour
         if(Elapsed>Definition.CivilianDangerAfter)
         {
             float exposure=Mathf.Min(dt,Elapsed-Definition.CivilianDangerAfter);
-            foreach(var actor in Civilians) if(!actor.Saved&&actor.Npc!=null&&!actor.Npc.Dead) actor.Npc.Damage(Definition.CivilianDamagePerSecond*exposure,null);
+            using(HarmContext.Hostile()) foreach(var actor in Civilians) if(!actor.Saved&&actor.Npc!=null&&!actor.Npc.Dead) actor.Npc.Damage(Definition.CivilianDamagePerSecond*exposure,null);
         }
         if(World.Mode.Definition.Rules.Failed(this)) { End(false,"A robber escaped or a civilian was lost."); return; }
         if(Elapsed>=Definition.Deadline) { End(false,"Encounter ignored / deadline expired."); return; }
@@ -190,7 +190,7 @@ public sealed class CrimeEncounter : MonoBehaviour
         if(hold<Definition.HoldSeconds) return false;
         if(candidate is EncounterActor chosen)
         {
-            if(Civilians.Contains(chosen)) { chosen.Saved=true; World.Mode.RecordRescue(); World.Mode.AddScore(World.Mode.Definition.RescueScore); }
+            if(Civilians.Contains(chosen)) { chosen.Saved=true; World.Civilians?.Rescued(chosen.Npc); World.Mode.RecordRescue(); World.Mode.AddScore(World.Mode.Definition.RescueScore); }
             else {chosen.Captured=true;chosen.Npc.gameObject.SetActive(false);}
         }
         else if(candidate is EncounterNode node) {node.Done=true;node.Visual.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Leaf);}

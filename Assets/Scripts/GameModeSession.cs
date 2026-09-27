@@ -131,6 +131,7 @@ public sealed class GameModeSession : MonoBehaviour
         var result=new SessionResult {ModeId=Definition.Id,ModeName=Definition.DisplayName,Outcome=outcome,Reason=reason,Score=Score,Xp=XpEarned,Successes=Successes,Failures=Failures,Defeats=Defeats,Seconds=Elapsed,
             Side=World.Progression.Data.Side,Rescues=Rescues,PeakHeat=PeakHeat,TimeLimit=Definition.SessionSeconds,StartLevel=startLevel,StartXp=startXp,Layout=Definition.Results};
         if(Director!=null) Director.Describe(result);
+        if(World.Civilians!=null) result.Civilians=World.Civilians.Summary;
         int previousBest=World.Progression.BestScore(Definition.Id);
         if(Style!=null) { Style.End(); World.Progression.RecordStyle(Definition.Id,Style.Total); }
         World.Progression.RecordSession(Definition.Id,outcome==SessionOutcome.Won,Score,XpEarned,result.Wave);

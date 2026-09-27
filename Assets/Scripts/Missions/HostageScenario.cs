@@ -60,7 +60,7 @@ public sealed class HostageState : ScenarioState
             if (hostage.Saved || !Freed(hostage)) { npc.Agent.isStopped = true; return true; }
             npc.Agent.isStopped = false; npc.DirectTo(SafePoint, d.FleeSpeed);
             if (Vector3.Distance(npc.transform.position, SafePoint) < d.SafeRadius)
-            { hostage.Saved = true; World.Mode.RecordRescue(); World.Mode.AddScore(World.Mode.Definition.RescueScore); Encounter.TryComplete(); }
+            { hostage.Saved = true; World.Civilians?.Rescued(hostage.Npc); World.Mode.RecordRescue(); World.Mode.AddScore(World.Mode.Definition.RescueScore); Encounter.TryComplete(); }
             return true;
         }
         // Gunmen hold their posts by the hostages (they still shoot through their normal attack cycle when in range).
@@ -73,7 +73,7 @@ public sealed class HostageState : ScenarioState
         foreach (var g in Gunmen) if (!Alerted && g != null && g.Health < g.MaxHealth) Alerted = true;   // attacked from range
         if (Alerted && GunmenLeft > 0) AlertedFor += dt;
         if (!HostagesInDanger) return;
-        foreach (var h in Encounter.Civilians) if (!h.Saved && h.Npc != null && !h.Npc.Dead) h.Npc.Damage(d.HostageDamagePerSecond * dt, null);
+        using (HarmContext.Hostile()) foreach (var h in Encounter.Civilians) if (!h.Saved && h.Npc != null && !h.Npc.Dead) h.Npc.Damage(d.HostageDamagePerSecond * dt, null);
     }
     public override bool Complete() => GunmenLeft == 0 && Encounter.Civilians.Count > 0 && Encounter.Rescued == Encounter.Civilians.Count;
     public override bool Failed(out string reason)

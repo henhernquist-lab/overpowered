@@ -110,6 +110,7 @@ public sealed class CityNpc : MonoBehaviour
         float before = Health;
         Health = Mathf.Max(0f, Health-amount);
         if (source != null) source.ReportDamage(this, before - Health, Dead, assault);   // per-power stats / style / challenges (no gameplay effect)
+        if (Role == NpcRole.Civilian) world.Civilians?.Harmed(this, before - Health, source, Dead);   // civilian ledger (no gameplay effect)
         if (Dead) CancelAttack(); // a killed NPC mid-windup never deals its damage
         Damaged?.Invoke(Dead);
         if(source!=null&&assault) world.OnAssault(this);

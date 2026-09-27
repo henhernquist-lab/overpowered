@@ -69,13 +69,13 @@ public sealed class FireState : ScenarioState
         Vector3 behind = hero - (hero - npc.transform.position).normalized * d.FollowGap;
         npc.DirectTo(behind, d.EscortSpeed);
         if (Vector3.Distance(npc.transform.position, SafePoint) < d.SafeRadius)
-        { a.Saved = true; Following.Remove(a); World.Mode.RecordRescue(); World.Mode.AddScore(World.Mode.Definition.RescueScore); Encounter.TryComplete(); }
+        { a.Saved = true; Following.Remove(a); World.Civilians?.Rescued(a.Npc); World.Civilians?.Escorted(a.Npc); World.Mode.RecordRescue(); World.Mode.AddScore(World.Mode.Definition.RescueScore); Encounter.TryComplete(); }
         return true;
     }
     public override void Tick(float dt)
     {
         if (Encounter.Elapsed < d.CivilianBurnAfter) return;
-        foreach (var a in Encounter.Civilians) if (!a.Saved && a.Npc != null && !a.Npc.Dead && Trapped(a)) a.Npc.Damage(d.CivilianBurnPerSecond * dt, null);
+        using (HarmContext.Environment()) foreach (var a in Encounter.Civilians) if (!a.Saved && a.Npc != null && !a.Npc.Dead && Trapped(a)) a.Npc.Damage(d.CivilianBurnPerSecond * dt, null);
     }
     public override bool Complete() => Spots.Count > 0 && SpotsOut == Spots.Count && Encounter.Civilians.Count > 0 && Encounter.Rescued == Encounter.Civilians.Count;
     public override bool Failed(out string reason)

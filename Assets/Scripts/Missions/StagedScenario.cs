@@ -407,6 +407,7 @@ public sealed class StagedState : ScenarioState
     void CompleteStage()
     {
         int index = StageIndex; var s = d.Stages[index];
+        if (s.Kind == StageKind.EscortActors) { var g = Group(s.Group); if (g != null) foreach (var a in g) if (!Gone(a) && !a.Escaped) World.Civilians?.Escorted(a.Npc); }
         Completed[index]++; Run(s.OnComplete); StageCompleted?.Invoke(index);
         if (Terminal != MissionTerminal.Running) return;
         if (index + 1 >= d.Stages.Length) { Terminal = MissionTerminal.Complete; PayBonuses(); Encounter.TryComplete(); return; }
@@ -561,7 +562,7 @@ public sealed class StagedState : ScenarioState
         if (victims != null)
         {
             foreach (var v in victims)
-                if (!Gone(v) && Vector3.Distance(v.Npc.transform.position, a.Npc.transform.position) <= d.HarassRange) { v.Npc.Damage(d.HarassDamagePerSecond * dt, null); return; }
+                if (!Gone(v) && Vector3.Distance(v.Npc.transform.position, a.Npc.transform.position) <= d.HarassRange) { using (HarmContext.Hostile()) v.Npc.Damage(d.HarassDamagePerSecond * dt, null); return; }
             return;
         }
         var targets = TargetGroup(spec.BehaviorArgument); if (targets == null) return;

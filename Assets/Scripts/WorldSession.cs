@@ -22,6 +22,8 @@ public sealed class WorldSession : MonoBehaviour
     public PursuitTracker Pursuit { get; private set; }
     /// Optional Heat response tiers (HeatResponseProfile); neutral unless an enabled profile is present.
     public HeatResponse Response { get; private set; }
+    /// Session civilian outcomes (rescued / harmed by whom / lost / escorted); transient, never saved.
+    public CivilianLedger Civilians { get; private set; }
     public int Stars => Mathf.Clamp(Mathf.CeilToInt(Heat),0,Tuning.Heat.MaximumStars);
     public float Health { get; private set; }
     public bool PlayerDead => Health<=0;
@@ -51,6 +53,7 @@ public sealed class WorldSession : MonoBehaviour
         Districts=gameObject.AddComponent<DistrictContext>(); Districts.Initialize(this);
         Pursuit=gameObject.AddComponent<PursuitTracker>(); Pursuit.Initialize(this);
         Response=gameObject.AddComponent<HeatResponse>(); Response.Initialize(this);
+        Civilians=gameObject.AddComponent<CivilianLedger>();
         if(GameFlow.Instance!=null&&GameFlow.Instance.ActiveMode!=null)
         { Mode=gameObject.AddComponent<GameModeSession>(); Mode.Initialize(this,GameFlow.Instance.ActiveMode); Message=Mode.Definition.Description; }
         int civilians=Mode==null?tuning.City.Civilians:Mode.Definition.Civilians;
