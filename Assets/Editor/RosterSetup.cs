@@ -39,6 +39,14 @@ public static class RosterSetup
             d.Damage = 24f; d.Force = 300f; d.Range = 24f;
             d.PaletteColor = CityColor.Cream; d.MenuIcon = MenuGlyph.Chevron; d.CastingPresentation = true;
         });
+        // Defensive: Damage 0 (never used); Duration is the field's life; the absorb capacity lives on the effect asset.
+        Define("force-field", "Force Field", Effect<ForceFieldEffect>("ForceField"), d =>
+        {
+            d.Description = "Raise a shield that absorbs up to 60 damage for 6 s. Deals no damage.";
+            d.Charges = 1; d.ChargeRecharge = 12f; d.Cooldown = 1f; d.ResourceCost = 25f;
+            d.Damage = 0f; d.Force = 0f; d.Duration = 6f; d.Range = 0f;
+            d.PaletteColor = CityColor.Blue; d.MenuIcon = MenuGlyph.Shield; d.CastingPresentation = true;
+        });
         AddToHeroes();
         AssetDatabase.SaveAssets(); AssetDatabase.Refresh();
     }
