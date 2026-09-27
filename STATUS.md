@@ -3210,3 +3210,43 @@ Each group below can be taken on its own:
 - Style never changes mode score or rewards. Challenges pay only XP and existing upgrade points.
 - No shared status-effect framework: the audit found each status self-cleaning. Two targeted fixes instead.
 - No new synergies. The five-synergy cap is untouched; the dash shatter is a base rule, not a pair.
+
+### CLOUD REPLAYABILITY: addendum (after `d6c0ba5`; same branch; still NO Unity)
+| Commit | What |
+|---|---|
+| `dfeca32` | **Per-spawn variation** for staged missions (see below). `StageFrameworkVerification` adds a variation-off control and a seeded yaw / mirror / band check |
+| `bb09771` | **Bonus goals** on staged missions (see below). Framework checks: a clean run pays all goals once, a messy run forfeits exactly the broken ones, a failed run pays none |
+| `8481828` | **Mission rotations** (see below). `StagedMissionVerification` validates both rotations and runs the selection rule at band 0 |
+| `0635e44` | **Selection soft-lock guard.** When no option is eligible, `SpawnNext` falls back to the mode's own list instead of spawning nothing forever (`SelectionFallbacks`) |
+| `2b2e7a4` | **Flee re-route timer fix.** It now uses wall-clock time: `Drive` runs at the NPC LOD think rate for far NPCs, so accumulated frame time was far too slow. The window resets when behaviour changes |
+
+**Per-spawn variation.**
+- Seeded random yaw and mirror of the whole layout.
+- A difficulty band (session successes / step) adds hostile members to groups marked `ScaleWithDifficulty` (capped), and
+  tightens stage timeouts (floored).
+- Values live on `StagedState`; the shared asset is never written.
+- The nine recipes enable it:
+  - +1 hostile per 2 bands, max 3;
+  - timers ×0.95 per band, floor 0.7;
+  - residents, crew and the enforcer are not scaled.
+- Suites fix seeds (`StagedState.SeedOverride`) for reproducibility.
+
+**Bonus goals.** Optional goals: UnderSeconds, NoDamageTaken, NoLosses(group), MaxHeatStars.
+- They are checked once, on SUCCESS only.
+- All met goals are paid as ONE XP grant with reason `bonus`.
+- Each of the nine recipes has 1–2 goals, and its hint lists them.
+
+**Mission rotations.** `StagedMissionSetup.CreateRotations` (part of Batch) writes dormant
+`Resources/Rotations/{hero,villain}-rotation.asset`:
+- the mode's current Encounters and the existing `Missions/` encounters at weight 1;
+- the side's staged missions with library weight, first band (Hold the block / Armoured strongroom from 1, Sabotage from 2)
+  and district filter;
+- anti-repeat 2.
+
+Content switch, **not run**: "Use mission rotations in Hero and Villain modes". Run `MissionSetup.Batch` before
+`StagedMissionSetup.Batch` so that the rotations include the four scenario missions.
+
+**Henry decides:**
+- the variation strength and whether mirroring reads well;
+- the bonus goal thresholds and XP;
+- the rotation weights, bands and district lists, and whether to switch the rotations on.
