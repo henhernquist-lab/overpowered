@@ -118,6 +118,9 @@ public static class RosterSetup
         Add("void-grasp", "Void Grasp", "darkness", "telekinesis", NewEffect<VoidGraspEffect>("void-grasp"),
             "Open a singularity: pull nearby enemies in, crush them together, leave them rooted.",
             d => { d.Cooldown = 40; d.Range = 26; d.Radius = 9; d.MaxTargets = 6; d.Duration = 1.4f; d.Spring = 30; d.Damping = 6; d.Damage = 45; d.Force = 2200; d.FreezeSeconds = 2.5f; d.Primary = CityColor.UiPurple; d.Secondary = CityColor.UiNavy; });
+        Add("eclipse-beam", "Eclipse Beam", "darkness", "laser-eyes", NewEffect<EclipseBeamEffect>("eclipse-beam"),
+            "Wrap one enemy in darkness, then burn straight through it. Single target, enormous damage.",
+            d => { d.Cooldown = 45; d.Range = 30; d.LiftSeconds = .6f; d.Duration = .5f; d.Damage = 160; d.Force = 3000; d.Radius = 1.5f; d.Primary = CityColor.Red; d.Secondary = CityColor.UiPurple; });
         catalog.Synergies = entries.ToArray(); EditorUtility.SetDirty(catalog);
     }
     /// Every shipping hero may equip every shipping power (the existing heroes were created with the whole list).
