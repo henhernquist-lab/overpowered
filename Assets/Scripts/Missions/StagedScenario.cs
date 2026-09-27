@@ -38,6 +38,14 @@ public sealed class StagedScenario : EncounterScenario
     public float HarassRange = 2.2f, HarassDamagePerSecond = 5f, HarassSeconds = 2.5f;
     [Tooltip("A hit of at least this impulse stops a driving mission vehicle (Ice always does).")] public float VehicleStopImpulse = 1200f;
     public float VehicleSpeed = 10f, VehicleEscapeDistance = 80f;
+    [Header("Variation per spawn (replayability). All off = the authored layout, counts and timers every time.")]
+    [Tooltip("Rotate every point about the site by a random yaw.")] public bool RandomYaw;
+    [Tooltip("Mirror every point's angle (left / right) at random.")] public bool RandomMirror;
+    [Tooltip("Difficulty band = the session's successes / DifficultyStep.")] [Min(1)] public int DifficultyStep = 2;
+    [Tooltip("Extra members per band for actor groups marked ScaleWithDifficulty (floored), capped at MaxExtraActors.")] public float ExtraActorsPerBand;
+    public int MaxExtraActors = 3;
+    [Tooltip("Stage timeouts x this per band (0.95 = 5% tighter each band), never below MinTimeoutScale.")] public float TimeoutScalePerBand = 1f;
+    public float MinTimeoutScale = .7f;
     public override ScenarioState Begin(CrimeEncounter encounter)
     {
         var state = encounter.gameObject.AddComponent<StagedState>(); state.Setup(encounter, this); return state;
@@ -57,6 +65,7 @@ public enum StageActionKind { SpawnActors, SpawnTargets, SetBehavior, AddHeat, H
     public ActorBehavior Behavior = ActorBehavior.Default;
     [Tooltip("Flee: comma-separated exit point ids (first = preferred). Harass: the actor or target group to harass.")] public string BehaviorArgument;
     public bool SpawnAtStart = true;
+    [Tooltip("Gets the scenario's difficulty-band extra members (hostile groups: yes; people you protect or escort: no).")] public bool ScaleWithDifficulty = true;
 }
 [Serializable] public sealed class TargetGroupSpec
 {
@@ -97,16 +106,34 @@ public sealed class StagedState : ScenarioState
     public int[] Completed { get; private set; }
     public event Action<int> StageStarted, StageCompleted;
     float repeatClock, startDistance; Actor cuffing; float cuff;
+    /// This spawn's variation (see StagedScenario "Variation"): seed, layout yaw / mirror, difficulty band, extra hostile
+    /// members per scaling group, and the timeout scale. Verification may fix the next seed with SeedOverride.
+    public int Seed { get; private set; }
+    public float Yaw { get; private set; }
+    public bool Mirrored { get; private set; }
+    public int Band { get; private set; }
+    public int ExtraActors { get; private set; }
+    public float TimeoutScale { get; private set; } = 1f;
+    public static int? SeedOverride;
+    public float TimeoutOf(MissionStageSpec s) => s.Timeout * TimeoutScale;
     public void Setup(CrimeEncounter e, StagedScenario scenario)
     {
         Attach(e, scenario); d = scenario;
         Started = new int[d.Stages.Length]; Completed = new int[d.Stages.Length];
+        Seed = SeedOverride ?? UnityEngine.Random.Range(int.MinValue, int.MaxValue); SeedOverride = null;
+        var random = new System.Random(Seed);
+        Yaw = d.RandomYaw ? (float)(random.NextDouble() * 360d) : 0f;
+        Mirrored = d.RandomMirror && random.Next(2) == 1;
+        Band = e.World.Mode != null ? e.World.Mode.Successes / Mathf.Max(1, d.DifficultyStep) : 0;
+        ExtraActors = Mathf.Clamp(Mathf.FloorToInt(Band * d.ExtraActorsPerBand + 1e-4f), 0, Mathf.Max(0, d.MaxExtraActors));
+        TimeoutScale = Mathf.Clamp(Mathf.Pow(d.TimeoutScalePerBand, Band), Mathf.Min(1f, d.MinTimeoutScale), 1f);
         foreach (var p in d.Points)
         {
-            Vector3 at = e.Site + Quaternion.Euler(0, p.Angle, 0) * Vector3.forward * p.Distance;
+            float angle = (Mirrored ? -p.Angle : p.Angle) + Yaw;
+            Vector3 at = e.Site + Quaternion.Euler(0, angle, 0) * Vector3.forward * p.Distance;
             points[p.Id] = p.Sidewalk ? e.World.City.NearestSidewalk(at) : at;
         }
-        foreach (var g in d.Actors) { Actors[g.Id] = new List<Actor>(); if (g.SpawnAtStart) SpawnActors(g.Id, g.Count); }
+        foreach (var g in d.Actors) { Actors[g.Id] = new List<Actor>(); if (g.SpawnAtStart) SpawnActors(g.Id, g.Count + Extra(g)); }
         foreach (var t in d.Targets) { TargetsById[t.Id] = new List<Target>(); if (t.SpawnAtStart) SpawnTargets(t.Id); }
         if (d.Stages.Length == 0) { Terminal = MissionTerminal.Complete; return; }
         BeginStage(0);
@@ -120,6 +147,7 @@ public sealed class StagedState : ScenarioState
     public List<Target> TargetGroup(string id) => id != null && TargetsById.TryGetValue(id, out var list) ? list : null;
     static bool Gone(Actor a) => a.Npc == null || a.Npc.Dead || a.Captured;
     static bool Lost(Actor a) => !a.Captured && (a.Npc == null || a.Npc.Dead);
+    int Extra(ActorGroupSpec g) => g != null && g.ScaleWithDifficulty && g.Count > 0 ? ExtraActors : 0;
     public int SpawnActors(string id, int count, Vector3? around = null)
     {
         var g = ActorSpec(id); var list = Group(id); if (g == null || list == null) return 0;
@@ -188,7 +216,7 @@ public sealed class StagedState : ScenarioState
         foreach (var a in actions)
             switch (a.Kind)
             {
-                case StageActionKind.SpawnActors: SpawnActors(a.Group, Mathf.Max(1, Mathf.RoundToInt(a.Amount)), Anchor(a.Text)); break;
+                case StageActionKind.SpawnActors: SpawnActors(a.Group, Mathf.Max(1, Mathf.RoundToInt(a.Amount)) + Extra(ActorSpec(a.Group)), Anchor(a.Text)); break;
                 case StageActionKind.SpawnTargets: SpawnTargets(a.Group, Anchor(a.Text)); break;
                 case StageActionKind.SetBehavior: SetBehavior(a.Group, a.Behavior); break;
                 case StageActionKind.AddHeat: World.AddHeat(a.Amount); break;
@@ -229,7 +257,7 @@ public sealed class StagedState : ScenarioState
         TickPickups();
         if (Evaluate(s, out bool failed, out string why)) { CompleteStage(); return; }
         if (failed) { Fail(why); return; }
-        if (s.Timeout > 0f && StageElapsed >= s.Timeout) Fail("Timed out: " + s.Label.ToLowerInvariant());
+        if (s.Timeout > 0f && StageElapsed >= TimeoutOf(s)) Fail("Timed out: " + s.Label.ToLowerInvariant());
     }
     void CompleteStage()
     {

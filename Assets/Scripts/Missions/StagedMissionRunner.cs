@@ -28,13 +28,18 @@ public abstract class StagedMissionRunner : SessionVerificationRunner
     protected static StagedScenario Staged(params MissionStageSpec[] stages)
     { var s = ScriptableObject.CreateInstance<StagedScenario>(); s.name = "Verification staged mission"; s.Hint = "verification"; s.Stages = stages; return s; }
     protected static MissionStageSpec StageOf(StageKind kind, string label, string group = null, string point = null) => new MissionStageSpec { Kind = kind, Label = label, Group = group, Point = point };
-    protected CrimeEncounter Spawn(EncounterDefinition def)
+    /// Staged missions vary per spawn (StagedScenario "Variation"); suites fix the seed so a run is reproducible.
+    protected int NextSeed = 1000;
+    protected CrimeEncounter Spawn(EncounterDefinition def, int? seed = null)
     {
+        int used = seed ?? NextSeed++; if (def.Scenario is StagedScenario) StagedState.SeedOverride = used;
         int district = -1;
         Check(W.City.PickEncounterSite(W.Hero.transform.position, s => W.Crimes.TrueForAll(c => c == null || c.Encounter == null || Vector3.Distance(c.Encounter.Site, s) > 45f), ref district, out var site),
             "Real encounter site found for " + def.DisplayName);
         var crime = W.SpawnEncounter(def, site);
-        Check(crime != null && crime.Encounter != null && crime.Encounter.Scenario != null, $"{def.DisplayName} spawned at {site} with its {def.Scenario.GetType().Name}.");
+        StagedState.SeedOverride = null;
+        Check(crime != null && crime.Encounter != null && crime.Encounter.Scenario != null, $"{def.DisplayName} spawned at {site} with its {def.Scenario.GetType().Name}" +
+            (crime.Encounter.Scenario is StagedState st ? $" (seed {st.Seed}, yaw {st.Yaw:F0}, mirrored {st.Mirrored}, band {st.Band}, +{st.ExtraActors} hostiles, timeouts x{st.TimeoutScale:F2})." : "."));
         return crime.Encounter;
     }
     protected string Line(CrimeEncounter e) => W.Mode.Definition.Rules.Current(e).Text;

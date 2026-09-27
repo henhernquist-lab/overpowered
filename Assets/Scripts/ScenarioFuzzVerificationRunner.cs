@@ -43,7 +43,7 @@ public sealed class ScenarioFuzzVerificationRunner : StagedMissionRunner
         Immortal = random.Next(4) != 0;   // one seed in four lets the player die
         var def = Resources.Load<EncounterDefinition>("Encounters/" + entry.Asset);
         Check(def != null, "Mission asset " + entry.Asset);
-        var e = Spawn(def); var s = (StagedState)e.Scenario;
+        var e = Spawn(def, seed); var s = (StagedState)e.Scenario;
         var order = new List<string>(); bool terminalSeen = false; string violation = null;
         s.StageStarted += i => { order.Add("S" + i); if (terminalSeen) violation = "stage started after the terminal latch"; };
         s.StageCompleted += i => { order.Add("C" + i); if (terminalSeen) violation = "stage completed after the terminal latch"; };

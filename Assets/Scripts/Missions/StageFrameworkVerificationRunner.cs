@@ -18,6 +18,7 @@ public sealed class StageFrameworkVerificationRunner : StagedMissionRunner
         yield return Failure();
         yield return Timeout();
         yield return HoldGate();
+        yield return Variation();
         Log("LIMIT: hero moved by teleport; blasts through CombatImpact.Blast (the punch / Fire / synergy path) rather than input. NPCs, NavMesh and physics are live.");
     }
     // ---------------------------------------------------------------- positive path, wrong order, exactly once, one reward
@@ -116,6 +117,34 @@ public sealed class StageFrameworkVerificationRunner : StagedMissionRunner
         yield return Outcome(e, 3f);
         Check(Ended(e) && !Result(e).Success && Result(e).Reason == "Timed out: get there" && s.Completed[0] == 0, $"Stage timeout fails the mission: {Describe(e)}.");
         Check(e.Definition.Deadline > 100f, $"The failure came from the stage timeout, not the encounter deadline ({e.Definition.Deadline} s).");
+    }
+    // ---------------------------------------------------------------- per-spawn variation
+    IEnumerator Variation()
+    {
+        Log("---- VARIATION (seeded layout, difficulty band)");
+        StagedScenario Layout(bool vary)
+        {
+            var sc = Staged(new MissionStageSpec { Kind = StageKind.Survive, Label = "WAIT", Seconds = .4f, Timeout = 30f });
+            sc.Points = new[] { new MissionPoint { Id = "p", Angle = 30, Distance = 12, Sidewalk = false }, new MissionPoint { Id = "q", Angle = 120, Distance = 8, Sidewalk = false } };
+            sc.Actors = new[] { new ActorGroupSpec { Id = "thugs", Count = 2, Behavior = ActorBehavior.Idle }, new ActorGroupSpec { Id = "vips", Role = NpcRole.Civilian, Count = 2, Behavior = ActorBehavior.Idle, ScaleWithDifficulty = false } };
+            sc.RandomYaw = sc.RandomMirror = vary; sc.DifficultyStep = 1; sc.ExtraActorsPerBand = vary ? 1f : 0f; sc.MaxExtraActors = 2; sc.TimeoutScalePerBand = vary ? .9f : 1f; sc.MinTimeoutScale = .75f;
+            return sc;
+        }
+        Vector3 Expected(CrimeEncounter e, float angle, float distance, float yaw, bool mirror) => e.Site + Quaternion.Euler(0, (mirror ? -angle : angle) + yaw, 0) * Vector3.forward * distance;
+        // CONTROL: variation off -> the authored layout and counts.
+        var plain = Spawn(Definition("Verification staged plain layout", Layout(false)), 7); var ps = (StagedState)plain.Scenario;
+        Check(ps.Yaw == 0f && !ps.Mirrored && ps.ExtraActors == 0 && ps.TimeoutScale == 1f && Vector3.Distance(ps.Point("p"), Expected(plain, 30, 12, 0, false)) < .01f && ps.Group("thugs").Count == 2,
+            "CONTROL: variation off keeps the authored points, counts and timers.");
+        // Seeded variation: the same seed gives the same yaw / mirror (System.Random order: yaw, then mirror).
+        var r = new System.Random(7); float yaw = (float)(r.NextDouble() * 360d); bool mirror = r.Next(2) == 1;
+        int successes = W.Mode.Successes; int band = successes; int extra = Mathf.Clamp(band, 0, 2); float scale = Mathf.Clamp(Mathf.Pow(.9f, band), .75f, 1f);
+        var varied = Spawn(Definition("Verification staged varied layout", Layout(true)), 7); var vs = (StagedState)varied.Scenario;
+        Check(Mathf.Abs(vs.Yaw - yaw) < .01f && vs.Mirrored == mirror && Vector3.Distance(vs.Point("p"), Expected(varied, 30, 12, yaw, mirror)) < .01f && Vector3.Distance(vs.Point("q"), Expected(varied, 120, 8, yaw, mirror)) < .01f,
+            $"Seed 7: yaw {vs.Yaw:F1}, mirrored {vs.Mirrored}; both points rotated / mirrored about the site with distances kept.");
+        Check(vs.Band == band && vs.ExtraActors == extra && vs.Group("thugs").Count == 2 + extra && vs.Group("vips").Count == 2 && Mathf.Abs(vs.TimeoutScale - scale) < 1e-4f && Mathf.Abs(vs.TimeoutOf(vs.Stage) - 30f * scale) < 1e-3f,
+            $"Band {band} ({successes} successes / step 1): +{extra} thugs (cap 2), protected civilians unscaled, stage timeout {vs.TimeoutOf(vs.Stage):F1} s (x{scale:F2}).");
+        yield return Outcome(plain, 3f); yield return Outcome(varied, 3f);
+        Check(Ended(plain) && Ended(varied) && Result(plain).Success && Result(varied).Success, "Both variation probes complete normally.");
     }
     // ---------------------------------------------------------------- R-hold gating
     IEnumerator HoldGate()

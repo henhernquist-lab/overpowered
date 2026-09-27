@@ -25,7 +25,14 @@ public static class StagedMissionLibrary
         new Entry { Id = "getaway", Title = "Getaway", Side = PlayerSide.Villain, Kind = CrimeKind.Robbery, Deadline = 200f, Build = Getaway },
     };
     public static Entry Find(string id) => Array.Find(All, e => e.Id == id);
-    public static StagedScenario Create(Entry entry) { var s = ScriptableObject.CreateInstance<StagedScenario>(); s.name = entry.Asset; entry.Build(s); return s; }
+    public static StagedScenario Create(Entry entry)
+    {
+        var s = ScriptableObject.CreateInstance<StagedScenario>(); s.name = entry.Asset;
+        // Every shipped mission varies per spawn: layout rotated / mirrored, +1 hostile per 2 bands (max 3), timers 5% tighter
+        // per band (floor 70%); band = successes / 2 in the session.
+        s.RandomYaw = true; s.RandomMirror = true; s.DifficultyStep = 2; s.ExtraActorsPerBand = .5f; s.MaxExtraActors = 3; s.TimeoutScalePerBand = .95f; s.MinTimeoutScale = .7f;
+        entry.Build(s); return s;
+    }
     // ---------------------------------------------------------------- builders
     static MissionPoint P(string id, float angle, float distance) => new MissionPoint { Id = id, Angle = angle, Distance = distance };
     static StageAction Spawn(string group, int count, string anchor = null) => new StageAction { Kind = StageActionKind.SpawnActors, Group = group, Amount = count, Text = anchor };
@@ -101,9 +108,9 @@ public static class StagedMissionLibrary
         s.Points = new[] { P("shelter", 135, 34) };
         s.Actors = new[]
         {
-            new ActorGroupSpec { Id = "residents", Role = NpcRole.Civilian, Count = 3, Ring = 3f, Speed = 3.5f, HealthMultiplier = 3f, Behavior = ActorBehavior.Idle },
+            new ActorGroupSpec { Id = "residents", Role = NpcRole.Civilian, Count = 3, Ring = 3f, Speed = 3.5f, HealthMultiplier = 3f, Behavior = ActorBehavior.Idle, ScaleWithDifficulty = false },
             new ActorGroupSpec { Id = "raiders", Role = NpcRole.Criminal, Count = 2, Ring = 11f, Speed = 4.5f, Behavior = ActorBehavior.HoldPost, BehaviorArgument = "residents" },
-            new ActorGroupSpec { Id = "enforcer", Role = NpcRole.Criminal, Archetype = Enemy("Brute"), Count = 1, Ring = 8f, HealthMultiplier = 2.5f, Behavior = ActorBehavior.Pursue, SpawnAtStart = false },
+            new ActorGroupSpec { Id = "enforcer", Role = NpcRole.Criminal, Archetype = Enemy("Brute"), Count = 1, Ring = 8f, HealthMultiplier = 2.5f, Behavior = ActorBehavior.Pursue, SpawnAtStart = false, ScaleWithDifficulty = false },
         };
         s.Stages = new[]
         {
@@ -210,7 +217,7 @@ public static class StagedMissionLibrary
         s.Points = new[] { P("van", 160, 40) };
         s.Actors = new[]
         {
-            new ActorGroupSpec { Id = "crew", Role = NpcRole.Criminal, Count = 2, Ring = 2f, Speed = 4.2f, Behavior = ActorBehavior.Follow },
+            new ActorGroupSpec { Id = "crew", Role = NpcRole.Criminal, Count = 2, Ring = 2f, Speed = 4.2f, Behavior = ActorBehavior.Follow, ScaleWithDifficulty = false },
             new ActorGroupSpec { Id = "hunters", Role = NpcRole.Cop, Count = 2, Ring = 14f, Speed = 5f, Behavior = ActorBehavior.HoldPost, BehaviorArgument = "crew" },
             new ActorGroupSpec { Id = "pursuers", Role = NpcRole.Cop, Count = 2, AtPoint = "van", Ring = 12f, Behavior = ActorBehavior.Pursue, SpawnAtStart = false },
         };
