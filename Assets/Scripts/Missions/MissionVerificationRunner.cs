@@ -62,19 +62,24 @@ public sealed class MissionVerificationRunner : SessionVerificationRunner
     {
         Log("---- ROBBERY GETAWAY (hero)");
         yield return Session("ice", "strength", "hero");
-        var e = Spawn("mission-robbery"); var s = (RobberyState)e.Scenario; Away(e);
-        Check(e.Robbers.Count == 3 && s.Cars.Count == 2 && s.Cars.All(c => c.Body != null), "3 robbers and 2 parked getaway cars.");
+        var e = Spawn("mission-robbery"); var s = (RobberyState)e.Scenario; Away(e); var scenario = (RobberyScenario)e.Definition.Scenario;
+        Check(e.Robbers.Count == 3 && s.Cars.Count == 2 && s.Cars.All(c => c.Body != null && !c.Body.isKinematic && !c.Driving), "3 robbers and 2 parked getaway cars (ordinary dynamic props, not driving).");
         Check(Line(e) == "STOP THE GETAWAY 0/3", $"Objective line: \"{Line(e)}\".");
+        var parked = s.Cars.Select(c => c.Body.position).ToArray();
+        yield return new WaitForSeconds(1f);
+        Check(s.Cars.All(c => c.Driving || Vector3.Distance(c.Body.position, parked[s.Cars.IndexOf(c)]) < .3f), "CONTROL: a car does not move before the mission says depart.");
         // FAIL PATH: nobody stops them.
         float until = Time.time + 30; while (!s.Cars.Exists(c => c.Driving) && Time.time < until) yield return null;
         var driving = s.Cars.FirstOrDefault(c => c.Driving);
-        Check(driving != null, $"Robbers reached a car and it departs ({s.LastEvent}).");
-        Vector3 p0 = driving.Body.position; yield return new WaitForSeconds(1.5f);
+        Check(driving != null && driving.Body.isKinematic && driving.Route != null && driving.Route.Length >= 2, $"A car departs on a route: {s.LastEvent}.");
+        Vector3 p0 = driving.Body.position; float driven0 = driving.Driven; yield return new WaitForSeconds(1.5f);
         float moved = driving.Body != null ? Vector3.Distance(p0, driving.Body.position) : 0;
-        Check(moved > 4f, $"The getaway car really drives: {moved:F1} m in 1.5 s.");
+        Log($"MEASURED getaway drive: {moved:F2} m straight-line, {driving.Driven - driven0:F2} m along the route in 1.5 s (speed {scenario.CarSpeed} m/s).");
+        Check(moved > scenario.CarSpeed * 1.5f * .5f && driving.Driven - driven0 > scenario.CarSpeed * 1.5f * .9f, "The getaway car really leaves: meaningful displacement along its route (no curb can hold it).");
         yield return Outcome(e, 45);
-        // Normally "The getaway car got away..."; if the route stalls the car, the robbers bail and escape on foot instead.
-        Check(Ended(e) && !Result(e).Success && (Result(e).Reason.Contains("getaway") || Result(e).Reason.Contains("escaped")), $"Too slow: mission FAILED \"{(Ended(e) ? Result(e).Reason : "no outcome")}\" ({s.LastEvent}).");
+        string reason = Ended(e) ? Result(e).Reason : "no outcome";
+        Check(Ended(e) && !Result(e).Success && reason.Contains("getaway car got away"), $"Too slow: mission FAILED with the CAR reason \"{reason}\" ({s.LastEvent}).");
+        Check(!reason.Contains("on foot"), "The car getaway reason is distinct from a robber escaping on foot.");
         // WIN PATH 1: take two down, freeze the car the third boards, cuff him when he bails.
         e = Spawn("mission-robbery"); s = (RobberyState)e.Scenario; Away(e);
         e.Robbers[0].Npc.Damage(9999, W.Powers); e.Robbers[1].Npc.Damage(9999, W.Powers);
@@ -87,22 +92,39 @@ public sealed class MissionVerificationRunner : SessionVerificationRunner
         var ice = Runtime("ice"); W.Powers.Select(ice); ice.Charges = 2; ice.Cooldown = 0;
         Aim(car.Body.worldCenterOfMass); Check(W.Powers.Use(ice), "Ice cast at the moving getaway car.");
         yield return null; yield return null;
-        Check(car.Stalled && last.Npc.gameObject.activeSelf, $"Frozen car stalls and the robber bails out on foot ({s.LastEvent}).");
-        Ground(last.Npc.transform.position + Vector3.forward * 1.5f); float cuffTime = 0;
-        while (cuffTime < 1.3f) { cuffTime += Time.deltaTime; e.Interact(Time.deltaTime); yield return null; }
-        Check(!last.Captured, "CONTROL: holding R beside an un-subdued robber does nothing (he must be frozen or rooted).");
+        Check(car.Stalled && car.StopReason == "frozen" && !car.Body.isKinematic && car.Body.GetComponent<FrozenBody>() != null && last.Npc.gameObject.activeSelf,
+            $"Frozen car stops (dynamic again, frozen in place) and the robber bails out on foot ({s.LastEvent}).");
+        Ground(last.Npc.transform.position + Vector3.forward * 1.5f);
+        float standoff = Vector3.Distance(W.Hero.transform.position, last.Npc.transform.position);
+        e.ScriptedHold = true; yield return new WaitForSeconds(1.4f); e.ScriptedHold = false;
+        Check(!last.Captured && !Ended(e), $"CONTROL: holding R {standoff:F2} m from an un-subdued robber (frozen {last.Npc.Frozen}, rooted {last.Npc.Rooted}) does not cuff him.");
         ice.Cooldown = 0; Aim(Chest(last.Npc)); Check(W.Powers.Use(ice) && last.Npc.Frozen, "Freeze the bailed robber.");
-        Ground(last.Npc.transform.position + Vector3.forward * 1.5f); cuffTime = 0;
-        while (!Ended(e) && cuffTime < 3f) { cuffTime += Time.deltaTime; e.Interact(Time.deltaTime); yield return null; }
-        Check(last.Captured && Ended(e) && Result(e).Success, "Cuffing him (hold R on a frozen robber) completes the mission: SUCCESS.");
-        // WIN PATH 2: wreck the car with the robber inside.
+        Ground(last.Npc.transform.position + Vector3.forward * 1.5f);
+        standoff = Vector3.Distance(W.Hero.transform.position, last.Npc.transform.position);
+        Check(standoff < scenario.CuffRadius && e.InteractableNear(W.Hero.transform.position), $"Standing {standoff:F2} m from the frozen robber: inside the {scenario.CuffRadius} m cuff radius, interactable.");
+        // R is held through the encounter's own Update path (CrimeEncounter.ScriptedHold), exactly as the key would be.
+        e.ScriptedHold = true; until = Time.time + 3f; while (!Ended(e) && Time.time < until) yield return null; e.ScriptedHold = false;
+        Log($"CUFF state: Captured={last.Captured}, scenario Finished={e.Finished}, outcome recorded={Ended(e)}, Result={(Ended(e) ? (Result(e).Success ? "SUCCESS" : "FAIL") + " '" + Result(e).Reason + "'" : "none")}, distance {standoff:F2} m.");
+        Check(last.Captured && Ended(e) && Result(e).Success, "Cuffing the frozen robber (held R) completes the mission: SUCCESS.");
+        // WIN PATH 2: wreck the car with the robber inside, while it drives (below the stop impulse, so it keeps driving).
         e = Spawn("mission-robbery"); s = (RobberyState)e.Scenario; Away(e);
         e.Robbers[0].Npc.Damage(9999, W.Powers); e.Robbers[1].Npc.Damage(9999, W.Powers); car = s.Cars[0];
-        until = Time.time + 25; while (car.Aboard.Count == 0 && Time.time < until) yield return null;
-        Check(car.Aboard.Count == 1, "Last robber is in the car.");
-        CombatImpact.Blast(W.Powers, car.Body.worldCenterOfMass, 2f, 1350f, 1000f, .2f);
+        until = Time.time + 25; while (!car.Driving && Time.time < until) yield return null;
+        Check(car.Driving && car.Aboard.Count == 1, "Last robber is in the driving car.");
+        CombatImpact.Blast(W.Powers, car.Body.worldCenterOfMass, 2f, scenario.StopImpulse * .4f, 1000f, .2f);
         yield return Outcome(e, 3);
-        Check(car.Wrecked && Ended(e) && Result(e).Success, $"Wrecking the car with the robber inside catches him: SUCCESS ({s.LastEvent}).");
+        Check(car.Wrecked && Ended(e) && Result(e).Success, $"Wrecking the driving car (blast damage on the kinematic car) catches the robber inside: SUCCESS ({s.LastEvent}).");
+        // HEAVY HIT: a punch-strength blast knocks a driving car out of its drive; the robber bails.
+        e = Spawn("mission-robbery"); s = (RobberyState)e.Scenario; Away(e);
+        e.Robbers[0].Npc.Damage(9999, W.Powers); e.Robbers[1].Npc.Damage(9999, W.Powers); car = s.Cars[0]; last = e.Robbers[2];
+        until = Time.time + 25; while (!car.Driving && Time.time < until) yield return null;
+        yield return new WaitForSeconds(.5f);
+        CombatImpact.Blast(W.Powers, car.Body.worldCenterOfMass - Vector3.up * .5f, 2f, scenario.StopImpulse * .3f, 0f, .2f);
+        Check(car.Driving, "CONTROL: a light hit (below StopImpulse) does not stop the car.");
+        CombatImpact.Blast(W.Powers, car.Body.worldCenterOfMass - Vector3.up * .5f, 2f, 1350f, 0f, .2f);
+        Check(car.Stalled && car.StopReason.StartsWith("rammed") && !car.Body.isKinematic, $"A 1350 N.s hit knocks the car out of its drive ({car.StopReason}).");
+        yield return null;
+        Check(last.Npc.gameObject.activeSelf && !Ended(e), "The robber inside bails out on foot; mission continues.");
     }
     // ---------------------------------------------------------------- HOSTAGE
     IEnumerator Hostage()

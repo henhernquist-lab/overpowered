@@ -2,10 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-/// ROBBERY — the robbers run from the site to parked getaway cars, climb in, and the car DRIVES OFF along the NavMesh. A car
-/// that gets EscapeDistance away with a robber inside = the robbery succeeds (mission failed). Stop them: take robbers down
-/// (defeat, or hold R to cuff one that is frozen or rooted), wreck a car (BreakableProp: robbers inside are caught), or stall
-/// it — freeze it with Ice, flip it, or pin it so it cannot move — and the robbers inside bail out on foot and run for it.
+/// ROBBERY — the robbers run from the site to parked getaway cars, climb in, and the car DRIVES OFF along a NavMesh route.
+/// A car that drives EscapeDistance (or reaches its route's end) with a robber inside = the robbery succeeds (mission failed,
+/// "getaway car got away"); a bailed robber reaching his exit on foot is a separate fail ("escaped on foot"). Stop them: take
+/// robbers down (defeat, or hold R to cuff one that is frozen or rooted), wreck a car (BreakableProp damage: robbers inside
+/// are caught), or stop a driving car — Ice freezes it, a heavy hit (>= StopImpulse) knocks it out of its drive — and the
+/// robbers inside bail out on foot and run for it.
+/// The parked car is an ordinary physics prop. While driving it is KINEMATIC and moved with MovePosition along the route,
+/// so curbs and ground friction cannot hold it (integration #1: a force-driven 400 kg box never left its curb); stopped, it
+/// becomes a dynamic prop again with its drive velocity.
 [CreateAssetMenu(menuName = "Overpowered/Missions/Robbery getaway")]
 public sealed class RobberyScenario : EncounterScenario
 {
@@ -16,10 +21,11 @@ public sealed class RobberyScenario : EncounterScenario
     [Header("Getaway car")]
     [Tooltip("Seconds after the first robber climbs in before the car leaves (it also leaves once every assigned robber is in).")]
     public float DepartAfterFirstBoard = 5f;
-    public float CarSpeed = 11f, CarAcceleration = 9f, TurnDegreesPerSecond = 120f;
-    [Tooltip("Metres from its parking spot at which a driving car has escaped.")] public float EscapeDistance = 70f;
-    [Tooltip("A driving car below StallSpeed for StallSeconds, frozen, or tipped past FlipUp stalls; robbers bail out.")]
-    public float StallSpeed = .8f, StallSeconds = 2.5f, FlipUp = .35f;
+    public float CarSpeed = 11f, TurnDegreesPerSecond = 160f;
+    [Tooltip("Metres driven along its route after which the car has escaped.")] public float EscapeDistance = 70f;
+    [Tooltip("A hit of at least this impulse (N.s) knocks a driving car out of its drive (Strength punch 1350; Fire Blast 450 does not).")]
+    public float StopImpulse = 1200f;
+    [Tooltip("A car tipped past this (transform.up.y) when it should leave cannot drive; its robbers bail.")] public float FlipUp = .35f;
     [Header("On foot after a stall")]
     public float BailRunSpeed = 4f, BailEscapeDistance = 40f;
     [Header("Cuffing a subdued (frozen/rooted) robber")]
@@ -35,7 +41,8 @@ public sealed class RobberyState : ScenarioState
     {
         public Rigidbody Body; public Vector3 Park; public Vector3[] Route; public int Corner;
         public readonly List<EncounterActor> Assigned = new List<EncounterActor>(), Aboard = new List<EncounterActor>();
-        public bool Driving, Stalled, Escaped, Wrecked; public float DepartAt = -1f, Slow;
+        public bool Driving, Stalled, Escaped, Wrecked, ReachedEnd; public float DepartAt = -1f, Driven;
+        public Vector3 Velocity; public string StopReason = "";
         public float Travelled => Body != null ? Vector3.Distance(Flat(Body.position), Flat(Park)) : 0f;
     }
     RobberyScenario d;
@@ -54,7 +61,8 @@ public sealed class RobberyState : ScenarioState
             Vector3 park = e.World.City.NearestSidewalk(e.Site + dir * d.CarDistance);
             // SpawnProp builds the shared-palette car art (BreakableProp, rigidbody) for this exact name.
             var body = e.SpawnProp("Encounter throwable car", park, props.CarSize, props.CarMass); body.gameObject.name = "Getaway car " + i;
-            Cars.Add(new Car { Body = body, Park = body.position });
+            var car = new Car { Body = body, Park = body.position }; Cars.Add(car);
+            var tag = body.gameObject.AddComponent<GetawayCar>(); tag.State = this; tag.Car = car;
         }
         for (int i = 0; i < d.Robbers; i++)
         {
@@ -108,36 +116,41 @@ public sealed class RobberyState : ScenarioState
                 if (car.Aboard.Count > 0 && (everyoneIn || (car.DepartAt > 0f && Time.time >= car.DepartAt))) Depart(car);
                 continue;
             }
-            if (car.Travelled >= d.EscapeDistance)
+            if (car.Driven >= d.EscapeDistance || car.ReachedEnd)
             {
-                car.Escaped = true; LastEvent = "getaway car escaped";
+                car.Escaped = true; car.Driving = false; LastEvent = $"getaway car escaped ({car.Driven:F1} m driven)";
                 foreach (var a in car.Aboard) a.Escaped = true;
-                continue;
             }
-            var frozen = car.Body.GetComponent<FrozenBody>();
-            bool tipped = car.Body.transform.up.y < d.FlipUp;
-            Vector3 v = car.Body.linearVelocity; v.y = 0f;
-            car.Slow = v.magnitude < d.StallSpeed ? car.Slow + dt : 0f;
-            if ((frozen != null && frozen.Frozen) || tipped || car.Slow >= d.StallSeconds) Stall(car, frozen != null && frozen.Frozen ? "frozen" : tipped ? "flipped" : "stuck");
         }
         if (cuffing != null && (cuffing.Npc == null || cuffing.Captured)) { cuffing = null; cuff = 0f; }
     }
     void Depart(Car car)
     {
-        car.Driving = true; car.Corner = 0; car.Slow = -1.5f;   // grace to get rolling before the stall timer counts
-        Vector3 away = Flat(car.Park - Encounter.Site); if (away.sqrMagnitude < .01f) away = Vector3.forward;
-        Vector3 goal = Encounter.World.City.NearestSidewalk(car.Park + away.normalized * d.EscapeDistance * 1.3f);
+        var frozen = car.Body.GetComponent<FrozenBody>();
+        if (frozen != null && frozen.Frozen) { Stall(car, "frozen before it could leave"); return; }
+        if (car.Body.transform.up.y < d.FlipUp) { Stall(car, "flipped before it could leave"); return; }
+        car.Driving = true; car.Corner = 0; car.Driven = 0f; car.ReachedEnd = false;
+        Vector3 start = car.Body.position, away = Flat(start - Encounter.Site); if (away.sqrMagnitude < .01f) away = Vector3.forward;
+        Vector3 far = start + away.normalized * d.EscapeDistance * 1.3f;
+        Vector3 goal = Encounter.World.City.NearestSidewalk(far);
         var path = new NavMeshPath();
-        car.Route = NavMesh.CalculatePath(car.Body.position, goal, NavMesh.AllAreas, path) && path.corners.Length > 1 ? path.corners : new[] { car.Body.position, car.Park + away.normalized * d.EscapeDistance * 1.3f };
-        LastEvent = car.Body.name + " departs with " + car.Aboard.Count;
+        bool routed = NavMesh.SamplePosition(start, out var from, 4f, NavMesh.AllAreas) && NavMesh.CalculatePath(from.position, goal, NavMesh.AllAreas, path) && path.corners.Length > 1;
+        car.Route = routed ? path.corners : new[] { start, far };
+        car.Body.isKinematic = true; car.Body.interpolation = RigidbodyInterpolation.Interpolate;
+        LastEvent = $"{car.Body.name} departs with {car.Aboard.Count} ({(routed ? "NavMesh route, " + car.Route.Length + " corners" : "straight fallback")})";
         foreach (var a in car.Assigned) if (!car.Aboard.Contains(a)) Bail(a, car);   // left behind: run for it
     }
-    void Stall(Car car, string why)
+    /// A driving car is stopped: it becomes a dynamic prop again with its drive velocity, and everyone assigned bails out.
+    public void Stall(Car car, string why)
     {
-        car.Stalled = true; car.Driving = false; LastEvent = car.Body.name + " stalled (" + why + ")";
+        if (car.Stalled || car.Wrecked || car.Escaped) return;
+        bool wasDriving = car.Driving;
+        car.Stalled = true; car.Driving = false; car.StopReason = why; LastEvent = car.Body.name + " stopped (" + why + ")";
+        if (wasDriving && car.Body != null) { car.Body.isKinematic = false; car.Body.linearVelocity = car.Velocity; }
         foreach (var a in car.Assigned) Bail(a, car);
         car.Aboard.Clear();
     }
+    public float StopImpulse => d.StopImpulse;
     void Bail(EncounterActor a, Car car)
     {
         if (Stopped(a) || a.Escaped) return;
@@ -153,24 +166,32 @@ public sealed class RobberyState : ScenarioState
             if (a.Npc.Agent.enabled) a.Npc.Agent.Warp(spot); else a.Npc.transform.position = spot;
         }
     }
+    /// Kinematic drive: advance CarSpeed x dt along the route corners (heights follow the NavMesh), face the heading.
     void FixedUpdate()
     {
         if (Encounter == null || Encounter.Finished) return;
         foreach (var car in Cars)
         {
-            if (!car.Driving || car.Body == null || car.Route == null) continue;
-            Vector3 target = car.Route[Mathf.Min(car.Corner, car.Route.Length - 1)], to = Flat(target - car.Body.position);
-            if (to.magnitude < 3f && car.Corner < car.Route.Length - 1) { car.Corner++; continue; }
-            Vector3 dir = to.sqrMagnitude > .01f ? to.normalized : Flat(car.Body.transform.forward).normalized;
-            Vector3 flat = Flat(car.Body.linearVelocity);
-            car.Body.AddForce(Vector3.ClampMagnitude(dir * d.CarSpeed - flat, d.CarAcceleration * Time.fixedDeltaTime), ForceMode.VelocityChange);
-            car.Body.MoveRotation(Quaternion.RotateTowards(car.Body.rotation, Quaternion.LookRotation(dir, Vector3.up), d.TurnDegreesPerSecond * Time.fixedDeltaTime));
+            if (!car.Driving || car.Body == null || car.Route == null || car.ReachedEnd) continue;
+            Vector3 before = car.Body.position, pos = before; float step = d.CarSpeed * Time.fixedDeltaTime;
+            while (step > 0f && car.Corner < car.Route.Length)
+            {
+                Vector3 to = car.Route[car.Corner] - pos; float dist = to.magnitude;
+                if (dist <= step) { pos = car.Route[car.Corner]; step -= dist; car.Driven += dist; car.Corner++; continue; }
+                pos += to / dist * step; car.Driven += step; step = 0f;
+            }
+            if (car.Corner >= car.Route.Length) car.ReachedEnd = true;
+            car.Velocity = (pos - before) / Time.fixedDeltaTime;
+            car.Body.MovePosition(pos);
+            Vector3 heading = Flat(pos - before);
+            if (heading.sqrMagnitude > 1e-6f)
+                car.Body.MoveRotation(Quaternion.RotateTowards(car.Body.rotation, Quaternion.LookRotation(heading.normalized, Vector3.up), d.TurnDegreesPerSecond * Time.fixedDeltaTime));
         }
     }
     public override bool Complete() => Encounter.Robbers.Count > 0 && Encounter.Robbers.TrueForAll(Stopped);
     public override bool Failed(out string reason)
     {
-        foreach (var car in Cars) if (car.Escaped && car.Aboard.Count > 0) { reason = "The getaway car got away with " + car.Aboard.Count + " robber(s)."; return true; }
+        foreach (var car in Cars) if (car.Escaped && car.Aboard.Count > 0) { reason = "The getaway car got away with " + car.Aboard.Count + " robber(s) aboard."; return true; }
         if (Encounter.EscapedRobbers > 0) { reason = "A robber escaped on foot."; return true; }
         reason = null; return false;
     }
@@ -205,5 +226,26 @@ public sealed class RobberyState : ScenarioState
         if (cuff < d.CuffSeconds) return false;
         target.Captured = true; target.Npc.gameObject.SetActive(false); cuffing = null; cuff = 0f; LastEvent = "robber cuffed";
         Encounter.TryComplete(); return true;
+    }
+}
+
+/// Tag on each getaway car: Ice (MissionTarget.Freeze) freezes a DRIVING car in place and stops it; any hit of at least
+/// StopImpulse (CombatImpact.Blast, beam ticks report their per-tick impulse) knocks it out of its drive. A parked car is
+/// left to the ordinary Ice / physics paths (a car frozen before leaving cannot depart). Damage is not handled here:
+/// CombatImpact.Blast damages a kinematic breakable directly, the beam damages BreakableProp itself.
+public sealed class GetawayCar : MissionTarget
+{
+    public RobberyState State; public RobberyState.Car Car;
+    public override bool Freeze(PowerUser source, PowerStats stats)
+    {
+        if (State == null || Car == null || !Car.Driving) return false;
+        State.Stall(Car, "frozen");
+        var frozen = GetComponent<FrozenBody>(); if (frozen == null) frozen = gameObject.AddComponent<FrozenBody>();
+        frozen.Apply(stats.Duration, CityColor.Cyan);
+        return true;
+    }
+    public override void Hit(float damage, float impulse, PowerUser source)
+    {
+        if (State != null && Car != null && Car.Driving && impulse >= State.StopImpulse) State.Stall(Car, $"rammed ({impulse:0} N.s)");
     }
 }

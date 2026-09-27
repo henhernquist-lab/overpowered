@@ -5,7 +5,7 @@ public static class CombatImpact
 {
     public static int Blast(PowerUser source, Vector3 origin, float radius, float impulse, float damage, float lift,float burnSeconds=0,bool displaceNpcs=false,bool melee=false)
     {
-        var bodies = new HashSet<Rigidbody>(); var npcs = new HashSet<CityNpc>(); var missions = new HashSet<MissionTarget>();
+        var bodies = new HashSet<Rigidbody>(); var npcs = new HashSet<CityNpc>(); var missions = new HashSet<MissionTarget>(); var kinematic = new HashSet<Rigidbody>();
         foreach (var hit in Physics.OverlapSphere(origin, radius))
         {
             if (hit.transform.root == source.transform) continue;
@@ -31,7 +31,10 @@ public static class CombatImpact
                 if(bonus>0)PreserveDeathLaunch(npc);
             }
             Rigidbody body = hit.attachedRigidbody;
-            if (body == null || body.isKinematic || !bodies.Add(body)) continue;
+            if (body == null) continue;
+            // A kinematic breakable (a driving getaway car) takes the blast's damage but no force: it is script-driven.
+            if (body.isKinematic) { if (kinematic.Add(body) && damage > 0f) body.GetComponent<BreakableProp>()?.TakeDamage(damage, source); continue; }
+            if (!bodies.Add(body)) continue;
             float propBonus=melee&&npc==null?IceEffect.Shatter(source,body,origin,radius):0;
             body.AddExplosionForce(impulse, origin, radius, lift, ForceMode.Impulse);
             body.GetComponent<BreakableProp>()?.TakeDamage(damage+propBonus, source);

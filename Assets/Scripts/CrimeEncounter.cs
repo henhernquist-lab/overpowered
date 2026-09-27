@@ -33,6 +33,8 @@ public sealed class CrimeEncounter : MonoBehaviour
     public float Elapsed { get; private set; }
     public bool Finished { get; private set; }
     public string Objective => World.Mode.Definition.Rules.Objective(this);
+    /// Verification only (batch mode has no keyboard): treated exactly like R being held on this encounter's own Update path.
+    public bool ScriptedHold;
     public string InteractionHint { get; set; }="Move barriers with powers, then hold R near people or supplies.";
     /// Mission run state when the definition has a Scenario (null for the original mixed encounter).
     public ScenarioState Scenario { get; private set; }
@@ -122,7 +124,7 @@ public sealed class CrimeEncounter : MonoBehaviour
     {
         if(Finished||World.Mode.Ended||World.Mode.Paused) return;
         Tick(Time.deltaTime);
-        if(!World.MenuOpen&&!World.PlayerDead) Interact(Input.GetKey(KeyCode.R)?Time.deltaTime:0f);
+        if(!World.MenuOpen&&!World.PlayerDead) Interact(Input.GetKey(KeyCode.R)||ScriptedHold?Time.deltaTime:0f);
     }
     public void Tick(float dt)
     {
