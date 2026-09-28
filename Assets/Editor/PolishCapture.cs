@@ -22,6 +22,7 @@ public static class PolishCapture
     static string Arg(string name) { var a = Environment.GetCommandLineArgs(); int i = Array.IndexOf(a, name); return i >= 0 && i + 1 < a.Length ? a[i + 1] : null; }
     static void Run(string tag, string preset)
     {
+        VisualPresetSetup.Create();   // create-missing only: the asset stays disabled; After forces it on for this process
         SessionState.SetString(Key, tag); SessionState.SetString(PresetKey, preset);
         EditorSceneManager.OpenScene("Assets/Scenes/Home.unity"); EditorApplication.isPlaying = true;
     }

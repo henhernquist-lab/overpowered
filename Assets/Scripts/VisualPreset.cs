@@ -11,7 +11,8 @@ using UnityEngine.Rendering;
 ///   - a procedural skybox whose ground half is the fog Haze, so the haze-skirt walls (visible as flat slabs in the sky
 ///     from the park and quay) can be hidden;
 ///   - melee / slam attack telegraphs drawn as rings instead of an opaque disc (AttackTelegraph);
-///   - a street-level facade pass on urban-height buildings (CityArt.StreetLevel), read when the city is generated.
+///   - a street-level facade pass on urban-height buildings (CityArt.StreetLevel), read when the city is generated;
+///   - per-role enemy silhouettes and accents (HumanoidPresentation), e.g. no hero-cyan on a hostile Gunner.
 /// Colours come from the shared CityPalette. Tune in Resources/VisualPreset (created by Overpowered > Visual > menus).
 [CreateAssetMenu(menuName = "Overpowered/Visual preset")]
 public sealed class VisualPreset : ScriptableObject
@@ -41,6 +42,21 @@ public sealed class VisualPreset : ScriptableObject
     [Header("Combat readability")]
     [Tooltip("Melee / slam telegraphs as a boundary ring + closing timing ring instead of a solid disc covering the ground.")] public bool RingTelegraphs = true;
 
+    [Header("Enemy roles (visual root only: collider, NavMeshAgent and physics root unchanged)")]
+    public EnemyLook[] EnemyLooks = new EnemyLook[0];
+    [System.Serializable] public sealed class EnemyLook
+    {
+        public EnemyArchetype Archetype;
+        [Tooltip("Multiplies the archetype's uniform VisualScale on the visual root (x width, y height, z depth).")] public Vector3 Silhouette = Vector3.one;
+        public bool OverrideAccent; public CityColor Accent = CityColor.Metal;
+    }
+    /// The active preset's look for `archetype`, or null (no preset / not listed).
+    public static EnemyLook LookFor(EnemyArchetype archetype)
+    {
+        if (archetype == null) return null; var p = Current; if (!Active(p) || p.EnemyLooks == null) return null;
+        foreach (var l in p.EnemyLooks) if (l != null && l.Archetype == archetype) return l;
+        return null;
+    }
     /// Verification / capture override for this process: null = the asset's Enabled flag.
     public static bool? ForceEnabled;
     public static VisualPreset Current

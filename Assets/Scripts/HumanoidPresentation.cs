@@ -65,7 +65,8 @@ public sealed class HumanoidPresentation : MonoBehaviour
         var loadout=definition!=null?WorldSession.Instance.Progression.Data.Loadout:null;
         // Player: Hero Forge loadout colours. NPCs: role sets the body colour, the archetype (if any) sets the joints accent.
         // A Sidekick suit recolours its colour map with the same two roles: one shared material per (suit, primary, secondary).
-        var accent=npc!=null&&npc.Archetype!=null?npc.Archetype.Accent:CityColor.Metal;
+        var enemyLook=npc!=null?VisualPreset.LookFor(npc.Archetype):null;   // null unless an active VisualPreset lists this archetype
+        var accent=enemyLook!=null&&enemyLook.OverrideAccent?enemyLook.Accent:npc!=null&&npc.Archetype!=null?npc.Archetype.Accent:CityColor.Metal;
         var body=npc==null?CityColor.Blue:npc.Role==NpcRole.Civilian?CityColor.Amber:npc.Role==NpcRole.Cop?CityColor.Teal:CityColor.Red;
         var primary=loadout!=null?loadout.Primary:body;var secondary=loadout!=null?loadout.Secondary:accent;
         foreach(var r in renderers)
@@ -77,7 +78,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
         var presentation=owner.AddComponent<HumanoidPresentation>();presentation.hero=hero;presentation.npc=npc;presentation.Tuning=tuning;presentation.Animator=animator;presentation.PoseRoot=pose;
         presentation.ReferenceMeshHeight=bounds.size.y;presentation.ModelScale=scale;presentation.VisualRoot=squash;
         // Silhouette: scale the visual root about the feet (the fit above is unchanged). CityNpc.Spawn scales the collider/agent to match.
-        if(npc!=null&&npc.Archetype!=null)squash.localScale=Vector3.one*npc.Archetype.VisualScale;
+        if(npc!=null&&npc.Archetype!=null)squash.localScale=enemyLook!=null?Vector3.Scale(Vector3.one*npc.Archetype.VisualScale,enemyLook.Silhouette):Vector3.one*npc.Archetype.VisualScale;
         for(int i=0;i<(int)HumanBodyBones.LastBone;i++){var bone=animator.GetBoneTransform((HumanBodyBones)i);if(bone!=null)presentation.neutral[bone]=bone.localRotation;}
         presentation.neutralHipsPosition=animator.GetBoneTransform(HumanBodyBones.Hips).localPosition;
         animator.runtimeAnimatorController=tuning.Controller;animator.applyRootMotion=false;animator.cullingMode=AnimatorCullingMode.AlwaysAnimate;animator.enabled=true;

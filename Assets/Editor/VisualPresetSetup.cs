@@ -11,9 +11,22 @@ public static class VisualPresetSetup
     [MenuItem("Overpowered/Visual/Create missing visual preset")]
     public static void Create()
     {
-        if (AssetDatabase.LoadAssetAtPath<VisualPreset>(Path) != null) return;
-        var p = ScriptableObject.CreateInstance<VisualPreset>(); p.Enabled = false;
-        AssetDatabase.CreateAsset(p, Path); AssetDatabase.SaveAssets();
+        var p = AssetDatabase.LoadAssetAtPath<VisualPreset>(Path);
+        if (p == null) { p = ScriptableObject.CreateInstance<VisualPreset>(); p.Enabled = false; AssetDatabase.CreateAsset(p, Path); }
+        // Create-missing at field level: suggested role looks only when the list is still empty (inspector tuning is kept).
+        if (p.EnemyLooks == null || p.EnemyLooks.Length == 0)
+        {
+            VisualPreset.EnemyLook L(string name, Vector3 silhouette, CityColor accent) => new VisualPreset.EnemyLook { Archetype = AssetDatabase.LoadAssetAtPath<EnemyArchetype>("Assets/Resources/Enemies/" + name + ".asset"), Silhouette = silhouette, OverrideAccent = true, Accent = accent };
+            p.EnemyLooks = new[]
+            {
+                L("Rusher", new Vector3(.9f, 1.05f, .9f), CityColor.Amber),     // lean, light, hot accent
+                L("Gunner", new Vector3(1f, 1f, 1f), CityColor.UiInk),          // was hero Cyan: hostile ranged role in off-white
+                L("Brute", new Vector3(1.22f, .96f, 1.18f), CityColor.Metal),   // wide, heavy, near-black
+            };
+            p.EnemyLooks = System.Array.FindAll(p.EnemyLooks, l => l.Archetype != null);
+            EditorUtility.SetDirty(p);
+        }
+        AssetDatabase.SaveAssets();
     }
     [MenuItem("Overpowered/Visual/Enable visual preset (content switch)")]
     public static void Enable() => Set(true);
