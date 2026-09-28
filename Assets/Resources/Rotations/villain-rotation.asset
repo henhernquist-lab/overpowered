@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5722cff6cb0f4ec18f6204210a99434d, type: 3}
+  m_Name: villain-rotation
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterSelection
+  Options:
+  - Encounter: {fileID: 11400000, guid: b5f7d59d2adc34c0d9c63191babbcaa9, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts: []
+    Tags: []
+    Category: 
+  - Encounter: {fileID: 11400000, guid: 8e74e698b47ed40e0a42c2ca852d5d09, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts: []
+    Tags: []
+    Category: 
+  - Encounter: {fileID: 11400000, guid: ad1d7c1d903ba458aaf9d96dfd705231, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts: []
+    Tags: []
+    Category: 
+  - Encounter: {fileID: 11400000, guid: 3f7a2c9d5e1b48d6a0c4f8b27e9d6153, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts: []
+    Tags: []
+    Category: 
+  - Encounter: {fileID: 11400000, guid: 7c2e8b41d9f04a63b5d8e7c1a4f29b80, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts: []
+    Tags: []
+    Category: 
+  - Encounter: {fileID: 11400000, guid: 9d4b6f18a2c357e0d1b8f4c6a3e57d92, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts: []
+    Tags: []
+    Category: 
+  - Encounter: {fileID: 11400000, guid: ad41f4ae750bf4387b556ff36b4c7f20, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts: []
+    Tags: []
+    Category: 
+  - Encounter: {fileID: 11400000, guid: 481ac5c51ed0f4e8fa06faf63a7ebbac, type: 2}
+    Weight: 1
+    MinDifficulty: 1
+    MaxDifficulty: 999
+    Districts:
+    - Downtown
+    Tags: []
+    Category: 
+  - Encounter: {fileID: 11400000, guid: c83bee8f5b5804991baf51e242bfd09e, type: 2}
+    Weight: 1
+    MinDifficulty: 2
+    MaxDifficulty: 999
+    Districts:
+    - Docks
+    - Downtown
+    Tags: []
+    Category: 
+  - Encounter: {fileID: 11400000, guid: d4b9ab52bb66742eea42df564d81c4b7, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts:
+    - Docks
+    - West Boulevard
+    - East Boulevard
+    - Harbour Boulevard
+    Tags: []
+    Category: 
+  - Encounter: {fileID: 11400000, guid: f328c8e45a22741b69f2f1403dd8b8fb, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts: []
+    Tags: []
+    Category: 
+  - Encounter: {fileID: 11400000, guid: b9d1382dc8b3a44958eccd4fa49de254, type: 2}
+    Weight: 1.2
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts: []
+    Tags: []
+    Category: 
+  - Encounter: {fileID: 11400000, guid: eb8d109c6add648fab304d0bfe5a12c6, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts:
+    - Downtown
+    Tags:
+    - corporate
+    Category: heist
+  - Encounter: {fileID: 11400000, guid: 6c9da8e34c5954e56bb5b592546ba684, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts:
+    - Docks
+    Tags:
+    - cargo
+    Category: heist
+  - Encounter: {fileID: 11400000, guid: 21287c9bead4442768ba31172a13d470, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts:
+    - Park
+    Tags:
+    - open
+    Category: chaos
+  - Encounter: {fileID: 11400000, guid: 517521a252148413fb1ba5a482b6af91, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts:
+    - Residential
+    Tags:
+    - homes
+    Category: break-in
+  - Encounter: {fileID: 11400000, guid: d51de782e8dac4813a6ac2378be39295, type: 2}
+    Weight: 1
+    MinDifficulty: 1
+    MaxDifficulty: 999
+    Districts: []
+    Tags: []
+    Category: heist
+  - Encounter: {fileID: 11400000, guid: 7469873748fa24fb68b0059f362f009d, type: 2}
+    Weight: 1
+    MinDifficulty: 0
+    MaxDifficulty: 999
+    Districts: []
+    Tags: []
+    Category: chase
+  AntiRepeatWindow: 2
+  Difficulty: 1
+  DifficultyStep: 1
+  DistrictFallback: 1
+  Seeded: 0
+  Seed: 1337

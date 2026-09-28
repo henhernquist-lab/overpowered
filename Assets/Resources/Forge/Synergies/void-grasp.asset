@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6439bcadf27604138888fd7ef6af365c, type: 3}
+  m_Name: void-grasp
+  m_EditorClassIdentifier: Assembly-CSharp::PowerSynergyDefinition
+  Id: void-grasp
+  DisplayName: Void Grasp
+  Description: 'Open a singularity: pull nearby enemies in, crush them together, leave them rooted.'
+  PowerA: {fileID: 11400000, guid: f642937753f7248eca1ba22f8f8616d5, type: 2}
+  PowerB: {fileID: 11400000, guid: 8dbf8910c4e3b45fda1e445661b0290c, type: 2}
+  Icon: 6
+  Effect: {fileID: 11400000, guid: f6da11de1de964af58959dd706263e0d, type: 2}
+  Cooldown: 40
+  Duration: 1.4
+  Damage: 45
+  Force: 2200
+  Radius: 9
+  Range: 26
+  LiftSpeed: 14
+  LiftSeconds: 0.3
+  DiveSpeed: 42
+  FreezeSeconds: 2.5
+  MaxMass: 500
+  OrbitRadius: 2.8
+  Spring: 30
+  Damping: 6
+  LaunchInterval: 0.15
+  BonusMultiplier: 1.7
+  MeleeMultiplier: 1.65
+  BurnSeconds: 0
+  MaxTargets: 6
+  Primary: 23
+  Secondary: 17

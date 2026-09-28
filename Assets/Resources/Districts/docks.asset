@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c564f9088f524bc68ed33ab0d0f163e1, type: 3}
+  m_Name: docks
+  m_EditorClassIdentifier: Assembly-CSharp::DistrictGameplayProfile
+  CategoryWeights:
+  - Category: vehicle
+    Weight: 1.5
+  - Category: heist
+    Weight: 1.2
+  MissionTags:
+  - cargo
+  - waterfront
+  - industrial
+  DifficultyOffset: 1
+  CivilianDensity: 0.6
+  PoliceResponse: 0.8
+  HeatResponse: 0.8
+  DestructionReward: 1.4
+  EnemyTags: []
+  ActivityTags:
+  - cranes
+  - quays

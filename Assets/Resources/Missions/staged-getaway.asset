@@ -1,0 +1,161 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a74523d141d2481db59b8e236c36883e, type: 3}
+  m_Name: staged-getaway
+  m_EditorClassIdentifier: Assembly-CSharp::StagedScenario
+  Tasks: []
+  Hint: 'Your crew is pinned with the take. Walk up to them so they follow you, protect them from the hunters on the way to the van, then shake the pursuit. Bonus: nobody left behind, untouched.'
+  Points:
+  - Id: van
+    Angle: 160
+    Distance: 40
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  Actors:
+  - Id: crew
+    Role: 3
+    Archetype: {fileID: 0}
+    Count: 2
+    AtPoint: 
+    Ring: 2
+    HealthMultiplier: 1
+    Speed: 4.2
+    Behavior: 4
+    BehaviorArgument: 
+    SpawnAtStart: 1
+    ScaleWithDifficulty: 0
+  - Id: hunters
+    Role: 1
+    Archetype: {fileID: 0}
+    Count: 2
+    AtPoint: 
+    Ring: 14
+    HealthMultiplier: 1
+    Speed: 5
+    Behavior: 2
+    BehaviorArgument: crew
+    SpawnAtStart: 1
+    ScaleWithDifficulty: 1
+  - Id: pursuers
+    Role: 1
+    Archetype: {fileID: 0}
+    Count: 2
+    AtPoint: van
+    Ring: 12
+    HealthMultiplier: 1
+    Speed: 4
+    Behavior: 5
+    BehaviorArgument: 
+    SpawnAtStart: 0
+    ScaleWithDifficulty: 1
+  Targets: []
+  Stages:
+  - Label: REACH YOUR CREW
+    Kind: 1
+    Group: crew
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 0
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete:
+    - Kind: 2
+      Group: hunters
+      Behavior: 6
+      Amount: 0
+      Text: 
+    - Kind: 4
+      Group: 
+      Behavior: 0
+      Amount: 0
+      Text: Hunters are going for your crew - get them to the van.
+    OnDecoy: []
+  - Label: GET THE CREW TO THE VAN
+    Kind: 3
+    Group: crew
+    Point: van
+    Count: 0
+    Seconds: 0
+    Radius: 5
+    Timeout: 120
+    AllowedLosses: 1
+    RepeatGroup: hunters
+    RepeatSeconds: 7
+    RepeatMaxAlive: 3
+    OnStart: []
+    OnComplete: []
+    OnDecoy: []
+  - Label: SHAKE THE PURSUIT
+    Kind: 8
+    Group: 
+    Point: van
+    Count: 0
+    Seconds: 0
+    Radius: 60
+    Timeout: 45
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart:
+    - Kind: 0
+      Group: pursuers
+      Behavior: 0
+      Amount: 2
+      Text: 
+    - Kind: 3
+      Group: 
+      Behavior: 0
+      Amount: 1
+      Text: 
+    OnComplete: []
+    OnDecoy: []
+  Bonuses:
+  - Label: NOBODY LEFT BEHIND
+    Kind: 2
+    Group: crew
+    Value: 0
+    RewardXp: 50
+  - Label: UNTOUCHED
+    Kind: 1
+    Group: 
+    Value: 0
+    RewardXp: 30
+  InteractRadius: 3
+  HoldSeconds: 1.5
+  CuffSeconds: 1
+  PickupRadius: 1.8
+  FollowRadius: 3.5
+  FollowGap: 1.8
+  StuckDistance: 0.6
+  StuckSeconds: 2
+  ExitReach: 2.5
+  HarassRange: 2.2
+  HarassDamagePerSecond: 5
+  HarassSeconds: 2.5
+  VehicleStopImpulse: 1200
+  VehicleSpeed: 10
+  VehicleEscapeDistance: 80
+  RandomYaw: 1
+  RandomMirror: 1
+  DifficultyStep: 2
+  ExtraActorsPerBand: 0.5
+  MaxExtraActors: 3
+  TimeoutScalePerBand: 0.95
+  MinTimeoutScale: 0.7

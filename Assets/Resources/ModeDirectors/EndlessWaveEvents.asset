@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7df26f6ccef465ba6eae88287559f97, type: 3}
+  m_Name: EndlessWaveEvents
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessWaveEvents
+  ModifierFromWave: 4
+  ModifierEvery: 2
+  ExtraModifierEvery: 10
+  MaxModifiersPerWave: 3
+  Modifiers:
+  - Id: armoured
+    DisplayName: ARMOURED
+    Weight: 3
+    FromWave: 4
+    Health: 1.5
+    Damage: 1
+    Count: 1
+    Score: 1.3
+    EliteShareBonus: 0
+  - Id: frenzied
+    DisplayName: FRENZIED
+    Weight: 3
+    FromWave: 4
+    Health: 1
+    Damage: 1.35
+    Count: 1
+    Score: 1.3
+    EliteShareBonus: 0
+  - Id: swarm
+    DisplayName: SWARM
+    Weight: 2
+    FromWave: 4
+    Health: 0.75
+    Damage: 1
+    Count: 1.5
+    Score: 1.2
+    EliteShareBonus: 0
+  - Id: glass
+    DisplayName: GLASS CANNONS
+    Weight: 1
+    FromWave: 6
+    Health: 0.6
+    Damage: 1.6
+    Count: 1
+    Score: 1.2
+    EliteShareBonus: 0
+  - Id: veterans
+    DisplayName: VETERANS
+    Weight: 2
+    FromWave: 8
+    Health: 1
+    Damage: 1
+    Count: 1
+    Score: 1.4
+    EliteShareBonus: 0.2
+  EliteFromWave: 3
+  EliteShare: 0.15
+  EliteShareGrowthPerWave: 0.01
+  MaxEliteShare: 0.4
+  EliteHealthMultiplier: 2
+  EliteDamageMultiplier: 1.4
+  EliteAliveCost: 2
+  MinibossEvery: 5
+  MinibossArchetype: {fileID: 11400000, guid: 8849d95f3b6842299eb95540af7b454b, type: 2}
+  MinibossHealthMultiplier: 8
+  MinibossDamageMultiplier: 1.6
+  MinibossAliveCost: 4
+  EliteKillScore: 25
+  MinibossKillScore: 150
+  FlawlessBonus: 40
+  Seed: 7331
+  RandomizePerRun: 1

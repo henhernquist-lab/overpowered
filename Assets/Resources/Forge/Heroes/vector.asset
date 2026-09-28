@@ -26,6 +26,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b03f599ff1c364029838b1577dec15b7, type: 2}
   - {fileID: 11400000, guid: cf8bf79c81570416f835a3043495579d, type: 2}
   - {fileID: 11400000, guid: 8dbf8910c4e3b45fda1e445661b0290c, type: 2}
+  - {fileID: 11400000, guid: f642937753f7248eca1ba22f8f8616d5, type: 2}
+  - {fileID: 11400000, guid: daaa5cc4b957f4ca8a8452f6e7cbca1e, type: 2}
+  - {fileID: 11400000, guid: b8962978f66214724a59b4accc7d1e55, type: 2}
+  - {fileID: 11400000, guid: 26dfdada1501b42de900633e12fd56ea, type: 2}
+  - {fileID: 11400000, guid: 0935459d3cd244a91afb0ba18ac05072, type: 2}
+  - {fileID: 11400000, guid: 1ba1c952164174bb7b510a248ff1ec8a, type: 2}
   DefaultA: {fileID: 11400000, guid: cf2bcb051324544df9997cb5bf016c10, type: 2}
   DefaultB: {fileID: 11400000, guid: cf8bf79c81570416f835a3043495579d, type: 2}
   Animation: {fileID: 0}
+  Stats:
+    MaxHealth: 1
+    MaxEnergy: 1
+    EnergyRegen: 1
+    MoveSpeed: 1
+    MeleeDamage: 1
+    PowerDamage: 1
+    CooldownMultiplier: 1
+    KnockbackResistance: 0

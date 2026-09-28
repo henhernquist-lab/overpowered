@@ -19,6 +19,9 @@ MonoBehaviour:
   Synergies:
   - {fileID: 11400000, guid: 23b2a1b61bf1f48d1a972b690c3ee287, type: 2}
   - {fileID: 11400000, guid: 8c53d661579f3421bb77a04cf9061e50, type: 2}
+  - {fileID: 11400000, guid: 5bb39402d32df4e48ae7b709ca235332, type: 2}
+  - {fileID: 11400000, guid: 1406cf268950d4b3da6f769d0f96bc69, type: 2}
+  - {fileID: 11400000, guid: 99bfb8e2e1a3f4b59895aa9bc62c9bee, type: 2}
   SuitColors: 0e0000000f000000050000000d00000009000000170000000a00000002000000i
   SynergyKey: 99
   SynergyGamepadButton: 335

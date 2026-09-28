@@ -1,0 +1,188 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a74523d141d2481db59b8e236c36883e, type: 3}
+  m_Name: staged-pursuit
+  m_EditorClassIdentifier: Assembly-CSharp::StagedScenario
+  Tasks: []
+  Hint: 'A getaway crew crashed. Get close and they scatter for the exits; take each runner down (or freeze / root one and hold R to cuff). Cut one off and it changes route. Bonus: under 70 s, untouched.'
+  Points:
+  - Id: exit-n
+    Angle: 0
+    Distance: 60
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  - Id: exit-e
+    Angle: 100
+    Distance: 60
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  - Id: exit-s
+    Angle: 190
+    Distance: 60
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  - Id: exit-w
+    Angle: 270
+    Distance: 60
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  - Id: bank
+    Angle: 0
+    Distance: 0
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  Actors:
+  - Id: runners
+    Role: 3
+    Archetype: {fileID: 0}
+    Count: 3
+    AtPoint: 
+    Ring: 2.5
+    HealthMultiplier: 0.6
+    Speed: 4.6
+    Behavior: 2
+    BehaviorArgument: exit-n,exit-e,exit-s,exit-w
+    SpawnAtStart: 1
+    ScaleWithDifficulty: 1
+  Targets:
+  - Id: bag
+    Kind: 3
+    Count: 1
+    AtPoint: 
+    Ring: 2
+    Health: 150
+    SpawnAtStart: 0
+    Besiegeable: 0
+  Stages:
+  - Label: GET TO THE CRASH
+    Kind: 1
+    Group: runners
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 22
+    Timeout: 0
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete:
+    - Kind: 2
+      Group: runners
+      Behavior: 3
+      Amount: 0
+      Text: 
+    - Kind: 4
+      Group: 
+      Behavior: 0
+      Amount: 0
+      Text: They're running! Different exits - stop every one.
+    OnDecoy: []
+  - Label: CATCH THE RUNNERS
+    Kind: 9
+    Group: runners
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 90
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete:
+    - Kind: 1
+      Group: bag
+      Behavior: 0
+      Amount: 0
+      Text: runners
+    - Kind: 4
+      Group: 
+      Behavior: 0
+      Amount: 0
+      Text: The loot bag fell where the last runner went down.
+    OnDecoy: []
+  - Label: RECOVER THE BAG
+    Kind: 6
+    Group: bag
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 45
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete: []
+    OnDecoy: []
+  - Label: RETURN IT TO THE BANK
+    Kind: 1
+    Group: 
+    Point: bank
+    Count: 0
+    Seconds: 0
+    Radius: 5
+    Timeout: 60
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete: []
+    OnDecoy: []
+  Bonuses:
+  - Label: UNDER 70 S
+    Kind: 0
+    Group: 
+    Value: 70
+    RewardXp: 40
+  - Label: UNTOUCHED
+    Kind: 1
+    Group: 
+    Value: 0
+    RewardXp: 30
+  InteractRadius: 3
+  HoldSeconds: 1.5
+  CuffSeconds: 1
+  PickupRadius: 1.8
+  FollowRadius: 3.5
+  FollowGap: 1.8
+  StuckDistance: 0.6
+  StuckSeconds: 2
+  ExitReach: 2.5
+  HarassRange: 2.2
+  HarassDamagePerSecond: 5
+  HarassSeconds: 2.5
+  VehicleStopImpulse: 1200
+  VehicleSpeed: 10
+  VehicleEscapeDistance: 80
+  RandomYaw: 1
+  RandomMirror: 1
+  DifficultyStep: 2
+  ExtraActorsPerBand: 0.5
+  MaxExtraActors: 3
+  TimeoutScalePerBand: 0.95
+  MinTimeoutScale: 0.7

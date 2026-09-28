@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77e4be6e71f84d1ab0f0c11d768869a5, type: 3}
+  m_Name: HeatResponse
+  m_EditorClassIdentifier: Assembly-CSharp::HeatResponseProfile
+  Enabled: 0
+  ApplyToHero: 0
+  Tiers:
+  - Label: RESPONSE
+    MinStars: 2
+    ArrivalIntervalMultiplier: 0.8
+    ResponseCountMultiplier: 1
+    HostileArchetype: {fileID: 0}
+    ArchetypeShare: 0
+    EliteHealthMultiplier: 1
+    Persistent: 0
+    PursuedDecayMultiplier: 0.8
+    RoadblockEligible: 0
+  - Label: TACTICAL
+    MinStars: 3
+    ArrivalIntervalMultiplier: 0.65
+    ResponseCountMultiplier: 1.25
+    HostileArchetype: {fileID: 11400000, guid: 8849d95f3b6842299eb95540af7b454b, type: 2}
+    ArchetypeShare: 0.25
+    EliteHealthMultiplier: 1
+    Persistent: 0
+    PursuedDecayMultiplier: 0.6
+    RoadblockEligible: 0
+  - Label: MANHUNT
+    MinStars: 5
+    ArrivalIntervalMultiplier: 0.5
+    ResponseCountMultiplier: 1.5
+    HostileArchetype: {fileID: 11400000, guid: 8849d95f3b6842299eb95540af7b454b, type: 2}
+    ArchetypeShare: 0.35
+    EliteHealthMultiplier: 1.5
+    Persistent: 1
+    PursuedDecayMultiplier: 0.4
+    RoadblockEligible: 1

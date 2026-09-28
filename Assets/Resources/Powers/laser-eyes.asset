@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7e10a87e21934ad5b3483d61d828e61, type: 3}
+  m_Name: laser-eyes
+  m_EditorClassIdentifier: Assembly-CSharp::PowerDefinition
+  Id: laser-eyes
+  DisplayName: Laser Eyes
+  Description: Hold to fire a continuous beam at the crosshair. Drains energy while held.
+  Effect: {fileID: 11400000, guid: 11962f706cf1045a6a8d0078c5ef87c7, type: 2}
+  InitiallyUnlocked: 1
+  UnlockCost: 1
+  Charges: 1
+  Cooldown: 0.8
+  ChargeRecharge: 1
+  ResourceCost: 10
+  Damage: 38
+  Force: 60
+  Radius: 3
+  Range: 26
+  Duration: 0
+  GroundRecharge: 2.5
+  OriginOffset: 1.7
+  OriginHeight: 1.62
+  UpwardForce: 0.28
+  ProjectileSpeed: 28
+  ProjectileSize: 0.35
+  HoldDistance: 3
+  HoldSpring: 35
+  HoldDamping: 10
+  HoldMaxMass: 500
+  Color: {r: 1, g: 1, b: 1, a: 1}
+  PaletteColor: 13
+  CastingPresentation: 0
+  Light:
+    Enabled: 1
+    Color: 13
+    Intensity: 2.5
+    Range: 7
+    Seconds: 0.12
+    Travel: 0
+  MenuIcon: 6
+  Activation: 1
+  DrainPerSecond: 32
+  Upgrades:
+  - Name: Upgrade
+    PointCost: 1
+    ExtraCharges: 1
+    ForceMultiplier: 1.4
+    DamageMultiplier: 1.4
+    DurationMultiplier: 1.3
+    RangeMultiplier: 1.15
+    CooldownMultiplier: 0.9
+  - Name: Upgrade
+    PointCost: 1
+    ExtraCharges: 1
+    ForceMultiplier: 1.4
+    DamageMultiplier: 1.4
+    DurationMultiplier: 1.3
+    RangeMultiplier: 1.15
+    CooldownMultiplier: 0.9

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45fea86b83ce4d5492e16ae8843f284f, type: 3}
+  m_Name: robbery-getaway
+  m_EditorClassIdentifier: Assembly-CSharp::RobberyScenario
+  Tasks:
+  - Task: 0
+    Label: STOP THE GETAWAY
+  Hint: Robbers are running for their getaway cars. Take them down, or wreck, freeze or flip a car before it drives off. Hold R to cuff a frozen or rooted robber.
+  Robbers: 3
+  Cars: 2
+  CarDistance: 18
+  RobberSpeed: 4.2
+  BoardRadius: 2.4
+  DepartAfterFirstBoard: 5
+  CarSpeed: 11
+  TurnDegreesPerSecond: 160
+  EscapeDistance: 70
+  StopImpulse: 1200
+  FlipUp: 0.35
+  BailRunSpeed: 4
+  BailEscapeDistance: 40
+  CuffRadius: 3
+  CuffSeconds: 1

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c23c56d8ec2e41979a04e53b74069b59, type: 3}
+  m_Name: DistrictProfiles
+  m_EditorClassIdentifier: Assembly-CSharp::DistrictProfileSet
+  Enabled: 0
+  Entries:
+  - District: Downtown
+    Profile: {fileID: 11400000, guid: 4f3e703c0e43749148e85b0576868d3c, type: 2}
+  - District: Park
+    Profile: {fileID: 11400000, guid: 7c4522900041a4bd88ab03372d93fac0, type: 2}
+  - District: Residential
+    Profile: {fileID: 11400000, guid: fbe28064d80354a41a9677fefb90a686, type: 2}
+  - District: Docks
+    Profile: {fileID: 11400000, guid: 6139d6c425de44977b12c794274a00b9, type: 2}

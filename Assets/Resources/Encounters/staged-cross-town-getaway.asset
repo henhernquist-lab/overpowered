@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54c6128b47f14475a9915d0f4dcf039a, type: 3}
+  m_Name: staged-cross-town-getaway
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterDefinition
+  DisplayName: Cross-town getaway
+  Kind: 1
+  Robbers: 0
+  Civilians: 0
+  RespondingCops: 0
+  Cars: 0
+  LooseProps: 0
+  Loot: 0
+  Hazards: 0
+  DestructionGoal: 0
+  Deadline: 540
+  RunForExitAfter: 45
+  CivilianDangerAfter: 90
+  CivilianDamagePerSecond: 1
+  RunnerSpeed: 3
+  RunnerEscapeDistance: 40
+  PlayerEscapeDistance: 22
+  EscapeReach: 2
+  Spacing: 3
+  PropMoveDistance: 2
+  InteractRadius: 3
+  HoldSeconds: 1.2
+  BlockadeOffset: 4.5
+  CopSuppressSeconds: 0.6
+  CopSuppressDamage: 2
+  MarkerSize: 0.65
+  MarkerHeight: 1
+  Scenario: {fileID: 11400000, guid: 1f857127be86346b3bdfede228898d77, type: 2}
+  LootColor: {r: 1, g: 0.8, b: 0.1, a: 1}
+  RescueColor: {r: 0, g: 1, b: 1, a: 1}
+  HazardColor: {r: 1, g: 0.25, b: 0.04, a: 1}

@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 494a21433294430193bd89ade1bdb4ba, type: 3}
+  m_Name: building-fire
+  m_EditorClassIdentifier: Assembly-CSharp::FireScenario
+  Tasks:
+  - Task: 8
+    Label: PUT OUT THE FIRE
+  - Task: 9
+    Label: LEAD CIVILIANS OUT
+  Hint: 'Douse the flames: Ice, heavy punches and ground pounds snuff them fast; holding R sprays slowly. Then walk up to a freed civilian and lead them to the green safe point.'
+  FireSpots: 4
+  Trapped: 2
+  SpotRing: 3.5
+  CivilianRing: 1
+  IceDouse: 0.55
+  ImpactDouse: 0.35
+  ImpactDouseImpulse: 600
+  HoldDousePerSecond: 0.2
+  RegrowPerSecond: 0.03
+  HoldRadius: 3
+  BlockRadius: 4.5
+  CivilianBurnAfter: 25
+  CivilianBurnPerSecond: 1.2
+  FollowRadius: 3.5
+  FollowGap: 1.8
+  EscortSpeed: 4.5
+  SafeDistance: 16
+  SafeRadius: 3
+  FlameRate: 18
+  FlameSize: 0.22
+  FlameLifetime: 0.7
+  FlameSpeed: 2.2

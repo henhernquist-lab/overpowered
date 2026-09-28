@@ -1,0 +1,185 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a74523d141d2481db59b8e236c36883e, type: 3}
+  m_Name: staged-dockyard-score
+  m_EditorClassIdentifier: Assembly-CSharp::StagedScenario
+  Tasks: []
+  Hint: 'Cut the three yard alarms, steal four crates from the two yards, then get to the boat at the quay. Bonus: quiet (max 1 star).'
+  Points:
+  - Id: alarm-a
+    Angle: 30
+    Distance: 20
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  - Id: alarm-b
+    Angle: 150
+    Distance: 22
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  - Id: alarm-c
+    Angle: 270
+    Distance: 20
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  - Id: yard-a
+    Angle: 80
+    Distance: 14
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  - Id: yard-b
+    Angle: 250
+    Distance: 14
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  - Id: boat
+    Angle: 0
+    Distance: 40
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  Actors:
+  - Id: dock-guards
+    Role: 1
+    Archetype: {fileID: 0}
+    Count: 2
+    AtPoint: yard-a,yard-b
+    Ring: 4
+    HealthMultiplier: 1
+    Speed: 4
+    Behavior: 2
+    BehaviorArgument: 
+    SpawnAtStart: 1
+    ScaleWithDifficulty: 1
+  - Id: response
+    Role: 1
+    Archetype: {fileID: 0}
+    Count: 1
+    AtPoint: boat
+    Ring: 12
+    HealthMultiplier: 1
+    Speed: 4
+    Behavior: 5
+    BehaviorArgument: 
+    SpawnAtStart: 0
+    ScaleWithDifficulty: 1
+  Targets:
+  - Id: alarms
+    Kind: 0
+    Count: 3
+    AtPoint: alarm-a,alarm-b,alarm-c
+    Ring: 2
+    Health: 70
+    SpawnAtStart: 1
+    Besiegeable: 0
+  - Id: crates
+    Kind: 3
+    Count: 4
+    AtPoint: yard-a,yard-b
+    Ring: 3
+    Health: 150
+    SpawnAtStart: 1
+    Besiegeable: 0
+  Stages:
+  - Label: CUT THE ALARMS
+    Kind: 5
+    Group: alarms
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 70
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete: []
+    OnDecoy: []
+  - Label: STEAL THE CARGO
+    Kind: 6
+    Group: crates
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 60
+    AllowedLosses: 0
+    RepeatGroup: response
+    RepeatSeconds: 8
+    RepeatMaxAlive: 3
+    OnStart:
+    - Kind: 4
+      Group: 
+      Behavior: 0
+      Amount: 0
+      Text: Alarms down - grab the crates.
+    OnComplete: []
+    OnDecoy: []
+  - Label: GET TO THE BOAT
+    Kind: 1
+    Group: 
+    Point: boat
+    Count: 0
+    Seconds: 0
+    Radius: 5
+    Timeout: 60
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart:
+    - Kind: 3
+      Group: 
+      Behavior: 0
+      Amount: 1
+      Text: 
+    OnComplete: []
+    OnDecoy: []
+  Bonuses:
+  - Label: QUIET (MAX 1 STAR)
+    Kind: 3
+    Group: 
+    Value: 1
+    RewardXp: 50
+  InteractRadius: 3
+  HoldSeconds: 1.5
+  CuffSeconds: 1
+  PickupRadius: 1.8
+  FollowRadius: 3.5
+  FollowGap: 1.8
+  StuckDistance: 0.6
+  StuckSeconds: 2
+  ExitReach: 2.5
+  HarassRange: 2.2
+  HarassDamagePerSecond: 5
+  HarassSeconds: 2.5
+  VehicleStopImpulse: 1200
+  VehicleSpeed: 10
+  VehicleEscapeDistance: 80
+  RandomYaw: 1
+  RandomMirror: 1
+  DifficultyStep: 2
+  ExtraActorsPerBand: 0.5
+  MaxExtraActors: 3
+  TimeoutScalePerBand: 0.95
+  MinTimeoutScale: 0.7

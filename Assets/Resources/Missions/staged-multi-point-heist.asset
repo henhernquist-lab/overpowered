@@ -1,0 +1,225 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a74523d141d2481db59b8e236c36883e, type: 3}
+  m_Name: staged-multi-point-heist
+  m_EditorClassIdentifier: Assembly-CSharp::StagedScenario
+  Tasks: []
+  Hint: 'Stage two distractions in two different districts, then hit the real vault back here while the police are spread out, and lose the pursuit. Bonus: low profile (max 3 stars).'
+  Points:
+  - Id: decoy-1
+    Angle: 0
+    Distance: 0
+    Sidewalk: 1
+    Placement: 1
+    DistrictTag: 
+    NotInDistrictsOf: 
+  - Id: decoy-2
+    Angle: 0
+    Distance: 0
+    Sidewalk: 1
+    Placement: 1
+    DistrictTag: 
+    NotInDistrictsOf: decoy-1
+  - Id: vault
+    Angle: 0
+    Distance: 10
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  Actors:
+  - Id: vault-guards
+    Role: 1
+    Archetype: {fileID: 0}
+    Count: 2
+    AtPoint: vault
+    Ring: 4
+    HealthMultiplier: 1
+    Speed: 4
+    Behavior: 2
+    BehaviorArgument: 
+    SpawnAtStart: 0
+    ScaleWithDifficulty: 1
+  Targets:
+  - Id: charge-1
+    Kind: 0
+    Count: 1
+    AtPoint: decoy-1
+    Ring: 2
+    Health: 60
+    SpawnAtStart: 1
+    Besiegeable: 0
+  - Id: charge-2
+    Kind: 0
+    Count: 1
+    AtPoint: decoy-2
+    Ring: 2
+    Health: 60
+    SpawnAtStart: 1
+    Besiegeable: 0
+  - Id: vault
+    Kind: 0
+    Count: 1
+    AtPoint: vault
+    Ring: 2
+    Health: 300
+    SpawnAtStart: 1
+    Besiegeable: 0
+  Stages:
+  - Label: DISTRACTION ONE
+    Kind: 1
+    Group: 
+    Point: decoy-1
+    Count: 0
+    Seconds: 0
+    Radius: 10
+    Timeout: 200
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete: []
+    OnDecoy: []
+  - Label: BLOW THE FIRST DECOY
+    Kind: 5
+    Group: charge-1
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 40
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete:
+    - Kind: 3
+      Group: 
+      Behavior: 0
+      Amount: 1
+      Text: 
+    OnDecoy: []
+  - Label: DISTRACTION TWO
+    Kind: 1
+    Group: 
+    Point: decoy-2
+    Count: 0
+    Seconds: 0
+    Radius: 10
+    Timeout: 200
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete: []
+    OnDecoy: []
+  - Label: BLOW THE SECOND DECOY
+    Kind: 5
+    Group: charge-2
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 40
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete:
+    - Kind: 3
+      Group: 
+      Behavior: 0
+      Amount: 1
+      Text: 
+    OnDecoy: []
+  - Label: HIT THE REAL TARGET
+    Kind: 1
+    Group: 
+    Point: vault
+    Count: 0
+    Seconds: 0
+    Radius: 10
+    Timeout: 220
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart:
+    - Kind: 0
+      Group: vault-guards
+      Behavior: 0
+      Amount: 2
+      Text: 
+    OnComplete: []
+    OnDecoy: []
+  - Label: CRACK THE VAULT
+    Kind: 5
+    Group: vault
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 60
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete: []
+    OnDecoy: []
+  - Label: LOSE THE PURSUIT
+    Kind: 14
+    Group: 
+    Point: 
+    Count: 0
+    Seconds: 3
+    Radius: 4
+    Timeout: 150
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete: []
+    OnDecoy: []
+  Bonuses:
+  - Label: LOW PROFILE (MAX 3 STARS)
+    Kind: 3
+    Group: 
+    Value: 3
+    RewardXp: 60
+  InteractRadius: 3
+  HoldSeconds: 1.5
+  CuffSeconds: 1
+  PickupRadius: 1.8
+  FollowRadius: 3.5
+  FollowGap: 1.8
+  StuckDistance: 0.6
+  StuckSeconds: 2
+  ExitReach: 2.5
+  HarassRange: 2.2
+  HarassDamagePerSecond: 5
+  HarassSeconds: 2.5
+  VehicleStopImpulse: 1200
+  VehicleSpeed: 10
+  VehicleEscapeDistance: 80
+  RandomYaw: 1
+  RandomMirror: 1
+  DifficultyStep: 2
+  ExtraActorsPerBand: 0.5
+  MaxExtraActors: 3
+  TimeoutScalePerBand: 0.95
+  MinTimeoutScale: 0.7

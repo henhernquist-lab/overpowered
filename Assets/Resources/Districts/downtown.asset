@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c564f9088f524bc68ed33ab0d0f163e1, type: 3}
+  m_Name: downtown
+  m_EditorClassIdentifier: Assembly-CSharp::DistrictGameplayProfile
+  CategoryWeights:
+  - Category: heist
+    Weight: 1.5
+  - Category: emergency
+    Weight: 1.3
+  MissionTags:
+  - urban
+  - corporate
+  - highrise
+  DifficultyOffset: 1
+  CivilianDensity: 1.3
+  PoliceResponse: 1.3
+  HeatResponse: 1.2
+  DestructionReward: 1.2
+  EnemyTags: []
+  ActivityTags:
+  - rooftops
+  - avenues

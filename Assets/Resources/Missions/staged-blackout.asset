@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a74523d141d2481db59b8e236c36883e, type: 3}
+  m_Name: staged-blackout
+  m_EditorClassIdentifier: Assembly-CSharp::StagedScenario
+  Tasks: []
+  Hint: 'The block''s relays are down. Hold R at each one to restore it - a saboteur left standing next to a restored relay knocks it out again. Then clear the looters. Bonus: under 90 s, untouched.'
+  Points: []
+  Actors:
+  - Id: saboteurs
+    Role: 3
+    Archetype: {fileID: 0}
+    Count: 2
+    AtPoint: 
+    Ring: 6
+    HealthMultiplier: 1
+    Speed: 4
+    Behavior: 6
+    BehaviorArgument: relays
+    SpawnAtStart: 1
+    ScaleWithDifficulty: 1
+  - Id: looters
+    Role: 3
+    Archetype: {fileID: 0}
+    Count: 3
+    AtPoint: 
+    Ring: 9
+    HealthMultiplier: 1
+    Speed: 4
+    Behavior: 5
+    BehaviorArgument: 
+    SpawnAtStart: 0
+    ScaleWithDifficulty: 1
+  Targets:
+  - Id: relays
+    Kind: 0
+    Count: 3
+    AtPoint: 
+    Ring: 13
+    Health: 999
+    SpawnAtStart: 1
+    Besiegeable: 0
+  Stages:
+  - Label: RESTORE THE RELAYS
+    Kind: 4
+    Group: relays
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 120
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete: []
+    OnDecoy: []
+  - Label: CLEAR THE LOOTERS
+    Kind: 0
+    Group: looters
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 0
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart:
+    - Kind: 0
+      Group: looters
+      Behavior: 0
+      Amount: 3
+      Text: 
+    - Kind: 4
+      Group: 
+      Behavior: 0
+      Amount: 0
+      Text: Lights are back - the looters are caught in the open.
+    OnComplete: []
+    OnDecoy: []
+  Bonuses:
+  - Label: UNDER 90 S
+    Kind: 0
+    Group: 
+    Value: 90
+    RewardXp: 30
+  - Label: UNTOUCHED
+    Kind: 1
+    Group: 
+    Value: 0
+    RewardXp: 30
+  InteractRadius: 3
+  HoldSeconds: 1.5
+  CuffSeconds: 1
+  PickupRadius: 1.8
+  FollowRadius: 3.5
+  FollowGap: 1.8
+  StuckDistance: 0.6
+  StuckSeconds: 2
+  ExitReach: 2.5
+  HarassRange: 2.2
+  HarassDamagePerSecond: 5
+  HarassSeconds: 2.5
+  VehicleStopImpulse: 1200
+  VehicleSpeed: 10
+  VehicleEscapeDistance: 80
+  RandomYaw: 1
+  RandomMirror: 1
+  DifficultyStep: 2
+  ExtraActorsPerBand: 0.5
+  MaxExtraActors: 3
+  TimeoutScalePerBand: 0.95
+  MinTimeoutScale: 0.7

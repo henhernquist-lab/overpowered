@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ee7c36fac2b43adbac707ad54cac1b8, type: 3}
+  m_Name: city-guardian
+  m_EditorClassIdentifier: Assembly-CSharp::ChallengeDefinition
+  Id: city-guardian
+  Title: CITY GUARDIAN
+  Description: Complete 10 missions as a hero.
+  Metric: 5
+  Scope: 0
+  Side: 1
+  Parameter: 
+  Target: 10
+  RewardXp: 200
+  RewardPoints: 1

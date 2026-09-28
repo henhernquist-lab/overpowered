@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5a36fa5814b4e8cb424e5b4d07480ee, type: 3}
+  m_Name: vault-heist
+  m_EditorClassIdentifier: Assembly-CSharp::HeistScenario
+  Tasks:
+  - Task: 10
+    Label: CRACK THE VAULT
+  - Task: 3
+    Label: GRAB THE LOOT
+  - Task: 11
+    Label: REACH THE GETAWAY VAN
+  Hint: Smash or burn the vault open (the alarm brings police), run over the loot bags, then get to the blue van.
+  VaultHealth: 350
+  VaultSize: {x: 2.4, y: 2.6, z: 1.4}
+  LootBags: 3
+  PickupRadius: 1.8
+  SpillRadius: 2.5
+  VanDistance: 30
+  VanRadius: 3.5
+  ResponseCops: 3
+  ResponseDelay: 4
+  ResponseRing: 12
+  CrackHeat: 1

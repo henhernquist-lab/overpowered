@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6439bcadf27604138888fd7ef6af365c, type: 3}
+  m_Name: eclipse-beam
+  m_EditorClassIdentifier: Assembly-CSharp::PowerSynergyDefinition
+  Id: eclipse-beam
+  DisplayName: Eclipse Beam
+  Description: Wrap one enemy in darkness, then burn straight through it. Single target, enormous damage.
+  PowerA: {fileID: 11400000, guid: f642937753f7248eca1ba22f8f8616d5, type: 2}
+  PowerB: {fileID: 11400000, guid: b8962978f66214724a59b4accc7d1e55, type: 2}
+  Icon: 6
+  Effect: {fileID: 11400000, guid: 3f724971b4ff04a2d8dde86587b62d4b, type: 2}
+  Cooldown: 45
+  Duration: 0.5
+  Damage: 160
+  Force: 3000
+  Radius: 1.5
+  Range: 30
+  LiftSpeed: 14
+  LiftSeconds: 0.6
+  DiveSpeed: 42
+  FreezeSeconds: 2
+  MaxMass: 500
+  OrbitRadius: 2.8
+  Spring: 35
+  Damping: 10
+  LaunchInterval: 0.15
+  BonusMultiplier: 1.7
+  MeleeMultiplier: 1.65
+  BurnSeconds: 0
+  MaxTargets: 4
+  Primary: 13
+  Secondary: 23

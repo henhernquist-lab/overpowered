@@ -1,0 +1,170 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a74523d141d2481db59b8e236c36883e, type: 3}
+  m_Name: staged-smuggler-intercept
+  m_EditorClassIdentifier: Assembly-CSharp::StagedScenario
+  Tasks: []
+  Hint: 'Smuggler trucks are arriving at the quay. Stop them, drop the guards, then secure the three cargo containers (hold R) before the extraction team undoes it. Bonus: under 120 s.'
+  Points:
+  - Id: berth
+    Angle: 60
+    Distance: 24
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  Actors:
+  - Id: guards
+    Role: 3
+    Archetype: {fileID: 0}
+    Count: 3
+    AtPoint: 
+    Ring: 3
+    HealthMultiplier: 1.2
+    Speed: 4
+    Behavior: 5
+    BehaviorArgument: 
+    SpawnAtStart: 0
+    ScaleWithDifficulty: 1
+  - Id: extractors
+    Role: 3
+    Archetype: {fileID: 0}
+    Count: 1
+    AtPoint: berth
+    Ring: 10
+    HealthMultiplier: 1
+    Speed: 4.5
+    Behavior: 6
+    BehaviorArgument: cargo
+    SpawnAtStart: 0
+    ScaleWithDifficulty: 1
+  Targets:
+  - Id: trucks
+    Kind: 2
+    Count: 2
+    AtPoint: 
+    Ring: 5
+    Health: 150
+    SpawnAtStart: 1
+    Besiegeable: 0
+  - Id: cargo
+    Kind: 0
+    Count: 3
+    AtPoint: berth
+    Ring: 4
+    Health: 999
+    SpawnAtStart: 0
+    Besiegeable: 0
+  Stages:
+  - Label: GET TO THE QUAY
+    Kind: 1
+    Group: trucks
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 30
+    Timeout: 0
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete: []
+    OnDecoy: []
+  - Label: STOP THE SMUGGLER TRUCKS
+    Kind: 10
+    Group: trucks
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 0
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete:
+    - Kind: 0
+      Group: guards
+      Behavior: 0
+      Amount: 3
+      Text: trucks
+    OnDecoy: []
+  - Label: DROP THE GUARDS
+    Kind: 0
+    Group: guards
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 0
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete:
+    - Kind: 1
+      Group: cargo
+      Behavior: 0
+      Amount: 0
+      Text: berth
+    OnDecoy: []
+  - Label: SECURE THE CARGO BEFORE EXTRACTION
+    Kind: 4
+    Group: cargo
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 60
+    AllowedLosses: 0
+    RepeatGroup: extractors
+    RepeatSeconds: 7
+    RepeatMaxAlive: 3
+    OnStart:
+    - Kind: 4
+      Group: 
+      Behavior: 0
+      Amount: 0
+      Text: Extraction team inbound - secure every container.
+    OnComplete: []
+    OnDecoy: []
+  Bonuses:
+  - Label: UNDER 120 S
+    Kind: 0
+    Group: 
+    Value: 120
+    RewardXp: 40
+  InteractRadius: 3
+  HoldSeconds: 1.5
+  CuffSeconds: 1
+  PickupRadius: 1.8
+  FollowRadius: 3.5
+  FollowGap: 1.8
+  StuckDistance: 0.6
+  StuckSeconds: 2
+  ExitReach: 2.5
+  HarassRange: 2.2
+  HarassDamagePerSecond: 5
+  HarassSeconds: 2.5
+  VehicleStopImpulse: 1200
+  VehicleSpeed: 8
+  VehicleEscapeDistance: 90
+  RandomYaw: 1
+  RandomMirror: 1
+  DifficultyStep: 2
+  ExtraActorsPerBand: 0.5
+  MaxExtraActors: 3
+  TimeoutScalePerBand: 0.95
+  MinTimeoutScale: 0.7

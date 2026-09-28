@@ -1,0 +1,206 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a74523d141d2481db59b8e236c36883e, type: 3}
+  m_Name: staged-safehouse-break-in
+  m_EditorClassIdentifier: Assembly-CSharp::StagedScenario
+  Tasks: []
+  Hint: 'One of these four houses is the gang''s safehouse. Try the doors (hold R) - each wrong one wakes a defender - then clear the guards, take the ledger and slip away. Bonus: first door.'
+  Points:
+  - Id: h1
+    Angle: 30
+    Distance: 18
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  - Id: h2
+    Angle: 110
+    Distance: 18
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  - Id: h3
+    Angle: 200
+    Distance: 18
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  - Id: h4
+    Angle: 290
+    Distance: 18
+    Sidewalk: 1
+    Placement: 0
+    DistrictTag: 
+    NotInDistrictsOf: 
+  Actors:
+  - Id: defenders
+    Role: 1
+    Archetype: {fileID: 0}
+    Count: 1
+    AtPoint: 
+    Ring: 2.5
+    HealthMultiplier: 1
+    Speed: 4
+    Behavior: 5
+    BehaviorArgument: 
+    SpawnAtStart: 0
+    ScaleWithDifficulty: 1
+  - Id: guards
+    Role: 1
+    Archetype: {fileID: 0}
+    Count: 2
+    AtPoint: 
+    Ring: 4
+    HealthMultiplier: 1
+    Speed: 4
+    Behavior: 5
+    BehaviorArgument: 
+    SpawnAtStart: 0
+    ScaleWithDifficulty: 1
+  Targets:
+  - Id: doors
+    Kind: 0
+    Count: 4
+    AtPoint: h1,h2,h3,h4
+    Ring: 2
+    Health: 999
+    SpawnAtStart: 1
+    Besiegeable: 0
+  - Id: ledger
+    Kind: 3
+    Count: 1
+    AtPoint: 
+    Ring: 2
+    Health: 150
+    SpawnAtStart: 0
+    Besiegeable: 0
+  Stages:
+  - Label: FIND THE SAFEHOUSE
+    Kind: 12
+    Group: doors
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 150
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete:
+    - Kind: 0
+      Group: guards
+      Behavior: 0
+      Amount: 2
+      Text: $player
+    - Kind: 1
+      Group: ledger
+      Behavior: 0
+      Amount: 0
+      Text: $player
+    OnDecoy:
+    - Kind: 0
+      Group: defenders
+      Behavior: 0
+      Amount: 1
+      Text: $here
+    - Kind: 3
+      Group: 
+      Behavior: 0
+      Amount: 0.5
+      Text: 
+    - Kind: 4
+      Group: 
+      Behavior: 0
+      Amount: 0
+      Text: Wrong house - and now they know you're here.
+  - Label: CLEAR THE GUARDS
+    Kind: 0
+    Group: guards
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 0
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete: []
+    OnDecoy: []
+  - Label: TAKE THE LEDGER
+    Kind: 6
+    Group: ledger
+    Point: 
+    Count: 0
+    Seconds: 0
+    Radius: 4
+    Timeout: 40
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart: []
+    OnComplete: []
+    OnDecoy: []
+  - Label: SLIP AWAY
+    Kind: 14
+    Group: 
+    Point: 
+    Count: 0
+    Seconds: 3
+    Radius: 4
+    Timeout: 150
+    AllowedLosses: 0
+    RepeatGroup: 
+    RepeatSeconds: 0
+    RepeatMaxAlive: 4
+    OnStart:
+    - Kind: 3
+      Group: 
+      Behavior: 0
+      Amount: 1
+      Text: 
+    OnComplete: []
+    OnDecoy: []
+  Bonuses:
+  - Label: FIRST DOOR
+    Kind: 3
+    Group: 
+    Value: 1
+    RewardXp: 40
+  InteractRadius: 3
+  HoldSeconds: 1.5
+  CuffSeconds: 1
+  PickupRadius: 1.8
+  FollowRadius: 3.5
+  FollowGap: 1.8
+  StuckDistance: 0.6
+  StuckSeconds: 2
+  ExitReach: 2.5
+  HarassRange: 2.2
+  HarassDamagePerSecond: 5
+  HarassSeconds: 2.5
+  VehicleStopImpulse: 1200
+  VehicleSpeed: 10
+  VehicleEscapeDistance: 80
+  RandomYaw: 1
+  RandomMirror: 1
+  DifficultyStep: 2
+  ExtraActorsPerBand: 0.5
+  MaxExtraActors: 3
+  TimeoutScalePerBand: 0.95
+  MinTimeoutScale: 0.7
