@@ -2612,3 +2612,27 @@ Codex independently rebuilt this exact source with the bundled Unity dotnet SDK:
 Sidekick + the local L1–L3 fixes are merged on main at `f3040c7`. Codex reran `SidekickVerification.Run` (exit 0) and `SidekickVerification.Reload` in a separate Unity process (exit 0) on the merged source in wt-sidekick. Evidence: `Verification/Continuation/Sidekick/`. Original package/Sidekick-database working changes on main were preserved.
 
 Push of main failed: `fatal: could not read Username for 'https://github.com': Device not configured`. Local commits remain intact; no credentials were changed.
+
+## CLOUD visual audit — `cloud/visual-audit` (2026-09-28, appended; CLOUD agent, NO Unity)
+
+The FINAL VISUAL POLISH SPRINT needs a running Unity Editor, and the cloud container has none. By Henry's choice this
+branch holds **only the audit**, `Verification/Polish/visual-audit.md`:
+- It is built from the existing committed screenshots of local runs (2026-09-15 to 09-27), inspected as images, with
+  each finding traced to the code that draws it.
+- **No visual change was made, and no BEFORE / AFTER screenshots or FPS numbers were produced.**
+
+Top findings by impact ÷ cost:
+1. **The sun casts no shadows at all.** `PrototypeBootstrap` adds the Light, and a Light added from code defaults to
+   `LightShadows.None`. On top of that, the lighting is flat and over-bright (white sun at 1.2 plus flat ambient), so
+   sidewalks read as snow and everything floats.
+2. **Horizon:** tombstone-like backdrop cards, and the haze-skirt walls are visible in the sky.
+3. **Ground planes:** pale sidewalks and chunky cream kerbs.
+4. **"Box city":** everything is Unity cube / cylinder primitives. The fix is a shared-mesh slot on `RecipePiece` for
+   ProBuilder modules, keeping batching as it is.
+
+Also noted:
+- Only five powers are on `main`. The other six are on the unmerged `cloud/*` branches.
+- There is no night mode.
+- Cartoon FX Remaster FREE is installed but unused. Henry decides whether its materials fit the shared-palette rule.
+
+The audit ends with a Downtown-first order of work and the BEFORE capture list for LOCAL.
