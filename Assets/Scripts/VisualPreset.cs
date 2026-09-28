@@ -10,7 +10,8 @@ using UnityEngine.Rendering;
 ///   - gradient (trilight) ambient instead of the default skybox's bright blue fill that bleaches up-facing surfaces;
 ///   - a procedural skybox whose ground half is the fog Haze, so the haze-skirt walls (visible as flat slabs in the sky
 ///     from the park and quay) can be hidden;
-///   - melee / slam attack telegraphs drawn as rings instead of an opaque disc (AttackTelegraph).
+///   - melee / slam attack telegraphs drawn as rings instead of an opaque disc (AttackTelegraph);
+///   - a street-level facade pass on urban-height buildings (CityArt.StreetLevel), read when the city is generated.
 /// Colours come from the shared CityPalette. Tune in Resources/VisualPreset (created by Overpowered > Visual > menus).
 [CreateAssetMenu(menuName = "Overpowered/Visual preset")]
 public sealed class VisualPreset : ScriptableObject
@@ -33,6 +34,9 @@ public sealed class VisualPreset : ScriptableObject
     public CityColor SkyTint = CityColor.Haze, SkyGround = CityColor.Haze;
     public float SkyExposure = 1.15f, SkyAtmosphere = .75f, SunSize = .025f;
     [Tooltip("Hide the haze-skirt walls (only when ProceduralSky paints the lower sky in the fog colour).")] public bool HideHazeSkirt = true;
+    [Header("Buildings (read at city generation)")]
+    [Tooltip("Street-level facade pass: shop glazing on every face, base plinth, corner pilasters, projecting cornice.")] public bool FacadeDetail = true;
+    [Tooltip("Only buildings at least this tall get it (keeps low residential houses as they are).")] public float FacadeMinHeight = 10f;
     [Header("Combat readability")]
     [Tooltip("Melee / slam telegraphs as a boundary ring + closing timing ring instead of a solid disc covering the ground.")] public bool RingTelegraphs = true;
 

@@ -39,12 +39,14 @@ public sealed class CityArt : MonoBehaviour
     sealed class SharedProp { public Mesh Mesh; public Mesh[] Parts; public Material[] Materials; }
     sealed class Batch { public Transform Owner; public CityColor Color; public int Layer; public readonly List<CombineInstance> Parts=new List<CombineInstance>(); public long Vertices; }
     bool Meshes=>StaticMode==StaticGeometryMode.BuildingMeshes;
+    bool facadeDetail;float facadeMinHeight;
     public void Initialize(GameTuning config)
     {
         buildWatch.Restart();
         tuning=config;Settings=Resources.Load<CityArtSettings>("CityArtSettings");
         if(Settings==null||Settings.Palette==null)throw new System.InvalidOperationException("Create city art assets via Overpowered > Create missing city art assets.");
         PropMode=Settings.PropMeshes;StaticMode=Settings.StaticGeometry;
+        var preset=VisualPreset.Current;facadeDetail=VisualPreset.Active(preset)&&preset.FacadeDetail;facadeMinHeight=preset!=null?preset.FacadeMinHeight:0f;
         gameObject.AddComponent<CityMaterials>().Initialize(Settings.Palette);
     }
     public static GameObject Piece(Transform parent,string name,Vector3 position,Vector3 size,CityColor color,bool solid=false,PrimitiveType type=PrimitiveType.Cube)
@@ -156,11 +158,30 @@ public sealed class CityArt : MonoBehaviour
             Part(t,"Parapet",new Vector3(side*(uw-thick)*.5f,h+wall*.5f,0),new Vector3(thick,wall,ud),CityColor.Cream,true,false);
             Part(t,"Parapet",new Vector3(0,h+wall*.5f,side*(ud-thick)*.5f),new Vector3(uw,wall,thick),CityColor.Cream,true,false);
         }
+        if(facadeDetail&&h>=facadeMinHeight)StreetLevel(t,w,d,uw,ud,h,entry,split,door);
         Part(t,"Shop canopy",new Vector3(0,entry,-d*.5f-.3f),new Vector3(w*.6f,.25f,.7f),CityColor.Teal,false,true);
         Part(t,"Shop sign",new Vector3(0,entry-.5f,-d*.5f-.36f),new Vector3(w*.5f,.65f,.12f),CityColor.Brick,false,true);
         for(int i=0;i<3;i++)Part(t,"Abstract shop glyph",new Vector3((i-1)*w*.13f,entry-.5f,-d*.5f-.44f),new Vector3(w*.09f,.16f,.035f),CityColor.Cream,false,true);
         if(Meshes)FlushOwner(t);
         StaticRoot(root);
+    }
+    /// VisualPreset.FacadeDetail (urban-height buildings only): the ground floor meets the street with shop glazing on every
+    /// face (either side of the entrance on the front), a dark base plinth, corner pilasters up the lower volume and a
+    /// projecting cornice under the parapet. Existing palette colours and batches only: no new meshes, materials or draws.
+    void StreetLevel(Transform t,float w,float d,float uw,float ud,float h,float entry,float split,float door)
+    {
+        float gy=entry*.44f,gh=entry*.56f,out_=.03f;
+        foreach(float side in new[]{-1f,1f})
+        {
+            Part(t,"Shop glazing",new Vector3(side*(w*.5f+out_),gy,0),new Vector3(.04f,gh,d*.78f),CityColor.Glass,false,true);
+            Part(t,"Shop glazing",new Vector3(side*(w+door)*.25f,gy,-d*.5f-out_),new Vector3((w-door)*.5f*.72f,gh,.04f),CityColor.Glass,false,true);
+            Part(t,"Base plinth",new Vector3(side*(w*.5f+.04f),.22f,0),new Vector3(.08f,.44f,d+.08f),CityColor.Slate,false,true);
+            Part(t,"Base plinth",new Vector3(0,.22f,side*(d*.5f+.04f)),new Vector3(w+.08f,.44f,.08f),CityColor.Slate,false,true);
+            foreach(float other in new[]{-1f,1f})
+                Part(t,"Corner pilaster",new Vector3(side*(w*.5f+.06f),(entry+split)*.5f,other*(d*.5f+.06f)),new Vector3(.36f,split-entry+.2f,.36f),CityColor.Cream,false,true);
+        }
+        Part(t,"Shop glazing",new Vector3(0,gy,d*.5f+out_),new Vector3(w*.78f,gh,.04f),CityColor.Glass,false,true);
+        Part(t,"Cornice",new Vector3(0,h-.12f,0),new Vector3(uw+.5f,.24f,ud+.5f),CityColor.Cream,false,false);
     }
     void Facade(Transform root,float w,float d,float bottom,float top,int seed,BuildingStyle style)
     {
