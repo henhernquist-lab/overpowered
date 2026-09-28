@@ -1,15 +1,15 @@
-PASS ForgeCatalog: 3 heroes, each a Sidekick prefab with a Humanoid avatar and a suit: VECTOR=Starter_03, TITAN=Starter_01, NOVA=Starter_02
+PASS ForgeCatalog: 3 heroes, each a Sidekick prefab with a Humanoid avatar and a suit: VECTOR=vector-rigged, TITAN=titan-rigged, NOVA=nova-rigged
 PASS Three distinct character prefabs.
 PASS Home button opens Hero Forge.
 PASS Forge: VECTOR Blue/Cyan saved.
-PASS Forge preview instantiates Starter_03 (19510 vertices, 1 skinned mesh 'vector-body', 88 bone entries).
+PASS Forge preview instantiates vector-rigged (19510 vertices, 1 skinned mesh 'vector-body', 88 bone entries).
 PASS Forge preview: VECTOR renderer uses the cached suit material 'Suit/vector-suit/Blue+Cyan' (Standard; not the vendor material, not a flat palette material).
 PASS Forge preview: _ColorMap is the generated point-filtered suit map, not the authored texture.
 PASS Forge preview: all 55 used swatches correct: 15 Primary=Blue RGBA(33, 92, 184, 255), 5 Secondary=Cyan, 9 Trim=Metal, 26 Keep (authored).
 PASS Forge preview: swatch (0,5) is 'Species / Skin 01' and kept.
 PREVIEW fit VECTOR: posed skinned height=1.844m (target 1.8 x VisualScale.y 1), model scale=(1.025, 1.025, 1.025), renderer bounds=(0.84, 1.84, 0.62), camera distance=4.20 fov=32
 PASS Forge: VECTOR Red/Cream saved.
-PASS Forge preview instantiates Starter_03 (19510 vertices, 1 skinned mesh 'vector-body', 88 bone entries).
+PASS Forge preview instantiates vector-rigged (19510 vertices, 1 skinned mesh 'vector-body', 88 bone entries).
 PASS Forge preview: VECTOR renderer uses the cached suit material 'Suit/vector-suit/Red+Cream' (Standard; not the vendor material, not a flat palette material).
 PASS Forge preview: _ColorMap is the generated point-filtered suit map, not the authored texture.
 PASS Forge preview: all 55 used swatches correct: 15 Primary=Red RGBA(204, 59, 56, 255), 5 Secondary=Cream, 9 Trim=Metal, 26 Keep (authored).
@@ -17,14 +17,14 @@ PASS Forge preview: swatch (0,5) is 'Species / Skin 01' and kept.
 PREVIEW fit VECTOR: posed skinned height=1.844m (target 1.8 x VisualScale.y 1), model scale=(1.025, 1.025, 1.025), renderer bounds=(0.84, 1.84, 0.62), camera distance=4.20 fov=32
 PASS CONTROL: VECTOR skin swatch identical for both colour pairs and equal to the authored map: RGBA(191, 144, 98, 255).
 PASS Forge: TITAN Teal/Amber saved.
-PASS Forge preview instantiates Starter_01 (26338 vertices, 1 skinned mesh 'titan-body', 96 bone entries).
+PASS Forge preview instantiates titan-rigged (26338 vertices, 1 skinned mesh 'titan-body', 96 bone entries).
 PASS Forge preview: TITAN renderer uses the cached suit material 'Suit/titan-suit/Teal+Amber' (Standard; not the vendor material, not a flat palette material).
 PASS Forge preview: _ColorMap is the generated point-filtered suit map, not the authored texture.
 PASS Forge preview: all 63 used swatches correct: 16 Primary=Teal RGBA(48, 122, 120, 255), 9 Secondary=Amber, 9 Trim=Metal, 29 Keep (authored).
 PASS Forge preview: swatch (0,5) is 'Species / Skin 01' and kept.
 PREVIEW fit TITAN: posed skinned height=1.632m (target 1.8 x VisualScale.y 1), model scale=(1.088, 0.907, 1.088), renderer bounds=(0.98, 1.84, 1.19), camera distance=4.17 fov=32
 PASS Forge: TITAN UiPurple/Cyan saved.
-PASS Forge preview instantiates Starter_01 (26338 vertices, 1 skinned mesh 'titan-body', 96 bone entries).
+PASS Forge preview instantiates titan-rigged (26338 vertices, 1 skinned mesh 'titan-body', 96 bone entries).
 PASS Forge preview: TITAN renderer uses the cached suit material 'Suit/titan-suit/UiPurple+Cyan' (Standard; not the vendor material, not a flat palette material).
 PASS Forge preview: _ColorMap is the generated point-filtered suit map, not the authored texture.
 PASS Forge preview: all 63 used swatches correct: 16 Primary=UiPurple RGBA(61, 38, 102, 255), 9 Secondary=Cyan, 9 Trim=Metal, 29 Keep (authored).
@@ -32,14 +32,14 @@ PASS Forge preview: swatch (0,5) is 'Species / Skin 01' and kept.
 PREVIEW fit TITAN: posed skinned height=1.632m (target 1.8 x VisualScale.y 1), model scale=(1.088, 0.907, 1.088), renderer bounds=(0.98, 1.84, 1.19), camera distance=4.17 fov=32
 PASS CONTROL: TITAN skin swatch identical for both colour pairs and equal to the authored map: RGBA(213, 165, 123, 255).
 PASS Forge: NOVA UiPurple/Red saved.
-PASS Forge preview instantiates Starter_02 (26575 vertices, 1 skinned mesh 'nova-body', 130 bone entries).
+PASS Forge preview instantiates nova-rigged (26575 vertices, 1 skinned mesh 'nova-body', 130 bone entries).
 PASS Forge preview: NOVA renderer uses the cached suit material 'Suit/nova-suit/UiPurple+Red' (Standard; not the vendor material, not a flat palette material).
 PASS Forge preview: _ColorMap is the generated point-filtered suit map, not the authored texture.
 PASS Forge preview: all 71 used swatches correct: 12 Primary=UiPurple RGBA(61, 38, 102, 255), 10 Secondary=Red, 16 Trim=Metal, 33 Keep (authored).
 PASS Forge preview: swatch (0,5) is 'Species / Skin 01' and kept.
 PREVIEW fit NOVA: posed skinned height=1.678m (target 1.8 x VisualScale.y 1), model scale=(0.858, 0.932, 0.858), renderer bounds=(0.72, 1.84, 1.25), camera distance=4.20 fov=32
 PASS Forge: NOVA Amber/Teal saved.
-PASS Forge preview instantiates Starter_02 (26575 vertices, 1 skinned mesh 'nova-body', 130 bone entries).
+PASS Forge preview instantiates nova-rigged (26575 vertices, 1 skinned mesh 'nova-body', 130 bone entries).
 PASS Forge preview: NOVA renderer uses the cached suit material 'Suit/nova-suit/Amber+Teal' (Standard; not the vendor material, not a flat palette material).
 PASS Forge preview: _ColorMap is the generated point-filtered suit map, not the authored texture.
 PASS Forge preview: all 71 used swatches correct: 12 Primary=Amber RGBA(255, 178, 66, 255), 10 Secondary=Teal, 16 Trim=Metal, 33 Keep (authored).
@@ -52,8 +52,9 @@ PASS CONTROL: vendor Sidekick materials untouched (still reference their authore
 PASS Forge: choose VECTOR Red/Cream.
 PASS SAVE & BACK closes Forge with the loadout persisted in PlayerProgression.
 PASS Enter Hero session.
-PASS Session spawns VECTOR as Starter_03 (same mesh + Humanoid avatar), shared controller SharedHumanoid, root motion False.
+PASS Session spawns VECTOR as vector-rigged (same mesh + Humanoid avatar), shared controller SharedHumanoid, root motion False.
 PASS CONTROL: no root motion, Animator not on the physics root, no capsule MeshRenderer.
+PASS Animation Rigging builds on this Sidekick humanoid avatar.
 PASS Session: VECTOR renderer uses the cached suit material 'Suit/vector-suit/Red+Cream' (Standard; not the vendor material, not a flat palette material).
 PASS Session: _ColorMap is the generated point-filtered suit map, not the authored texture.
 PASS Session: all 55 used swatches correct: 15 Primary=Red RGBA(204, 59, 56, 255), 5 Secondary=Cream, 9 Trim=Metal, 26 Keep (authored).
@@ -70,8 +71,9 @@ PASS Teardown: the session's suit material and colour map were destroyed with th
 PASS Forge: choose TITAN UiPurple/Cyan.
 PASS SAVE & BACK closes Forge with the loadout persisted in PlayerProgression.
 PASS Enter Hero session.
-PASS Session spawns TITAN as Starter_01 (same mesh + Humanoid avatar), shared controller SharedHumanoid, root motion False.
+PASS Session spawns TITAN as titan-rigged (same mesh + Humanoid avatar), shared controller SharedHumanoid, root motion False.
 PASS CONTROL: no root motion, Animator not on the physics root, no capsule MeshRenderer.
+PASS Animation Rigging builds on this Sidekick humanoid avatar.
 PASS Session: TITAN renderer uses the cached suit material 'Suit/titan-suit/UiPurple+Cyan' (Standard; not the vendor material, not a flat palette material).
 PASS Session: _ColorMap is the generated point-filtered suit map, not the authored texture.
 PASS Session: all 63 used swatches correct: 16 Primary=UiPurple RGBA(61, 38, 102, 255), 9 Secondary=Cyan, 9 Trim=Metal, 29 Keep (authored).
@@ -88,8 +90,9 @@ PASS Teardown: the session's suit material and colour map were destroyed with th
 PASS Forge: choose NOVA Amber/Teal.
 PASS SAVE & BACK closes Forge with the loadout persisted in PlayerProgression.
 PASS Enter Hero session.
-PASS Session spawns NOVA as Starter_02 (same mesh + Humanoid avatar), shared controller SharedHumanoid, root motion False.
+PASS Session spawns NOVA as nova-rigged (same mesh + Humanoid avatar), shared controller SharedHumanoid, root motion False.
 PASS CONTROL: no root motion, Animator not on the physics root, no capsule MeshRenderer.
+PASS Animation Rigging builds on this Sidekick humanoid avatar.
 PASS Session: NOVA renderer uses the cached suit material 'Suit/nova-suit/Amber+Teal' (Standard; not the vendor material, not a flat palette material).
 PASS Session: _ColorMap is the generated point-filtered suit map, not the authored texture.
 PASS Session: all 71 used swatches correct: 12 Primary=Amber RGBA(255, 178, 66, 255), 10 Secondary=Teal, 16 Trim=Metal, 33 Keep (authored).

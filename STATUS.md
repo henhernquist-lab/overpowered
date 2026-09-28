@@ -2802,3 +2802,141 @@ Added `LightingPreset`, `LightingCycle`, and `WorldLighting` assets; all five sh
 Measured 1280×720 Editor Play Mode on Radeon Pro 5300, same fixed street view for lighting. The final full run (`Verification/Lighting/results.txt`) had Day 72.58 FPS / 13.78 ms mean / 279 draws; Dusk 76.20 / 13.12 / 323 with 3 street lights; Night 75.14 / 13.31 / 320 with 3 street lights; Night plus 4/4 pooled power lights 53.10 / 18.83 / 371. The preceding full run was Day 60.14, Dusk 70.89, Night 75.55, and Night plus 4/4 power lights 71.09 FPS: **combat-light throughput varied materially between runs**, so these are not controlled hardware benchmarks and no stable delta is claimed. CityArt's separate whole-city vantage measured seed 3226 at 52.09 FPS, p95 23.26 ms, 620 median draws, and seed 2409 at 57.54 FPS, p95 19.60 ms, 606 draws. Those are **62.9–66.4% below its recorded 155 FPS historical target**; preserved as measured, with no causal attribution to lighting from an unpaired run. Day/dusk/night captures were inspected; streets, buildings and window lights remain distinguishable at night. Human gameplay readability and standalone-player performance remain untested. The original failed cycle-binding attempt (three `ScriptableObject` classes in one file caused missing script references) remains in `Verification/Lighting/failed-attempts/cycle-binding/`; each class now has its own Unity script file.
 
 Cloud Lightning and Laser definitions are not yet on this branch; the setup will assign data specs if those assets arrive, but their channel/end effects still need a live integration pass after cloud merge. The next phases remain the Cartoon ring rendering repair and Cinemachine/Timeline work.
+
+## Overnight Phase 7: unlit synergy rings, Forge Cinemachine reveal, first-launch Timeline intro; combat camera kept — 2026-09-27 (`feat/cinemachine`, appended)
+
+Finished Codex's uncommitted Phase 7 work in this worktree. Three parts shipped. One part was deliberately not attempted.
+
+Commits: `beda3a2` (the unlit rings) and `7522e95` (the Forge reveal), then the intro commit that carries this section.
+
+**1. Synergy shockwave rings render unlit in palette colours.** The dark-grey rings in the Phase 5 `cryo-crush`/`glacier-fist` captures came from the shared synergy shockwave `LineRenderer` in `Forge/SynergyVfx.cs`, which used the lit Standard palette swatch. They were not Cartoon FX. The Cartoon ring material is additive (`_SrcBlend 5 / _DstBlend 1`), and Codex's edit-mode diagnosis measured 0 pixels darker than the ground (`Verification/CFXRings/diagnose/diagnose.txt`).
+- **The fix:** `CityMaterials.GetVfx(color)` returns one shared `Unlit/Color` material per palette swatch.
+  - It is cached in `CityMaterials`, listed in `Owned`, recoloured by `Apply`, and destroyed in `OnDestroy`. Nothing is created per cast.
+  - `SynergyVfx.Initialize` resolves one material for each distinct catalog `Secondary`. The current catalog needs 4: Cream, Amber, Red and Cyan. The hard ceiling is the 33-value `CityColor` enum.
+- **New Forge gates:**
+  - all 6 pooled rings share the one cached material;
+  - 6 extra bursts create no material (120->120);
+  - the shader is `Unlit/Color` in the Cream palette colour, is not the lit swatch, and is owned by the session's CityMaterials;
+  - leaving the session destroys it.
+- **New night gate in `LightingVerification`:** at Night (glow > 0.9), the Thermal Shock ring uses the unlit Cyan swatch. In one frame, three renders are compared: with the ring, without it, and with the lit-swatch CONTROL. The ring covers 444 pixels with mean luma 0.627, against 0.179 for the street under it. The lit/unlit comparison is informational only. The lit swatch was 0.585 vs 0.613 unlit in one run and 0.632 vs 0.627 in the next, so the darkening depends on view and lighting. Readability is the gate.
+
+**2. Cinemachine hero reveal in the Forge.** Each successful save (`HeroForgeScreen.Save`) plays a 0.85 s orbit of the preview hero.
+- **The orbit:** heading -28 -> +18 deg, then settles on the front view at 0.
+- **The rig:** a `CinemachineCamera` with `CinemachineFollow` in LockToTarget mode and `CinemachineRotationComposer`, zero damping. It drives only the disabled Forge preview camera, through a `CinemachineBrain` in `ManualUpdate` with `IgnoreTimeScale`.
+- **Unchanged:** the form stays interactive, with no await or lock. No gameplay camera is touched, and Cinemachine is not used in sessions.
+- **Verified:** heading -28.0 -> 17.6 deg, the camera moves up to 2.03 m over 130 frames, and it settles at heading 0 within 0.85 s.
+
+**3. Skippable first-launch Timeline intro** (`FirstLaunchIntro`, `Resources/Intro/FirstLaunch.playable`, `IntroTimelineSetup.Configure`).
+- **Sequence:** a 9 s sequence runs over the cached menu skyline:
+  - caption "THE CITY IS WAITING" -> the selected hero's visual duplicate drops in (Timeline curves on child transforms only, never a physics root) -> it lands (the shared Animator `Land` at 6.15 s; "A HERO ARRIVES") -> "YOUR STORY STARTS HERE" -> Home.
+  - The hero renders to its own transparent RT on layer 29, with its own light and palette cache. The stage, RT and overlay are destroyed when it ends.
+- **Skipping:** skip is immediate: the SKIP button, Esc, Space or left-click.
+- **Save flag:** skipping or completing sets the additive `ProgressSave.IntroSeen` (Version stays 1). A save written before this field loads as false.
+- **Where it runs:** Home only. Batch runs are skipped unless `IntroTimelineVerification` sets its flag, so other verifiers' Home flows are unchanged.
+- **Not tied to one hero:** the intro stages `PlayerProgression.SelectedHero`'s own prefab and suit.
+- **Setup:** `IntroTimelineSetup.Configure` was re-run and preserved all Intro assets byte-for-byte (md5 identical).
+
+### Combat camera: Cinemachine migration NOT attempted, not kept
+`ThirdPersonCamera` (PrototypeBootstrap.cs) remains the only gameplay camera. **This is a decision, not a claim of a measured Cinemachine regression.** No migrated camera was built or measured.
+- **The gate cannot be run in full today.** Evidence on this branch's final code:
+  - **Fire** (Feel run, exit 0, 143 PASS; the MISS values are identical to the committed 5a04ff7 evidence):
+    - 15 m yaw 0: MISS 0.004 m;
+    - 15 m yaw +20 / -30: 0.004 / 0.004 m;
+    - 22 m yaw 0: 0.102 m (the crosshair point is 29.0 m from the camera, beyond Fire Range 20, so AimDirection clamps);
+    - 5 m: 0.001 m; 8 m yaw 20: 0.006 m; 30 m: 0.705 m (beyond Range).
+  - **Walls block real projectiles:**
+    - at 15 m yaw +30, the shoulder line is blocked by a City Car and the projectile hits the car, 7.142 m short of the crosshair point;
+    - with a 1 m box placed between the shoulder and a 15 m target, the projectile stops on the box (9.563 m short).
+    - The camera ray still reports the pillar, so an obstacle does not move the crosshair.
+  - **Ice:** freezes the crate under the crosshair, not the decoy 2.6 m beside it.
+  - **Telekinesis:** grabs crate A, then crate B (3 m apart, 9 m ahead), following the crosshair; this is its CONTROL.
+  - **Missing rows:** **no Ice or Telekinesis rows at 15 m / 22 m exist in any branch's FeelVerification**, and **Laser Eyes is not on this branch** (it arrives with the cloud merge). A zero-tolerance before/after comparison is therefore impossible for 3 of the 4 powers the gate names.
+  - **Camera gates:** CameraVerification.Verify: 45 PASS. FirstPerson: 207 / 5 PASS.
+  - **Feel, render-only kick:** "Mid-kick render used position rest+offset (0.00,-0.12,-0.09) (|0.145| m) and FOV 67.42 = 65 + 2.42", and the crosshair ray is identical before and after the kicked render.
+- **Coupling that a brain would break.** One component owns all of the following:
+  - yaw and pitch;
+  - hero-ignoring SphereCast collision, with inset;
+  - the first-person eye mode, with near clip and ceiling SphereCast;
+  - flight FOV, blended in scaled time;
+  - the synergy FOV kick;
+  - Feel impulses and FOV kicks, applied only between `OnPreCull` and `OnPostRender` in unscaled time. They animate through the hit pause, and the aim ray (`ViewportPointToRay` at screen centre) never sees them.
+
+  A `CinemachineBrain` writes transform and lens in its own update. Each of the above would need re-implementing as extensions:
+  - Deoccluder semantics instead of the SphereCast;
+  - an impulse listener instead of render-only offsets;
+  - lens blending against flight and synergy FOV;
+  - hit-pause time.
+
+  The aim ray would then read whatever the brain produced, including damping and blends. Under a zero-tolerance aim gate that cannot yet be fully measured, keeping the working camera is the only defensible call. Cinemachine is used only where it is isolated: the Forge preview.
+- **Before any future attempt:**
+  1. add Ice and Telekinesis 15 m / 22 m rows (and Laser Eyes after the cloud merge) to FeelVerification;
+  2. record the baseline;
+  3. migrate behind a switch;
+  4. require identical rows.
+
+### Suites (final code, wt-sidekick, one Unity process at a time; the parallel Splines agent kept load at 4–11)
+| Suite | exit | PASS | FAIL |
+|---|---|---|---|
+| IntroTimelineVerification.Run / Reload (separate process) | 0 / 0 | 15 / 2 | 0 |
+| HeroForgeVerification.Run / Reload (separate process) | 0 / 0 | 137 / 3 | 0 |
+| SidekickVerification.Run / Reload | 0 / 0 | 102 / 7 | 0 |
+| MenuPresentationVerification.Run | 0 | 42 | 0 |
+| FreezeReadabilityVerification.Run | 0 | 80 | 0 |
+| FeelVerification.Run | 0 | 143 | 0 |
+| FirstPersonVerification.Run / Reload | 0 / 0 | 207 / 5 | 0 |
+| CameraVerification.Verify | 0 | 45 | 0 |
+| HudVerification.Run (P1) | 0 | 316 | 0 |
+| ModeVerification.Run / Reload | 0 / 0 | 79 / 2 | 0 |
+| LightingVerification.Run | 0 | 31 | 0 |
+
+**Notes on the counts and runs:**
+- HeroForge went from 131 to 137: the 3 reveal checks and the 3 ring-material checks.
+- Intro includes the default-hero CONTROL (VECTOR, `vector-rigged`) and the alternate-hero CONTROL:
+  - A fresh profile saves NOVA through the normal `SetLoadout` gate.
+  - Full playback then stages `nova-rigged`, not `vector-rigged`, and reaches Home 8.66 s after the fresh-scene assertion.
+  - The second process reloads `IntroSeen` from the Version 1 save and does not replay.
+- Lighting went from 28 to 31 with the night ring checks.
+- No suite flaked. The dotnet gate reported 0 warnings and 0 errors. The only Unity analyzer warnings are the existing UAC0005 (AudioSetup) and UAC1001 (HumanoidPresentation).
+- Failed attempts: one HeroForge launch failed to compile (CS0128, a duplicate local `until` in my new verifier lines). It was fixed before any result was taken.
+- The user's real save md5 was `0071839f3c4b4bb7fd76e9b2acfc0ade` before and after every run.
+
+**Forge FX bench** (same method; noisy under the parallel load). Paired idle vs pooled-FX means:
+- 63.80 vs 68.41 FPS;
+- 69.10 vs 67.49 FPS;
+- 67.72 vs 60.72 FPS.
+
+No stable ring-material cost can be claimed.
+
+**Captures inspected:**
+- `Verification/FreezeReadability/cryo-crush.png`: two cream rings on the cyan floor under the frozen captive, with the snowflake above. The same frame in HEAD had dark-grey rings.
+- `glacier-fist.png`: cream ring arcs among cyan debris cubes and the white spike burst.
+- `Verification/Forge/sonic-impact.png`: a crisp cream ellipse around cyan cubes and the amber Cartoon spikes.
+- `Verification/Lighting/night-synergy-ring.png`: a bright cyan ellipse on dark asphalt beside the hero, under lit windows.
+- `Verification/Forge/forge-reveal-start.png`: NOVA from the left three-quarter (back gear and tail visible).
+- `forge-reveal-peak.png`: from the right (sword hilt visible).
+- `forge-preview.png`: the settled front view.
+- `forge-menu.png`: the form with BUILD SAVED, and Fire + Ice showing Thermal Shock.
+- `Verification/Intro/full-home-intro.png`: the actual UI Toolkit panel. NOVA (red, purple and cyan suit) stands on the street in front of the seeded skyline, "A HERO ARRIVES" is at bottom left, and a centred SKIP button is at top right.
+- `hero-entrance.png`: the transparent hero RT alone.
+
+### OVERNIGHT DECISIONS
+- **The per-swatch unlit VFX material is AGENTS-compliant as a shared palette material.** It is one per swatch, created at pool start, cached, owned, recoloured and destroyed by CityMaterials, and never created per cast. It is not a one-off material.
+- **Hardening added to Codex's fix:**
+  - If `Unlit/Color` is unavailable (for example, stripped from a player build), `GetVfx` logs a warning and returns the lit swatch instead of throwing.
+  - A ring swatch that is not in the catalog resolves once through the same cache instead of raising `KeyNotFoundException`.
+  - No player build was tested.
+- **Diagnostics removed:** `Assets/Editor/CartoonRingDiagnostics.cs` was a one-off tool labelled TEMPORARY that tested the wrong hypothesis, so it was removed together with its PNGs. `diagnose.txt` is kept as the Cartoon-is-additive evidence.
+- **Reverted as churn:**
+  - `JMO .../CFXR_WelcomeScreen.uxml.meta`, which the Editor rewrites on open;
+  - four `Resources/Powers/*.asset` files re-serialized with Phase 6's default `Light` block during the Menus run (no value changed);
+  - the generated `Verification/Modes/third-mode-definition.asset`;
+  - every uncited Verification PNG.
+
+  The updated `results.txt` files of the suites run here are kept.
+- **Existing players see the intro once,** because the field is absent from their saves. Quitting mid-intro, rather than skipping or finishing, replays it next launch.
+- **SKIP label** is centred and bold. In Codex's capture it sat at the top-left of the button.
+
+**Limits:**
+- Batch Editor Play Mode only: no player build (including `Unlit/Color` inclusion), no hardware input, and no human judgement of the intro's pacing, the Forge orbit's feel, or ring readability in motion.
+- The intro is 9 s, not skippable per shot, and has no audio cue.
+- The ten-synergy catalog is still current on this branch. Re-run the Forge and ring checks after the cloud cut to five.

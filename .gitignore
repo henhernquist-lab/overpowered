@@ -138,3 +138,4 @@ InitTestScene*.unity*
 
 # Phase 6 lighting verification saves
 /Verification/Lighting/saves/
+/Verification/Intro/saves/

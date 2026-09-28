@@ -40,7 +40,9 @@ public sealed class GameFlow : MonoBehaviour
         }
         Cursor.lockState=CursorLockMode.None; Cursor.visible=true;
         GameCamera.Ensure(scene,false);
-        new GameObject("Menu").AddComponent<ModeScreens>();
+        var menu=new GameObject("Menu").AddComponent<ModeScreens>();
+        if(scene.name==HomeScene&&(!Application.isBatchMode||FirstLaunchIntro.AllowBatchVerification))
+            menu.gameObject.AddComponent<FirstLaunchIntro>().Initialize(menu);
     }
     public bool Select(GameModeDefinition definition)
     {

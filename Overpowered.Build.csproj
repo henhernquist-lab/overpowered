@@ -14,6 +14,7 @@
     <Reference Include="$(UnityManaged)/UnityEngine/*.dll" />
     <Reference Include="Library/ScriptAssemblies/Unity.Animation.Rigging.dll" />
     <Reference Include="Library/ScriptAssemblies/Unity.Cinemachine.dll" />
+    <Reference Include="Library/ScriptAssemblies/Unity.Timeline.dll" />
     <Reference Include="Assets/Plugins/Demigiant/DOTween/DOTween.dll" />
   </ItemGroup>
   <Target Name="CheckUnity" BeforeTargets="ResolveReferences">

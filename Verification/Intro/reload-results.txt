@@ -1,0 +1,2 @@
+PASS SECOND PROCESS reloads the additive IntroSeen flag from a Version 1 legacy save.
+PASS SECOND PROCESS Home does not replay the intro.

@@ -1,0 +1,17 @@
+PASS Old Version 1 save without IntroSeen starts the first-launch Timeline.
+PASS Timeline begins on the skyline with its hero render target ready.
+PASS Legacy save stages its own saved/default hero VECTOR (vector-rigged), the CONTROL for the NOVA leg below.
+PASS Skip is immediate and persists IntroSeen.
+PASS Skip reveals the existing interactive Home screen.
+PASS Same-process Home revisit does not replay a skipped intro.
+PASS Fresh full-playback profile selects NOVA through the normal Forge save gate.
+PASS Fresh NOVA profile starts full playback independently of the skip control and default hero.
+PASS Alternate-hero CONTROL: the Timeline stages NOVA's own character (nova-rigged), not VECTOR's (vector-rigged).
+PASS Timeline camera push and hero entrance are still playing before landing.
+VIEW stage=(20000.00, -1000.00, 0.00) hero=(20000.00, -1000.00, 0.00) model=(20000.04, -999.87, -0.32) mesh=Center: (20000.02, -998.66, -0.08), Extents: (0.50, 1.28, 0.87) layer=29 camera=(20000.00, -998.50, -5.66) forward=(0.00, -0.07, 1.00) viewport=(0.50, 0.57, 5.58) mask=536870912 frames=1909
+PASS Intro camera framed the selected hero (76912 nontransparent pixels, bounds 536,103–745,709).
+CAPTURE full-home-intro.png (actual UI Toolkit panel).
+PASS Full Timeline reaches Home after its authored nine-second sequence (8.66 s after the fresh-scene assertion).
+PASS Full playback rendered moving frames and persisted completion.
+PASS Full playback releases the overlay and restores Home controls.
+PASS Full playback does not replay on the next Home visit.

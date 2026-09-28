@@ -8,12 +8,12 @@ PASS Untouched marker CONTROL does not resolve encounter.
 PASS Blocked civilian CONTROL refuses rescue before blockade is moved/broken.
 PASS Real charged E-punch accepted against encounter physics blockade.
 PASS Animated punch impact hit encounter physics blockade after windup.
-PASS Rescue physics: actual punch AddExplosionForce(1350 N·s, Impulse), mass=45kg; displacement=9.298m.
+PASS Rescue physics: actual punch AddExplosionForce(1350 N·s, Impulse), mass=45kg; displacement=9.252m.
 PASS Held interaction accepted at valid objective.
 PASS Moved blockade permits real rescue interaction.
 PASS Hero police CONTROL: neutral cop in attack range does not damage player.
 PASS Pause freezes session clock and encounter simulation.
-PASS Ignored Hero event: failures=1, Heat 1.75 -> 2.50 (+0.75).
+PASS Ignored Hero event: failures=1, Heat 1.00 -> 1.75 (+0.75).
 PASS Held interaction accepted at valid objective.
 PASS Held interaction accepted at valid objective.
 PASS All multi-part encounter objectives resolved.
@@ -40,11 +40,11 @@ PASS Hero/Villain regenerated the SAME seeded city layout.
 PASS Mode-switch persistence: level=5, XP=92, points=4, wins=1.
 PASS Earned points purchase strength upgrade; tier=1 must survive restart.
 PASS Same encounter systems, opposite Villain loot/destruction/escape goals.
-PASS Villain live cop AI attacked: health 100 -> 96.
+PASS Villain live cop AI attacked: health 100 -> 92 after 0.72s.
 PASS Existing Heat escalation retained: cops 4 -> 7 at Heat 3.00.
 PASS Configured spawn-clock interval adds second multi-part encounter.
 PASS Population-cap CONTROL refuses a third simultaneous encounter.
-MEASURED populated events: civilians=28, cops=9, events=2; 1280x720 rendered Editor Play Mode; frames=315, seconds=5.017, FPS=62.78, p95=17.49ms; Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz; AMD Radeon Pro 5300.
+MEASURED populated events: civilians=28, cops=9, events=2; 1280x720 rendered Editor Play Mode; frames=413, seconds=5.002, FPS=82.57, p95=16.68ms; Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz; AMD Radeon Pro 5300.
 PASS Held interaction accepted at valid objective.
 PASS Held interaction accepted at valid objective.
 PASS Villain escape CONTROL: loot/destruction alone cannot resolve while inside scene.
