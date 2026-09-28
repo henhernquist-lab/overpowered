@@ -12,7 +12,8 @@ using UnityEngine.Rendering;
 ///     from the park and quay) can be hidden;
 ///   - melee / slam attack telegraphs drawn as rings instead of an opaque disc (AttackTelegraph);
 ///   - a street-level facade pass on urban-height buildings (CityArt.StreetLevel), read when the city is generated;
-///   - per-role enemy silhouettes and accents (HumanoidPresentation), e.g. no hero-cyan on a hostile Gunner.
+///   - per-role enemy silhouettes and accents (HumanoidPresentation), e.g. no hero-cyan on a hostile Gunner;
+///   - a comet tail on projectile powers (FireBlastEffect).
 /// Colours come from the shared CityPalette. Tune in Resources/VisualPreset (created by Overpowered > Visual > menus).
 [CreateAssetMenu(menuName = "Overpowered/Visual preset")]
 public sealed class VisualPreset : ScriptableObject
@@ -41,6 +42,7 @@ public sealed class VisualPreset : ScriptableObject
     [Tooltip("Distant mainland as a continuous coastline of narrow stepped towers instead of isolated wide slabs.")] public bool SkylineBackdrop = true;
     [Header("Combat readability")]
     [Tooltip("Melee / slam telegraphs as a boundary ring + closing timing ring instead of a solid disc covering the ground.")] public bool RingTelegraphs = true;
+    [Tooltip("Projectile powers (Fire Blast) trail a three-sphere comet tail in their palette colour.")] public bool ProjectileTail = true;
 
     [Header("Enemy roles (visual root only: collider, NavMeshAgent and physics root unchanged)")]
     public EnemyLook[] EnemyLooks = new EnemyLook[0];
