@@ -39,14 +39,14 @@ public sealed class CityArt : MonoBehaviour
     sealed class SharedProp { public Mesh Mesh; public Mesh[] Parts; public Material[] Materials; }
     sealed class Batch { public Transform Owner; public CityColor Color; public int Layer; public readonly List<CombineInstance> Parts=new List<CombineInstance>(); public long Vertices; }
     bool Meshes=>StaticMode==StaticGeometryMode.BuildingMeshes;
-    bool facadeDetail;float facadeMinHeight;
+    bool facadeDetail,skylineBackdrop;float facadeMinHeight;
     public void Initialize(GameTuning config)
     {
         buildWatch.Restart();
         tuning=config;Settings=Resources.Load<CityArtSettings>("CityArtSettings");
         if(Settings==null||Settings.Palette==null)throw new System.InvalidOperationException("Create city art assets via Overpowered > Create missing city art assets.");
         PropMode=Settings.PropMeshes;StaticMode=Settings.StaticGeometry;
-        var preset=VisualPreset.Current;facadeDetail=VisualPreset.Active(preset)&&preset.FacadeDetail;facadeMinHeight=preset!=null?preset.FacadeMinHeight:0f;
+        var preset=VisualPreset.Current;facadeDetail=VisualPreset.Active(preset)&&preset.FacadeDetail;skylineBackdrop=VisualPreset.Active(preset)&&preset.SkylineBackdrop;facadeMinHeight=preset!=null?preset.FacadeMinHeight:0f;
         gameObject.AddComponent<CityMaterials>().Initialize(Settings.Palette);
     }
     public static GameObject Piece(Transform parent,string name,Vector3 position,Vector3 size,CityColor color,bool solid=false,PrimitiveType type=PrimitiveType.Cube)
@@ -320,10 +320,28 @@ public sealed class CityArt : MonoBehaviour
             float angle=(i+(float)rng.NextDouble()*.8f)/backdrop.Count*Mathf.PI*2,radius=Mathf.Lerp(backdrop.Radius.x,backdrop.Radius.y,(float)rng.NextDouble());
             float h=Mathf.Lerp(backdrop.Height.x,backdrop.Height.y,(float)Mathf.Pow((float)rng.NextDouble(),2)),w=Mathf.Lerp(backdrop.Width.x,backdrop.Width.y,(float)rng.NextDouble());
             var rotation=Quaternion.Euler(0,-angle*Mathf.Rad2Deg,0);var outward=new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle));
+            if(skylineBackdrop){SkylineCluster(centre,outward,rotation,radius,h,backdrop,i);continue;}
             // A low shore under each cluster so the silhouettes stand on land instead of floating on the horizon.
             Silhouette(centre+outward*(radius+20)+Vector3.up*3,new Vector3(w*2.6f,6,70),rotation,backdrop.ShoreColor);
             Silhouette(centre+outward*radius+Vector3.up*h*.5f,new Vector3(w,h,w*.7f),rotation,backdrop.Color);
             if(rng.NextDouble()<.6){float h2=h*Mathf.Lerp(.35f,.8f,(float)rng.NextDouble());Silhouette(centre+outward*(radius+12)+rotation*Vector3.right*(w*.8f)+Vector3.up*h2*.5f,new Vector3(w*.7f,h2,w*.6f),rotation,backdrop.Color);}
+        }
+    }
+    /// VisualPreset.SkylineBackdrop: a continuous coastline (each cluster's shore overlaps its neighbours) carrying 2-4 narrow
+    /// square towers of varied height, the tallest with a stepped crown, instead of one wide slab per cluster (which read as
+    /// a ring of gravestones). Own seeded stream per cluster, backdrop layer, palette colours, no shadows.
+    void SkylineCluster(Vector3 centre,Vector3 outward,Quaternion rotation,float radius,float h,BackdropSettings backdrop,int cluster)
+    {
+        var rng=new System.Random(tuning.City.Seed*7919+cluster);float R()=> (float)rng.NextDouble();
+        float arc=2f*Mathf.PI*radius/Mathf.Max(1,backdrop.Count);var right=rotation*Vector3.right;
+        Silhouette(centre+outward*(radius+15)+Vector3.up*3,new Vector3(arc*1.25f,6,80),rotation,backdrop.ShoreColor);
+        int towers=2+rng.Next(3);
+        for(int k=0;k<towers;k++)
+        {
+            float tw=Mathf.Lerp(12f,30f,R()),th=Mathf.Max(18f,h*Mathf.Lerp(.35f,1f,k==0?1f:R()));
+            var at=centre+outward*(radius+Mathf.Lerp(-10f,25f,R()))+right*((k-(towers-1)*.5f)*arc/Mathf.Max(1,towers)*Mathf.Lerp(.7f,1f,R()));
+            Silhouette(at+Vector3.up*th*.5f,new Vector3(tw,th,tw),rotation,backdrop.Color);
+            if(k==0||R()<.35f)Silhouette(at+Vector3.up*(th+th*.09f),new Vector3(tw*.6f,th*.18f,tw*.6f),rotation,backdrop.Color);
         }
     }
     void Skirt(CityPlan plan,BackdropSettings backdrop)

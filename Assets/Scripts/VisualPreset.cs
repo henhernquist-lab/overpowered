@@ -37,6 +37,7 @@ public sealed class VisualPreset : ScriptableObject
     [Header("Buildings (read at city generation)")]
     [Tooltip("Street-level facade pass: shop glazing on every face, base plinth, corner pilasters, projecting cornice.")] public bool FacadeDetail = true;
     [Tooltip("Only buildings at least this tall get it (keeps low residential houses as they are).")] public float FacadeMinHeight = 10f;
+    [Tooltip("Distant mainland as a continuous coastline of narrow stepped towers instead of isolated wide slabs.")] public bool SkylineBackdrop = true;
     [Header("Combat readability")]
     [Tooltip("Melee / slam telegraphs as a boundary ring + closing timing ring instead of a solid disc covering the ground.")] public bool RingTelegraphs = true;
 
