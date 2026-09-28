@@ -187,16 +187,18 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
 
     // ---------------------------------------------------------------- FREE PLAY POWERS (Phase 4 audit, 2026-09-27)
     /// Every power of the CURRENT catalog is equipped through the real save gates and used in a real Free Play session
-    /// launched from the Home button. Sessions cache their two equipped powers, so three sessions cover all five.
+    /// launched from the Home button. Sessions cache their two equipped powers, so six sessions cover all eleven (the five
+    /// original powers keep their specific checks; the six roster powers get a real aimed cast at an NPC dummy).
     IEnumerator FreePlayPowers()
     {
         var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");var all=Resources.LoadAll<PowerDefinition>("Powers");
         PowerDefinition P(string id)=>all.First(p=>p.Id==id);
         var ids=all.Select(p=>p.Id).OrderBy(i=>i).ToArray();
-        Check(ids.SequenceEqual(new[]{"fire","flight","ice","strength","telekinesis"}),"Current power catalog = "+string.Join(", ",ids)+" (5 powers; the 11-power check is pending the cloud merge).");
+        Check(ids.SequenceEqual(new[]{"darkness","fire","flight","force-field","ice","laser-eyes","lightning","poison","speed","strength","telekinesis"}),"Current power catalog = "+string.Join(", ",ids)+" ("+ids.Length+" powers).");
+        var original5=new HashSet<string>{"fire","flight","ice","strength","telekinesis"};
         var original=ui.Profile.Data.Loadout;string heroId=original.HeroId,oa=original.PowerA,ob=original.PowerB;CityColor op=original.Primary,os=original.Secondary;
         var used=new HashSet<string>();float basic=-1,strong=-1;
-        foreach(var (a,b) in new[]{("fire","ice"),("flight","strength"),("telekinesis","fire")})
+        foreach(var (a,b) in new[]{("fire","ice"),("flight","strength"),("telekinesis","fire"),("darkness","poison"),("lightning","laser-eyes"),("speed","force-field")})
         {
             Check(ui.Profile.SetLoadout(forge.Heroes[0],P(a),P(b),CityColor.Blue,CityColor.Cyan),$"Save {a} + {b} through PlayerProgression.SetLoadout (ownership/equip gates).");
             Submit(ui.ModeButtons["free-play"]);yield return Scene(GameFlow.CityScene);
@@ -225,6 +227,21 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
                     used.Add(id);continue;
                 }
                 if(id=="strength")continue;
+                if(!original5.Contains(id))
+                {
+                    // Roster power: one real aimed cast at an NPC dummy through PowerUser.Use (instant: pays a charge; channeled: starts, drains, releases).
+                    var dummy=CityNpc.Spawn(W,W.City.Sidewalks[0],NpcRole.Criminal);dummy.enabled=false;dummy.Agent.enabled=false;dummy.transform.position=new Vector3(0,150,7);dummy.SetCombatStats(100000,0);
+                    Move(new Vector3(0,150,0));cam.transform.position=W.Hero.transform.position+new Vector3(0,1.7f,-1);cam.transform.LookAt(dummy.transform.position+Vector3.up*1.2f);Physics.SyncTransforms();yield return null;
+                    U.Tick(100,true);Check(U.Select(rt),$"Select equipped {id}.");int charges0=rt.Charges;float energy0=U.Energy,hp0=dummy.Health;
+                    bool cast=U.Use(rt);bool channel=U.Channeling==rt;string message=U.Message;
+                    Check(cast&&(channel?rt.Charges==charges0:rt.Charges==charges0-1),$"{id} real cast accepted in Free Play ({(channel?"channel started, charges unchanged":"charges "+charges0+" -> "+rt.Charges)}; '{message}').");
+                    if(channel){float hold=Time.time+.3f;while(Time.time<hold){U.Channel(true,Time.deltaTime);yield return null;}U.Channel(false,Time.deltaTime);Check(U.Channeling==null&&U.Energy<energy0,$"{id} channel held 0.3 s then released: energy {energy0:F1} -> {U.Energy:F1}.");}
+                    yield return new WaitForSeconds(.4f);
+                    Log($"MEASURED {id} in Free Play: dummy health {hp0:F0} -> {(dummy!=null?dummy.Health:0f):F0}, rooted {(dummy!=null&&dummy.Rooted)}.");
+                    if(U.HeldBody!=null)U.Release(false);
+                    Destroy(dummy.gameObject);Move(new Vector3(0,150,0));W.Hero.transform.rotation=Quaternion.LookRotation(Vector3.left);yield return null;
+                    used.Add(id);continue;
+                }
                 var crate=GameObject.CreatePrimitive(PrimitiveType.Cube);crate.transform.position=new Vector3(0,151.2f,7);var body=crate.AddComponent<Rigidbody>();body.mass=45;body.useGravity=false;Physics.SyncTransforms();
                 cam.transform.position=W.Hero.transform.position+new Vector3(0,1.7f,-1);cam.transform.LookAt(crate.transform.position);Physics.SyncTransforms();
                 U.Tick(100,true);Check(U.Select(rt),$"Select equipped {id}.");int before=rt.Charges;
@@ -240,7 +257,7 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
             if(!U.IsEquipped(P("flight")))Check(!U.ConsumeFlight(.25f),"Unequipped Flight CONTROL: fuel gate refuses.");
             session.ReturnHome();yield return Scene(GameFlow.HomeScene);yield return Menu();
         }
-        Check(used.OrderBy(i=>i).SequenceEqual(ids),"All 5 current powers equipped and used in Free Play: "+string.Join(", ",used.OrderBy(i=>i))+".");
+        Check(used.OrderBy(i=>i).SequenceEqual(ids),"All "+ids.Length+" current powers equipped and used in Free Play: "+string.Join(", ",used.OrderBy(i=>i))+".");
         Check(strong>basic&&basic>0,$"Basic melee stays weaker without Strength: basic {basic:F1} vs Strength {strong:F1}.");
         Check(ui.Profile.SetLoadout(forge.Hero(heroId),P(oa),P(ob),op,os),"Original loadout restored through the same save API ("+oa+" + "+ob+").");
     }
