@@ -46,15 +46,9 @@ public static class HeroForgeSetup
             d.PowerA=Resources.Load<PowerDefinition>("Powers/"+a);d.PowerB=Resources.Load<PowerDefinition>("Powers/"+b);d.Effect=effect;configure(d);
             AssetDatabase.CreateAsset(d,"Assets/Resources/Forge/Synergies/"+id+".asset");entries.Add(d);
         }
-        Add("phoenix-dive","Phoenix Dive","flight","fire",Effect<SonicSlamEffect>("phoenix-dive",e=>e.Targeted=true),"Launch, dive ahead, ignite the landing.",d=>{d.Cooldown=40;d.Primary=CityColor.Fire;d.Secondary=CityColor.Amber;d.BurnSeconds=4;d.Damage=55;d.Force=1800;});
-        Add("frostwake","Frostwake","flight","ice",Effect<FrostwakeEffect>("frostwake"),"Burn flight fuel. Freeze enemies you pass.",d=>{d.Cooldown=25;d.Primary=CityColor.Cyan;d.Duration=1.1f;d.DiveSpeed=26;d.Radius=3;d.Damage=12;d.FreezeSeconds=2;});
-        Add("orbit-throw","Orbit Throw","flight","telekinesis",Effect<OrbitThrowEffect>("orbit-throw"),"Gather loose props. Press C again to volley.",d=>{d.Cooldown=30;d.Primary=CityColor.Blue;d.Range=9;d.Duration=2;d.Force=1800;d.Damage=35;});
+        // Synergies are CAPPED at five (Sonic Slam, Thermal Shock, Solar Flare, Void Grasp, Eclipse Beam). The original-roster
+        // pairs other than these two were removed; RosterSetup adds the three new-power synergies and enforces the exact set.
         Add("thermal-shock","Thermal Shock","fire","ice",Effect<ThermalShockEffect>("thermal-shock"),"Hot/cold blast. Bonus against burning or frozen targets.",d=>{d.Cooldown=30;d.Primary=CityColor.Fire;d.Secondary=CityColor.Cyan;d.Radius=4;d.Damage=25;d.Force=1500;d.FreezeSeconds=.6f;});
-        Add("meteor-punch","Meteor Punch","fire","strength",Effect<MeteorPunchEffect>("meteor-punch"),"Charge a flaming fist. Deliver an explosive blow.",d=>{d.Cooldown=40;d.Primary=CityColor.Fire;d.Secondary=CityColor.Amber;d.LiftSeconds=.6f;d.Radius=4;d.Damage=75;d.Force=3400;d.BurnSeconds=4;});
-        Add("inferno-orbit","Inferno Orbit","fire","telekinesis",Effect<OrbitThrowEffect>("inferno-orbit",e=>e.Ignite=true),"Ignite orbiting debris. Press C again to release.",d=>{d.Cooldown=45;d.Primary=CityColor.Fire;d.Secondary=CityColor.Red;d.Range=9;d.Duration=2;d.Force=1600;d.Damage=40;d.Radius=3;d.BurnSeconds=4;});
-        Add("glacier-fist","Glacier Fist","ice","strength",Effect<GlacierFistEffect>("glacier-fist"),"Ice-coated fists. Heavy hits knock back and freeze.",d=>{d.Cooldown=30;d.Primary=CityColor.Cyan;d.Duration=6;d.Radius=.4f;d.FreezeSeconds=1.5f;d.MeleeMultiplier=1.65f;});
-        Add("cryo-crush","Cryo Crush","ice","telekinesis",Effect<LiftSlamEffect>("cryo-crush",e=>{e.EnemyOnly=true;e.Freeze=true;}),"Suspend an enemy in ice. Slam them into the ground.",d=>{d.Cooldown=30;d.Primary=CityColor.Cyan;d.OrbitRadius=5;d.LiftSeconds=1.1f;d.Damage=35;d.Force=2000;d.Radius=4;});
-        Add("meteor-slam","Meteor Slam","strength","telekinesis",Effect<LiftSlamEffect>("meteor-slam"),"Lift an enemy or prop. Slam it down with a shockwave.",d=>{d.Cooldown=35;d.Primary=CityColor.Amber;d.OrbitRadius=6;d.LiftSeconds=1.2f;d.Damage=50;d.Force=2800;d.Radius=7;});
         catalog.Synergies=entries.ToArray();EditorUtility.SetDirty(catalog);AssetDatabase.SaveAssets();
     }
     public static void Batch(){Create();EditorApplication.Exit(0);}

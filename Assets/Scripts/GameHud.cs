@@ -373,7 +373,7 @@ public sealed partial class GameHud : MonoBehaviour
 
         // Vitals (Health)
         Show(VitalsGroup, (hud & ModeHud.Health) != 0);
-        float health = Mathf.Clamp01(w.Health / Mathf.Max(1f, w.Tuning.Movement.Health)), energy = Mathf.Clamp01(user.Energy / Mathf.Max(1f, w.Tuning.Movement.Energy));
+        float health = Mathf.Clamp01(w.Health / Mathf.Max(1f, w.MaxHealth)), energy = Mathf.Clamp01(user.Energy / Mathf.Max(1f, user.MaxEnergy));   // hero archetype maxima
         ghost = health >= ghost ? health : Mathf.MoveTowards(ghost, health, Time.unscaledDeltaTime * .5f);
         HealthFill.style.width = Length.Percent(health * 100f); healthGhost.style.width = Length.Percent(ghost * 100f); EnergyFill.style.width = Length.Percent(energy * 100f);
         int hv = Mathf.CeilToInt(w.Health), ev = Mathf.FloorToInt(user.Energy);

@@ -2195,6 +2195,312 @@ completed payoff run. Run commands (on an isolated copy, omit `-quit`):
 Supplemental dotnet build: **0 warnings / 0 errors** (`Verification/Payoff/build.txt`). All 18 changed/new asset,
 source and metadata files byte-match the final tested copy. `git diff --check` passes.
 
+## Cloud branch `cloud/gameplay-depth`: roster 5 → 11 powers + capped synergies — 2026-09-27 (appended; CLOUD agent, NO Unity)
+
+**Nothing in this section has been compiled by Unity or run.** Everything is written, unverified, and waiting for a local
+run. The cloud container has no Unity/.NET SDK. As a partial substitute, each commit was checked with Roslyn 4.2 on Mono
+against Unity 2021.3 reference DLLs (`UnityEngine.Modules` NuGet) and a 2021.1 `UnityEditor.dll`, diffing error sets
+against `origin/main`. Unity-6-only APIs (`linearVelocity`, `GetEntityId`, `FindObjectsByType`) show as baseline noise in
+that check. It found no new errors, but it is NOT a Unity 6000.6 compile: the local batch compile is still required.
+
+**Phase 1 (Ice shatter + Telekinesis throw):** already on main (`ada0a2e`, STATUS "Ice shatter + directed Telekinesis
+throw"), including Orbit Throw compatibility. Nothing was left to build; no change.
+
+**Synergy audit (10 existing):** all ten are fully implemented (none partial or stubbed) and exercised by
+`HeroForgeVerification.AllSynergies`.
+
+| Synergy | Pair | Status | In the 5-synergy cap? |
+|---|---|---|---|
+| Sonic Slam | Flight + Strength | full | yes (left as is) |
+| Thermal Shock | Fire + Ice | full | yes (left as is) |
+| Phoenix Dive, Frostwake, Orbit Throw, Meteor Punch, Inferno Orbit, Glacier Fist, Cryo Crush, Meteor Slam | original-five pairs | full | **no. Reported, NOT deleted, nothing more built for them** |
+| Solar Flare | Fire + Laser Eyes | NEW (this branch) | yes |
+| Void Grasp | Darkness + Telekinesis | NEW | yes |
+| Eclipse Beam | Darkness + Laser Eyes | NEW | yes |
+
+No other pair has a synergy. `HeroForgeVerification` asserted "every pair has a synergy", which cannot hold with 11
+powers and a cap. It now asserts full coverage for the original five powers only, symmetric lookup for all pairs, and
+a CONTROL that Speed + Poison resolves to none. Its per-synergy loop runs over the ten legacy ids.
+
+### Data-model changes (why the two odd powers fit cleanly)
+- `PowerDefinition.Activation` (`Instant` | `Channeled`) + `DrainPerSecond`; abstract `ChanneledEffect : PowerEffect` with
+  `Execute` (start), `Sustain(dt)` (each held frame), `Stop`. **Laser Eyes** is the only channeled power:
+  - no charge is spent; `ResourceCost` is only the energy needed to START;
+  - energy drains at `DrainPerSecond` while the fire button is held;
+  - `Cooldown` starts when the channel ends (release, reselect, synergy start, energy out, death, menu).
+  - `PowerUser.Channel(held, dt)` is called by `SuperHeroController` every frame with `GetMouseButton(0) || ScriptedHold`
+    (`ScriptedHold` exists only for verification).
+  - Its HUD slot shows one always-full pip (`Charges = 1`) plus the existing radial cooldown. The HUD was not changed.
+- **Force Field** is defensive and needs no special activation. It is an ordinary instant power whose effect raises a
+  `PlayerShield` (capacity, duration, absorb fraction). `WorldSession.DamagePlayer` routes damage through
+  `PowerUser.AbsorbIncoming` first.
+  - A fully absorbed hit changes no health and raises no `PlayerDamaged` event, so it also gives no hit feel and no
+    knockback (knockback requires a health drop).
+  - The kill plane uses the new `DamagePlayer(damage, unblockable: true)`.
+  - Upgrade tiers lengthen the field; capacity lives on the effect asset.
+- `CityNpc.Root(seconds)` / `Rooted`: navigation stops but the attack cycle continues. That is the difference from
+  Freeze: a rooted gunner still shoots, and a rooted melee enemy only hits the player inside its reach.
+- `CityNpc.Damage(amount, source, assault)`: DoT and beam ticks after the first do not add assault Heat each tick. A kill
+  still counts as a defeat.
+- Number keys: with Hero Forge, **1 = slot A, 2 = slot B** (`PowerUser.SlotNumber` / `PowerForSlot`). The old
+  list-index keys could not reach powers 10–11. `HudBindings.PowerKey` reads the same mapping (the only HUD-file edit:
+  key text, no animation). Legacy no-catalog sessions keep list-index keys.
+- `SuperHeroController`:
+  - `MoveInput`;
+  - `Dash(direction, distance, seconds, onStep)`: CharacterController only, NPC capsules ignored for the dash, stops at a
+    wall, zero-dt frames skipped as in Backflip.
+- VFX: `PowerVfx` is ONE fixed pool of 16 LineRenderers + 1 beam, parented to the WorldSession (first person keeps it).
+  - `PlayerShield` owns 3 ring lines on the player root; `DashTrail` is one TrailRenderer on the player root.
+  - Particles come from the existing Feel `ImpactParticlePool`.
+  - Every line/trail uses `CityMaterials.Get(<palette colour>)`: no runtime `new Material`, no per-cast GameObject.
+
+### The six powers (all `InitiallyUnlocked`, added to every hero's `AvailablePowers`)
+| Power (id) | Effect | Key numbers (asset) | Colour / glyph |
+|---|---|---|---|
+| Darkness `darkness` | Shadow Tendrils: root aimed NPC | 2 charges, 5 s recharge, 3.5 s root, 4 dmg, 22 m, 15 energy | UiPurple / Orbit |
+| Laser Eyes `laser-eyes` | channeled beam | 38 dmg/s, 32 energy/s drain (~5 s from full), start ≥10, 0.8 s cooldown after, 26 m | Red / Star |
+| Lightning `lightning` | chain bolt | 24 dmg ×0.85 per jump, 5 jumps (6 targets), 8 m hostile-only arcs with line of sight, 2 charges | Cream / Chevron |
+| Force Field `force-field` | shield, **0 damage** | 60 absorb, 6 s, 1 charge / 12 s, re-cast refused while up | Blue / Shield |
+| Speed `speed` | burst dash | 9 m in 0.18 s, 3 charges / 2.5 s, 0.35 s cooldown, 8 dmg to each hostile passed | Amber / Wing |
+| Poison `poison` | DoT + spread on death | 10 dmg/s × 6 s (exactly 60), spreads to ≤3 nearest enemies in 6 m, ≤3 generations | Leaf / Crystal |
+
+### New synergies (Sonic Slam pattern: `SynergyEffect` asset + `PowerSynergyDefinition`; always available on equip, cooldown is the lever)
+| Synergy | Mechanism | Numbers | Cooldown reasoning |
+|---|---|---|---|
+| Solar Flare | 0.5 s focusing beam, then `SynergyRunner.Impact` at the point | 60 dmg, 6 m, 2600 N·s, 4 s burn | 40 s: like Phoenix Dive (AoE + burn at range) |
+| Void Grasp | pulls ≤6 hostile NPCs within 9 m into a core via `SynergySuspension` for 1.4 s, then collapse `Impact` + 2.5 s root | 45 dmg, 2200 N·s | 40 s: strongest crowd control; damage is modest |
+| Eclipse Beam | roots one aimed NPC 0.6 s, beam 0.5 s, then ONE 160-damage hit to that target only | 160 single target | 45 s: highest single-target burst, so the longest cooldown |
+
+### What the local agent needs to do
+1. Batch-compile the branch (bundled SDK). The Mono/Roslyn check above is only an approximation.
+2. Run **`RosterSetup.Batch`** (menu *Overpowered/Roster/Create missing roster assets*). It creates, and never overwrites:
+   - `Resources/Effects/{Darkness,LaserEyes,Lightning,ForceField,SpeedDash,Poison}.asset`;
+   - `Resources/Powers/{darkness,laser-eyes,lightning,force-field,speed,poison}.asset`;
+   - the new entries in every hero's `AvailablePowers`;
+   - `Resources/Forge/{Effects,Synergies}/{solar-flare,void-grasp,eclipse-beam}.asset` and their `ForgeCatalog` entries.
+
+   Commit the generated assets. `RosterVerification.Run` also calls it first.
+3. Run **`RosterVerification.Run`**, then **`RosterVerification.Reload`** in a separate process. Output goes to
+   `Verification/Roster/`, with PNG captures per power/synergy. What the suite checks, all with controls:
+   - **Darkness**, on LIVE navigating criminals: speed before, during and after the root; an un-rooted control keeps
+     moving; a rooted enemy in reach still attacks while a frozen one does not; refusals for 0 charges and an empty sky.
+   - **Laser Eyes**: damage/s and energy drain against data; exactly one assault of Heat over ~10 ticks; the adjacent
+     cop is untouched; release, cooldown, reselect and energy-out each end the channel; start below the cost is refused.
+   - **Lightning**: exact chain order and per-jump damage; controls for the 7th target (cap), civilian, walled target,
+     distant target and no-enemy.
+   - **Force Field**: absorb then break (partial pass-through); full damage with the field down; re-cast refusal;
+     unblockable damage bypasses it; expiry.
+   - **Speed**: dash distance and direction; clips the enemy in its path once; civilian and side controls; NPC
+     collision restored after; a wall stops it; 0 charges refused.
+   - **Poison**: exactly 60 total damage; one Heat; spread to the 3 nearest enemies; controls for the 4th target,
+     civilian, out-of-radius, any killing blow, expired poison and the generation cap.
+   - **Synergies**: the cap, then each of the three with its no-target refusal (no cooldown spent), effect, bystander
+     controls and a mid-cooldown refusal.
+   - **Reload**: the Laser Eyes + Poison loadout survives a second process; that pair has no synergy.
+4. Re-run the retargeted `HeroForgeVerification` + `Reload` and `CityVerification` + `Reload`. Then the usual sweep
+   (Combat, HUD P1–3, Feel, FirstPerson, Ice, PowerPayoff, SynergyAvailability): powers, keys and damage routing changed
+   under all of them.
+
+### Untested / needs a human
+Everything: compile, runtime, feel, balance of all numbers above, readability of the line VFX (thin lit lines on the
+shared Standard materials, which may look flat), and FPS impact (the pool is fixed but not measured). There are no
+audio cues for the new powers: `AudioTuning.Powers` has no bindings for them, so they are silent by design until
+bindings are added. Glyphs reuse the existing 8 `MenuGlyph` shapes, so Darkness/Telekinesis share Orbit and Laser
+Eyes shares Star; colour distinguishes them.
+
+### OVERNIGHT DECISIONS
+- The queue said "build the 4 new synergies". The capped list has three new ones plus Thermal Shock, which already
+  existed, so three were built.
+- The earlier "Phase 3 missions" brief is deferred until after the overnight Phases 5 (melee depth) and 6 (hero
+  archetypes), per "continue in this order".
+- Number keys changed from list index to Forge slot (1/2) because 11 powers made list-index keys unreachable past 9.
+- The HUD was not touched beyond `HudBindings.PowerKey` key text. The channeled power shows one pip; no new HUD element
+  was added (the local agent owns the HUD).
+- Force Field capacity does not scale with upgrade tiers; tiers lengthen it (Duration) and add charges.
+- Lightning, Poison spread, Speed pass-hits and Void Grasp only affect `Hostile` NPCs, so a hero never chains into
+  civilians or friendly police. The directly aimed first target can be anyone, as with every other power.
+- Poison duration is converted to a whole tick count, so its total damage is exact (60) regardless of frame timing.
+
+## Cloud branch: melee depth (Phase 5) + hero stat archetypes (Phase 6) — 2026-09-27 (appended; CLOUD agent, NO Unity)
+
+**Written, unverified, awaiting local run.** Compile-checked only with the Mono/Roslyn approximation described above.
+
+### Phase 5 — melee depth (`GameTuning.Melee`, new section; missing in the existing asset → class defaults load)
+E is routed through three NEW entry points. `TryPunch` / `TryHurricaneKick` keep their exact behaviour, so every
+existing suite that calls them is unaffected. Payment is always the existing Super Strength charge + cooldown, or the Forge
+basic-melee cooldown without Strength. Force and damage go through `CombatImpact.Blast`; the hit pause goes through
+`TimeArbiter`. No camera code was touched.
+- **Combo** (`TryComboAttack`, a tap):
+  - punch → punch → the Hurricane Kick gesture as a finisher with ×1.6 force and ×1.4 damage, plus a 0.07 s hit pause;
+  - the string restarts after 0.9 s without a hit, or after the finisher; a refused tap does not advance it.
+- **Charged heavy** (`TryHeavyAttack(held)`, hold then release): one paid punch scaled linearly from ×1 at the 0.2 s tap
+  threshold to ×2.5 force / ×2.2 damage at 1.2 s. Longer holds are capped.
+- **Ground pound** (`TryGroundPound`, E while ≥ 2 m above ground):
+  - dives through the normal Update movement, so the controller must be enabled;
+  - on landing, a radial `Blast` of 4 m at punch ×1.35 force / ×0.85 damage (Strength tier 0: 1822 N·s / 29.75, vs
+    Sonic Slam's 2600 N·s / 40 / 7 m);
+  - one charge, no synergy cooldown.
+- **Verification — `MeleeVerification.Run`** (`Verification/Melee/results.txt`):
+  - combo stage damage and force, including the finisher's kick multipliers and its hit pause;
+  - restart after the finisher, plus window-timeout and zero-charge controls;
+  - heavy scaling at 4 hold times, with a cap control;
+  - pound: charge spent, force, radial damage, a 7 m control, prop knockback, a grounded control, the second pound at
+    once (no long cooldown), and smaller than Sonic Slam;
+  - basic-melee string: light taps give no pause (control), the finisher gives its own pause.
+
+### Phase 6 — hero stat archetypes (`HeroDefinition.Stats`, multipliers of the shared baseline; 1 = baseline)
+| Stat | Applied in | VECTOR | TITAN | NOVA |
+|---|---|---|---|---|
+| MaxHealth | `WorldSession.MaxHealth` (spawn, respawn) | 1 | **1.4** | **0.75** |
+| MaxEnergy / EnergyRegen | `PowerUser.MaxEnergy` / `EnergyRegen` (Tick) | 1 / 1 | **0.8** / 1 | **1.4 / 1.4** |
+| MoveSpeed | `SuperHeroController` walk/run (and so flight's boosted move) | 1 | **0.85** | **1.1** |
+| MeleeDamage | `PowerUser.Stats` for the Punch effect (damage AND force), basic melee stats, so combo/heavy/pound too | 1 | **1.25** | 1 |
+| PowerDamage | `PowerUser.Stats` damage of every non-melee, non-flight power | 1 | 1 | 1 |
+| CooldownMultiplier | `PowerUser.Stats` cooldown of every non-melee, non-flight power (not synergies, not charge recharge) | 1 | 1 | **0.8** |
+| KnockbackResistance | `CityNpc.Release` incoming knockback distance × (1 − r) | 0 | **0.6** | 0 |
+
+- `HeroArchetypeSetup.Batch` (menu *Overpowered/Forge/Apply hero archetype stats*; `RosterSetup` also runs it) writes
+  TITAN and NOVA into the hero assets, and only while they are still all-baseline.
+- HUD health/energy fractions now divide by `WorldSession.MaxHealth` / `PowerUser.MaxEnergy`. This is a one-line data
+  read in `GameHud` and in the F3 `PrototypeHUD`; no animation code was touched.
+- Hero Forge has eight comparison bars under the preview (`forge-stat-<key>`): the real value, filled relative to the
+  roster best (lower is better for cooldown). Accent colour means better than baseline, red means worse.
+- **Verification — `HeroStatsVerification.Run`** (`Verification/HeroStats/results.txt`). Each hero plays a real session
+  and VECTOR is the control for every difference:
+  - starting maxima, and who survives a 90-damage hit (TITAN/VECTOR yes, NOVA no);
+  - measured regen per second and measured run speed (`ScriptedMove` through the real Update path);
+  - punch damage and force on a real actor, Ice damage and cooldown;
+  - knockback from a live Brute slam in the city (VECTOR vs TITAN);
+  - PowerDamage via an in-memory ×1.5 test hero (catalog restored immediately);
+  - every Forge bar's text and fill for all three heroes.
+
+### Local agent: run
+1. `RosterSetup.Batch`, which now includes the archetypes; commit the generated/updated assets.
+2. `MeleeVerification.Run`, then `HeroStatsVerification.Run`.
+3. Re-run HeroForge + Reload, which has a TITAN session whose punch now uses ×1.25. Its assertions compare against
+   `Stats()`, which includes the multiplier, so they should hold, but that needs a real run.
+
+### OVERNIGHT DECISIONS (Phases 5–6)
+- Tap vs heavy is decided on key RELEASE (tap < 0.2 s), so a tap punch fires up to 0.2 s later than before. This needs a
+  playtest; the threshold is `Melee.HeavyTapThreshold`.
+- The combo finisher reuses the Hurricane Kick gesture (the brief's "kick finisher") rather than a new clip. RMB kick is
+  unchanged.
+- With Strength, every punch is already a Feel "heavy" hit (≥ 1000 N·s) with its own pause. The finisher's extra pause
+  is therefore distinguishable only for basic melee. The suite asserts that case and records the Strength case.
+- Archetype values are multipliers, not absolutes, so GameTuning stays the single baseline; the Forge bars show resulting
+  absolute values.
+- "+25% melee damage and knockback" applies ×1.25 to melee damage and to the knockback force Titan deals. "Resists
+  knockback" is a separate 60% resistance to knockback Titan receives.
+- "−20% power cooldowns" applies to the 10 non-melee, non-flight powers only: not synergies (their cooldown is the
+  balancing lever) and not charge recharge.
+- PowerDamage exists and is applied, but no shipping hero changes it, per the brief.
+
+## Cloud branch: readable missions + session summary — 2026-09-27 (appended; CLOUD agent, NO Unity)
+
+**Everything below is written, unverified, and awaiting a local run.** Nothing here was compiled by Unity or executed.
+
+### Missions (the earlier "Phase 3" brief, done last per the overnight order)
+Built as an **opt-in scenario layer** inside the existing encounter architecture:
+- `EncounterDefinition.Scenario` (an `EncounterScenario` asset) adds a per-encounter `ScenarioState`, the same split as
+  `ModeDirector`. Null keeps the original mixed encounter byte-for-byte in behaviour.
+- `CrimeEncounter` still owns spawning helpers, deadline, rewards and ending. It delegates tick, win/fail, NPC driving and
+  interaction to the scenario.
+- The HUD needed no change: `ModeRules.Current` / `Targets` show the scenario's own task labels, and new `ObjectiveTask`
+  kinds (`Threats, Hostages, Fires, Carry, Vault, Extract`) read progress and waypoints from the state.
+- `MissionTarget` lets mission objects receive `CombatImpact.Blast` hits, Ice casts and Laser Eyes ticks.
+
+| Mission (encounter) | Objective line | How you play it (not just hold R) | Win | Fail |
+|---|---|---|---|---|
+| Bank robbery getaway (`mission-robbery`) | STOP THE GETAWAY n/3 | robbers run to 2 parked cars; a car leaves 5 s after the first robber boards (or once all are in) and **drives a NavMesh route**; take robbers down, wreck a car (robbers inside caught), or stall it (Ice freeze / flip / pin 2.5 s) so they bail on foot; hold R 1 s cuffs only a frozen or rooted robber | every robber stopped | a car with a robber gets 70 m away, or a robber escapes on foot |
+| Hostage standoff (`mission-hostage`) | TAKE DOWN THE GUNMEN n/3 → FREE THE HOSTAGES n/3 | 3 ranged gunmen hold their posts; coming within 18 m (or hitting one) starts a 15 s clock, after which hostages bleed; take the gunmen down, then move each hostage's 250 kg debris 2 m with powers; freed hostages run to the safe point | gunmen down + all hostages safe | a hostage lost (area attacks count) |
+| Apartment fire (`mission-fire`) | PUT OUT THE FIRE n/4 → LEAD CIVILIANS OUT n/2 | 4 regrowing fire spots ring 2 trapped civilians; Ice cast −0.55, any ≥600 N·s blast −0.35, hold R spray −0.2/s (slow fallback); freed civilians follow you when approached; lead them to the safe point; trapped ones burn after 25 s | all spots out + civilians safe | a civilian lost |
+| Vault heist, villain (`mission-heist`) | CRACK THE VAULT n/100 → GRAB THE LOOT n/3 → REACH THE GETAWAY VAN n M | 350 HP vault takes any blast or beam (Ice does nothing); first hit brings a 3-cop response in 4 s on top of 2 guards; cracking adds Heat and spills 3 bags (run over them); reach the blue van 30 m away | all three | mode deadline / defeat limit |
+
+All numbers live on the scenario assets (`Resources/Missions/*.asset`) and encounter assets.
+
+**Local agent — missions:**
+1. `MissionSetup.Batch` (menu *Overpowered/Missions/Create missing mission assets*) creates the 4 scenario assets and 4
+   `mission-*` encounter assets. Commit them.
+2. `MissionVerification.Run` (`Verification/Missions/results.txt`). For each mission it checks the objective line text,
+   the mechanics, the win path and the fail path; fail paths needing minutes use in-memory clones with one timing value
+   shortened.
+3. **Only after it passes:** run `MissionSetup.BatchUseInModes`. That is the content switch: Hero = robbery → hostage →
+   fire, Villain = heist. Then re-run HUD P2/P3, Mode, ModeExpansion, World and Audio, which read the mode's encounter
+   list. Those suites encode the original mixed encounters, so expect them to need retargeting to the missions. That was
+   not done blind here.
+
+### Every commit on `cloud/gameplay-depth`
+```
+52cdb4e Extend the power model for channeled and defensive powers
+8684f34 Add Darkness (Shadow Tendrils): root the aimed enemy
+6d0b56b Add Laser Eyes: a held beam that drains energy
+ad435b4 Add Lightning: a chain bolt that arcs between enemies
+9741893 Add Force Field: a damage-absorbing shield on the player
+f33fef8 Add Speed: a short combat burst dash
+dd14326 Add Poison: damage over time that spreads on death
+59e60ad Retarget City and Forge verifiers to the eleven-power roster
+0c5b4f8 Poison: count whole ticks so total damage is exactly dps x duration
+ebf05f5 Add RosterVerification for the six new powers
+b4bef1c Add Solar Flare (Fire Blast + Laser Eyes) synergy
+e3884e6 Add Void Grasp (Darkness + Telekinesis) synergy
+49cde9a Add Eclipse Beam (Darkness + Laser Eyes) synergy
+184ddab Verify the capped synergy set and the three new synergies
+5eb2e5c STATUS: cloud roster expansion and capped synergies (unverified)
+e6c84fa Add melee depth: combo string, charged heavy, ground pound
+4801ee9 Add MeleeVerification and a shared session verification base
+1286b54 Add hero stat archetypes and Hero Forge comparison bars
+ff8452d Add HeroStatsVerification for the hero archetypes
+4785a1b STATUS: cloud melee depth and hero archetypes (unverified)
+e3d2190 Add an opt-in mission scenario layer to encounters
+bb6c280 Add the Robbery getaway mission scenario
+15cf5fc Add the Hostage rescue mission scenario
+f315f31 Add the Building fire mission scenario
+3686385 Add the Vault heist (villain) mission scenario
+c1c5636 Add MissionSetup: mission assets and an explicit mode switch
+3c6f7f3 Add MissionVerification for the four mission scenarios
+```
+
+### New suites (all written, none run)
+| Suite | Checks |
+|---|---|
+| `RosterVerification.Run` / `.Reload` | the six powers and three capped synergies with controls; the synergy cap; a second-process loadout reload (details in the roster section above) |
+| `MeleeVerification.Run` | combo stages and finisher, heavy scaling and cap, ground pound; basic-melee pause control |
+| `HeroStatsVerification.Run` | every archetype stat against the VECTOR control in real play; the Forge bars |
+| `MissionVerification.Run` | four missions: objective text, mechanics, win and fail paths |
+
+Retargeted existing suites: `HeroForgeVerification` (synergy coverage for the capped roster) and `CityVerification`
+(power count from data).
+
+### Full local run order
+1. Compile. The branch has only ever passed a Roslyn/Mono approximation against Unity 2021 reference DLLs.
+2. `RosterSetup.Batch` (powers, synergies, archetypes), then `MissionSetup.Batch`. Commit the generated assets.
+3. Run `RosterVerification.Run` + `.Reload`, then `MeleeVerification.Run`, `HeroStatsVerification.Run` and
+   `MissionVerification.Run`.
+4. Full regression sweep. Shared code changed under all of it: `PowerUser`, `SuperHeroController` (E routing, dash),
+   `CityNpc` (root, damage overload, knockback resistance), `WorldSession` (MaxHealth, shield), `CombatImpact` and
+   `IceEffect` (mission targets), and `GameHud` / `PrototypeHUD` (max-value reads only). Suites: HeroForge + Reload,
+   City + Reload, Combat, HUD P1–3, Feel, FirstPerson + Reload, Ice, PowerPayoff, SynergyAvailability + Reload,
+   Humanoid, BackflipHurricane, Mode + Reload, ModeExpansion + Reload, Audio, World.
+5. Only then `MissionSetup.BatchUseInModes`, followed by the mode/HUD re-runs above.
+
+### Untested — needs a human playtest (none of it is claimed to work, let alone feel good)
+- Compile and runtime of every commit above.
+- FPS cost of the line pools, flame particles, the channel beam and car driving.
+- Balance of every number, and whether the tap-on-release timing feels laggy.
+- Readability of the lit line VFX, and whether the getaway cars' NavMesh routes look like driving.
+- Whether escorting civilians is fun, whether the hostage clock is fair, and mission pacing and difficulty.
+- The new powers and missions have no audio cues.
+
+### OVERNIGHT DECISIONS (missions)
+- Missions are opt-in data. The shipping modes are unchanged until `MissionSetup.UseInModes` runs, so no existing suite
+  regresses silently on a content change nobody has run.
+- Villain mode gets one mission type (the vault heist, repeated). The brief asked for heist objectives only.
+- Hero missions post no friendly responding cops (`RespondingCops = 0`), so the player does the work. The heist keeps 2
+  guards plus a 3-cop response.
+- Blasts and area powers can hurt hostages and trapped civilians. This is a deliberate risk/skill element, not a bug;
+  a playtest should decide whether to keep it.
+- Robbers left behind when their car departs, stalls or is wrecked run for a far exit on foot, so stalling a car is not a
+  free win.
 ## Local agent Phase 0: ground truth, packages, DOTween — 2026-09-27 (appended)
 
 Verified in an isolated clone (the user's Editor was open on the real tree at the start); real tree only received the
@@ -2612,3 +2918,596 @@ Codex independently rebuilt this exact source with the bundled Unity dotnet SDK:
 Sidekick + the local L1–L3 fixes are merged on main at `f3040c7`. Codex reran `SidekickVerification.Run` (exit 0) and `SidekickVerification.Reload` in a separate Unity process (exit 0) on the merged source in wt-sidekick. Evidence: `Verification/Continuation/Sidekick/`. Original package/Sidekick-database working changes on main were preserved.
 
 Push of main failed: `fatal: could not read Username for 'https://github.com': Device not configured`. Local commits remain intact; no credentials were changed.
+
+## CLOUD READY — `cloud/gameplay-depth` repaired after CLOUD FEEDBACK #1 (2026-09-27, appended; CLOUD agent, NO Unity)
+
+**Nothing in this section has been run in Unity.** The Mono/Roslyn diff check against Unity 2021 reference DLLs showed no
+new errors in any commit. `origin/main` (`49ffbed`) is merged in (`4d4392d`); the only conflicts were `HeroForgeScreen`
+(kept both `StatsPanel` and `PreviewModel`) and STATUS.md (kept both sides).
+
+### Repair commits (in order)
+| Commit | Fixes |
+|---|---|
+| `4d4392d` | merge `origin/main` into the branch |
+| `0f5c825` | #1.1 verifier power clock |
+| `9127078` | #1.2 HeroStats Ice occlusion; asserts measured Ice damage == data |
+| `9567b22` | #1.3 exact five shipping synergies; #1.4 scoped 40x cooldown rule |
+| `1821152` | deleted code used only by the eight removed synergies |
+| `ff9f666` | #1.5 getaway car really drives; #1.6 cuff completion |
+| `e8397f5` | per-cast collection allocations (Lightning, Poison, Speed, Void Grasp) |
+| `6e72cf3` | fire looks pooled; fire gameplay independent of visuals |
+
+### What each repair does
+- **#1.1 Power clock** (test bug): `SessionVerificationRunner.Update` now calls `W.Powers.Tick(Time.deltaTime, true)` once
+  per frame while `SuperHeroController` is disabled. That is the same call the controller makes, and frames where the
+  controller runs are never double-ticked.
+  - Cooldown assertions are unchanged.
+  - Laser Eyes' energy check now expects the real net drain (drain − regen).
+  - The below-start-cost control clears the cooldown in the same frame the channel ran dry, because regen would otherwise
+    refill the start cost during that cooldown.
+- **#1.2 HeroStats Ice**:
+  - The melee actor is removed before any Ice cast, and the suite asserts the crosshair line reaches the far actor.
+  - Each hero's measured Ice damage must equal data damage × PowerDamage and be non-zero; the ×1.5 test hero is checked
+    against data × 1.5.
+  - The regen sample is now 0.5 s, so NOVA cannot hit its cap.
+- **#1.3 Exact five shipping synergies:** `sonic-slam`, `thermal-shock`, `solar-flare`, `void-grasp`, `eclipse-beam`.
+  - `ForgeCatalog.asset` references only Sonic Slam and Thermal Shock; `RosterSetup` adds the other three.
+  - The 8 legacy synergy definitions and their 8 effect assets are deleted.
+  - `HeroForgeSetup` no longer creates them. `RosterSetup.EnforceSynergyCap` (also menu *Overpowered/Roster/Enforce the
+    five-synergy cap*) leaves exactly the five and logs anything it drops.
+  - `HeroForgeVerification.Run` and `SynergyAvailabilityVerification.Run` now run `RosterSetup.Create()` first.
+  - Assertions check exact IDs, not counts:
+    - Forge: the five IDs; the removed 8 are not loadable from Resources; of all 55 pairs, exactly the 5 capped pairs
+      resolve (each to its own id) and the other 50 resolve none.
+    - SynergyAvailability: the five IDs, also after its in-memory restore; the pair-change check now uses Solar Flare;
+      new control: Fire + Strength shows "No synergy"; the unequipped-Ice control now expects no synergy.
+    - PowerPayoff: the Orbit Throw section is replaced by "Flight + Telekinesis has no synergy; LMB Telekinesis still grabs
+      and throws".
+- **#1.4 40× rule, scoped:**
+  - Compared (instant offensive powers): darkness, fire, ice, lightning, poison, speed, strength, telekinesis. The suite
+    logs the list.
+  - Excluded, and asserted to be exactly these: flight (fuel), force-field (lifetime + 12 s charge recharge), laser-eyes
+    (channel drain).
+  - **Lightning cooldown 0.8 → 0.75 s**, so 40× equals Thermal Shock's 30 s. Its real pacing gate is still 2 charges with
+    a 2.5 s recharge.
+  - Nothing else was retuned.
+- **Dead code removed** (the only users were the removed synergies): `FrostwakeEffect`, `OrbitThrowEffect`,
+  `MeteorPunchEffect`, `GlacierFistEffect`, `LiftSlamEffect`, `SynergyPayload`.
+  - Also removed: their `SynergyRunner` helpers, PowerUser's Orbit Throw LMB branch, and SuperHeroController's two no-op
+    `ModifyMelee` calls.
+  - `SynergyRunner.Cancel` now finishes any `SynergySuspension` a Void Grasp started, so dying mid-grasp never leaves an NPC
+    suspended.
+- **#1.5 Getaway car** (logic bug):
+  - Parked, it is an ordinary physics prop.
+  - On depart it becomes **kinematic** and moves with `MovePosition` at `CarSpeed` along its NavMesh route corners,
+    following the NavMesh height, with a straight-line fallback if no route exists. Friction and curbs cannot hold it.
+  - It escapes after `EscapeDistance` driven or at the route's end. Fail reasons are now distinct: "The getaway car got
+    away with N robber(s) aboard." vs "A robber escaped on foot."
+  - Ice freezes a driving car in place and stops it. A hit ≥ `StopImpulse` (1200 N·s; a punch is 1350, Fire Blast 450
+    is not) knocks it out of its drive. A stopped car turns dynamic with its drive velocity and the robbers bail.
+  - `CombatImpact.Blast` now damages kinematic breakables (no force), so a driving car can still be wrecked with the
+    robbers inside.
+- **#1.6 Cuff** (test bug): `CrimeEncounter.Update` calls `Interact(0)` every frame R is not held, and that reset the cuff
+  timer under the test's own coroutine calls.
+  - `CrimeEncounter.ScriptedHold` now behaves exactly like holding R on that Update path.
+  - The suite logs Captured, scenario Finished, outcome, Result and standing distance, and asserts the cuff radius.
+  - Unfrozen-robber control; frozen robber → SUCCESS.
+- **Allocations:**
+  - Lightning and Void Grasp use `UnityEngine.Pool` `HashSetPool`/`ListPool`, rented per cast, so a nested cast cannot
+    share a set.
+  - Poison keeps the nearest targets by insertion into a pooled list.
+  - Speed reuses a per-hero set, buffer and cached delegate.
+- **Fire looks:** `FireSpot` is gameplay only. Its placeholder look is rented from a 12-slot session `FireVisualPool` and
+  returned. With the pool exhausted, a spot still burns and douses (the suite tests this).
+
+### Files changed since the merge
+- **Editor setup and verification entry points:** `HeroForgeSetup`, `RosterSetup`, `HeroForgeVerification`,
+  `SynergyAvailabilityVerification`.
+- **Data:** `ForgeCatalog.asset`; 16 legacy assets deleted.
+- **Gameplay code:** `CombatImpact`, `CrimeEncounter`, `IceEffect`, `PowerUser`, `SuperHeroController`, `Forge/SynergyRunner`,
+  `Forge/VoidGraspEffect`, `Missions/RobberyScenario`, `Missions/FireScenario`, `Powers/LightningEffect`,
+  `Powers/PoisonEffect`, `Powers/SpeedDashEffect`.
+- **Verification runners:** `Powers/SessionVerificationRunner`, `Powers/RosterVerificationRunner`,
+  `Forge/HeroStatsVerificationRunner`, `Forge/HeroForgeVerificationRunner`,
+  `Forge/SynergyAvailabilityVerificationRunner`, `PowerPayoffVerificationRunner`, `Missions/MissionVerificationRunner`.
+- **Deleted:** 6 effect scripts.
+
+### Migrations
+- Saves: none. Loadouts store power IDs, and every one of the 11 powers remains.
+- Catalog: the 8 removed synergies simply no longer resolve.
+- A local tree already holding integration #1's generated assets (13-entry catalog, Lightning at 0.8) is corrected by
+  `RosterSetup.EnforceSynergyCap`. The existing `lightning.asset` keeps 0.8 until changed by hand or regenerated, because
+  setup never overwrites. Regenerate it, or the SynergyAvailability 40× check will fail by design.
+
+### Setup scripts LOCAL must run (none overwrite existing assets)
+1. `RosterSetup.Batch`: 6 powers, heroes' `AvailablePowers`, the 3 new synergies + cap enforcement, and archetypes. Then
+   commit the generated assets.
+2. `MissionSetup.Batch`: mission assets. **Do NOT run `MissionSetup.BatchUseInModes`.** LOCAL enables missions after its
+   green sweep.
+
+### Verification entry points
+- **New suites:** `RosterVerification.Run` + `.Reload`, `MeleeVerification.Run`, `HeroStatsVerification.Run`,
+  `MissionVerification.Run`.
+- **Retargeted suites:** `HeroForgeVerification.Run` + `.Reload`, `SynergyAvailabilityVerification.Run` + `.Reload`,
+  `PowerPayoffVerification.Run`, `CityVerification.Run` + `.Reload`.
+
+### Exact local integration order
+1. Merge `cloud/gameplay-depth` into a scratch integration branch from current main, then batch compile.
+2. Run `RosterSetup.Batch`, then `MissionSetup.Batch`. On an old integration tree, also regenerate or fix `lightning.asset`
+   (0.75).
+3. Run the new suites: Roster Run + Reload, Melee, HeroStats, Mission.
+4. Run the retargeted suites: HeroForge Run + Reload, SynergyAvailability Run + Reload, PowerPayoff, City Run + Reload.
+5. Full regression sweep: Combat, HUD P1–3, Feel, FirstPerson + Reload, Ice, Humanoid, BackflipHurricane, Mode +
+   Reload, ModeExpansion + Reload, Audio + Reload, World, CityArt, Camera, MenuPresentation.
+6. If green: merge to main. Only then decide on `MissionSetup.BatchUseInModes` and the suites that read the mode
+   encounter lists.
+
+### Still unverified or needing Henry's playtest
+- Everything above is unrun in Unity.
+- Whether the kinematic getaway drive looks right on real streets (route corners, turn rate).
+- Whether 1200 N·s is the right stopping hit.
+- All balance numbers; the lower Lightning cooldown.
+- Missions stay out of the shipping modes.
+
+Further work continues on **`cloud/replayability-depth`**, branched from this repaired head. `cloud/gameplay-depth` gets
+no more features.
+
+## CLOUD REPLAYABILITY — `cloud/replayability-depth` (2026-09-27, appended; CLOUD agent, NO Unity)
+
+Branched from the repaired `cloud/gameplay-depth` head (`bfa59fa`). `origin/main` had no new commits at any checkpoint
+during this work, and there was no newer CLOUD FEEDBACK than #1 (already addressed). **Nothing here has run in Unity.**
+Every item is **written, unverified, and awaiting a local run**. The compile check was the usual approximation: Roslyn C# 9
+against Unity 2021.3 module DLLs, diffed against the `origin/main` error baseline. It introduced no new errors.
+
+### Commits (oldest first)
+| Commit | What |
+|---|---|
+| `cf910d6` | Mission-stage layer: `StagedScenario` / `StagedState` (ordered data stages on `EncounterScenario`), `DamageTarget`, `MissionVehicle`; `ObjectiveTask.Stage` and `ScenarioState.TryCurrent`, so the HUD line shows the active stage |
+| `373ee64` | `StageFrameworkVerification` and the shared `StagedMissionRunner` harness |
+| `55c1a6e` | Nine staged missions (`StagedMissionLibrary` recipes, `StagedMissionSetup`); `StagedMissionVerification`; framework: anchored spawns, scattering exits, root-safe `Drive` |
+| `0ddaba8` | Optional `EncounterSelection` (weighted, anti-repeat, difficulty bands, district filter, seeded) on `GameModeDefinition.Selection`; `EncounterSelectionVerification` |
+| `41f01ed` | Endless wave events (`EndlessWaveEvents`: composable modifiers, elites, minibosses, alive budget, score events); `EndlessEventsSetup`, `EndlessSimulation`, `EndlessEventsVerification` |
+| `cc7fbfe` | Save robustness in `PlayerProgression` (.corrupt copy, .bak/.tmp recovery, repair, overflow guards); `SaveRobustnessVerification` + Reload |
+| `4b8c9e4` | Persistent per-power stats (instrumentation only, credit scopes); `PowerStatsVerification` + Reload |
+| `1af37e8` | `StyleScoreTracker` + `PowerUser.Hit` / `Used` events; `StyleVerification` |
+| `56add91` | Challenges (`ChallengeDefinition`, `ChallengeCatalog` switch, `ChallengeTracker`, pay-once saves); `ChallengeSetup`; `ChallengeVerification` + Reload |
+| `c5e91b7` | Status-effect audit fixes (poison stops at session end; a dash shatters freezes); `StatusEffectVerification` |
+| `ce11109` | `LoadoutMatrixVerification` (55 loadouts, 11-power lifecycle, teardown) + batched Reload |
+| `3c19724` | `ScenarioFuzzVerification` (seeded; Replay by seed) |
+| `ad1f41f` | Performance audit fixes (per-frame and per-hit allocations) |
+| `79f1474` | `BalanceReport` (scene-free CSV / JSON / text) |
+| `56294a7` | Cleanup: four clearly dead members removed |
+
+### Systems (what exists now)
+- **Staged missions.** A `StagedScenario` asset is data:
+  - points, actor groups (real `CityNpc`s with Idle / HoldPost / Flee / Follow / Pursue / Harass), target groups
+    (hardpoints, crates, pickups, driving vehicles) and ordered stages;
+  - stage kinds: DefeatTargets, ReachArea, ProtectActors, EscortActors, InteractTargets, DestroyTargets, CollectItems,
+    Survive, EscapeRadius, ChaseExit, StopVehicles, RaiseHeat;
+  - each stage has a timeout, repeat spawns, and OnStart / OnComplete actions.
+
+  One stage is active at a time. The first failure latches FAILED, and the last completion latches COMPLETE. Rewards stay in
+  `CrimeEncounter`'s single `End`. Hardpoints take damage only while their Destroy stage is active, and pickups collect only
+  during their Collect stage, so stage order matters.
+- **The nine missions.** Assets are created by `StagedMissionSetup.Create`, which only creates missing ones. The shipping
+  mode lists are not changed.
+
+  | Side | Mission | Flow |
+  |---|---|---|
+  | Hero | Street pursuit | Arrival triggers the scatter; runners take different exits and re-route when held; the bag drops at the last runner; return it |
+  | Hero | Convoy intercept | Trucks leave as you close in; stop both; gunmen come out; the crates become breakable |
+  | Hero | Blackout response | Restore spread relays while saboteurs undo them; then the looters |
+  | Hero | Hold the block | Arrive, then defend the residents against capped raiders; beat a Brute enforcer; escort the residents |
+  | Villain | Armoured strongroom | The guards gate the door; the breach adds Heat and a response team; timed cash grab; reach the pickup |
+  | Villain | Sabotage run | Three nodes, strictly in order, each with its own timer; then get clear |
+  | Villain | Armoured car robbery | Stop the car WITHOUT wrecking it (a wreck fails the crack stage); drop the escort; hold R at the car; take the bags; escape |
+  | Villain | The distraction job | Raise Heat on purpose; slip the cordon; crack the real target |
+  | Villain | Getaway | Reach the crew; escort them while hunters go for them; shake the pursuit |
+
+  **Rooftop Rescue was not built.** NPCs only exist on the ground NavMesh, and there is no rooftop NavMesh. Adding one is
+  a scene / NavMesh decision for LOCAL.
+- **EncounterSelection (optional).** Null keeps the original round robin, and the shipping modes are null. With a selection:
+  - weighted options;
+  - an anti-repeat window that relaxes instead of stalling;
+  - difficulty bands from resolved encounters, successes, player level or Heat stars, divided by a step;
+  - a district-name filter with optional fallback;
+  - a seeded, deterministic mode.
+- **Endless wave events (optional `EndlessWaveDirector.Events`).** Null keeps the original waves; the shipping director is
+  null. `Plan(wave)` is pure and deterministic:
+  - modifiers (Armoured, Frenzied, Swarm, Glass cannons, Veterans) compose multiplicatively;
+  - elites are an exact share of spawns, spread evenly;
+  - every 5th wave starts with a Brute miniboss;
+  - elites and the miniboss occupy 2 / 4 MaxAlive slots (`EndlessWaveState.Room`), so neither the threat nor the humanoid
+    count exceeds MaxAlive;
+  - `Scored` events: kill (× modifier score), elite kill, miniboss kill, wave clear, flawless.
+- **Save robustness.**
+  - An unreadable save is copied to `.corrupt`. The newest readable `.bak` / `.tmp` is then used. Before this change, the
+    next save moved the corrupt file over the good `.bak`.
+  - Missing Powers / Rooftops lists are created. They used to reset the whole profile.
+  - Duplicates are merged, empty ids dropped, counters clamped, and the level capped at 9999.
+  - `RequiredXp` saturates instead of wrapping negative. A huge saved level used to make every XP point a level-up loop.
+  - The version policy is unchanged: Version 1 only, and negative level / xp / points are still invalid.
+- **Per-power stats.** Instrumentation only; no gameplay reads them.
+  - `ProgressSave.PowerStats` records uses, hits, damage (health actually removed), kills and equipped sessions per power
+    id, `melee`, or `synergy:<id>`.
+  - Attribution uses an explicit credit scope. Deferred hits re-enter it: projectile, TK throw, poison ticks, dash steps,
+    melee impacts and synergy steps.
+- **StyleScoreTracker.** A per-session number, separate from score and rewards. The best per mode is saved as
+  `ModeRecord.BestStyle`.
+  - Points come from varied hits, kills, multi-kills and synergies against hostile enemies.
+  - Anti-exploit rules:
+    - non-hostile targets pay nothing, and killing one resets the streak;
+    - damage-over-time ticks pay no hit points;
+    - repeating one power decays its value;
+    - hit points are capped per NPC;
+    - idling resets the multiplier;
+    - a token bucket caps points per second.
+- **Challenges.** 15 definitions with stable kebab-case ids equal to their asset names.
+  - Metrics: kills (optionally per power), elite / miniboss kills, flawless waves, best Endless wave, missions completed,
+    synergy uses, best session style, and distinct powers per session.
+  - Rewards are XP and upgrade points only.
+  - `PayChallenge` writes Paid together with both rewards in one save, so nothing pays twice, even across processes.
+  - Removed ids stay in the save untouched and are never paid.
+  - **Dormant until `Resources/ChallengeCatalog.Enabled`.** Setup creates the catalog disabled.
+- **Status effects: audit result.**
+
+  | Status | How it works |
+  |---|---|
+  | Freeze / Root / Burning | Timestamps on `CityNpc` (self-expiring; pause stops them) |
+  | FrozenLook / RootedLook / Poisoned | Poll death / expiry and live on the NPC, so they are destroyed with it |
+  | Lightning | Instant |
+  | Force Field | The player's shield, deliberately not a status |
+
+  No shared status infrastructure is justified. Two fixes:
+  - poison no longer ticks, kills or pays XP after the session has ended;
+  - **base interaction:** a Speed dash consumes an existing freeze and shatters it for Ice's `ShatterDamage`, like melee.
+    It is not a synergy: any freeze source counts, and no pair has to be equipped.
+
+  Considered and rejected:
+  - fire thawing ice, because it would undercut Thermal Shock;
+  - cold pausing poison, a hidden rule;
+  - lightning bonuses on statuses, which would be new damage without a readable cue.
+
+### Performance audit (cloud code)
+`CityNpc.Update` calls its encounter's `Drive` **every frame** for every encounter NPC. The Hostage / Fire / Robbery Drive
+lookups used `List.Find` closures, so they allocated per NPC per frame. The same pattern appeared in these places, and
+all of them are now plain loops:
+
+| Where | Allocation | How often |
+|---|---|---|
+| Staged `ActorSpec` / `TargetSpec` | `Array.Find` closure | per group per frame |
+| `Interact` | `AllTargets` iterator | every frame |
+| `PlayerProgression.Usage` / `Challenge` | closure | per hit / per kill |
+| Style pruning | `RemoveAll` closure | per event |
+| `PlayerProgression.Tier` | closure | every power every frame, via `PowerUser.Stats` |
+
+Left for LOCAL, pre-existing and not cloud code: `CrimeEncounter.Drive` still uses `Robbers.Find` / `Civilians.Find`
+closures per NPC per frame. There are no profiler numbers from the cloud; LOCAL should measure.
+
+### Cleanup audit
+Every member added on the cloud branches was checked for references anywhere under `Assets`.
+- **Removed** (no references): `RobberyScenario.Car.Travelled`, `ChallengeTracker.SessionValue`, `Poisoned.TicksLeft`,
+  `CityNpc.Unroot`.
+- **Kept on purpose:** `EndlessEventsSetup.UseInEndless` (a menu item), `SuperHeroController.Charge01` (heavy-charge meter
+  hook for LOCAL's HUD), and the style / challenge events (HUD hooks).
+
+### Setup assets (editor / batch; all create-missing only)
+1. `RosterSetup.Batch` (as before)
+2. `StagedMissionSetup.Batch`
+3. `EndlessEventsSetup.Batch`
+4. `ChallengeSetup.Batch`
+
+The suites call the Create they need themselves.
+
+**Content switches (explicit menus, NOT run by cloud):**
+- Endless wave events: "Overpowered/Endless/Use wave events in Endless".
+- Challenges: "Overpowered/Challenges/Enable challenges".
+- Staged missions in the modes: no switch exists. Add them to a mode's `Encounters`, or reference them from an
+  `EncounterSelection`. This is Henry's call.
+
+### Verification entry points
+| Kind | Entry points |
+|---|---|
+| Scene-free | `EndlessSimulation.Run` (waves 1–50 CSV / JSON; formulas at 1/5/10/20/25), `BalanceReport.Run`, `SaveRobustnessVerification.Run` then `.Reload` |
+| Play mode | `StageFrameworkVerification.Run`, `StagedMissionVerification.Run`, `EncounterSelectionVerification.Run`, `EndlessEventsVerification.Run`, `PowerStatsVerification.Run` + `.Reload`, `StyleVerification.Run`, `ChallengeVerification.Run` + `.Reload`, `StatusEffectVerification.Run`, `LoadoutMatrixVerification.Run` + `.Reload`, `ScenarioFuzzVerification.Run` (replay: `.Replay -fuzzSeed <n>`) |
+
+- All of them write to `Verification/<Suite>/`.
+- No suite touches the real save. SaveRobustness fingerprints the real save before and after to prove it.
+- Missions, challenges and wave events are tested on in-memory clones or on assets that are not wired into the modes.
+
+### Exact local test order
+1. Merge `cloud/replayability-depth` into a scratch integration branch from current main, then batch compile.
+2. Run `RosterSetup.Batch`, `StagedMissionSetup.Batch`, `EndlessEventsSetup.Batch`, `ChallengeSetup.Batch`, and commit
+   the generated assets.
+3. Scene-free: `EndlessSimulation`, `BalanceReport`, `SaveRobustnessVerification` Run then Reload.
+4. New play suites, in this order: StageFramework, StagedMission, EncounterSelection, EndlessEvents, PowerStats (+ Reload),
+   Style, Challenge (+ Reload), StatusEffect, LoadoutMatrix (+ Reload, the longest at ~55 city loads), ScenarioFuzz.
+5. Regression, first the suites touching changed files:
+   - ModeExpansion + Reload (save format);
+   - Roster + Reload (dash / poison edits);
+   - Melee (credit scopes in punch / kick / pound);
+   - Mission (scenario Drive loops);
+   - HeroForge + Reload, SynergyAvailability + Reload (`SynergyRunner`);
+   - HeroStats;
+   - PowerPayoff.
+
+   Then the full sweep: Combat, HUD P1–3, Feel, FirstPerson + Reload, Ice, Humanoid, BackflipHurricane, Mode + Reload,
+   Audio + Reload, World, City + Reload, CityArt, Camera, MenuPresentation.
+
+### Cherry-picking independently (if not merging the whole branch)
+Each group below can be taken on its own:
+- **Standalone commits:** `41f01ed` (Endless events), `cc7fbfe` (save robustness), `ce11109` (loadout matrix),
+  `79f1474` (balance report).
+- **Missions:** `cf910d6` → `373ee64` → `55c1a6e` → `3c19724`.
+- **Encounter selection:** `0ddaba8`. It needs `373ee64`, because its verifier uses `StagedMissionRunner`.
+- **Stats and statuses:** `cc7fbfe` → `4b8c9e4` → `c5e91b7`.
+- **Style and challenges:** `4b8c9e4` → `1af37e8` → `56add91`. Challenges also need `41f01ed` (`EndlessScoreEvent`).
+
+`ad1f41f` (perf) and `56294a7` (cleanup) touch files from most groups, so apply them last.
+
+**Likely conflict files with LOCAL work:**
+- `GameModeSession.cs`, `GameModeDefinition.cs`, `PlayerProgression.cs`;
+- `PowerUser.cs`, `CityNpc.cs`, `SuperHeroController.cs` (credit scopes only, around the three melee `Blast` calls);
+- `Forge/SynergyRunner.cs`, `EndlessWaveDirector.cs`;
+- `Powers/SpeedDashEffect.cs`, `Powers/PoisonEffect.cs`, `FireBlastEffect.cs`;
+- `Missions/*.cs`, `STATUS.md`.
+
+### Unverified / needs Henry's playtest decisions
+- Everything above is unrun.
+- Staged missions: which to put in which mode (list or weighted `EncounterSelection` with district tags), and whether each
+  one reads well:
+  - stage labels on the HUD line;
+  - hints;
+  - timers of 35–120 s;
+  - raider / hunter pressure;
+  - Harass at 5 dps.
+- Rooftop Rescue needs a rooftop NavMesh decision.
+- Endless events: whether to switch them on, and the tuning: modifier strengths, elite share 15% → 40%, miniboss 8× health,
+  alive costs 2 / 4.
+- Challenges: whether to enable them, and the reward sizes (25–250 XP, 0–1 point).
+- Style: whether and where to show it (a HUD hook exists), and the rank thresholds.
+- Keep the dash-shatter interaction?
+- A save recovered from `.bak` still shows the "SAVE ERROR" line once (it tells the truth). Is that the wanted wording?
+- `BalanceReport` flags (power / loadout outliers) are for Henry's judgement, not failures.
+- Fuzzer: the action sequence is seeded; physics / NavMesh timing is not bit-exact across runs.
+
+### OVERNIGHT DECISIONS (cloud, this branch)
+- Rooftop Rescue skipped: no rooftop NavMesh. The other nine missions are built.
+- Every new content system ships dormant behind an explicit switch: modes unchanged, Selection null, Events null, challenge
+  catalog disabled. `MissionSetup.BatchUseInModes` was never run.
+- Style never changes mode score or rewards. Challenges pay only XP and existing upgrade points.
+- No shared status-effect framework: the audit found each status self-cleaning. Two targeted fixes instead.
+- No new synergies. The five-synergy cap is untouched; the dash shatter is a base rule, not a pair.
+
+### CLOUD REPLAYABILITY: addendum (after `d6c0ba5`; same branch; still NO Unity)
+| Commit | What |
+|---|---|
+| `dfeca32` | **Per-spawn variation** for staged missions (see below). `StageFrameworkVerification` adds a variation-off control and a seeded yaw / mirror / band check |
+| `bb09771` | **Bonus goals** on staged missions (see below). Framework checks: a clean run pays all goals once, a messy run forfeits exactly the broken ones, a failed run pays none |
+| `8481828` | **Mission rotations** (see below). `StagedMissionVerification` validates both rotations and runs the selection rule at band 0 |
+| `0635e44` | **Selection soft-lock guard.** When no option is eligible, `SpawnNext` falls back to the mode's own list instead of spawning nothing forever (`SelectionFallbacks`) |
+| `2b2e7a4` | **Flee re-route timer fix.** It now uses wall-clock time: `Drive` runs at the NPC LOD think rate for far NPCs, so accumulated frame time was far too slow. The window resets when behaviour changes |
+
+**Per-spawn variation.**
+- Seeded random yaw and mirror of the whole layout.
+- A difficulty band (session successes / step) adds hostile members to groups marked `ScaleWithDifficulty` (capped), and
+  tightens stage timeouts (floored).
+- Values live on `StagedState`; the shared asset is never written.
+- The nine recipes enable it:
+  - +1 hostile per 2 bands, max 3;
+  - timers ×0.95 per band, floor 0.7;
+  - residents, crew and the enforcer are not scaled.
+- Suites fix seeds (`StagedState.SeedOverride`) for reproducibility.
+
+**Bonus goals.** Optional goals: UnderSeconds, NoDamageTaken, NoLosses(group), MaxHeatStars.
+- They are checked once, on SUCCESS only.
+- All met goals are paid as ONE XP grant with reason `bonus`.
+- Each of the nine recipes has 1–2 goals, and its hint lists them.
+
+**Mission rotations.** `StagedMissionSetup.CreateRotations` (part of Batch) writes dormant
+`Resources/Rotations/{hero,villain}-rotation.asset`:
+- the mode's current Encounters and the existing `Missions/` encounters at weight 1;
+- the side's staged missions with library weight, first band (Hold the block / Armoured strongroom from 1, Sabotage from 2)
+  and district filter;
+- anti-repeat 2.
+
+Content switch, **not run**: "Use mission rotations in Hero and Villain modes". Run `MissionSetup.Batch` before
+`StagedMissionSetup.Batch` so that the rotations include the four scenario missions.
+
+**Henry decides:**
+- the variation strength and whether mirroring reads well;
+- the bonus goal thresholds and XP;
+- the rotation weights, bands and district lists, and whether to switch the rotations on.
+- `44908c5` **Save recovery keeps the good backup.**
+  - Before: after loading from `.bak` / `.tmp` over an unreadable save, the next `File.Replace` moved the corrupt file over
+    the good `.bak`.
+  - Now: the corrupt file (already copied to `.corrupt`) is deleted after a successful recovery. The next save creates the
+    main file fresh and leaves `.bak` intact.
+  - SaveRobustness checks the `.bak` content survives.
+- `fa01ef2` **Endless events: a fresh modifier sequence per run.**
+  - Draws are seeded by (run seed, wave). `RandomizePerRun` is on by default; off means every run uses the asset `Seed`.
+    `EndlessWaveState.RunSeed` is exposed for replays.
+  - EndlessSimulation checks that the same seed replays the same sequence and a different seed differs.
+
+## CLOUD WORLD DEPTH — `cloud/world-depth` (2026-09-27, appended; CLOUD agent, NO Unity)
+
+Branched from `cloud/replayability-depth` at `b3010f1`. `origin/main` (`49ffbed`) was already merged at every checkpoint, and
+there was no CLOUD FEEDBACK newer than #1. **Nothing here has run in Unity: every item is written, unverified, and
+awaiting a local run.** Compile check was the usual approximation (Roslyn C# 9 against Unity 2021.3 DLLs, diffed against the
+`origin/main` baseline): no new errors except Unity-6-only APIs the project already uses (`FindObjectsByType`).
+
+Ownership kept: no scenes, prefabs, shaders, materials, lighting, camera, Timeline / Cinemachine / Splines, character art or
+animation, HUD layout, packages or hand-written YAML. New assets come only from editor menus. **Every feature is OFF or
+neutral until LOCAL switches it on.**
+
+### Commits (oldest first)
+| Commit | What |
+|---|---|
+| `e5b4214` | **District gameplay profiles** (W1): data layer, neutral defaults, hooks, `DistrictProfileVerification` |
+| `1711898` | **Pursuit state model** (W5): Clear / Alerted / Pursued / Searching / Escaped, `PursuitVerification` |
+| `e294864` | **Stage framework**: multi-point groups, multi-group stages, SearchTargets / DefendTargets / LosePursuit, cross-district points with repair (W3), framework checks |
+| `6a72f2b` | **Twelve world missions** (W2 + W3): two per district plus four cross-district, dormant (rotations only) |
+| `a2a753e` | **Heat response tiers** (W4): `HeatResponseProfile`, neutral by default, `HeatResponseVerification` |
+| `d294188` | `HeatResponseSetup`: dormant suggested villain tiers |
+| `27805cb` | **Civilian outcome ledger** (W6): session events + summary, `CivilianLedgerVerification` |
+| `d8394d3` | **Per-district diagnostics** (W7): OFF by default, CSV + JSON, `DistrictDiagnosticsVerification` |
+
+### W1 District gameplay profiles
+- `DistrictGameplayProfile` (SO) holds:
+  - category weights, mission / enemy / activity tags, `DifficultyOffset`;
+  - multipliers `CivilianDensity`, `PoliceResponse`, `HeatResponse`, `DestructionReward` (default 1).
+- `DistrictProfileSet` (`Resources/DistrictProfiles`) maps CityLayout district names to profiles. It has an `Enabled` flag
+  and ships disabled.
+- `WorldSession.Districts` (`DistrictContext`) exposes:
+  - `PlayerDistrict`, `PlayerProfile`, `DistrictChanged`;
+  - `ProfileAt` and the hook values.
+  - When inactive, every hook returns exactly 1 / 0 / null.
+- Hooks:
+  - civilian spawn (the old loop is used unless active);
+  - Heat from destruction / assault / defeat / crime;
+  - destruction XP;
+  - police count and district archetype (by `EnemyArchetype.Tags`);
+  - encounter selection: option `Tags` must meet the district's MissionTags, and `Category` weights apply;
+  - staged mission band offset.
+- The name scan in the verifier proves gameplay code has no district-name literals. Names appear only in layout / art data
+  and the editor setup.
+
+### W2 / W3 World missions and cross-district stages
+- `StagedMissionLibrary.World.cs` has 12 recipes with unique stage sequences:
+  - Downtown: highrise-panic (hero), corporate-raid (villain).
+  - Docks: smuggler-intercept (hero), dockyard-score (villain).
+  - Park: public-event-attack (hero), park-chaos (villain).
+  - Residential: neighbourhood-siege (hero), safehouse-break-in (villain).
+  - Cross-district: citywide-pursuit and emergency-relay (hero); multi-point-heist and cross-town-getaway (villain).
+- Actors are placeholders (existing roles / archetypes).
+- They go only into the dormant rotation assets. The shipping mode lists are unchanged.
+- `MissionPoint.Placement = OtherDistrict`, with optional `DistrictTag` and `NotInDistrictsOf`, picks a sidewalk in
+  another district from the mission's seeded random.
+  - Fallbacks, in order: drop the tag → exclude only the own district → the site. Each fallback is recorded in
+    `PointFallbacks`.
+  - `BeginStage` repairs a destination that became invalid (`DestinationRepairs`), so stages cannot soft-lock.
+  - HUD targets go through the existing `ModeRules.Targets` / objective API.
+- New stage kinds:
+  - `SearchTargets`: one seeded real target; decoys run `OnDecoy`.
+  - `DefendTargets`: besiegeable hardpoints; fails when losses exceed `AllowedLosses`.
+  - `LosePursuit`: completes after `Seconds` while Escaped / Clear, or Alerted with no contact for `SearchSeconds`.
+    Being 30 m away while still engaged stays Pursued, and the framework checks this control.
+- Losing a critical escorted actor fails the mission.
+
+### W4 Heat response tiers
+- `HeatResponseProfile` (`Resources/HeatResponse`) has `Enabled` and `ApplyToHero` (both default off).
+- Each tier has:
+  - `MinStars`;
+  - arrival / count multipliers;
+  - hostile archetype and share;
+  - elite health;
+  - `Persistent`;
+  - pursued-decay multiplier;
+  - `RoadblockEligible` (event only, no visuals).
+- `WorldSession.Response` applies the current tier through multipliers: 1 = the old expression exactly. There is no star
+  switch in WorldSession.
+- Dropping below a tier removes its modifiers from police already spawned.
+- Hero police keep their non-hostile defaults. Endless explicit stats stay Heat-independent.
+
+### W5 Pursuit
+- `WorldSession.Pursuit` (`PursuitTracker`) samples every 0.25 s. Contact = a hostile Cop / PursuingHero NPC within range
+  with a clear raycast.
+- Transitions:
+  - Alerted → Pursued (contact);
+  - Pursued → Searching after `LoseContactSeconds`;
+  - Searching → Escaped after `SearchSeconds` and `EscapeDistance`;
+  - Escaped holds for `EscapedHoldSeconds`.
+- Session end and respawn call `ResetState`. Hero play never enters pursuit.
+- Optional tuning asset: `Resources/PursuitSettings`. The code defaults apply without it.
+
+### W6 Civilian outcomes
+- `WorldSession.Civilians` (`CivilianLedger`) tracks each outcome once per civilian instance, within the session only:
+  - Rescued, SafelyEscorted;
+  - HarmedByHostile / HarmedByPlayer / HarmedByEnvironment;
+  - Killed, LostInMission.
+- Attribution:
+  - player-sourced damage counts as player harm;
+  - damage inside `HarmContext.Hostile()` counts as hostile harm (crime danger, hostage damage, staged harass);
+  - everything else counts as environment (fire burn is scoped explicitly).
+- Despawn / mission cleanup is not a death.
+- The summary is copied to `SessionResult.Civilians`. Instance ids are never saved.
+- There is no morality UI and no rebalancing.
+
+### W7 Per-district diagnostics (for LOCAL)
+- `DistrictDiagnostics` is attached only by:
+  - **Overpowered > Diagnostics > Record District Diagnostics** (EditorPrefs toggle, off by default);
+  - the `-districtDiagnostics` command-line flag;
+  - a verifier.
+- It is read-only. **Sampled** data, per district:
+  - every `SampleSeconds` (default 1 s): active civilians, hostile NPCs, NPCs within 40 m of the player, active encounters,
+    active mission stage (per kind / label), Heat, and time per pursuit state;
+  - every 5 s: breakable props;
+  - at start / end and every 30 s: enabled and visible renderers.
+- **Event counts**:
+  - player hits and kills;
+  - player damage events and defeats;
+  - mission successes / failures (by site);
+  - encounters spawned, style points, XP (at the grant position), Heat gained, pursuits started;
+  - civilian outcomes;
+  - time and entries per district.
+- Data is aggregated into 60 s buckets plus session totals. Nothing is logged per frame.
+- Output: at session end, or via **Write District Diagnostics Now**, it writes
+  `Verification/DistrictDiagnostics/district-diagnostics-<mode>-<time>{-buckets.csv,-totals.csv,.json}`. In builds it
+  writes to `persistentDataPath`.
+- The JSON records the measured sampling cost (`samplingMilliseconds`).
+
+### Setup menus and content switches (none run by CLOUD)
+| Create (safe, idempotent) | Content switch (LOCAL decides) |
+|---|---|
+| Overpowered > Districts > Create missing district profiles | Overpowered > Districts > Enable district profiles |
+| Overpowered > Heat > Create missing Heat response profile | Overpowered > Heat > Enable Heat response tiers |
+| Overpowered > Missions > Create missing staged missions / mission rotations | Overpowered > Missions > Use mission rotations in Hero and Villain modes |
+| — | Overpowered > Diagnostics > Record District Diagnostics (per machine) |
+
+Batch entries: `DistrictProfileSetup.Batch`, `HeatResponseSetup.Batch`, `StagedMissionSetup.Batch`. Run
+`MissionSetup.Batch` before `StagedMissionSetup.Batch` if the rotations should include the scenario missions.
+
+### Suggested local test order
+1. Compile; then restore `Side_Kick_Data.db` after every Play Mode run.
+2. Regression, because the changed files are shared:
+   - `StageFrameworkVerification.Run`, `StagedMissionVerification.Run` (creates the missing mission and rotation assets);
+   - `EncounterSelectionVerification`, `MissionVerification`, `ModeVerification`;
+   - `ChallengeVerification` (XP grants); `EndlessEventsVerification` (police / Heat paths).
+3. New suites, all in-memory (they never enable the shipped assets):
+   - `DistrictProfileVerification.Run`, `PursuitVerification.Run`, `HeatResponseVerification.Run`;
+   - `CivilianLedgerVerification.Run`, `DistrictDiagnosticsVerification.Run`.
+4. Only after they pass, play-test with the content switches one at a time and a diagnostics recording.
+
+### Cherry-pick groups and conflict files
+The commits are layered, so **merge the branch whole** rather than cherry-picking. If it must be split, keep this order:
+1. W1 `e5b4214`;
+2. W5 `1711898`;
+3. framework `e294864` (needs 1–2);
+4. missions `6a72f2b` (needs 3);
+5. Heat `a2a753e` + `d294188`;
+6. civilians `27805cb` (needs 3);
+7. diagnostics `d8394d3` (needs 1, 2, 6).
+
+Files LOCAL may also be touching:
+- `WorldSession.cs`, `GameModeSession.cs`, `GameFlow.cs` (`SessionResult.Civilians`);
+- `CityNpc.cs` (one ledger line in `Damage`), `CrimeEncounter.cs`, `EncounterSelection.cs`;
+- `Missions/StagedScenario.cs`, `FireScenario.cs`, `HostageScenario.cs`, `EnemyArchetype.cs` (`Tags`).
+
+There are no scene, prefab, material or package changes.
+
+### Unverified / limits
+- None of it has run.
+- Unknowns:
+  - Travel time between cross-district points versus stage timeouts is unplayed.
+  - The suggested district and tier values are guesses.
+  - Placeholder actors only.
+  - The roadblock hook raises an event and nothing else.
+  - Pursuit contact uses a single raycast (no vision cones, by design).
+- Diagnostics cost is measured only inside its verifier (no build, no long session).
+- District civilian density redistributes civilians only when the layer is active.
+
+### Henry decides
+- Whether and when to enable the district profiles, Heat tiers and mission rotations, and their values.
+- Pursuit timings, and whether LosePursuit stages feel fair.
+- Whether any world mission graduates from the dormant rotations into shipping mode lists.
+- Whether civilian outcomes ever feed UI or rewards (currently data only).

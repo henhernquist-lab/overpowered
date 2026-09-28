@@ -1,0 +1,362 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+/// See StagedMissionVerification. For every staged mission asset (StagedMissionLibrary via StagedMissionSetup): data rules
+/// (references resolve, >= 2 stage kinds, not an R-hold loop, no two missions with the same stage sequence), then in a fresh
+/// real session of its side: one FAILURE path that exercises the mission's own mechanic with controls, and one full SOLVE
+/// through the generic stage solver with every stage started / completed exactly once and exactly one outcome.
+/// Fail paths that would take minutes use IN-MEMORY clones with one timer changed (logged, never saved).
+public sealed class StagedMissionVerificationRunner : StagedMissionRunner
+{
+    protected override string Folder => "Verification/StagedMissions/";
+    protected override string ResultFile => "results.txt";
+    protected override IEnumerator Checks()
+    {
+        yield return Scene(GameFlow.HomeScene);
+        Data();
+        foreach (var entry in StagedMissionLibrary.All)
+        {
+            Log($"---- {entry.Title.ToUpperInvariant()} ({entry.Side}, {entry.Asset})");
+            bool hero = entry.Side == PlayerSide.Hero;
+            yield return Session(hero ? "ice" : "fire", hero ? "strength" : "ice", hero ? "hero" : "villain");
+            homeDistrict = entry.Districts != null && entry.Districts.Length > 0 ? entry.Districts[0] : null;
+            Immortal = true;
+            yield return FailPath(entry);
+            yield return Solve(entry);
+            Immortal = false;
+        }
+        Log("NOTE Rooftop Rescue is not built: NPCs exist only on the ground NavMesh (no rooftop NavMesh), see STATUS.");
+        Log("LIMIT: the solver teleports the hero and acts through NPC damage / CombatImpact.Blast / ScriptedHold R; escort followers are warped the last stretch; player health is refilled by the harness. No human playtest of difficulty, pacing or readability.");
+    }
+    // ---------------------------------------------------------------- data rules
+    static readonly StageKind[] PowerKinds = { StageKind.DefeatTargets, StageKind.ChaseExit, StageKind.DestroyTargets, StageKind.StopVehicles, StageKind.ProtectActors, StageKind.EscortActors, StageKind.RaiseHeat, StageKind.DefendTargets };
+    /// Missions authored for a district spawn at an encounter site of that district (by name: verification data, not gameplay).
+    string homeDistrict;
+    CrimeEncounter SpawnHome(EncounterDefinition def)
+    {
+        if (string.IsNullOrEmpty(homeDistrict)) return Spawn(def);
+        int district = Enumerable.Range(0, W.Districts.Count).FirstOrDefault(i => string.Equals(W.Districts.NameOf(i), homeDistrict, StringComparison.OrdinalIgnoreCase));
+        var sites = Enumerable.Range(0, W.City.EncounterSites.Count).Where(i => W.City.EncounterSiteDistrict[i] == district && W.Crimes.TrueForAll(c => c == null || c.Encounter == null || Vector3.Distance(c.Encounter.Site, W.City.EncounterSites[i]) > 45f)).ToList();
+        Check(sites.Count > 0, $"A free encounter site in {homeDistrict} (district {district}).");
+        StagedState.SeedOverride = NextSeed++;
+        var crime = W.SpawnEncounter(def, W.City.EncounterSites[sites[0]]); StagedState.SeedOverride = null;
+        Check(crime?.Encounter?.Scenario is StagedState st && W.City.DistrictAt(crime.Encounter.Site) == district, $"{def.DisplayName} spawned in its home district {homeDistrict} (seed {((StagedState)crime.Encounter.Scenario).Seed}).");
+        return crime.Encounter;
+    }
+    void Data()
+    {
+        int heroes = StagedMissionLibrary.All.Count(x => x.Side == PlayerSide.Hero), villains = StagedMissionLibrary.All.Count(x => x.Side == PlayerSide.Villain);
+        Check(heroes == 10 && villains == 11, $"Library: {heroes} hero and {villains} villain missions (Core 4 + 5, World 6 + 6; Rooftop Rescue omitted, see STATUS).");
+        foreach (var district in new[] { "Downtown", "Docks", "Park", "Residential" })
+        {
+            var own = StagedMissionLibrary.All.Where(x => x.Districts != null && x.Districts.Length == 1 && x.Districts[0] == district && !x.Id.Contains("pursuit")).ToList();
+            Check(own.Count >= 2 && own.Any(x => x.Side == PlayerSide.Hero) && own.Any(x => x.Side == PlayerSide.Villain), $"{district}: {own.Count} authored missions ({string.Join(", ", own.Select(x => x.Id + "/" + x.Side))}).");
+        }
+        var sequences = new Dictionary<string, string>();
+        foreach (var entry in StagedMissionLibrary.All)
+        {
+            var def = Resources.Load<EncounterDefinition>("Encounters/" + entry.Asset); var d = def != null ? def.Scenario as StagedScenario : null;
+            Check(d != null && def.Robbers + def.Civilians + def.RespondingCops + def.Cars + def.LooseProps + def.Loot + def.Hazards == 0, $"{entry.Asset}: encounter asset with a StagedScenario and no legacy cast.");
+            Check(References(d, out string problem), $"{entry.Asset}: every group / point / anchor reference resolves{(problem == null ? "" : " - " + problem)}.");
+            var kinds = d.Stages.Select(x => x.Kind).ToArray();
+            int holds = kinds.Count(k => k == StageKind.InteractTargets || k == StageKind.SearchTargets);
+            Check(kinds.Distinct().Count() >= 2 && holds <= 1 && holds * 2 <= kinds.Length && kinds.Any(k => PowerKinds.Contains(k)),
+                $"{entry.Asset}: {kinds.Length} stages [{string.Join(" > ", d.Stages.Select(x => x.Label))}] - {kinds.Distinct().Count()} kinds, {holds} hold-R stage(s), needs powers/combat.");
+            string key = string.Join(",", kinds);
+            Check(!sequences.ContainsKey(key), $"{entry.Asset}: stage sequence differs from every other mission{(sequences.TryGetValue(key, out var other) ? " (same as " + other + ")" : "")}.");
+            sequences[key] = entry.Asset;
+        }
+        Rotations();
+    }
+    /// The rotation assets (StagedMissionSetup.CreateRotations): every staged mission of the side present with its weight /
+    /// band / districts, the mode's current encounters kept, no dangling option; the shipping modes still have no Selection;
+    /// and the pure selection rule over the real options honours the first-band rule.
+    void Rotations()
+    {
+        foreach (var side in new[] { PlayerSide.Hero, PlayerSide.Villain })
+        {
+            string id = side == PlayerSide.Hero ? "hero" : "villain";
+            var rotation = Resources.Load<EncounterSelection>("Rotations/" + id + "-rotation"); var mode = Resources.Load<GameModeDefinition>("Modes/" + id);
+            Check(rotation != null && rotation.Options.All(o => o != null && o.Encounter != null && o.Weight > 0f), $"{id}-rotation exists with {rotation?.Options.Length} valid options.");
+            Check(mode.Selection == null, $"CONTROL: the shipping {id} mode still has no Selection (the rotation is dormant until the content switch).");
+            Check(mode.Encounters.Where(e => e != null).All(e => rotation.Options.Any(o => o.Encounter == e)), $"{id}-rotation keeps all {mode.Encounters.Length} of the mode's current encounters.");
+            foreach (var entry in StagedMissionLibrary.All.Where(e => e.Side == side))
+            {
+                var o = rotation.Options.FirstOrDefault(x => x.Encounter != null && x.Encounter.name == entry.Asset);
+                Check(o != null && Mathf.Approximately(o.Weight, entry.Weight) && o.MinDifficulty == entry.MinBand && o.Districts.SequenceEqual(entry.Districts), $"{id}-rotation: {entry.Asset} weight {entry.Weight}, from band {entry.MinBand}, districts [{string.Join(", ", entry.Districts)}], category {entry.Category ?? "-"}.");
+            }
+            var recent = new List<EncounterDefinition>(); var scratch = new List<int>(); var random = new System.Random(5); var picked = new HashSet<string>();
+            for (int i = 0; i < 400; i++) { int k = EncounterSelection.Choose(rotation.Options, 0, "Downtown", recent, rotation.AntiRepeatWindow, true, random.NextDouble(), scratch); if (k >= 0) { recent.Add(rotation.Options[k].Encounter); picked.Add(rotation.Options[k].Encounter.name); } }
+            var late = StagedMissionLibrary.All.Where(e => e.Side == side && e.MinBand > 0).Select(e => e.Asset).ToArray();
+            Check(late.All(n => !picked.Contains(n)) && picked.Count >= 3, $"Band 0 in Downtown over 400 picks: {picked.Count} different encounters, none of the later-band missions ({string.Join(", ", late)}).");
+        }
+    }
+    static bool References(StagedScenario d, out string problem)
+    {
+        problem = null;
+        var actors = new HashSet<string>(d.Actors.Select(a => a.Id)); var targets = new HashSet<string>(d.Targets.Select(t => t.Id)); var points = new HashSet<string>(d.Points.Select(p => p.Id));
+        IEnumerable<string> Parts(string key) => key.Split(',').Select(x => x.Trim());
+        bool AllIn(string key, params HashSet<string>[] sets) => Parts(key).All(k => sets.Any(set => set.Contains(k)));
+        bool Anchor(string id) => id == "$here" || id == "$player" || AllIn(id, actors, targets, points);
+        foreach (var p in d.Points)
+            if (!string.IsNullOrEmpty(p.NotInDistrictsOf) && !Parts(p.NotInDistrictsOf).All(k => d.Points.TakeWhile(x => x != p).Any(x => x.Id == k))) { problem = $"point {p.Id} NotInDistrictsOf {p.NotInDistrictsOf} (must name EARLIER points)"; return false; }
+        foreach (var a in d.Actors)
+        {
+            if (!string.IsNullOrEmpty(a.AtPoint) && !AllIn(a.AtPoint, points)) { problem = $"actor {a.Id} AtPoint {a.AtPoint}"; return false; }
+            if (a.Behavior == ActorBehavior.Flee && (string.IsNullOrEmpty(a.BehaviorArgument) || !AllIn(a.BehaviorArgument, points))) { problem = $"actor {a.Id} exits"; return false; }
+            // HoldPost / Idle may carry the exits a later SetBehavior(Flee) uses; Harass names actor or target groups.
+            if (!string.IsNullOrEmpty(a.BehaviorArgument) && a.Behavior != ActorBehavior.Flee && !AllIn(a.BehaviorArgument, actors, targets, points)) { problem = $"actor {a.Id} argument {a.BehaviorArgument}"; return false; }
+        }
+        foreach (var t in d.Targets) if (!string.IsNullOrEmpty(t.AtPoint) && !AllIn(t.AtPoint, points)) { problem = $"target {t.Id} AtPoint {t.AtPoint}"; return false; }
+        foreach (var b in d.Bonuses ?? new BonusObjective[0]) if (b.Kind == BonusKind.NoLosses && (string.IsNullOrEmpty(b.Group) || !AllIn(b.Group, actors))) { problem = $"bonus {b.Label} group {b.Group}"; return false; }
+        foreach (var s in d.Stages)
+        {
+            if (!string.IsNullOrEmpty(s.Group) && !AllIn(s.Group, actors) && !AllIn(s.Group, targets)) { problem = $"stage {s.Label} group {s.Group}"; return false; }
+            if (!string.IsNullOrEmpty(s.Point) && !points.Contains(s.Point)) { problem = $"stage {s.Label} point {s.Point}"; return false; }
+            if (!string.IsNullOrEmpty(s.RepeatGroup) && !actors.Contains(s.RepeatGroup)) { problem = $"stage {s.Label} repeat {s.RepeatGroup}"; return false; }
+            bool needsGroup = s.Kind != StageKind.Survive && s.Kind != StageKind.RaiseHeat && s.Kind != StageKind.EscapeRadius && s.Kind != StageKind.LosePursuit && !(s.Kind == StageKind.ReachArea && !string.IsNullOrEmpty(s.Point));
+            if (needsGroup && string.IsNullOrEmpty(s.Group)) { problem = $"stage {s.Label} has no group"; return false; }
+            if (s.Kind == StageKind.SearchTargets && !targets.Contains(s.Group)) { problem = $"stage {s.Label} searches a non-target group"; return false; }
+            foreach (var a in (s.OnStart ?? new StageAction[0]).Concat(s.OnComplete ?? new StageAction[0]).Concat(s.OnDecoy ?? new StageAction[0]))
+            {
+                if (a.Kind == StageActionKind.SpawnActors && !actors.Contains(a.Group)) { problem = $"action spawn actors {a.Group}"; return false; }
+                if (a.Kind == StageActionKind.SpawnTargets && !targets.Contains(a.Group)) { problem = $"action spawn targets {a.Group}"; return false; }
+                if (a.Kind == StageActionKind.SetBehavior && !AllIn(a.Group, actors)) { problem = $"action behavior {a.Group}"; return false; }
+                if ((a.Kind == StageActionKind.SpawnActors || a.Kind == StageActionKind.SpawnTargets) && !string.IsNullOrEmpty(a.Text) && !Anchor(a.Text)) { problem = $"anchor {a.Text}"; return false; }
+            }
+        }
+        return true;
+    }
+    // ---------------------------------------------------------------- shared
+    EncounterDefinition Def(StagedMissionLibrary.Entry entry, Action<StagedScenario> tweak = null)
+    {
+        var def = Resources.Load<EncounterDefinition>("Encounters/" + entry.Asset);
+        if (tweak != null) { def = Instantiate(def); def.Scenario = Instantiate(def.Scenario); tweak((StagedScenario)def.Scenario); }
+        return def;
+    }
+    IEnumerator Solve(StagedMissionLibrary.Entry entry)
+    {
+        var e = SpawnHome(Def(entry)); var s = (StagedState)e.Scenario; var d = (StagedScenario)e.Definition.Scenario; Away(e);
+        int n = d.Stages.Length, guard = 0;
+        if (entry.CrossDistrict) CrossDistricts(e, s, d);
+        var visited = new HashSet<int>();
+        while (s.Terminal == MissionTerminal.Running && !Ended(e) && guard++ < n + 2)
+        {
+            var stage = s.Stage;
+            Check(Line(e).StartsWith(stage.Label), $"HUD objective line for stage {s.StageIndex}: \"{Line(e)}\".");
+            if (!string.IsNullOrEmpty(stage.Point) && (stage.Kind == StageKind.ReachArea || stage.Kind == StageKind.EscortActors))
+            {
+                var targets = new List<Vector3>(); ModeRules.Targets(e, W.Mode.Definition.Rules.Current(e).Task, targets);
+                Check(targets.Count > 0 && targets.Any(t => Vector3.Distance(t, s.Point(stage.Point)) < .01f), $"HUD target for \"{stage.Label}\" is its destination in district {s.DistrictOfPoint(stage.Point)} ({W.Districts.NameOf(s.DistrictOfPoint(stage.Point))}).");
+                visited.Add(s.DistrictOfPoint(stage.Point));
+            }
+            yield return SolveStage(e, s, d);
+        }
+        if (entry.CrossDistrict) Log($"Stage destinations visited {visited.Count} district(s): {string.Join(", ", visited.Select(v => W.Districts.NameOf(v)))} (mission site in {W.Districts.NameOf(W.City.DistrictAt(e.Site))}).");
+        yield return Outcome(e, 3f);
+        Check(Ended(e) && Result(e).Success, $"SOLVE: {Describe(e)}.");
+        Check(ExactlyOnce(s.Started, n) && ExactlyOnce(s.Completed, n), $"Every stage started and completed exactly once ({Counts(s)}).");
+        yield return new WaitForSeconds(.5f);
+        Check(OutcomeCount(e) == 1, "Exactly one outcome for the mission.");
+    }
+    /// Cross-district missions: every OtherDistrict point sits outside the mission's own district, and points that must differ
+    /// (NotInDistrictsOf) really occupy distinct districts; no destination needed a fallback.
+    void CrossDistricts(CrimeEncounter e, StagedState s, StagedScenario d)
+    {
+        int home = W.City.DistrictAt(e.Site);
+        var far = d.Points.Where(p => p.Placement == PointPlacement.OtherDistrict).ToList();
+        Check(far.Count > 0 && far.All(p => s.DistrictOfPoint(p.Id) != home), $"Cross-district: {far.Count} destination(s) outside the home district {W.Districts.NameOf(home)}: {string.Join(", ", far.Select(p => p.Id + " -> " + W.Districts.NameOf(s.DistrictOfPoint(p.Id))))}.");
+        foreach (var p in far.Where(p => !string.IsNullOrEmpty(p.NotInDistrictsOf)))
+            foreach (var other in p.NotInDistrictsOf.Split(','))
+                Check(s.DistrictOfPoint(p.Id) != s.DistrictOfPoint(other.Trim()), $"{p.Id} and {other.Trim()} are in distinct districts.");
+        int distinct = far.Select(p => s.DistrictOfPoint(p.Id)).Append(home).Distinct().Count();
+        Log($"Distinct districts across the mission: {distinct}; fallbacks: {(s.PointFallbacks.Count == 0 ? "none" : string.Join("; ", s.PointFallbacks))}.");
+        Check(s.PointFallbacks.Count == 0, "No destination needed a fallback on this city.");
+    }
+    /// Missions without a hand-written failure path: the first timed stage that absence cannot complete gets a 3 s timeout
+    /// (in-memory clone); the solver clears the stages before it, then the hero leaves and the mission must FAIL once.
+    IEnumerator GenericFail(StagedMissionLibrary.Entry entry)
+    {
+        var recipe = StagedMissionLibrary.Create(entry);
+        var passive = new[] { StageKind.LosePursuit, StageKind.EscapeRadius, StageKind.Survive, StageKind.ProtectActors, StageKind.DefendTargets };
+        int k = System.Array.FindIndex(recipe.Stages, x => x.Timeout > 0f && !passive.Contains(x.Kind));
+        Check(k >= 0, $"{entry.Asset}: has a timed stage absence cannot complete ({(k >= 0 ? recipe.Stages[k].Label : "none")}).");
+        Log($"In-memory clone: stage {k} \"{recipe.Stages[k].Label}\" timeout {recipe.Stages[k].Timeout} s -> 3 s.");
+        var e = SpawnHome(Def(entry, d => d.Stages[k].Timeout = 3f)); var s = (StagedState)e.Scenario; var d0 = (StagedScenario)e.Definition.Scenario;
+        yield return SolveUntil(e, s, d0, k);
+        Check(s.StageIndex == k && s.Terminal == MissionTerminal.Running, $"Solved up to stage {k}.");
+        Away(e);
+        yield return Outcome(e, 6f + recipe.Stages[k].Timeout * 0f);
+        Check(Ended(e) && !Result(e).Success && OutcomeCount(e) == 1 && s.Completed[k] == 0, $"FAIL PATH: {Describe(e)} ({Counts(s)}).");
+    }
+    IEnumerator FailPath(StagedMissionLibrary.Entry entry)
+    {
+        switch (entry.Id)
+        {
+            case "pursuit": yield return Pursuit(entry); break;
+            case "convoy-intercept": yield return ConvoyIntercept(entry); break;
+            case "blackout": yield return Blackout(entry); break;
+            case "hold-the-block": yield return HoldTheBlock(entry); break;
+            case "armored-heist": yield return ArmoredHeist(entry); break;
+            case "sabotage-run": yield return SabotageRun(entry); break;
+            case "convoy-robbery": yield return ConvoyRobbery(entry); break;
+            case "distraction": yield return Distraction(entry); break;
+            case "getaway": yield return Getaway(entry); break;
+            default: yield return GenericFail(entry); break;
+        }
+    }
+    IEnumerator Failed(CrimeEncounter e, StagedState s, float seconds, string contains, int stage)
+    {
+        yield return Outcome(e, seconds);
+        Check(Ended(e) && !Result(e).Success && Result(e).Reason.Contains(contains), $"FAIL PATH: {Describe(e)} (expected \"{contains}\").");
+        Check(s.Completed[stage] == 0 && (stage + 1 >= s.Started.Length || s.Started[stage + 1] == 0) && !s.Complete(), $"Latched at stage {stage}: {Counts(s)}.");
+    }
+    // ---------------------------------------------------------------- HERO
+    IEnumerator Pursuit(StagedMissionLibrary.Entry entry)
+    {
+        var e = Spawn(Def(entry)); var s = (StagedState)e.Scenario; var d = (StagedScenario)e.Definition.Scenario; Away(e);
+        var runners = s.Group("runners"); var posts = runners.Select(r => r.Npc.transform.position).ToArray();
+        yield return new WaitForSeconds(1.5f);
+        Check(s.StageIndex == 0 && runners.Select((r, i) => Vector3.Distance(r.Npc.transform.position, posts[i])).Max() < 3f, "CONTROL: before the hero arrives the crew holds position (no chase starts off-screen).");
+        yield return SolveStage(e, s, d);
+        var exits = s.ExitPoints(s.ActorSpec("runners"));
+        Check(s.StageIndex == 1 && runners.Select(r => r.ExitIndex % exits.Length).Distinct().Count() == runners.Count, $"Arrival starts the chase; runners scatter to {runners.Count} different exits.");
+        Away(e); yield return new WaitForSeconds(1f);
+        float[] before = runners.Select(r => Vector3.Distance(r.Npc.transform.position, exits[r.ExitIndex % exits.Length])).ToArray();
+        yield return new WaitForSeconds(1.5f);
+        float[] after = runners.Select(r => Vector3.Distance(r.Npc.transform.position, exits[r.ExitIndex % exits.Length])).ToArray();
+        Log($"MEASURED runner distance to exit over 1.5 s: {string.Join(", ", before.Select((b, i) => $"{b:F1}->{after[i]:F1} m"))}.");
+        Check(after.Where((a, i) => a < before[i] - 1f).Count() >= 2, "Runners really head for their exits.");
+        var held = runners[1]; int route = held.ExitIndex; held.Npc.Root(d.StuckSeconds * 2f + 1f);
+        yield return Until(() => held.ExitIndex != route, d.StuckSeconds * 2f + 1.5f);
+        Check(held.ExitIndex != route, $"A runner held in place (rooted) re-routes to its next exit after {d.StuckSeconds} s (exit {route % exits.Length} -> {held.ExitIndex % exits.Length}).");
+        yield return Failed(e, s, 95f, "got away", 1);
+    }
+    IEnumerator ConvoyIntercept(StagedMissionLibrary.Entry entry)
+    {
+        var e = Spawn(Def(entry)); var s = (StagedState)e.Scenario; var d = (StagedScenario)e.Definition.Scenario; Away(e);
+        var trucks = s.TargetGroup("trucks"); var parked = trucks.Select(t => t.Go.transform.position).ToArray();
+        yield return new WaitForSeconds(1.5f);
+        Check(trucks.All(t => !t.Vehicle.Driving) && trucks.Select((t, i) => Vector3.Distance(t.Go.transform.position, parked[i])).Max() < .5f, "CONTROL: the trucks wait until the hero closes in.");
+        Check(s.TargetGroup("crates").Count == 0 && s.Group("gunmen").Count == 0, "Gunmen and crates do not exist yet (they come out of the stopped trucks).");
+        yield return SolveStage(e, s, d);
+        yield return Until(() => trucks.All(t => t.Vehicle.Driving), 2f);
+        Check(s.StageIndex == 1 && trucks.All(t => t.Vehicle.Driving), "Closing in starts the convoy: both trucks drive.");
+        var body = trucks[0].Go.GetComponent<Rigidbody>();
+        CombatImpact.Blast(W.Powers, body.worldCenterOfMass - Vector3.up * .5f, 2.5f, d.VehicleStopImpulse * .4f, 0f, .2f);
+        Check(trucks[0].Vehicle.Driving, "CONTROL: a light hit (40% of the stop impulse) does not stop a truck.");
+        Away(e);
+        yield return Failed(e, s, 30f, "a vehicle got away", 1);
+    }
+    IEnumerator Blackout(StagedMissionLibrary.Entry entry)
+    {
+        var e = Spawn(Def(entry, d => d.Stages[0].Timeout = 16f)); var s = (StagedState)e.Scenario; var d0 = (StagedScenario)e.Definition.Scenario;
+        Log("In-memory clone: relay stage timeout 120 s -> 16 s.");
+        var relays = s.TargetGroup("relays"); var relay = relays[0];
+        Ground(Floor(relay.Go.transform.position + Vector3.right * 1.8f)); e.ScriptedHold = true;
+        yield return Until(() => relay.Done, d0.HoldSeconds + 2f); e.ScriptedHold = false;
+        Check(relay.Done && s.StageIndex == 0 && Line(e) == "RESTORE THE RELAYS 1/3", $"Holding R restores one relay: \"{Line(e)}\".");
+        Away(e);
+        var saboteur = s.Group("saboteurs").First(a => a.Npc != null && !a.Npc.Dead);
+        saboteur.Npc.Agent.Warp(Floor(relay.Go.transform.position + Vector3.forward * 1.2f));
+        yield return Until(() => !relay.Done, d0.HarassSeconds + 3f);
+        Check(!relay.Done && Line(e) == "RESTORE THE RELAYS 0/3", $"A saboteur left beside a restored relay knocks it out again after {d0.HarassSeconds} s: \"{Line(e)}\".");
+        yield return Failed(e, s, 20f, "Timed out: restore the relays", 0);
+    }
+    IEnumerator HoldTheBlock(StagedMissionLibrary.Entry entry)
+    {
+        var e = Spawn(Def(entry, d => d.Stages[1].Seconds = 120f)); var s = (StagedState)e.Scenario; var d0 = (StagedScenario)e.Definition.Scenario;
+        Log("In-memory clone: hold stage 40 s -> 120 s so an unattended block is certain to be lost first.");
+        Away(e); var residents = s.Group("residents"); var raiders = s.Group("raiders");
+        yield return new WaitForSeconds(1.5f);
+        Check(s.StageIndex == 0 && residents.All(r => r.Npc.Health == r.Npc.MaxHealth), "CONTROL: nobody is hurt before the hero arrives.");
+        yield return SolveStage(e, s, d0);
+        Check(s.StageIndex == 1, "Arrival starts the defence.");
+        Away(e); int maxAlive = 0; float until = Time.time + 90f; bool hurt = false;
+        while (!Ended(e) && Time.time < until)
+        {
+            maxAlive = Mathf.Max(maxAlive, raiders.Count(r => r.Npc != null && !r.Npc.Dead));
+            hurt |= residents.Any(r => r.Npc != null && (r.Npc.Dead || r.Npc.Health < r.Npc.MaxHealth));
+            yield return null;
+        }
+        Log($"MEASURED unattended defence: {raiders.Count} raiders spawned in total, at most {maxAlive} alive at once (cap {d0.Stages[1].RepeatMaxAlive}).");
+        Check(hurt && raiders.Count > 2 && maxAlive <= d0.Stages[1].RepeatMaxAlive, "Raiders hurt the residents, reinforcements keep arriving, never more than the cap alive.");
+        yield return Failed(e, s, 1f, "hold the block: 2 lost", 1);
+    }
+    // ---------------------------------------------------------------- VILLAIN
+    IEnumerator ArmoredHeist(StagedMissionLibrary.Entry entry)
+    {
+        var e = Spawn(Def(entry, d => d.Stages[2].Timeout = 6f)); var s = (StagedState)e.Scenario; var d0 = (StagedScenario)e.Definition.Scenario;
+        Log("In-memory clone: cash stage timeout 35 s -> 6 s.");
+        Away(e); var door = s.TargetGroup("door")[0];
+        CombatImpact.Blast(W.Powers, door.Go.transform.position + Vector3.right * 1.2f, 2.5f, 300f, 9999f, .1f);
+        Check(!door.Hardpoint.Destroyed && door.Hardpoint.IgnoredHits >= 1, "CONTROL (wrong order): the strongroom door ignores a 9999-damage blast while its guards stand.");
+        yield return SolveStage(e, s, d0);
+        Check(s.StageIndex == 1 && door.Hardpoint.Armed, "Guards down: the door is exposed.");
+        float heat = W.Heat;
+        yield return SolveStage(e, s, d0);
+        Check(s.StageIndex == 2 && (W.Heat >= heat + .9f || W.Stars >= W.Tuning.Heat.MaximumStars) && s.Group("response").Count >= 2 && s.TargetGroup("cash").Count == 3,
+            $"Breach: Heat {heat:F2} -> {W.Heat:F2}, {s.Group("response").Count} response officers, {s.TargetGroup("cash").Count} cash bags dropped at the door.");
+        Away(e);
+        yield return Failed(e, s, 12f, "Timed out: grab the cash", 2);
+    }
+    IEnumerator SabotageRun(StagedMissionLibrary.Entry entry)
+    {
+        var e = Spawn(Def(entry, d => d.Stages[1].Timeout = 5f)); var s = (StagedState)e.Scenario; var d0 = (StagedScenario)e.Definition.Scenario;
+        Log("In-memory clone: node B timeout 45 s -> 5 s.");
+        Away(e); var b = s.TargetGroup("node-b")[0];
+        CombatImpact.Blast(W.Powers, b.Go.transform.position + Vector3.right * 1.2f, 2.5f, 300f, 9999f, .1f);
+        Check(!b.Hardpoint.Destroyed && b.Hardpoint.IgnoredHits >= 1 && s.TargetGroup("node-a")[0].Hardpoint.Armed, "CONTROL (wrong order): node B ignores hits while node A is the target.");
+        yield return SolveStage(e, s, d0);
+        Check(s.StageIndex == 1 && b.Hardpoint.Armed && !s.TargetGroup("node-c")[0].Hardpoint.Armed, "Node A down: only node B is exposed.");
+        Away(e);
+        yield return Failed(e, s, 10f, "Timed out: hit node b", 1);
+    }
+    IEnumerator ConvoyRobbery(StagedMissionLibrary.Entry entry)
+    {
+        var e = Spawn(Def(entry)); var s = (StagedState)e.Scenario; var d0 = (StagedScenario)e.Definition.Scenario;
+        yield return SolveStage(e, s, d0);
+        var car = s.TargetGroup("car")[0];
+        yield return Until(() => car.Vehicle != null && car.Vehicle.Driving, 2f);
+        Check(s.StageIndex == 1 && car.Vehicle.Driving, "The armoured car drives off when the villain closes in.");
+        Away(e);
+        CombatImpact.Blast(W.Powers, car.Go.GetComponent<Rigidbody>().worldCenterOfMass, 2.5f, 0f, 99999f, .1f);
+        yield return Until(() => s.StageIndex >= 2 || Ended(e), 2f);
+        Check(car.Go == null && s.StageIndex == 2, "Wrecking the car stops it (the stop stage completes)...");
+        yield return SolveStage(e, s, d0);
+        yield return Failed(e, s, 3f, "crack the cargo door: objective lost", 3);
+    }
+    IEnumerator Distraction(StagedMissionLibrary.Entry entry)
+    {
+        var e = Spawn(Def(entry, d => d.Stages[1].Timeout = 5f)); var s = (StagedState)e.Scenario;
+        Log("In-memory clone: cordon timeout 40 s -> 5 s.");
+        Ground(Floor(e.Site + Vector3.right * 2f));
+        W.AddHeat(-W.Heat); W.AddHeat(.9f);
+        yield return new WaitForSeconds(.5f);
+        Check(s.StageIndex == 0 && W.Stars == 1, "CONTROL: 1 Heat star is not a scene yet.");
+        W.AddHeat(1.9f - W.Heat);
+        yield return Until(() => s.StageIndex >= 1, 1f);
+        Check(s.StageIndex == 1 && W.Stars >= 2 && s.Group("cordon").Count == 3, $"2 stars: the police take the bait ({s.Group("cordon").Count} cordon officers).");
+        yield return Failed(e, s, 10f, "Timed out: slip the cordon", 1);
+    }
+    IEnumerator Getaway(StagedMissionLibrary.Entry entry)
+    {
+        var e = Spawn(Def(entry)); var s = (StagedState)e.Scenario; var d0 = (StagedScenario)e.Definition.Scenario; Away(e);
+        var crew = s.Group("crew"); var hunters = s.Group("hunters");
+        yield return new WaitForSeconds(1.5f);
+        Check(crew.All(c => !c.Following && c.Npc.Health == c.Npc.MaxHealth), "CONTROL: the crew waits (not following, unhurt) until the villain reaches them.");
+        yield return SolveStage(e, s, d0);
+        yield return null;
+        Check(s.StageIndex == 1 && crew.Any(c => c.Following), "Reaching the crew: they follow.");
+        Away(e); int maxAlive = 0; float until = Time.time + 80f;
+        while (!Ended(e) && Time.time < until) { maxAlive = Mathf.Max(maxAlive, hunters.Count(h => h.Npc != null && !h.Npc.Dead)); yield return null; }
+        Log($"MEASURED unattended escort: {hunters.Count} hunters spawned, at most {maxAlive} alive (cap {d0.Stages[1].RepeatMaxAlive}).");
+        Check(maxAlive <= d0.Stages[1].RepeatMaxAlive, "Hunter reinforcements respect the cap.");
+        yield return Failed(e, s, 1f, "get the crew to the van: 2 lost", 1);
+    }
+}
+#endif
