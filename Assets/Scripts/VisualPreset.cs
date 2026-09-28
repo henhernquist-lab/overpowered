@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-/// City lighting look (Visual polish, audit items 1 + 2). OPTIONAL and OFF by default: without Resources/VisualPreset, or
+/// City look for the visual polish pass (Verification/Polish/visual-audit.md). OPTIONAL and OFF by default: without Resources/VisualPreset, or
 /// with Enabled false, the city lights exactly as before (shadowless white sun at 1.2, scene skybox ambient, haze skirt).
 /// When on it applies, for the city session only (VisualPresetApplier restores Quality/RenderSettings on teardown):
 ///   - the sun casts soft shadows (a Light added from code defaults to LightShadows.None, so the city never had any),
@@ -11,7 +11,8 @@ using UnityEngine.Rendering;
 ///   - a procedural skybox whose ground half is the fog Haze, so the haze-skirt walls (visible as flat slabs in the sky
 ///     from the park and quay) can be hidden;
 ///   - melee / slam attack telegraphs drawn as rings instead of an opaque disc (AttackTelegraph);
-///   - a street-level facade pass on urban-height buildings (CityArt.StreetLevel), read when the city is generated;
+///   - a street-level facade pass on urban-height buildings (CityArt.StreetLevel) and sloped shop awnings, read when the
+///     city is generated;
 ///   - per-role enemy silhouettes and accents (HumanoidPresentation), e.g. no hero-cyan on a hostile Gunner;
 ///   - a comet tail on projectile powers (FireBlastEffect);
 ///   - structure recipe overrides using shared generated low-poly shapes (faceted canopy / pine trees), at generation.
@@ -78,12 +79,18 @@ public sealed class VisualPreset : ScriptableObject
     }
     /// Verification / capture override for this process: null = the asset's Enabled flag.
     public static bool? ForceEnabled;
+    static VisualPreset fallback;
     public static VisualPreset Current
     {
         get
         {
             var p = Resources.Load<VisualPreset>("VisualPreset");
-            if (ForceEnabled == true && p == null) { p = CreateInstance<VisualPreset>(); p.hideFlags = HideFlags.HideAndDontSave; }
+            if (ForceEnabled == true && p == null)
+            {
+                // No asset yet (VisualPresetSetup not run): the code defaults, one instance per process.
+                if (fallback == null) { fallback = CreateInstance<VisualPreset>(); fallback.hideFlags = HideFlags.HideAndDontSave; }
+                p = fallback;
+            }
             return p;
         }
     }
