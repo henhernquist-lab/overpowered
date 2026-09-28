@@ -53,6 +53,39 @@ public sealed class LightingVerificationRunner : MonoBehaviour
         Check(maxStreet<=Lighting.StreetCapacity&&maxPower<=Lighting.PowerCapacity,label+" respects both fixed point-light caps.");
         if(stress)Check(maxPower==Lighting.PowerCapacity&&Lighting.PowerCapacity==4,label+" keeps exactly four pooled power flashes active at the cap.");
     }
+    Texture2D Grab()
+    {
+        camera.Render();var prior=RenderTexture.active;RenderTexture.active=target;
+        var image=new Texture2D(1280,720,TextureFormat.RGB24,false);image.ReadPixels(new Rect(0,0,1280,720),0,0);image.Apply();RenderTexture.active=prior;return image;
+    }
+    static float Luma(Color32 c)=>(.2126f*c.r+.7152f*c.g+.0722f*c.b)/255f;
+    /// Night CONTROL for the synergy shockwave ring: the live pooled ring (unlit palette swatch) against the same ring
+    /// re-rendered with the lit Standard swatch, both against the ring-free frame, all three in one frame.
+    IEnumerator NightSynergyRing()
+    {
+        var runner=W.Powers.SynergyRunner;var d=runner.Definition;
+        Check(d!=null,"Fire + Ice equips a synergy whose shockwave ring can be rendered at night ("+d?.DisplayName+").");
+        var ring=CityMaterials.GetVfx(d.Secondary);var swatch=CityMaterials.Current.Palette.Colors[(int)d.Secondary];
+        runner.Vfx.Burst(W.City.Spawn+new Vector3(0,.05f,6),d);var particles=runner.Vfx.LastParticles;particles.Clear(true);
+        var line=particles.GetComponent<LineRenderer>();
+        yield return new WaitForSeconds(.2f);particles.Clear(true);
+        Check(line.gameObject.activeInHierarchy&&line.sharedMaterial==ring&&ring.shader.name=="Unlit/Color"&&ring.color==swatch&&Lighting.State.Glow>.9f,
+            $"Night: the live {d.DisplayName} ring uses the unlit {d.Secondary} palette swatch, unchanged by the night cycle.");
+        camera.transform.SetPositionAndRotation(cameraAt,cameraRotation);
+        var withRing=Grab();line.enabled=false;var without=Grab();line.enabled=true;
+        line.sharedMaterial=CityMaterials.Get(d.Secondary);var litControl=Grab();line.sharedMaterial=ring;
+        File.WriteAllBytes(Folder+"night-synergy-ring.png",withRing.EncodeToPNG());
+        var a=withRing.GetPixels32();var b=without.GetPixels32();var c=litControl.GetPixels32();int n=0;double unlit=0,lit=0,back=0;
+        static int Diff(Color32 x,Color32 y)=>Mathf.Abs(x.r-y.r)+Mathf.Abs(x.g-y.g)+Mathf.Abs(x.b-y.b);
+        for(int i=0;i<a.Length;i++)if(Diff(a[i],b[i])>12||Diff(c[i],b[i])>12){n++;unlit+=Luma(a[i]);lit+=Luma(c[i]);back+=Luma(b[i]);}
+        Destroy(withRing);Destroy(without);Destroy(litControl);
+        float u=n>0?(float)(unlit/n):0,l=n>0?(float)(lit/n):0,g=n>0?(float)(back/n):0,sw=.2126f*swatch.r+.7152f*swatch.g+.0722f*swatch.b;
+        Log($"MEASURED night synergy ring ({d.Secondary}, swatch luma {sw:F3}): {n} ring pixels; mean luma unlit ring {u:F3}, lit-swatch CONTROL {l:F3}, ground under ring {g:F3}.");
+        Check(n>100&&u-g>=.15f,$"Night: the unlit ring reads against the night street (luma {u:F3} vs ground {g:F3}, {n} pixels).");
+        // Informational only: the lit swatch's darkening depends on view and ribbon normals (grey rings in the daytime freeze
+        // captures), so readability, not the lit/unlit gap, is the gate.
+        Log($"CONTROL night lit-swatch ring luma {l:F3} vs unlit {u:F3} (difference {u-l:+0.000;-0.000}).");
+    }
     IEnumerator Checks()
     {
         yield return Scene(GameFlow.HomeScene);
@@ -68,6 +101,7 @@ public sealed class LightingVerificationRunner : MonoBehaviour
         yield return Measure("night-combat-max-lights",true);yield return Capture("night-max-power-lights-same-view");
         Check(CityMaterials.Current.All.Count()==mats,"Lighting cycle and pooled flashes reuse the same shared city palette materials.");
         var power=W.Powers.Powers.Find(p=>p.Definition==fire);W.Powers.Tick(100,true);Check(W.Powers.Use(power),"Real equipped Fire cast requests a pooled point light.");yield return null;Check(Lighting.PowerActive>0,"Fire leaves a visible short-lived point light while its projectile travels.");
+        yield return NightSynergyRing();
         camera.targetTexture=null;target.Release();Destroy(target);camera.enabled=true;follow.enabled=true;
         yield return Enter("villain");Check(Lighting.TimeOfDay==.5f&&Lighting.State.Glow>.4f,"Villain starts at the authored dusk preset.");
         yield return Enter("free-play");Check(Lighting.Cycle.Advances&&Lighting.Cycle.Loop&&Lighting.Cycle.DurationSeconds>0,"Free Play cycles through day/dusk/night from data.");float t=Lighting.TimeOfDay;yield return new WaitForSeconds(.15f);Check(Lighting.TimeOfDay>t,"Free Play's live cycle advances in game time.");

@@ -124,12 +124,23 @@ public sealed class HeroForgeVerificationRunner : MonoBehaviour
         var pooled=renderers.Where(renderer=>renderer.name.StartsWith("Pooled synergy")).ToArray();
         Check(pooled.Length==F.EffectPoolSize&&pooled.All(renderer=>renderer.mesh==pooled[0].mesh),"All six VFX slots share the same particle mesh.");
         CaptureCamera(camera,"sonic-impact.png");
+        // Ring material contract: one cached unlit palette swatch per colour, shared by every slot, owned/destroyed by CityMaterials.
+        var ringMaterial=CityMaterials.GetVfx(slam.Definition.Secondary);int materialsBefore=Resources.FindObjectsOfTypeAll<Material>().Length;
+        for(int i=0;i<F.EffectPoolSize;i++)slam.Vfx.Burst(hero.transform.position,slam.Definition);
+        var rings=FindObjectsByType<LineRenderer>(FindObjectsInactive.Include).Where(ring=>ring.name.StartsWith("Pooled synergy")).ToArray();
+        int materialsAfter=Resources.FindObjectsOfTypeAll<Material>().Length;
+        Check(rings.Length==F.EffectPoolSize&&rings.All(ring=>ring.sharedMaterial==ringMaterial)&&materialsAfter==materialsBefore,
+            $"Every pooled synergy ring shares one cached palette ring material; {F.EffectPoolSize} more bursts create no material ({materialsBefore}->{materialsAfter}).");
+        Check(ringMaterial.shader.name=="Unlit/Color"&&ringMaterial.color==CityMaterials.Current.Palette.Colors[(int)slam.Definition.Secondary]
+            &&ringMaterial!=CityMaterials.Get(slam.Definition.Secondary)&&CityMaterials.Current.Owned.Contains(ringMaterial),
+            $"Ring is the unlit {slam.Definition.Secondary} palette swatch (not the lit Standard swatch) and is owned by the session's CityMaterials.");
         hero.DebugSetResources(2,3,0);Check(W.Powers.ConsumeFlight(.5f)&&Mathf.Approximately(hero.FlightFuel,1.5f),"Equipped Flight positive control consumes configured fuel.");
         Check(hero.TryPunch(),"Equipped Strength uses existing paid punch.");Check(!hero.TryHurricaneKick(),"Shared punch/kick cooldown still rejects kick.");yield return new WaitForSeconds(.5f);
         Check(hero.LastForce==W.Powers.Stats(W.Powers.Strength).Force,"Equipped Strength preserves original force.");
         hero.DebugSetResources(2,0,0);Check(!hero.TryHurricaneKick(),"Zero Strength charges still reject Hurricane Kick.");
         Check(hero.TryBackflip(),"Backflip remains available.");float hp=W.Health;W.DamagePlayer(1);Check(W.Health==hp-1,"Backflip CONTROL has no invincibility.");
         GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);menu=FindAnyObjectByType<ModeScreens>();
+        Check(ringMaterial==null,"Leaving the session destroys the unlit ring material with its CityMaterials owner.");
         Check(menu.Profile.SetLoadout(F.Hero("nova"),Power("fire"),Power("ice"),CityColor.Red,CityColor.Cyan),"Save final loadout for separate-process test.");
         int level=menu.Profile.Data.Level;GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/villain"));yield return Scene(GameFlow.CityScene);
         Check(W.Powers.EquippedA==Power("fire")&&W.Progression.Data.Level==level,"Villain mode switch preserves build and progression.");

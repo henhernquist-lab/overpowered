@@ -44,7 +44,7 @@ PASS Destruction control: cream shape/navy outline use shared palette materials.
 PASS Destruction control: glyph does not affect target physics or its renderer snapshot.
 PASS Destroying frozen prop releases silhouette.
 PASS Timed prop thaw clears silhouette.
-MEASURED markers 64->64, growth=0, materials 109->109; newly loaded: 
+MEASURED markers 64->64, growth=0, materials 108->108; newly loaded: 
 PASS Repeated freezes reuse preallocated markers without material growth.
 PASS Session transition destroys its marker pool.
 MEASURED current catalog synergies=10; freezing=Cryo Crush, Frostwake, Glacier Fist, Thermal Shock
@@ -80,7 +80,7 @@ PASS Cryo Crush NPC: six-ray branched shape with border is shared geometry.
 PASS Cryo Crush NPC: cream shape/navy outline use shared palette materials.
 PASS Cryo Crush NPC: glyph does not affect target physics or its renderer snapshot.
 PASS Cryo Crush uses the shared FrozenLook (Cyan palette material, held presentation).
-PASS Cryo Crush glyph follows the lifted captive: glyph y=156.39, captive y=154.08
+PASS Cryo Crush glyph follows the lifted captive: glyph y=156.58, captive y=154.27
 PASS Cryo Crush far CONTROL has no glyph or freeze.
 PASS Cryo Crush thaw/death releases the glyph (thawed).
 PASS Cryo Crush reuses preallocated markers (no growth).

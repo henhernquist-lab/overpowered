@@ -1,16 +1,20 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-// Fixed scene-lifetime pool. Built-in materials are shared by palette role; no per-cast meshes/materials.
+// Fixed scene-lifetime pool. Built-in materials are shared by palette role (particles: lit swatch; ring: CityMaterials' unlit
+// swatch, so the thin ribbon keeps its palette colour); no per-cast meshes/materials.
 public sealed class SynergyVfx : MonoBehaviour
 {
     sealed class Slot {public GameObject Root;public ParticleSystem Particles;public LineRenderer Ring;public float Until,Start,Radius;}
-    Slot[] slots;int cursor;ForgeCatalog tuning;
+    Slot[] slots;int cursor;ForgeCatalog tuning;readonly Dictionary<CityColor,Material> ringMaterials=new Dictionary<CityColor,Material>();
     public int Emissions {get;private set;}
     public int PoolCount=>slots?.Length??0;
     public ParticleSystem LastParticles=>slots==null||cursor==0?null:slots[(cursor-1)%slots.Length].Particles;
     public void Initialize(ForgeCatalog catalog)
     {
         tuning=catalog;slots=new Slot[Mathf.Max(1,catalog.EffectPoolSize)];
+        foreach(var effect in catalog.Synergies)if(effect!=null&&!ringMaterials.ContainsKey(effect.Secondary))
+            ringMaterials.Add(effect.Secondary,CityMaterials.GetVfx(effect.Secondary));
         var template=GameObject.CreatePrimitive(PrimitiveType.Cube);
         Mesh particleMesh=template.GetComponent<MeshFilter>().sharedMesh;
         template.SetActive(false);Destroy(template);
@@ -36,7 +40,9 @@ public sealed class SynergyVfx : MonoBehaviour
         var s=slots[cursor++%slots.Length];s.Root.SetActive(true);s.Root.transform.position=position;s.Root.transform.rotation=Quaternion.identity;s.Root.transform.localScale=Vector3.one;
         s.Particles.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);
         s.Particles.GetComponent<ParticleSystemRenderer>().sharedMaterial=CityMaterials.Get(d.Primary);
-        s.Ring.sharedMaterial=CityMaterials.Get(d.Secondary);
+        // Catalog swatches are resolved at pool start; any other swatch is resolved once through the same bounded palette cache.
+        if(!ringMaterials.TryGetValue(d.Secondary,out var ring))ringMaterials.Add(d.Secondary,ring=CityMaterials.GetVfx(d.Secondary));
+        s.Ring.sharedMaterial=ring;
         s.Radius=d.Radius;s.Start=Time.time;s.Until=Time.time+tuning.ShockwaveSeconds;
         s.Particles.Play();s.Particles.Emit(tuning.ParticlesPerBurst);Emissions++;
     }

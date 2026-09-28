@@ -53,6 +53,7 @@ public sealed class CityMaterials : MonoBehaviour
     public static CityMaterials Current {get;private set;}
     public CityPalette Palette {get;private set;}
     readonly Dictionary<CityColor,Material> materials=new Dictionary<CityColor,Material>();
+    readonly Dictionary<CityColor,Material> vfxMaterials=new Dictionary<CityColor,Material>();
     readonly Dictionary<CityColor,Color> applied=new Dictionary<CityColor,Color>();
     float appliedSmoothness=float.NaN; int appliedToonHash, appliedEmissiveHash;
     /// Night glow 0..1 set by the session's WorldLightingDirector (0 = day: every emissive swatch emits black).
@@ -93,7 +94,7 @@ public sealed class CityMaterials : MonoBehaviour
     readonly Dictionary<(SidekickSuit,CityColor,CityColor),SuitEntry> suits=new Dictionary<(SidekickSuit,CityColor,CityColor),SuitEntry>();
     public int SuitCount=>suits.Count;
     /// Palette materials plus the suit materials generated from palette colours (both owned and destroyed here).
-    public IEnumerable<Material> Owned=>materials.Values.Concat(suits.Values.Select(e=>e.Material));
+    public IEnumerable<Material> Owned=>materials.Values.Concat(vfxMaterials.Values).Concat(suits.Values.Select(e=>e.Material));
     public static int SuitsCreated {get;private set;}
     public static Material Suit(SidekickSuit suit,CityColor primary,CityColor secondary)
     {
@@ -120,10 +121,26 @@ public sealed class CityMaterials : MonoBehaviour
         }
         return mat;
     }
+    /// Shared unlit palette material for thin VFX geometry, where Standard's view-facing ribbon normals make colours muddy.
+    /// At most one per swatch, cached, recoloured by Apply and destroyed with this owner. Call during pool setup, not per cast.
+    public static Material GetVfx(CityColor color)
+    {
+        if(Current==null)throw new System.InvalidOperationException("City palette must be initialized before VFX.");
+        if(!Current.vfxMaterials.TryGetValue(color,out var mat))
+        {
+            var shader=Shader.Find("Unlit/Color");
+            // A player build can strip an unreferenced built-in shader: fall back to the lit shared swatch rather than fail the session.
+            if(shader==null||!shader.isSupported){Debug.LogWarning("Unlit/Color unavailable; VFX swatch "+color+" uses the lit palette material.");return Get(color);}
+            mat=new Material(shader){name="Palette/Vfx/"+color,enableInstancing=true,color=Current.Palette.Colors[(int)color]};
+            Current.vfxMaterials.Add(color,mat);
+        }
+        return mat;
+    }
     public void Apply()
     {
         foreach(var pair in materials)
         {var color=Palette.Colors[(int)pair.Key];Surface(pair.Value,color,null,false);Emission(pair.Value,pair.Key);applied[pair.Key]=color;}
+        foreach(var pair in vfxMaterials)pair.Value.color=Palette.Colors[(int)pair.Key];
         appliedSmoothness=Palette.Smoothness; appliedToonHash=ToonHash; appliedEmissiveHash=EmissiveHash;
         foreach(var pair in suits)
         {
@@ -157,6 +174,7 @@ public sealed class CityMaterials : MonoBehaviour
     {
         if(!appliedSmoothness.Equals(Palette.Smoothness)||appliedToonHash!=ToonHash||appliedEmissiveHash!=EmissiveHash)return true;
         foreach(var pair in materials)if(!applied.TryGetValue(pair.Key,out var color)||!color.Equals(Palette.Colors[(int)pair.Key]))return true;
+        foreach(var pair in vfxMaterials)if(!pair.Value.color.Equals(Palette.Colors[(int)pair.Key]))return true;
         foreach(var pair in suits)
             if(!pair.Value.Primary.Equals(Palette.Colors[(int)pair.Key.Item2])||!pair.Value.Secondary.Equals(Palette.Colors[(int)pair.Key.Item3])||!pair.Value.Trim.Equals(Palette.Colors[(int)pair.Key.Item1.Trim]))return true;
         return false;
@@ -165,6 +183,7 @@ public sealed class CityMaterials : MonoBehaviour
     void OnDestroy()
     {
         foreach(var mat in materials.Values)Destroy(mat);
+        foreach(var mat in vfxMaterials.Values)Destroy(mat);
         foreach(var e in suits.Values){Destroy(e.Material);Destroy(e.Map);}suits.Clear();
         if(Current==this)Current=null;
     }

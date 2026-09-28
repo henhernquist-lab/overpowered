@@ -108,7 +108,10 @@ This is not a ragdoll system. No physics prop is teleported, marked static, or g
 
 Built-in Particle System module is enabled in Packages/manifest.json. No URP pipeline,
 Shader Graph, volume or renderer feature was added. Six scene-lifetime pooled effects reuse
-palette materials; each has a 40-point ring and at most 28 particles. No per-cast meshes or
+palette materials; each has a 40-point ring and at most 28 particles. Particles use the lit
+palette swatch; the thin ring uses `CityMaterials.GetVfx`, one shared unlit palette material per
+colour, resolved at pool start, recoloured by `Apply` and destroyed with its CityMaterials owner
+(the lit Standard swatch rendered these ribbons dark grey). No per-cast meshes or
 materials are created. Fixed-step yield instructions are reused and pair lookup is cached.
 Existing CombatImpact allocations and first-use component attachment are retained; this
 is not a claim of a measured allocation-free game.
