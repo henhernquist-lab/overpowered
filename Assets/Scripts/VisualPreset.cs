@@ -13,7 +13,8 @@ using UnityEngine.Rendering;
 ///   - melee / slam attack telegraphs drawn as rings instead of an opaque disc (AttackTelegraph);
 ///   - a street-level facade pass on urban-height buildings (CityArt.StreetLevel), read when the city is generated;
 ///   - per-role enemy silhouettes and accents (HumanoidPresentation), e.g. no hero-cyan on a hostile Gunner;
-///   - a comet tail on projectile powers (FireBlastEffect).
+///   - a comet tail on projectile powers (FireBlastEffect);
+///   - structure recipe overrides using shared generated low-poly shapes (faceted canopy / pine trees), at generation.
 /// Colours come from the shared CityPalette. Tune in Resources/VisualPreset (created by Overpowered > Visual > menus).
 [CreateAssetMenu(menuName = "Overpowered/Visual preset")]
 public sealed class VisualPreset : ScriptableObject
@@ -40,6 +41,22 @@ public sealed class VisualPreset : ScriptableObject
     [Tooltip("Street-level facade pass: shop glazing on every face, base plinth, corner pilasters, projecting cornice.")] public bool FacadeDetail = true;
     [Tooltip("Only buildings at least this tall get it (keeps low residential houses as they are).")] public float FacadeMinHeight = 10f;
     [Tooltip("Distant mainland as a continuous coastline of narrow stepped towers instead of isolated wide slabs.")] public bool SkylineBackdrop = true;
+    [Tooltip("Structure recipes replaced by name at city generation (e.g. faceted canopy trees instead of stacked cubes). Pieces may use the shared generated PieceShape meshes.")]
+    public StructureRecipe[] RecipeOverrides = DefaultRecipeOverrides();
+    static RecipePiece Piece(PieceShape shape, PrimitiveType type, float x, float y, float z, float sx, float sy, float sz, CityColor c, bool solid = false, float yaw = 0)
+        => new RecipePiece { Shape = shape, Type = type, Position = new Vector3(x, y, z), Size = new Vector3(sx, sy, sz), Euler = new Vector3(0, yaw, 0), Color = c, Solid = solid };
+    /// Same trunks (and trunk colliders) as the shipped recipes; canopies become faceted low-poly balls / cones.
+    static StructureRecipe[] DefaultRecipeOverrides()
+    {
+        const PieceShape P = PieceShape.Primitive, Ball = PieceShape.Canopy, Cone = PieceShape.Cone;
+        const PrimitiveType Cyl = PrimitiveType.Cylinder, Box = PrimitiveType.Cube;
+        return new[]
+        {
+            new StructureRecipe { Name = "Street tree", Pieces = new[] { Piece(P, Cyl, 0, 1.2f, 0, .32f, 2.4f, .32f, CityColor.Wood, true), Piece(Ball, Box, 0, 3.5f, 0, 2.8f, 2.4f, 2.8f, CityColor.Leaf, yaw: 30), Piece(Ball, Box, .35f, 4.6f, .2f, 1.8f, 1.6f, 1.8f, CityColor.Lawn, yaw: 70) } },
+            new StructureRecipe { Name = "Park tree", Pieces = new[] { Piece(P, Cyl, 0, 1.6f, 0, .5f, 3.2f, .5f, CityColor.Wood, true), Piece(Ball, Box, 0, 4.6f, 0, 4.6f, 3.8f, 4.6f, CityColor.Leaf, yaw: 15), Piece(Ball, Box, .7f, 6.1f, .3f, 3.2f, 2.8f, 3.2f, CityColor.Lawn, yaw: 50), Piece(Ball, Box, -1.1f, 5.6f, -.7f, 2.6f, 2.2f, 2.6f, CityColor.Leaf, yaw: 80) } },
+            new StructureRecipe { Name = "Pine tree", Pieces = new[] { Piece(P, Cyl, 0, 1.1f, 0, .42f, 2.2f, .42f, CityColor.Wood, true), Piece(Cone, Box, 0, 2.9f, 0, 3.8f, 2.6f, 3.8f, CityColor.Leaf, yaw: 10), Piece(Cone, Box, 0, 4.3f, 0, 2.8f, 2.3f, 2.8f, CityColor.Leaf, yaw: 32), Piece(Cone, Box, 0, 5.6f, 0, 1.8f, 2f, 1.8f, CityColor.Leaf, yaw: 55) } },
+        };
+    }
     [Header("Combat readability")]
     [Tooltip("Melee / slam telegraphs as a boundary ring + closing timing ring instead of a solid disc covering the ground.")] public bool RingTelegraphs = true;
     [Tooltip("Projectile powers (Fire Blast) trail a three-sphere comet tail in their palette colour.")] public bool ProjectileTail = true;

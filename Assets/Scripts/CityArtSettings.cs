@@ -22,10 +22,14 @@ public enum StaticGeometryMode
     BuildingMeshes  // world pass: pieces written straight into one mesh per building (and per 64 m chunk for ground/streets/
                     // structures) per material and layer, no per-piece GameObjects; then StaticBatchingUtility per district root
 }
+/// Shared generated low-poly meshes a piece may use instead of its primitive (CityArt.ShapeMesh): one mesh per shape for the
+/// whole city, unit bounds centred like the built-in cube, palette materials, batched like any other piece.
+public enum PieceShape { Primitive, Canopy, Cone, Wedge, Gable }
 /// A static structure built from primitive pieces (trees, containers, cranes, landmarks). Pure data: CityArt places any recipe.
 [Serializable] public sealed class RecipePiece
 {
     public PrimitiveType Type=PrimitiveType.Cube;
+    [Tooltip("Primitive = Type. Otherwise a shared generated low-poly mesh sized by Size (Type is then only the collider shape for Solid pieces).")] public PieceShape Shape;
     [Tooltip("Piece centre relative to the recipe origin (ground level).")] public Vector3 Position;
     public Vector3 Size=Vector3.one, Euler;
     public CityColor Color;

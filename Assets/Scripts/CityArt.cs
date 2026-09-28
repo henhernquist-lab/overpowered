@@ -80,7 +80,7 @@ public sealed class CityArt : MonoBehaviour
     }
     /// One primitive piece of never-moving geometry. Legacy modes create a GameObject per piece; BuildingMeshes appends it to
     /// the owner's mesh for that colour and layer and adds a BoxCollider on the owner when solid. Owners are never rotated/scaled.
-    GameObject Part(Transform owner,string name,Vector3 local,Vector3 size,CityColor color,bool solid,bool detail,PrimitiveType type=PrimitiveType.Cube,Quaternion? rotated=null)
+    GameObject Part(Transform owner,string name,Vector3 local,Vector3 size,CityColor color,bool solid,bool detail,PrimitiveType type=PrimitiveType.Cube,Quaternion? rotated=null,PieceShape shape=PieceShape.Primitive)
     {
         PieceCount++;
         var rotation=rotated??Quaternion.identity;
@@ -88,14 +88,15 @@ public sealed class CityArt : MonoBehaviour
         if(!Meshes)
         {
             var go=Piece(owner,name,local,size,color,solid,type);go.layer=layer;
+            if(shape!=PieceShape.Primitive){go.GetComponent<MeshFilter>().sharedMesh=ShapeMesh(shape);go.transform.localScale=size;}
             if(detail)go.GetComponent<Renderer>().shadowCastingMode=ShadowCastingMode.Off;
             if(rotation!=Quaternion.identity)go.transform.localRotation=rotation;
             return go;
         }
         var key=(owner,color,layer);
         if(!batches.TryGetValue(key,out var batch))batches[key]=batch=new Batch{Owner=owner,Color=color,Layer=layer};
-        var mesh=Primitive(type);
-        batch.Parts.Add(new CombineInstance{mesh=mesh,transform=Matrix4x4.TRS(local,rotation,PieceScale(size,type))});batch.Vertices+=mesh.vertexCount;
+        var mesh=shape==PieceShape.Primitive?Primitive(type):ShapeMesh(shape);
+        batch.Parts.Add(new CombineInstance{mesh=mesh,transform=Matrix4x4.TRS(local,rotation,shape==PieceShape.Primitive?PieceScale(size,type):size)});batch.Vertices+=mesh.vertexCount;
         if(solid)
         {
             // Cylinders are symmetric about their axis, so a yaw-only rotation needs no rotated collider.
@@ -299,13 +300,13 @@ public sealed class CityArt : MonoBehaviour
     {
         foreach(var s in plan.Structures)
         {
-            var recipe=Settings.Recipe(s.Recipe);
+            var recipe=RecipeOverride(s.Recipe)??Settings.Recipe(s.Recipe);
             if(recipe==null)throw new System.InvalidOperationException("CityArtSettings has no structure recipe '"+s.Recipe+"'.");
             var rot=Quaternion.Euler(0,s.Yaw,0);var owner=Chunk(s.District,s.Position);
             foreach(var p in recipe.Pieces)
             {
                 var color=p.Variant&&recipe.Variants.Length>0?recipe.Variants[s.Variant%recipe.Variants.Length]:p.Color;
-                Part(owner,recipe.Name,s.Position+rot*p.Position,p.Size,color,p.Solid,p.Detail,p.Type,rot*Quaternion.Euler(p.Euler));
+                Part(owner,recipe.Name,s.Position+rot*p.Position,p.Size,color,p.Solid,p.Detail,p.Type,rot*Quaternion.Euler(p.Euler),p.Shape);
             }
         }
     }
@@ -526,6 +527,62 @@ public sealed class CityArt : MonoBehaviour
             ownedMeshes.Add(shared.Mesh);
         }
         sharedProps.Add(key,shared);return shared;
+    }
+    /// An active VisualPreset's replacement for a structure recipe (by recipe name), or null = the CityArtSettings recipe.
+    StructureRecipe RecipeOverride(string name)
+    {
+        var p=VisualPreset.Current;if(!VisualPreset.Active(p)||p.RecipeOverrides==null)return null;
+        foreach(var r in p.RecipeOverrides)if(r!=null&&r.Name==name&&r.Pieces!=null&&r.Pieces.Length>0)return r;
+        return null;
+    }
+    static readonly Dictionary<PieceShape,Mesh> shapes=new Dictionary<PieceShape,Mesh>();
+    /// Shared flat-shaded low-poly meshes within the unit cube (-0.5..0.5), built once. Every shape is convex, so each
+    /// triangle is wound to face away from an interior point (no hand-wound index lists).
+    public static Mesh ShapeMesh(PieceShape shape)
+    {
+        if(shapes.TryGetValue(shape,out var cached)&&cached!=null)return cached;
+        var v=new List<Vector3>();var f=new List<int>();
+        switch(shape)
+        {
+            case PieceShape.Canopy:
+            {
+                float t=(1f+Mathf.Sqrt(5f))*.5f;
+                var ico=new[]{new Vector3(-1,t,0),new Vector3(1,t,0),new Vector3(-1,-t,0),new Vector3(1,-t,0),new Vector3(0,-1,t),new Vector3(0,1,t),new Vector3(0,-1,-t),new Vector3(0,1,-t),new Vector3(t,0,-1),new Vector3(t,0,1),new Vector3(-t,0,-1),new Vector3(-t,0,1)};
+                foreach(var p in ico)v.Add(p.normalized*.5f);
+                f.AddRange(new[]{0,11,5,0,5,1,0,1,7,0,7,10,0,10,11,1,5,9,5,11,4,11,10,2,10,7,6,7,1,8,3,9,4,3,4,2,3,2,6,3,6,8,3,8,9,4,9,5,2,4,11,6,2,10,8,6,7,9,8,1});
+                break;
+            }
+            case PieceShape.Cone:
+            {
+                v.Add(new Vector3(0,.5f,0));v.Add(new Vector3(0,-.5f,0));
+                for(int i=0;i<8;i++){float a=i*Mathf.PI/4f;v.Add(new Vector3(Mathf.Cos(a)*.5f,-.5f,Mathf.Sin(a)*.5f));}
+                for(int i=0;i<8;i++){int a=2+i,b=2+(i+1)%8;f.AddRange(new[]{0,a,b,1,b,a});}
+                break;
+            }
+            case PieceShape.Wedge: // full height at the back (+z), sloping to the front-bottom edge (-z): awnings, ramps
+                v.AddRange(new[]{new Vector3(-.5f,.5f,.5f),new Vector3(.5f,.5f,.5f),new Vector3(-.5f,-.5f,.5f),new Vector3(.5f,-.5f,.5f),new Vector3(-.5f,-.5f,-.5f),new Vector3(.5f,-.5f,-.5f)});
+                f.AddRange(new[]{0,1,4,1,5,4,0,2,1,1,2,3,2,4,3,3,4,5,0,4,2,1,3,5});
+                break;
+            case PieceShape.Gable: // ridge along x at the top, eaves at the bottom front/back: pitched roofs
+                v.AddRange(new[]{new Vector3(-.5f,.5f,0),new Vector3(.5f,.5f,0),new Vector3(-.5f,-.5f,-.5f),new Vector3(.5f,-.5f,-.5f),new Vector3(-.5f,-.5f,.5f),new Vector3(.5f,-.5f,.5f)});
+                f.AddRange(new[]{0,1,2,1,3,2,0,4,1,1,4,5,2,3,4,3,5,4,0,2,4,1,5,3});
+                break;
+            default: return Primitive(PrimitiveType.Cube);
+        }
+        // Flat shading: one vertex per corner per face; winding faces away from the vertex centroid (strictly inside every
+        // shape here; the origin is not: it lies on the wedge's slope).
+        var inside=Vector3.zero;foreach(var p in v)inside+=p;inside/=v.Count;
+        var verts=new List<Vector3>();var tris=new List<int>();
+        for(int i=0;i<f.Count;i+=3)
+        {
+            Vector3 a=v[f[i]],b=v[f[i+1]],c=v[f[i+2]];
+            if(Vector3.Dot(Vector3.Cross(b-a,c-a),(a+b+c)/3f-inside)<0){var x=b;b=c;c=x;}
+            int n=verts.Count;verts.Add(a);verts.Add(b);verts.Add(c);tris.Add(n);tris.Add(n+1);tris.Add(n+2);
+        }
+        var mesh=new Mesh{name="City shape "+shape};mesh.SetVertices(verts);mesh.SetTriangles(tris,0);
+        var uv=new List<Vector2>();foreach(var p in verts)uv.Add(new Vector2(p.x+.5f,p.y+.5f));mesh.SetUVs(0,uv);   // same channels as the primitives it is combined with
+        mesh.RecalculateNormals();mesh.RecalculateTangents();mesh.RecalculateBounds();
+        shapes[shape]=mesh;return mesh;
     }
     static Mesh Primitive(PrimitiveType type)
     {
