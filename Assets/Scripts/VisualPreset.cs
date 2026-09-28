@@ -9,7 +9,8 @@ using UnityEngine.Rendering;
 ///     never cast: CityArt.FlushBatches);
 ///   - gradient (trilight) ambient instead of the default skybox's bright blue fill that bleaches up-facing surfaces;
 ///   - a procedural skybox whose ground half is the fog Haze, so the haze-skirt walls (visible as flat slabs in the sky
-///     from the park and quay) can be hidden.
+///     from the park and quay) can be hidden;
+///   - melee / slam attack telegraphs drawn as rings instead of an opaque disc (AttackTelegraph).
 /// Colours come from the shared CityPalette. Tune in Resources/VisualPreset (created by Overpowered > Visual > menus).
 [CreateAssetMenu(menuName = "Overpowered/Visual preset")]
 public sealed class VisualPreset : ScriptableObject
@@ -32,6 +33,8 @@ public sealed class VisualPreset : ScriptableObject
     public CityColor SkyTint = CityColor.Haze, SkyGround = CityColor.Haze;
     public float SkyExposure = 1.15f, SkyAtmosphere = .75f, SunSize = .025f;
     [Tooltip("Hide the haze-skirt walls (only when ProceduralSky paints the lower sky in the fog colour).")] public bool HideHazeSkirt = true;
+    [Header("Combat readability")]
+    [Tooltip("Melee / slam telegraphs as a boundary ring + closing timing ring instead of a solid disc covering the ground.")] public bool RingTelegraphs = true;
 
     /// Verification / capture override for this process: null = the asset's Enabled flag.
     public static bool? ForceEnabled;
