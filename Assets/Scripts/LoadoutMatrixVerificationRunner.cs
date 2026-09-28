@@ -51,9 +51,9 @@ public sealed class LoadoutMatrixVerificationRunner : SessionVerificationRunner
                 manifest.Add(string.Join("|", snapshot, hero.Id, a.Id, b.Id, expected != null ? expected.Id : "-"));
             }
         yield return Home();
-        Check(FindObjectsByType<PowerProjectile>(FindObjectsSortMode.None).Length == 0 && FindObjectsByType<ThrownProp>(FindObjectsSortMode.None).Length == 0 &&
-              FindObjectsByType<Poisoned>(FindObjectsSortMode.None).Length == 0 && FindObjectsByType<SynergySuspension>(FindObjectsSortMode.None).Length == 0 &&
-              FindObjectsByType<PowerVfx>(FindObjectsSortMode.None).Length == 0 && FindObjectsByType<CityNpc>(FindObjectsSortMode.None).Length == 0,
+        Check(FindObjectsByType<PowerProjectile>().Length == 0 && FindObjectsByType<ThrownProp>().Length == 0 &&
+              FindObjectsByType<Poisoned>().Length == 0 && FindObjectsByType<SynergySuspension>().Length == 0 &&
+              FindObjectsByType<PowerVfx>().Length == 0 && FindObjectsByType<CityNpc>().Length == 0,
             "Teardown: back Home, no projectile, thrown prop, poison, suspension, line pool or NPC survived the city.");
         Check(synergies == 5 && lifecycle.Count == 11, $"55 pairs played: exactly {synergies} resolved a synergy; lifecycle run for all {lifecycle.Count} powers.");
         File.WriteAllLines(Manifest, manifest);
