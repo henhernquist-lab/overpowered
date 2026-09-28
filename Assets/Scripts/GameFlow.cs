@@ -13,6 +13,8 @@ public sealed class SessionResult
     public float PeakHeat, TimeLimit;
     public ResultsLayout Layout;
     public int Wave, EnemiesDefeated, BestScore;
+    /// Session civilian outcomes (read-only facts for future results / scoring; not saved).
+    public CivilianSummary Civilians;
     public bool NewBest;
 }
 public sealed class GameFlow : MonoBehaviour

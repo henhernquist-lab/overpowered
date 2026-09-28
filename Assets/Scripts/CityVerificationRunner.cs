@@ -72,7 +72,8 @@ public sealed class CityVerificationRunner : MonoBehaviour
         Check(!w.Progression.Buy(w.Powers.Strength.Definition),"Zero-point upgrade CONTROL rejected.");
 
         var seventh=w.Powers.Powers.Find(p=>p.Definition.Id=="verification-7");
-        Check(w.Powers.Powers.Count==7&&seventh.Definition.Effect==w.Powers.Powers.Find(p=>p.Definition.Id=="fire").Definition.Effect,
+        // Roster size now comes from data (11 shipping powers + the two temporary verification powers), not a literal 5 + 2.
+        Check(seventh!=null&&w.Powers.Powers.Count==Resources.LoadAll<PowerDefinition>("Powers").Length&&seventh.Definition.Effect==w.Powers.Powers.Find(p=>p.Definition.Id=="fire").Definition.Effect,
             "Seventh power discovered from DATA only; exact same projectile effect asset as Fire Blast.");
         // Hero Forge gate CONTROL: the owned seventh power is not in the default Flight + Strength loadout, so it is refused.
         Check(w.Progression.Owns(seventh.Definition)&&!w.Powers.IsEquipped(seventh.Definition),$"Seventh power owned but NOT equipped (session loadout {w.Powers.EquippedA.Id} + {w.Powers.EquippedB.Id}).");

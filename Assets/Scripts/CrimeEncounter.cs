@@ -33,13 +33,18 @@ public sealed class CrimeEncounter : MonoBehaviour
     public float Elapsed { get; private set; }
     public bool Finished { get; private set; }
     public string Objective => World.Mode.Definition.Rules.Objective(this);
-    public string InteractionHint { get; private set; }="Move barriers with powers, then hold R near people or supplies.";
+    /// Verification only (batch mode has no keyboard): treated exactly like R being held on this encounter's own Update path.
+    public bool ScriptedHold;
+    public string InteractionHint { get; set; }="Move barriers with powers, then hold R near people or supplies.";
+    /// Mission run state when the definition has a Scenario (null for the original mixed encounter).
+    public ScenarioState Scenario { get; private set; }
     /// Progress (0-1) of the R hold currently in progress; 0 when nothing is being held (read-only, for the HUD).
     public float HoldFraction => Definition==null ? 0f : Mathf.Clamp01(hold/Mathf.Max(.0001f,Definition.HoldSeconds));
     /// Read-only mirror of Interact()'s candidate rules: would holding R at this point act on something right now?
     public bool InteractableNear(Vector3 point)
     {
         if(Finished||World==null||World.Mode==null||World.Mode.Ended) return false;
+        if(Scenario!=null) return Scenario.InteractableNear(point);
         float radius=Definition.InteractRadius; bool hero=World.Mode.Definition.Side==PlayerSide.Hero;
         if(hero)
         {
@@ -75,12 +80,17 @@ public sealed class CrimeEncounter : MonoBehaviour
         for(int i=0;i<definition.LooseProps;i++) Prop("Encounter supply crate",site+new Vector3((i%2==0?1:-1)*definition.Spacing,0,(i+1)*definition.Spacing),world.Tuning.Props.CrateSize,world.Tuning.Props.CrateMass);
         for(int i=0;i<definition.Loot;i++) Loot.Add(Node("Loot — hold R",site+new Vector3(-definition.Spacing,0,-(i+1)*definition.Spacing),CityColor.Amber));
         for(int i=0;i<definition.Hazards;i++) Hazards.Add(Node("Fire — hold R",site+new Vector3(definition.Spacing,0,-(i+1)*definition.Spacing),CityColor.Fire));
+        if(definition.Scenario!=null) Scenario=definition.Scenario.Begin(this);
         World.Alarm(site);
     }
-    CityNpc Actor(Vector3 position,NpcRole role)
+    // Building blocks shared with mission scenarios (same spawning, parenting and palette rules as the original encounter).
+    public CityNpc SpawnActor(Vector3 position,NpcRole role,EnemyArchetype archetype=null)=>Actor(position,role,archetype);
+    public Rigidbody SpawnProp(string name,Vector3 ground,Vector3 size,float mass)=>Prop(name,ground,size,mass);
+    public EncounterNode SpawnNode(string name,Vector3 ground,CityColor color)=>Node(name,ground,color);
+    CityNpc Actor(Vector3 position,NpcRole role,EnemyArchetype archetype=null)
     {
-        var actor=CityNpc.Spawn(World,position,role);
-        if(actor==null) actor=CityNpc.Spawn(World,Site,role);
+        var actor=archetype!=null?CityNpc.Spawn(World,position,role,archetype):CityNpc.Spawn(World,position,role);
+        if(actor==null) actor=archetype!=null?CityNpc.Spawn(World,Site,role,archetype):CityNpc.Spawn(World,Site,role);
         if(actor==null) throw new System.InvalidOperationException("Encounter has no usable NavMesh at "+Site);
         actor.Encounter=this; actor.transform.SetParent(transform,true); return actor;
     }
@@ -114,16 +124,24 @@ public sealed class CrimeEncounter : MonoBehaviour
     {
         if(Finished||World.Mode.Ended||World.Mode.Paused) return;
         Tick(Time.deltaTime);
-        if(!World.MenuOpen&&!World.PlayerDead) Interact(Input.GetKey(KeyCode.R)?Time.deltaTime:0f);
+        if(!World.MenuOpen&&!World.PlayerDead) Interact(Input.GetKey(KeyCode.R)||ScriptedHold?Time.deltaTime:0f);
     }
     public void Tick(float dt)
     {
         if(Finished||World.Mode.Ended||World.Mode.Paused) return;
         Elapsed+=dt;
+        if(Scenario!=null)
+        {
+            Scenario.Tick(dt);
+            if(Finished) return;
+            if(Scenario.Failed(out string why)) { End(false,why); return; }
+            if(Elapsed>=Definition.Deadline) { End(false,"Mission deadline expired."); return; }
+            TryComplete(); return;
+        }
         if(Elapsed>Definition.CivilianDangerAfter)
         {
             float exposure=Mathf.Min(dt,Elapsed-Definition.CivilianDangerAfter);
-            foreach(var actor in Civilians) if(!actor.Saved&&actor.Npc!=null&&!actor.Npc.Dead) actor.Npc.Damage(Definition.CivilianDamagePerSecond*exposure,null);
+            using(HarmContext.Hostile()) foreach(var actor in Civilians) if(!actor.Saved&&actor.Npc!=null&&!actor.Npc.Dead) actor.Npc.Damage(Definition.CivilianDamagePerSecond*exposure,null);
         }
         if(World.Mode.Definition.Rules.Failed(this)) { End(false,"A robber escaped or a civilian was lost."); return; }
         if(Elapsed>=Definition.Deadline) { End(false,"Encounter ignored / deadline expired."); return; }
@@ -131,7 +149,7 @@ public sealed class CrimeEncounter : MonoBehaviour
     }
     public bool TryComplete()
     {
-        if(Finished||World.Mode.Ended||!World.Mode.Definition.Rules.Complete(this)) return false;
+        if(Finished||World.Mode.Ended||!(Scenario!=null?Scenario.Complete():World.Mode.Definition.Rules.Complete(this))) return false;
         End(true,"All objectives complete."); return true;
     }
     void End(bool success,string reason)
@@ -143,6 +161,8 @@ public sealed class CrimeEncounter : MonoBehaviour
     public bool Interact(float dt)
     {
         if(Finished||World.Mode.Ended||World.Mode.Paused||World.PlayerDead) return false;
+        // Scenario encounters: HoldFraction still reports an R hold in progress (HUD first-time "interact" prompt).
+        if(Scenario!=null) { hold=dt>0&&Scenario.InteractableNear(World.Hero.transform.position)?Mathf.Min(hold+dt,Definition.HoldSeconds):0f; return Scenario.Interact(dt); }
         object candidate=null; float best=Definition.InteractRadius;
         Vector3 player=World.Hero.transform.position;
         bool hero=World.Mode.Definition.Side==PlayerSide.Hero;
@@ -170,7 +190,7 @@ public sealed class CrimeEncounter : MonoBehaviour
         if(hold<Definition.HoldSeconds) return false;
         if(candidate is EncounterActor chosen)
         {
-            if(Civilians.Contains(chosen)) { chosen.Saved=true; World.Mode.RecordRescue(); World.Mode.AddScore(World.Mode.Definition.RescueScore); }
+            if(Civilians.Contains(chosen)) { chosen.Saved=true; World.Civilians?.Rescued(chosen.Npc); World.Mode.RecordRescue(); World.Mode.AddScore(World.Mode.Definition.RescueScore); }
             else {chosen.Captured=true;chosen.Npc.gameObject.SetActive(false);}
         }
         else if(candidate is EncounterNode node) {node.Done=true;node.Visual.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Leaf);}
@@ -179,6 +199,7 @@ public sealed class CrimeEncounter : MonoBehaviour
     public bool Drive(CityNpc npc)
     {
         if(Finished) return false;
+        if(Scenario!=null&&Scenario.Drive(npc)) return true;
         var robber=Robbers.Find(a=>a.Npc==npc);
         if(robber!=null)
         {

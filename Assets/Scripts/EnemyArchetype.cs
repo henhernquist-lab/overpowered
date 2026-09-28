@@ -10,6 +10,7 @@ public enum AttackKind { Melee, Ranged, Slam }
 public sealed class EnemyArchetype : ScriptableObject
 {
     public string DisplayName="Enemy";
+    [Tooltip("Free tags districts can prefer (DistrictGameplayProfile.EnemyTags), e.g. \"dockworker\". Empty = none.")] public string[] Tags=new string[0];
     [Header("Body")]
     [Tooltip("Hostile movement speed, m/s. Non-hostile NPCs keep their role speed.")] public float MoveSpeed=5.5f;
     [Tooltip("x standard enemy health (GameTuning CopHealth + Heat stars) or x the Endless wave health.")] public float HealthMultiplier=1f;

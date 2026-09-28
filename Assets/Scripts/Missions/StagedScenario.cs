@@ -1,0 +1,796 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+/// A small, inspectable mission-stage layer on top of EncounterScenario. A StagedScenario asset is DATA: named points around
+/// the site, actor groups (real CityNpcs), target groups (hardpoints, crates, pickups, driving vehicles) and an ordered list
+/// of stages. Exactly one stage is active; it completes or fails, its OnComplete actions run once, the next stage starts and
+/// runs its OnStart actions once. The first failure (stage rule or timeout) latches the mission as FAILED; the last stage's
+/// completion latches it as COMPLETE. After a latch nothing transitions again, and rewards stay with CrimeEncounter's single
+/// End(). No graph, no scripting: a list of stages.
+///
+/// Stage kinds (what completes / what fails; every stage may also time out):
+///  DefeatTargets   defeat or cuff Count (0 = all) members of Group                      | -
+///  ReachArea       player within Radius of Point (or of the first live member of Group) | -
+///  ProtectActors   Group survives Seconds                                               | more than AllowedLosses lost
+///  EscortActors    Group (following the player) all within Radius of Point              | more than AllowedLosses lost
+///  InteractTargets hold R HoldSeconds at Count (0 = all) targets of target Group        | too few targets left
+///  DestroyTargets  destroy Count (0 = all) targets of target Group (only ARMED while this stage is active)
+///  CollectItems    walk over Count (0 = all) pickups of target Group (collectable only while active) | too few left
+///  Survive         Seconds pass                                                         | -
+///  EscapeRadius    player farther than Radius from Point (default: the site)            | -
+///  ChaseExit       defeat/cuff every member of Group, who flee to Point                 | any member reaches Point
+///  StopVehicles    stop (freeze / heavy hit) or wreck every vehicle of target Group, driving from stage start | any escapes
+///  RaiseHeat       Heat stars >= Count                                                  | -
+///  SearchTargets   hold R at targets of Group until the REAL one (seeded) is found; decoys run OnDecoy | the real one is lost
+///  DefendTargets   besiegeable hardpoints of Group survive Seconds                       | more than AllowedLosses destroyed
+///  LosePursuit     the pursuit state clears (Escaped / Clear, or Alerted with no contact for SearchSeconds), after Seconds | -
+/// Groups may be comma lists ("vips-a,vips-b"); AtPoint may be a comma list (members spread over the points); a point may
+/// be placed in ANOTHER district (MissionPoint.Placement); anchors "$here" (the revealed decoy) and "$player" are allowed.
+[CreateAssetMenu(menuName = "Overpowered/Missions/Staged mission")]
+public sealed class StagedScenario : EncounterScenario
+{
+    public MissionPoint[] Points = new MissionPoint[0];
+    public ActorGroupSpec[] Actors = new ActorGroupSpec[0];
+    public TargetGroupSpec[] Targets = new TargetGroupSpec[0];
+    public MissionStageSpec[] Stages = new MissionStageSpec[0];
+    [Tooltip("Optional bonus goals (a choice: speed vs care vs stealth). Checked once when the mission SUCCEEDS; each met goal pays its XP once.")]
+    public BonusObjective[] Bonuses = new BonusObjective[0];
+    [Header("Shared rules")]
+    public float InteractRadius = 3f, HoldSeconds = 1.5f, CuffSeconds = 1f, PickupRadius = 1.8f, FollowRadius = 3.5f, FollowGap = 1.8f;
+    [Tooltip("A fleeing actor that has moved less than this in StuckSeconds (or has no complete path) switches to its next exit.")]
+    public float StuckDistance = .6f, StuckSeconds = 2f, ExitReach = 2.5f;
+    [Tooltip("Harassing actors within HarassRange hurt protected actors (per second) or undo a restored target after HarassSeconds.")]
+    public float HarassRange = 2.2f, HarassDamagePerSecond = 5f, HarassSeconds = 2.5f;
+    [Tooltip("A hit of at least this impulse stops a driving mission vehicle (Ice always does).")] public float VehicleStopImpulse = 1200f;
+    public float VehicleSpeed = 10f, VehicleEscapeDistance = 80f;
+    [Header("Variation per spawn (replayability). All off = the authored layout, counts and timers every time.")]
+    [Tooltip("Rotate every point about the site by a random yaw.")] public bool RandomYaw;
+    [Tooltip("Mirror every point's angle (left / right) at random.")] public bool RandomMirror;
+    [Tooltip("Difficulty band = the session's successes / DifficultyStep.")] [Min(1)] public int DifficultyStep = 2;
+    [Tooltip("Extra members per band for actor groups marked ScaleWithDifficulty (floored), capped at MaxExtraActors.")] public float ExtraActorsPerBand;
+    public int MaxExtraActors = 3;
+    [Tooltip("Stage timeouts x this per band (0.95 = 5% tighter each band), never below MinTimeoutScale.")] public float TimeoutScalePerBand = 1f;
+    public float MinTimeoutScale = .7f;
+    public override ScenarioState Begin(CrimeEncounter encounter)
+    {
+        var state = encounter.gameObject.AddComponent<StagedState>(); state.Setup(encounter, this); return state;
+    }
+}
+public enum StageKind { DefeatTargets, ReachArea, ProtectActors, EscortActors, InteractTargets, DestroyTargets, CollectItems, Survive, EscapeRadius, ChaseExit, StopVehicles, RaiseHeat, SearchTargets, DefendTargets, LosePursuit }
+public enum ActorBehavior { Default, Idle, HoldPost, Flee, Follow, Pursue, Harass }
+public enum TargetKind { Hardpoint, Crate, Vehicle, Pickup }
+public enum StageActionKind { SpawnActors, SpawnTargets, SetBehavior, AddHeat, Hint }
+public enum PointPlacement { NearSite, OtherDistrict }
+/// A named place: Angle (degrees, 0 = +Z) and Distance from its anchor, optionally snapped to the nearest sidewalk. The anchor
+/// is the mission site, or (OtherDistrict) an encounter site in a district other than the mission's own and other than the
+/// districts of the points listed in NotInDistrictsOf, preferring districts whose profile has DistrictTag; picked from the
+/// mission seed (deterministic), with a recorded fallback when nothing qualifies.
+[Serializable] public sealed class MissionPoint
+{
+    public string Id; public float Angle, Distance; public bool Sidewalk = true;
+    public PointPlacement Placement;
+    [Tooltip("OtherDistrict: prefer districts whose gameplay profile has this mission tag (ignored when the district layer is off).")] public string DistrictTag;
+    [Tooltip("OtherDistrict: comma-separated earlier point ids whose districts are excluded too.")] public string NotInDistrictsOf;
+}
+[Serializable] public sealed class ActorGroupSpec
+{
+    public string Id; public NpcRole Role = NpcRole.Criminal;
+    [Tooltip("Null = the roster archetype for Role.")] public EnemyArchetype Archetype;
+    public int Count = 1; public string AtPoint; public float Ring = 2f, HealthMultiplier = 1f, Speed = 4f;
+    public ActorBehavior Behavior = ActorBehavior.Default;
+    [Tooltip("Flee: comma-separated exit point ids (first = preferred). Harass: the actor or target group to harass.")] public string BehaviorArgument;
+    public bool SpawnAtStart = true;
+    [Tooltip("Gets the scenario's difficulty-band extra members (hostile groups: yes; people you protect or escort: no).")] public bool ScaleWithDifficulty = true;
+}
+[Serializable] public sealed class TargetGroupSpec
+{
+    public string Id; public TargetKind Kind = TargetKind.Hardpoint; public int Count = 1; public string AtPoint; public float Ring = 2f;
+    [Tooltip("Hardpoint health.")] public float Health = 150f;
+    public bool SpawnAtStart = true;
+    [Tooltip("Hardpoints that harassing actors damage (DefendTargets); otherwise harassers only undo restored targets.")] public bool Besiegeable;
+}
+[Serializable] public sealed class StageAction
+{
+    public StageActionKind Kind; public string Group; public ActorBehavior Behavior; public float Amount;
+    [Tooltip("Hint: the text. SpawnActors / SpawnTargets: optional ANCHOR - an actor or target group (spawn around its first live member, else its last known position) or a point id. Empty = the group's own AtPoint.")]
+    public string Text;
+}
+[Serializable] public sealed class MissionStageSpec
+{
+    public string Label = "OBJECTIVE"; public StageKind Kind; public string Group; public string Point;
+    public int Count; public float Seconds, Radius = 4f, Timeout; public int AllowedLosses;
+    [Tooltip("While this stage is active, spawn one more member of this actor group every RepeatSeconds, up to RepeatMaxAlive alive.")]
+    public string RepeatGroup; public float RepeatSeconds; public int RepeatMaxAlive = 4;
+    public StageAction[] OnStart = new StageAction[0], OnComplete = new StageAction[0];
+    [Tooltip("SearchTargets: run when a DECOY is revealed (anchor \"$here\" = that decoy).")] public StageAction[] OnDecoy = new StageAction[0];
+}
+public enum MissionTerminal { Running, Complete, Failed }
+public enum BonusKind
+{
+    /// Whole mission within Value seconds.
+    UnderSeconds,
+    /// The player took no damage during the mission.
+    NoDamageTaken,
+    /// No member of Group lost (dead, not captured).
+    NoLosses,
+    /// Heat never above Value stars during the mission.
+    MaxHeatStars,
+}
+[Serializable] public sealed class BonusObjective { public string Label = "BONUS"; public BonusKind Kind; public string Group; public float Value; [Min(0)] public int RewardXp = 25; }
+public sealed class StagedState : ScenarioState
+{
+    public sealed class Actor { public CityNpc Npc; public Vector3 Post; public Vector3? LastSeen; public bool Captured, Escaped; public int ExitIndex; public float StuckSince; public Vector3 StuckFrom; public bool Following; public float HarassTimer; }
+    public sealed class Target { public GameObject Go; public DamageTarget Hardpoint; public MissionVehicle Vehicle; public EncounterNode Pickup; public bool Done, Real, Besiegeable; public float Hold; public bool Missing => Go == null && Pickup == null; }
+    StagedScenario d;
+    readonly Dictionary<string, Vector3> points = new Dictionary<string, Vector3>();
+    readonly Dictionary<string, int> pointDistricts = new Dictionary<string, int>();
+    readonly Dictionary<string, string[]> splits = new Dictionary<string, string[]>();
+    readonly Dictionary<string, List<Actor>> mergedActors = new Dictionary<string, List<Actor>>();
+    readonly Dictionary<string, List<Target>> mergedTargets = new Dictionary<string, List<Target>>();
+    /// Points that could not be placed as authored (e.g. "exfil: tag"), and destinations repaired at stage start.
+    public readonly List<string> PointFallbacks = new List<string>();
+    public int DestinationRepairs { get; private set; }
+    public readonly Dictionary<string, List<Actor>> Actors = new Dictionary<string, List<Actor>>();
+    public readonly Dictionary<string, List<Target>> TargetsById = new Dictionary<string, List<Target>>();
+    public int StageIndex { get; private set; } = -1;
+    public MissionStageSpec Stage => StageIndex >= 0 && StageIndex < d.Stages.Length ? d.Stages[StageIndex] : null;
+    public MissionTerminal Terminal { get; private set; }
+    public string FailReason { get; private set; }
+    public float StageElapsed { get; private set; }
+    /// Times each stage index has started / completed (verification: exactly once each).
+    public int[] Started { get; private set; }
+    public int[] Completed { get; private set; }
+    public event Action<int> StageStarted, StageCompleted;
+    float repeatClock, startDistance; Actor cuffing; float cuff;
+    /// This spawn's variation (see StagedScenario "Variation"): seed, layout yaw / mirror, difficulty band, extra hostile
+    /// members per scaling group, and the timeout scale. Verification may fix the next seed with SeedOverride.
+    public int Seed { get; private set; }
+    public float Yaw { get; private set; }
+    public bool Mirrored { get; private set; }
+    public int Band { get; private set; }
+    public int ExtraActors { get; private set; }
+    public float TimeoutScale { get; private set; } = 1f;
+    public static int? SeedOverride;
+    /// Mission clock (sum of ticks), player damage taken and the highest Heat stars seen, for the bonus goals.
+    public float MissionElapsed { get; private set; }
+    public float DamageTaken { get; private set; }
+    public int PeakStars { get; private set; }
+    /// Labels of the bonus goals met (filled once, when the mission succeeds) and the XP they paid.
+    public readonly List<string> BonusesEarned = new List<string>();
+    public int BonusXp { get; private set; }
+    float healthSeen;
+    public float TimeoutOf(MissionStageSpec s) => s.Timeout * TimeoutScale;
+    public void Setup(CrimeEncounter e, StagedScenario scenario)
+    {
+        Attach(e, scenario); d = scenario;
+        Started = new int[d.Stages.Length]; Completed = new int[d.Stages.Length];
+        Seed = SeedOverride ?? UnityEngine.Random.Range(int.MinValue, int.MaxValue); SeedOverride = null;
+        var random = new System.Random(Seed);
+        Yaw = d.RandomYaw ? (float)(random.NextDouble() * 360d) : 0f;
+        Mirrored = d.RandomMirror && random.Next(2) == 1;
+        Band = e.World.Mode != null ? e.World.Mode.Successes / Mathf.Max(1, d.DifficultyStep) : 0;
+        if (e.World.Districts != null) Band = Mathf.Max(0, Band + e.World.Districts.DifficultyOffsetAt(e.Site));   // district difficulty (0 when neutral)
+        ExtraActors = Mathf.Clamp(Mathf.FloorToInt(Band * d.ExtraActorsPerBand + 1e-4f), 0, Mathf.Max(0, d.MaxExtraActors));
+        TimeoutScale = Mathf.Clamp(Mathf.Pow(d.TimeoutScalePerBand, Band), Mathf.Min(1f, d.MinTimeoutScale), 1f);
+        int siteDistrict = e.World.City.DistrictAt(e.Site);
+        foreach (var p in d.Points)
+        {
+            float angle = (Mirrored ? -p.Angle : p.Angle) + Yaw;
+            Vector3 anchor = p.Placement == PointPlacement.OtherDistrict ? OtherDistrictSite(p, siteDistrict, random) : e.Site;
+            Vector3 at = anchor + Quaternion.Euler(0, angle, 0) * Vector3.forward * p.Distance;
+            points[p.Id] = p.Sidewalk ? e.World.City.NearestSidewalk(at) : at;
+            pointDistricts[p.Id] = e.World.City.DistrictAt(points[p.Id]);
+        }
+        healthSeen = e.World.Health; PeakStars = e.World.Stars;
+        foreach (var g in d.Actors) { Actors[g.Id] = new List<Actor>(); if (g.SpawnAtStart) SpawnActors(g.Id, g.Count + Extra(g)); }
+        foreach (var t in d.Targets) { TargetsById[t.Id] = new List<Target>(); if (t.SpawnAtStart) SpawnTargets(t.Id); }
+        if (d.Stages.Length == 0) { Terminal = MissionTerminal.Complete; return; }
+        BeginStage(0);
+    }
+    // ---------------------------------------------------------------- lookups and spawning
+    public Vector3 Point(string id) => !string.IsNullOrEmpty(id) && points.TryGetValue(id, out var p) ? p : Encounter.Site;
+    /// District index of a point (-1 unknown): verification proves cross-district stages really are in distinct districts.
+    public int DistrictOfPoint(string id) => id != null && pointDistricts.TryGetValue(id, out int district) ? district : -1;
+    string[] Split(string key)
+    {
+        if (!splits.TryGetValue(key, out var parts)) { parts = key.Split(','); for (int i = 0; i < parts.Length; i++) parts[i] = parts[i].Trim(); splits[key] = parts; }
+        return parts;
+    }
+    /// A point from a comma list for the member at `index` (members spread round-robin over the listed points).
+    Vector3 PointFor(string atPoints, int index)
+    {
+        if (string.IsNullOrEmpty(atPoints) || atPoints.IndexOf(',') < 0) return Point(atPoints);
+        var parts = Split(atPoints); return Point(parts[index % parts.Length]);
+    }
+    readonly List<int> candidates = new List<int>(); readonly HashSet<int> excluded = new HashSet<int>();
+    /// An encounter site for an OtherDistrict point (seeded). Pass 0 honours DistrictTag; pass 1 drops the tag; pass 2 only
+    /// avoids the mission's own district; then the mission site itself. Every relaxation is recorded in PointFallbacks.
+    Vector3 OtherDistrictSite(MissionPoint p, int siteDistrict, System.Random random)
+    {
+        var city = World.City; excluded.Clear(); excluded.Add(siteDistrict);
+        if (!string.IsNullOrEmpty(p.NotInDistrictsOf)) foreach (var id in Split(p.NotInDistrictsOf)) if (pointDistricts.TryGetValue(id, out int other)) excluded.Add(other);
+        var districts = World.Districts;
+        for (int pass = 0; pass < 3; pass++)
+        {
+            if (pass == 0 && string.IsNullOrEmpty(p.DistrictTag)) continue;
+            candidates.Clear();
+            for (int i = 0; i < city.EncounterSites.Count; i++)
+            {
+                int district = city.EncounterSiteDistrict[i];
+                if (pass < 2 ? excluded.Contains(district) : district == siteDistrict) continue;
+                if (pass == 0 && !(districts != null && districts.Active && districts.ProfileOf(district).HasMissionTag(p.DistrictTag))) continue;
+                if (!NavMesh.SamplePosition(city.EncounterSites[i], out _, 4f, NavMesh.AllAreas)) continue;
+                candidates.Add(i);
+            }
+            if (candidates.Count == 0) continue;
+            if (pass == 1 && !string.IsNullOrEmpty(p.DistrictTag)) PointFallbacks.Add(p.Id + ": no district tagged " + p.DistrictTag);
+            if (pass == 2) PointFallbacks.Add(p.Id + ": only the mission's own district excluded");
+            return city.EncounterSites[candidates[random.Next(candidates.Count)]];
+        }
+        PointFallbacks.Add(p.Id + ": no other district; placed near the site"); return Encounter.Site;
+    }
+    /// Verification hook: move a point (e.g. somewhere unreachable) to prove the stage-start repair.
+    public void Relocate(string id, Vector3 at) { if (id != null) points[id] = at; }
+    /// A stage whose destination point is off the NavMesh (moved, removed, blocked) is re-pointed at the nearest sidewalk,
+    /// else the nearest encounter site, so it never waits forever for an unreachable place.
+    void RepairDestination(MissionStageSpec s)
+    {
+        if (string.IsNullOrEmpty(s.Point) || !points.TryGetValue(s.Point, out var at)) return;
+        if (NavMesh.SamplePosition(at, out _, 6f, NavMesh.AllAreas)) return;
+        Vector3 repaired = World.City.NearestSidewalk(at);
+        if (!NavMesh.SamplePosition(repaired, out _, 6f, NavMesh.AllAreas))
+        {
+            float best = float.MaxValue; foreach (var site in World.City.EncounterSites) { float dd = (site - at).sqrMagnitude; if (dd < best && NavMesh.SamplePosition(site, out _, 4f, NavMesh.AllAreas)) { best = dd; repaired = site; } }
+        }
+        points[s.Point] = repaired; pointDistricts[s.Point] = World.City.DistrictAt(repaired); DestinationRepairs++;
+    }
+    // Looked up every frame per group (TickActors) and per NPC repath (Drive): plain loops, no closures.
+    public ActorGroupSpec ActorSpec(string id) { foreach (var g in d.Actors) if (g.Id == id) return g; return null; }
+    TargetGroupSpec TargetSpec(string id) { foreach (var t in d.Targets) if (t.Id == id) return t; return null; }
+    /// One actor group, or the members of a comma list of groups (a reused buffer - do not nest two reads of the same list).
+    public List<Actor> Group(string id)
+    {
+        if (id == null) return null;
+        if (Actors.TryGetValue(id, out var list)) return list;
+        if (id.IndexOf(',') < 0) return null;
+        if (!mergedActors.TryGetValue(id, out var buffer)) mergedActors[id] = buffer = new List<Actor>();
+        buffer.Clear(); foreach (var part in Split(id)) if (Actors.TryGetValue(part, out var l)) buffer.AddRange(l);
+        return buffer;
+    }
+    public List<Target> TargetGroup(string id)
+    {
+        if (id == null) return null;
+        if (TargetsById.TryGetValue(id, out var list)) return list;
+        if (id.IndexOf(',') < 0) return null;
+        if (!mergedTargets.TryGetValue(id, out var buffer)) mergedTargets[id] = buffer = new List<Target>();
+        buffer.Clear(); foreach (var part in Split(id)) if (TargetsById.TryGetValue(part, out var l)) buffer.AddRange(l);
+        return buffer;
+    }
+    static bool Gone(Actor a) => a.Npc == null || a.Npc.Dead || a.Captured;
+    static bool Lost(Actor a) => !a.Captured && (a.Npc == null || a.Npc.Dead);
+    int Extra(ActorGroupSpec g) => g != null && g.ScaleWithDifficulty && g.Count > 0 ? ExtraActors : 0;
+    public int SpawnActors(string id, int count, Vector3? around = null)
+    {
+        var g = ActorSpec(id); var list = Group(id); if (g == null || list == null) return 0;
+        int made = 0;
+        for (int i = 0; i < count; i++)
+        {
+            Vector3 centre = around ?? PointFor(g.AtPoint, list.Count + i);
+            Vector3 at = centre + Quaternion.Euler(0, (list.Count + i) * 137.5f, 0) * Vector3.forward * g.Ring;
+            var npc = Encounter.SpawnActor(at, g.Role, g.Archetype);
+            if (npc == null) continue;
+            if (g.HealthMultiplier != 1f) npc.SetCombatStats(npc.MaxHealth * g.HealthMultiplier, npc.ContactDamage);
+            if (g.Role == NpcRole.Civilian) npc.GetComponentInChildren<Renderer>().sharedMaterial = CityMaterials.Get(CityColor.Cyan);
+            // Each member starts on its own exit (a fleeing group scatters); blocked, it moves on to the next one.
+            list.Add(new Actor { Npc = npc, Post = npc.transform.position, StuckFrom = npc.transform.position, StuckSince = Time.time, ExitIndex = list.Count }); made++;
+        }
+        return made;
+    }
+    public void SpawnTargets(string id, Vector3? around = null)
+    {
+        var t = TargetSpec(id); var list = TargetGroup(id); if (t == null || list == null) return;
+        var props = World.Tuning.Props; bool spread = around == null && !string.IsNullOrEmpty(t.AtPoint) && t.AtPoint.IndexOf(',') >= 0;
+        for (int i = 0; i < t.Count; i++)
+        {
+            Vector3 centre = around ?? PointFor(t.AtPoint, list.Count + i);
+            Vector3 at = centre + Quaternion.Euler(0, (list.Count + i) * 137.5f, 0) * Vector3.forward * (t.Count > 1 && !spread ? t.Ring : 0f);
+            var item = new Target { Besiegeable = t.Besiegeable };
+            switch (t.Kind)
+            {
+                case TargetKind.Hardpoint:
+                    var go = GameObject.CreatePrimitive(PrimitiveType.Cube); go.name = "Mission hardpoint " + id; go.transform.SetParent(Encounter.transform, false);
+                    go.transform.position = at + Vector3.up * .8f; go.transform.localScale = new Vector3(1.4f, 1.6f, 1.4f);
+                    go.GetComponent<Renderer>().sharedMaterial = CityMaterials.Get(CityColor.Metal);
+                    item.Go = go; item.Hardpoint = go.AddComponent<DamageTarget>(); item.Hardpoint.Setup(t.Health); break;
+                case TargetKind.Crate:
+                    item.Go = Encounter.SpawnProp("Mission crate " + id, at, props.CrateSize, props.CrateMass).gameObject; break;
+                case TargetKind.Vehicle:
+                    var car = Encounter.SpawnProp("Encounter throwable car", at, props.CarSize, props.CarMass); car.gameObject.name = "Mission vehicle " + id;
+                    item.Go = car.gameObject; item.Vehicle = car.gameObject.AddComponent<MissionVehicle>(); item.Vehicle.Setup(d.VehicleSpeed, d.VehicleStopImpulse); break;
+                case TargetKind.Pickup:
+                    item.Pickup = Encounter.SpawnNode("Mission pickup " + id, at, CityColor.Amber); break;
+            }
+            list.Add(item);
+        }
+    }
+    // ---------------------------------------------------------------- stage machine
+    void BeginStage(int index)
+    {
+        StageIndex = index; StageElapsed = 0f; repeatClock = 0f; Started[index]++;
+        var s = d.Stages[index];
+        RepairDestination(s);
+        if (s.Kind == StageKind.SearchTargets) ChooseReal(s, index);
+        Run(s.OnStart);
+        if (s.Kind == StageKind.StopVehicles) foreach (var t in TargetGroup(s.Group) ?? new List<Target>()) if (t.Vehicle != null && !t.Vehicle.Driving && !t.Vehicle.Stopped) DriveAway(t.Vehicle);
+        if (s.Kind == StageKind.ReachArea || s.Kind == StageKind.EscapeRadius) startDistance = Vector3.Distance(World.Hero.transform.position, ReachPoint(s));
+        foreach (var t in AllTargets()) if (t.Hardpoint != null) t.Hardpoint.Armed = s.Kind == StageKind.DestroyTargets && TargetGroup(s.Group) != null && TargetGroup(s.Group).Contains(t);
+        StageStarted?.Invoke(index);
+    }
+    /// SearchTargets: exactly one target of the group is real, picked from the mission seed and the stage index.
+    void ChooseReal(MissionStageSpec s, int index)
+    {
+        var t = TargetGroup(s.Group); if (t == null || t.Count == 0) return;
+        int real = new System.Random(unchecked(Seed * 31 + index * 7919)).Next(t.Count);
+        for (int i = 0; i < t.Count; i++) t[i].Real = i == real;
+    }
+    IEnumerable<Target> AllTargets() { foreach (var list in TargetsById.Values) foreach (var t in list) yield return t; }
+    void DriveAway(MissionVehicle v)
+    {
+        Vector3 start = v.transform.position, away = start - Encounter.Site; away.y = 0; if (away.sqrMagnitude < .01f) away = Vector3.forward;
+        Vector3 far = start + away.normalized * d.VehicleEscapeDistance * 1.3f, goal = World.City.NearestSidewalk(far);
+        var path = new NavMeshPath();
+        bool routed = NavMesh.SamplePosition(start, out var from, 4f, NavMesh.AllAreas) && NavMesh.CalculatePath(from.position, goal, NavMesh.AllAreas, path) && path.corners.Length > 1;
+        v.Drive(routed ? path.corners : new[] { start, far }, d.VehicleEscapeDistance);
+    }
+    void Run(StageAction[] actions, Vector3? here = null)
+    {
+        if (actions == null) return;
+        foreach (var a in actions)
+            switch (a.Kind)
+            {
+                case StageActionKind.SpawnActors: SpawnActors(a.Group, Mathf.Max(1, Mathf.RoundToInt(a.Amount)) + Extra(ActorSpec(a.Group)), Anchor(a.Text, here)); break;
+                case StageActionKind.SpawnTargets: SpawnTargets(a.Group, Anchor(a.Text, here)); break;
+                case StageActionKind.SetBehavior: SetBehavior(a.Group, a.Behavior); break;
+                case StageActionKind.AddHeat: World.AddHeat(a.Amount); break;
+                case StageActionKind.Hint: Encounter.InteractionHint = a.Text; break;
+            }
+    }
+    /// Where an anchored spawn goes: the first live member of an actor group, else any member's last position (a runner
+    /// that was just taken down drops its bag where it fell); the first target of a target group; a point id; null = none.
+    public Vector3? Anchor(string id, Vector3? here = null)
+    {
+        if (string.IsNullOrEmpty(id)) return null;
+        if (id == "$here") return here;
+        if (id == "$player") return World.Hero.transform.position;
+        var g = Group(id);
+        if (g != null)
+        {
+            foreach (var a in g) if (!Gone(a) && !a.Escaped) return a.Npc.transform.position;
+            for (int i = g.Count - 1; i >= 0; i--) if (g[i].LastSeen.HasValue) return g[i].LastSeen;
+        }
+        var t = TargetGroup(id); if (t != null) foreach (var x in t) if (x.Go != null) return x.Go.transform.position;
+        if (points.TryGetValue(id, out var p)) return p;
+        return null;
+    }
+    readonly Dictionary<string, ActorBehavior> behaviorOverride = new Dictionary<string, ActorBehavior>();
+    void SetBehavior(string group, ActorBehavior behavior)
+    {
+        if (group == null) return;
+        foreach (var part in Split(group)) behaviorOverride[part] = behavior;
+        // A new behaviour starts its own stuck window (a runner that was holding its post is not "stuck" on its first check).
+        var g = Group(group); if (g != null) foreach (var a in g) if (a.Npc != null) { a.StuckSince = Time.time; a.StuckFrom = a.Npc.transform.position; }
+    }
+    ActorBehavior BehaviorOf(string group, ActorGroupSpec spec) => behaviorOverride.TryGetValue(group, out var b) ? b : spec.Behavior;
+    void Fail(string reason) { if (Terminal != MissionTerminal.Running) return; Terminal = MissionTerminal.Failed; FailReason = reason; }
+    public override void Tick(float dt)
+    {
+        if (Terminal != MissionTerminal.Running) return;
+        var s = Stage; if (s == null) return;
+        StageElapsed += dt; MissionElapsed += dt;
+        // Health only drops through damage (respawn / refill raise it): count every drop as damage taken.
+        float health = World.Health; if (health < healthSeen) DamageTaken += healthSeen - health; healthSeen = health;
+        PeakStars = Mathf.Max(PeakStars, World.Stars);
+        TickActors(dt);
+        if (Terminal != MissionTerminal.Running) return;
+        if (!string.IsNullOrEmpty(s.RepeatGroup) && s.RepeatSeconds > 0f)
+        {
+            repeatClock += dt;
+            if (repeatClock >= s.RepeatSeconds) { repeatClock = 0f; int alive = 0; foreach (var a in Group(s.RepeatGroup) ?? new List<Actor>()) if (!Gone(a)) alive++; if (alive < s.RepeatMaxAlive) SpawnActors(s.RepeatGroup, 1); }
+        }
+        TickPickups();
+        if (Evaluate(s, out bool failed, out string why)) { CompleteStage(); return; }
+        if (failed) { Fail(why); return; }
+        if (s.Timeout > 0f && StageElapsed >= TimeoutOf(s)) Fail("Timed out: " + s.Label.ToLowerInvariant());
+    }
+    void CompleteStage()
+    {
+        int index = StageIndex; var s = d.Stages[index];
+        if (s.Kind == StageKind.EscortActors) { var g = Group(s.Group); if (g != null) foreach (var a in g) if (!Gone(a) && !a.Escaped) World.Civilians?.Escorted(a.Npc); }
+        Completed[index]++; Run(s.OnComplete); StageCompleted?.Invoke(index);
+        if (Terminal != MissionTerminal.Running) return;
+        if (index + 1 >= d.Stages.Length) { Terminal = MissionTerminal.Complete; PayBonuses(); Encounter.TryComplete(); return; }
+        BeginStage(index + 1);
+    }
+    /// Runs exactly once (the Complete latch): each met bonus goal pays its XP through the normal grant.
+    void PayBonuses()
+    {
+        if (d.Bonuses == null) return;
+        float health = World.Health; if (health < healthSeen) DamageTaken += healthSeen - health; healthSeen = health;
+        foreach (var b in d.Bonuses)
+        {
+            if (b == null || !BonusMet(b)) continue;
+            BonusesEarned.Add(b.Label); BonusXp += Mathf.Max(0, b.RewardXp);
+        }
+        // The grant's reason "bonus" reaches the HUD's XP popup; the outcome banner that follows keeps its own text.
+        if (BonusXp > 0) World.Progression.AddXp(BonusXp, Encounter.Site, "bonus");
+    }
+    public bool BonusMet(BonusObjective b)
+    {
+        switch (b.Kind)
+        {
+            case BonusKind.UnderSeconds: return MissionElapsed <= b.Value;
+            case BonusKind.NoDamageTaken: return DamageTaken <= 0f;
+            case BonusKind.MaxHeatStars: return PeakStars <= Mathf.RoundToInt(b.Value);
+            case BonusKind.NoLosses: { var g = Group(b.Group); if (g == null) return true; foreach (var a in g) if (Lost(a)) return false; return true; }
+        }
+        return false;
+    }
+    public Vector3 ReachPoint(MissionStageSpec s)
+    {
+        if (!string.IsNullOrEmpty(s.Point)) return Point(s.Point);
+        var g = Group(s.Group); if (g != null) foreach (var a in g) if (!Gone(a)) return a.Npc.transform.position;
+        var t = TargetGroup(s.Group); if (t != null) foreach (var x in t) if (x.Go != null) return x.Go.transform.position;
+        return Encounter.Site;
+    }
+    /// True when the stage is complete now; otherwise `failed` says whether its own rule failed.
+    bool Evaluate(MissionStageSpec s, out bool failed, out string why)
+    {
+        failed = false; why = null; Vector3 hero = World.Hero.transform.position;
+        switch (s.Kind)
+        {
+            case StageKind.DefeatTargets:
+            {
+                var g = Group(s.Group); if (g == null) return true; int gone = 0; foreach (var a in g) if (Gone(a)) gone++;
+                return gone >= (s.Count > 0 ? Mathf.Min(s.Count, g.Count) : g.Count);
+            }
+            case StageKind.ReachArea: return Vector3.Distance(hero, ReachPoint(s)) <= s.Radius;
+            case StageKind.EscapeRadius: return Vector3.Distance(hero, ReachPoint(s)) > s.Radius;
+            case StageKind.Survive: return StageElapsed >= s.Seconds;
+            case StageKind.RaiseHeat: return World.Stars >= s.Count;
+            case StageKind.ProtectActors:
+            {
+                var g = Group(s.Group); int lost = 0; if (g != null) foreach (var a in g) if (Lost(a)) lost++;
+                if (lost > s.AllowedLosses) { failed = true; why = $"{s.Label.ToLowerInvariant()}: {lost} lost"; return false; }
+                return StageElapsed >= s.Seconds;
+            }
+            case StageKind.EscortActors:
+            {
+                var g = Group(s.Group); if (g == null) return true; int lost = 0, arrived = 0, alive = 0; Vector3 at = Point(s.Point);
+                foreach (var a in g) { if (Lost(a)) { lost++; continue; } if (a.Captured) continue; alive++; if (Vector3.Distance(a.Npc.transform.position, at) <= s.Radius) arrived++; }
+                if (lost > s.AllowedLosses) { failed = true; why = $"{s.Label.ToLowerInvariant()}: {lost} lost"; return false; }
+                return alive > 0 && arrived == alive;
+            }
+            case StageKind.InteractTargets: case StageKind.DestroyTargets: case StageKind.CollectItems:
+            {
+                var t = TargetGroup(s.Group); if (t == null) return true; int done = 0, possible = 0;
+                foreach (var x in t)
+                {
+                    bool finished = s.Kind == StageKind.DestroyTargets ? Destroyed(x) : x.Done;
+                    if (finished) done++; else if (!x.Missing || s.Kind == StageKind.DestroyTargets) possible++;
+                }
+                int need = s.Count > 0 ? Mathf.Min(s.Count, t.Count) : t.Count;
+                if (done >= need) return true;
+                if (done + possible < need) { failed = true; why = $"{s.Label.ToLowerInvariant()}: objective lost"; }
+                return false;
+            }
+            case StageKind.ChaseExit:
+            {
+                var g = Group(s.Group); if (g == null) return true; bool all = true;
+                foreach (var a in g) { if (a.Escaped) { failed = true; why = $"{s.Label.ToLowerInvariant()}: the target got away"; return false; } if (!Gone(a)) all = false; }
+                return all;
+            }
+            case StageKind.StopVehicles:
+            {
+                var t = TargetGroup(s.Group); if (t == null) return true; bool all = true;
+                foreach (var x in t)
+                {
+                    if (x.Vehicle != null && x.Vehicle.Escaped) { failed = true; why = $"{s.Label.ToLowerInvariant()}: a vehicle got away"; return false; }
+                    if (!(x.Go == null || (x.Vehicle != null && x.Vehicle.Stopped))) all = false;
+                }
+                return all;
+            }
+            case StageKind.SearchTargets:
+            {
+                var t = TargetGroup(s.Group); if (t == null) return true;
+                foreach (var x in t) if (x.Real) { if (x.Done) return true; if (x.Missing) { failed = true; why = $"{s.Label.ToLowerInvariant()}: the target was lost"; } return false; }
+                return true;   // no real target (empty group): nothing to find
+            }
+            case StageKind.DefendTargets:
+            {
+                var t = TargetGroup(s.Group); int lost = 0; if (t != null) foreach (var x in t) if (x.Go == null || (x.Hardpoint != null && x.Hardpoint.Destroyed)) lost++;
+                if (lost > s.AllowedLosses) { failed = true; why = $"{s.Label.ToLowerInvariant()}: {lost} lost"; return false; }
+                return StageElapsed >= s.Seconds;
+            }
+            case StageKind.LosePursuit:
+            {
+                // Success needs the pursuit state to actually clear: Escaped / Clear, or Alerted (Heat still up) with no police
+                // contact for a full search window. Walking away while police still see you stays Pursued / Searching.
+                var p = World.Pursuit; if (p == null) return true;
+                if (StageElapsed < s.Seconds) return false;
+                return p.State == PursuitState.Escaped || p.State == PursuitState.Clear || (p.State == PursuitState.Alerted && p.SinceContact >= p.Settings.SearchSeconds);
+            }
+        }
+        return false;
+    }
+    static bool Destroyed(Target x) => x.Hardpoint != null ? x.Hardpoint == null || x.Hardpoint.Destroyed : x.Go == null;
+    // ---------------------------------------------------------------- actors
+    void TickActors(float dt)
+    {
+        foreach (var pair in Actors)
+        {
+            var spec = ActorSpec(pair.Key); var behavior = BehaviorOf(pair.Key, spec);
+            foreach (var a in pair.Value)
+            {
+                if (a.Npc != null) a.LastSeen = a.Npc.transform.position;
+                if (Gone(a) || a.Escaped) continue;
+                if (behavior == ActorBehavior.Pursue) a.Npc.AlwaysAggro = true;
+                if (behavior == ActorBehavior.Harass) Harass(a, spec, dt);
+                if (behavior == ActorBehavior.Flee)
+                {
+                    var exits = ExitPoints(spec);
+                    if (exits.Length > 0 && Vector3.Distance(a.Npc.transform.position, exits[a.ExitIndex % exits.Length]) <= d.ExitReach)
+                    { a.Escaped = true; a.Npc.gameObject.SetActive(false); }
+                }
+            }
+        }
+    }
+    readonly Dictionary<ActorGroupSpec, Vector3[]> exitCache = new Dictionary<ActorGroupSpec, Vector3[]>();
+    /// A Flee group's exits (resolved once; points never move during a mission).
+    public Vector3[] ExitPoints(ActorGroupSpec spec)
+    {
+        if (exitCache.TryGetValue(spec, out var cached)) return cached;
+        var ids = string.IsNullOrEmpty(spec.BehaviorArgument) ? new string[0] : spec.BehaviorArgument.Split(',');
+        var r = new Vector3[ids.Length]; for (int i = 0; i < ids.Length; i++) r[i] = Point(ids[i].Trim());
+        exitCache[spec] = r; return r;
+    }
+    void Harass(Actor a, ActorGroupSpec spec, float dt)
+    {
+        // Harass an actor group (hurt its members) or a target group (undo restored targets).
+        var victims = Group(spec.BehaviorArgument);
+        if (victims != null)
+        {
+            foreach (var v in victims)
+                if (!Gone(v) && Vector3.Distance(v.Npc.transform.position, a.Npc.transform.position) <= d.HarassRange) { using (HarmContext.Hostile()) v.Npc.Damage(d.HarassDamagePerSecond * dt, null); return; }
+            return;
+        }
+        var targets = TargetGroup(spec.BehaviorArgument); if (targets == null) return;
+        foreach (var t in targets)
+        {
+            // Besiegeable hardpoints (DefendTargets houses) take the harass damage directly.
+            if (t.Besiegeable && t.Hardpoint != null && !t.Hardpoint.Destroyed && Vector3.Distance(t.Go.transform.position, a.Npc.transform.position) <= d.HarassRange + 1f)
+            { t.Hardpoint.Siege(d.HarassDamagePerSecond * dt); return; }
+            if (t.Done && t.Go != null && Vector3.Distance(t.Go.transform.position, a.Npc.transform.position) <= d.HarassRange)
+            { a.HarassTimer += dt; if (a.HarassTimer >= d.HarassSeconds) { t.Done = false; t.Hold = 0f; a.HarassTimer = 0f; Encounter.InteractionHint = "A saboteur undid your work!"; } return; }
+        }
+        a.HarassTimer = 0f;
+    }
+    public override bool Drive(CityNpc npc)
+    {
+        foreach (var pair in Actors)
+        {
+            Actor a = null; foreach (var x in pair.Value) if (x.Npc == npc) { a = x; break; }
+            if (a == null) continue;
+            var spec = ActorSpec(pair.Key);
+            switch (BehaviorOf(pair.Key, spec))
+            {
+                case ActorBehavior.Idle: npc.Agent.isStopped = true; return true;
+                case ActorBehavior.HoldPost: npc.DirectTo(a.Post, spec.Speed); return true;
+                case ActorBehavior.Flee:
+                {
+                    var exits = ExitPoints(spec); if (exits.Length == 0) return false;
+                    Vector3 exit = exits[a.ExitIndex % exits.Length];
+                    npc.Agent.isStopped = npc.Rooted; npc.DirectTo(exit, spec.Speed);
+                    // Blocked or stuck: take the next exit (the route changes when the way is cut off).
+                    // Wall-clock window, not accumulated frame time: a far NPC's AI (and so Drive) runs at the LOD think rate.
+                    if (Time.time - a.StuckSince >= d.StuckSeconds)
+                    {
+                        bool stuck = Vector3.Distance(a.StuckFrom, npc.transform.position) < d.StuckDistance || (npc.Agent.hasPath && npc.Agent.pathStatus != NavMeshPathStatus.PathComplete);
+                        if (stuck && exits.Length > 1) a.ExitIndex++;
+                        a.StuckSince = Time.time; a.StuckFrom = npc.transform.position;
+                    }
+                    return true;
+                }
+                case ActorBehavior.Follow:
+                {
+                    Vector3 hero = World.Hero.transform.position;
+                    if (!a.Following && Vector3.Distance(hero, npc.transform.position) < d.FollowRadius) a.Following = true;
+                    if (!a.Following) { npc.Agent.isStopped = true; return true; }
+                    npc.Agent.isStopped = npc.Rooted; npc.DirectTo(hero - (hero - npc.transform.position).normalized * d.FollowGap, spec.Speed); return true;
+                }
+                case ActorBehavior.Harass:
+                {
+                    Vector3? goal = null; float best = float.MaxValue;
+                    var victims = Group(spec.BehaviorArgument);
+                    if (victims != null) foreach (var v in victims) { if (Gone(v)) continue; float dist = Vector3.Distance(v.Npc.transform.position, npc.transform.position); if (dist < best) { best = dist; goal = v.Npc.transform.position; } }
+                    var targets = TargetGroup(spec.BehaviorArgument);
+                    if (targets != null) foreach (var t in targets) { if (t.Go == null || !(t.Done || (t.Besiegeable && t.Hardpoint != null && !t.Hardpoint.Destroyed))) continue; float dist = Vector3.Distance(t.Go.transform.position, npc.transform.position); if (dist < best) { best = dist; goal = t.Go.transform.position; } }
+                    if (goal == null) return false;
+                    npc.Agent.isStopped = npc.Rooted; npc.DirectTo(goal.Value, spec.Speed); return true;
+                }
+                default: return false;
+            }
+        }
+        return false;
+    }
+    // ---------------------------------------------------------------- pickups / interaction
+    void TickPickups()
+    {
+        var s = Stage; if (s == null || s.Kind != StageKind.CollectItems) return;
+        var t = TargetGroup(s.Group); if (t == null) return; Vector3 hero = World.Hero.transform.position;
+        foreach (var x in t)
+            if (!x.Done && x.Pickup != null && x.Pickup.Visual != null && Vector3.Distance(hero, x.Pickup.Visual.transform.position) < d.PickupRadius)
+            { x.Done = true; x.Pickup.Done = true; x.Pickup.Visual.SetActive(false); }
+    }
+    Target InteractCandidate(Vector3 at)
+    {
+        var s = Stage; if (s == null || (s.Kind != StageKind.InteractTargets && s.Kind != StageKind.SearchTargets)) return null;
+        var t = TargetGroup(s.Group); if (t == null) return null; Target best = null; float nearest = d.InteractRadius;
+        foreach (var x in t) { if (x.Done || x.Go == null) continue; float dist = Vector3.Distance(at, x.Go.transform.position); if (dist < nearest) { nearest = dist; best = x; } }
+        return best;
+    }
+    Actor CuffCandidate(Vector3 at)
+    {
+        var s = Stage; if (s == null || (s.Kind != StageKind.ChaseExit && s.Kind != StageKind.DefeatTargets)) return null;
+        var g = Group(s.Group); if (g == null) return null; Actor best = null; float nearest = d.InteractRadius;
+        foreach (var a in g) { if (Gone(a) || a.Escaped || !a.Npc.gameObject.activeInHierarchy || !(a.Npc.Frozen || a.Npc.Rooted)) continue; float dist = Vector3.Distance(at, a.Npc.transform.position); if (dist < nearest) { nearest = dist; best = a; } }
+        return best;
+    }
+    /// SearchTargets decoys revealed so far (verification).
+    public int DecoysRevealed { get; private set; }
+    public override bool InteractableNear(Vector3 point) => Terminal == MissionTerminal.Running && (InteractCandidate(point) != null || CuffCandidate(point) != null);
+    public override bool Interact(float dt)
+    {
+        if (Terminal != MissionTerminal.Running) return false;
+        Vector3 hero = World.Hero.transform.position;
+        var target = dt > 0f ? InteractCandidate(hero) : null;
+        // Runs every frame: plain loops, no iterator allocation.
+        foreach (var list in TargetsById.Values) foreach (var x in list) if (x != target) x.Hold = 0f;
+        if (target != null)
+        {
+            target.Hold += dt; Encounter.InteractionHint = $"Working… {Mathf.Clamp01(target.Hold / d.HoldSeconds):P0}";
+            if (target.Hold >= d.HoldSeconds)
+            {
+                target.Done = true; target.Hold = 0f;
+                var stage = Stage;
+                if (stage != null && stage.Kind == StageKind.SearchTargets && !target.Real) { DecoysRevealed++; Run(stage.OnDecoy, target.Go != null ? target.Go.transform.position : (Vector3?)null); }
+                return true;
+            }
+            return false;
+        }
+        var subdued = dt > 0f ? CuffCandidate(hero) : null;
+        if (subdued != cuffing) { cuffing = subdued; cuff = 0f; }
+        if (subdued == null) return false;
+        cuff += dt; if (cuff < d.CuffSeconds) return false;
+        subdued.Captured = true; subdued.Npc.gameObject.SetActive(false); cuffing = null; cuff = 0f; return true;
+    }
+    // ---------------------------------------------------------------- scenario contract
+    public override bool Complete() => Terminal == MissionTerminal.Complete;
+    public override bool Failed(out string reason) { reason = FailReason; return Terminal == MissionTerminal.Failed; }
+    public override bool TryCurrent(out ObjectiveStep step)
+    {
+        var s = Stage; step = default;
+        if (s == null || Terminal != MissionTerminal.Running) return false;
+        int more = d.Stages.Length - StageIndex - 1; int done = 0, total = 1; bool distance = false; Vector3 hero = World.Hero.transform.position;
+        switch (s.Kind)
+        {
+            case StageKind.DefeatTargets: case StageKind.ChaseExit: { var g = Group(s.Group); total = g != null ? (s.Count > 0 && s.Kind == StageKind.DefeatTargets ? Mathf.Min(s.Count, g.Count) : g.Count) : 0; if (g != null) foreach (var a in g) if (Gone(a)) done++; done = Mathf.Min(done, total); break; }
+            case StageKind.ProtectActors: case StageKind.Survive: case StageKind.DefendTargets: total = Mathf.CeilToInt(s.Seconds); done = Mathf.Min(total, Mathf.FloorToInt(StageElapsed)); break;
+            case StageKind.SearchTargets: { var t = TargetGroup(s.Group); total = t != null ? t.Count : 0; if (t != null) foreach (var x in t) if (x.Done) done++; break; }
+            case StageKind.LosePursuit: { var p = World.Pursuit; total = 1; done = p != null && (p.State == PursuitState.Escaped || p.State == PursuitState.Clear) ? 1 : 0; break; }
+            case StageKind.EscortActors: { var g = Group(s.Group); Vector3 at = Point(s.Point); if (g != null) foreach (var a in g) { if (Lost(a) || a.Captured) continue; total++; if (Vector3.Distance(a.Npc.transform.position, at) <= s.Radius) done++; } total = Mathf.Max(0, total - 1); break; }
+            case StageKind.InteractTargets: case StageKind.DestroyTargets: case StageKind.CollectItems:
+            { var t = TargetGroup(s.Group); total = t != null ? (s.Count > 0 ? Mathf.Min(s.Count, t.Count) : t.Count) : 0; if (t != null) foreach (var x in t) if (s.Kind == StageKind.DestroyTargets ? Destroyed(x) : x.Done) done++; done = Mathf.Min(done, total); break; }
+            case StageKind.StopVehicles: { var t = TargetGroup(s.Group); total = t != null ? t.Count : 0; if (t != null) foreach (var x in t) if (x.Go == null || (x.Vehicle != null && x.Vehicle.Stopped)) done++; break; }
+            case StageKind.RaiseHeat: total = s.Count; done = Mathf.Min(total, World.Stars); break;
+            case StageKind.ReachArea: distance = true; total = Mathf.Max(1, Mathf.CeilToInt(startDistance)); done = Mathf.Clamp(total - Mathf.CeilToInt(Vector3.Distance(hero, ReachPoint(s))), 0, total); break;
+            case StageKind.EscapeRadius: distance = true; total = Mathf.CeilToInt(s.Radius); done = Mathf.Clamp(Mathf.FloorToInt(Vector3.Distance(hero, ReachPoint(s))), 0, total); break;
+        }
+        step = new ObjectiveStep(s.Label, done, total, more, distance); return true;
+    }
+    public override void Targets(ObjectiveTask task, List<Vector3> into)
+    {
+        var s = Stage; if (s == null || Terminal != MissionTerminal.Running) return;
+        switch (s.Kind)
+        {
+            case StageKind.ReachArea: case StageKind.EscapeRadius: into.Add(ReachPoint(s)); break;
+            case StageKind.EscortActors: into.Add(Point(s.Point)); break;
+            case StageKind.Survive: case StageKind.RaiseHeat: into.Add(Encounter.Site); break;
+            default:
+                var g = Group(s.Group); if (g != null) foreach (var a in g) if (!Gone(a) && !a.Escaped) into.Add(a.Npc.transform.position);
+                var t = TargetGroup(s.Group); if (t != null) foreach (var x in t)
+                {
+                    if (s.Kind == StageKind.DestroyTargets ? Destroyed(x) : x.Done) continue;
+                    if (x.Go != null) into.Add(x.Go.transform.position); else if (x.Pickup != null && x.Pickup.Visual != null) into.Add(x.Pickup.Visual.transform.position);
+                }
+                break;
+        }
+    }
+}
+/// A mission hardpoint (armoured door, relay, generator): soaks blast / beam damage while ARMED (its stage is active);
+/// hits while disarmed are ignored, which is what makes stage order matter. Ice does nothing to it.
+public sealed class DamageTarget : MissionTarget
+{
+    public float Health { get; private set; }
+    public float MaxHealth { get; private set; }
+    public bool Armed;
+    public int Hits { get; private set; }
+    public int IgnoredHits { get; private set; }
+    public bool Destroyed => Health <= 0f;
+    public void Setup(float health) { Health = MaxHealth = Mathf.Max(1f, health); }
+    /// Damage from a mission NPC besieging it (DefendTargets): not the player's hit, so the Armed gate does not apply.
+    public void Siege(float damage) { if (Destroyed || damage <= 0f) return; SiegeDamage += damage; Apply(damage, false); }
+    public float SiegeDamage { get; private set; }
+    public override void Hit(float damage, float impulse, PowerUser source)
+    {
+        if (Destroyed || damage <= 0f) return;
+        if (!Armed) { IgnoredHits++; return; }
+        Hits++; Apply(damage, true);
+    }
+    void Apply(float damage, bool hitFeel)
+    {
+        Health = Mathf.Max(0f, Health - damage);
+        // Per-frame siege damage only bursts when it finally breaks the hardpoint (no particle stream).
+        if (hitFeel || Destroyed) FeelDirector.Instance?.Particles.Burst(transform.position + Vector3.up * .5f, CityColor.Metal, Destroyed ? 14 : 4);
+        if (Destroyed) { GetComponent<Renderer>().sharedMaterial = CityMaterials.Get(CityColor.Slate); var c = GetComponent<Collider>(); if (c != null) c.enabled = false; }
+    }
+}
+/// A mission vehicle: a parked physics prop until told to Drive, then KINEMATIC along its route (same drive as the robbery
+/// getaway). Ice stops it (frozen in place), a hit >= StopImpulse knocks it out of its drive; stopped it is dynamic again.
+/// Escaped after EscapeDistance driven or at the route's end. Wrecking it (BreakableProp) removes it.
+public sealed class MissionVehicle : MissionTarget
+{
+    Rigidbody body; Vector3[] route; int corner; float speed, stopImpulse, escapeDistance; Vector3 velocity;
+    public bool Driving { get; private set; }
+    public bool Stopped { get; private set; }
+    public bool Escaped { get; private set; }
+    public float Driven { get; private set; }
+    public string StopReason { get; private set; } = "";
+    public void Setup(float driveSpeed, float impulse) { body = GetComponent<Rigidbody>(); speed = driveSpeed; stopImpulse = impulse; }
+    public void Drive(Vector3[] path, float escapeAfter)
+    {
+        if (Driving || Stopped || Escaped || body == null) return;
+        var frozen = GetComponent<FrozenBody>(); if (frozen != null && frozen.Frozen) { Stop("frozen before it could leave"); return; }
+        route = path; corner = 0; Driven = 0f; escapeDistance = escapeAfter; Driving = true; body.isKinematic = true; body.interpolation = RigidbodyInterpolation.Interpolate;
+    }
+    public void Stop(string why)
+    {
+        if (Stopped || Escaped) return;
+        bool was = Driving; Driving = false; Stopped = true; StopReason = why;
+        if (was && body != null) { body.isKinematic = false; body.linearVelocity = velocity; }
+    }
+    public override bool Freeze(PowerUser source, PowerStats stats)
+    {
+        if (!Driving) return false;
+        Stop("frozen");
+        var frozen = GetComponent<FrozenBody>(); if (frozen == null) frozen = gameObject.AddComponent<FrozenBody>();
+        frozen.Apply(stats.Duration, CityColor.Cyan); return true;
+    }
+    public override void Hit(float damage, float impulse, PowerUser source) { if (Driving && impulse >= stopImpulse) Stop($"rammed ({impulse:0} N.s)"); }
+    void FixedUpdate()
+    {
+        if (!Driving || route == null) return;
+        Vector3 before = body.position, pos = before; float step = speed * Time.fixedDeltaTime;
+        while (step > 0f && corner < route.Length)
+        {
+            Vector3 to = route[corner] - pos; float dist = to.magnitude;
+            if (dist <= step) { pos = route[corner]; step -= dist; Driven += dist; corner++; continue; }
+            pos += to / dist * step; Driven += step; step = 0f;
+        }
+        velocity = (pos - before) / Time.fixedDeltaTime; body.MovePosition(pos);
+        Vector3 heading = pos - before; heading.y = 0f;
+        if (heading.sqrMagnitude > 1e-6f) body.MoveRotation(Quaternion.RotateTowards(body.rotation, Quaternion.LookRotation(heading.normalized, Vector3.up), 160f * Time.fixedDeltaTime));
+        if (Driven >= escapeDistance || corner >= route.Length) { Driving = false; Escaped = true; }
+    }
+}

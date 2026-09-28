@@ -15,6 +15,26 @@ public sealed class GameTuning : ScriptableObject
     /// Game feel (hit pause, camera impulse, FOV kick, impact particles). Every feel value lives here; Camera above stays
     /// the camera authority (offset / look height / field of view).
     public FeelSettings Feel = new FeelSettings();
+    /// Melee depth on E: tap combo string, hold-to-charge heavy, airborne ground pound. Paid by the existing Super Strength
+    /// charges/cooldown (or the Forge basic-melee cooldown without Strength); force/damage go through CombatImpact.Blast.
+    public MeleeSettings Melee = new MeleeSettings();
+}
+[Serializable] public sealed class MeleeSettings
+{
+    [Header("Combo string (tap E): punch -> punch -> kick finisher")]
+    [Tooltip("Hits in one string; the last one is the kick finisher.")] public int ComboLength = 3;
+    [Tooltip("Seconds after a string hit within which the next tap continues the string; later taps restart it.")] public float ComboWindow = .9f;
+    [Tooltip("Finisher = the existing Hurricane Kick gesture with these extra multipliers on force and damage.")]
+    public float FinisherForceMultiplier = 1.6f, FinisherDamageMultiplier = 1.4f;
+    [Tooltip("Real seconds of hit pause on a landed finisher (through TimeArbiter, same rate limit as Feel).")] public float FinisherHitPauseSeconds = .07f;
+    [Header("Charged heavy (hold E, release)")]
+    [Tooltip("A press shorter than this is a tap (combo); longer charges a heavy punch released on key-up.")] public float HeavyTapThreshold = .2f;
+    [Tooltip("Charge time (from the press) at which the heavy reaches its maximum; longer holds are capped.")] public float HeavyMaxChargeSeconds = 1.2f;
+    public float HeavyMaxForceMultiplier = 2.5f, HeavyMaxDamageMultiplier = 2.2f;
+    [Header("Ground pound (E while airborne): smaller than Sonic Slam, no long cooldown")]
+    [Tooltip("E becomes a ground pound only this high or more above the ground.")] public float PoundMinHeight = 2f;
+    public float PoundDiveSpeed = 30f, PoundMaxSeconds = 2f, PoundRadius = 4f, PoundLift = .5f;
+    [Tooltip("x the punch's (Strength or basic) force and damage.")] public float PoundForceMultiplier = 1.35f, PoundDamageMultiplier = .85f;
 }
 [Serializable] public sealed class MovementSettings
 {

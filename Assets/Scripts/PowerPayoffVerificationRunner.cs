@@ -180,24 +180,20 @@ public sealed class PowerPayoffVerificationRunner : MonoBehaviour
         Check(probe.Hit==wall.GetComponent<Collider>()&&target.Health==1000,"Real wall collision blocks throw; NPC behind wall unharmed");
         Destroy(body.gameObject);Destroy(target.gameObject);Destroy(wall);yield return null;
     }
+    /// Orbit Throw (Flight + Telekinesis) was removed by the five-synergy cap. What this section protected, the Telekinesis LMB
+    /// path while a synergy is equipped, is now checked as: Flight + Telekinesis resolves no synergy, C is refused with no
+    /// cooldown, and LMB Telekinesis still performs its own paid grab (not a synergy release).
     IEnumerator Orbit()
     {
-        var bodies=new List<Rigidbody>();for(int i=0;i<3;i++)bodies.Add(Crate(stage+new Vector3(i*2-2,1.5f,4)));
-        U.Select(Power("telekinesis"));Aim(stage+Vector3.forward*20+Vector3.up);
-        var runner=U.SynergyRunner;Check(runner.TryActivate()&&runner.HeldCount==3,"Existing Orbit Throw gathers three real props");
-        yield return new WaitForSeconds(.4f);float cooldown=runner.Cooldown;
-        Check(U.Use(Power("telekinesis"))&&runner.ReleaseRequested,"Same LMB power input requests existing Orbit Throw volley");
-        var times=new float[3];int count=0;float until=Time.time+4;
-        while(runner.Busy&&Time.time<until)
-        {
-            for(int i=0;i<3;i++)if(times[i]==0&&bodies[i].GetComponent<ThrownProp>()!=null){times[i]=Time.time;count++;Log($"ORBIT release {count}: t={Time.time:F4}s velocity={bodies[i].linearVelocity.magnitude:F3}m/s");}
-            yield return null;
-        }
-        Array.Sort(times);
-        Check(count==3&&!runner.Busy&&runner.HeldCount==0,"All three released through existing sequential coroutine");
-        Check(times[1]-times[0]>=runner.Definition.LaunchInterval-.03f&&times[2]-times[1]>=runner.Definition.LaunchInterval-.03f,$"Orbit intervals={times[1]-times[0]:F3}/{times[2]-times[1]:F3}s; configured={runner.Definition.LaunchInterval:F3}s");
-        Check(runner.Cooldown<cooldown&&!runner.TryActivate(),"Release did not reset or bypass synergy cooldown");
-        foreach(var b in bodies)Destroy(b.gameObject);
+        var body=Crate(stage+new Vector3(0,1.5f,4));
+        U.Select(Power("telekinesis"));Aim(body.worldCenterOfMass);
+        var runner=U.SynergyRunner;
+        Check(U.Synergy==null&&!runner.TryActivate()&&runner.Cooldown==0&&runner.Feedback=="No synergy for this pair","Flight + Telekinesis: no synergy in the capped set; C refused with no cooldown.");
+        var tk=U.Powers.Find(p=>p.Definition.Id=="telekinesis");int charges=tk.Charges;
+        Check(U.Use(tk)&&U.HeldBody==body&&tk.Charges==charges-1,"LMB Telekinesis performs its own paid grab.");
+        yield return new WaitForSeconds(.3f);
+        Check(U.Use(tk)&&U.HeldBody==null&&body.GetComponent<ThrownProp>()!=null,"Second LMB throws the held prop (no orbit release path).");
+        Destroy(body.gameObject);yield return null;
     }
 }
 public sealed class PayoffContactProbe : MonoBehaviour

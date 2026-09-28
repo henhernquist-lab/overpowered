@@ -28,6 +28,25 @@ public sealed class GameModeSession : MonoBehaviour
     public event System.Action<EncounterOutcome> EncounterResolved;
     int startLevel,startXp;
     float spawnClock; int nextEncounter, siteDistrict=-1;
+    /// Optional GameModeDefinition.Selection state (null = round robin over Encounters, unchanged).
+    public EncounterSelectionState Selection {get;private set;}
+    /// Spawns where the Selection had no eligible option and the round-robin list was used instead.
+    public int SelectionFallbacks {get;private set;}
+    /// The value EncounterSelection.Difficulty reads (before DifficultyStep).
+    public int SelectionDifficulty
+    {
+        get
+        {
+            if(Definition.Selection==null) return 0;
+            switch(Definition.Selection.Difficulty)
+            {
+                case EncounterSelection.DifficultySource.Successes: return Successes;
+                case EncounterSelection.DifficultySource.PlayerLevel: return World.Progression.Data.Level;
+                case EncounterSelection.DifficultySource.HeatStars: return World.Stars;
+                default: return Successes+Failures;
+            }
+        }
+    }
     /// District index the next SpawnNext() tries first (CityLayout.EncounterSites round robin); -1 before the first spawn.
     public int NextSiteDistrict => siteDistrict;
     public void Initialize(WorldSession world,GameModeDefinition definition)
@@ -36,11 +55,18 @@ public sealed class GameModeSession : MonoBehaviour
         world.Progression.SetModeSide(definition.SideFromProfile?world.Progression.Data.Side:definition.Side,!definition.AllowSideSwitch);
         startLevel=world.Progression.Data.Level;startXp=world.Progression.Data.Xp;PeakHeat=world.Heat;
         world.Progression.XpAwarded+=Awarded;
+        if(definition.Selection!=null) Selection=definition.Selection.Begin();
         Feedback=definition.Description;
     }
+    /// Session style score (separate from Score; never changes rewards). Best per mode is saved at the end of the session.
+    public StyleScoreTracker Style {get;private set;}
+    /// Challenge progress for this session (definitions: Resources/Challenges).
+    public ChallengeTracker Challenges {get;private set;}
     public void Begin()
     {
+        Style=gameObject.AddComponent<StyleScoreTracker>(); Style.Begin(World.Powers);
         if(Definition.Director!=null) Director=Definition.Director.Begin(this);
+        Challenges=gameObject.AddComponent<ChallengeTracker>(); Challenges.Begin(this);
         for(int i=0;i<Definition.InitialEncounters;i++) SpawnNext();
     }
     void Awarded(int amount) { if(!Ended) XpEarned+=amount; }
@@ -59,12 +85,19 @@ public sealed class GameModeSession : MonoBehaviour
     public CrimeEvent SpawnNext()
     {
         World.Crimes.RemoveAll(c=>c==null||c.Resolved);
-        if(Ended||World.Crimes.Count>=Definition.MaximumEncounters||Definition.Encounters==null||Definition.Encounters.Length==0) return null;
+        bool noList=Definition.Encounters==null||Definition.Encounters.Length==0;
+        if(Ended||World.Crimes.Count>=Definition.MaximumEncounters||(Selection==null&&noList)) return null;
         // Set-pieces go to the city's encounter sites (street crossings, park/dock squares), spread across districts
         // by CityLayout.EncounterSites (round robin), leaving space for physics cars and escape routes.
         if(!World.City.PickEncounterSite(World.Hero.transform.position,
             site=>!World.Crimes.Exists(c=>c!=null&&c.Encounter!=null&&Vector3.Distance(c.Encounter.Site,site)<Definition.SiteSeparation),ref siteDistrict,out var chosen)) return null;
-        return World.SpawnEncounter(Definition.Encounters[nextEncounter++%Definition.Encounters.Length],chosen);
+        if(Selection==null) return World.SpawnEncounter(Definition.Encounters[nextEncounter++%Definition.Encounters.Length],chosen);
+        var districts=World.Districts; var profile=districts!=null&&districts.Active?districts.ProfileAt(chosen):null;
+        var picked=Selection.Pick(SelectionDifficulty,World.City.DistrictDefinitions[World.City.DistrictAt(chosen)].Name,profile,profile!=null?profile.DifficultyOffset:0);
+        // Nothing eligible (every option banded / filtered out): fall back to the mode's own list rather than spawn nothing
+        // forever (a success goal would become unreachable). An empty list keeps "no spawn this cycle".
+        if(picked==null&&!noList){SelectionFallbacks++;picked=Definition.Encounters[nextEncounter++%Definition.Encounters.Length];}
+        return picked!=null?World.SpawnEncounter(picked,chosen):null;
     }
     public void EncounterEnded(CrimeEncounter encounter,bool success,string reason)
     {
@@ -93,12 +126,14 @@ public sealed class GameModeSession : MonoBehaviour
     public void Finish(SessionOutcome outcome,string reason,bool home=false)
     {
         if(Ended) return;
-        Ended=true; World.MenuOpen=true; World.Powers.Release(false);
+        Ended=true; World.MenuOpen=true; World.Powers.Release(false); World.Pursuit?.ResetState();
         home|=!Definition.ShowResults;
         var result=new SessionResult {ModeId=Definition.Id,ModeName=Definition.DisplayName,Outcome=outcome,Reason=reason,Score=Score,Xp=XpEarned,Successes=Successes,Failures=Failures,Defeats=Defeats,Seconds=Elapsed,
             Side=World.Progression.Data.Side,Rescues=Rescues,PeakHeat=PeakHeat,TimeLimit=Definition.SessionSeconds,StartLevel=startLevel,StartXp=startXp,Layout=Definition.Results};
         if(Director!=null) Director.Describe(result);
+        if(World.Civilians!=null) result.Civilians=World.Civilians.Summary;
         int previousBest=World.Progression.BestScore(Definition.Id);
+        if(Style!=null) { Style.End(); World.Progression.RecordStyle(Definition.Id,Style.Total); }
         World.Progression.RecordSession(Definition.Id,outcome==SessionOutcome.Won,Score,XpEarned,result.Wave);
         result.BestScore=Mathf.Max(previousBest,Score); result.NewBest=Score>previousBest;
         result.EndLevel=World.Progression.Data.Level; result.EndXp=World.Progression.Data.Xp;

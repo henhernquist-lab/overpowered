@@ -25,16 +25,11 @@ public sealed class SynergyRunner : MonoBehaviour
     float deadline,fovUntil,baseFov;
     Camera view;
     readonly HashSet<CityNpc> affected=new HashSet<CityNpc>();
-    readonly Rigidbody[] held=new Rigidbody[8];
-    readonly bool[] gravity=new bool[8];
-    public int HeldCount {get;private set;}
-    public bool ReleaseRequested {get;private set;}
     public CityNpc Captive;
-    public Rigidbody CaptiveBody;
-    public SynergySuspension Suspension;
-    float glacierUntil,nextGlacierFx;
-    readonly Collider[] ignored=new Collider[128];int ignoredCount;
-    public bool GlacierActive=>Time.time<glacierUntil;
+    /// NPC physics handoffs an effect started (Void Grasp); Cancel finishes any still held so a cut-short synergy never leaves
+    /// an NPC suspended until the handoff's own safety deadline.
+    readonly List<SynergySuspension> suspended=new List<SynergySuspension>();
+    public void Track(SynergySuspension suspension){if(suspension!=null&&!suspended.Contains(suspension))suspended.Add(suspension);}
     public void Initialize(PowerUser user)
     {
         User=user;Vfx=gameObject.AddComponent<SynergyVfx>();Vfx.Initialize(Catalog);
@@ -48,13 +43,6 @@ public sealed class SynergyRunner : MonoBehaviour
         Cooldown=Mathf.Max(0,Cooldown-Time.deltaTime);
         if(Busy&&(WorldSession.Instance.PlayerDead||Time.time>deadline))Cancel();
         if(Live&&(Input.GetKeyDown(Catalog.SynergyKey)||Input.GetKeyDown(Catalog.SynergyGamepadButton)))TryActivate();
-        if(GlacierActive&&Live&&Time.time>=nextGlacierFx)
-        {
-            var animator=GetComponent<HumanoidPresentation>().Animator;
-            Vfx.Burst(animator.GetBoneTransform(HumanBodyBones.LeftHand).position,Definition);
-            Vfx.Burst(animator.GetBoneTransform(HumanBodyBones.RightHand).position,Definition);
-            nextGlacierFx=Time.time+.25f;
-        }
     }
     public bool TryActivate()
     {
@@ -64,15 +52,19 @@ public sealed class SynergyRunner : MonoBehaviour
         if(Cooldown>0){Feedback="Synergy cooling down";return false;}
         if(Definition==null||Definition.Effect==null){Feedback="No synergy for this pair";return false;}
         if(!User.IsEquipped(Definition.PowerA)||!User.IsEquipped(Definition.PowerB)){Feedback="Equip both powers";return false;}
-        Captive=null;CaptiveBody=null;
+        Captive=null;
         if(!Definition.Effect.CanBegin(this)){Feedback="No valid target";return false;}
         User.Release(false);
-        affected.Clear();ReleaseRequested=false;
+        affected.Clear();suspended.Clear();
         Cooldown=Definition.Cooldown;Busy=true;deadline=Time.time+Mathf.Max(8,Definition.Duration+4);
         Feedback=Definition.DisplayName;
         action=StartCoroutine(Perform(Definition.Effect));
+        User.RecordUse(CreditId);
         return true;
     }
+    /// Per-power stats id for this synergy's hits and activations.
+    public string CreditId{get{if(creditFor!=Definition){creditFor=Definition;creditId=Definition!=null?"synergy:"+Definition.Id:null;}return creditId;}}
+    PowerSynergyDefinition creditFor;string creditId;
     IEnumerator Perform(SynergyEffect effect)
     {
         var steps=new Stack<IEnumerator>();steps.Push(effect.Execute(this));
@@ -80,7 +72,7 @@ public sealed class SynergyRunner : MonoBehaviour
         {
             if(Time.timeScale==0){yield return null;continue;}
             object next=null;bool moved=false;Exception error=null;
-            try{moved=steps.Peek().MoveNext();if(moved)next=steps.Peek().Current;}
+            try{using(User.Credit(CreditId)){moved=steps.Peek().MoveNext();if(moved)next=steps.Peek().Current;}}
             catch(Exception e){error=e;}
             if(error!=null)
             {
@@ -89,7 +81,7 @@ public sealed class SynergyRunner : MonoBehaviour
             if(!moved){(steps.Pop() as IDisposable)?.Dispose();continue;}
             if(next is IEnumerator nested)steps.Push(nested);else yield return next;
         }
-        RestoreActorCollisions();
+        suspended.Clear();
         bool droveMotion=DrivesMotion;DrivesMotion=false;Busy=false;if(droveMotion)User.Hero.ResetMotion();action=null;
     }
     public CollisionFlags Move(Vector3 velocity,bool flying)=>User.Hero.MoveAbility(velocity,flying);
@@ -167,77 +159,15 @@ public sealed class SynergyRunner : MonoBehaviour
         for(int i=0;i<count;i++)if(!rays[i].collider.isTrigger&&rays[i].rigidbody==null&&rays[i].collider.GetComponentInParent<CityNpc>()==null&&rays[i].transform.root!=transform)return false;
         return true;
     }
-    public void EnableGlacier(){glacierUntil=Time.time+Definition.Duration;Feedback="Glacier Fist empowered melee";}
-    public void RequestRelease(){ReleaseRequested=true;Feedback="Release orbit";}
-    public void PassActors()
-    {
-        var controller=GetComponent<CharacterController>();
-        foreach(var npc in WorldSession.Instance.Npcs)
-        {
-            if(npc==null||ignoredCount>=ignored.Length)continue;
-            var collider=npc.GetComponent<Collider>();if(collider==null)continue;
-            ignored[ignoredCount++]=collider;Physics.IgnoreCollision(controller,collider,true);
-        }
-    }
-    void RestoreActorCollisions()
-    {
-        var controller=GetComponent<CharacterController>();
-        for(int i=0;i<ignoredCount;i++){if(ignored[i]!=null&&controller!=null)Physics.IgnoreCollision(controller,ignored[i],false);ignored[i]=null;}ignoredCount=0;
-    }
-    public PowerStats ModifyMelee(PowerStats stats,Vector3 origin)
-    {
-        if(!GlacierActive)return stats;
-        stats.Force*=Definition.MeleeMultiplier;
-        affected.Clear();AffectNearby(origin,stats.Radius,0,Definition.FreezeSeconds,false);
-        Vfx.Burst(origin,Definition);return stats;
-    }
-    public int GatherBodies()
-    {
-        ReleaseHeld();int count=Physics.OverlapSphereNonAlloc(transform.position,Definition.Range,Hits);
-        for(int i=0;i<count&&HeldCount<Mathf.Clamp(Definition.MaxTargets,1,held.Length);i++)
-        {
-            var body=Hits[i].attachedRigidbody;
-            if(body==null||body.isKinematic||body.mass>Definition.MaxMass||body.transform.root==transform||body.constraints==RigidbodyConstraints.FreezeAll)continue;
-            bool duplicate=false;for(int j=0;j<HeldCount;j++)if(held[j]==body)duplicate=true;
-            if(duplicate||!Visible(User.AimOrigin,body.position))continue;
-            held[HeldCount]=body;gravity[HeldCount]=body.useGravity;HeldCount++;
-        }
-        return HeldCount;
-    }
-    public void HoldGathered(){for(int i=0;i<HeldCount;i++)if(held[i]!=null)held[i].useGravity=false;}
-    public void HoldOne(Rigidbody body){ReleaseHeld();held[0]=body;gravity[0]=body.useGravity;HeldCount=1;HoldGathered();}
-    public void Orbit(float elapsed)
-    {
-        for(int i=0;i<HeldCount;i++)
-        {
-            var body=held[i];if(body==null)continue;
-            float angle=elapsed*2+i*Mathf.PI*2/HeldCount;
-            Vector3 target=transform.position+Vector3.up*2+new Vector3(Mathf.Cos(angle),.2f*Mathf.Sin(angle*2),Mathf.Sin(angle))*Definition.OrbitRadius;
-            body.AddForce((target-body.position)*Definition.Spring-body.linearVelocity*Definition.Damping,ForceMode.Acceleration);
-        }
-    }
-    public void OrbitVfx(){for(int i=0;i<HeldCount;i++)if(held[i]!=null)Vfx.Burst(held[i].position,Definition);}
-    public void LaunchHeld(int index,bool ignite)
-    {
-        var body=held[index];if(body==null)return;
-        body.useGravity=gravity[index];body.AddForce(User.AimDirection*Definition.Force,ForceMode.Impulse);
-        var thrown=body.GetComponent<ThrownProp>()??body.gameObject.AddComponent<ThrownProp>();thrown.Initialize(User,Definition.Damage,Definition.Duration+3);
-        var payload=body.GetComponent<SynergyPayload>()??body.gameObject.AddComponent<SynergyPayload>();payload.Arm(this,ignite,ignite);
-        held[index]=null;
-    }
-    public void ReleaseHeld()
-    {
-        for(int i=0;i<HeldCount;i++){if(held[i]!=null)held[i].useGravity=gravity[i];held[i]=null;}
-        HeldCount=0;
-    }
     public void Cancel()
     {
         if(action!=null)StopCoroutine(action);
         action=null;Busy=false;DrivesMotion=false;
-        ReleaseHeld();if(Suspension!=null)Suspension.Finish();Suspension=null;Captive=null;CaptiveBody=null;glacierUntil=0;
-        RestoreActorCollisions();
+        foreach(var hold in suspended)if(hold!=null&&hold.enabled)hold.Finish();
+        suspended.Clear();Captive=null;
         if(User!=null)User.Hero.ResetMotion();
         if(view!=null&&fovUntil>0)view.fieldOfView=baseFov;
+        PowerVfx.Instance?.HideBeam();   // a beam synergy (Solar Flare / Eclipse Beam) cut short must not leave its beam drawn
         fovUntil=0;
     }
     void OnDisable(){Cancel();}

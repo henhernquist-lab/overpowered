@@ -47,6 +47,7 @@ public sealed class SynergyAvailabilityVerificationRunner : MonoBehaviour
         yield return new WaitForSecondsRealtime(.5f);
     }
     void Submit(Button button){using(var e=NavigationSubmitEvent.GetPooled()){e.target=button;button.SendEvent(e);}}
+    static readonly string[] Shipping={"sonic-slam","thermal-shock","solar-flare","void-grasp","eclipse-beam"};
     void RestoreCatalog(){if(shippingSynergies!=null){F.Synergies=shippingSynergies;shippingSynergies=null;}}
 
     IEnumerator Checks()
@@ -56,10 +57,20 @@ public sealed class SynergyAvailabilityVerificationRunner : MonoBehaviour
         // ---- Data: every synergy has its own long cooldown; no cost field exists at all.
         foreach(var s in F.Synergies.OrderBy(s=>s.Cooldown).ThenBy(s=>s.Id))
             Log($"DATA synergy={s.Id} pair={s.PowerA.Id}+{s.PowerB.Id} cooldown={s.Cooldown:0.#}s damage={s.Damage:0.#} radius={s.Radius:0.#}m force={s.Force:0} duration={s.Duration:0.#}s freeze={s.FreezeSeconds:0.#}s burn={s.BurnSeconds:0.#}s");
-        Check(F.Synergies.Length==10&&F.Synergies.All(s=>s.Cooldown>=25&&s.Cooldown<=45),"All ten synergy cooldowns are long (25-45 s): "+string.Join(", ",F.Synergies.Select(s=>s.Id+"="+s.Cooldown)));
+        var ids=F.Synergies.Select(s=>s.Id).OrderBy(s=>s,StringComparer.Ordinal).ToArray();
+        Check(ids.SequenceEqual(Shipping.OrderBy(s=>s,StringComparer.Ordinal)),"Shipping catalog is EXACTLY the five capped synergies: "+string.Join(", ",ids));
+        Check(F.Synergies.All(s=>s.Cooldown>=25&&s.Cooldown<=45),"All five synergy cooldowns are long (25-45 s): "+string.Join(", ",F.Synergies.Select(s=>s.Id+"="+s.Cooldown)));
         Check(F.Synergies.Select(s=>s.Cooldown).Distinct().Count()>1,"Cooldowns are tuned per synergy, not one flat value.");
-        float normal=Resources.LoadAll<PowerDefinition>("Powers").Max(p=>p.Cooldown);
-        Check(F.Synergies.Min(s=>s.Cooldown)>=normal*40,$"Shortest synergy cooldown {F.Synergies.Min(s=>s.Cooldown)} s is >= 40x the longest normal power cooldown {normal} s.");
+        // The 40x rule compares synergies with ORDINARY INSTANT OFFENSIVE powers. Excluded, because their cooldown is not their
+        // gate: Flight (traversal, gated by fuel), Force Field (defensive; gated by its lifetime and 12 s charge recharge) and
+        // any Channeled power, i.e. Laser Eyes (gated by continuous energy drain; its cooldown only starts on release).
+        var all=Resources.LoadAll<PowerDefinition>("Powers").Where(p=>!p.Id.StartsWith("verification-")).ToArray();
+        var ordinary=all.Where(p=>p.Activation==PowerActivation.Instant&&!(p.Effect is ForceFieldEffect)&&!(p.Effect!=null&&p.Effect.IsFlight)).OrderBy(p=>p.Id,StringComparer.Ordinal).ToArray();
+        var excluded=all.Except(ordinary).OrderBy(p=>p.Id,StringComparer.Ordinal).ToArray();
+        Log("RULE 40x compares: "+string.Join(", ",ordinary.Select(p=>p.Id+"="+p.Cooldown+"s"))+" | excluded: "+string.Join(", ",excluded.Select(p=>p.Id+" ("+(p.Activation==PowerActivation.Channeled?"channeled: drain-gated":p.Effect is ForceFieldEffect?"defensive: lifetime + charge recharge":"traversal: fuel")+")")));
+        Check(excluded.Select(p=>p.Id).OrderBy(s=>s,StringComparer.Ordinal).SequenceEqual(new[]{"flight","force-field","laser-eyes"}),"Excluded from the ratio rule: exactly flight, force-field, laser-eyes.");
+        float normal=ordinary.Max(p=>p.Cooldown);
+        Check(F.Synergies.Min(s=>s.Cooldown)>=normal*40,$"Shortest synergy cooldown {F.Synergies.Min(s=>s.Cooldown)} s is >= 40x the longest instant offensive power cooldown {normal} s ({ordinary.First(p=>p.Cooldown==normal).Id}).");
         // ---- Fresh profile: nothing to buy.
         Check(profile.Data.Level==1&&profile.Data.Points==0,"Fresh profile: level 1, 0 points.");
         Check(Resources.LoadAll<PowerDefinition>("Powers").All(p=>p.InitiallyUnlocked&&profile.Owns(p)&&profile.Tier(p)==0),"Every power asset is InitiallyUnlocked and owned at tier 0 with 0 points.");
@@ -71,7 +82,8 @@ public sealed class SynergyAvailabilityVerificationRunner : MonoBehaviour
         string status=screen.SynergyStatus.text;
         Check(screen.SynergyLabel.text=="SYNERGY / Thermal Shock"&&status.Contains("READY WHEN EQUIPPED")&&status.Contains(thermal.Cooldown.ToString("0")+" S COOLDOWN"),$"Forge shows the synergy as available with its cooldown: '{screen.SynergyLabel.text}' / '{status}'.");
         yield return CaptureMenu(menu,"forge-fire-ice-available.png");
-        Check(screen.SelectPower(1,Power("strength"))&&screen.SynergyLabel.text=="SYNERGY / Meteor Punch"&&screen.SynergyStatus.text.Contains(F.Resolve(Power("fire"),Power("strength")).Cooldown.ToString("0")+" S"),"Changing the pair updates the synergy line and its own cooldown: "+screen.SynergyStatus.text);
+        Check(screen.SelectPower(1,Power("laser-eyes"))&&screen.SynergyLabel.text=="SYNERGY / Solar Flare"&&screen.SynergyStatus.text.Contains(F.Resolve(Power("fire"),Power("laser-eyes")).Cooldown.ToString("0")+" S"),"Changing the pair updates the synergy line and its own cooldown: "+screen.SynergyStatus.text);
+        Check(screen.SelectPower(1,Power("strength"))&&screen.SynergyLabel.text=="SYNERGY / No synergy"&&screen.SynergyStatus.text=="","CONTROL: Fire + Strength (a removed legacy pair) shows no synergy and no status line.");
         Check(screen.SelectPower(1,Power("ice")),"Back to Fire + Ice.");
         screen.Close();
 
@@ -112,7 +124,7 @@ public sealed class SynergyAvailabilityVerificationRunner : MonoBehaviour
         GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);
 
         // ---- Refusal CONTROLs.
-        // (a) A pair with no synergy: shipping data covers all 10 pairs, so the loaded catalog is changed IN MEMORY ONLY.
+        // (a) Thermal Shock removed from the loaded catalog IN MEMORY ONLY: the same Fire + Ice session then has no synergy.
         shippingSynergies=F.Synergies;F.Synergies=shippingSynergies.Where(s=>s!=thermal).ToArray();
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);
         r=W.Powers.SynergyRunner;victim=Arena(out control);hp=victim.Health;yield return null;yield return null;
@@ -121,14 +133,14 @@ public sealed class SynergyAvailabilityVerificationRunner : MonoBehaviour
         Check(victim.Health==hp&&FindAnyObjectByType<GameHud>().Slots.All(s=>s.Synergy==null),"No-synergy CONTROL: target untouched and the HUD has no synergy slot.");
         GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);
         RestoreCatalog();
-        Check(F.Synergies.Contains(thermal)&&F.Synergies.Length==10&&!EditorUtility.IsDirty(F),"Catalog restored to its 10 shipping synergies; never dirtied or saved.");
+        Check(F.Synergies.Contains(thermal)&&F.Synergies.Select(s=>s.Id).OrderBy(s=>s,StringComparer.Ordinal).SequenceEqual(Shipping.OrderBy(s=>s,StringComparer.Ordinal))&&!EditorUtility.IsDirty(F),"Catalog restored to its exact five shipping synergies; never dirtied or saved.");
         // (b) Unequipped power: Ice is owned but not in the Fire + Strength loadout -> Thermal Shock is unreachable.
         menu=FindAnyObjectByType<ModeScreens>();profile=menu.Profile;
         Check(profile.SetLoadout(F.Hero("vector"),Power("fire"),Power("strength"),CityColor.Blue,CityColor.Cyan),"Equip Fire + Strength.");
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);
         var ice=W.Powers.Powers.Find(p=>p.Definition.Id=="ice");
-        Check(W.Powers.Synergy!=null&&W.Powers.Synergy.Id=="meteor-punch"&&W.Powers.Synergy!=thermal&&!W.Powers.IsEquipped(ice.Definition)&&!W.Powers.Use(ice)&&W.Powers.Message=="Power not equipped",
-            "CONTROL: with Ice owned but unequipped, the session's synergy is Meteor Punch (not Thermal Shock) and Ice itself is refused by the equip gate.");
+        Check(W.Powers.Synergy==null&&!W.Powers.IsEquipped(ice.Definition)&&!W.Powers.Use(ice)&&W.Powers.Message=="Power not equipped"&&!W.Powers.SynergyRunner.TryActivate(),
+            "CONTROL: with Ice owned but unequipped, Fire + Strength has no synergy (not Thermal Shock; Meteor Punch was removed), C is refused and Ice itself is refused by the equip gate.");
         GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);
 
         // ---- Points still buy upgrade TIERS.

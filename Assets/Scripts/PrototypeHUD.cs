@@ -71,7 +71,7 @@ public sealed class PrototypeHUD : MonoBehaviour
         GUILayout.BeginArea(new Rect(14,14,510,Mathf.Min(610,Screen.height-28)),GUI.skin.box);
         GUILayout.Label("OVERPOWERED / "+progress.Data.Side+((hud&ModeHud.Heat)!=0?"   HEAT "+new string('*',w.Stars)+new string('-',w.Tuning.Heat.MaximumStars-w.Stars):""));
         var director=DirectorLine(w); if(!string.IsNullOrEmpty(director)) GUILayout.Label(director);
-        if((hud&ModeHud.Health)!=0) GUILayout.Label($"Health {w.Health:F0}/{w.Tuning.Movement.Health:F0} | Energy {p.Energy:F0}/{w.Tuning.Movement.Energy:F0}");
+        if((hud&ModeHud.Health)!=0) GUILayout.Label($"Health {w.Health:F0}/{w.MaxHealth:F0} | Energy {p.Energy:F0}/{p.MaxEnergy:F0}");
         if((hud&ModeHud.Progression)!=0) {
         GUILayout.Label($"Level {progress.Data.Level} | XP {progress.Data.Xp}/{progress.RequiredXp} | Unspent points {progress.Data.Points}");
         Rect bar=GUILayoutUtility.GetRect(460,12); GUI.Box(bar,""); GUI.Box(new Rect(bar.x,bar.y,bar.width*progress.Data.Xp/progress.RequiredXp,bar.height),"");

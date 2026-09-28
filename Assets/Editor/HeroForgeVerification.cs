@@ -9,7 +9,7 @@ public static class HeroForgeVerification
 {
     const string Key="Overpowered.ForgeVerification";static double deadline;
     static HeroForgeVerification(){EditorApplication.update+=()=>{if(deadline>0&&EditorApplication.timeSinceStartup>deadline){Debug.LogError("Forge timeout");Finish(1);}};}
-    public static void Run(){HeroForgeSetup.Create();Directory.CreateDirectory("Verification/Forge");SessionState.SetString(Key,"run");EditorSceneManager.OpenScene("Assets/Scenes/Home.unity");EditorApplication.isPlaying=true;}
+    public static void Run(){RosterSetup.Create();Directory.CreateDirectory("Verification/Forge");SessionState.SetString(Key,"run");EditorSceneManager.OpenScene("Assets/Scenes/Home.unity");EditorApplication.isPlaying=true;}
     public static void Reload(){SessionState.SetString(Key,"reload");EditorSceneManager.OpenScene("Assets/Scenes/Home.unity");EditorApplication.isPlaying=true;}
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void Configure()
