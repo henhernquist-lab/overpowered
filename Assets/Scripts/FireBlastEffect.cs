@@ -45,12 +45,12 @@ public sealed class FireBlastEffect : PowerEffect
 }
 public sealed class PowerProjectile : MonoBehaviour
 {
-    PowerUser owner; PowerDefinition definition; PowerStats stats; bool exploded;
-    public void Initialize(PowerUser user, PowerRuntime power) { owner = user; definition = power.Definition; stats = user.Stats(power); Destroy(gameObject, stats.Duration); }
+    PowerUser owner; PowerDefinition definition; PowerStats stats; bool exploded; string credit;
+    public void Initialize(PowerUser user, PowerRuntime power) { owner = user; definition = power.Definition; stats = user.Stats(power); credit = user.Crediting; Destroy(gameObject, stats.Duration); }
     void OnCollisionEnter(Collision collision)
     {
         if (exploded) return; exploded = true;
-        CombatImpact.Blast(owner, transform.position, stats.Radius, stats.Force, stats.Damage, definition.UpwardForce,stats.Duration);
+        using (owner.Credit(credit)) CombatImpact.Blast(owner, transform.position, stats.Radius, stats.Force, stats.Damage, definition.UpwardForce,stats.Duration);
         Destroy(gameObject);
     }
 }

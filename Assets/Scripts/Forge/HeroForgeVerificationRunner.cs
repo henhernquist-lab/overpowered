@@ -139,91 +139,53 @@ public sealed class HeroForgeVerificationRunner : MonoBehaviour
         menu=FindAnyObjectByType<ModeScreens>();menu.Profile.SetLoadout(F.Hero("nova"),Power("fire"),Power("ice"),CityColor.Red,CityColor.Cyan);
         Log("LIMIT: no human feel test; real gameplay entry points, not hardware key injection. Free Play/Endless Fight remain disabled existing definitions.");
     }
+    /// The shipping synergy set is CAPPED at exactly these five (Henry's rule). The eight legacy pair synergies were removed
+    /// from ForgeCatalog; no other pair may resolve. Sonic Slam is exercised in depth above; Thermal Shock here; Solar Flare,
+    /// Void Grasp and Eclipse Beam in RosterVerification.
+    public static readonly string[] ShippingSynergies={"sonic-slam","thermal-shock","solar-flare","void-grasp","eclipse-beam"};
+    static readonly string[][] ShippingPairs={new[]{"flight","strength"},new[]{"fire","ice"},new[]{"fire","laser-eyes"},new[]{"darkness","telekinesis"},new[]{"darkness","laser-eyes"}};
+    static readonly string[] RemovedSynergies={"phoenix-dive","frostwake","orbit-throw","meteor-punch","inferno-orbit","glacier-fist","cryo-crush","meteor-slam"};
     IEnumerator AllSynergies()
     {
-        Check(F.Synergies.Length==10,"All ten unordered pairs have effect assets.");
-        var powers=Resources.LoadAll<PowerDefinition>("Powers");
+        var ids=F.Synergies.Where(s=>s!=null).Select(s=>s.Id).OrderBy(s=>s,StringComparer.Ordinal).ToArray();
+        Check(F.Synergies.All(s=>s!=null)&&ids.SequenceEqual(ShippingSynergies.OrderBy(s=>s,StringComparer.Ordinal)),"Shipping catalog is EXACTLY the five capped synergies: "+string.Join(", ",ids));
+        Check(RemovedSynergies.All(id=>F.Synergies.All(s=>s.Id!=id)&&Resources.Load<PowerSynergyDefinition>("Forge/Synergies/"+id)==null),"The eight removed legacy synergies are neither in the catalog nor loadable from Resources.");
+        var powers=Resources.LoadAll<PowerDefinition>("Powers").Where(p=>!p.Id.StartsWith("verification-")).ToArray();
+        int resolved=0;
         for(int a=0;a<powers.Length;a++)for(int b=a+1;b<powers.Length;b++)
-            Check(F.Resolve(powers[a],powers[b])!=null&&F.Resolve(powers[a],powers[b])==F.Resolve(powers[b],powers[a]),"Unique symmetric pair "+powers[a].Id+" + "+powers[b].Id);
-        foreach(var definition in F.Synergies.Where(d=>d.Id!="sonic-slam"))
         {
-            var menu=FindAnyObjectByType<ModeScreens>();
+            var s=F.Resolve(powers[a],powers[b]);
+            int pair=Array.FindIndex(ShippingPairs,x=>(x[0]==powers[a].Id&&x[1]==powers[b].Id)||(x[1]==powers[a].Id&&x[0]==powers[b].Id));
+            bool ok=s==F.Resolve(powers[b],powers[a])&&(pair>=0?s!=null&&s.Id==ShippingSynergies[pair]:s==null);
+            Check(ok,$"{powers[a].Id} + {powers[b].Id} -> {(s!=null?s.Id:"none")} ({(pair>=0?"capped pair":"no synergy expected")}).");
+            if(s!=null)resolved++;
+        }
+        Check(resolved==5,"Exactly five unordered pairs resolve a synergy.");
+        var thermal=F.Synergies.Single(d=>d.Id=="thermal-shock");
+        {
+            var definition=thermal;var menu=FindAnyObjectByType<ModeScreens>();
             Check(menu.Profile.SetLoadout(F.Heroes[0],definition.PowerA,definition.PowerB,CityColor.Blue,CityColor.Cyan),"Equip "+definition.DisplayName);
             GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);
             W.Hero.enabled=false;var cc=W.Hero.GetComponent<CharacterController>();cc.enabled=false;W.Hero.transform.position=new Vector3(0,151,0);cc.enabled=true;W.Hero.ResetMotion();W.Hero.transform.forward=Vector3.forward;
             var floor=GameObject.CreatePrimitive(PrimitiveType.Cube);floor.transform.position=new Vector3(0,149.5f,0);floor.transform.localScale=new Vector3(100,1,100);
             var camera=Camera.main;camera.GetComponent<ThirdPersonCamera>().enabled=false;camera.transform.position=new Vector3(0,152,-8);camera.transform.forward=Vector3.forward;
-            var r=W.Powers.SynergyRunner;Rigidbody body=null,heavy=null;CityNpc victim=null,control=null;
-            bool orbit=definition.Effect is OrbitThrowEffect;
-            if(orbit){Check(!r.TryActivate()&&r.Cooldown==0,definition.DisplayName+" empty-area CONTROL costs no cooldown.");body=Prop(new Vector3(3,152,3));heavy=Prop(new Vector3(-3,152,3));heavy.mass=900;}
-            else if(definition.Id=="meteor-punch"){W.Powers.Strength.Charges=0;Check(!r.TryActivate(), "Meteor Punch zero-charge eligibility CONTROL.");W.Powers.Strength.Charges=3;body=Prop(new Vector3(0,152,2.5f));}
-            else if(definition.Id=="meteor-slam"){Check(!r.TryActivate()&&r.Cooldown==0,"Meteor Slam no-target CONTROL.");body=Prop(new Vector3(0,152,5));}
-            else if(definition.Id=="thermal-shock"||definition.Id=="frostwake"||definition.Id=="glacier-fist"||definition.Id=="cryo-crush")
-            {
-                if(definition.Id=="cryo-crush")Check(!r.TryActivate()&&r.Cooldown==0,"Cryo Crush no-enemy CONTROL.");
-                victim=Actor(new Vector3(0,151,definition.Id=="glacier-fist"?2.5f:6));control=Actor(new Vector3(definition.Id=="thermal-shock"?2:12,151,6));
-                if(definition.Id=="thermal-shock")
-                {
-                    // Damage is measured as health LOST. Criminal now spawns as a low-HP roster archetype (Rusher), which would
-                    // cap the measurement at its health, so both measured actors get explicit headroom well above any hit here.
-                    float headroom=Mathf.Max(1000,definition.Damage*definition.BonusMultiplier*10);
-                    victim.SetCombatStats(headroom,victim.ContactDamage);control.SetCombatStats(headroom,control.ContactDamage);
-                    Check(victim.Health>definition.Damage*definition.BonusMultiplier&&control.Health>definition.Damage,"Thermal measured actors have uncapped headroom: "+victim.Health+" HP each vs expected hits "+definition.Damage*definition.BonusMultiplier+" / "+definition.Damage);
-                    victim.Freeze(20);
-                }
-                if(definition.Id=="frostwake"){W.Powers.Flight.Fuel=0;Check(!r.TryActivate(),"Frostwake empty-fuel CONTROL.");W.Powers.Flight.Fuel=6;}
-            }
-            else body=Prop(new Vector3(3,151,12));
+            var r=W.Powers.SynergyRunner;
+            var victim=Actor(new Vector3(0,151,6));var control=Actor(new Vector3(2,151,6));
+            // Damage is measured as health LOST, so both measured actors get explicit headroom well above any hit here.
+            float headroom=Mathf.Max(1000,definition.Damage*definition.BonusMultiplier*10);
+            victim.SetCombatStats(headroom,victim.ContactDamage);control.SetCombatStats(headroom,control.ContactDamage);
+            Check(victim.Health>definition.Damage*definition.BonusMultiplier&&control.Health>definition.Damage,"Thermal measured actors have uncapped headroom: "+victim.Health+" HP each vs expected hits "+definition.Damage*definition.BonusMultiplier+" / "+definition.Damage);
+            victim.Freeze(20);
             Physics.SyncTransforms();
-            float hp=victim!=null?victim.Health:0,controlHp=control!=null?control.Health:0;
-            Vector3 initial=body!=null?body.position:W.Hero.transform.position;
+            float hp=victim.Health,controlHp=control.Health;
             Check(r.TryActivate(),definition.DisplayName+" activation accepted.");
-            if(orbit)
-            {
-                yield return new WaitForSeconds(.5f);
-                Check(r.HeldCount==1&&!body.useGravity&&heavy.useGravity,definition.DisplayName+" only movable in-budget prop captured; heavy CONTROL excluded.");
-                Check(Vector3.Distance(initial,body.position)>.3f,definition.DisplayName+" orbit uses real force displacement.");
-                r.TryActivate();Check(r.ReleaseRequested,"Second C-equivalent requests volley, not another paid activation.");
-            }
-            if(definition.Id=="glacier-fist")
-            {
-                yield return null;yield return null;
-                Check(r.GlacierActive&&!r.Busy,"Glacier buff leaves normal melee available.");
-                Check(W.Hero.TryPunch(),"Glacier empowered punch uses existing charge gate.");
-                yield return new WaitForSeconds(.3f);
-                Check(Mathf.Approximately(W.Hero.LastForce,W.Powers.Stats(W.Powers.Strength).Force*definition.MeleeMultiplier)&&victim.Frozen,"Glacier impact raises force and applies freeze.");
-            }
-            float peak=victim!=null?victim.transform.position.y:0;float until=Time.time+8;
-            while(r.Busy&&Time.time<until){if(victim!=null)peak=Mathf.Max(peak,victim.transform.position.y);yield return null;}
+            float until=Time.time+8;
+            while(r.Busy&&Time.time<until)yield return null;
             yield return new WaitForFixedUpdate();
             Check(!r.Busy,definition.DisplayName+" completes within bounded duration.");
             Check(r.Cooldown>0,definition.DisplayName+" cooldown remains after action.");
-            if(definition.Id=="thermal-shock")
-            {
-                float bonus=hp-victim.Health,normal=controlHp-control.Health;
-                Check(bonus>normal&&Mathf.Abs(bonus-definition.Damage*definition.BonusMultiplier)<.1f,"Thermal affected-target bonus CONTROL: "+bonus+" vs clean "+normal);
-            }
-            if(definition.Id=="frostwake")Check(victim.Frozen&&victim.Health<hp&&!control.Frozen&&control.Health==controlHp&&W.Powers.Flight.Fuel<6,"Frostwake moves, drains fuel, hits nearby actor; far actor untouched.");
-            if(definition.Id=="cryo-crush")Check(peak>152&&r.Impacts>0,"Cryo Crush physically lifts enemy and hits ground; peak="+peak.ToString("F2"));
-            if(definition.Id=="meteor-slam")Check(r.Impacts>0&&body.position.y<154,"Meteor Slam lifts a prop and produces collision-driven shockwave.");
-            if(definition.Id=="meteor-punch")Check(r.LastForce>HeroAbilityTuning.KickForceMultiplier*W.Powers.Stats(W.Powers.Strength).Force&&r.Impacts==1,"Meteor Punch is heavier than Hurricane Kick: "+r.LastForce+" N.s");
-            if(definition.Id=="phoenix-dive")Check(r.Impacts==1&&W.Hero.transform.position.z>5,"Phoenix Dive reaches forward ground target and impacts.");
-            if(orbit)
-            {
-                Check(body!=null&&body.useGravity&&Vector3.Dot(body.linearVelocity,W.Powers.AimDirection)>10,"Thrown prop restores gravity and receives a real forward launch impulse.");
-                Check(Mathf.Abs(heavy.linearVelocity.x)<.01f&&Mathf.Abs(heavy.linearVelocity.z)<.01f,"Heavy prop CONTROL has no launch impulse.");
-                if(definition.Id=="inferno-orbit")
-                {
-                    float contactDeadline=Time.time+3;while(r.Impacts==0&&Time.time<contactDeadline)yield return null;
-                    Check(r.Impacts>0,"Inferno projectile collision causes a real fiery blast.");
-                }
-                yield return new WaitForSeconds(r.Cooldown+.05f);
-                var cancelBody=Prop(W.Hero.transform.position+new Vector3(2,1,0));Physics.SyncTransforms();
-                Check(r.TryActivate(),"Orbit cancellation setup accepted.");yield return new WaitForFixedUpdate();
-                Check(!cancelBody.useGravity,"Orbit cancellation setup actually holds body.");
-                W.DamagePlayer(W.Health);
-                Check(!r.Busy&&cancelBody.useGravity,"Death CONTROL cancels orbit and restores held-body gravity.");
-            }
+            float bonus=hp-victim.Health,normal=controlHp-control.Health;
+            Check(bonus>normal&&Mathf.Abs(bonus-definition.Damage*definition.BonusMultiplier)<.1f,"Thermal affected-target bonus CONTROL: "+bonus+" vs clean "+normal);
             Check(r.Vfx.Emissions>0,definition.DisplayName+" emits bounded pooled effects.");
             Log("SYNERGY "+definition.DisplayName+": impacts="+r.Impacts+", VFX emissions="+r.Vfx.Emissions+", cooldown="+r.Cooldown.ToString("F2"));
             GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);

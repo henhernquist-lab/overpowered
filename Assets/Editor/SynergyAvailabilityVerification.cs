@@ -12,7 +12,7 @@ public static class SynergyAvailabilityVerification
 {
     const string Key="Overpowered.SynergyAvailabilityVerification";const string Saves="Verification/Synergy/saves/";static double deadline;
     static SynergyAvailabilityVerification(){EditorApplication.update+=()=>{if(deadline>0&&EditorApplication.timeSinceStartup>deadline){Debug.LogError("Synergy availability timeout");Finish(1);}};}
-    public static void Run(){Begin("run");}
+    public static void Run(){RosterSetup.Create();Begin("run");}
     public static void Reload(){Begin("reload");}
     static void Begin(string task){Directory.CreateDirectory(Saves);SessionState.SetString(Key,task);EditorSceneManager.OpenScene("Assets/Scenes/Home.unity");EditorApplication.isPlaying=true;}
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]

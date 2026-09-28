@@ -19,6 +19,42 @@ public sealed class PowerUser : MonoBehaviour
     public PowerSynergyDefinition Synergy {get;private set;}
     public HeroDefinition HeroDefinition {get;private set;}
     public SynergyRunner SynergyRunner {get;private set;}
+    /// The held (channeled) power, or null. See PowerActivation.
+    public PowerRuntime Channeling { get; private set; }
+    /// Verification harness: treated exactly like the fire button being held (batch mode has no mouse).
+    public bool ScriptedHold;
+    public event System.Action<PowerDefinition> ChannelEnded;
+    /// Instrumentation only (per-power stats): the id NPC damage from this user is credited to right now. Set around a
+    /// power's Execute / Sustain and re-entered by deferred hits (projectiles, poison ticks, dash steps, melee impacts,
+    /// synergy steps). Uncredited damage (null) is not counted. Never read by gameplay.
+    public string Crediting { get; private set; }
+    public CreditScope Credit(string id) => new CreditScope(this, id);
+    public readonly struct CreditScope : System.IDisposable
+    {
+        readonly PowerUser user; readonly string previous;
+        public CreditScope(PowerUser owner, string id) { user = owner; previous = owner != null ? owner.Crediting : null; if (owner != null) owner.Crediting = id; }
+        public void Dispose() { if (user != null) user.Crediting = previous; }
+    }
+    /// Every successful activation (power id or "synergy:<id>"), after it is recorded. Listeners: style, challenges.
+    public event System.Action<string> Used;
+    /// Every NPC hit this user caused (credited or not), after the NPC took it. Listeners: style, challenges.
+    public event System.Action<PowerHit> Hit;
+    /// A successful activation of `id` (stats only).
+    public void RecordUse(string id) { var u = Progression != null ? Progression.Usage(id, true) : null; if (u != null) u.Uses++; Used?.Invoke(id); }
+    /// Called by CityNpc.Damage for damage this user caused: health actually removed, whether it killed, and whether it was
+    /// an assault (false = a continuing tick of poison / a held beam).
+    public void ReportDamage(CityNpc npc, float dealt, bool killed, bool assault)
+    {
+        if (dealt <= 0f) return;
+        if (Crediting != null && Progression != null) { var u = Progression.Usage(Crediting, true); u.Hits++; u.Damage += dealt; if (killed) u.Kills++; }
+        Hit?.Invoke(new PowerHit(npc, Crediting, dealt, killed, assault));
+    }
+    /// Force Field (or null): the player's damage-absorbing shield. WorldSession.DamagePlayer routes damage through it.
+    public PlayerShield Shield { get; private set; }
+    /// The session hero's archetype (baseline without a Forge hero).
+    public HeroStats HeroStats => HeroDefinition != null && HeroDefinition.Stats != null ? HeroDefinition.Stats : HeroStats.Baseline;
+    public float MaxEnergy => config.Energy * HeroStats.MaxEnergy;
+    public float EnergyRegen => config.EnergyRecharge * HeroStats.EnergyRegen;
     public bool IsEquipped(PowerDefinition definition)=>definition!=null&&(Forge==null||definition==EquippedA||definition==EquippedB);
     public Vector3 AimOrigin
     {
@@ -63,12 +99,23 @@ public sealed class PowerUser : MonoBehaviour
         }
         Forge=Resources.Load<ForgeCatalog>("ForgeCatalog");
         EquippedA=progression.EquippedA;EquippedB=progression.EquippedB;HeroDefinition=progression.SelectedHero;
+        Energy = MaxEnergy;
         Synergy=Forge?.Resolve(EquippedA,EquippedB);
         Selected = Powers.Find(p=>IsEquipped(p.Definition)&&!p.Definition.Effect.IsFlight)??Strength; progression.Changed += Refresh;
         Refresh();
+        // Stats: one equipped session per power (a Forge loadout's two powers; without a Forge every power counts).
+        foreach (var p in Powers) if (IsEquipped(p.Definition) && progression.Owns(p.Definition)) { var u = progression.Usage(p.Definition.Id, true); if (u != null) u.Sessions++; }
         if(Forge!=null){SynergyRunner=gameObject.AddComponent<SynergyRunner>();SynergyRunner.Initialize(this);}
     }
-    public PowerStats Stats(PowerRuntime power) => power.Definition.GetStats(Mathf.Max(0, Progression.Tier(power.Definition)));
+    public PowerStats Stats(PowerRuntime power)
+    {
+        var s = power.Definition.GetStats(Mathf.Max(0, Progression.Tier(power.Definition)));
+        var h = HeroStats;
+        // Hero archetype: melee (Super Strength's punch/kick) scales damage and knockback; every other power scales damage and cooldown.
+        if (power.Definition.Effect is PunchEffect) { s.Damage *= h.MeleeDamage; s.Force *= h.MeleeDamage; }
+        else if (power.Definition.Effect == null || !power.Definition.Effect.IsFlight) { s.Damage *= h.PowerDamage; s.Cooldown *= h.CooldownMultiplier; }
+        return s;
+    }
     void Refresh()
     {
         foreach (var p in Powers) { var stats = Stats(p); p.Charges = Mathf.Min(p.Charges, stats.Charges); p.Fuel = Mathf.Min(p.Fuel, stats.Duration); }
@@ -76,11 +123,32 @@ public sealed class PowerUser : MonoBehaviour
     public bool Select(PowerRuntime power)
     {
         if (power==null||!Powers.Contains(power)||!IsEquipped(power.Definition)||!Progression.Owns(power.Definition)) return false;
-        Release(false); Selected = power; Message = power.Definition.Description; return true;
+        Release(false); EndChannel(); Selected = power; Message = power.Definition.Description; return true;
+    }
+    /// Number key (1-9) for a power. With Hero Forge: 1 = equipped slot A, 2 = slot B (the roster has more than nine powers,
+    /// so list positions cannot be keys). Without a catalog (legacy all-powers sessions): list position + 1. 0 = no key.
+    public int SlotNumber(PowerRuntime power)
+    {
+        if (power == null) return 0;
+        if (Forge != null) return power.Definition == EquippedA ? 1 : power.Definition == EquippedB ? 2 : 0;
+        int index = Powers.IndexOf(power); return index >= 0 && index < 9 ? index + 1 : 0;
+    }
+    public PowerRuntime PowerForSlot(int number)
+    {
+        if (Forge != null) { var d = number == 1 ? EquippedA : number == 2 ? EquippedB : null; return d == null ? null : Powers.Find(p => p.Definition == d); }
+        return number >= 1 && number <= Mathf.Min(9, Powers.Count) ? Powers[number - 1] : null;
+    }
+    /// Damage the player is about to take, after the Force Field (if raised) absorbs what it can.
+    public float AbsorbIncoming(float damage) => Shield != null ? Shield.Absorb(damage) : damage;
+    /// The player's single shield component (created on first use, then reused for every later cast).
+    public PlayerShield ShieldComponent()
+    {
+        if (Shield == null) Shield = gameObject.AddComponent<PlayerShield>();
+        return Shield;
     }
     public void Tick(float dt, bool grounded)
     {
-        Energy = Mathf.Min(config.Energy, Energy + config.EnergyRecharge * dt);
+        Energy = Mathf.Min(MaxEnergy, Energy + EnergyRegen * dt);
         foreach (var power in Powers)
         {
             var s = Stats(power); power.Cooldown = Mathf.Max(0f, power.Cooldown - dt);
@@ -101,22 +169,59 @@ public sealed class PowerUser : MonoBehaviour
         if(power==null||!Powers.Contains(power)||!IsEquipped(power.Definition)){Message="Power not equipped";return false;}
         if(SynergyRunner!=null&&SynergyRunner.Busy)
         {
-            if(power.Definition.Effect is TelekinesisEffect && SynergyRunner.Definition.Effect is OrbitThrowEffect && SynergyRunner.HeldCount>0)
-            { SynergyRunner.RequestRelease(); Message="Throw orbit"; return true; }
             Message="Synergy in progress";return false;
         }
         if (power == null || !Progression.Owns(power.Definition)) { Message = "Power locked"; return false; }
         if (HeldBody != null && power == heldPower) { Release(true); return true; } // Hurl is the second half of the paid grab.
         if (power.Cooldown > 0f) { Message = "Blocked: cooldown"; return false; }
+        if (power.Definition.Activation == PowerActivation.Channeled) return BeginChannel(power);
         if (power.Charges <= 0) { Message = "Blocked: 0 charges"; return false; }
         if (Energy < power.Definition.ResourceCost) { Message = "Blocked: energy"; return false; }
         Message = "No valid target";
-        if (!power.Definition.Effect.Execute(this, power)) return false;
+        bool executed; using (Credit(power.Definition.Id)) executed = power.Definition.Effect.Execute(this, power);
+        if (!executed) return false;
+        RecordUse(power.Definition.Id);
         power.Charges--; power.Cooldown = Stats(power).Cooldown; power.ChargeTimer = 0f;
         Energy -= power.Definition.ResourceCost; Message = power.Definition.DisplayName + " activated";
         Activated?.Invoke(power.Definition);
         WorldSession.Instance?.Alarm(transform.position);
         return true;
+    }
+    bool BeginChannel(PowerRuntime power)
+    {
+        if (Channeling == power) return true;
+        if (!(power.Definition.Effect is ChanneledEffect)) { Message = "Channel effect missing"; return false; }
+        // Energy is drained while held; ResourceCost is only the minimum needed to start. No charge is spent.
+        if (Energy < power.Definition.ResourceCost) { Message = "Blocked: energy"; return false; }
+        EndChannel();
+        bool executed; using (Credit(power.Definition.Id)) executed = power.Definition.Effect.Execute(this, power);
+        if (!executed) return false;
+        RecordUse(power.Definition.Id);
+        Channeling = power; Message = power.Definition.DisplayName + " channeling";
+        Activated?.Invoke(power.Definition);
+        WorldSession.Instance?.Alarm(transform.position);
+        return true;
+    }
+    /// Called every frame by the controller with whether the fire button is held (or ScriptedHold). Ends the channel on release,
+    /// unequip/reselect, a synergy taking over, or when the energy for this frame's drain is not there.
+    public void Channel(bool held, float dt)
+    {
+        if (Channeling == null) return;
+        var power = Channeling;
+        if (!held || Selected != power || !IsEquipped(power.Definition) || (SynergyRunner != null && SynergyRunner.Busy)) { EndChannel(); return; }
+        if (dt <= 0f) return;   // paused / hit-pause frame: nothing drains, nothing ticks
+        float cost = power.Definition.DrainPerSecond * dt;
+        if (Energy < cost) { Message = "Blocked: energy"; EndChannel(); return; }
+        Energy -= cost;
+        using (Credit(power.Definition.Id)) ((ChanneledEffect)power.Definition.Effect).Sustain(this, power, dt);
+    }
+    public void EndChannel()
+    {
+        if (Channeling == null) return;
+        var power = Channeling; Channeling = null;
+        power.Cooldown = Stats(power).Cooldown;
+        (power.Definition.Effect as ChanneledEffect)?.Stop(this, power);
+        ChannelEnded?.Invoke(power.Definition);
     }
     public bool FindTarget(float range, out RaycastHit result)
     {
@@ -149,12 +254,18 @@ public sealed class PowerUser : MonoBehaviour
         Vector3 target = AimOrigin + AimDirection * d.HoldDistance;
         HeldBody.AddForce((target - HeldBody.position) * d.HoldSpring - HeldBody.linearVelocity * d.HoldDamping, ForceMode.Acceleration);
     }
-    void OnDisable() { Release(false); }
+    void OnDisable() { Release(false); EndChannel(); }
     void OnDestroy() { if (Progression != null) Progression.Changed -= Refresh; }
+}
+/// One NPC hit caused by the player (see PowerUser.Hit). Credit = power id, "melee", "synergy:<id>" or null (uncredited).
+public readonly struct PowerHit
+{
+    public readonly CityNpc Npc; public readonly string Credit; public readonly float Dealt; public readonly bool Killed, Assault;
+    public PowerHit(CityNpc npc, string credit, float dealt, bool killed, bool assault) { Npc = npc; Credit = credit; Dealt = dealt; Killed = killed; Assault = assault; }
 }
 public sealed class ThrownProp : MonoBehaviour
 {
-    PowerUser owner; float damage, expiry; bool spent;
+    PowerUser owner; float damage, expiry; bool spent; string credit;
     TelekinesisEffect throwSettings;
     public Vector3 LastContact { get; private set; }
     public float LastDamage { get; private set; }
@@ -162,7 +273,7 @@ public sealed class ThrownProp : MonoBehaviour
     public Vector3 LaunchImpulse { get; private set; }
     public bool Spent => spent;
     public void Initialize(PowerUser user, float value, float duration, TelekinesisEffect settings = null, Vector3 launchImpulse = default)
-    { owner = user; damage = value; expiry = Time.time + duration; spent = false; throwSettings = settings; LastDamage=LastImpulse=0; LaunchImpulse=launchImpulse; }
+    { owner = user; damage = value; expiry = Time.time + duration; spent = false; throwSettings = settings; LastDamage=LastImpulse=0; LaunchImpulse=launchImpulse; credit = user != null ? user.Crediting : null; }
     void OnCollisionEnter(Collision other)
     {
         if (spent || Time.time > expiry || owner == null || other.transform.root == owner.transform) return;
@@ -178,7 +289,7 @@ public sealed class ThrownProp : MonoBehaviour
                 GetComponentsInChildren<Collider>(),throwSettings.ImpactSeparationSeconds));
             FeelDirector.Impact(LastContact,LastImpulse,damage,1);
         }
-        LastDamage=damage;npc.Damage(damage, owner); spent = true;
+        LastDamage=damage;using(owner.Credit(credit))npc.Damage(damage, owner); spent = true;
     }
     static System.Collections.IEnumerator LaunchAfterContact(CityNpc npc,Vector3 impulse,Collider[] projectileColliders,float separation)
     {

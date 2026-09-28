@@ -8,8 +8,8 @@ public sealed class IceEffect : PowerEffect
     public static float Shatter(PowerUser user, Component target, Vector3 origin, float radius)
     {
         var npc=target.GetComponent<CityNpc>();var frozen=target.GetComponent<FrozenBody>();
-        // Glacier Fist applies its freeze in this same melee call. It must establish a freeze, not immediately consume
-        // its own new effect; shatter is a follow-up against a freeze that existed before this frame.
+        // A freeze applied in this same frame (e.g. by an area freeze in the same call) is established, not consumed:
+        // shatter is a follow-up against a freeze that existed before this frame.
         if(npc!=null ? npc.Dead||!npc.Frozen||npc.FreezeStartedFrame==Time.frameCount : frozen==null||!frozen.Frozen)return 0;
         var power=user.Powers.Find(p=>p.Definition.Effect is IceEffect);
         if(power==null)return 0;
@@ -39,6 +39,8 @@ public sealed class IceEffect : PowerEffect
             if (!npc.Dead) FrozenLook.Show(npc.gameObject, power.Definition.PaletteColor, () => npc != null && !npc.Dead && npc.Frozen);
             Cast(user, power, hit.point); return true;
         }
+        var mission = hit.collider.GetComponentInParent<MissionTarget>();   // e.g. a mission fire spot: Ice douses it
+        if (mission != null && mission.Freeze(user, stats)) { Cast(user, power, hit.point); return true; }
         if (hit.rigidbody == null || hit.rigidbody.isKinematic) return false;
         var frozen = hit.rigidbody.GetComponent<FrozenBody>();
         if (frozen == null) frozen = hit.rigidbody.gameObject.AddComponent<FrozenBody>();
