@@ -2636,3 +2636,31 @@ Also noted:
 - Cartoon FX Remaster FREE is installed but unused. Henry decides whether its materials fit the shared-palette rule.
 
 The audit ends with a Downtown-first order of work and the BEFORE capture list for LOCAL.
+
+### CLOUD visual pass addendum (same branch `cloud/visual-audit`, 2026-09-28; NO Unity, nothing rendered)
+
+Henry asked CLOUD to continue past the audit. Every visual change is behind **`VisualPreset`**, which is **off by
+default**. With the preset off, the city, NPCs, telegraphs and projectiles are generated exactly as before.
+
+| Commit | What |
+|---|---|
+| `7e3fa19` | `VisualPreset` + setup menus: sun shadows, warm sun, trilight ambient, haze-ground procedural sky that hides the skirt walls; globals restored on teardown |
+| `aee76f8` | **`PolishCapture.RunBefore` / `RunAfter`**: one-command 1920×1080 captures of the sprint's views plus one per power, and `perf.csv` (FPS, frame time, draws, batches, SetPass, tris, visible renderers, materials, GC) with the preset forced off / on for that process only |
+| `4183d54` | Ring telegraphs instead of the opaque slam disc (`Renderer` / `Visible` contracts kept) |
+| `8e972e6` | Street-level facade pass for buildings ≥ 10 m: glazing, plinth, pilasters, cornice (no new draw calls) |
+| `600f93f` | Skyline backdrop: continuous coastline of narrow stepped towers |
+| `e26dc6d` | Enemy role looks: visual-root silhouettes plus accents (Gunner no longer wears hero Cyan) |
+| `e1db344` | Projectile comet tail |
+| `e1a067d` | `RecipePiece.Shape` shared low-poly kit (Canopy / Cone / Wedge / Gable) plus faceted tree recipe overrides |
+| `4cdc873` | Sloped Wedge shop awnings |
+
+**How to judge it:** see `Verification/Polish/visual-audit.md` → "CLOUD implementation", which covers:
+- the commands to run;
+- the performance gate;
+- the regression suites to re-run with the preset on.
+
+**Not claimed:**
+- that anything looks better;
+- any FPS number.
+
+**Henry decides** which preset fields stay on after looking at `Before/` and `After/`.

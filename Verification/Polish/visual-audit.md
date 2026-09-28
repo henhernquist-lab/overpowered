@@ -284,3 +284,46 @@ fixed pool. If not allowed, copy only its textures into palette-tinted pooled pa
 - `power-laser`, `power-lightning`, `power-forcefield`, `power-speed`, `power-poison`.
 
 **With FPS / frame time / draw calls / SetPass / renderers** at street, flight and dense combat.
+
+## CLOUD implementation (2026-09-28): everything behind one switch, unverified
+
+After the audit, CLOUD implemented the audit fixes that do not need eyes to get structurally right. **All of it is
+behind `VisualPreset`**, which is off by default (no asset, or `Enabled` false), so the game is unchanged until LOCAL
+judges it. Nothing here has been rendered.
+
+| Audit item | Change (only when the preset is active) | Where |
+|---|---|---|
+| 1 Lighting | Sun casts soft shadows (strength 0.55, 80 m, 2 cascades), warm cream at 1.05; trilight ambient (Slate / UiPurple / Metal) replaces the default skybox's blue fill; all globals restored at session teardown | `VisualPreset.cs` (`VisualPresetApplier`), hook in `PrototypeBootstrap.cs` |
+| 2 Horizon | Procedural sky whose lower half is the fog Haze, so the four haze-skirt walls are hidden. Backdrop becomes a continuous coastline of 2–4 narrow square towers per cluster, with stepped crowns | `VisualPresetApplier`, `CityArt.SkylineCluster` |
+| 4 Box city (first step) | Urban-height buildings (≥ 10 m) get shop glazing on every face, a Slate base plinth, Cream corner pilasters and a projecting cornice. Every building gets a sloped awning (Wedge) instead of the flat canopy. Existing palette colours and per-building batches: **no new draw calls** | `CityArt.StreetLevel`, `CityArt.Building` |
+| 4 / 8 Kit | `RecipePiece.Shape`: four shared generated flat-shaded meshes (Canopy, Cone, Wedge, Gable), built once per city. Winding comes from an interior point, and topology and winding were checked offline. The preset's `RecipeOverrides` swap in faceted canopy / pine trees on the same trunks and colliders | `CityArt.ShapeMesh`, `CityArtSettings.cs`, `VisualPreset.RecipeOverrides` |
+| 5 Enemy roles | Visual-root-only silhouette multipliers (Rusher 0.9 × 1.05 × 0.9, Brute 1.22 × 0.96 × 1.18; collider, agent and physics root unchanged). Accent overrides: Rusher Amber, **Gunner UiInk (was hero Cyan)**, Brute Metal | `HumanoidPresentation.Create`, `VisualPreset.EnemyLooks` |
+| 7 VFX | Melee / slam telegraph: a fixed boundary ring at the exact hit radius plus a timing ring closing in on it, instead of the opaque disc. Projectile comet tail (three shrinking spheres in the power colour) | `AttackTelegraph.cs`, `FireBlastEffect.cs` |
+
+**Deliberately not done blind:**
+- Pitched roofs: low buildings carry rooftop props and discovery markers that a gable would bury.
+- Palette retuning (`Pavement`, kerb Cream): re-judge after the lighting change.
+- Menus, Forge and Results: UI layout needs eyes.
+- The per-power VFX beyond Fire.
+- Enemy weapon attachments: bone axes are unknown without seeing the rig.
+
+### How LOCAL evaluates it (one command each, the preset asset is never written by these)
+1. `Unity -batchmode -projectPath <copy> -executeMethod PolishCapture.RunBefore -logFile before.log`
+   - Writes `Verification/Polish/Before/`: preset forced off (today's game).
+2. `Unity -batchmode -projectPath <copy> -executeMethod PolishCapture.RunAfter -logFile after.log`
+   - Writes `Verification/Polish/After/`: preset forced on.
+3. Compare the same-named PNGs (`01-home` … `13-results`, `power-<id>`) and `perf.csv`. Rows: downtown-street, flight,
+   combat-hero, combat-villain, endless.
+   - Each row records FPS, mean / p95 ms, draws, batches, SetPass, triangles, visible renderers, distinct materials,
+     GC gen0 and managed growth.
+   - Gate against STATUS: street ≥ 70 FPS. If shadows cost too much, lower `ShadowDistance` or `ShadowCascades` in the
+     preset first.
+4. Keep what reads better, turn the rest off field by field in `Resources/VisualPreset`, then use
+   **Overpowered > Visual > Enable visual preset**.
+5. Run the regression suites with the preset **on**, because they have only ever run with it off:
+   - `CombatVerification` (telegraph contract);
+   - `CityArtVerification` / `WorldVerification` (generation, rooftop contract);
+   - `FeelVerification` (aim, projectiles);
+   - `HumanoidVerification`;
+   - `FirstPersonVerification`.
+6. Restore `Side_Kick_Data.db` after Play Mode (AGENTS.md).
