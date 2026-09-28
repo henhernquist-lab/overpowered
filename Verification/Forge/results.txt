@@ -10,6 +10,9 @@ PASS Suit palette roles saved.
 PASS Slot 1 collision repairs slot 2 immediately.
 PASS Slot 2 UI excludes duplicate.
 PASS Select Fire + Ice.
+PASS Successful Forge save starts the Cinemachine preview reveal without blocking the form.
+PASS Cinemachine preview camera actually orbits the selected hero (heading -28.0 -> 17.6 deg, camera moved up to 2.03 m, 130 frames).
+PASS Short Forge reveal settles on the front view (heading 0) without delaying navigation.
 PASS Pair lookup is order-independent.
 PASS Enter Hero with saved build.
 PASS Gameplay receives exact equipped pair.
@@ -26,12 +29,14 @@ PASS Pause CONTROL freezes synergy motion/cooldown and rejects activation.
 PASS Sonic Slam rises then collides with actual ground exactly once.
 PASS Sonic force moves real 45kg Rigidbody.
 PASS Outside-radius CONTROL has no horizontal launch.
-MEASURED Sonic peak=154.306m, force=2600.0 N.s, bodies=1, near velocity=34.052m/s, displacement=0.672m; cooldown=34.602s.
+MEASURED Sonic peak=154.308m, force=2600.0 N.s, bodies=1, near velocity=34.396m/s, displacement=0.615m; cooldown=34.589s.
 PASS Cooldown still blocks after animation ends.
 PASS Actual pooled ParticleSystem / ring emitted once.
 PASS Real ParticleSystem contains bounded live particles.
 PASS Particle positions advance over real frames (not a frozen emission counter).
 PASS All six VFX slots share the same particle mesh.
+PASS Every pooled synergy ring shares one cached palette ring material; 6 more bursts create no material (108->108).
+PASS Ring is the unlit Cream palette swatch (not the lit Standard swatch) and is owned by the session's CityMaterials.
 PASS Equipped Flight positive control consumes configured fuel.
 PASS Equipped Strength uses existing paid punch.
 PASS Shared punch/kick cooldown still rejects kick.
@@ -39,6 +44,7 @@ PASS Equipped Strength preserves original force.
 PASS Zero Strength charges still reject Hurricane Kick.
 PASS Backflip remains available.
 PASS Backflip CONTROL has no invincibility.
+PASS Leaving the session destroys the unlit ring material with its CityMaterials owner.
 PASS Save final loadout for separate-process test.
 PASS Villain mode switch preserves build and progression.
 PASS All ten unordered pairs have effect assets.
@@ -58,7 +64,7 @@ PASS Phoenix Dive completes within bounded duration.
 PASS Phoenix Dive cooldown remains after action.
 PASS Phoenix Dive reaches forward ground target and impacts.
 PASS Phoenix Dive emits bounded pooled effects.
-SYNERGY Phoenix Dive: impacts=1, VFX emissions=1, cooldown=39.39
+SYNERGY Phoenix Dive: impacts=1, VFX emissions=1, cooldown=39.40
 PASS Equip Frostwake
 PASS Frostwake empty-fuel CONTROL.
 PASS Frostwake activation accepted.
@@ -66,7 +72,7 @@ PASS Frostwake completes within bounded duration.
 PASS Frostwake cooldown remains after action.
 PASS Frostwake moves, drains fuel, hits nearby actor; far actor untouched.
 PASS Frostwake emits bounded pooled effects.
-SYNERGY Frostwake: impacts=0, VFX emissions=8, cooldown=23.89
+SYNERGY Frostwake: impacts=0, VFX emissions=8, cooldown=23.90
 PASS Equip Orbit Throw
 PASS Orbit Throw empty-area CONTROL costs no cooldown.
 PASS Orbit Throw activation accepted.
@@ -81,7 +87,7 @@ PASS Orbit cancellation setup accepted.
 PASS Orbit cancellation setup actually holds body.
 PASS Death CONTROL cancels orbit and restores held-body gravity.
 PASS Orbit Throw emits bounded pooled effects.
-SYNERGY Orbit Throw: impacts=0, VFX emissions=4, cooldown=30.00
+SYNERGY Orbit Throw: impacts=0, VFX emissions=4, cooldown=29.99
 PASS Equip Thermal Shock
 PASS Thermal measured actors have uncapped headroom: 1000 HP each vs expected hits 42.5 / 25
 PASS Thermal Shock activation accepted.
@@ -97,7 +103,7 @@ PASS Meteor Punch completes within bounded duration.
 PASS Meteor Punch cooldown remains after action.
 PASS Meteor Punch is heavier than Hurricane Kick: 3400 N.s
 PASS Meteor Punch emits bounded pooled effects.
-SYNERGY Meteor Punch: impacts=1, VFX emissions=5, cooldown=39.25
+SYNERGY Meteor Punch: impacts=1, VFX emissions=5, cooldown=39.27
 PASS Equip Inferno Orbit
 PASS Inferno Orbit empty-area CONTROL costs no cooldown.
 PASS Inferno Orbit activation accepted.
@@ -113,7 +119,7 @@ PASS Orbit cancellation setup accepted.
 PASS Orbit cancellation setup actually holds body.
 PASS Death CONTROL cancels orbit and restores held-body gravity.
 PASS Inferno Orbit emits bounded pooled effects.
-SYNERGY Inferno Orbit: impacts=1, VFX emissions=5, cooldown=45.00
+SYNERGY Inferno Orbit: impacts=1, VFX emissions=5, cooldown=44.99
 PASS Equip Glacier Fist
 PASS Glacier Fist activation accepted.
 PASS Glacier buff leaves normal melee available.
@@ -130,7 +136,7 @@ PASS Cryo Crush completes within bounded duration.
 PASS Cryo Crush cooldown remains after action.
 PASS Cryo Crush physically lifts enemy and hits ground; peak=156.01
 PASS Cryo Crush emits bounded pooled effects.
-SYNERGY Cryo Crush: impacts=1, VFX emissions=8, cooldown=28.47
+SYNERGY Cryo Crush: impacts=1, VFX emissions=8, cooldown=28.48
 PASS Equip Meteor Slam
 PASS Meteor Slam no-target CONTROL.
 PASS Meteor Slam activation accepted.
@@ -138,11 +144,11 @@ PASS Meteor Slam completes within bounded duration.
 PASS Meteor Slam cooldown remains after action.
 PASS Meteor Slam lifts a prop and produces collision-driven shockwave.
 PASS Meteor Slam emits bounded pooled effects.
-SYNERGY Meteor Slam: impacts=1, VFX emissions=9, cooldown=33.55
+SYNERGY Meteor Slam: impacts=1, VFX emissions=9, cooldown=33.56
 BENCH population civilians=26, cops=9; 1280x720 single camera.
-MEASURED Forge idle phase=0: FPS=54.87, draws=201.0, pool=6.
-MEASURED Forge FX stress phase=1: FPS=54.38, draws=208.8, pool=6.
-MEASURED Forge FX stress phase=2: FPS=56.77, draws=208.9, pool=6.
-MEASURED Forge idle phase=3: FPS=56.18, draws=199.6, pool=6.
-FORGE COST paired means: idle=55.52 FPS, repeated pooled FX=55.57 FPS, difference=-0.05 FPS, frame delta=-0.016ms. Stress emits every 100ms; not a standalone GPU-time measurement.
+MEASURED Forge idle phase=0: FPS=64.39, draws=309.4, pool=6.
+MEASURED Forge FX stress phase=1: FPS=58.79, draws=319.5, pool=6.
+MEASURED Forge FX stress phase=2: FPS=62.65, draws=318.0, pool=6.
+MEASURED Forge idle phase=3: FPS=71.05, draws=307.8, pool=6.
+FORGE COST paired means: idle=67.72 FPS, repeated pooled FX=60.72 FPS, difference=7.00 FPS, frame delta=1.702ms. Stress emits every 100ms; not a standalone GPU-time measurement.
 LIMIT: no human feel test; real gameplay entry points, not hardware key injection. Free Play/Endless Fight remain disabled existing definitions.

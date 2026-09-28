@@ -4,6 +4,10 @@ Start at Home and choose **Hero Forge / Select Hero**. Previous/next buttons cho
 hero, two palette suit colors and two distinct unlocked powers. Changes save immediately
 through PlayerProgression's existing atomic JSON save. Save & Back returns to the
 unchanged mode cards. The same loadout is read by every mode that uses BuildCity.
+Each successful save plays a 0.85 s Cinemachine reveal of the preview (orbit from -28 to
++18 degrees, settling on the front view). Only the Forge preview camera carries a
+`CinemachineBrain` (manual update, unscaled time); the form stays interactive throughout
+and the gameplay/first-person cameras are not Cinemachine-driven.
 
 ## Controls and progression
 

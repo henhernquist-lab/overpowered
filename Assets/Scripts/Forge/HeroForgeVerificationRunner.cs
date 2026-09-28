@@ -80,6 +80,16 @@ public sealed class HeroForgeVerificationRunner : MonoBehaviour
         Check(screen.SelectPower(0,Power("ice"))&&menu.Profile.EquippedA!=menu.Profile.EquippedB,"Slot 1 collision repairs slot 2 immediately.");
         Check(!screen.SlotB.choices.Contains(Power("ice").DisplayName),"Slot 2 UI excludes duplicate.");
         Check(screen.SelectPower(0,Power("fire"))&&screen.SelectPower(1,Power("ice")),"Select Fire + Ice.");
+        Check(screen.HasCinemachinePreview&&screen.RevealActive,"Successful Forge save starts the Cinemachine preview reveal without blocking the form.");
+        Vector3 revealStart=screen.RevealCameraPosition;yield return null;
+        float startHeading=screen.RevealHeading,farthest=(screen.RevealCameraPosition-revealStart).magnitude;Capture(screen.Preview,"forge-reveal-start.png");
+        float revealUntil=Time.realtimeSinceStartup+.7f;
+        while(screen.RevealActive&&screen.RevealHeading<17.5f&&Time.realtimeSinceStartup<revealUntil){farthest=Mathf.Max(farthest,(screen.RevealCameraPosition-revealStart).magnitude);yield return null;}
+        float peakHeading=screen.RevealHeading;Capture(screen.Preview,"forge-reveal-peak.png");
+        Check(screen.RevealFrames>2&&farthest>.05f&&startHeading<-20&&peakHeading>15,
+            $"Cinemachine preview camera actually orbits the selected hero (heading {startHeading:F1} -> {peakHeading:F1} deg, camera moved up to {farthest:F2} m, {screen.RevealFrames} frames).");
+        yield return new WaitForSecondsRealtime(.8f);
+        Check(!screen.RevealActive&&Mathf.Abs(screen.RevealHeading)<.01f,"Short Forge reveal settles on the front view (heading 0) without delaying navigation.");
         Check(F.Resolve(Power("flight"),Power("strength"))==F.Resolve(Power("strength"),Power("flight")),"Pair lookup is order-independent.");
         Capture(screen.Preview,"forge-preview.png");
         yield return CaptureMenu(menu);
