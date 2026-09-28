@@ -13,8 +13,11 @@ public enum FeatureKind
     Water,   // a hole in every land/ground slab over Area: canal, basin, pond (the shared sea plane shows through)
     Deck,    // walkable deck over water at Height (bridge, pier), railings along the long sides, optional arches below
     Path,    // pavement strip of Width along Points (polyline), street props every Spacing from Props
-    Scatter  // seeded static recipes (or props) inside Area with minimum Spacing; Rows packs a grid; Stack stacks recipes
+    Scatter, // seeded static recipes (or props) inside Area with minimum Spacing; Rows packs a grid; Stack stacks recipes
+    Route    // no geometry: an authored pedestrian/patrol route along Points at Height (e.g. a quay promenade); see CityLayout.Routes
 }
+/// Who may use a route: civilians walk Walk routes, police patrol Patrol routes.
+[Flags] public enum RouteUse { None=0, Walk=1, Patrol=2 }
 [Serializable] public sealed class FeatureDefinition
 {
     public string Name;
@@ -31,6 +34,8 @@ public enum FeatureKind
     public bool Rows;
     [Tooltip("Scatter: yaw choices in degrees (seeded); Path/Deck ignore.")] public float[] Yaws=new float[]{0};
     [Tooltip("Path polyline or explicit Scatter positions (world x, z).")] public Vector2[] Points=new Vector2[0];
+    [Tooltip("Path / Deck / Route: who uses it as a route (CityLayout.Routes). None = no route along this feature.")] public RouteUse Walkers=RouteUse.Walk|RouteUse.Patrol;
+    [Tooltip("Path / Route: the polyline closes into a loop (otherwise walkers turn back at its ends).")] public bool Closed;
 }
 [Serializable] public sealed class DistrictDefinition
 {
@@ -82,6 +87,24 @@ public enum FeatureKind
     public float RecyclePerSecond=4, WanderRadius=70;
     public bool Enabled=true;
 }
+/// Pedestrian / patrol route generation (CityLayout.Plan -> CityPlan.Routes; CityRoutes turns them into Unity Splines).
+/// Every route is derived from the seeded plan or from authored feature data; nothing is placed per district ID.
+[Serializable] public sealed class RouteSettings
+{
+    [Tooltip("Civilians walk routes and police patrol routes. Off = the old random sidewalk-to-sidewalk wander (CONTROL).")] public bool Enabled=true;
+    [Tooltip("Sidewalk loops (every grid block) and patrol loops run this far in from the kerb (m).")] public float SidewalkInset=1.5f;
+    [Tooltip("Patrol loops circle a seeded k x k cluster of whole blocks, k in this range per district (loop length ~ 4k blocks+streets).")] public Vector2Int PatrolBlocks=new Vector2Int(2,2);
+    [Tooltip("Boulevard promenade loops run around each planted median piece this far beyond its kerb (m).")] public float BoulevardOffset=1.5f;
+    [Tooltip("Loops/lines are kept this far inside the island edge (m).")] public float EdgeMargin=3f;
+    [Tooltip("Deck (bridge/pier) routes stop this far short of the deck ends (m).")] public float DeckEndInset=1f;
+    [Tooltip("Routes shorter than this are dropped (m).")] public float MinLength=30f;
+    [Tooltip("Rounded corners: Bezier fillet radius at every polyline corner (m).")] public float CornerRadius=2.5f;
+    [Tooltip("Route spacing: baked arc-length sample spacing along each spline (m). Far NPCs ride these samples analytically.")] public float BakeSpacing=1f;
+    [Tooltip("A baked sample counts as on the NavMesh within this horizontal distance (m); routes with more off-mesh samples than MaxOffMeshFraction are dropped.")] public float OnMeshTolerance=.6f;
+    [Range(0,1)] public float MaxOffMeshFraction=.1f;
+    [Tooltip("Street crossings: a transfer is offered every TransferSpacing m along a route to the nearest point of another route within TransferDistance (NavMesh-clear straight line).")] public float TransferSpacing=12f, TransferDistance=22f;
+    [Tooltip("Walkers keep a seeded lateral lane within +/- this half-width of the route line (m), so a crowd does not walk single file.")] public float LaneHalfWidth=.6f;
+}
 [Serializable] public sealed class EncounterSiteRule
 {
     [Tooltip("Spread set-pieces across districts: each new one goes to the next district (round robin) that has a free site.")] public bool RotateDistricts=true;
@@ -110,6 +133,12 @@ public sealed class CityPlan
     public readonly List<int> SidewalkDistrict=new List<int>(), SiteDistrict=new List<int>();
     public readonly List<ArtPlacement> FeatureProps=new List<ArtPlacement>();
     public readonly List<string> Landmarks=new List<string>();
+    /// Planted boulevard median pieces (after cutting at crossing boulevards and water).
+    public sealed class Median { public int District; public string Name; public Rect Area; public bool AlongX; }
+    public readonly List<Median> Medians=new List<Median>();
+    /// A pedestrian/patrol route as a polyline of corners (y = the surface it runs on); CityRoutes fillets and bakes it.
+    public sealed class Route { public int District; public string Name, Kind; public RouteUse Use; public bool Closed; public readonly List<Vector3> Points=new List<Vector3>(); }
+    public readonly List<Route> Routes=new List<Route>();
     public List<DistrictDefinition> Districts;
     public Rect Island;
     public Vector3 Spawn;
@@ -141,6 +170,8 @@ public sealed class CityLayout : ScriptableObject
     public float NavVoxelSize=1f/6f; public int NavTileVoxels=192;
     public NpcLodSettings NpcLod=new NpcLodSettings();
     public EncounterSiteRule EncounterSites=new EncounterSiteRule();
+    [Header("Pedestrian / patrol routes (Unity Splines, generated from this plan)")]
+    public RouteSettings Routes=new RouteSettings();
 
     /// Building placements only (rooftop-reward buildings first). Kept for the menu skyline and existing callers.
     public List<BuildingPlacement> Generate(CitySettings config) => UseAuthoredBuildings ? new List<BuildingPlacement>(Buildings) : Plan(config).Buildings;
@@ -189,7 +220,72 @@ public sealed class CityLayout : ScriptableObject
         var order=Enumerable.Range(0,plan.Sidewalks.Count).OrderBy(i=>(plan.Sidewalks[i]-plan.Spawn).sqrMagnitude).ThenBy(i=>i).ToList();
         var walks=order.Select(i=>plan.Sidewalks[i]).ToList();var owners=order.Select(i=>plan.SidewalkDistrict[i]).ToList();
         plan.Sidewalks.Clear();plan.Sidewalks.AddRange(walks);plan.SidewalkDistrict.Clear();plan.SidewalkDistrict.AddRange(owners);
+        BuildRoutes(plan,config);
         return plan;
+    }
+
+    /// Routes from the finished plan (pure data, deterministic per seed): a sidewalk loop around every grid block, seeded
+    /// k x k block-cluster patrol loops, a promenade loop around every boulevard median piece, and every Path / Deck / Route
+    /// feature whose Walkers is not None. Nothing here reads a district name or index as a special case.
+    void BuildRoutes(CityPlan plan,CitySettings config)
+    {
+        var r=Routes;if(r==null)return;
+        var land=Expand(plan.Island,-r.EdgeMargin);
+        void Add(int d,string name,string kind,RouteUse use,bool closed,IEnumerable<Vector3> points)
+        {
+            var route=new CityPlan.Route{District=d,Name=name,Kind=kind,Use=use,Closed=closed};route.Points.AddRange(points);
+            float length=0;for(int i=1;i<route.Points.Count;i++)length+=Vector3.Distance(route.Points[i-1],route.Points[i]);
+            if(closed&&route.Points.Count>2)length+=Vector3.Distance(route.Points[route.Points.Count-1],route.Points[0]);
+            if(route.Points.Count>=2&&length>=r.MinLength&&use!=RouteUse.None)plan.Routes.Add(route);
+        }
+        IEnumerable<Vector3> Loop(Rect a,float y)=>new[]{new Vector3(a.xMin,y,a.yMin),new Vector3(a.xMax,y,a.yMin),new Vector3(a.xMax,y,a.yMax),new Vector3(a.xMin,y,a.yMax)};
+        float walk=config.SidewalkHeight;
+        // 1. Sidewalk loops: every block of every street grid.
+        for(int i=0;i<plan.Blocks.Count;i++){var b=plan.Blocks[i];Add(b.District,$"{Districts[b.District].Name} sidewalk loop {i}","sidewalk",RouteUse.Walk,true,Loop(Expand(b.Area,-r.SidewalkInset),walk));}
+        // 2. Patrol loops: seeded k x k clusters of blocks per grid district, around the cluster's outer sidewalks (crossing the
+        //    streets inside it). A cluster that is not a full rectangle of dry blocks falls back to one loop per block.
+        for(int d=0;d<Districts.Count;d++)
+        {
+            var blocks=plan.Blocks.Where(b=>b.District==d).ToList();if(blocks.Count==0)continue;
+            var rng=new System.Random(unchecked(config.Seed*6007+d*353+11));
+            int k=Mathf.Max(1,rng.Next(Mathf.Max(1,r.PatrolBlocks.x),Mathf.Max(r.PatrolBlocks.x,r.PatrolBlocks.y)+1)),ox=rng.Next(k),oz=rng.Next(k);
+            var xs=blocks.Select(b=>Mathf.Round(b.Area.xMin*100)).Distinct().OrderBy(v=>v).ToList();var zs=blocks.Select(b=>Mathf.Round(b.Area.yMin*100)).Distinct().OrderBy(v=>v).ToList();
+            var clusters=blocks.GroupBy(b=>((xs.IndexOf(Mathf.Round(b.Area.xMin*100))+ox)/k,(zs.IndexOf(Mathf.Round(b.Area.yMin*100))+oz)/k)).OrderBy(g=>g.Key.Item2).ThenBy(g=>g.Key.Item1);
+            int n=0;
+            foreach(var c in clusters)
+            {
+                var area=c.Select(b=>b.Area).Aggregate((a,b)=>Rect.MinMaxRect(Mathf.Min(a.xMin,b.xMin),Mathf.Min(a.yMin,b.yMin),Mathf.Max(a.xMax,b.xMax),Mathf.Max(a.yMax,b.yMax)));
+                int cols=c.Select(b=>Mathf.Round(b.Area.xMin*100)).Distinct().Count(),rows=c.Select(b=>Mathf.Round(b.Area.yMin*100)).Distinct().Count();
+                bool whole=c.Count()==cols*rows&&!plan.Water.Any(w=>Expand(w,r.SidewalkInset).Overlaps(area));
+                foreach(var a in whole?new[]{area}:c.Select(b=>b.Area).ToArray())
+                    Add(d,$"{Districts[d].Name} patrol loop {n++}","patrol",RouteUse.Patrol,true,Loop(Expand(a,-r.SidewalkInset),walk));
+            }
+        }
+        // 3. Boulevard promenades: a loop around each planted median piece, clipped inside the island edge.
+        foreach(var m in plan.Medians)
+        {
+            var a=Expand(m.Area,r.BoulevardOffset);
+            a=Rect.MinMaxRect(Mathf.Max(a.xMin,land.xMin),Mathf.Max(a.yMin,land.yMin),Mathf.Min(a.xMax,land.xMax),Mathf.Min(a.yMax,land.yMax));
+            if(a.width<=m.Area.width*.5f||a.height<=m.Area.height*.5f)continue;
+            Add(m.District,m.Name+" promenade","boulevard",RouteUse.Walk|RouteUse.Patrol,true,Loop(a,0));
+        }
+        // 4. Authored walkways: park/feature paths, bridges and piers (long axis), and Route features.
+        for(int d=0;d<Districts.Count;d++)foreach(var f in Districts[d].Features)
+        {
+            if(f.Walkers==RouteUse.None)continue;
+            switch(f.Kind)
+            {
+                case FeatureKind.Path: case FeatureKind.Route:
+                    Add(d,f.Name,f.Kind==FeatureKind.Path?"path":"route",f.Walkers,f.Closed,f.Points.Select(p=>new Vector3(p.x,f.Height,p.y)));break;
+                case FeatureKind.Deck:
+                {
+                    var a=f.Area;bool alongX=a.width>=a.height;float e=r.DeckEndInset;
+                    var from=alongX?new Vector3(a.xMin+e,f.Height,a.center.y):new Vector3(a.center.x,f.Height,a.yMin+e);
+                    var to=alongX?new Vector3(a.xMax-e,f.Height,a.center.y):new Vector3(a.center.x,f.Height,a.yMax-e);
+                    Add(d,f.Name,"deck",f.Walkers,false,new[]{from,to});break;
+                }
+            }
+        }
     }
 
     void Grid(CityPlan plan,int d,DistrictDefinition district,CitySettings config,System.Random rng,List<BuildingPlacement> buildings,Dictionary<LandmarkDefinition,Vector2> landmarkAt)
@@ -281,6 +377,7 @@ public sealed class CityLayout : ScriptableObject
                 }
                 break;
             case FeatureKind.Scatter: pendingScatter.Add((d,f)); break;
+            case FeatureKind.Route: break; // routes only (BuildRoutes); no geometry, no sidewalk points
         }
     }
     readonly List<(int District,FeatureDefinition Feature)> pendingScatter=new List<(int,FeatureDefinition)>();
@@ -341,6 +438,7 @@ public sealed class CityLayout : ScriptableObject
                 if(p.width<2||p.height<2)continue;
                 int d=plan.DistrictAt(new Vector3(p.center.x,0,p.center.y));
                 plan.Slabs.Add(new CityPlan.Slab{District=d,Area=p,Top=.3f,Bottom=0,Color=CityColor.Lawn});
+                plan.Medians.Add(new CityPlan.Median{District=d,Name=b.Name,Area=p,AlongX=alongX});
                 float len=alongX?p.width:p.height;
                 for(float t=b.RecipeSpacing*.5f;t<len;t+=b.RecipeSpacing)
                 {
@@ -386,6 +484,9 @@ public sealed class CityLayout : ScriptableObject
         if(b.xMax<a.xMax)yield return Rect.MinMaxRect(b.xMax,y0,a.xMax,y1);
     }
 
+    /// Authored Docks quay walk: along the apron between the harbour road and the container yard, over the quay bridge.
+    public static FeatureDefinition QuayPromenade()=>new FeatureDefinition{Name="Quay promenade",Kind=FeatureKind.Route,Height=.08f,
+        Points=new[]{new Vector2(-268,-165.5f),new Vector2(104,-165.5f),new Vector2(104,-191),new Vector2(152,-191),new Vector2(152,-165.5f),new Vector2(270,-165.5f)}};
     static List<DistrictDefinition> DefaultDistricts()=>new List<DistrictDefinition>
     {
         new DistrictDefinition{Name="Downtown",Region=new Rect(-96,-96,192,256),Area=new Rect(-84,-84,168,232),
@@ -426,10 +527,11 @@ public sealed class CityLayout : ScriptableObject
                 new FeatureDefinition{Name="Harbour Boulevard bridge",Kind=FeatureKind.Deck,Area=new Rect(112,-108,32,24),Height=0,Color=CityColor.Cream,Railing=1.2f,Stack=new Vector2Int(1,1)},
                 new FeatureDefinition{Name="Quay bridge",Kind=FeatureKind.Deck,Area=new Rect(112,-200,32,18),Height=.08f,Color=CityColor.Slate,Railing=1.1f,Stack=new Vector2Int(1,1)},
                 new FeatureDefinition{Name="Lighthouse pier",Kind=FeatureKind.Deck,Area=new Rect(-20,-250,12,44),Height=.08f,Color=CityColor.Wood,Railing=1f},
-                new FeatureDefinition{Name="Lighthouse platform",Kind=FeatureKind.Deck,Area=new Rect(-28,-272,28,24),Height=.08f,Color=CityColor.Slate,Railing=1f},
+                new FeatureDefinition{Name="Lighthouse platform",Kind=FeatureKind.Deck,Area=new Rect(-28,-272,28,24),Height=.08f,Color=CityColor.Slate,Railing=1f,Walkers=RouteUse.None},
                 new FeatureDefinition{Name="Fishing pier",Kind=FeatureKind.Deck,Area=new Rect(56,-238,10,32),Height=.08f,Color=CityColor.Wood,Railing=1f},
                 new FeatureDefinition{Name="Gantry cranes",Kind=FeatureKind.Scatter,Height=.08f,Spacing=24,Recipes=new[]{"Gantry crane"},Points=new[]{new Vector2(-150,-202),new Vector2(-90,-202),new Vector2(20,-202),new Vector2(200,-172)}},
                 new FeatureDefinition{Name="Container yard",Kind=FeatureKind.Scatter,Area=new Rect(-270,-200,330,30),Height=.08f,Rows=true,Spacing=7,Stack=new Vector2Int(1,3),Recipes=new[]{"Shipping container"},Yaws=new[]{90f}},
-                new FeatureDefinition{Name="Dock crates",Kind=FeatureKind.Scatter,Area=new Rect(150,-205,130,40),Height=.08f,Count=14,Spacing=5,Props=new[]{CityPropKind.Planter,CityPropKind.Trash,CityPropKind.Newspaper}}}}
+                new FeatureDefinition{Name="Dock crates",Kind=FeatureKind.Scatter,Area=new Rect(150,-205,130,40),Height=.08f,Count=14,Spacing=5,Props=new[]{CityPropKind.Planter,CityPropKind.Trash,CityPropKind.Newspaper}},
+                QuayPromenade()}}
     };
 }

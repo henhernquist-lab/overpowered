@@ -1,0 +1,8 @@
+PASS Run's route fingerprint for seed 2409 exists.
+PASS Free Play selected (seed 2409, routes ON)
+PASS SEPARATE PROCESS: seed 2409 rebuilds byte-identical routes (59 routes, 994 transfers, hash 5333CDE5).
+PASS Walkers join routes in the new process (22 following after 3 s).
+PASS Run's route fingerprint for seed 3226 exists.
+PASS Free Play selected (seed 3226, routes ON)
+PASS SEPARATE PROCESS: seed 3226 rebuilds byte-identical routes (61 routes, 873 transfers, hash 5A77783B).
+PASS Walkers join routes in the new process (26 following after 3 s).

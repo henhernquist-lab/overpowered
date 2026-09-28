@@ -114,6 +114,8 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 3
+      Closed: 0
     - Name: Pond
       Kind: 1
       Area:
@@ -135,6 +137,8 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 3
+      Closed: 0
     - Name: Pond footbridge
       Kind: 2
       Area:
@@ -156,6 +160,8 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 3
+      Closed: 0
     - Name: Loop path
       Kind: 3
       Area:
@@ -183,6 +189,8 @@ MonoBehaviour:
       - {x: -150, y: 120}
       - {x: -150, y: 60}
       - {x: -108, y: 60}
+      Walkers: 3
+      Closed: 0
     - Name: South gate path
       Kind: 3
       Area:
@@ -206,6 +214,8 @@ MonoBehaviour:
       Points:
       - {x: -192, y: -84}
       - {x: -192, y: -40}
+      Walkers: 3
+      Closed: 0
     - Name: Pond path south
       Kind: 3
       Area:
@@ -229,6 +239,8 @@ MonoBehaviour:
       Points:
       - {x: -210, y: -40}
       - {x: -210, y: 4}
+      Walkers: 3
+      Closed: 0
     - Name: Pond path north
       Kind: 3
       Area:
@@ -253,6 +265,8 @@ MonoBehaviour:
       - {x: -210, y: 42}
       - {x: -210, y: 60}
       - {x: -150, y: 60}
+      Walkers: 3
+      Closed: 0
     - Name: Tower path
       Kind: 3
       Area:
@@ -276,6 +290,8 @@ MonoBehaviour:
       Points:
       - {x: -196, y: 60}
       - {x: -196, y: 120}
+      Walkers: 3
+      Closed: 0
     - Name: Park trees
       Kind: 4
       Area:
@@ -303,6 +319,8 @@ MonoBehaviour:
       - 60
       - 90
       Points: []
+      Walkers: 3
+      Closed: 0
   - Name: Residential
     Region:
       serializedVersion: 2
@@ -358,6 +376,8 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 3
+      Closed: 0
     - Name: Grand Canal Bridge
       Kind: 2
       Area:
@@ -379,6 +399,8 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 3
+      Closed: 0
     - Name: North footbridge
       Kind: 2
       Area:
@@ -400,6 +422,8 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 3
+      Closed: 0
   - Name: Docks
     Region:
       serializedVersion: 2
@@ -459,6 +483,8 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 3
+      Closed: 0
     - Name: East basin
       Kind: 1
       Area:
@@ -480,6 +506,8 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 3
+      Closed: 0
     - Name: Harbour Boulevard bridge
       Kind: 2
       Area:
@@ -501,6 +529,8 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 3
+      Closed: 0
     - Name: Quay bridge
       Kind: 2
       Area:
@@ -522,6 +552,8 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 3
+      Closed: 0
     - Name: Lighthouse pier
       Kind: 2
       Area:
@@ -543,6 +575,8 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 3
+      Closed: 0
     - Name: Lighthouse platform
       Kind: 2
       Area:
@@ -564,6 +598,8 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 0
+      Closed: 0
     - Name: Fishing pier
       Kind: 2
       Area:
@@ -585,6 +621,8 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 3
+      Closed: 0
     - Name: Gantry cranes
       Kind: 4
       Area:
@@ -611,6 +649,8 @@ MonoBehaviour:
       - {x: -90, y: -202}
       - {x: 20, y: -202}
       - {x: 200, y: -172}
+      Walkers: 3
+      Closed: 0
     - Name: Container yard
       Kind: 4
       Area:
@@ -633,6 +673,8 @@ MonoBehaviour:
       Yaws:
       - 90
       Points: []
+      Walkers: 3
+      Closed: 0
     - Name: Dock crates
       Kind: 4
       Area:
@@ -654,6 +696,37 @@ MonoBehaviour:
       Yaws:
       - 0
       Points: []
+      Walkers: 3
+      Closed: 0
+    - Name: Quay promenade
+      Kind: 5
+      Area:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      Height: 0.08
+      Color: 1
+      Recipes: []
+      Props: 
+      Count: 0
+      Spacing: 8
+      Width: 4
+      Railing: 1.1
+      Stack: {x: 1, y: 1}
+      Rows: 0
+      Yaws:
+      - 0
+      Points:
+      - {x: -268, y: -165.5}
+      - {x: 104, y: -165.5}
+      - {x: 104, y: -191}
+      - {x: 152, y: -191}
+      - {x: 152, y: -165.5}
+      - {x: 270, y: -165.5}
+      Walkers: 3
+      Closed: 0
   Boulevards:
   - Name: West Boulevard
     Area:
@@ -734,4 +807,19 @@ MonoBehaviour:
     RotateDistricts: 1
     PreferredMinDistance: 45
     MaxDistance: 320
+  Routes:
+    Enabled: 1
+    SidewalkInset: 1.5
+    PatrolBlocks: {x: 2, y: 2}
+    BoulevardOffset: 1.5
+    EdgeMargin: 3
+    DeckEndInset: 1
+    MinLength: 30
+    CornerRadius: 2.5
+    BakeSpacing: 1
+    OnMeshTolerance: 0.6
+    MaxOffMeshFraction: 0.1
+    TransferSpacing: 12
+    TransferDistance: 22
+    LaneHalfWidth: 0.6
   StackHeight: 2.6

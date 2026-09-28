@@ -33,6 +33,10 @@ public sealed class CityNpc : MonoBehaviour
     public bool Hostile => Role == NpcRole.Criminal ? world.Progression.Data.Side == PlayerSide.Hero :
         (Role == NpcRole.Cop || Role == NpcRole.PursuingHero) && world.PoliceHostileTo(this);
     public NavMeshAgent Agent { get; private set; }
+    // ---- Phase 8 routes (RouteWalker.cs): route following for civilians/police; null for criminals.
+    public RouteWalker Walker { get; private set; }
+    /// Body velocity: the far-route rail while riding, otherwise the NavMeshAgent's (presentation reads this).
+    public Vector3 Velocity => Walker!=null&&Walker.Riding ? Walker.Velocity : Agent!=null&&Agent.enabled ? Agent.velocity : Vector3.zero;
     public event System.Action<bool> Damaged;
     /// Fired at RELEASE, whether the committed shape hits or misses (audio/presentation stay in sync with the strike).
     public event System.Action Attacked;
@@ -85,6 +89,7 @@ public sealed class CityNpc : MonoBehaviour
         npc.Agent.stoppingDistance=c.AttackRange*.5f;
         npc.circleSign=(npc.GetEntityId().GetHashCode()&1)==0?1:-1; npc.combatSpeed=archetype!=null?archetype.MoveSpeed:c.CopSpeed;
         npc.animationTuning=HumanoidPresentation.Create(root,c.Height,null,npc).Tuning;
+        npc.Walker=RouteWalker.For(npc, world, role);   // Phase 8 routes
         world.Npcs.Add(npc); Spawned?.Invoke(npc); return npc;
     }
     public void Alarm(Vector3 position) { alarm=position; fleeUntil=Time.time+world.Tuning.Npcs.FleeSeconds; nextPath=0; }
@@ -129,9 +134,12 @@ public sealed class CityNpc : MonoBehaviour
         Agent.speed=combatant ? combatSpeed : Role==NpcRole.Civilian ? (Fleeing ? c.FleeSpeed : c.CivilianSpeed) : Role==NpcRole.PursuingHero ? c.HeroSpeed : c.CopSpeed;
         float distance=Vector3.Distance(transform.position,world.Hero.transform.position);
         bool aggro=combatant && (AlwaysAggro || distance<c.DetectionRange);
+        // Phase 8 routes: any response (flee, hostility, combat, encounter) takes the body off its route on this tick; re-path now.
+        if (Walker!=null && Walker.Override(aggro || Fleeing || Encounter!=null || (Hostile && (AlwaysAggro || distance<c.DetectionRange)))) nextPath=0f;
         if (aggro) { if (TickAttack(distance, Encounter!=null)) return; }
         else Withdraw();
         if(Encounter!=null&&Encounter.Drive(this)) return;
+        if (Walker!=null && Walker.WalkRoute()) return;   // Phase 8 routes: ordinary movement walks a route (false = old wander)
         if (Time.time<nextPath) return;
         nextPath=Time.time+(Hostile || Fleeing ? c.RepathSeconds : c.WanderSeconds);
         if (aggro) { CombatMove(); return; }
@@ -335,7 +343,7 @@ public sealed class CityNpc : MonoBehaviour
         }
         return ((p1+d1*s)-(p2+d2*t)).magnitude;
     }
-    void OnDisable() { CancelAttack(); }
+    void OnDisable() { CancelAttack(); Walker?.Leave(); /* Phase 8 routes */ }
     void OnDestroy() { if (world!=null) { world.AttackTokens.Release(this); world.Npcs.Remove(this); } }
     public void DirectTo(Vector3 destination,float speed)
     {

@@ -17,6 +17,10 @@ public sealed class CityDistrict : MonoBehaviour
     public CityArt Art {get;private set;}
     public CityPlan Plan {get;private set;}
     public CityLayout Layout {get;private set;}
+    /// Pedestrian / patrol routes (Unity Splines) built from Plan.Routes after the NavMesh; see CityRoutes / RouteWalker.
+    public CityRoutes Routes {get;private set;}
+    /// Walkers use routes (CityLayout.Routes.Enabled and at least one route baked). Off = the old sidewalk wander.
+    public bool RoutesActive => Routes!=null && Layout.Routes!=null && Layout.Routes.Enabled && Routes.Routes.Count>0;
     public IReadOnlyList<DistrictDefinition> DistrictDefinitions => Plan.Districts;
     /// NavMesh build time per district region (ms), same order as the districts.
     public readonly List<double> NavMeshMilliseconds = new List<double>();
@@ -67,6 +71,9 @@ public sealed class CityDistrict : MonoBehaviour
         }
         Art.Populate(Plan); Stage("street/rooftop/feature props");
         BuildNavMesh(tuning, layout);
+        var routes = new GameObject("City routes"); routes.transform.SetParent(transform, false);
+        Routes = routes.AddComponent<CityRoutes>(); Routes.Build(Plan, layout.Routes ?? new RouteSettings());
+        Stage("routes (splines, NavMesh heights, crossings)");
     }
     /// Runtime NavMesh, built district by district into ONE NavMeshData over the whole island: each step adds that district's
     /// sources and calls NavMeshBuilder.UpdateNavMeshData, which rebuilds only the tiles whose inputs changed (that district's

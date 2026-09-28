@@ -138,3 +138,7 @@ InitTestScene*.unity*
 
 # Phase 6 lighting verification saves
 /Verification/Lighting/saves/
+
+# Phase 8 spline route verification saves
+/Verification/Splines/saves/
+/Verification/Splines/**/saves/

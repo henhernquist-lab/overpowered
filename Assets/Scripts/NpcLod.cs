@@ -9,7 +9,10 @@ using UnityEngine.AI;
 /// and advanced manually every FarAnimatorInterval, the presentation overlay is off, skinning runs only while visible,
 /// agents skip obstacle avoidance. Promotion restores every saved setting.
 /// Civilians that are far, unseen and not part of an encounter are moved to an unseen sidewalk around the hero, so the
-/// large world keeps a local crowd instead of spreading 24 people over half a square kilometre.
+/// large world keeps a local crowd instead of spreading 24 people over half a square kilometre. With routes
+/// (CityLayout.Routes) the unseen point is a Walk-route point and the civilian keeps walking that route.
+/// Far route walkers ride their route analytically (RouteWalker.Ride): every frame while any of their renderers is
+/// visible, every FarThinkInterval otherwise; no NavMesh path requests.
 [DefaultExecutionOrder(-50)]
 public sealed class NpcLod : MonoBehaviour
 {
@@ -24,7 +27,7 @@ public sealed class NpcLod : MonoBehaviour
     WorldSession world; int actorLayer; float recycleBudget;
     sealed class State
     {
-        public bool Far; public float NextThink, AnimatorTime; public int Thinks, AnimatorSteps;
+        public bool Far; public float NextThink, AnimatorTime, RideTime; public int Thinks, AnimatorSteps;
         public Animator Animator; public HumanoidPresentation Presentation; public SkinnedMeshRenderer[] Skins; public Renderer[] Renderers;
         public ObstacleAvoidanceType Avoidance;
     }
@@ -65,8 +68,11 @@ public sealed class NpcLod : MonoBehaviour
             if (s.Far)
             {
                 farCount++;
+                // Phase 8 routes: far rail - every frame while seen, every FarThinkInterval otherwise (RouteWalker.Ride).
+                if (npc.Walker != null && npc.Walker.Riding && ((s.RideTime += Time.deltaTime) >= Settings.FarThinkInterval || Seen(s))) { npc.Walker.Ride(s.RideTime); s.RideTime = 0; }
                 s.AnimatorTime += Time.deltaTime;
-                if (s.AnimatorTime >= Settings.FarAnimatorInterval && s.Animator != null && npc.gameObject.activeInHierarchy) { s.Animator.Update(s.AnimatorTime); s.AnimatorTime = 0; s.AnimatorSteps++; }
+                if (s.AnimatorTime >= Settings.FarAnimatorInterval && s.Animator != null && npc.gameObject.activeInHierarchy)
+                { if (s.Presentation != null) s.Presentation.FarLocomotion(); s.Animator.Update(s.AnimatorTime); s.AnimatorTime = 0; s.AnimatorSteps++; }
             }
             else nearCount++;
         }
@@ -93,7 +99,8 @@ public sealed class NpcLod : MonoBehaviour
         if (s.Presentation != null) s.Presentation.enabled = false;
         foreach (var skin in s.Skins) if (skin != null) skin.updateWhenOffscreen = false;
         if (npc.Agent != null) { s.Avoidance = npc.Agent.obstacleAvoidanceType; npc.Agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance; }
-        s.NextThink = Time.time + Random.value * Settings.FarThinkInterval;
+        s.NextThink = Time.time + Random.value * Settings.FarThinkInterval; s.RideTime = 0;
+        npc.Walker?.OnLod(true);   // Phase 8 routes
     }
     void Promote(CityNpc npc, State s)
     {
@@ -102,6 +109,7 @@ public sealed class NpcLod : MonoBehaviour
         if (s.Presentation != null) s.Presentation.enabled = true;
         foreach (var skin in s.Skins) if (skin != null) skin.updateWhenOffscreen = true;
         if (npc.Agent != null) npc.Agent.obstacleAvoidanceType = s.Avoidance;
+        npc.Walker?.OnLod(false);   // Phase 8 routes
     }
     /// Test/diagnostic access: the saved state is authoritative, so a forced tier goes through the same code path.
     public void Force(CityNpc npc, bool far)
@@ -121,6 +129,9 @@ public sealed class NpcLod : MonoBehaviour
             if (npc == null || npc.Dead || npc.Role != NpcRole.Civilian || npc.Encounter != null || npc.Fleeing || npc.Agent == null || !npc.Agent.isOnNavMesh) continue;
             if (Vector3.Distance(npc.transform.position, hero) < Settings.RecycleRadius) continue;
             if (!states.TryGetValue(npc, out var s) || Seen(s)) continue;
+            // Phase 8 routes: an unseen walk-route point in the same band instead of a sidewalk point; it walks on from there.
+            if (npc.Walker != null && npc.Walker.Recycle(p => { float d = Vector3.Distance(p, hero); return d >= Settings.RecycleDistance.x && d <= Settings.RecycleDistance.y && !Visible(camera, p); }, out bool moved))
+            { if (moved) { Recycled++; recycleBudget -= 1f; } continue; }
             for (int attempt = 0; attempt < 12; attempt++)
             {
                 var point = sidewalks[Random.Range(0, sidewalks.Count)];

@@ -45,6 +45,17 @@ public sealed class GameTuning : ScriptableObject
     public float Height = 1.8f, Radius = .35f, Acceleration = 20f, AngularSpeed = 360f, NavSampleRadius = 5f;
     public float DestroyDelay = 1.5f, MinimumWanderDistance = 2f, DetectionRange = 100f;
     public Color CivilianColor = new Color(.9f,.75f,.32f), CopColor = new Color(.08f,.2f,.65f), HeroColor = new Color(.85f,.15f,.15f);
+    [Header("Routes (geometry lives in CityLayout.Routes)")]
+    [Tooltip("Police walking a patrol route when not responding (m/s). Civilians walk routes at CivilianSpeed.")] public float PatrolSpeed = 2.2f;
+    [Tooltip("Per-walker speed variation: x (1 +/- this), seeded per NPC.")] [Range(0f,.5f)] public float RouteSpeedJitter = .12f;
+    [Tooltip("Near walkers steer the NavMeshAgent at a point this far ahead on the route (m); re-path when it moved RouteRepathDistance.")] public float RouteLookahead = 4f, RouteRepathDistance = 1.5f;
+    [Tooltip("Rejoin radius: a walker within this distance of its route line is on it (m). One pushed farther than RouteLeaveDistance walks back.")] public float RejoinRadius = 1.5f, RouteLeaveDistance = 4f;
+    [Tooltip("Chance a walker takes a street-crossing transfer to another route when it passes one.")] [Range(0f,1f)] public float TransferChance = .1f;
+    [Tooltip("Far riders: an initial offset from the route line fades out over this time (s), so starting the rail never snaps the body.")] public float RailBlendSeconds = 1.5f;
+    [Tooltip("Far riders: if something else moved the body more than this from its rail position (m), the rider hands back to the NavMeshAgent.")] public float RailDisplacement = .75f;
+    [Tooltip("A walker that has not reached its join point in this time re-picks the nearest route (s).")] public float JoinTimeout = 20f;
+    [Tooltip("Nearest-route search radius when joining or rejoining (m); none within it = the old sidewalk wander.")] public float RouteSearchRadius = 250f;
+    [Tooltip("A near walker that made no progress along its route for this long turns around and re-paths (s).")] public float RouteStuckSeconds = 3f;
 }
 [Serializable] public sealed class ProgressionSettings
 {
