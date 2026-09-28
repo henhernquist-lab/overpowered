@@ -308,13 +308,16 @@ public sealed class CityArt : MonoBehaviour
     void Skirt(CityPlan plan,BackdropSettings backdrop)
     {
         var c=new Vector3(plan.Island.center.x,plan.WaterLevel-20+backdrop.SkirtHeight*.5f,plan.Island.center.y);float r=backdrop.SkirtRadius,h=backdrop.SkirtHeight+20;
-        Silhouette(c+Vector3.forward*r,new Vector3(2*r+20,h,10),Quaternion.identity,backdrop.SkirtColor);Silhouette(c+Vector3.back*r,new Vector3(2*r+20,h,10),Quaternion.identity,backdrop.SkirtColor);
-        Silhouette(c+Vector3.right*r,new Vector3(10,h,2*r+20),Quaternion.identity,backdrop.SkirtColor);Silhouette(c+Vector3.left*r,new Vector3(10,h,2*r+20),Quaternion.identity,backdrop.SkirtColor);
+        Silhouette(c+Vector3.forward*r,new Vector3(2*r+20,h,10),Quaternion.identity,backdrop.SkirtColor).name=HazeSkirtName;Silhouette(c+Vector3.back*r,new Vector3(2*r+20,h,10),Quaternion.identity,backdrop.SkirtColor).name=HazeSkirtName;
+        Silhouette(c+Vector3.right*r,new Vector3(10,h,2*r+20),Quaternion.identity,backdrop.SkirtColor).name=HazeSkirtName;Silhouette(c+Vector3.left*r,new Vector3(10,h,2*r+20),Quaternion.identity,backdrop.SkirtColor).name=HazeSkirtName;
     }
-    void Silhouette(Vector3 at,Vector3 size,Quaternion rotation,CityColor color)
+    /// Name of the four haze-skirt walls (VisualPreset may hide them when its sky paints the lower half in the fog colour).
+    public const string HazeSkirtName="Backdrop haze skirt";
+    GameObject Silhouette(Vector3 at,Vector3 size,Quaternion rotation,CityColor color)
     {
         var go=Piece(BackdropRoot,"Backdrop silhouette",at,size,color);go.layer=Rendering.BackdropLayer;go.transform.rotation=rotation;
         var r=go.GetComponent<Renderer>();r.shadowCastingMode=ShadowCastingMode.Off;r.receiveShadows=false;
+        return go;
     }
     void StaticRoot(GameObject root){staticRoots.Add(root);}
     /// Call once all static geometry exists (and before any capture render). Legacy modes combine as before; StaticBatching and
