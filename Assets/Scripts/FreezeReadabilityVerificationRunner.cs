@@ -79,30 +79,6 @@ public sealed class FreezeReadabilityVerificationRunner : MonoBehaviour
         Log("MEASURED palette contrast vs "+backdrop+": cream "+cream.ToString("F2")+":1, navy outline "+navy.ToString("F2")+":1");
         Check(Mathf.Max(cream,navy)>=3f,"Palette glyph colours reach 3:1 against "+backdrop+".");
     }
-    IEnumerator SynergyFreeze(ForgeCatalog catalog,PowerDefinition a,PowerDefinition b,string id)
-    {
-        var definition=catalog.Resolve(a,b);Check(definition!=null&&definition.Id==id,"Catalog pair "+a.Id+"+"+b.Id+" resolves to "+id+".");
-        Check(FindAnyObjectByType<ModeScreens>().Profile.SetLoadout(catalog.Heroes[0],a,b,CityColor.Teal,CityColor.Cyan),"Save "+definition.DisplayName+" pair through ownership/equip gates.");
-        GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/free-play"));yield return Scene(GameFlow.CityScene);
-        W.Hero.enabled=false;var cc=W.Hero.GetComponent<CharacterController>();cc.enabled=false;W.Hero.transform.position=new Vector3(0,151,0);cc.enabled=true;W.Hero.ResetMotion();W.Hero.transform.forward=Vector3.forward;
-        var floor=GameObject.CreatePrimitive(PrimitiveType.Cube);floor.transform.position=new Vector3(0,149.5f,0);floor.transform.localScale=new Vector3(100,1,100);floor.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Teal);
-        Cam.GetComponent<ThirdPersonCamera>().enabled=false;Cam.transform.position=new Vector3(0,152,-8);Cam.transform.forward=Vector3.forward;
-        var victim=Actor(new Vector3(0,151,id=="glacier-fist"?2.5f:6));var control=Actor(new Vector3(12,151,6),NpcRole.Cop);Physics.SyncTransforms();yield return null;
-        int baseline=Pool.ActiveCount,count=Pool.PoolCount;var r=W.Powers.SynergyRunner;
-        if(id=="frostwake")W.Powers.Flight.Fuel=6;
-        Check(r.Definition==definition&&r.TryActivate(),definition.DisplayName+" activated through the real synergy gate.");
-        if(id=="glacier-fist"){yield return null;yield return null;Check(W.Hero.TryPunch(),"Glacier Fist empowered punch through the existing melee gate.");yield return new WaitForSeconds(.3f);}
-        float until=Time.time+3;while(!victim.IceFrozen&&Time.time<until)yield return null;
-        yield return null;Shape(victim.gameObject,definition.DisplayName+" NPC");
-        Check(AllIce(victim)&&victim.GetComponent<HumanoidPresentation>().FrozenOverlay,definition.DisplayName+" uses the shared FrozenLook (Cyan palette material, held presentation).");
-        if(id=="cryo-crush"){yield return new WaitForSeconds(.3f);Check(Glyph(victim.gameObject)!=null&&Glyph(victim.gameObject).transform.position.y>victim.transform.position.y+1.5f,"Cryo Crush glyph follows the lifted captive: glyph y="+Glyph(victim.gameObject).transform.position.y.ToString("F2")+", captive y="+victim.transform.position.y.ToString("F2"));}
-        yield return Capture(victim.gameObject,id);
-        Check(Glyph(control.gameObject)==null&&!control.Frozen,definition.DisplayName+" far CONTROL has no glyph or freeze.");
-        until=Time.time+10;while((r.Busy||victim!=null&&!victim.Dead&&victim.IceFrozen)&&Time.time<until)yield return null;yield return null;yield return null;
-        Check(Pool.ActiveCount==baseline&&(victim==null||Glyph(victim.gameObject)==null),definition.DisplayName+" thaw/death releases the glyph ("+(victim!=null&&victim.Dead?"died":"thawed")+").");
-        Check(Pool.PoolCount==count&&Pool.Growths==0,definition.DisplayName+" reuses preallocated markers (no growth).");
-        GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);
-    }
     IEnumerator Checks()
     {
         yield return Scene(GameFlow.HomeScene);var f=Resources.Load<ForgeCatalog>("ForgeCatalog");var p=FindAnyObjectByType<ModeScreens>().Profile;var ice=Resources.Load<PowerDefinition>("Powers/ice");var fire=Resources.Load<PowerDefinition>("Powers/fire");
@@ -123,21 +99,27 @@ public sealed class FreezeReadabilityVerificationRunner : MonoBehaviour
         control.Freeze(.6f,ice:false);yield return null;
         Check(control.Frozen&&!control.IceFrozen&&Glyph(control.gameObject)==null&&Mats(control)==controlLook&&control.GetComponent<HumanoidPresentation>().Animator.speed==1,"Non-ice hold CONTROL (Freeze(0.6, ice:false), the call CrimeEncounter police suppression makes) stops the NPC without frost glyph or material swap.");
         yield return new WaitForSeconds(.7f);Check(!control.Frozen&&Glyph(control.gameObject)==null,"Suppression CONTROL ends without leaving presentation behind.");
+        control.Root(.6f);yield return null;Check(control.Rooted&&!control.Frozen&&!control.IceFrozen&&Glyph(control.gameObject)==null&&Mats(control)==controlLook&&control.GetComponent<HumanoidPresentation>().Animator.speed==1,"Root CONTROL (CityNpc.Root, the hold Darkness, Void Grasp and Eclipse Beam apply) is not a freeze: no frost glyph, material swap or held pose.");
+        yield return new WaitForSeconds(.7f);Check(!control.Rooted&&Glyph(control.gameObject)==null,"Root CONTROL ends without leaving presentation behind.");
         var prop=GameObject.CreatePrimitive(PrimitiveType.Cube);prop.transform.position=new Vector3(0,151,8);prop.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Teal);var body=prop.AddComponent<Rigidbody>();body.useGravity=false;body.constraints=RigidbodyConstraints.FreezeRotation;Physics.SyncTransforms();W.Powers.Tick(100,true);Aim(prop.transform.position);
         Check(W.Powers.Use(rt),"Direct Ice uses the real power on a Teal physics prop.");yield return null;Shape(prop,"Direct Ice prop");Check(Glyph(prop)==reused,"Pool reuses the released NPC marker for a prop.");yield return Capture(prop,"direct-ice-prop");
         prop.SetActive(false);yield return null;Check(Pool.ActiveCount==baseline,"Disabling frozen prop releases its glyph.");prop.SetActive(true);yield return null;Shape(prop,"Re-enabled frozen prop");
         prop.GetComponent<FrozenBody>().Thaw();yield return null;yield return null;Check(Glyph(prop)==null&&body.constraints==RigidbodyConstraints.FreezeRotation&&prop.GetComponent<Renderer>().sharedMaterial==CityMaterials.Get(CityColor.Teal),"Prop thaw restores exact constraints/material and releases glyph.");Destroy(prop);yield return null;
-        target.MarkBurn(4);Aim(target.transform.position+Vector3.up*1.2f);var synergy=W.Powers.GetComponent<SynergyRunner>();Check(synergy.Definition.Effect is ThermalShockEffect&&synergy.TryActivate(),"Shipping Thermal Shock activated through real synergy gate on burning target.");float until=Time.time+3;while(!target.Frozen&&Time.time<until)yield return null;yield return null;Shape(target.gameObject,"Thermal Shock NPC");yield return Capture(target.gameObject,"thermal-shock");
+        target.MarkBurn(4);Aim(target.transform.position+Vector3.up*1.2f);var synergy=W.Powers.GetComponent<SynergyRunner>();Check(synergy.Definition.Effect is ThermalShockEffect&&synergy.TryActivate(),"Shipping Thermal Shock activated through real synergy gate on burning target.");float until=Time.time+3;while(!target.Frozen&&Time.time<until)yield return null;yield return null;Shape(target.gameObject,"Thermal Shock NPC");Check(target.IceFrozen&&AllIce(target)&&presentation.FrozenOverlay,"Thermal Shock uses the shared FrozenLook (Cyan palette material, held presentation) through CityNpc.Freeze.");yield return Capture(target.gameObject,"thermal-shock");
         target.Damage(100000,W.Powers);yield return null;yield return null;Check(target.Dead&&Glyph(target.gameObject)==null&&Pool.ActiveCount==baseline,"Frozen NPC death releases silhouette.");
         var doomed=GameObject.CreatePrimitive(PrimitiveType.Cube);doomed.AddComponent<Rigidbody>().useGravity=false;doomed.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Teal);doomed.AddComponent<FrozenBody>().Apply(2,CityColor.Cyan);yield return null;Shape(doomed,"Destruction control");Destroy(doomed);yield return null;yield return null;Check(Pool.ActiveCount==baseline,"Destroying frozen prop releases silhouette.");
         var timed=GameObject.CreatePrimitive(PrimitiveType.Cube);timed.AddComponent<Rigidbody>().useGravity=false;timed.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Teal);timed.AddComponent<FrozenBody>().Apply(.2f,CityColor.Cyan);yield return new WaitForSeconds(.4f);yield return null;Check(Glyph(timed)==null&&Pool.ActiveCount==baseline,"Timed prop thaw clears silhouette.");Destroy(timed);
         Log("MEASURED markers "+count+"->"+Pool.PoolCount+", growth="+Pool.Growths+", materials "+materials+"->"+Resources.FindObjectsOfTypeAll<Material>().Length+"; newly loaded: "+string.Join(",",Resources.FindObjectsOfTypeAll<Material>().Where(m=>!originalMaterials.Contains(m)).Select(m=>m.name)));
         Check(Pool.PoolCount==count&&Pool.Growths==0&&Resources.FindObjectsOfTypeAll<Material>().Length==materials,"Repeated freezes reuse preallocated markers without material growth.");GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);Check(Pool==null,"Session transition destroys its marker pool.");
-        var catalog=Resources.Load<ForgeCatalog>("ForgeCatalog");var strength=Resources.Load<PowerDefinition>("Powers/strength");var telekinesis=Resources.Load<PowerDefinition>("Powers/telekinesis");var flight=Resources.Load<PowerDefinition>("Powers/flight");
-        var freezing=catalog.Synergies.Where(d=>d.Effect is ThermalShockEffect||d.Effect is FrostwakeEffect||d.Effect is GlacierFistEffect||d.Effect is LiftSlamEffect lift&&lift.Freeze).Select(d=>d.DisplayName).OrderBy(n=>n).ToArray();
-        Log("MEASURED current catalog synergies="+catalog.Synergies.Length+"; freezing="+string.Join(", ",freezing));
-        Check(freezing.SequenceEqual(new[]{"Cryo Crush","Frostwake","Glacier Fist","Thermal Shock"}),"Every freezing synergy in the current catalog is exercised here (Thermal Shock above).");
-        yield return SynergyFreeze(catalog,flight,ice,"frostwake");yield return SynergyFreeze(catalog,ice,strength,"glacier-fist");yield return SynergyFreeze(catalog,ice,telekinesis,"cryo-crush");Log("LIMIT: batch entry-point tests and rendered screenshots; human silhouette readability and dense freeze performance still need review.");
+        var catalog=Resources.Load<ForgeCatalog>("ForgeCatalog");
+        Log("MEASURED current catalog synergies="+catalog.Synergies.Length+": "+string.Join(", ",catalog.Synergies.Select(d=>d.Id+"="+(d.Effect!=null?d.Effect.GetType().Name:"null"))));
+        Check(catalog.Synergies.Select(d=>d.Id).OrderBy(n=>n).SequenceEqual(new[]{"eclipse-beam","solar-flare","sonic-slam","thermal-shock","void-grasp"}),"Catalog holds exactly the five shipping synergies.");
+        // Only ThermalShockEffect calls CityNpc.Freeze (SynergyRunner.AffectNearby); Void Grasp and Eclipse Beam hold with CityNpc.Root
+        // (checked above as a non-freeze CONTROL); Sonic Slam and Solar Flare neither freeze nor root.
+        var freezing=catalog.Synergies.Where(d=>d.Effect is ThermalShockEffect).Select(d=>d.DisplayName).OrderBy(n=>n).ToArray();
+        Log("MEASURED freezing synergies="+string.Join(", ",freezing)+"; rooting (no ice look by design)="+string.Join(", ",catalog.Synergies.Where(d=>d.Effect is VoidGraspEffect||d.Effect is EclipseBeamEffect).Select(d=>d.DisplayName)));
+        Check(freezing.SequenceEqual(new[]{"Thermal Shock"}),"Every freezing synergy in the current catalog is exercised here (Thermal Shock above).");
+        Log("LIMIT: batch entry-point tests and rendered screenshots; human silhouette readability and dense freeze performance still need review.");
     }
 }
 #endif
