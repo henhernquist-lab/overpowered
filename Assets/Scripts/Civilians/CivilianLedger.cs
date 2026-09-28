@@ -26,14 +26,14 @@ public struct CivilianSummary
 }
 /// Session-level civilian outcomes (WorldSession.Civilians). Each outcome counts a civilian at most once; a despawn or a
 /// mission cleanup is not a death (only a lethal CityNpc.Damage is). Transient: nothing here is saved, and the per-actor
-/// keys are Unity instance ids that live only as long as the session. No morality, reputation or score effect: scoring and
+/// keys are Unity entity ids that live only as long as the session. No morality, reputation or score effect: scoring and
 /// challenges may READ the summary later.
 public sealed class CivilianLedger : MonoBehaviour
 {
-    readonly Dictionary<CivilianOutcome, HashSet<int>> seen = new Dictionary<CivilianOutcome, HashSet<int>>();
+    readonly Dictionary<CivilianOutcome, HashSet<EntityId>> seen = new Dictionary<CivilianOutcome, HashSet<EntityId>>();
     public event Action<CivilianOutcome, CityNpc> Recorded;
     public int Count(CivilianOutcome outcome) => seen.TryGetValue(outcome, out var set) ? set.Count : 0;
-    public bool Has(CityNpc npc, CivilianOutcome outcome) => npc != null && seen.TryGetValue(outcome, out var set) && set.Contains(npc.GetInstanceID());
+    public bool Has(CityNpc npc, CivilianOutcome outcome) => npc != null && seen.TryGetValue(outcome, out var set) && set.Contains(npc.GetEntityId());
     public CivilianSummary Summary => new CivilianSummary
     {
         Rescued = Count(CivilianOutcome.Rescued), HarmedByHostile = Count(CivilianOutcome.HarmedByHostile), HarmedByPlayer = Count(CivilianOutcome.HarmedByPlayer),
@@ -42,8 +42,8 @@ public sealed class CivilianLedger : MonoBehaviour
     void Record(CivilianOutcome outcome, CityNpc npc)
     {
         if (npc == null || npc.Role != NpcRole.Civilian) return;
-        if (!seen.TryGetValue(outcome, out var set)) seen[outcome] = set = new HashSet<int>();
-        if (set.Add(npc.GetInstanceID())) Recorded?.Invoke(outcome, npc);
+        if (!seen.TryGetValue(outcome, out var set)) seen[outcome] = set = new HashSet<EntityId>();
+        if (set.Add(npc.GetEntityId())) Recorded?.Invoke(outcome, npc);
     }
     /// From CityNpc.Damage (health actually removed): player-sourced, else the current HarmContext.
     public void Harmed(CityNpc npc, float dealt, PowerUser source, bool died)
