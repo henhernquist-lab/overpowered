@@ -2,6 +2,22 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Overpowered/Effects/Projectile")]
 public sealed class FireBlastEffect : PowerEffect
 {
+    static Mesh sphere;
+    /// VisualPreset.ProjectileTail: three shrinking spheres trailing the shot in its own palette colour (a comet tail, so the
+    /// projectile and its direction read in one frame). Visual only: no colliders, no shadows, destroyed with the shot.
+    static void Tail(Transform shot, Vector3 direction, Material material)
+    {
+        if (sphere == null) sphere = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
+        shot.rotation = Quaternion.LookRotation(direction);
+        float[] back = { .7f, 1.3f, 1.8f }, size = { .72f, .48f, .3f };
+        for (int i = 0; i < back.Length; i++)
+        {
+            var go = new GameObject("Projectile tail " + i); go.transform.SetParent(shot, false);
+            go.transform.localPosition = Vector3.back * back[i]; go.transform.localScale = Vector3.one * size[i];
+            go.AddComponent<MeshFilter>().sharedMesh = sphere; var r = go.AddComponent<MeshRenderer>(); r.sharedMaterial = material;
+            r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; r.receiveShadows = false;
+        }
+    }
     public override bool Execute(PowerUser user, PowerRuntime power)
     {
         var d = power.Definition;
@@ -22,6 +38,8 @@ public sealed class FireBlastEffect : PowerEffect
         rb.linearVelocity = direction * d.ProjectileSpeed;
         Physics.IgnoreCollision(shot.GetComponent<Collider>(), user.GetComponent<CharacterController>());
         shot.AddComponent<PowerProjectile>().Initialize(user, power);
+        var preset = VisualPreset.Current;
+        if (VisualPreset.Active(preset) && preset.ProjectileTail) Tail(shot.transform, direction, CityMaterials.Get(d.PaletteColor));
         return true;
     }
 }

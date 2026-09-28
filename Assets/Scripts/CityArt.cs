@@ -39,12 +39,14 @@ public sealed class CityArt : MonoBehaviour
     sealed class SharedProp { public Mesh Mesh; public Mesh[] Parts; public Material[] Materials; }
     sealed class Batch { public Transform Owner; public CityColor Color; public int Layer; public readonly List<CombineInstance> Parts=new List<CombineInstance>(); public long Vertices; }
     bool Meshes=>StaticMode==StaticGeometryMode.BuildingMeshes;
+    bool facadeDetail,skylineBackdrop;float facadeMinHeight;
     public void Initialize(GameTuning config)
     {
         buildWatch.Restart();
         tuning=config;Settings=Resources.Load<CityArtSettings>("CityArtSettings");
         if(Settings==null||Settings.Palette==null)throw new System.InvalidOperationException("Create city art assets via Overpowered > Create missing city art assets.");
         PropMode=Settings.PropMeshes;StaticMode=Settings.StaticGeometry;
+        var preset=VisualPreset.Current;facadeDetail=VisualPreset.Active(preset)&&preset.FacadeDetail;skylineBackdrop=VisualPreset.Active(preset)&&preset.SkylineBackdrop;facadeMinHeight=preset!=null?preset.FacadeMinHeight:0f;
         gameObject.AddComponent<CityMaterials>().Initialize(Settings.Palette);
     }
     public static GameObject Piece(Transform parent,string name,Vector3 position,Vector3 size,CityColor color,bool solid=false,PrimitiveType type=PrimitiveType.Cube)
@@ -78,7 +80,7 @@ public sealed class CityArt : MonoBehaviour
     }
     /// One primitive piece of never-moving geometry. Legacy modes create a GameObject per piece; BuildingMeshes appends it to
     /// the owner's mesh for that colour and layer and adds a BoxCollider on the owner when solid. Owners are never rotated/scaled.
-    GameObject Part(Transform owner,string name,Vector3 local,Vector3 size,CityColor color,bool solid,bool detail,PrimitiveType type=PrimitiveType.Cube,Quaternion? rotated=null)
+    GameObject Part(Transform owner,string name,Vector3 local,Vector3 size,CityColor color,bool solid,bool detail,PrimitiveType type=PrimitiveType.Cube,Quaternion? rotated=null,PieceShape shape=PieceShape.Primitive)
     {
         PieceCount++;
         var rotation=rotated??Quaternion.identity;
@@ -86,14 +88,15 @@ public sealed class CityArt : MonoBehaviour
         if(!Meshes)
         {
             var go=Piece(owner,name,local,size,color,solid,type);go.layer=layer;
+            if(shape!=PieceShape.Primitive){go.GetComponent<MeshFilter>().sharedMesh=ShapeMesh(shape);go.transform.localScale=size;}
             if(detail)go.GetComponent<Renderer>().shadowCastingMode=ShadowCastingMode.Off;
             if(rotation!=Quaternion.identity)go.transform.localRotation=rotation;
             return go;
         }
         var key=(owner,color,layer);
         if(!batches.TryGetValue(key,out var batch))batches[key]=batch=new Batch{Owner=owner,Color=color,Layer=layer};
-        var mesh=Primitive(type);
-        batch.Parts.Add(new CombineInstance{mesh=mesh,transform=Matrix4x4.TRS(local,rotation,PieceScale(size,type))});batch.Vertices+=mesh.vertexCount;
+        var mesh=shape==PieceShape.Primitive?Primitive(type):ShapeMesh(shape);
+        batch.Parts.Add(new CombineInstance{mesh=mesh,transform=Matrix4x4.TRS(local,rotation,shape==PieceShape.Primitive?PieceScale(size,type):size)});batch.Vertices+=mesh.vertexCount;
         if(solid)
         {
             // Cylinders are symmetric about their axis, so a yaw-only rotation needs no rotated collider.
@@ -156,11 +159,32 @@ public sealed class CityArt : MonoBehaviour
             Part(t,"Parapet",new Vector3(side*(uw-thick)*.5f,h+wall*.5f,0),new Vector3(thick,wall,ud),CityColor.Cream,true,false);
             Part(t,"Parapet",new Vector3(0,h+wall*.5f,side*(ud-thick)*.5f),new Vector3(uw,wall,thick),CityColor.Cream,true,false);
         }
-        Part(t,"Shop canopy",new Vector3(0,entry,-d*.5f-.3f),new Vector3(w*.6f,.25f,.7f),CityColor.Teal,false,true);
+        if(facadeDetail&&h>=facadeMinHeight)StreetLevel(t,w,d,uw,ud,h,entry,split,door);
+        // Preset: a sloped awning (shared Wedge mesh, high edge against the wall) instead of the flat canopy slab.
+        if(facadeDetail)Part(t,"Shop awning",new Vector3(0,entry+.12f,-d*.5f-.55f),new Vector3(w*.6f,.55f,1.1f),CityColor.Teal,false,true,PrimitiveType.Cube,null,PieceShape.Wedge);
+        else Part(t,"Shop canopy",new Vector3(0,entry,-d*.5f-.3f),new Vector3(w*.6f,.25f,.7f),CityColor.Teal,false,true);
         Part(t,"Shop sign",new Vector3(0,entry-.5f,-d*.5f-.36f),new Vector3(w*.5f,.65f,.12f),CityColor.Brick,false,true);
         for(int i=0;i<3;i++)Part(t,"Abstract shop glyph",new Vector3((i-1)*w*.13f,entry-.5f,-d*.5f-.44f),new Vector3(w*.09f,.16f,.035f),CityColor.Cream,false,true);
         if(Meshes)FlushOwner(t);
         StaticRoot(root);
+    }
+    /// VisualPreset.FacadeDetail (urban-height buildings only): the ground floor meets the street with shop glazing on every
+    /// face (either side of the entrance on the front), a dark base plinth, corner pilasters up the lower volume and a
+    /// projecting cornice under the parapet. Existing palette colours and batches only: no new meshes, materials or draws.
+    void StreetLevel(Transform t,float w,float d,float uw,float ud,float h,float entry,float split,float door)
+    {
+        float gy=entry*.44f,gh=entry*.56f,out_=.03f;
+        foreach(float side in new[]{-1f,1f})
+        {
+            Part(t,"Shop glazing",new Vector3(side*(w*.5f+out_),gy,0),new Vector3(.04f,gh,d*.78f),CityColor.Glass,false,true);
+            Part(t,"Shop glazing",new Vector3(side*(w+door)*.25f,gy,-d*.5f-out_),new Vector3((w-door)*.5f*.72f,gh,.04f),CityColor.Glass,false,true);
+            Part(t,"Base plinth",new Vector3(side*(w*.5f+.04f),.22f,0),new Vector3(.08f,.44f,d+.08f),CityColor.Slate,false,true);
+            Part(t,"Base plinth",new Vector3(0,.22f,side*(d*.5f+.04f)),new Vector3(w+.08f,.44f,.08f),CityColor.Slate,false,true);
+            foreach(float other in new[]{-1f,1f})
+                Part(t,"Corner pilaster",new Vector3(side*(w*.5f+.06f),(entry+split)*.5f,other*(d*.5f+.06f)),new Vector3(.36f,split-entry+.2f,.36f),CityColor.Cream,false,true);
+        }
+        Part(t,"Shop glazing",new Vector3(0,gy,d*.5f+out_),new Vector3(w*.78f,gh,.04f),CityColor.Glass,false,true);
+        Part(t,"Cornice",new Vector3(0,h-.12f,0),new Vector3(uw+.5f,.24f,ud+.5f),CityColor.Cream,false,false);
     }
     void Facade(Transform root,float w,float d,float bottom,float top,int seed,BuildingStyle style)
     {
@@ -278,13 +302,13 @@ public sealed class CityArt : MonoBehaviour
     {
         foreach(var s in plan.Structures)
         {
-            var recipe=Settings.Recipe(s.Recipe);
+            var recipe=RecipeOverride(s.Recipe)??Settings.Recipe(s.Recipe);
             if(recipe==null)throw new System.InvalidOperationException("CityArtSettings has no structure recipe '"+s.Recipe+"'.");
             var rot=Quaternion.Euler(0,s.Yaw,0);var owner=Chunk(s.District,s.Position);
             foreach(var p in recipe.Pieces)
             {
                 var color=p.Variant&&recipe.Variants.Length>0?recipe.Variants[s.Variant%recipe.Variants.Length]:p.Color;
-                Part(owner,recipe.Name,s.Position+rot*p.Position,p.Size,color,p.Solid,p.Detail,p.Type,rot*Quaternion.Euler(p.Euler));
+                Part(owner,recipe.Name,s.Position+rot*p.Position,p.Size,color,p.Solid,p.Detail,p.Type,rot*Quaternion.Euler(p.Euler),p.Shape);
             }
         }
     }
@@ -299,22 +323,43 @@ public sealed class CityArt : MonoBehaviour
             float angle=(i+(float)rng.NextDouble()*.8f)/backdrop.Count*Mathf.PI*2,radius=Mathf.Lerp(backdrop.Radius.x,backdrop.Radius.y,(float)rng.NextDouble());
             float h=Mathf.Lerp(backdrop.Height.x,backdrop.Height.y,(float)Mathf.Pow((float)rng.NextDouble(),2)),w=Mathf.Lerp(backdrop.Width.x,backdrop.Width.y,(float)rng.NextDouble());
             var rotation=Quaternion.Euler(0,-angle*Mathf.Rad2Deg,0);var outward=new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle));
+            if(skylineBackdrop){SkylineCluster(centre,outward,rotation,radius,h,backdrop,i);continue;}
             // A low shore under each cluster so the silhouettes stand on land instead of floating on the horizon.
             Silhouette(centre+outward*(radius+20)+Vector3.up*3,new Vector3(w*2.6f,6,70),rotation,backdrop.ShoreColor);
             Silhouette(centre+outward*radius+Vector3.up*h*.5f,new Vector3(w,h,w*.7f),rotation,backdrop.Color);
             if(rng.NextDouble()<.6){float h2=h*Mathf.Lerp(.35f,.8f,(float)rng.NextDouble());Silhouette(centre+outward*(radius+12)+rotation*Vector3.right*(w*.8f)+Vector3.up*h2*.5f,new Vector3(w*.7f,h2,w*.6f),rotation,backdrop.Color);}
         }
     }
+    /// VisualPreset.SkylineBackdrop: a continuous coastline (each cluster's shore overlaps its neighbours) carrying 2-4 narrow
+    /// square towers of varied height, the tallest with a stepped crown, instead of one wide slab per cluster (which read as
+    /// a ring of gravestones). Own seeded stream per cluster, backdrop layer, palette colours, no shadows.
+    void SkylineCluster(Vector3 centre,Vector3 outward,Quaternion rotation,float radius,float h,BackdropSettings backdrop,int cluster)
+    {
+        var rng=new System.Random(tuning.City.Seed*7919+cluster);float R()=> (float)rng.NextDouble();
+        float arc=2f*Mathf.PI*radius/Mathf.Max(1,backdrop.Count);var right=rotation*Vector3.right;
+        Silhouette(centre+outward*(radius+15)+Vector3.up*3,new Vector3(arc*1.25f,6,80),rotation,backdrop.ShoreColor);
+        int towers=2+rng.Next(3);
+        for(int k=0;k<towers;k++)
+        {
+            float tw=Mathf.Lerp(12f,30f,R()),th=Mathf.Max(18f,h*Mathf.Lerp(.35f,1f,k==0?1f:R()));
+            var at=centre+outward*(radius+Mathf.Lerp(-10f,25f,R()))+right*((k-(towers-1)*.5f)*arc/Mathf.Max(1,towers)*Mathf.Lerp(.7f,1f,R()));
+            Silhouette(at+Vector3.up*th*.5f,new Vector3(tw,th,tw),rotation,backdrop.Color);
+            if(k==0||R()<.35f)Silhouette(at+Vector3.up*(th+th*.09f),new Vector3(tw*.6f,th*.18f,tw*.6f),rotation,backdrop.Color);
+        }
+    }
     void Skirt(CityPlan plan,BackdropSettings backdrop)
     {
         var c=new Vector3(plan.Island.center.x,plan.WaterLevel-20+backdrop.SkirtHeight*.5f,plan.Island.center.y);float r=backdrop.SkirtRadius,h=backdrop.SkirtHeight+20;
-        Silhouette(c+Vector3.forward*r,new Vector3(2*r+20,h,10),Quaternion.identity,backdrop.SkirtColor);Silhouette(c+Vector3.back*r,new Vector3(2*r+20,h,10),Quaternion.identity,backdrop.SkirtColor);
-        Silhouette(c+Vector3.right*r,new Vector3(10,h,2*r+20),Quaternion.identity,backdrop.SkirtColor);Silhouette(c+Vector3.left*r,new Vector3(10,h,2*r+20),Quaternion.identity,backdrop.SkirtColor);
+        Silhouette(c+Vector3.forward*r,new Vector3(2*r+20,h,10),Quaternion.identity,backdrop.SkirtColor).name=HazeSkirtName;Silhouette(c+Vector3.back*r,new Vector3(2*r+20,h,10),Quaternion.identity,backdrop.SkirtColor).name=HazeSkirtName;
+        Silhouette(c+Vector3.right*r,new Vector3(10,h,2*r+20),Quaternion.identity,backdrop.SkirtColor).name=HazeSkirtName;Silhouette(c+Vector3.left*r,new Vector3(10,h,2*r+20),Quaternion.identity,backdrop.SkirtColor).name=HazeSkirtName;
     }
-    void Silhouette(Vector3 at,Vector3 size,Quaternion rotation,CityColor color)
+    /// Name of the four haze-skirt walls (VisualPreset may hide them when its sky paints the lower half in the fog colour).
+    public const string HazeSkirtName="Backdrop haze skirt";
+    GameObject Silhouette(Vector3 at,Vector3 size,Quaternion rotation,CityColor color)
     {
         var go=Piece(BackdropRoot,"Backdrop silhouette",at,size,color);go.layer=Rendering.BackdropLayer;go.transform.rotation=rotation;
         var r=go.GetComponent<Renderer>();r.shadowCastingMode=ShadowCastingMode.Off;r.receiveShadows=false;
+        return go;
     }
     void StaticRoot(GameObject root){staticRoots.Add(root);}
     /// Call once all static geometry exists (and before any capture render). Legacy modes combine as before; StaticBatching and
@@ -484,6 +529,62 @@ public sealed class CityArt : MonoBehaviour
             ownedMeshes.Add(shared.Mesh);
         }
         sharedProps.Add(key,shared);return shared;
+    }
+    /// An active VisualPreset's replacement for a structure recipe (by recipe name), or null = the CityArtSettings recipe.
+    StructureRecipe RecipeOverride(string name)
+    {
+        var p=VisualPreset.Current;if(!VisualPreset.Active(p)||p.RecipeOverrides==null)return null;
+        foreach(var r in p.RecipeOverrides)if(r!=null&&r.Name==name&&r.Pieces!=null&&r.Pieces.Length>0)return r;
+        return null;
+    }
+    static readonly Dictionary<PieceShape,Mesh> shapes=new Dictionary<PieceShape,Mesh>();
+    /// Shared flat-shaded low-poly meshes within the unit cube (-0.5..0.5), built once. Every shape is convex, so each
+    /// triangle is wound to face away from an interior point (no hand-wound index lists).
+    public static Mesh ShapeMesh(PieceShape shape)
+    {
+        if(shapes.TryGetValue(shape,out var cached)&&cached!=null)return cached;
+        var v=new List<Vector3>();var f=new List<int>();
+        switch(shape)
+        {
+            case PieceShape.Canopy:
+            {
+                float t=(1f+Mathf.Sqrt(5f))*.5f;
+                var ico=new[]{new Vector3(-1,t,0),new Vector3(1,t,0),new Vector3(-1,-t,0),new Vector3(1,-t,0),new Vector3(0,-1,t),new Vector3(0,1,t),new Vector3(0,-1,-t),new Vector3(0,1,-t),new Vector3(t,0,-1),new Vector3(t,0,1),new Vector3(-t,0,-1),new Vector3(-t,0,1)};
+                foreach(var p in ico)v.Add(p.normalized*.5f);
+                f.AddRange(new[]{0,11,5,0,5,1,0,1,7,0,7,10,0,10,11,1,5,9,5,11,4,11,10,2,10,7,6,7,1,8,3,9,4,3,4,2,3,2,6,3,6,8,3,8,9,4,9,5,2,4,11,6,2,10,8,6,7,9,8,1});
+                break;
+            }
+            case PieceShape.Cone:
+            {
+                v.Add(new Vector3(0,.5f,0));v.Add(new Vector3(0,-.5f,0));
+                for(int i=0;i<8;i++){float a=i*Mathf.PI/4f;v.Add(new Vector3(Mathf.Cos(a)*.5f,-.5f,Mathf.Sin(a)*.5f));}
+                for(int i=0;i<8;i++){int a=2+i,b=2+(i+1)%8;f.AddRange(new[]{0,a,b,1,b,a});}
+                break;
+            }
+            case PieceShape.Wedge: // full height at the back (+z), sloping to the front-bottom edge (-z): awnings, ramps
+                v.AddRange(new[]{new Vector3(-.5f,.5f,.5f),new Vector3(.5f,.5f,.5f),new Vector3(-.5f,-.5f,.5f),new Vector3(.5f,-.5f,.5f),new Vector3(-.5f,-.5f,-.5f),new Vector3(.5f,-.5f,-.5f)});
+                f.AddRange(new[]{0,1,4,1,5,4,0,2,1,1,2,3,2,4,3,3,4,5,0,4,2,1,3,5});
+                break;
+            case PieceShape.Gable: // ridge along x at the top, eaves at the bottom front/back: pitched roofs
+                v.AddRange(new[]{new Vector3(-.5f,.5f,0),new Vector3(.5f,.5f,0),new Vector3(-.5f,-.5f,-.5f),new Vector3(.5f,-.5f,-.5f),new Vector3(-.5f,-.5f,.5f),new Vector3(.5f,-.5f,.5f)});
+                f.AddRange(new[]{0,1,2,1,3,2,0,4,1,1,4,5,2,3,4,3,5,4,0,2,4,1,5,3});
+                break;
+            default: return Primitive(PrimitiveType.Cube);
+        }
+        // Flat shading: one vertex per corner per face; winding faces away from the vertex centroid (strictly inside every
+        // shape here; the origin is not: it lies on the wedge's slope).
+        var inside=Vector3.zero;foreach(var p in v)inside+=p;inside/=v.Count;
+        var verts=new List<Vector3>();var tris=new List<int>();
+        for(int i=0;i<f.Count;i+=3)
+        {
+            Vector3 a=v[f[i]],b=v[f[i+1]],c=v[f[i+2]];
+            if(Vector3.Dot(Vector3.Cross(b-a,c-a),(a+b+c)/3f-inside)<0){var x=b;b=c;c=x;}
+            int n=verts.Count;verts.Add(a);verts.Add(b);verts.Add(c);tris.Add(n);tris.Add(n+1);tris.Add(n+2);
+        }
+        var mesh=new Mesh{name="City shape "+shape};mesh.SetVertices(verts);mesh.SetTriangles(tris,0);
+        var uv=new List<Vector2>();foreach(var p in verts)uv.Add(new Vector2(p.x+.5f,p.y+.5f));mesh.SetUVs(0,uv);   // same channels as the primitives it is combined with
+        mesh.RecalculateNormals();mesh.RecalculateTangents();mesh.RecalculateBounds();
+        shapes[shape]=mesh;return mesh;
     }
     static Mesh Primitive(PrimitiveType type)
     {
