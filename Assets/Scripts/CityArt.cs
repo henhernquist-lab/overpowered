@@ -160,7 +160,9 @@ public sealed class CityArt : MonoBehaviour
             Part(t,"Parapet",new Vector3(0,h+wall*.5f,side*(ud-thick)*.5f),new Vector3(uw,wall,thick),CityColor.Cream,true,false);
         }
         if(facadeDetail&&h>=facadeMinHeight)StreetLevel(t,w,d,uw,ud,h,entry,split,door);
-        Part(t,"Shop canopy",new Vector3(0,entry,-d*.5f-.3f),new Vector3(w*.6f,.25f,.7f),CityColor.Teal,false,true);
+        // Preset: a sloped awning (shared Wedge mesh, high edge against the wall) instead of the flat canopy slab.
+        if(facadeDetail)Part(t,"Shop awning",new Vector3(0,entry+.12f,-d*.5f-.55f),new Vector3(w*.6f,.55f,1.1f),CityColor.Teal,false,true,PrimitiveType.Cube,null,PieceShape.Wedge);
+        else Part(t,"Shop canopy",new Vector3(0,entry,-d*.5f-.3f),new Vector3(w*.6f,.25f,.7f),CityColor.Teal,false,true);
         Part(t,"Shop sign",new Vector3(0,entry-.5f,-d*.5f-.36f),new Vector3(w*.5f,.65f,.12f),CityColor.Brick,false,true);
         for(int i=0;i<3;i++)Part(t,"Abstract shop glyph",new Vector3((i-1)*w*.13f,entry-.5f,-d*.5f-.44f),new Vector3(w*.09f,.16f,.035f),CityColor.Cream,false,true);
         if(Meshes)FlushOwner(t);
