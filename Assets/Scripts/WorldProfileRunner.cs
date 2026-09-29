@@ -51,9 +51,11 @@ public sealed class WorldProfileRunner : MonoBehaviour
     }
 
     CityArtSettings art; StaticGeometryMode restoreStatic; bool staticOverride;
+    CityLayout routeLayout; bool restoreRoutes, routesOverride;
     void Finish(int code)
     {
         if (staticOverride) art.StaticGeometry = restoreStatic;
+        if (routesOverride) routeLayout.Routes.Enabled = restoreRoutes;
         File.WriteAllLines(Path.Combine(Folder, "results.txt"), lines);
         Finished(code);
     }
@@ -85,6 +87,10 @@ public sealed class WorldProfileRunner : MonoBehaviour
         art = Resources.Load<CityArtSettings>("CityArtSettings"); restoreStatic = art.StaticGeometry;
         if (int.TryParse(Arg("-worldStatic"), out int forced)) { staticOverride = true; art.StaticGeometry = (StaticGeometryMode)forced; }
         Log($"STATIC GEOMETRY MODE {art.StaticGeometry}{(staticOverride ? " (command-line override for this run only; asset restored at exit)" : "")}");
+        // Phase 8 CONTROL: -worldRoutesOff runs the same build with CityLayout.Routes.Enabled=false (old wander) for this run only.
+        routeLayout = Resources.Load<CityLayout>("CityLayout"); restoreRoutes = routeLayout.Routes.Enabled;
+        if (Array.IndexOf(Environment.GetCommandLineArgs(), "-worldRoutesOff") >= 0) { routesOverride = true; routeLayout.Routes.Enabled = false; }
+        Log($"ROUTES enabled={routeLayout.Routes.Enabled}{(routesOverride ? " (command-line CONTROL override for this run only; asset restored at exit)" : "")}");
         var mode = Resources.Load<GameModeDefinition>("Modes/free-play");
         Log($"ENV runTag={runTag} commit={Arg("-worldCommit") ?? "?"} GPU={SystemInfo.graphicsDeviceName} CPU={SystemInfo.processorType} quality='{QualitySettings.names[QualitySettings.GetQualityLevel()]}' shadows={QualitySettings.shadows} shadowDistance={QualitySettings.shadowDistance} load={LoadAverage()} batchUnities={BatchUnities()}");
         Log($"SCENARIO mode={mode.Id} civilians={mode.Civilians} spawnPolice={mode.SpawnPolice}; Heat topped to 3 before every sample; seed={Resources.Load<GameTuning>("GameTuning").City.Seed}");

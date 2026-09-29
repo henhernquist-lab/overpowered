@@ -197,6 +197,15 @@ public sealed class HumanoidPresentation : MonoBehaviour
         Action("Shoot",Tuning.Shoot,Tuning.ShootPlayback,Tuning.ShootStartSeconds);
         actionUntil=Time.time+Mathf.Max(.01f,Tuning.ShootEndSeconds-Tuning.ShootStartSeconds)/Tuning.ShootPlayback;
     }
+    /// NpcLod far tier (this component disabled, Animator stepped manually): keep the locomotion blend at the body's real
+    /// speed (route rail or agent) before each manual Animator step, so a far walker never slides in an idle pose.
+    public void FarLocomotion()
+    {
+        if(Animator==null||dead||!Animator.isInitialized)return;
+        var v=ReadState().LocalVelocity;MeasuredSpeed=new Vector2(v.x,v.z).magnitude;
+        Animator.SetFloat("Speed",MeasuredSpeed);Animator.SetFloat("Blend",LocomotionBlend(MeasuredSpeed));
+    }
+    float LocomotionBlend(float smooth)=>smooth<Tuning.WalkThreshold?Mathf.InverseLerp(0,Tuning.WalkThreshold,smooth):smooth<Tuning.JogThreshold?1+Mathf.InverseLerp(Tuning.WalkThreshold,Tuning.JogThreshold,smooth):2+Mathf.InverseLerp(Tuning.JogThreshold,Tuning.RunThreshold,smooth);
     public void AnimationImpact(){LastAnimationImpactTime=Time.time;LastAnimationImpactFrame=Time.frameCount;}
     public void KickAnimationImpact(){LastKickAnimationImpactTime=Time.time;LastKickAnimationImpactFrame=Time.frameCount;}
     void Update()
@@ -207,7 +216,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
         HeroPresentationState state=ReadState();MeasuredSpeed=new Vector2(state.LocalVelocity.x,state.LocalVelocity.z).magnitude;
         Animator.SetFloat("Speed",MeasuredSpeed,Tuning.SpeedDamping,Time.deltaTime);
         float smooth=Animator.GetFloat("Speed");
-        float blend=smooth<Tuning.WalkThreshold?Mathf.InverseLerp(0,Tuning.WalkThreshold,smooth):smooth<Tuning.JogThreshold?1+Mathf.InverseLerp(Tuning.WalkThreshold,Tuning.JogThreshold,smooth):2+Mathf.InverseLerp(Tuning.JogThreshold,Tuning.RunThreshold,smooth);
+        float blend=LocomotionBlend(smooth);
         Animator.SetFloat("Blend",blend);
         bool panic=npc!=null&&npc.Role==NpcRole.Civilian&&npc.Fleeing&&!npc.Dead;
         Animator.SetFloat("GaitRate",panic?Tuning.PanicPlayback:1);
@@ -220,7 +229,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
         if(VerificationState.HasValue)return VerificationState.Value;
 #endif
         if(hero!=null)return hero.PresentationState;
-        return new HeroPresentationState(npc!=null&&npc.Agent.enabled?transform.InverseTransformDirection(npc.Agent.velocity):Vector3.zero,true,false);
+        return new HeroPresentationState(npc!=null?transform.InverseTransformDirection(npc.Velocity):Vector3.zero,true,false);
     }
     void LateUpdate()
     {
