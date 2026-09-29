@@ -1,5 +1,19 @@
 # Prototype Status
 
+## Sidekick material-slot integrity — 2026-09-28 (`codex/sidekick-material-integrity`)
+
+The live humanoid, Forge preview, and first-launch intro now recolour only renderer slots that use the hero's
+`SidekickSuit.Source`. Other materials on a Sidekick prefab remain the vendor-authored materials; the mannequin
+fallback still uses shared palette materials. The suit material is still cached by `CityMaterials` per suit and colour
+pair. No vendor asset or Sidekick database was changed.
+
+On this isolated checkout, Unity Editor batch runs exited 0 with no FAIL: `SidekickVerification.Run` 102 PASS and a
+separate-process `Reload` 7 PASS; `HeroForgeVerification.Run` 137 PASS and separate-process `Reload` 3 PASS;
+`IntroTimelineVerification.Run` 15 PASS and separate-process `Reload` 2 PASS. The Unity SDK build succeeded with
+0 warnings and 0 errors. The new `Verification/Intro/full-home-intro.png` was inspected: the selected NOVA suit still
+renders against the skyline. Forge's paired FX measurements varied from the prior run, so no performance delta is
+attributed to this material-slot change. Player-build rendering and human visual/gameplay feel remain untested.
+
 ## Verification gauntlet (branch `cloud/verification-gauntlet`) — 2026-09-27, Cloud worker — NEW VERIFICATION ONLY, NO GAMEPLAY CHANGES
 
 Added a **verification gauntlet** on top of the existing suites (nothing under `Assets/Scripts/` shipping logic, no scenes,

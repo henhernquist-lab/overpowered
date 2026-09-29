@@ -72,9 +72,14 @@ public sealed class FirstLaunchIntro : MonoBehaviour
         {
             if(hero.Suit!=null)hero.Suit.ApplyBody(renderer);
             var mats=renderer.sharedMaterials;
-            for(int i=0;i<mats.Length;i++)mats[i]=hero.Suit!=null&&mats[i]==hero.Suit.Source?
-                CityMaterials.Current.SuitMaterial(hero.Suit,loadout.Primary,loadout.Secondary):
-                CityMaterials.Get(renderer.name.Contains("Joints")?loadout.Secondary:loadout.Primary);
+            for(int i=0;i<mats.Length;i++)
+            {
+                if(hero.Suit!=null)
+                {
+                    if(mats[i]==hero.Suit.Source)mats[i]=CityMaterials.Current.SuitMaterial(hero.Suit,loadout.Primary,loadout.Secondary);
+                }
+                else mats[i]=CityMaterials.Get(renderer.name.Contains("Joints")?loadout.Secondary:loadout.Primary);
+            }
             renderer.sharedMaterials=mats;
         }
         // Fit the visual duplicate to the intro frame, keeping the separate animated wrapper free of physics.

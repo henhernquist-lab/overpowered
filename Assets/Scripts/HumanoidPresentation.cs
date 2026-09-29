@@ -75,7 +75,15 @@ public sealed class HumanoidPresentation : MonoBehaviour
         foreach(var r in renderers)
         {
             var mats=r.sharedMaterials;
-            for(int i=0;i<mats.Length;i++)mats[i]=suit!=null&&mats[i]==suit.Source?CityMaterials.Suit(suit,primary,secondary):CityMaterials.Get(r.name.Contains("Joints")?secondary:primary);
+            for(int i=0;i<mats.Length;i++)
+            {
+                if(suit!=null)
+                {
+                    // Only the authored colour-map slot belongs to the suit. Keep Sidekick's other materials intact.
+                    if(mats[i]==suit.Source)mats[i]=CityMaterials.Suit(suit,primary,secondary);
+                }
+                else mats[i]=CityMaterials.Get(r.name.Contains("Joints")?secondary:primary);
+            }
             r.sharedMaterials=mats;r.updateWhenOffscreen=true;
         }
         var presentation=owner.AddComponent<HumanoidPresentation>();presentation.hero=hero;presentation.npc=npc;presentation.Tuning=tuning;presentation.Animator=animator;presentation.PoseRoot=pose;

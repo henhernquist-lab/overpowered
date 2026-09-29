@@ -183,7 +183,14 @@ public sealed class HeroForgeScreen : MonoBehaviour
         foreach(var renderer in renderers)
         {
             var mats=renderer.sharedMaterials;
-            for(int i=0;i<mats.Length;i++)mats[i]=hero.Suit!=null&&mats[i]==hero.Suit.Source?materials.SuitMaterial(hero.Suit,primary,secondary):CityMaterials.Get(renderer.name.Contains("Joints")?secondary:primary);
+            for(int i=0;i<mats.Length;i++)
+            {
+                if(hero.Suit!=null)
+                {
+                    if(mats[i]==hero.Suit.Source)mats[i]=materials.SuitMaterial(hero.Suit,primary,secondary);
+                }
+                else mats[i]=CityMaterials.Get(renderer.name.Contains("Joints")?secondary:primary);
+            }
             renderer.sharedMaterials=mats;
         }
         foreach(var node in previewRoot.GetComponentsInChildren<Transform>())node.gameObject.layer=30;
