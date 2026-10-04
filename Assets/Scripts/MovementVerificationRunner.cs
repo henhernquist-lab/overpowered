@@ -46,6 +46,9 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
             {
                 Rig.SetLook(0,pitch);yield return null;yield return null;
                 Vector3 expected=Cam.transform.forward;Vector3 position=Cam.transform.position;
+                var c=W.Tuning.Camera;
+                Vector3 analytic=first?Quaternion.Euler(pitch,0,0)*Vector3.forward:(Vector3.up*c.LookHeight-Quaternion.Euler(pitch,0,0)*c.Offset).normalized;
+                Check(Vector3.Angle(analytic,expected)<.03f,"View reaches configured limit through existing orbit/eye math.");
                 Log($"MEASURED camera first={first} input={pitch:F2} renderedPitch={Mathf.Asin(-expected.y)*Mathf.Rad2Deg:F3} camera={position}.");
                 Rig.SetLook(0,pitch==min?min-50:max+50);yield return null;yield return null;
                 Check(Vector3.Angle(expected,Cam.transform.forward)<.01f,"CONTROL pitch overshoot clamps at "+pitch+" first="+first);
@@ -54,7 +57,34 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
                 Check(!Physics.OverlapSphere(Cam.transform.position,first?.14f:.19f,~0,QueryTriggerInteraction.Ignore).Any(c=>c.transform.root!=W.Hero.transform),"Camera collision volume clear at configured limit.");
             }
         }
+        if(Stage=="camera")yield return UpwardAimControls();
         Time.captureDeltaTime=0;
+    }
+    IEnumerator UpwardAimControls()
+    {
+        yield return Home();Profile.Data.Points=20;
+        if(!Profile.Owns(Power("fire")))Check(Profile.Buy(Power("fire")),"Unlock Fire through existing progression for camera verification.");
+        yield return Enter(F.Heroes[0],"fire","strength","free-play");
+        Isolate();Rig.enabled=true;
+        foreach(bool first in new[]{false,true})
+        {
+            if(Rig.FirstPerson!=first)Check(Rig.ToggleView(),"Change aim verification view.");
+            Rig.SetLook(0,first?W.Tuning.Camera.FirstPersonMinimumPitch:W.Tuning.Camera.MinimumPitch);
+            yield return null;yield return null;
+            var ray=Cam.ViewportPointToRay(new Vector3(.5f,.5f));
+            float near=Mathf.Max(0,Vector3.Dot(W.Powers.AimOrigin-ray.origin,ray.direction));
+            var target=Wall(ray.GetPoint(near+9),Vector3.one*.7f);
+            var rb=target.AddComponent<Rigidbody>();rb.useGravity=false;rb.mass=45;
+            var probe=target.AddComponent<FirstPersonImpactProbe>();
+            var off=Wall(target.transform.position+Cam.transform.right*5,Vector3.one*.7f);
+            off.AddComponent<Rigidbody>().useGravity=false;var miss=off.AddComponent<FirstPersonImpactProbe>();
+            Physics.SyncTransforms();W.Powers.Tick(100,true);W.Powers.Select(Runtime("fire"));
+            Check(W.Powers.FindTarget(20,out var hit)&&hit.rigidbody==rb,"Upward limit gameplay aim hits crosshair target first="+first);
+            Check(W.Powers.Use(Runtime("fire")),"Upward-limit Fire cast accepted.");
+            float until=Time.time+2;while(!probe.Hit&&Time.time<until)yield return null;
+            Check(probe.Hit&&!miss.Hit,"Physical projectile hits upward target; off-axis CONTROL untouched first="+first);
+            Destroy(target);Destroy(off);yield return null;
+        }
     }
 }
 #endif

@@ -152,7 +152,7 @@ public sealed class FirstPersonVerificationRunner : MonoBehaviour
         var right=Box("Tight right wall",new Vector3(.72f,151,0),new Vector3(.2f,2,4),CityColor.UiPurple);
         var ceiling=Box("Low ceiling",new Vector3(0,152,0),new Vector3(2,.2f,4),CityColor.Cream);
         Physics.SyncTransforms();yield return null;
-        foreach(float angle in new[]{-85f,0,85})
+        foreach(float angle in new[]{W.Tuning.Camera.FirstPersonMinimumPitch,-85f,0,W.Tuning.Camera.FirstPersonMaximumPitch})
         {
             Rig.SetLook(35,angle);yield return null;yield return null;
             Check(!Physics.OverlapSphere(Cam.transform.position,.15f,~0,QueryTriggerInteraction.Ignore).Any(c=>c.transform.root!=W.Hero.transform),"Tight corner eye volume clear at pitch "+angle);
@@ -188,7 +188,7 @@ public sealed class FirstPersonVerificationRunner : MonoBehaviour
     IEnumerator EyeImpulse(string label)
     {
         var f=W.Tuning.Feel;float worst=float.PositiveInfinity;string worstAt="";int samples=0,overlaps=0;float maxOffset=0;
-        foreach(float pitch in new[]{-85f,0,85})
+        foreach(float pitch in new[]{W.Tuning.Camera.FirstPersonMinimumPitch,-85f,0,W.Tuning.Camera.FirstPersonMaximumPitch})
         {
             Rig.SetLook(0,pitch);yield return null;yield return null;
             Vector3 eye=Cam.transform.position;

@@ -4077,3 +4077,24 @@ active idle hero, Editor overhead included; not standalone throughput or active-
 Internal batchUnities counter returned0 including itself (unreliable); external exact executable
 process check established no other Editor before launch. No simultaneous Unity was launched.
 All results retained under `Verification/World/movement-before`. No performance acceptance yet.
+
+
+### Movement Phase 1 — vertical camera range verified, 2026-10-04
+
+Before checkpoint99f07cb. GameTuning.Camera TP MinimumPitch -10 -> -85;
+FP MinimumPitch -85 -> -89. MaximumPitch65/FP85 and every offset/FOV/collision/aiming
+setting remain unchanged. C# fallback defaults match asset limits. Existing feet-relative
+TP orbit renders -70.646 degrees at the new minimum (formerly -7.591), downward83.100
+unchanged; FP renders -89/85. First person already allowed85 degrees upward, so the
+remaining safe range is4 degrees short of vertical singularity rather than a large numeric change.
+No camera algorithm, physics-root rotation, power aim, Feel or save changes.
+
+Actual sequential Unity results: MovementVerification.Camera final38 PASS/0 FAIL;
+CameraVerification.Verify45/0; FirstPersonVerification.Run211/0 and fresh-process Reload5/0;
+all exit0. Evidence `Verification/Movement/camera-gates`, `camera-upward-aim`, and camera.txt.
+New controls compare analytical direction at each configured limit, reject50-degree overshoot,
+verify center ray/roll/root/collision sphere, then fire real projectiles at both upward limits
+with untouched off-axis targets. Existing first-person suite retains -85 checks and additionally
+samples configured -89 around tight walls/overhangs and full Feel impulses (0 clipped samples).
+Database and real save hashes unchanged according to runner manifests. Camera comfort remains
+unverified by a human. Phase1 complete; traversal phases and final regression still pending.

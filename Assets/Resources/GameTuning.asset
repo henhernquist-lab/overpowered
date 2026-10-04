@@ -163,7 +163,7 @@ MonoBehaviour:
   Camera:
     Sensitivity: 3.5
     Pitch: 16
-    MinimumPitch: -10
+    MinimumPitch: -85
     MaximumPitch: 65
     LookHeight: 2.5
     Offset: {x: 0, y: 2.8, z: -7.6}
@@ -174,7 +174,7 @@ MonoBehaviour:
     EyeHeight: 1.62
     FirstPersonNearClip: 0.03
     EyeCollisionRadius: 0.15
-    FirstPersonMinimumPitch: -85
+    FirstPersonMinimumPitch: -89
     FirstPersonMaximumPitch: 85
     FlightFovIncrease: 5
     FlightFovSpeed: 8
