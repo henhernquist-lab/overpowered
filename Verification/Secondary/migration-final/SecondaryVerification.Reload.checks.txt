@@ -1,0 +1,3 @@
+PASS Exactly the requested eight combat and four secondary powers have their assigned roles.
+PASS Teleport is available in every hero roster.
+PASS Separate process reload retains both attacks and Teleport secondary.

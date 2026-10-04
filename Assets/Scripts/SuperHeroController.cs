@@ -60,7 +60,7 @@ public sealed class SuperHeroController : MonoBehaviour
     /// Verification only (batch mode has no keyboard): used as the camera-relative movement input when non-zero.
     public Vector3 ScriptedMove; public bool ScriptedRun;
     // Verification input follows the exact same flight resource and motion path as keyboard input.
-    public bool ScriptedFlight, ScriptedAscend;
+    public bool ScriptedFlight, ScriptedAscend, ScriptedSecondaryPress;
     bool BasicMelee(bool kick)
     {
         if(Time.time<basicReadyAt||powers.SynergyRunner.Busy)return false;
@@ -90,6 +90,10 @@ public sealed class SuperHeroController : MonoBehaviour
         if (acceptsInput && ScriptedMove.sqrMagnitude > 0f) move = Vector3.ProjectOnPlane(ScriptedMove, Vector3.up).normalized;
         MoveInput = move;
         bool flying = acceptsInput && !controller.isGrounded && (Input.GetKey(KeyCode.F) || ScriptedFlight) && powers.ConsumeFlight(Time.deltaTime);
+        bool secondaryPressed=Input.GetKeyDown(KeyCode.F)||ScriptedSecondaryPress;
+        ScriptedSecondaryPress=false;
+        if (acceptsInput && secondaryPressed && powers.EquippedSecondary != null && !powers.EquippedSecondary.Effect.IsFlight)
+            powers.UseSecondary();
         if (move.sqrMagnitude > 0f) transform.forward = Vector3.Slerp(transform.forward, move, Time.deltaTime * movement.TurnResponse);
         float speed = (Input.GetKey(KeyCode.LeftShift) || ScriptedRun ? movement.RunSpeed : movement.WalkSpeed) * powers.HeroStats.MoveSpeed;
         if (controller.isGrounded && verticalVelocity < 0f) verticalVelocity = -movement.GroundStickSpeed;
@@ -414,6 +418,23 @@ public sealed class SuperHeroController : MonoBehaviour
             controller.radius+controller.skinWidth,delta.normalized,traversalHits,delta.magnitude,~0,QueryTriggerInteraction.Ignore);
         if(count==traversalHits.Length)return false;
         for(int i=0;i<count;i++)if(TraversalObstacle(traversalHits[i].collider))return false;
+        return true;
+    }
+    /// A grounded short blink. The entire standing capsule and travel corridor must be clear,
+    /// and the destination must have a walkable support surface.
+    public bool TryTeleport(float distance)
+    {
+        if(!TraversalInputAllowed||!controller.isGrounded||Mantling||AbilityDriving||Dashing||BackflipActive||GroundPounding)return false;
+        Vector3 direction=Vector3.ProjectOnPlane(view!=null?view.transform.forward:transform.forward,Vector3.up).normalized;
+        if(direction.sqrMagnitude<.5f||distance<=0f)return false;
+        Vector3 from=transform.position;
+        Vector3 target=from+direction*distance;
+        if(!CapsulePathClear(from+Vector3.up*.1f,target+Vector3.up*.1f))return false;
+        if(!Physics.Raycast(target+Vector3.up*.5f,Vector3.down,out var support,1f,~0,QueryTriggerInteraction.Ignore)||
+            support.collider.transform.root==transform||support.normal.y<Mathf.Cos(controller.slopeLimit*Mathf.Deg2Rad))return false;
+        target.y=support.point.y+controller.skinWidth+.02f;
+        if(Mathf.Abs(target.y-from.y)>.5f||!CapsuleClear(target))return false;
+        controller.enabled=false;transform.position=target;controller.enabled=true;ResetMotion();Physics.SyncTransforms();
         return true;
     }
     /// Geometric ledge probe, shared by player input and verification. No building tags/components required.

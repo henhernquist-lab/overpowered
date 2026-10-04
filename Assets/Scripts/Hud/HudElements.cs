@@ -74,9 +74,8 @@ public sealed class HudCrosshair : VisualElement
 }
 
 /// Key hints. The synergy key is data (ForgeCatalog.SynergyKey). Flight (F) and Strength (E) are hardcoded in
-/// SuperHeroController.Update, which is outside this change's scope; they are mirrored here in ONE place. Every other
-/// equipped power is selected with its number key (its index in PowerUser.Powers, as SuperHeroController does) and
-/// fired with LMB.
+/// SuperHeroController.Update, which is outside this change's scope; they are mirrored here in ONE place. The two
+/// combat powers use 1/2 and LMB; the independent secondary uses F.
 public static class HudBindings
 {
     public const string FlightKey = "F", StrengthKey = "E", FireSelected = "LMB", BasicMelee = "E / RMB";
@@ -90,6 +89,7 @@ public static class HudBindings
     public static bool FlightEquipped(PowerUser user) => user != null && user.Flight != null && user.IsEquipped(user.Flight.Definition);
     public static string PowerKey(PowerUser user, PowerRuntime power)
     {
+        if (power.Definition == user.EquippedSecondary) return "F";
         if (power.Definition.Effect != null && power.Definition.Effect.IsFlight) return FlightKey;
         if (power == user.Strength) return StrengthKey;
         // Same mapping SuperHeroController reads (PowerUser.SlotNumber): Forge slot A = 1, slot B = 2.

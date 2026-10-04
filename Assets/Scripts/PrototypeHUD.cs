@@ -79,13 +79,13 @@ public sealed class PrototypeHUD : MonoBehaviour
         if((hud&ModeHud.Powers)!=0) {
         if(p.IsEquipped(p.Flight.Definition))GUILayout.Label($"Flight {p.Flight.Fuel:F2}/{p.Stats(p.Flight).Duration:F2}s (ground recharge)");
         if(p.Forge!=null){
-            GUILayout.Label($"{p.HeroDefinition.DisplayName} / {p.EquippedA.DisplayName} + {p.EquippedB.DisplayName}");
+            GUILayout.Label($"{p.HeroDefinition.DisplayName} / attacks: {p.EquippedA.DisplayName} + {p.EquippedB.DisplayName} / secondary F: {p.EquippedSecondary?.DisplayName}");
             GUILayout.Label($"{p.Forge.SynergyKey}: {p.Synergy?.DisplayName??"No synergy"} / {p.SynergyRunner.Cooldown:F1}s — {p.SynergyRunner.Feedback}");
         }
         if(current!=null) GUILayout.Label($"{current.Definition.DisplayName} {current.Charges}/{p.Stats(current).Charges} charges | cooldown {current.Cooldown:F2}s");
         }
         GUILayout.Label(p.Message); GUILayout.Label(w.Hero.LastPunchResult); GUILayout.Label(w.Message);
-        GUILayout.Label("WASD · Shift run · Space jump/ascend · F hold flight\nLMB selected power · E punch · RMB hurricane kick · 1–5 select · Hold R interact\nQ backflip · Tab powers/upgrades · Esc pause / results / home");
+        GUILayout.Label("WASD · Shift run · Space jump/ascend · F secondary (hold airborne for Flight)\n1/2 select attacks · LMB use attack · E punch · RMB hurricane kick · Hold R interact\nQ backflip · Tab powers/upgrades · Esc pause / results / home");
         if(p.HeldBody!=null) GUILayout.Label("Telekinesis: LMB hurl; timeout releases safely.");
         if(w.Mode==null&&progress.Data.Side==PlayerSide.Villain) GUILayout.Label($"Chaos: destroy props {w.ChaosProgress}/{w.Tuning.Crimes.ChaosTarget}");
         foreach(var line in ObjectiveLines(w)) GUILayout.Label(line);
@@ -113,8 +113,8 @@ public sealed class PrototypeHUD : MonoBehaviour
             GUILayout.Label($"{p.Powers.IndexOf(power)+1}. {d.DisplayName} · {(tier<0?"LOCKED":"Tier "+tier)}");
             GUILayout.Label(d.Description);
             GUILayout.Label($"Charges {s.Charges} · cooldown {s.Cooldown:F2}s · force {s.Force:F0} N·s\nDamage {s.Damage:F0} · duration {s.Duration:F1}s · range {s.Range:F1}m · energy {d.ResourceCost:F0}");
-            GUILayout.BeginHorizontal(); GUI.enabled=tier>=0&&p.IsEquipped(d);
-            if(GUILayout.Button("Select")) p.Select(power);
+            GUILayout.BeginHorizontal(); GUI.enabled=tier>=0&&p.IsEquipped(d)&&d.Role==PowerRole.Combat;
+            if(GUILayout.Button(d.Role==PowerRole.Secondary?"F secondary":"Select")) p.Select(power);
             // Powers are owned from the start (InitiallyUnlocked data); points only buy upgrade tiers, never ownership.
             int cost=tier>=0&&tier<d.Upgrades.Length?d.Upgrades[tier].PointCost:0;
             GUI.enabled=tier>=0 && tier<d.Upgrades.Length && progress.Data.Points>=cost;

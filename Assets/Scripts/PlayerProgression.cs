@@ -87,13 +87,18 @@ public sealed class PlayerProgression : MonoBehaviour
     public HeroDefinition SelectedHero => Resources.Load<ForgeCatalog>("ForgeCatalog")?.Hero(Data.Loadout?.HeroId);
     public PowerDefinition EquippedA => Array.Find(definitions,p=>p.Id==Data.Loadout?.PowerA);
     public PowerDefinition EquippedB => Array.Find(definitions,p=>p.Id==Data.Loadout?.PowerB);
+    public PowerDefinition EquippedSecondary => Array.Find(definitions,p=>p.Id==Data.Loadout?.SecondaryPower);
     public bool SetLoadout(HeroDefinition hero,PowerDefinition a,PowerDefinition b,CityColor primary,CityColor secondary)
+        => SetLoadout(hero,a,b,EquippedSecondary,primary,secondary);
+    public bool SetLoadout(HeroDefinition hero,PowerDefinition a,PowerDefinition b,PowerDefinition utility,CityColor primary,CityColor secondary)
     {
         var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");
-        if(forge==null||Array.IndexOf(forge.Heroes,hero)<0||a==b||!forge.Allowed(hero,a)||!forge.Allowed(hero,b)||!Owns(a)||!Owns(b))return false;
+        if(forge==null||Array.IndexOf(forge.Heroes,hero)<0||a==b||!forge.AllowedCombat(hero,a)||!forge.AllowedCombat(hero,b)||
+            !forge.AllowedSecondary(hero,utility)||!Owns(a)||!Owns(b)||!Owns(utility))return false;
         // Loadouts are chosen before play; changing a live loadout would reset ongoing resource/ability state.
         if(WorldSession.Instance!=null&&WorldSession.Instance.Progression==this)return false;
-        Data.Loadout=new HeroLoadout{HeroId=hero.Id,PowerA=a.Id,PowerB=b.Id,Primary=forge.ColorOrDefault(primary,hero.Primary),Secondary=forge.ColorOrDefault(secondary,hero.Secondary)};
+        Data.Loadout=new HeroLoadout{HeroId=hero.Id,PowerA=a.Id,PowerB=b.Id,SecondaryPower=utility.Id,
+            Primary=forge.ColorOrDefault(primary,hero.Primary),Secondary=forge.ColorOrDefault(secondary,hero.Secondary)};
         Save();Changed?.Invoke();return true;
     }
     void ValidateLoadout()
@@ -101,10 +106,17 @@ public sealed class PlayerProgression : MonoBehaviour
         var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");if(forge==null||forge.Heroes.Length==0)return;
         var hero=forge.Hero(Data.Loadout?.HeroId);
         var available=Array.FindAll(hero.AvailablePowers,p=>p!=null&&Owns(p));
-        if(available.Length<2)return;
-        var a=Array.Find(available,p=>p.Id==Data.Loadout?.PowerA)??(Owns(hero.DefaultA)?hero.DefaultA:available[0]);
-        var b=Array.Find(available,p=>p.Id==Data.Loadout?.PowerB&&p!=a)??Array.Find(available,p=>p==hero.DefaultB&&p!=a)??Array.Find(available,p=>p!=a);
-        Data.Loadout=new HeroLoadout{HeroId=hero.Id,PowerA=a.Id,PowerB=b.Id,
+        var combat=Array.FindAll(available,p=>p.Role==PowerRole.Combat);
+        var utilities=Array.FindAll(available,p=>p.Role==PowerRole.Secondary);
+        if(combat.Length<2||utilities.Length==0)return;
+        var old=Data.Loadout;
+        var a=Array.Find(combat,p=>p.Id==old?.PowerA)??Array.Find(combat,p=>p==hero.DefaultA)??combat[0];
+        var b=Array.Find(combat,p=>p.Id==old?.PowerB&&p!=a)??Array.Find(combat,p=>p==hero.DefaultB&&p!=a)??Array.Find(combat,p=>p!=a);
+        // Older two-slot saves may have placed Flight, Speed or Force Field in either combat slot.
+        var utility=Array.Find(utilities,p=>p.Id==old?.SecondaryPower)??
+            Array.Find(utilities,p=>p.Id==old?.PowerA||p.Id==old?.PowerB)??
+            Array.Find(utilities,p=>p.Id=="flight")??utilities[0];
+        Data.Loadout=new HeroLoadout{HeroId=hero.Id,PowerA=a.Id,PowerB=b.Id,SecondaryPower=utility.Id,
             Primary=forge.ColorOrDefault(Data.Loadout?.Primary??hero.Primary,hero.Primary),
             Secondary=forge.ColorOrDefault(Data.Loadout?.Secondary??hero.Secondary,hero.Secondary)};
     }

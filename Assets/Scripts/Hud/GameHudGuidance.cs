@@ -505,7 +505,11 @@ public sealed partial class GameHud
         }
         switch (id)
         {
-            case "move": Pair(HudBindings.JumpKey, "JUMP"); if (HudBindings.FlightEquipped(user)) Pair(HudBindings.FlightKey, "HOLD IN THE AIR TO FLY"); break;
+            case "move":
+                Pair(HudBindings.JumpKey, "JUMP");
+                if (user.EquippedSecondary != null)
+                    Pair("F", user.EquippedSecondary.Effect.IsFlight ? "HOLD IN THE AIR TO FLY" : user.EquippedSecondary.DisplayName.ToUpperInvariant());
+                break;
             case "punch": Pair(HudBindings.MeleeKey(user), "PUNCH"); break;
             case "dodge": Pair(HudBindings.BackflipKey, "BACKFLIP TO DODGE"); break;
             case "interact": Pair(HudBindings.InteractKey, "HOLD TO INTERACT"); break;

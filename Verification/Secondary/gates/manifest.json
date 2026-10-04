@@ -1,0 +1,36 @@
+[
+  {
+    "entry": "SecondaryVerification.Run",
+    "commit": "10822e031e3fbba812afe8ed9b9c001acfc5ae74",
+    "status_before": "M .freebuff/project-id\n M Assets/Resources/Forge/Heroes/nova.asset\n M Assets/Resources/Forge/Heroes/titan.asset\n M Assets/Resources/Forge/Heroes/vector.asset\n M Assets/Resources/GameTuning.asset\n M Assets/Resources/Powers/flight.asset\n M Assets/Resources/Powers/force-field.asset\n M Assets/Resources/Powers/speed.asset\n M Assets/Scripts/BackflipHurricaneVerificationRunner.cs\n M Assets/Scripts/Forge/ForgeCatalog.cs\n M Assets/Scripts/Forge/HeroForgeScreen.cs\n M Assets/Scripts/GameHud.cs\n M Assets/Scripts/GameTuning.cs\n M Assets/Scripts/Hud/HudElements.cs\n M Assets/Scripts/MovementVerificationRunner.cs\n M Assets/Scripts/PlayerProgression.cs\n M Assets/Scripts/PowerDefinition.cs\n M Assets/Scripts/PowerUser.cs\n M Assets/Scripts/PrototypeHUD.cs\n M Assets/Scripts/SuperHeroController.cs\n?? Assets/Editor/SecondaryVerification.cs\n?? Assets/Editor/SecondaryVerification.cs.meta\n?? Assets/Resources/Effects/Teleport.asset\n?? Assets/Resources/Effects/Teleport.asset.meta\n?? Assets/Resources/Powers/teleport.asset\n?? Assets/Resources/Powers/teleport.asset.meta\n?? Assets/Scripts/Powers/TeleportEffect.cs\n?? Assets/Scripts/Powers/TeleportEffect.cs.meta\n?? Assets/Scripts/SecondaryVerificationRunner.cs\n?? Assets/Scripts/SecondaryVerificationRunner.cs.meta\n?? Verification/Movement/secondary-build.txt\n?? Verification/Secondary/",
+    "started_utc": "2026-10-04T21:38:42.967922+00:00",
+    "save_before": "7457a12901d07b347f85c659ff9aa5fa906e905425c454dbd05c995007daaaa4",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Secondary/gates/SecondaryVerification.Run.log",
+    "pid": 62154,
+    "exit": 0,
+    "seconds": 52.81,
+    "pass": 34,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Resources/Forge/Heroes/nova.asset\n M Assets/Resources/Forge/Heroes/titan.asset\n M Assets/Resources/Forge/Heroes/vector.asset\n M Assets/Resources/GameTuning.asset\n M Assets/Resources/Powers/flight.asset\n M Assets/Resources/Powers/force-field.asset\n M Assets/Resources/Powers/speed.asset\n M Assets/Scripts/BackflipHurricaneVerificationRunner.cs\n M Assets/Scripts/Forge/ForgeCatalog.cs\n M Assets/Scripts/Forge/HeroForgeScreen.cs\n M Assets/Scripts/GameHud.cs\n M Assets/Scripts/GameTuning.cs\n M Assets/Scripts/Hud/GameHudGuidance.cs\n M Assets/Scripts/Hud/HudElements.cs\n M Assets/Scripts/MovementVerificationRunner.cs\n M Assets/Scripts/PlayerProgression.cs\n M Assets/Scripts/PowerDefinition.cs\n M Assets/Scripts/PowerUser.cs\n M Assets/Scripts/PrototypeHUD.cs\n M Assets/Scripts/SuperHeroController.cs\n?? Assets/Editor/SecondaryVerification.cs\n?? Assets/Editor/SecondaryVerification.cs.meta\n?? Assets/Resources/Effects/Teleport.asset\n?? Assets/Resources/Effects/Teleport.asset.meta\n?? Assets/Resources/Powers/teleport.asset\n?? Assets/Resources/Powers/teleport.asset.meta\n?? Assets/Scripts/Powers/TeleportEffect.cs\n?? Assets/Scripts/Powers/TeleportEffect.cs.meta\n?? Assets/Scripts/SecondaryVerificationRunner.cs\n?? Assets/Scripts/SecondaryVerificationRunner.cs.meta\n?? Verification/Movement/secondary-build.txt\n?? Verification/Secondary/"
+  },
+  {
+    "entry": "SecondaryVerification.Reload",
+    "commit": "10822e031e3fbba812afe8ed9b9c001acfc5ae74",
+    "status_before": "M .freebuff/project-id\n M Assets/Resources/Forge/Heroes/nova.asset\n M Assets/Resources/Forge/Heroes/titan.asset\n M Assets/Resources/Forge/Heroes/vector.asset\n M Assets/Resources/GameTuning.asset\n M Assets/Resources/Powers/flight.asset\n M Assets/Resources/Powers/force-field.asset\n M Assets/Resources/Powers/speed.asset\n M Assets/Scripts/BackflipHurricaneVerificationRunner.cs\n M Assets/Scripts/Forge/ForgeCatalog.cs\n M Assets/Scripts/Forge/HeroForgeScreen.cs\n M Assets/Scripts/GameHud.cs\n M Assets/Scripts/GameTuning.cs\n M Assets/Scripts/Hud/GameHudGuidance.cs\n M Assets/Scripts/Hud/HudElements.cs\n M Assets/Scripts/MovementVerificationRunner.cs\n M Assets/Scripts/PlayerProgression.cs\n M Assets/Scripts/PowerDefinition.cs\n M Assets/Scripts/PowerUser.cs\n M Assets/Scripts/PrototypeHUD.cs\n M Assets/Scripts/SuperHeroController.cs\n?? Assets/Editor/SecondaryVerification.cs\n?? Assets/Editor/SecondaryVerification.cs.meta\n?? Assets/Resources/Effects/Teleport.asset\n?? Assets/Resources/Effects/Teleport.asset.meta\n?? Assets/Resources/Powers/teleport.asset\n?? Assets/Resources/Powers/teleport.asset.meta\n?? Assets/Scripts/Powers/TeleportEffect.cs\n?? Assets/Scripts/Powers/TeleportEffect.cs.meta\n?? Assets/Scripts/SecondaryVerificationRunner.cs\n?? Assets/Scripts/SecondaryVerificationRunner.cs.meta\n?? Verification/Movement/secondary-build.txt\n?? Verification/Secondary/",
+    "started_utc": "2026-10-04T21:39:35.973354+00:00",
+    "save_before": "7457a12901d07b347f85c659ff9aa5fa906e905425c454dbd05c995007daaaa4",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Secondary/gates/SecondaryVerification.Reload.log",
+    "pid": 62458,
+    "exit": 0,
+    "seconds": 30.79,
+    "pass": 3,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Resources/Forge/Heroes/nova.asset\n M Assets/Resources/Forge/Heroes/titan.asset\n M Assets/Resources/Forge/Heroes/vector.asset\n M Assets/Resources/GameTuning.asset\n M Assets/Resources/Powers/flight.asset\n M Assets/Resources/Powers/force-field.asset\n M Assets/Resources/Powers/speed.asset\n M Assets/Scripts/BackflipHurricaneVerificationRunner.cs\n M Assets/Scripts/Forge/ForgeCatalog.cs\n M Assets/Scripts/Forge/HeroForgeScreen.cs\n M Assets/Scripts/GameHud.cs\n M Assets/Scripts/GameTuning.cs\n M Assets/Scripts/Hud/GameHudGuidance.cs\n M Assets/Scripts/Hud/HudElements.cs\n M Assets/Scripts/MovementVerificationRunner.cs\n M Assets/Scripts/PlayerProgression.cs\n M Assets/Scripts/PowerDefinition.cs\n M Assets/Scripts/PowerUser.cs\n M Assets/Scripts/PrototypeHUD.cs\n M Assets/Scripts/SuperHeroController.cs\n?? Assets/Editor/SecondaryVerification.cs\n?? Assets/Editor/SecondaryVerification.cs.meta\n?? Assets/Resources/Effects/Teleport.asset\n?? Assets/Resources/Effects/Teleport.asset.meta\n?? Assets/Resources/Powers/teleport.asset\n?? Assets/Resources/Powers/teleport.asset.meta\n?? Assets/Scripts/Powers/TeleportEffect.cs\n?? Assets/Scripts/Powers/TeleportEffect.cs.meta\n?? Assets/Scripts/SecondaryVerificationRunner.cs\n?? Assets/Scripts/SecondaryVerificationRunner.cs.meta\n?? Verification/Movement/secondary-build.txt\n?? Verification/Secondary/"
+  }
+]

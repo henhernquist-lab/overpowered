@@ -11,10 +11,12 @@ using UnityEngine;
 /// energy needed to START, no charge is spent, DrainPerSecond is taken every frame while held, and Cooldown starts when the
 /// channel ends. Defensive powers (Force Field) are ordinary instant activations whose effect acts on the player.
 public enum PowerActivation { Instant, Channeled }
+public enum PowerRole { Combat, Secondary }
 [CreateAssetMenu(menuName = "Overpowered/Power")]
 public sealed class PowerDefinition : ScriptableObject
 {
     public string Id, DisplayName;
+    public PowerRole Role;
     [TextArea] public string Description;
     public PowerEffect Effect;
     public bool InitiallyUnlocked;

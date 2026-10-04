@@ -12,12 +12,13 @@ public sealed class HeroForgeScreen : MonoBehaviour
     public Label SynergyStatus {get;private set;}
     public ForgeChoice SlotA {get;private set;}
     public ForgeChoice SlotB {get;private set;}
+    public ForgeChoice SecondarySlot {get;private set;}
     public RenderTexture Preview {get;private set;}
     /// Archetype comparison bars under the preview (rebuilt with the form when the hero changes).
     public VisualElement StatsPanel {get;private set;}
     /// The character instance of the last captured preview (verification reads its recoloured material).
     public GameObject PreviewModel {get;private set;}
-    ModeScreens menu;ForgeCatalog catalog;HeroDefinition hero;PowerDefinition a,b;
+    ModeScreens menu;ForgeCatalog catalog;HeroDefinition hero;PowerDefinition a,b,utility;
     CityColor primary,secondary;CityPalette palette;GameObject previewRoot;bool rebuilding;
     Camera previewCamera;CinemachineBrain revealBrain;Transform orbitPivot;float revealStarted;bool revealActive;
     public bool RevealActive=>revealActive;
@@ -41,14 +42,15 @@ public sealed class HeroForgeScreen : MonoBehaviour
         StatsPanel=new VisualElement{name="forge-stats"};StatsPanel.style.backgroundColor=C(CityColor.UiPanel);StatsPanel.style.paddingLeft=StatsPanel.style.paddingRight=12;
         StatsPanel.style.paddingTop=StatsPanel.style.paddingBottom=8;StatsPanel.style.marginTop=8;column.Add(StatsPanel);
         Preview=new RenderTexture(400,500,24){name="Hero Forge preview"};Preview.Create();image.image=Preview;
-        form=new VisualElement();form.style.flexGrow=1;form.style.paddingTop=12;row.Add(form);
+        var formScroll=new ScrollView(ScrollViewMode.Vertical);formScroll.style.flexGrow=1;row.Add(formScroll);
+        form=new VisualElement();form.style.paddingTop=12;formScroll.Add(form);
         feedback=new Label();feedback.style.fontSize=15;Root.Add(feedback);
         var done=new Button(()=>Close()){text="SAVE & BACK",name="forge-done"};done.style.height=48;done.style.marginTop=16;done.style.marginBottom=20;done.style.backgroundColor=C(CityColor.HeroAccent);done.style.color=C(CityColor.UiNavy);done.style.fontSize=18;done.style.unityFontStyleAndWeight=FontStyle.Bold;done.style.unityTextAlign=TextAnchor.MiddleCenter;Root.Add(done);
         Open();
     }
     public void Open()
     {
-        var saved=menu.Profile.Data.Loadout;hero=catalog.Hero(saved.HeroId);a=menu.Profile.EquippedA;b=menu.Profile.EquippedB;primary=saved.Primary;secondary=saved.Secondary;
+        var saved=menu.Profile.Data.Loadout;hero=catalog.Hero(saved.HeroId);a=menu.Profile.EquippedA;b=menu.Profile.EquippedB;utility=menu.Profile.EquippedSecondary;primary=saved.Primary;secondary=saved.Secondary;
         Root.style.display=DisplayStyle.Flex;Rebuild();Capture();
     }
     public void Close(){Root.style.display=DisplayStyle.None;revealActive=false;}
@@ -56,23 +58,26 @@ public sealed class HeroForgeScreen : MonoBehaviour
     {
         if(Array.IndexOf(catalog.Heroes,value)<0)return false;
         hero=value;primary=hero.Primary;secondary=hero.Secondary;
-        var owned=hero.AvailablePowers.Where(menu.Profile.Owns).ToArray();
+        var owned=hero.AvailablePowers.Where(p=>menu.Profile.Owns(p)&&p.Role==PowerRole.Combat).ToArray();
         a=owned.Contains(hero.DefaultA)?hero.DefaultA:owned[0];
         b=owned.Contains(hero.DefaultB)&&hero.DefaultB!=a?hero.DefaultB:owned.First(p=>p!=a);
+        utility=hero.AvailablePowers.First(p=>menu.Profile.Owns(p)&&p.Role==PowerRole.Secondary);
         return Save();
     }
     public bool SelectPower(int slot,PowerDefinition power)
     {
-        if(!catalog.Allowed(hero,power)||!menu.Profile.Owns(power))return false;
-        if(slot==0){a=power;if(b==a)b=hero.AvailablePowers.First(p=>p!=a&&menu.Profile.Owns(p));}
+        if(!menu.Profile.Owns(power))return false;
+        if(slot==2){if(!catalog.AllowedSecondary(hero,power))return false;utility=power;return Save();}
+        if(!catalog.AllowedCombat(hero,power))return false;
+        if(slot==0){a=power;if(b==a)b=hero.AvailablePowers.First(p=>p!=a&&p.Role==PowerRole.Combat&&menu.Profile.Owns(p));}
         else if(slot==1){if(power==a)return false;b=power;}else return false;
         return Save();
     }
     public bool SetColors(CityColor first,CityColor second){primary=first;secondary=second;return Save();}
     bool Save()
     {
-        bool ok=menu.Profile.SetLoadout(hero,a,b,primary,secondary);
-        if(ok){feedback.text="BUILD SAVED";Rebuild();Capture();BeginReveal();}else feedback.text="Choose two different powers.";
+        bool ok=menu.Profile.SetLoadout(hero,a,b,utility,primary,secondary);
+        if(ok){feedback.text="BUILD SAVED";Rebuild();Capture();BeginReveal();}else feedback.text="Choose two different attack powers and one secondary.";
         return ok;
     }
     ForgeChoice Dropdown(string title,string[] values,int selected,Action<int> changed)
@@ -86,11 +91,13 @@ public sealed class HeroForgeScreen : MonoBehaviour
         Dropdown("HERO",catalog.Heroes.Select(h=>h.DisplayName).ToArray(),Array.IndexOf(catalog.Heroes,hero),i=>SelectHero(catalog.Heroes[i]));
         Dropdown("PRIMARY SUIT",catalog.SuitColors.Select(c=>c.ToString()).ToArray(),Array.IndexOf(catalog.SuitColors,primary),i=>SetColors(catalog.SuitColors[i],secondary));
         Dropdown("SECONDARY SUIT",catalog.SuitColors.Select(c=>c.ToString()).ToArray(),Array.IndexOf(catalog.SuitColors,secondary),i=>SetColors(primary,catalog.SuitColors[i]));
-        var first=hero.AvailablePowers.Where(menu.Profile.Owns).ToArray();
-        SlotA=Dropdown("POWER SLOT 1",first.Select(p=>p.DisplayName).ToArray(),Array.IndexOf(first,a),i=>SelectPower(0,first[i]));
+        var first=hero.AvailablePowers.Where(p=>menu.Profile.Owns(p)&&p.Role==PowerRole.Combat).ToArray();
+        SlotA=Dropdown("ATTACK POWER 1",first.Select(p=>p.DisplayName).ToArray(),Array.IndexOf(first,a),i=>SelectPower(0,first[i]));
         var second=first.Where(p=>p!=a).ToArray();
-        SlotB=Dropdown("POWER SLOT 2",second.Select(p=>p.DisplayName).ToArray(),Array.IndexOf(second,b),i=>SelectPower(1,second[i]));
-        var synergy=catalog.Resolve(a,b);
+        SlotB=Dropdown("ATTACK POWER 2",second.Select(p=>p.DisplayName).ToArray(),Array.IndexOf(second,b),i=>SelectPower(1,second[i]));
+        var secondaries=hero.AvailablePowers.Where(p=>menu.Profile.Owns(p)&&p.Role==PowerRole.Secondary).ToArray();
+        SecondarySlot=Dropdown("SECONDARY POWER / F",secondaries.Select(p=>p.DisplayName).ToArray(),Array.IndexOf(secondaries,utility),i=>SelectPower(2,secondaries[i]));
+        var synergy=catalog.Resolve(a,b,utility);
         SynergyLabel=new Label("SYNERGY / "+(synergy?.DisplayName??"No synergy")){name="forge-synergy"};
         SynergyLabel.style.fontSize=24;SynergyLabel.style.whiteSpace=WhiteSpace.Normal;SynergyLabel.style.color=C(CityColor.HeroAccent);form.Add(SynergyLabel);
         // Synergies have no unlock step: the equipped pair's synergy is available at once, gated only by its cooldown.

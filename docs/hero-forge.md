@@ -1,7 +1,7 @@
 # Hero Forge
 
 Start at Home and choose **Hero Forge / Select Hero**. Previous/next buttons choose a
-hero, two palette suit colors and two distinct unlocked powers. Changes save immediately
+hero, two palette suit colors, two distinct combat powers and one secondary power. Changes save immediately
 through PlayerProgression's existing atomic JSON save. Save & Back returns to the
 unchanged mode cards. The same loadout is read by every mode that uses BuildCity.
 Each successful save plays a 0.85 s Cinemachine reveal of the preview (orbit from -28 to
@@ -16,16 +16,19 @@ and the gameplay/first-person cameras are not Cinemachine-driven.
   vary by device; hardware controller input has not been tested.
 - Press the same button again during either orbit to release its volley early.
   Otherwise the volley releases automatically after its configured orbit duration.
-- HUD shows the equipped pair, synergy, remaining cooldown and refusal feedback.
-- Existing E punch, RMB Hurricane Kick, Q backflip, F flight and selected-power controls
+- HUD shows both combat powers, the F secondary, synergy, remaining cooldown and refusal feedback.
+- **1/2** select the two combat powers; **LMB** uses the selected one. **F** activates the chosen secondary
+  (hold it while airborne for Flight). The secondary choices are Flight, Speed, Force Field and Teleport.
+- Existing E punch, RMB Hurricane Kick, Q backflip and selected-power controls
   remain. Unequipped powers are rejected inside PowerUser, including direct calls and
   flight fuel consumption. E/RMB retain weaker basic melee when Strength is not equipped
   (160 N·s / 8 damage before kick multipliers, 0.65s shared basic cooldown).
   With Strength equipped, the existing charge/cooldown and upgrade pipeline is unchanged.
-- Forge respects existing power ownership: fresh saves still start with Flight/Strength.
+- Forge respects existing power ownership: fresh saves start with two combat powers and Flight as the secondary.
   Unlock buttons use PlayerProgression.Buy and existing XP-earned points. Selecting a hero
-  never grants free powers or spends points; locked defaults fall back to two owned powers.
-  Thus the three starting silhouettes share the starter pair until more powers are unlocked.
+  never grants free powers or spends points; locked defaults fall back to owned combat and secondary powers.
+  Older two-slot saves place a secondary formerly in either attack slot into the new F slot and fill the attack pair
+  with owned combat powers. Existing ownership, XP and upgrades are retained.
 - Backflip has no invulnerability. Synergies do not make the player immune to damage either.
 
 ## Data and runtime ownership
@@ -38,7 +41,7 @@ and the gameplay/first-person cameras are not Cinemachine-driven.
 | Resources/Forge/Synergies/*.asset | Unordered pair, name/icon, effect reference, cooldown and effect parameters |
 | Resources/Forge/Effects/*.asset | Reusable behaviour variants, such as targeted/vertical slam or icy/physical lift |
 | ProgressSave.Loadout | Additive version-1-compatible hero/power IDs and palette roles; no second save file/framework |
-| PowerUser | Cached immutable-for-session pair, actual ability gates, synergy reference |
+| PowerUser | Cached combat pair and F secondary for the session, ownership/equip gates, synergy reference |
 | SynergyRunner | Validity, cooldown, bounded execution, cleanup, physics helper methods and short FOV kick |
 | HumanoidPresentation | Existing shared Animator and bone/visual-root ownership; selected prefab replaces only the model |
 

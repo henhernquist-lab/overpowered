@@ -16,6 +16,7 @@ public sealed class PowerUser : MonoBehaviour
     public ForgeCatalog Forge {get;private set;}
     public PowerDefinition EquippedA {get;private set;}
     public PowerDefinition EquippedB {get;private set;}
+    public PowerDefinition EquippedSecondary {get;private set;}
     public PowerSynergyDefinition Synergy {get;private set;}
     public HeroDefinition HeroDefinition {get;private set;}
     public SynergyRunner SynergyRunner {get;private set;}
@@ -55,7 +56,7 @@ public sealed class PowerUser : MonoBehaviour
     public HeroStats HeroStats => HeroDefinition != null && HeroDefinition.Stats != null ? HeroDefinition.Stats : HeroStats.Baseline;
     public float MaxEnergy => config.Energy * HeroStats.MaxEnergy;
     public float EnergyRegen => config.EnergyRecharge * HeroStats.EnergyRegen;
-    public bool IsEquipped(PowerDefinition definition)=>definition!=null&&(Forge==null||definition==EquippedA||definition==EquippedB);
+    public bool IsEquipped(PowerDefinition definition)=>definition!=null&&(Forge==null||definition==EquippedA||definition==EquippedB||definition==EquippedSecondary);
     public Vector3 AimOrigin
     {
         get
@@ -98,10 +99,10 @@ public sealed class PowerUser : MonoBehaviour
             if (definition.Id == "strength") Strength = runtime;
         }
         Forge=Resources.Load<ForgeCatalog>("ForgeCatalog");
-        EquippedA=progression.EquippedA;EquippedB=progression.EquippedB;HeroDefinition=progression.SelectedHero;
+        EquippedA=progression.EquippedA;EquippedB=progression.EquippedB;EquippedSecondary=progression.EquippedSecondary;HeroDefinition=progression.SelectedHero;
         Energy = MaxEnergy;
-        Synergy=Forge?.Resolve(EquippedA,EquippedB);
-        Selected = Powers.Find(p=>IsEquipped(p.Definition)&&!p.Definition.Effect.IsFlight)??Strength; progression.Changed += Refresh;
+        Synergy=Forge?.Resolve(EquippedA,EquippedB,EquippedSecondary);
+        Selected = Powers.Find(p=>p.Definition==EquippedA)??Strength; progression.Changed += Refresh;
         Refresh();
         // Stats: one equipped session per power (a Forge loadout's two powers; without a Forge every power counts).
         foreach (var p in Powers) if (IsEquipped(p.Definition) && progression.Owns(p.Definition)) { var u = progression.Usage(p.Definition.Id, true); if (u != null) u.Sessions++; }
@@ -122,7 +123,7 @@ public sealed class PowerUser : MonoBehaviour
     }
     public bool Select(PowerRuntime power)
     {
-        if (power==null||!Powers.Contains(power)||!IsEquipped(power.Definition)||!Progression.Owns(power.Definition)) return false;
+        if (power==null||!Powers.Contains(power)||power.Definition.Role!=PowerRole.Combat||!IsEquipped(power.Definition)||!Progression.Owns(power.Definition)) return false;
         Release(false); EndChannel(); Selected = power; Message = power.Definition.Description; return true;
     }
     /// Number key (1-9) for a power. With Hero Forge: 1 = equipped slot A, 2 = slot B (the roster has more than nine powers,
@@ -137,6 +138,13 @@ public sealed class PowerUser : MonoBehaviour
     {
         if (Forge != null) { var d = number == 1 ? EquippedA : number == 2 ? EquippedB : null; return d == null ? null : Powers.Find(p => p.Definition == d); }
         return number >= 1 && number <= Mathf.Min(9, Powers.Count) ? Powers[number - 1] : null;
+    }
+    public PowerRuntime SecondaryRuntime => EquippedSecondary == null ? null : Powers.Find(p=>p.Definition==EquippedSecondary);
+    public bool UseSecondary()
+    {
+        var power=SecondaryRuntime;
+        if(power==null||power.Definition.Effect.IsFlight){Message="Hold F in the air to fly";return false;}
+        return Use(power);
     }
     /// Damage the player is about to take, after the Force Field (if raised) absorbs what it can.
     public float AbsorbIncoming(float damage) => Shield != null ? Shield.Absorb(damage) : damage;

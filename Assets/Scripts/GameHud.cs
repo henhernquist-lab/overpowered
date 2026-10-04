@@ -178,15 +178,15 @@ public sealed partial class GameHud : MonoBehaviour
     }
 
     // ------------------------------------------------------------------ power bar (built from the loadout)
-    PowerDefinition builtA, builtB; PowerSynergyDefinition builtSynergy; int builtCount; bool builtStrength, built; KeyCode builtKey;
+    PowerDefinition builtA, builtB, builtSecondary; PowerSynergyDefinition builtSynergy; int builtCount; bool builtStrength, built; KeyCode builtKey;
     static bool StrengthEquipped(PowerUser user) => user.Strength != null && user.IsEquipped(user.Strength.Definition);
     /// Allocation-free per-frame check that the loadout still matches what the bar was built from.
-    bool LoadoutChanged(PowerUser user) => !built || user.EquippedA != builtA || user.EquippedB != builtB || user.Synergy != builtSynergy || user.Powers.Count != builtCount ||
+    bool LoadoutChanged(PowerUser user) => !built || user.EquippedA != builtA || user.EquippedB != builtB || user.EquippedSecondary != builtSecondary || user.Synergy != builtSynergy || user.Powers.Count != builtCount ||
         StrengthEquipped(user) != builtStrength || (catalog != null ? catalog.SynergyKey : KeyCode.None) != builtKey;
     static string Signature(PowerUser user, ForgeCatalog forge)
     {
         if (user == null) return "";
-        return $"{user.EquippedA?.Id}|{user.EquippedB?.Id}|{user.Synergy?.Id}|{user.Powers.Count}|{forge?.SynergyKey}|{(user.Strength != null && user.IsEquipped(user.Strength.Definition))}";
+        return $"{user.EquippedA?.Id}|{user.EquippedB?.Id}|{user.EquippedSecondary?.Id}|{user.Synergy?.Id}|{user.Powers.Count}|{forge?.SynergyKey}|{(user.Strength != null && user.IsEquipped(user.Strength.Definition))}";
     }
     /// The slots, in loadout order: every equipped power the player owns, then the synergy.
     /// Without a Forge catalog every owned power is "equipped" (PowerUser.IsEquipped), so they all become slots.
@@ -195,7 +195,7 @@ public sealed partial class GameHud : MonoBehaviour
         var list = new List<PowerRuntime>();
         if (user.Forge != null)
         {
-            foreach (var definition in new[] { user.EquippedA, user.EquippedB })
+            foreach (var definition in new[] { user.EquippedA, user.EquippedB, user.EquippedSecondary })
             { var runtime = user.Powers.Find(p => p.Definition == definition); if (runtime != null && !list.Contains(runtime)) list.Add(runtime); }
         }
         else foreach (var runtime in user.Powers) if (user.Progression.Owns(runtime.Definition)) list.Add(runtime);
@@ -211,6 +211,11 @@ public sealed partial class GameHud : MonoBehaviour
         foreach (var runtime in EquippedPowers(user))
         {
             var d = runtime.Definition;
+            if (d == user.EquippedSecondary)
+            {
+                var divider = Box("secondary-divider"); divider.style.width = 2; divider.style.height = 50; divider.style.marginTop = 11;
+                divider.style.marginLeft = 4; divider.style.marginRight = 4; divider.style.backgroundColor = Alpha(C(CityColor.UiMuted), .35f); PowerBar.Add(divider);
+            }
             PowerBar.Add(Slot(new HudSlot { Id = d.Id, Power = runtime, Glyph = d.MenuIcon, Color = C(d.PaletteColor), Name = d.DisplayName, KeyText = HudBindings.PowerKey(user, runtime), Flight = d.Effect != null && d.Effect.IsFlight }));
         }
         if (user.Synergy != null && user.SynergyRunner != null)
@@ -221,7 +226,7 @@ public sealed partial class GameHud : MonoBehaviour
             PowerBar.Add(Slot(new HudSlot { Id = s.Id, Synergy = s, Glyph = s.Icon, Color = C(s.Primary), Name = s.DisplayName, KeyText = catalog != null ? HudBindings.KeyName(catalog.SynergyKey) : "" }));
         }
         BuiltSignature = Signature(user, catalog); Rebuilds++;
-        builtA = user.EquippedA; builtB = user.EquippedB; builtSynergy = user.Synergy; builtCount = user.Powers.Count; builtStrength = StrengthEquipped(user); builtKey = catalog != null ? catalog.SynergyKey : KeyCode.None; built = true;
+        builtA = user.EquippedA; builtB = user.EquippedB; builtSecondary = user.EquippedSecondary; builtSynergy = user.Synergy; builtCount = user.Powers.Count; builtStrength = StrengthEquipped(user); builtKey = catalog != null ? catalog.SynergyKey : KeyCode.None; built = true;
     }
     VisualElement Slot(HudSlot slot)
     {

@@ -1,0 +1,1 @@
+MEASURED Sonic peak=154.312m, force=2600.0 N.s, bodies=1, near velocity=34.396m/s, displacement=0.615m; cooldown=34.597s.

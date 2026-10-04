@@ -1,0 +1,12 @@
+PASS Three selectable data-defined heroes.
+PASS Home button opens Forge in existing panel.
+PASS Character preview render texture exists.
+PASS Duplicate combat pair CONTROL rejected by save API.
+PASS Fresh profile owns every power with 0 points spent (InitiallyUnlocked data).
+PASS Forge shows no UNLOCK purchase buttons.
+PASS Unowned-power CONTROL (ownership removed in memory only) rejected by Forge and SetLoadout; ownership restored.
+PASS Select NOVA definition.
+PASS Suit palette roles saved.
+PASS Slot 1 collision repairs slot 2 immediately.
+PASS Slot 2 UI excludes duplicate.
+FAIL System.Exception: Select Fire + Ice attacks and Speed secondary.

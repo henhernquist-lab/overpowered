@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerDefinition
   Id: flight
   DisplayName: Flight
+  Role: 1
   Description: Hold F airborne. Space ascends; no directional input hovers. Land to recharge.
   Effect: {fileID: 11400000, guid: 5a16d0985b8a34843880e6d8ab29008c, type: 2}
   InitiallyUnlocked: 1

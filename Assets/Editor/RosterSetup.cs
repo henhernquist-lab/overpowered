@@ -65,6 +65,19 @@ public static class RosterSetup
             d.Damage = 10f; d.Force = 0f; d.Duration = 6f; d.Range = 20f;
             d.PaletteColor = CityColor.Leaf; d.MenuIcon = MenuGlyph.Crystal; d.CastingPresentation = true;
         });
+        Define("teleport", "Teleport", Effect<TeleportEffect>("Teleport"), d =>
+        {
+            d.Description="Blink across a clear path to supported ground.";
+            d.Role=PowerRole.Secondary;d.Charges=2;d.ChargeRecharge=5f;d.Cooldown=.75f;
+            d.ResourceCost=18f;d.Damage=0f;d.Force=0f;d.Range=8f;d.Duration=0f;
+            d.PaletteColor=CityColor.Blue;d.MenuIcon=MenuGlyph.Star;
+        });
+        foreach(var id in new[]{"flight","speed","force-field","teleport"})
+        {
+            var path="Assets/Resources/Powers/"+id+".asset";
+            var power=AssetDatabase.LoadAssetAtPath<PowerDefinition>(path);
+            if(power!=null&&power.Role!=PowerRole.Secondary){power.Role=PowerRole.Secondary;EditorUtility.SetDirty(power);}
+        }
         AddToHeroes();
         AddSynergies();
         HeroArchetypeSetup.Apply();
