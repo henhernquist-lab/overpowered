@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "MovementVerification.Baseline",
+    "commit": "37ffd121e8f955cb9741a521cecb48d36f48915e",
+    "status_before": "M .gitignore\n M \"Assets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uxml.meta\"\n M Assets/Scripts/SuperHeroController.cs\n M Assets/Scripts/WorldProfileRunner.cs\n M Verification/Splines/verify/district-docks-routes.png\n M Verification/Splines/verify/district-docks-street.png\n M Verification/Splines/verify/district-downtown-routes.png\n M Verification/Splines/verify/district-downtown-street.png\n M Verification/Splines/verify/district-park-routes.png\n M Verification/Splines/verify/district-park-street.png\n M Verification/Splines/verify/district-residential-routes.png\n M Verification/Splines/verify/district-residential-street.png\n M Verification/Splines/verify/downtown-spawn-control-wander.png\n M Verification/Splines/verify/downtown-spawn-routes-on.png\n M Verification/Splines/verify/results.txt\n M Verification/Splines/verify/routes-seed-2409-topdown.png\n M Verification/Splines/verify/routes-seed-3226-topdown.png\n?? Assets/Editor/MovementVerification.cs\n?? Assets/Editor/MovementVerification.cs.meta\n?? Assets/Scripts/MovementVerificationRunner.cs\n?? Assets/Scripts/MovementVerificationRunner.cs.meta\n?? Verification/StageFramework/\n?? Verification/StagedMissions/\n?? Verification/World/movement-before/\n?? tools/",
+    "started_utc": "2026-10-04T05:27:31.662446+00:00",
+    "save_before": "bd8e561e5136d962531e0d8fc211e81b13d9dca18cef33b8d02c643e145dacee",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Movement/baseline-run/MovementVerification.Baseline.log",
+    "pid": 34020,
+    "exit": 0,
+    "seconds": 34.48,
+    "pass": 23,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .gitignore\n M \"Assets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uxml.meta\"\n M Assets/Scripts/SuperHeroController.cs\n M Assets/Scripts/WorldProfileRunner.cs\n M Verification/Splines/verify/district-docks-routes.png\n M Verification/Splines/verify/district-docks-street.png\n M Verification/Splines/verify/district-downtown-routes.png\n M Verification/Splines/verify/district-downtown-street.png\n M Verification/Splines/verify/district-park-routes.png\n M Verification/Splines/verify/district-park-street.png\n M Verification/Splines/verify/district-residential-routes.png\n M Verification/Splines/verify/district-residential-street.png\n M Verification/Splines/verify/downtown-spawn-control-wander.png\n M Verification/Splines/verify/downtown-spawn-routes-on.png\n M Verification/Splines/verify/results.txt\n M Verification/Splines/verify/routes-seed-2409-topdown.png\n M Verification/Splines/verify/routes-seed-3226-topdown.png\n?? Assets/Editor/MovementVerification.cs\n?? Assets/Editor/MovementVerification.cs.meta\n?? Assets/Scripts/MovementVerificationRunner.cs\n?? Assets/Scripts/MovementVerificationRunner.cs.meta\n?? Verification/Movement/\n?? Verification/StageFramework/\n?? Verification/StagedMissions/\n?? Verification/World/movement-before/\n?? tools/"
+  }
+]

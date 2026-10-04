@@ -231,6 +231,8 @@ public sealed class WorldProfileRunner : MonoBehaviour
         var cc = W.Hero.GetComponent<CharacterController>(); cc.enabled = false; W.Hero.transform.position = at; cc.enabled = true;
         var follow = Camera.main.GetComponent<ThirdPersonCamera>(); follow.enabled = true; follow.SetLook(yaw, pitch);
         Populate();
+        if (view == "street" && Array.IndexOf(Environment.GetCommandLineArgs(), "-worldActive") >= 0)
+        { W.Hero.ResetMotion(); W.Hero.enabled = true; }
         yield return new WaitForSeconds(1.5f);
         Log($"VIEW {view}: hero at {at} ({where}); camera {Camera.main.transform.position} fwd {Camera.main.transform.forward}");
     }
@@ -268,6 +270,8 @@ public sealed class WorldProfileRunner : MonoBehaviour
                 .Select(x => (x.Name, new ProfilerRecorder(x.h, 1, ProfilerRecorderOptions.Default), 0.0)).ToList();
             foreach (var x in recs) x.Rec.Start();
         }
+        using var gc = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Allocated In Frame", 1);
+        long allocated = 0;
         var times = new List<double>(); var draws = new List<int>(); var batches = new List<int>(); var pass = new List<int>();
         var stat = new List<int>(); var statB = new List<int>(); var inst = new List<int>(); var instB = new List<int>(); var dyn = new List<int>();
         var tris = new List<long>(); var sums = new double[recs?.Count ?? 0]; int frames = 0;
@@ -276,6 +280,7 @@ public sealed class WorldProfileRunner : MonoBehaviour
         {
             cam.Render();
             yield return null;
+            allocated += gc.LastValue;
             double now = watch.Elapsed.TotalSeconds; times.Add((now - prior) * 1000); prior = now;
             draws.Add(UnityStats.drawCalls); batches.Add(UnityStats.staticBatches + UnityStats.dynamicBatches + UnityStats.instancedBatches); pass.Add(UnityStats.setPassCalls);
             stat.Add(UnityStats.staticBatchedDrawCalls); statB.Add(UnityStats.staticBatches); inst.Add(UnityStats.instancedBatchedDrawCalls); instB.Add(UnityStats.instancedBatches);
@@ -292,6 +297,7 @@ public sealed class WorldProfileRunner : MonoBehaviour
         Log($"MEASURED {view} {(profiled ? "PROFILED (recorders attached; FPS not used)" : "r" + round)} attempt{attempt}: FPS={fps:F2} mean={times.Average():F2}ms p95={sorted[(int)(sorted.Count * .95f)]:F2}ms frames={times.Count} " +
             $"drawCalls={Median(draws)} batches={Median(batches)} setPass={Median(pass)} staticBatchedDraws={Median(stat)} staticBatches={Median(statB)} instancedDraws={Median(inst)} instancedBatches={Median(instB)} dynamicBatchedDraws={Median(dyn)} tris={Median(tris)} " +
             $"visibleRenderers={visible} npcs={W.Npcs.Count(n => n != null && !n.Dead)} heat={W.Heat:F2} {lod} batchUnities before/after={othersBefore}/{othersAfter}{(othersBefore > 1 || othersAfter > 1 ? " CONTAMINATED" : "")}");
+        Log($"ALLOC {view}: whole-frame GC {allocated / Math.Max(1, times.Count)} bytes/frame; recorderValid={gc.Valid}; activeHero={W.Hero.enabled}. Includes Editor, NPCs and diagnostic sampling, not isolated movement allocations.");
         if (recs != null)
         {
             for (int i = 0; i < recs.Count; i++) { Log($"PROFILE {view} {recs[i].Name}: {sums[i] / Math.Max(1, frames) / 1e6:F3} ms/frame"); recs[i].Rec.Dispose(); }

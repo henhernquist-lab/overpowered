@@ -4056,3 +4056,24 @@ Source baseline (runtime measurements follow separately):
 
 Pending: actual baseline apex/ascent/geometry/performance; all implementation phases,
 new traversal controls, existing regressions and human playtest. No feel claim.
+
+
+### Movement Phase 0 — measured baseline, 2026-10-04
+
+Source checkpoint37ffd12 plus verification-only Flight input and WorldProfile allocation/active-hero
+instrumentation. Bundled SDK build:0 warnings/0 errors. MovementVerification.Baseline:
+exit0,23 PASS/0 FAIL; evidence `Verification/Movement/baseline.txt` and baseline-run manifest.
+At fixed1/120s, first jump rises1.4692m. The2s flight observation rises29.1983m,
+travels143.4750m horizontally, burns1.9916 fuel (239 controller ticks due runner ordering),
+ends at16 vertical/72 horizontal m/s. Preserve this exact harness ordering for after comparison.
+Actual seed2409 generated buildings: Downtown37,21.6..106.1m; Residential20,6..18.5m;
+Docks6,7.2..11.1m. Configured TP pitch -10/65 yields rendered -7.591/83.100;
+FP -85/85 yields rendered -85/85. Both clamp overshoot, clear collision sphere and stable root.
+
+WorldProfile.Run, movement-before,3 rounds,1 generation,-worldActive, exit0:
+actual densest street72.99/75.07/75.63 FPS (13.70/13.32/13.22ms), whole-frame GC
+1725/1720/1711bytes per frame. Same gameplay-camera single-render1280x720 methodology,
+active idle hero, Editor overhead included; not standalone throughput or active-climbing cost.
+Internal batchUnities counter returned0 including itself (unreliable); external exact executable
+process check established no other Editor before launch. No simultaneous Unity was launched.
+All results retained under `Verification/World/movement-before`. No performance acceptance yet.

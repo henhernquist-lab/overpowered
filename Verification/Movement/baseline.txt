@@ -1,0 +1,32 @@
+PASS Save VECTOR with flight + strength through the loadout API.
+PASS Session equips flight + strength.
+GEOMETRY Downtown: 37 buildings, height 21.600..106.100m.
+GEOMETRY Residential: 20 buildings, height 6.000..18.500m.
+GEOMETRY Docks: 6 buildings, height 7.200..11.100m.
+PASS Baseline fixture genuinely grounded.
+PASS Grounded jump accepted.
+MEASURED first jump peak=1.4692m, launch=8.500m/s, gravity=24.000m/s², dt=0.008333.
+PASS Ground jump remains within original ballistic envelope.
+MEASURED flight 2s: ascent=29.1983m, horizontal=143.4750m, fuel=1.9916, final velocity=(0.00, 16.00, 72.00), lift=16, response=3.
+PASS Flight activates via real controller and resource gates.
+MEASURED camera first=False input=-10.00 renderedPitch=-7.591 camera=(0.00, 151.49, -7.97).
+PASS CONTROL pitch overshoot clamps at -10 first=False
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.
+MEASURED camera first=False input=65.00 renderedPitch=83.100 camera=(0.00, 158.12, -0.67).
+PASS CONTROL pitch overshoot clamps at 65 first=False
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.
+PASS Toggle view for pitch controls.
+MEASURED camera first=True input=-85.00 renderedPitch=-85.000 camera=(0.00, 151.67, 0.00).
+PASS CONTROL pitch overshoot clamps at -85 first=True
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.
+MEASURED camera first=True input=85.00 renderedPitch=85.000 camera=(0.00, 151.67, 0.00).
+PASS CONTROL pitch overshoot clamps at 85 first=True
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.

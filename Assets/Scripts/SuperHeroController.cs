@@ -52,6 +52,8 @@ public sealed class SuperHeroController : MonoBehaviour
     PowerStats BasicStats()=>new PowerStats{Damage=powers.Forge.BasicDamage*powers.HeroStats.MeleeDamage,Force=powers.Forge.BasicForce*powers.HeroStats.MeleeDamage,Radius=powers.Forge.BasicRadius};
     /// Verification only (batch mode has no keyboard): used as the camera-relative movement input when non-zero.
     public Vector3 ScriptedMove; public bool ScriptedRun;
+    // Verification input follows the exact same flight resource and motion path as keyboard input.
+    public bool ScriptedFlight, ScriptedAscend;
     bool BasicMelee(bool kick)
     {
         if(Time.time<basicReadyAt||powers.SynergyRunner.Busy)return false;
@@ -79,14 +81,14 @@ public sealed class SuperHeroController : MonoBehaviour
         Vector3 move = acceptsInput ? (forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal")).normalized : Vector3.zero;
         if (acceptsInput && ScriptedMove.sqrMagnitude > 0f) move = Vector3.ProjectOnPlane(ScriptedMove, Vector3.up).normalized;
         MoveInput = move;
-        bool flying = acceptsInput && !controller.isGrounded && Input.GetKey(KeyCode.F) && powers.ConsumeFlight(Time.deltaTime);
+        bool flying = acceptsInput && !controller.isGrounded && (Input.GetKey(KeyCode.F) || ScriptedFlight) && powers.ConsumeFlight(Time.deltaTime);
         if (move.sqrMagnitude > 0f) transform.forward = Vector3.Slerp(transform.forward, move, Time.deltaTime * movement.TurnResponse);
         float speed = (Input.GetKey(KeyCode.LeftShift) || ScriptedRun ? movement.RunSpeed : movement.WalkSpeed) * powers.HeroStats.MoveSpeed;
         if (controller.isGrounded && verticalVelocity < 0f) verticalVelocity = -movement.GroundStickSpeed;
         if (acceptsInput && controller.isGrounded && Input.GetButtonDown("Jump")) TryJump();
         if (flying)
         {
-            verticalVelocity = Mathf.MoveTowards(verticalVelocity, Input.GetKey(KeyCode.Space) ? movement.FlightLift : 0f, movement.FlightLift * movement.FlightResponse * Time.deltaTime);
+            verticalVelocity = Mathf.MoveTowards(verticalVelocity, (Input.GetKey(KeyCode.Space) || ScriptedAscend) ? movement.FlightLift : 0f, movement.FlightLift * movement.FlightResponse * Time.deltaTime);
             move *= movement.FlightForwardBoost;
         }
         else verticalVelocity -= movement.Gravity * Time.deltaTime;

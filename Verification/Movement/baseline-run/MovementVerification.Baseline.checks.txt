@@ -1,0 +1,23 @@
+PASS Save VECTOR with flight + strength through the loadout API.
+PASS Session equips flight + strength.
+PASS Baseline fixture genuinely grounded.
+PASS Grounded jump accepted.
+PASS Ground jump remains within original ballistic envelope.
+PASS Flight activates via real controller and resource gates.
+PASS CONTROL pitch overshoot clamps at -10 first=False
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.
+PASS CONTROL pitch overshoot clamps at 65 first=False
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.
+PASS Toggle view for pitch controls.
+PASS CONTROL pitch overshoot clamps at -85 first=True
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.
+PASS CONTROL pitch overshoot clamps at 85 first=True
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.

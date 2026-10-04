@@ -143,3 +143,5 @@ InitTestScene*.unity*
 # Phase 8 spline route verification saves
 /Verification/Splines/saves/
 /Verification/Splines/**/saves/
+
+/Verification/Movement/saves/
