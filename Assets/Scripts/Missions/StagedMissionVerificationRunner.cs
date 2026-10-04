@@ -141,6 +141,12 @@ public sealed class StagedMissionVerificationRunner : StagedMissionRunner
     IEnumerator Solve(StagedMissionLibrary.Entry entry)
     {
         var e = SpawnHome(Def(entry)); var s = (StagedState)e.Scenario; var d = (StagedScenario)e.Definition.Scenario; Away(e);
+        if (entry.Id == "sabotage-run")
+        {
+            var nodes = new[] { s.Point("node-a"), s.Point("node-b"), s.Point("node-c") };
+            Check(Vector3.Distance(nodes[0], nodes[1]) >= 2f && Vector3.Distance(nodes[0], nodes[2]) >= 2f && Vector3.Distance(nodes[1], nodes[2]) >= 2f,
+                $"Seeded security nodes occupy distinct sidewalk sites ({nodes[0]}, {nodes[1]}, {nodes[2]}).");
+        }
         int n = d.Stages.Length, guard = 0;
         if (entry.CrossDistrict) CrossDistricts(e, s, d);
         var visited = new HashSet<int>();

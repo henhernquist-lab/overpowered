@@ -1,0 +1,12 @@
+2026-10-03 — recovered integration source
+Command: Unity 6000.6.0f1 bundled DotNetSdk/dotnet build Overpowered.Build.csproj -p:UseSharedCompilation=false --ignore-failed-sources
+References: Unity engine assemblies from the installed Editor; Unity.Animation.Rigging, Cinemachine, Timeline,
+Splines and Mathematics assemblies copied from the original checkout's Library/ScriptAssemblies into this worktree's ignored Library.
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+Time Elapsed 00:00:04.89
+Exit code: 0
+
+This is compilation only. No Play Mode, save/reload, rendering, feel or performance result is implied.

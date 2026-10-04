@@ -1,5 +1,43 @@
 # Prototype Status
 
+## Recovery checkpoint: staged mission placement — 2026-10-03 (`codex/overnight-recovery`)
+
+**The overnight queue is still incomplete.** This checkpoint restores work lost when the temporary integration
+worktree was cleaned up. Base `0b7cbb6`; recovered spline fix `7acbb82`. The original checkout remains on
+`8bac975`, with its existing CivilianLedger and LoadoutMatrix edits untouched. This recovery branch has not been
+merged into that checkout or pushed.
+
+Recovered fixes:
+- Actor/target group spawning captures the initial list count before appending. Previously `list.Count + i`
+  advanced twice, skipping alternate points in a multi-point group.
+- Distinct staged mission points use the closest unoccupied sidewalk in the same district when their nearest
+  discrete sidewalk positions collide. CityLayout remains authoritative; ties use its seeded list order.
+  In the prior Docks seed 1011 failure, node B had 120 health, zero hits, and its blast was blocked by
+  `Mission hardpoint node-c` at 0.36 m. B and C had collapsed onto the same point. The solver retains the real
+  CombatImpact blast and now also checks node separation; no damage/occlusion rule was bypassed.
+- The LosePursuit verifier moves beyond the configured escape distance from last contact. Its old `Away(e)`
+  destination was only about 28 m away despite a 45 m escape setting.
+
+**Fresh checks:** the complete restored source compiles with the installed Unity 6000.6 .NET SDK, 0 warnings and
+0 errors; `git diff --check` passes. Evidence: `Verification/OvernightRecovery/build.txt`.
+`StagedMissionVerification.Run` could not start because the Editor has no valid license (exit 198), recorded in
+`Verification/OvernightRecovery/unity-license.txt`. The last run from September was never recovered, so the
+node-separation fix is **not yet runtime verified**. Earlier task output reported StageFramework 108 PASS before
+the node-separation change; its lost log is not treated as current evidence. Vendor materials and the Sidekick
+database were not modified in this recovery.
+
+**OVERNIGHT DECISIONS:** use the persistent sibling `op-overnight-recovery` worktree and commit each recovered
+unit; leave shipping mission pools and new visual adoption gated on the required Unity runs. Phase 9 visual
+finalization and the broad final sweep remain pending. No fresh performance claim, setup-script execution,
+player-build check, or human playtest is claimed.
+
+**Exact next task:** restore the Unity Editor license, run `StagedMissionVerification.Run` first (Docks seed 1011
+must solve nodes A/B/C in order), then `StageFrameworkVerification.Run`, `SplineRouteVerification.Run`, and a
+separate-process `SplineRouteVerification.Reload`. Record real results before proceeding to the remaining
+cloud integration gates and Phase 9 in `docs/overnight-queue.md`. Henry should later playtest seeded mission
+spacing, pedestrian crossings, and power readability in first/third person at night.
+
+
 ## Recovery checkpoint: spline transfer fixes — 2026-10-03
 
 Recovered the committed integration `0b7cbb6` (including Sidekick material fix `b7cb2fe` and spline branch

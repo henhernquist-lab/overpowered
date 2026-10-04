@@ -310,7 +310,9 @@ public sealed class StageFrameworkVerificationRunner : StagedMissionRunner
         float until = Time.time + 4f; while (Time.time < until) { W.Pursuit.Sample(); yield return null; }
         Check(!Ended(e) && W.Pursuit.State == PursuitState.Pursued, "CONTROL: 30 m from the cop while it still engages -> the LOSE PURSUIT stage does NOT complete.");
         Log($"Escape-radius stage meanwhile: hero {Vector3.Distance(W.Hero.transform.position, x.Site):F0} m from its site (a literal distance rule, kept for missions that want it).");
-        cop.gameObject.SetActive(false); Away(e);
+        cop.gameObject.SetActive(false);
+        // The pursuit uses distance from last contact, not distance from the mission site.
+        PlaceHero(W.Pursuit.LastContactPosition + Vector3.back * (W.Pursuit.Settings.EscapeDistance + 10f));
         yield return Outcome(e, W.Pursuit.Settings.LoseContactSeconds + W.Pursuit.Settings.SearchSeconds + 4f);
         Check(Ended(e) && Result(e).Success && st.Terminal == MissionTerminal.Complete, $"Out of sight and far away, the pursuit clears ({W.Pursuit.State}) and the stage completes: {Describe(e)}.");
         yield return Outcome(x, 3f);

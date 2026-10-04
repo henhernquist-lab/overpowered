@@ -1,0 +1,10 @@
+2026-10-03 — StagedMissionVerification.Run startup attempt
+Editor: /Applications/Unity/Hub/Editor/6000.6.0f1/Unity.app/Contents/MacOS/Unity
+Project: /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery
+Arguments: -batchmode -executeMethod StagedMissionVerification.Run
+Log excerpt:
+[Licensing::Module] Error: 'com.unity.editor.headless' was not found.
+No valid Unity Editor license found. Please activate your license.
+[ExitDontLaunchBugReporter] Exiting without the bug reporter. Application will exit with return code 198
+
+The suite did not start. No new PASS count exists.

@@ -180,7 +180,7 @@ public sealed class StagedState : ScenarioState
             float angle = (Mirrored ? -p.Angle : p.Angle) + Yaw;
             Vector3 anchor = p.Placement == PointPlacement.OtherDistrict ? OtherDistrictSite(p, siteDistrict, random) : e.Site;
             Vector3 at = anchor + Quaternion.Euler(0, angle, 0) * Vector3.forward * p.Distance;
-            points[p.Id] = p.Sidewalk ? e.World.City.NearestSidewalk(at) : at;
+            points[p.Id] = p.Sidewalk ? DistinctSidewalk(at) : at;
             pointDistricts[p.Id] = e.World.City.DistrictAt(points[p.Id]);
         }
         healthSeen = e.World.Health; PeakStars = e.World.Stars;
@@ -191,6 +191,35 @@ public sealed class StagedState : ScenarioState
     }
     // ---------------------------------------------------------------- lookups and spawning
     public Vector3 Point(string id) => !string.IsNullOrEmpty(id) && points.TryGetValue(id, out var p) ? p : Encounter.Site;
+    // Discrete sidewalk snapping can collapse separate mission nodes onto one collider-blocked position.
+    // Keep the nearest free sidewalk in the same district, with deterministic CityLayout list-order ties.
+    Vector3 DistinctSidewalk(Vector3 desired)
+    {
+        var city = World.City;
+        Vector3 nearest = city.NearestSidewalk(desired);
+        if (Separated(nearest)) return nearest;
+        int district = city.DistrictAt(nearest);
+        float bestDistance = float.MaxValue;
+        Vector3 best = nearest;
+        for (int i = 0; i < city.Sidewalks.Count; i++)
+        {
+            if (city.SidewalkDistrict[i] != district) continue;
+            Vector3 candidate = city.Sidewalks[i];
+            if (!Separated(candidate)) continue;
+            float distance = (candidate - desired).sqrMagnitude;
+            if (distance < bestDistance) { bestDistance = distance; best = candidate; }
+        }
+        return best;
+    }
+    bool Separated(Vector3 candidate)
+    {
+        foreach (var prior in points.Values)
+        {
+            Vector3 gap = candidate - prior; gap.y = 0f;
+            if (gap.sqrMagnitude < 4f) return false;
+        }
+        return true;
+    }
     /// District index of a point (-1 unknown): verification proves cross-district stages really are in distinct districts.
     public int DistrictOfPoint(string id) => id != null && pointDistricts.TryGetValue(id, out int district) ? district : -1;
     string[] Split(string key)
@@ -274,11 +303,12 @@ public sealed class StagedState : ScenarioState
     public int SpawnActors(string id, int count, Vector3? around = null)
     {
         var g = ActorSpec(id); var list = Group(id); if (g == null || list == null) return 0;
-        int made = 0;
+        int made = 0, first = list.Count;
         for (int i = 0; i < count; i++)
         {
-            Vector3 centre = around ?? PointFor(g.AtPoint, list.Count + i);
-            Vector3 at = centre + Quaternion.Euler(0, (list.Count + i) * 137.5f, 0) * Vector3.forward * g.Ring;
+            int member = first + i;
+            Vector3 centre = around ?? PointFor(g.AtPoint, member);
+            Vector3 at = centre + Quaternion.Euler(0, member * 137.5f, 0) * Vector3.forward * g.Ring;
             var npc = Encounter.SpawnActor(at, g.Role, g.Archetype);
             if (npc == null) continue;
             if (g.HealthMultiplier != 1f) npc.SetCombatStats(npc.MaxHealth * g.HealthMultiplier, npc.ContactDamage);
@@ -292,10 +322,12 @@ public sealed class StagedState : ScenarioState
     {
         var t = TargetSpec(id); var list = TargetGroup(id); if (t == null || list == null) return;
         var props = World.Tuning.Props; bool spread = around == null && !string.IsNullOrEmpty(t.AtPoint) && t.AtPoint.IndexOf(',') >= 0;
+        int first = list.Count;
         for (int i = 0; i < t.Count; i++)
         {
-            Vector3 centre = around ?? PointFor(t.AtPoint, list.Count + i);
-            Vector3 at = centre + Quaternion.Euler(0, (list.Count + i) * 137.5f, 0) * Vector3.forward * (t.Count > 1 && !spread ? t.Ring : 0f);
+            int member = first + i;
+            Vector3 centre = around ?? PointFor(t.AtPoint, member);
+            Vector3 at = centre + Quaternion.Euler(0, member * 137.5f, 0) * Vector3.forward * (t.Count > 1 && !spread ? t.Ring : 0f);
             var item = new Target { Besiegeable = t.Besiegeable };
             switch (t.Kind)
             {
