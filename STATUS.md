@@ -156,7 +156,7 @@ events and an overload).
 - HONESTY: SUM(popups) == shown total == real XP gained (Hero 410, Villain 145, Endless 280)
 - MERGE: 3 defeats in 0.026 s → one "+105 XP"; CONTROLS: 1 s apart → separate, 12 m apart → separate; a 5-kill
   Endless burst → one "+175 XP"
-- timeScale was 1 on every sampled frame of the level-up, and NPCs kept moving
+- timeScale was 1 on every sampled frame of the level-up, and NPCs kept moving 
 - the objective banner shows THEN the alert, with 0 frames overlapping
 - IDLE CONTROL (30 s): zero popups, banners and alerts
 - Heat: 1,258 frames of decay without a star change → 0 flashes, and the one star drop flashed exactly once. (The
