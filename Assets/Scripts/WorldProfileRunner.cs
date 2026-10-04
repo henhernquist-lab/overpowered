@@ -79,7 +79,7 @@ public sealed class WorldProfileRunner : MonoBehaviour
     }
     static string LoadAverage() => Shell("/usr/sbin/sysctl", "-n vm.loadavg");
     /// Unity batch-mode processes on the machine (this one included). >1 means another agent's Unity is running.
-    static int BatchUnities() { string s = Shell("/usr/bin/pgrep", "-f \"^/Applications/Unity.*/MacOS/Unity -batchmode\""); return s.StartsWith("unavailable") ? -1 : s.Split('\n').Count(l => l.Trim().Length > 0); }
+    static int BatchUnities() { string s = Shell("/usr/bin/pgrep", "-af \"^/Applications/Unity.*/MacOS/Unity -batchmode\""); return s.StartsWith("unavailable") ? -1 : s.Split('\n').Count(l => l.Trim().Length > 0); }
 
     IEnumerator Run()
     {

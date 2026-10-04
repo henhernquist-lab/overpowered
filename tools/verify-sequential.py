@@ -40,7 +40,7 @@ def main():
     for entry in args.entries:
         if not re.fullmatch(r'[A-Za-z0-9_]+\.[A-Za-z0-9_]+', entry):
             parser.error('Expected an Editor Class.Method entry: ' + entry)
-        if entry.endswith('.Reload') and entry.removesuffix('.Reload') + '.Run' not in passed:
+        if entry.endswith('.Reload') and not any(entry.removesuffix('.Reload') + suffix in passed for suffix in ('.Run', '.VerifyExisting')):
             parser.error('Reload requires a successful Run in this invocation: ' + entry)
         processes = subprocess.run(['pgrep', '-fl', str(unity)], capture_output=True, text=True)
         if processes.returncode != 1:

@@ -242,9 +242,9 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
         }
         yield return Travel(new Vector3(-18.8f,0,-207),flight?1.5f:3);
         if(!flight){W.Hero.ScriptedMove=Vector3.zero;yield return new WaitForSeconds(.8f);Check(CC.isGrounded,"Low pier railing cleared onto real support.");}
-        yield return Travel(new Vector3(-18.8f,0,-246.8f),flight?2:7);
+        yield return Travel(new Vector3(-14f,0,-246.8f),flight?2:7);
         if(!flight)Check(W.Hero.TryJump(),"Ground jump clears actual lighthouse-platform railing.");
-        yield return Travel(new Vector3(-18.8f,0,-250.9f),flight?1:2);
+        yield return Travel(new Vector3(-14f,0,-250.9f),flight?1:2);
         if(!flight)yield return new WaitForSeconds(.6f);
         W.Hero.ScriptedMove=Vector3.zero;
         if(!flight)
@@ -263,8 +263,13 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
         W.Hero.Jumped-=jumped;
         Check(CC.isGrounded&&W.Hero.transform.position.y>landmark.Position.y+3.9f&&W.Hero.transform.position.z<-252.3f,
             "Actual Harbour Light podium rooftop arrival, Flight="+flight+" at "+W.Hero.transform.position);
+        var podium=Resources.Load<CityArtSettings>("CityArtSettings").Recipe(landmark.Recipe).Pieces[0];
+        float radial=Vector3.ProjectOnPlane(W.Hero.transform.position-(landmark.Position+podium.Position),Vector3.up).magnitude;
+        float radius=Mathf.Min(podium.Size.x,podium.Size.z)*.5f;
+        Check(radial+CC.radius<radius,$"Arrival capsule is inside visible cylindrical podium footprint, radial={radial:F3}, radius={radius:F3}; not merely its box-collider corner.");
         Check(flight?used>0:!W.Powers.IsEquipped(Power("flight"))&&Mathf.Abs(used)<.001f&&W.Hero.MantleCount>mantles,
             "Route uses intended traversal resources, Flight="+flight);
+        Rig.enabled=true;Rig.SetLook(155,25);yield return null;Capture(flight?"route-flight.png":"route-no-flight.png");
         Log($"ROUTE seed2409 flight={flight} start={start} end={W.Hero.transform.position} seconds={seconds:F4} vertical={W.Hero.transform.position.y-start.y:F4} jumps={jumps} mantles={W.Hero.MantleCount-mantles} fuelUsed={used:F4}. Podium roof only; no claim of access to the sheer upper lighthouse tower.");
     }
     IEnumerator Travel(Vector3 target,float timeout)

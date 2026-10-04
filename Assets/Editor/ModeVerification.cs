@@ -12,9 +12,12 @@ public static class ModeVerification
     const string TestAsset="Assets/Resources/Modes/verification-third.asset";
     static double deadline;
     static ModeVerification() { EditorApplication.update+=Watchdog; }
-    public static void Run()
+    public static void Run() => RunWithSetup(true);
+    // Same controls and temporary test mode, without rewriting project setup.
+    public static void VerifyExisting() => RunWithSetup(false);
+    static void RunWithSetup(bool create)
     {
-        ModeDataSetup.Create();
+        if(create)ModeDataSetup.Create();
         if(File.Exists(TestAsset)) throw new InvalidOperationException("Refusing to overwrite existing test definition.");
         var mode=UnityEngine.Object.Instantiate(Resources.Load<GameModeDefinition>("Modes/hero"));
         mode.Id="verification-third";mode.DisplayName="Data-only test mode";mode.SuccessGoal=1;mode.MenuOrder=99;

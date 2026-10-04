@@ -4190,3 +4190,39 @@ empty refusal, and adds an airborne-no-recharge control. No verification toleran
 Phase4 complete. This measures less ascent, a real startup ramp and more fuel pressure;
 it does not prove rooftop decisions are interesting or that the nerf amount is comfortable.
 Flight/non-Flight route comparison and final regression/performance still pending.
+
+
+### Movement route visual audit — stronger acceptance required
+
+Checkpoint8f3b891 contains Phase4. Initial paired route-comparison returned26 PASS/0 FAIL,
+with8.775s non-Flight and2.050s Flight, but manual inspection of route-no-flight.png exposed
+a false-positive arrival assertion: the cylindrical Harbour Light base uses a box collider,
+and the hero stood on its invisible corner beyond the visible roof. The earlier Phase3
+route capability claim is therefore limited to physical collider traversal until corrected.
+No city collision/art changes are authorized by this task. Route waypoints are being moved
+to the center-facing approach, and acceptance now requires the entire capsule footprint
+inside the visible cylindrical podium radius. Do not use the initial route timings as final.
+
+
+### Movement Phase 5 — visible-roof route comparison PASS, 2026-10-04
+
+`route-visible-roof`:28 PASS/0 FAIL, exit0. Both routes now approach the north center
+of the actual Harbour Light podium; the whole capsule must fit within the visible cylinder
+radius6m, not its conservative box collider. Captures were inspected: hero stands on the visible
+roof. Earlier collider-only captures retained in route-comparison for audit.
+
+Same seed2409, actual street/pier/platform rails/podium, same start(-22,0.13,-207), no
+geometry changes or mid-route teleports. Non-Flight fire+strength:8.8250s,3.9500m gain,
+4 jumps,1 mantle,0 fuel, end(-14,4.08,-252.82), radial5.176m. Flight+strength:2.0583s,
+3.9500m gain,1 jump,0 mantles,1.1550 fuel, end(-14,4.08,-253.13), radial4.874m.
+Times include the same1s landing settle; fuel is summed consumption so landing recharge cannot
+hide expenditure. Horizontal waypoints are shared; Flight flies over the railings. No fun claim.
+This proves a practical lower-roof route without Flight while retaining faster aerial travel;
+it does not imply every high-rise is accessible or establish ideal traversal balance.
+
+Final regression uses new VerifyExisting entry points for Roster/Mode: same assertions and
+fresh reloads, skipping asset bootstrap routines so recovered catalogs/settings are measured
+as-is. The profiler's zero self-count was traced to macOS pgrep excluding ancestors by default;
+-af now includes its parent Editor (baseline external process guard still established exclusivity).
+Mantle interruption diagnostics use constant strings, avoiding formatting allocations on abort.
+Phase5 complete. Broad final regression and matched performance comparison are still pending.

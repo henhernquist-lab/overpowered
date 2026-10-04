@@ -16,6 +16,8 @@ public static class RosterVerification
     const string Key = "Overpowered.RosterVerification"; const string Folder = "Verification/Roster/"; static double deadline;
     static RosterVerification() { EditorApplication.update += () => { if (deadline > 0 && EditorApplication.timeSinceStartup > deadline) { Debug.LogError("Roster verification timeout"); Finish(1); } }; }
     public static void Run() { RosterSetup.Create(); Begin("run"); }
+    // Recovery regression: inspect existing data without rebuilding or pruning its catalog.
+    public static void VerifyExisting() { Begin("run"); }
     public static void Reload() { Begin("reload"); }
     static void Begin(string mode) { Directory.CreateDirectory(Folder + "saves"); SessionState.SetString(Key, mode); EditorSceneManager.OpenScene("Assets/Scenes/Home.unity"); EditorApplication.isPlaying = true; }
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]

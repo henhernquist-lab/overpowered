@@ -456,7 +456,7 @@ public sealed class SuperHeroController : MonoBehaviour
         var flags=controller.Move(step);
         PresentationState=new HeroPresentationState(transform.InverseTransformDirection(controller.velocity),controller.isGrounded,false);
         if((flags&(CollisionFlags.Above|CollisionFlags.Sides))!=0||Time.time>mantleDeadline)
-        {LastMantleResult=$"Interrupted flags={flags} position={transform.position} target={target} deadline={Time.time>mantleDeadline}";Mantling=false;return;}
+        {LastMantleResult=Time.time>mantleDeadline?"Timed out":"Blocked by collision";Mantling=false;return;}
         if(Vector3.Distance(transform.position,target)<.025f)
         {
             if(!mantleAcross)mantleAcross=true;
