@@ -1,0 +1,55 @@
+[CITY VERIFY] PASS World bootstrapped with city, powers, and progression.
+[CITY VERIFY] PASS Seeded city: 63 solid buildings (== planned 63) across 3 districts; civilians=24
+[CITY VERIFY] PASS Same seed reproduced layout samples.
+[CITY VERIFY] PASS NavMesh has complete sidewalk-to-sidewalk route.
+[CITY VERIFY] PASS Fresh progression: level=1, points=0.
+[CITY VERIFY] PASS Unspent CONTROL: level=2, points=1, force unchanged=1350.
+[CITY VERIFY] PASS Spent one point on strength.
+[CITY VERIFY] PASS Upgraded strength: force=1890, max charges=4, points=0.
+[CITY VERIFY] PASS Zero-point upgrade CONTROL rejected.
+[CITY VERIFY] PASS Seventh power discovered from DATA only; exact same projectile effect asset as Fire Blast.
+[CITY VERIFY] PASS Seventh power owned but NOT equipped (session loadout flight + strength).
+[CITY VERIFY] PASS CONTROL: unequipped seventh power refused by the equip gate (Select/Use false, "Power not equipped"); charges 3->3, cooldown 0.00->0.00, energy 100.00->100.00.
+[CITY VERIFY] PASS CONTROL: refused seventh power spawned no projectile (0 before/after) and the target did not move: displacement=0.0000m.
+[CITY VERIFY] PASS Real flight resource path: start=6, after 2s=3.8, after 6s=0; empty rejects.
+[CITY VERIFY] PASS Airborne CONTROL cannot recharge empty flight fuel.
+[CITY VERIFY] PASS Ground recharge after 1s=2.5s.
+[CITY VERIFY] PASS Charged punch normal CONTROL fires.
+[CITY VERIFY] PASS Punch cooldown rejects immediate retry.
+[CITY VERIFY] PASS Three punches exhausted charges; zero-charge fire rejected.
+[CITY VERIFY] PASS Time-driven recharge restored a working punch.
+[CITY VERIFY] PASS Telekinesis and Ice owned from the start at tier 0 (InitiallyUnlocked data); the 3 earned points stay unspent for tiers.
+[CITY VERIFY] PASS CONTROL: unequipped Telekinesis and Ice refused by the equip gate (Select/Use false); nothing grabbed, frozen or charged.
+[CITY VERIFY] PASS Test hero 'verification-hero' registered in memory only (no asset file; catalog not dirty); roster=verification-7+strength.
+[CITY VERIFY] PASS CONTROL: live in-session loadout change refused (seventh power + Strength).
+[CITY VERIFY] PASS CONTROL: hero vector whose roster lacks the pair cannot equip seventh power + Strength.
+[CITY VERIFY] PASS Equipped owned seventh power + Strength on verification-hero through PlayerProgression.SetLoadout before the session.
+[CITY VERIFY] PASS New sandbox session receives verification-7 + strength and keeps progression level=5.
+[CITY VERIFY] PASS Seventh power activated via normal selected-power path.
+[CITY VERIFY] PASS Seventh projectile hit real Rigidbody: impulse setting=200 N·s; displacement=13.642m; velocity=32.550m/s.
+[CITY VERIFY] PASS CONTROL: live in-session loadout change refused (Telekinesis + Ice).
+[CITY VERIFY] PASS CONTROL: hero verification-hero whose roster lacks the pair cannot equip Telekinesis + Ice.
+[CITY VERIFY] PASS Equipped owned Telekinesis + Ice on vector through PlayerProgression.SetLoadout before the session.
+[CITY VERIFY] PASS New sandbox session receives telekinesis + ice and keeps progression level=5.
+[CITY VERIFY] PASS Catalog restored to its 3 shipping heroes once the Telekinesis + Ice session started; never marked dirty.
+[CITY VERIFY] PASS Telekinesis grabs the aimed Rigidbody.
+[CITY VERIFY] PASS Second activation hurls the already-paid grab.
+[CITY VERIFY] PASS Telekinesis hurl velocity=40.000m/s.
+[CITY VERIFY] PASS Ice fixture CONTROL: retired throw collider no longer occludes new target.
+[CITY VERIFY] PASS Ice freezes a targeted Rigidbody.
+[CITY VERIFY] PASS Ice expires and restores original physics constraints.
+[CITY VERIFY] PASS Real prop destruction: Heat=3.50; police 2 -> 6; high-tier max HP=137.
+[CITY VERIFY] PASS High Heat spawns one pursuing Hero NPC.
+[CITY VERIFY] PASS Civilians react to nearby destruction by fleeing.
+[CITY VERIFY] PASS Lay-low decay: 3.50 -> 2.80 after configured delay plus 10s.
+[CITY VERIFY] PASS Hero resolves fire event.
+[CITY VERIFY] PASS Hero fire outcome: Heat delta=-1.00, XP awarded=60.
+[CITY VERIFY] PASS Side switched through normal cooldown-controlled action.
+[CITY VERIFY] PASS Immediate repeat switch CONTROL rejected.
+[CITY VERIFY] PASS Same fire event as Villain: Heat delta=1.00; opposite Hero outcome; same character=Overpowered Hero.
+[CITY VERIFY] PASS Cops become hostile on side switch; owned strength tier remains 1
+[CITY VERIFY] PASS Existing patrol cop placed in attack range on NavMesh.
+[CITY VERIFY] PASS Hostile cop attacked through live AI: player HP 92 -> 78.
+[CITY VERIFY] PASS Defeating cop as Villain awards XP and disables dead NPC navigation.
+[CITY VERIFY] PASS Performance population: civilians=24, cops=6, on-NavMesh cops=6.
+[CITY VERIFY] PASS Saved level=5, strength tier=1; will verify in a separate Unity process.

@@ -4167,3 +4167,26 @@ The initial route stopped at the platform's second railing; adding a real ground
 negotiated it. This proves one lower rooftop route, NOT access to the sheer upper lighthouse
 or every high-rise. Intermediate solid ledges are still required. Human mantle smoothness
 and broader city-route coverage remain unverified. Phase3 complete; Flight/final gates pending.
+
+
+### Movement Phase 4 — modest Flight adjustment verified, 2026-10-04
+
+Before checkpoint78e2a89. Lift16 ->14m/s; response3 ->2.5 (vertical acceleration48 ->35m/s²).
+Horizontal boost stays8; new boost acceleration14 multiplier-units/s ramps1 ->8 in0.5s.
+Flight asset ResourceCost1 ->1.1 fuel/s. Capacity6, recharge2.5/s, upgrades/progression and
+PowerUser ownership/equip gates remain unchanged; base full-fuel flight6 ->5.455s, full refill2.4s.
+Legacy PrototypeTuning constants retained. Space keeps its existing ascend role while Flight
+is active instead of consuming the new air jump. No unrelated power costs changed.
+
+Same baseline observation at120Hz: ascent29.1983 ->25.0592m (-14.176%); horizontal143.4750
+->127.9875m during startup; final horizontal72m/s unchanged, final vertical16 ->14m/s;
+fuel1.9916 ->2.1908 over239 controller ticks. Final MovementVerification.Flight33 PASS/0 FAIL,
+exit0, reproduced twice. Empty/zero-dt, airborne recharge refusal, ground recharge and bounded
+ascent/travel controls pass. City55/0 + fresh Reload5/0; FirstPerson211/0 + fresh Reload5/0,
+all exit0. Evidence flight-gates and flight-final. Bundled SDK final build0 warnings/0 errors.
+City's obsolete exact4-fuel-after2s assertion now checks configured burn precisely, retains
+empty refusal, and adds an airborne-no-recharge control. No verification tolerance widened.
+
+Phase4 complete. This measures less ascent, a real startup ramp and more fuel pressure;
+it does not prove rooftop decisions are interesting or that the nerf amount is comfortable.
+Flight/non-Flight route comparison and final regression/performance still pending.

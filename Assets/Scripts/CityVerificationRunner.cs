@@ -90,7 +90,8 @@ public sealed class CityVerificationRunner : MonoBehaviour
         w.Powers.Flight.Fuel=w.Powers.Stats(w.Powers.Flight).Duration;
         w.Powers.ConsumeFlight(2); float after2=w.Powers.Flight.Fuel;
         w.Powers.ConsumeFlight(4); float empty=w.Powers.Flight.Fuel;
-        Check(after2==4&&empty==0&&!w.Powers.ConsumeFlight(.1f),$"Real flight resource path: start=6, after 2s={after2}, after 6s={empty}; empty rejects.");
+        Check(Mathf.Approximately(after2,6-2*w.Powers.Flight.Definition.ResourceCost)&&empty==0&&!w.Powers.ConsumeFlight(.1f),$"Real flight resource path: start=6, after 2s={after2}, after 6s={empty}; empty rejects.");
+        w.Powers.Tick(1,false);Check(w.Powers.Flight.Fuel==0,"Airborne CONTROL cannot recharge empty flight fuel.");
         w.Powers.Tick(1,true); Check(w.Powers.Flight.Fuel==2.5f,"Ground recharge after 1s=2.5s.");
         w.Hero.DebugSetResources(6,3); Check(w.Hero.TryPunch(),"Charged punch normal CONTROL fires.");
         Check(!w.Hero.TryPunch(),"Punch cooldown rejects immediate retry.");

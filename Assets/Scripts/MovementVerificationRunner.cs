@@ -14,6 +14,7 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
     protected override IEnumerator Checks()
     {
         yield return Scene(GameFlow.HomeScene);
+        if(Stage=="route"){Time.captureDeltaTime=1f/120;yield return CityRoute(false);yield return CityRoute(true);Time.captureDeltaTime=0;yield break;}
         if(Stage=="mantle"){Time.captureDeltaTime=1f/120;yield return MantleControls();yield return CityRoute(false);Time.captureDeltaTime=0;yield break;}
         if(Stage=="jump"){Time.captureDeltaTime=1f/120;yield return JumpControls();Time.captureDeltaTime=0;yield break;}
         yield return Enter(F.Heroes[0],"flight","strength","free-play");
@@ -36,6 +37,15 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
         Vector3 delta=W.Hero.transform.position-before;
         Log($"MEASURED flight 2s: ascent={delta.y:F4}m, horizontal={new Vector2(delta.x,delta.z).magnitude:F4}m, fuel={fuel-W.Hero.FlightFuel:F4}, final velocity={CC.velocity}, lift={W.Tuning.Movement.FlightLift}, response={W.Tuning.Movement.FlightResponse}.");
         Check(delta.y>0&&delta.z>80,"Flight activates via real controller and resource gates.");
+        if(Stage=="flight")
+        {
+            Check(delta.y>29.1983f*.8f&&delta.y<29.1983f*.9f,"Ascent measured with baseline harness is reduced10..20%.");
+            Check(Mathf.Abs(CC.velocity.z-72)<.1f,"Full horizontal Flight speed remains72m/s.");
+            Check(delta.z<143.475f&&delta.z>110,"Activation ramp lowers initial travel modestly while preserving strong horizontal distance.");
+            W.Powers.Flight.Fuel=0;Check(!W.Powers.ConsumeFlight(.01f)&&!W.Powers.ConsumeFlight(0),"Empty/zero-dt flight controls refuse.");
+            W.Powers.Tick(1,false);Check(W.Powers.Flight.Fuel==0,"Airborne recharge CONTROL stays empty.");
+            W.Powers.Tick(1,true);Check(Mathf.Abs(W.Powers.Flight.Fuel-2.5f)<.001f,"Ground recharge remains2.5 units/s.");
+        }
         W.Hero.ScriptedFlight=W.Hero.ScriptedAscend=W.Hero.ScriptedRun=false;W.Hero.ScriptedMove=Vector3.zero;
         W.Hero.enabled=false;
         PlaceHero(new Vector3(0,150.05f,0));Rig.enabled=true;
@@ -137,7 +147,7 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
             foreach(var power in pair)if(!Profile.Owns(power))Check(Profile.Buy(power),"Unlock non-Flight control loadout for "+hero.DisplayName);
             yield return Enter(hero,pair[0].Id,pair[1].Id,"free-play");
             Isolate();PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.2f);
-            Check(!W.Powers.IsEquipped(Power("flight"))&&W.Hero.TryJump(),hero.DisplayName+" grounded jump without Flight.");
+            Check(!W.Powers.IsEquipped(Power("flight"))&&!W.Powers.ConsumeFlight(.1f)&&W.Hero.TryJump(),hero.DisplayName+" grounded jump without Flight; unequipped Flight refuses consumption.");
             yield return new WaitForSeconds(.36f);
             Check(W.Hero.TryJump()&&!W.Hero.TryJump(),hero.DisplayName+" exactly one air jump without Flight.");
         }

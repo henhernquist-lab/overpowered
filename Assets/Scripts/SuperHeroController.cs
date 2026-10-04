@@ -6,6 +6,7 @@ public sealed class SuperHeroController : MonoBehaviour
     CharacterController controller;
     Camera view;
     float verticalVelocity;
+    float flightBoost = 1f;
     float airbornePeakHeight;
     bool airJumpUsed, jumpLaunched;
     public bool AirJumpAvailable => !airJumpUsed;
@@ -69,7 +70,7 @@ public sealed class SuperHeroController : MonoBehaviour
 
     void Awake() { controller = GetComponent<CharacterController>(); view = Camera.main; airbornePeakHeight = transform.position.y; }
     public void Initialize(PowerUser user, MovementSettings settings) { powers = user; movement = settings; }
-    public void ResetMotion() { verticalVelocity = 0f; airbornePeakHeight = transform.position.y; airJumpUsed = jumpLaunched = false; Mantling = mantleUsed = false; }
+    public void ResetMotion() { flightBoost = 1f; verticalVelocity = 0f; airbornePeakHeight = transform.position.y; airJumpUsed = jumpLaunched = false; Mantling = mantleUsed = false; }
     void Update()
     {
         if (powers == null) return;
@@ -91,14 +92,16 @@ public sealed class SuperHeroController : MonoBehaviour
         if (move.sqrMagnitude > 0f) transform.forward = Vector3.Slerp(transform.forward, move, Time.deltaTime * movement.TurnResponse);
         float speed = (Input.GetKey(KeyCode.LeftShift) || ScriptedRun ? movement.RunSpeed : movement.WalkSpeed) * powers.HeroStats.MoveSpeed;
         if (controller.isGrounded && verticalVelocity < 0f) verticalVelocity = -movement.GroundStickSpeed;
-        if (acceptsInput && Input.GetButtonDown("Jump")) TryJump();
+        // While Flight is active, Space retains its ascend role rather than spending the universal air jump.
+        if (acceptsInput && !flying && Input.GetButtonDown("Jump")) TryJump();
         if (!flying && move.sqrMagnitude > .1f && TryMantle(move)) { MoveMantle(); return; }
         if (flying)
         {
             verticalVelocity = Mathf.MoveTowards(verticalVelocity, (Input.GetKey(KeyCode.Space) || ScriptedAscend) ? movement.FlightLift : 0f, movement.FlightLift * movement.FlightResponse * Time.deltaTime);
-            move *= movement.FlightForwardBoost;
+            flightBoost = Mathf.MoveTowards(flightBoost, movement.FlightForwardBoost, movement.FlightBoostAcceleration * Time.deltaTime);
+            move *= flightBoost;
         }
-        else verticalVelocity -= movement.Gravity * Time.deltaTime;
+        else { flightBoost = 1f; verticalVelocity -= movement.Gravity * Time.deltaTime; }
         bool wasGrounded = controller.isGrounded;
         airbornePeakHeight = wasGrounded ? transform.position.y : Mathf.Max(airbornePeakHeight, transform.position.y);
         float impactSpeed = Mathf.Max(0f, -verticalVelocity);

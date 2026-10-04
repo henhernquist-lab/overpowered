@@ -1,0 +1,33 @@
+PASS Save VECTOR with flight + strength through the loadout API.
+PASS Session equips flight + strength.
+PASS Baseline fixture genuinely grounded.
+PASS Grounded jump accepted.
+PASS Ground jump remains within original ballistic envelope.
+PASS Flight activates via real controller and resource gates.
+PASS Ascent measured with baseline harness is reduced10..20%.
+PASS Full horizontal Flight speed remains72m/s.
+PASS Activation ramp lowers initial travel modestly while preserving strong horizontal distance.
+PASS Empty/zero-dt flight controls refuse.
+PASS Airborne recharge CONTROL stays empty.
+PASS Ground recharge remains2.5 units/s.
+PASS View reaches configured limit through existing orbit/eye math.
+PASS CONTROL pitch overshoot clamps at -85 first=False
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.
+PASS View reaches configured limit through existing orbit/eye math.
+PASS CONTROL pitch overshoot clamps at 65 first=False
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.
+PASS Toggle view for pitch controls.
+PASS View reaches configured limit through existing orbit/eye math.
+PASS CONTROL pitch overshoot clamps at -89 first=True
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.
+PASS View reaches configured limit through existing orbit/eye math.
+PASS CONTROL pitch overshoot clamps at 85 first=True
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.

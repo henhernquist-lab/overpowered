@@ -23,11 +23,12 @@ MonoBehaviour:
     MantleSpeed: 5
     MantleMaxDrop: 0.75
     Gravity: 24
-    FlightLift: 16
+    FlightLift: 14
     FlightForwardBoost: 8
     TurnResponse: 14
     GroundStickSpeed: 2
-    FlightResponse: 3
+    FlightResponse: 2.5
+    FlightBoostAcceleration: 14
     Health: 100
     RespawnDelay: 3
     Energy: 100
