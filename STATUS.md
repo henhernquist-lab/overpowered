@@ -4347,3 +4347,46 @@ Forge save migration/UI and primary verification) and `b57bbc8` (ground/air jump
 updated movement controls, exact measured evidence and player-facing documentation).
 The checked-out branch is `codex/movement-foundation`. Only the pre-existing unrelated
 `.freebuff/project-id` worktree change remains uncommitted; it was not touched.
+
+## Universal climbing Phase 0 — 2026-10-04 (`codex/universal-climbing`)
+
+The branch starts from `652f7d4` and carries the user's unrelated `.freebuff/project-id`
+working-tree edit unchanged. This is source diagnosis and a before measurement, not a
+climbing implementation or a new regression pass. The next Speed/Teleport packet is
+conditional on universal climbing being finished and integrated.
+
+`SuperHeroController` is the sole player `CharacterController` movement authority. It
+has a universal grounded jump (10 m/s), one air jump (8.5 m/s), gravity 24 m/s²,
+walk/run 5.2/9 m/s before hero multipliers, limited Flight, Backflip, Speed's burst
+dash, and a bounded automatic mantle (0.25–1.8 m). Its old mantle cannot climb a
+full facade. Existing fixed-120 Hz evidence measured a standalone ground rise of
+2.0417 m, air-jump rise of 1.4692 m, and chained peak of 3.4758 m; those are
+historical source-baseline observations, not a fresh Phase 0 run. The controller
+keeps `Jumped`/`Landed`/`HeroPresentationState`; the Animator owns clips and the
+visual presentation never moves the physics root. `ThirdPersonCamera` owns both
+views, collision and aiming. Current configured pitch limits are third-person
+-85..65 and first-person -89..85 degrees.
+
+Generated `CityArt.Building` facades use solid structural BoxColliders with no
+per-building climb marker. Facade windows, bands and canopies are visual-only.
+Roofs have 0.08 m decks and 0.6 m high, 0.18 m thick solid parapets. District
+height data: Downtown 20–46 m normally / 56–84 m tall, Residential 6–13 /
+16–22 m, Docks 7–12 / 14–18 m. Actual seed-2409 generation in the baseline
+profile reported 37 Downtown, 20 Residential and 6 Docks buildings. A geometric
+static-wall probe in the existing controller is the appropriate extension point;
+moving cars, NPCs, rigidbodies and small props should be excluded. Unlimited
+climbing uses no progression resource.
+
+Fresh **before** dense-street `WorldProfile.Run` (`Verification/World/climbing-before-host`),
+one Editor, active idle hero, three rounds: 82.10/82.90/78.67 FPS and
+12.18/12.06/12.71 ms mean frame time; whole-frame GC 1676/1676/1686 B/frame.
+Median is 82.10 FPS, 12.18 ms, 1676 B/frame. This includes Editor, NPC, rendering
+and diagnostic overhead and does not measure active climbing. Its Unity exit was 0;
+an initial sandboxed launch failed licensing initialization and was interrupted
+(exit 130) before measurement. Running the installed Editor with host permission
+restored the license connection. No code or gameplay asset has changed yet.
+
+**OVERNIGHT DECISIONS:** add geometry-based climbing inside the existing controller,
+keep the existing mantle for short ledges, and use that collision-checked transition
+for roof top-out where possible. Ground contact alone refills the air jump; wall
+latch and wall jump will not. Preserve existing camera/aim and power ownership.
