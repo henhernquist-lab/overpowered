@@ -1,5 +1,41 @@
 # Prototype Status
 
+## Recovery runtime checkpoint — 2026-10-04 UTC
+
+Source tested: `748e89d` on `codex/overnight-recovery`, clean at handoff; recovered
+spline source is `7acbb82`. Unity licensing is restored: Unity 6000.6.0f1 entered
+Play Mode in the persistent recovery project. No temporary project copy was used.
+
+Fresh sequential results (no other Editor running at launch):
+- `StagedMissionVerification.Run`: **exit 1, 443 PASS, 1 FAIL**. Docks seed 1011
+  now places nodes A/B/C distinctly and solves all three destruction stages in
+  order. The suite later fails setting up Public Event Attack's ringleader timeout
+  control. Root cause: verifier `KillOthers` treats the comma-separated protected
+  group list as a single group ID and kills all three civilian crowds itself.
+  Fix and rerun pending; the mission suite is NOT green.
+- `StageFrameworkVerification.Run`: **exit 0, 108 PASS, 0 FAIL**. Includes the
+  engaged-at-30-m negative control and escape measured from last contact.
+- `SplineRouteVerification.Run` and separate-process Reload: pending completion.
+
+Evidence: `Verification/OvernightRecovery/2026-10-04/staged-missions-initial-failed.txt`
+and `stage-framework-baseline.txt`. Full local Editor logs are in the same directory
+(`staged-missions.log`, `stage-framework.log`). Unity reports legacy DOTween
+PluginImporter metadata warnings; these results are not a warning-free Editor claim.
+Vendor materials and Sidekick database unchanged. The Cartoon FX welcome screen
+updated its own importer `dontshow` flag; incidental vendor metadata is excluded
+from this checkpoint.
+
+**OVERNIGHT DECISIONS:** preserve the original failed output; repair the verifier's
+multi-group helper and add positive/negative controls without changing mission
+loss rules. Use direct sequential suite processes here: the existing gauntlet
+master keeps a parent Editor alive and creates temporary project copies, which
+conflicts with this handoff's execution constraints. Audit plan and current Phase 9
+implementation gaps: `docs/recovery-verification-plan.md`.
+
+The build remains incomplete. Shipping mission pools remain gated. Cloud/core
+integration verification, Phase 9 presentation, final regression/performance and
+human pacing/feel checks remain outstanding. No fresh FPS or visual-quality claim.
+
 ## Recovery checkpoint: staged mission placement — 2026-10-03 (`codex/overnight-recovery`)
 
 **The overnight queue is still incomplete.** This checkpoint restores work lost when the temporary integration
