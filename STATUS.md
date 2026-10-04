@@ -4013,3 +4013,46 @@ There are no scene, prefab, material or package changes.
 - Pursuit timings, and whether LosePursuit stages feel fair.
 - Whether any world mission graduates from the dormant rotations into shipping mode lists.
 - Whether civilian outcomes ever feed UI or rewards (currently data only).
+
+
+## 2026-10-04 — Movement foundation Phase 0: source diagnosis (before implementation)
+
+Scope replaced by the attached movement-foundation request. Branch `codex/movement-foundation`
+starts at `0241d4d` (recovery evidence), retaining `748e89d` and `7acbb82`.
+No movement/camera/Flight implementation has changed at this checkpoint. Mission helper
+failure remains outside this task; shipping mission pools remain gated. Licensing is restored.
+The inherited fresh spline Run completed successfully; separate-process Reload is still pending,
+so this is not a complete spline gate. Historical PASS totals are not new results.
+
+Authoritative ownership: extend SuperHeroController's existing CharacterController path for
+universal air jump and geometric mantle; GameTuning.Movement owns their tuning. Retain
+Jumped/Landed and HeroPresentationState contracts, physics-root uprightness, and Animator
+ownership. Extend existing ThirdPersonCamera/GameTuning.Camera for pitch. Flight remains
+PowerUser.ConsumeFlight with its ownership/equip gates and the Flight power asset; movement
+response stays in GameTuning.Movement. No new controller, progression, or animation system.
+
+Source baseline (runtime measurements follow separately):
+- Third-person input pitch -10..65 degrees, default16. Its orbit is around the feet,
+  with asset Offset (0,2.8,-7.6) and LookHeight2.5; rendered view pitch differs from input.
+  First-person pitch -85..85 degrees directly controls view rotation. Existing sphere casts
+  protect the third-person boom and first-person eye; Feel impulses and additive FOV are separate.
+- JumpSpeed8.5 m/s, Gravity24 m/s²: ideal ballistic rise1.505 m (not a measured apex).
+  Grounded jump only; no air-jump or mantle implementation. Walk5.2/run9 m/s, hero multiplier.
+- Flight lift16 m/s, vertical acceleration48 m/s² (response3); horizontal multiplier8
+  applied immediately: VECTOR41.6 walking /72 running m/s, modified by hero move stats.
+  Fuel6 units, burn1 unit/s, grounded recharge2.5 units/s, base empty-to-full2.4s.
+  Duration upgrades multiply capacity; preserve that architecture.
+- Generated district configured building ranges: Downtown20..46 normal /56..84 tall,
+  up to45% core boost; Residential6..13 /16..22 tall; Docks7..12 /14..18 tall.
+  Landmarks can be much taller. Roof deck is0.08m thick above building height;
+  solid parapets0.6m high /0.18m thick. Facade bands/canopies are visual-only,
+  so they must not be mistaken for climbable intermediate ledges. Actual seed geometry
+  and a feasible non-Flight route must be measured, not assumed from these ranges.
+- Existing City verifier hardcodes base fuel consumption; any fuel-pressure adjustment
+  requires truthful replacement assertions plus unchanged empty/unequipped controls.
+- Existing WorldProfile parks/disables the hero: useful rendering baseline but cannot
+  measure new traversal logic by itself. Add an explicitly labeled active-controller
+  sample and allocation instrumentation before comparing runtime changes.
+
+Pending: actual baseline apex/ascent/geometry/performance; all implementation phases,
+new traversal controls, existing regressions and human playtest. No feel claim.
