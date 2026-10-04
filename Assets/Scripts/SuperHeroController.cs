@@ -48,6 +48,7 @@ public sealed class SuperHeroController : MonoBehaviour
     public bool AbilityDriving=>powers?.SynergyRunner!=null&&powers.SynergyRunner.DrivesMotion;
     public CollisionFlags MoveAbility(Vector3 velocity,bool flying)
     {
+        flightBoost=1f;
         verticalVelocity=0;
         bool grounded=controller.isGrounded;
         var flags=controller.Move(velocity*Time.deltaTime);
@@ -443,7 +444,7 @@ public sealed class SuperHeroController : MonoBehaviour
         Vector3 end=new Vector3(inside.x,top.point.y+controller.skinWidth+.02f,inside.z);
         Vector3 lift=new Vector3(feet.x,end.y,feet.z);
         if(!CapsuleClear(lift)||!CapsuleClear(end)||!CapsulePathClear(feet,lift)||!CapsulePathClear(lift,end))return false;
-        LastMantleResult="Climbing";Mantling=true;mantleUsed=true;mantleAcross=false;mantleLift=lift;mantleEnd=end;
+        flightBoost=1f;LastMantleResult="Climbing";Mantling=true;mantleUsed=true;mantleAcross=false;mantleLift=lift;mantleEnd=end;
         mantleDeadline=Time.time+(Vector3.Distance(feet,lift)+Vector3.Distance(lift,end))/Mathf.Max(.1f,movement.MantleSpeed)+.5f;
         verticalVelocity=0;return true;
     }

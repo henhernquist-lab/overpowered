@@ -4226,3 +4226,23 @@ as-is. The profiler's zero self-count was traced to macOS pgrep excluding ancest
 -af now includes its parent Editor (baseline external process guard still established exclusivity).
 Mantle interruption diagnostics use constant strings, avoiding formatting allocations on abort.
 Phase5 complete. Broad final regression and matched performance comparison are still pending.
+
+
+### Movement final regression and Flight handoff correction — 2026-10-04
+
+At source558d610, final-regression completed with exit0 for every process:
+Movement Jump116/0, Mantle36/0, Camera38/0; Backflip/Hurricane64/0; Humanoid69/0;
+Roster VerifyExisting194/0 + separate Reload3/0; Mode VerifyExisting79/0 + Reload2/0.
+All numbers are PASS/FAIL; real save and Sidekick database hashes remained unchanged.
+
+A final transition control exposed stale Flight acceleration after MoveAbility took motion
+ownership: flight-transition-control stopped at9 PASS/1 FAIL, exit1. The controller now resets
+its boost ramp when ability movement or a mantle takes over. The unchanged stronger control
+and a collision-driven Flight→mantle→Flight control pass: Flight37/0, exit0 in
+flight-transition-fixed. Existing full-speed/ascent/fuel/camera controls remain. This fixes a
+startup-ramp bypass; no power ownership, resource, collision or progression controls changed.
+First-person repeat and matched performance are still being completed at this checkpoint.
+
+Bundled SDK clean rebuild after the handoff correction:0 warnings/0 errors,
+`Verification/Movement/build-final.txt`. FirstPerson.Run repeated211 PASS/0 FAIL, exit0.
+Fresh FirstPerson.Reload5 PASS/0 FAIL, exit0; save/database hashes unchanged for all three transition-fixed processes.

@@ -1,0 +1,10 @@
+PASS Save VECTOR with flight + strength through the loadout API.
+PASS Session equips flight + strength.
+PASS Baseline fixture genuinely grounded.
+PASS Grounded jump accepted.
+PASS Ground jump remains within original ballistic envelope.
+PASS Flight activates via real controller and resource gates.
+PASS Ascent measured with baseline harness is reduced10..20%.
+PASS Full horizontal Flight speed remains72m/s.
+PASS Activation ramp lowers initial travel modestly while preserving strong horizontal distance.
+FAIL System.Exception: Ability motion handoff restarts the Flight acceleration ramp.

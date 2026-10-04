@@ -42,6 +42,22 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
             Check(delta.y>29.1983f*.8f&&delta.y<29.1983f*.9f,"Ascent measured with baseline harness is reduced10..20%.");
             Check(Mathf.Abs(CC.velocity.z-72)<.1f,"Full horizontal Flight speed remains72m/s.");
             Check(delta.z<143.475f&&delta.z>110,"Activation ramp lowers initial travel modestly while preserving strong horizontal distance.");
+            // Switching to another motion owner must not preserve a stale full-speed flight ramp.
+            W.Hero.MoveAbility(Vector3.zero,false);yield return null;yield return null;
+            Check(W.Hero.PresentationState.Flying&&CC.velocity.z>0&&CC.velocity.z<30,"Ability motion handoff restarts the Flight acceleration ramp.");
+            yield return new WaitForSeconds(.6f);
+            Vector3 at=W.Hero.transform.position;
+            var ledge=Wall(at+new Vector3(0,.1f,1.5f),new Vector3(4,.2f,2));
+            var lip=Wall(at+new Vector3(0,.45f,.59f),new Vector3(4,.5f,.18f));
+            W.Hero.ScriptedFlight=false;W.Hero.ScriptedMove=Vector3.zero;
+            int priorMantles=W.Hero.MantleCount;
+            Check(W.Hero.TryMantle(Vector3.forward),"Flight can hand movement to a valid nearby ledge.");
+            float deadline=Time.time+2;while(W.Hero.Mantling&&Time.time<deadline)yield return null;
+            Check(W.Hero.MantleCount==priorMantles+1,"Flight-to-mantle handoff completes through collision movement.");
+            W.Hero.ScriptedFlight=true;W.Hero.ScriptedMove=Vector3.forward;
+            yield return null;yield return null;
+            Check(W.Hero.PresentationState.Flying&&CC.velocity.z>0&&CC.velocity.z<30,"Mantle handoff cannot resume stale instant full-speed Flight.");
+            Destroy(ledge);Destroy(lip);
             W.Powers.Flight.Fuel=0;Check(!W.Powers.ConsumeFlight(.01f)&&!W.Powers.ConsumeFlight(0),"Empty/zero-dt flight controls refuse.");
             W.Powers.Tick(1,false);Check(W.Powers.Flight.Fuel==0,"Airborne recharge CONTROL stays empty.");
             W.Powers.Tick(1,true);Check(Mathf.Abs(W.Powers.Flight.Fuel-2.5f)<.001f,"Ground recharge remains2.5 units/s.");
