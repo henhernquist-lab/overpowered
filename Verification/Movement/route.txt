@@ -1,32 +1,31 @@
-PASS Save VECTOR with fire + strength through the loadout API.
-PASS Session equips fire + strength.
-PASS fire selected for LMB (key 1).
+PASS Saved two attack powers and a separate secondary through progression.
+PASS Session received the exact three-slot build.
 PASS Reproducible route uses city seed2409.
 PASS Route starts on real quay street support.
 PASS Route ground jump accepted.
-PASS Route waypoint reached (-18.80, 0.00, -207.00) actual=(-19.05, 1.60, -207.00)
+PASS Route waypoint reached (-18.80, 0.00, -207.00) actual=(-19.05, 2.15, -207.00)
 PASS Low pier railing cleared onto real support.
 PASS Route waypoint reached (-14.00, 0.00, -246.80) actual=(-14.03, 0.20, -246.58)
 PASS Ground jump clears actual lighthouse-platform railing.
-PASS Route waypoint reached (-14.00, 0.00, -250.90) actual=(-14.00, 1.40, -250.67)
+PASS Route waypoint reached (-14.00, 0.00, -250.90) actual=(-14.00, 2.15, -250.67)
 PASS Roof approach starts a grounded jump.
 PASS Roof approach uses one air jump; third refused.
-PASS Actual Harbour Light podium rooftop arrival, Flight=False at (-14.00, 4.08, -252.82)
-PASS Arrival capsule is inside visible cylindrical podium footprint, radial=5.176, radius=6.000; not merely its box-collider corner.
+PASS Actual Harbour Light podium rooftop arrival, Flight=False at (-14.00, 4.08, -252.83)
+PASS Arrival capsule is inside visible cylindrical podium footprint, radial=5.167, radius=6.000; not merely its box-collider corner.
 PASS Route uses intended traversal resources, Flight=False
 IMAGE Verification/Movement/route-no-flight.png
-ROUTE seed2409 flight=False start=(-22.00, 0.13, -207.00) end=(-14.00, 4.08, -252.82) seconds=8.8250 vertical=3.9500 jumps=4 mantles=1 fuelUsed=0.0000. Podium roof only; no claim of access to the sheer upper lighthouse tower.
-PASS Save VECTOR with flight + strength through the loadout API.
-PASS Session equips flight + strength.
+ROUTE seed2409 flight=False start=(-22.00, 0.13, -207.00) end=(-14.00, 4.08, -252.83) seconds=8.8000 vertical=3.9500 jumps=4 mantles=1 fuelUsed=0.0000. Podium roof only; no claim of access to the sheer upper lighthouse tower.
+PASS Saved two attack powers and a separate secondary through progression.
+PASS Session received the exact three-slot build.
 PASS Reproducible route uses city seed2409.
 PASS Route starts on real quay street support.
 PASS Route ground jump accepted.
 PASS Flight reaches podium clearance.
-PASS Route waypoint reached (-18.80, 0.00, -207.00) actual=(-19.04, 5.06, -207.00)
-PASS Route waypoint reached (-14.00, 0.00, -246.80) actual=(-14.00, 7.05, -246.78)
-PASS Route waypoint reached (-14.00, 0.00, -250.90) actual=(-14.00, 7.05, -250.73)
-PASS Actual Harbour Light podium rooftop arrival, Flight=True at (-14.00, 4.08, -253.13)
-PASS Arrival capsule is inside visible cylindrical podium footprint, radial=4.874, radius=6.000; not merely its box-collider corner.
+PASS Route waypoint reached (-18.80, 0.00, -207.00) actual=(-18.82, 5.26, -207.00)
+PASS Route waypoint reached (-14.00, 0.00, -246.80) actual=(-14.00, 7.15, -246.81)
+PASS Route waypoint reached (-14.00, 0.00, -250.90) actual=(-14.00, 7.15, -250.75)
+PASS Actual Harbour Light podium rooftop arrival, Flight=True at (-14.00, 4.08, -253.15)
+PASS Arrival capsule is inside visible cylindrical podium footprint, radial=4.848, radius=6.000; not merely its box-collider corner.
 PASS Route uses intended traversal resources, Flight=True
 IMAGE Verification/Movement/route-flight.png
-ROUTE seed2409 flight=True start=(-22.00, 0.13, -207.00) end=(-14.00, 4.08, -253.13) seconds=2.0583 vertical=3.9500 jumps=1 mantles=0 fuelUsed=1.1550. Podium roof only; no claim of access to the sheer upper lighthouse tower.
+ROUTE seed2409 flight=True start=(-22.00, 0.13, -207.00) end=(-14.00, 4.08, -253.15) seconds=2.0583 vertical=3.9500 jumps=1 mantles=0 fuelUsed=1.1550. Podium roof only; no claim of access to the sheer upper lighthouse tower.

@@ -228,7 +228,8 @@ public sealed class BackflipHurricaneVerificationRunner : MonoBehaviour
     }
     IEnumerator Regressions()
     {
-        Check(W.Tuning.Movement.WalkSpeed==5.2f&&W.Tuning.Movement.RunSpeed==9f&&W.Tuning.Movement.JumpSpeed==8.5f,"CONTROL: movement constants unchanged (walk 5.2 / run 9 / jump 8.5 m/s).");
+        Check(W.Tuning.Movement.WalkSpeed==5.2f&&W.Tuning.Movement.RunSpeed==9f&&W.Tuning.Movement.JumpSpeed==10f,
+            "CONTROL: walk/run remain 5.2/9 m/s; requested grounded-jump buff is 10 m/s.");
         var stats=W.Powers.Stats(W.Powers.Strength);
         Check(stats.Force==1350f&&stats.Radius==3.3f&&stats.Damage==35f&&stats.Charges==3&&Mathf.Approximately(stats.Cooldown,.45f),"CONTROL: Super Strength tier-0 punch stats unchanged (1350 N·s / 3.3 m / 35 dmg / 3 charges / 0.45 s).");
         Move(W.City.Spawn+Vector3.up*200);yield return new WaitForSeconds(.3f);

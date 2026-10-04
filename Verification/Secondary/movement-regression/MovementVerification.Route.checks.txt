@@ -1,0 +1,27 @@
+PASS Saved two attack powers and a separate secondary through progression.
+PASS Session received the exact three-slot build.
+PASS Reproducible route uses city seed2409.
+PASS Route starts on real quay street support.
+PASS Route ground jump accepted.
+PASS Route waypoint reached (-18.80, 0.00, -207.00) actual=(-19.05, 2.15, -207.00)
+PASS Low pier railing cleared onto real support.
+PASS Route waypoint reached (-14.00, 0.00, -246.80) actual=(-14.03, 0.20, -246.58)
+PASS Ground jump clears actual lighthouse-platform railing.
+PASS Route waypoint reached (-14.00, 0.00, -250.90) actual=(-14.00, 2.15, -250.67)
+PASS Roof approach starts a grounded jump.
+PASS Roof approach uses one air jump; third refused.
+PASS Actual Harbour Light podium rooftop arrival, Flight=False at (-14.00, 4.08, -252.83)
+PASS Arrival capsule is inside visible cylindrical podium footprint, radial=5.167, radius=6.000; not merely its box-collider corner.
+PASS Route uses intended traversal resources, Flight=False
+PASS Saved two attack powers and a separate secondary through progression.
+PASS Session received the exact three-slot build.
+PASS Reproducible route uses city seed2409.
+PASS Route starts on real quay street support.
+PASS Route ground jump accepted.
+PASS Flight reaches podium clearance.
+PASS Route waypoint reached (-18.80, 0.00, -207.00) actual=(-18.82, 5.26, -207.00)
+PASS Route waypoint reached (-14.00, 0.00, -246.80) actual=(-14.00, 7.15, -246.81)
+PASS Route waypoint reached (-14.00, 0.00, -250.90) actual=(-14.00, 7.15, -250.75)
+PASS Actual Harbour Light podium rooftop arrival, Flight=True at (-14.00, 4.08, -253.15)
+PASS Arrival capsule is inside visible cylindrical podium footprint, radial=4.848, radius=6.000; not merely its box-collider corner.
+PASS Route uses intended traversal resources, Flight=True

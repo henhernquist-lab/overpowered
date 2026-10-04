@@ -39,9 +39,9 @@ public sealed class GameTuning : ScriptableObject
 [Serializable] public sealed class MovementSettings
 {
     public float WalkSpeed = PrototypeTuning.WalkSpeed, RunSpeed = PrototypeTuning.RunSpeed;
-    public float JumpSpeed = PrototypeTuning.JumpSpeed, Gravity = PrototypeTuning.Gravity;
+    public float JumpSpeed = 10f, Gravity = PrototypeTuning.Gravity;
     [Tooltip("One universal air jump per landing; vertical speed replaces current fall speed.")]
-    public float AirJumpSpeed = 7f;
+    public float AirJumpSpeed = 8.5f;
     [Tooltip("Geometric mantle height above current feet, forward reach beyond capsule radius, motion speed, and allowed drop behind a parapet (metres / m/s).")]
     public float MantleMinHeight = .25f, MantleMaxHeight = 1.8f, MantleReach = .65f, MantleSpeed = 5f, MantleMaxDrop = .75f;
     public float FlightLift = 14f, FlightForwardBoost = PrototypeTuning.FlightForwardBoost;

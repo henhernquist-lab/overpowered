@@ -1,0 +1,2 @@
+ROUTE seed2409 flight=False start=(-22.00, 0.13, -207.00) end=(-14.00, 4.08, -252.83) seconds=8.8000 vertical=3.9500 jumps=4 mantles=1 fuelUsed=0.0000. Podium roof only; no claim of access to the sheer upper lighthouse tower.
+ROUTE seed2409 flight=True start=(-22.00, 0.13, -207.00) end=(-14.00, 4.08, -253.15) seconds=2.0583 vertical=3.9500 jumps=1 mantles=0 fuelUsed=1.1550. Podium roof only; no claim of access to the sheer upper lighthouse tower.

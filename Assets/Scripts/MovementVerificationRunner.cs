@@ -11,13 +11,23 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
     protected override string ResultFile => Stage+".txt";
     CharacterController CC => W.Hero.GetComponent<CharacterController>();
     ThirdPersonCamera Rig => Cam.GetComponent<ThirdPersonCamera>();
+    IEnumerator EnterBuild(HeroDefinition hero,string attackA,string attackB,string secondary)
+    {
+        yield return Home();
+        Check(Profile.SetLoadout(hero,Power(attackA),Power(attackB),Power(secondary),hero.Primary,hero.Secondary),
+            "Saved two attack powers and a separate secondary through progression.");
+        GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/free-play"));
+        yield return Scene(GameFlow.CityScene);
+        Check(W.Powers.EquippedA==Power(attackA)&&W.Powers.EquippedB==Power(attackB)&&W.Powers.EquippedSecondary==Power(secondary),
+            "Session received the exact three-slot build.");
+    }
     protected override IEnumerator Checks()
     {
         yield return Scene(GameFlow.HomeScene);
         if(Stage=="route"){Time.captureDeltaTime=1f/120;yield return CityRoute(false);yield return CityRoute(true);Time.captureDeltaTime=0;yield break;}
         if(Stage=="mantle"){Time.captureDeltaTime=1f/120;yield return MantleControls();yield return CityRoute(false);Time.captureDeltaTime=0;yield break;}
         if(Stage=="jump"){Time.captureDeltaTime=1f/120;yield return JumpControls();Time.captureDeltaTime=0;yield break;}
-        yield return Enter(F.Heroes[0],"flight","strength","free-play");
+        yield return EnterBuild(F.Heroes[0],"strength","fire","flight");
         foreach(var group in W.City.Buildings.GroupBy(b=>b.District))
             Log($"GEOMETRY {W.City.Plan.Districts[group.Key].Name}: {group.Count()} buildings, height {group.Min(b=>b.Size.y):F3}..{group.Max(b=>b.Size.y):F3}m.");
         Time.captureDeltaTime=1f/120;
@@ -28,7 +38,8 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
         Check(W.Hero.TryJump(),"Grounded jump accepted.");
         for(int i=0;i<150;i++){yield return null;peak=Mathf.Max(peak,W.Hero.transform.position.y);}
         Log($"MEASURED first jump peak={peak-start:F4}m, launch={W.Tuning.Movement.JumpSpeed:F3}m/s, gravity={W.Tuning.Movement.Gravity:F3}m/s², dt={Time.deltaTime:F6}.");
-        Check(peak-start>1.3f&&peak-start<1.6f,"Ground jump remains within original ballistic envelope.");
+        float expectedRise=W.Tuning.Movement.JumpSpeed*W.Tuning.Movement.JumpSpeed/(2*W.Tuning.Movement.Gravity);
+        Check(peak-start>expectedRise*.92f&&peak-start<expectedRise*1.02f,"Ground jump matches configured ballistic rise.");
         PlaceHero(new Vector3(0,160,0),true);W.Hero.ScriptedFlight=true;W.Hero.ScriptedAscend=true;
         W.Hero.ScriptedRun=true;W.Hero.ScriptedMove=Vector3.forward;
         W.Powers.Flight.Fuel=W.Powers.Stats(W.Powers.Flight).Duration;
@@ -92,7 +103,7 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
     {
         yield return Home();Profile.Data.Points=20;
         if(!Profile.Owns(Power("fire")))Check(Profile.Buy(Power("fire")),"Unlock Fire through existing progression for camera verification.");
-        yield return Enter(F.Heroes[0],"fire","strength","free-play");
+        yield return EnterBuild(F.Heroes[0],"fire","strength","flight");
         Isolate();Rig.enabled=true;
         foreach(bool first in new[]{false,true})
         {
@@ -119,7 +130,7 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
         // A non-Flight loadout proves traversal is universal rather than an ownership side effect.
         yield return Home();Profile.Data.Points=20;
         if(!Profile.Owns(Power("fire")))Check(Profile.Buy(Power("fire")),"Unlock non-Flight test loadout through progression.");
-        yield return Enter(F.Heroes[0],"strength","fire","free-play");
+        yield return EnterBuild(F.Heroes[0],"strength","fire","speed");
         Isolate();PlaceHero(new Vector3(0,150.05f,0),true);
         yield return new WaitForSeconds(.2f);
         float floor=W.Hero.transform.position.y;
@@ -132,7 +143,10 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
         float second=W.Hero.transform.position.y,peak=second;int refused=0;
         for(int i=0;i<100;i++){yield return null;peak=Mathf.Max(peak,W.Hero.transform.position.y);if(!CC.isGrounded){Check(!W.Hero.TryJump(),"CONTROL airborne spam refused.");refused++;}}
         Log($"MEASURED double jump: first apex={first-floor:F4}m, air-jump rise={peak-second:F4}m, combined peak={peak-floor:F4}m.");
-        Check(first-floor>1.3f&&first-floor<1.6f&&peak-second>.8f&&peak-second<1.1f,"Ground jump unchanged; air correction remains modest.");
+        float firstExpected=W.Tuning.Movement.JumpSpeed*W.Tuning.Movement.JumpSpeed/(2*W.Tuning.Movement.Gravity);
+        float airExpected=W.Tuning.Movement.AirJumpSpeed*W.Tuning.Movement.AirJumpSpeed/(2*W.Tuning.Movement.Gravity);
+        Check(first-floor>firstExpected*.92f&&first-floor<firstExpected*1.02f&&peak-second>airExpected*.9f&&peak-second<airExpected*1.02f,
+            "Both jump rises match their configured ballistic speeds; no third jump.");
         yield return new WaitForSeconds(.5f);
         Check(CC.isGrounded&&W.Hero.AirJumpAvailable&&W.Hero.TryJump(),"Real landing restores one jump.");
         W.Mode.SetPaused(true);var held=W.Hero.transform.position;
@@ -161,7 +175,7 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
             yield return Home();Profile.Data.Points=100;
             var pair=hero.AvailablePowers.Where(p=>!p.Effect.IsFlight).Take(2).ToArray();
             foreach(var power in pair)if(!Profile.Owns(power))Check(Profile.Buy(power),"Unlock non-Flight control loadout for "+hero.DisplayName);
-            yield return Enter(hero,pair[0].Id,pair[1].Id,"free-play");
+            yield return EnterBuild(hero,pair[0].Id,pair[1].Id,"speed");
             Isolate();PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.2f);
             Check(!W.Powers.IsEquipped(Power("flight"))&&!W.Powers.ConsumeFlight(.1f)&&W.Hero.TryJump(),hero.DisplayName+" grounded jump without Flight; unequipped Flight refuses consumption.");
             yield return new WaitForSeconds(.36f);
@@ -171,7 +185,7 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
     }
     IEnumerator MantleControls()
     {
-        yield return Enter(F.Heroes[0],"flight","strength","free-play");
+        yield return EnterBuild(F.Heroes[0],"strength","fire","flight");
         Isolate();
         foreach(float height in new[]{.7f,1.6f})
         {
@@ -234,7 +248,7 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
     {
         yield return Home();Profile.Data.Points=100;
         if(!Profile.Owns(Power("fire")))Check(Profile.Buy(Power("fire")),"Unlock non-Flight route pair.");
-        yield return Enter(F.Heroes[0],flight?"flight":"fire","strength","free-play");
+        yield return EnterBuild(F.Heroes[0],"fire","strength",flight?"flight":"speed");
         // Seed2409: actual quay -> lighthouse pier west railing -> Harbour Light podium roof.
         // No fixture geometry or collider modifications; only the initial street placement is scripted.
         Check(W.Tuning.City.Seed==2409,"Reproducible route uses city seed2409.");

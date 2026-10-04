@@ -21,7 +21,7 @@ public static class HeroForgeSetup
             d.VisualScale=new Vector3(width,1,width);d.Primary=primary;d.Secondary=secondary;d.AvailablePowers=powers;
             d.DefaultA=Power(a);d.DefaultB=Power(b);AssetDatabase.CreateAsset(d,"Assets/Resources/Forge/Heroes/"+id+".asset");return d;
         }
-        catalog.Heroes=new[]{Hero("vector","VECTOR",1,CityColor.Blue,CityColor.Cyan,"flight","strength"),
+        catalog.Heroes=new[]{Hero("vector","VECTOR",1,CityColor.Blue,CityColor.Cyan,"fire","strength"),
             Hero("titan","TITAN",1.2f,CityColor.Teal,CityColor.Amber,"strength","telekinesis"),
             Hero("nova","NOVA",.92f,CityColor.UiPurple,CityColor.Red,"fire","ice")};
         var slam=ScriptableObject.CreateInstance<SonicSlamEffect>();AssetDatabase.CreateAsset(slam,"Assets/Resources/Forge/Effects/sonic-slam.asset");

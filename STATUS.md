@@ -4293,3 +4293,51 @@ Sidekick vendor materials/database and real save retained. Unrelated .freebuff/p
 change left untouched. Functional movement work is checkpointed, not a claim that the
 overnight build is finished. Henry still needs to judge double-jump strength, mantle
 smoothness, camera comfort and whether the Flight nerf is too much or too little.
+
+
+### Three-slot powers and requested jump buff — 2026-10-04
+
+User clarified the intended loadout: two combat attacks (Strength, Telekinesis, Fire, Ice,
+Darkness, Laser Eyes, Lightning, Poison) plus one F secondary (Flight, Speed, Force Field,
+Teleport). Previous two-slot description in earlier STATUS sections is historical.
+
+The current Forge UI, HUD, PlayerProgression save/load validation, PowerUser ownership/equip
+gates and SuperHeroController input now use that split. Flight retains held F and its fuel
+gate; the other three use paid F activations. Existing Sonic Slam remains available across
+Strength and Flight slots; attack-pair synergy takes priority when several pairs match.
+Teleport is a new grounded 8m blink requiring a clear capsule corridor and supported,
+walkable landing within 0.5m of starting height; blocked attempts pay nothing. Existing
+Speed/Force Field effects and Sidekick/vendor materials were not rewritten. Old two-slot
+saves migrate in memory to two owned combat powers and the former secondary, preserving
+ownership, tiers, XP and suit colors. VECTOR defaults to Fire + Strength / Flight.
+
+Requested movement tuning: ground launch8.5 ->10m/s, air jump7 ->8.5m/s; gravity24
+unchanged, one-air-jump and grounded-reset controls unchanged. At120Hz actual first rise
+2.0067m (was1.4692m), air rise1.4692m (was0.9917m), combined peak3.4758m
+(was2.4608m). Route on actual seed2409: no Flight8.8000s,4 jumps,1 mantle,0 fuel;
+Flight2.0583s,1 jump,0 mantles,1.1550 fuel, both on visible podium.
+
+Fresh sequential Unity evidence: Secondary41 PASS/0 FAIL + Reload3/0
+(`Verification/Secondary/migration-final`); existing HeroForge.VerifyExisting124/0 +
+Reload3/0 (`forge-fuel-current`); Movement Jump126/0, Flight37/0, Route27/0,
+Backflip64/0 (`movement-regression`). All exited0 and real save/Sidekick DB hashes
+matched before/after. Bundled SDK clean build0 warnings/0 errors. Retained earlier Forge
+failures: attack-slot collision repair selected Flight (11/1), fixed by combat-only repair;
+then an obsolete hard-coded Flight fuel expectation (38/1), replaced with an exact
+configured-cost assertion. No gameplay fuel gate was relaxed. The UI was visually
+inspected in `Verification/Forge/forge-menu.png`, showing all three rows at1440x900.
+Reusable RosterSetup now creates Teleport and preserves secondary roles without running
+asset setup on this recovered catalog. Final asset-default rerun pending as this note is
+written. See docs/secondary-loadout.md for player controls and remaining limits.
+
+Final asset-default rerun: SecondaryVerification.Run41 PASS/0 FAIL, exit0, and
+separate-process Reload3/0, exit0 (`Verification/Secondary/asset-defaults-final`).
+The real save and Sidekick database hashes stayed unchanged. In the Forge UI capture,
+Attack Power 1, Attack Power 2 and Secondary Power / F are visible together.
+Human keyboard feel and a new matched performance comparison remain unverified.
+
+Checkpoint `2fbd14e` contains the three-slot roster, F input, Teleport, UI, save migration
+and Hero Forge evidence. Jump tuning and movement evidence are staged as a separate
+checkpoint. Measurement clarification: standalone ground-jump peak is2.0417m at120Hz;
+the double-jump test triggered the air jump before full apex, so its first segment reached
+2.0067m. Air segment1.4692m and combined3.4758m.

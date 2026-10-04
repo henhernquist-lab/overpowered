@@ -15,8 +15,8 @@ MonoBehaviour:
   Movement:
     WalkSpeed: 5.2
     RunSpeed: 9
-    JumpSpeed: 8.5
-    AirJumpSpeed: 7
+    JumpSpeed: 10
+    AirJumpSpeed: 8.5
     MantleMinHeight: 0.25
     MantleMaxHeight: 1.8
     MantleReach: 0.65
