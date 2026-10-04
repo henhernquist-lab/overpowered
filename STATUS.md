@@ -4341,3 +4341,9 @@ and Hero Forge evidence. Jump tuning and movement evidence are staged as a separ
 checkpoint. Measurement clarification: standalone ground-jump peak is2.0417m at120Hz;
 the double-jump test triggered the air jump before full apex, so its first segment reached
 2.0067m. Air segment1.4692m and combined3.4758m.
+
+Final durable checkpoints: `2fbd14e` (two combat powers, F secondary, Teleport,
+Forge save migration/UI and primary verification) and `b57bbc8` (ground/air jump buff,
+updated movement controls, exact measured evidence and player-facing documentation).
+The checked-out branch is `codex/movement-foundation`. Only the pre-existing unrelated
+`.freebuff/project-id` worktree change remains uncommitted; it was not touched.
