@@ -1,0 +1,22 @@
+[ABILITIES VERIFY] PASS CONTROL: Home camera retained.
+[ABILITIES VERIFY] PASS CONTROL: shared humanoid Animator is live before the gestures.
+[ABILITIES VERIFY] PASS CONTROL: hero reached real ground contact.
+[ABILITIES VERIFY] PASS CONTROL: backflip surface starts Ready with zero uses.
+[ABILITIES VERIFY] PASS Backflip accepted from the ground.
+[ABILITIES VERIFY] PASS Backflip dispatches the shared humanoid's Backflip state (previously named Unwired Backflip).
+[ABILITIES VERIFY] PASS Presentation reports the backflip as the active action from one real event.
+[ABILITIES VERIFY] PASS Accepted backflip opens its dash window and counts one use.
+[ABILITIES VERIFY] PASS Backflip repositioned the hero -4.21m backward against a configured 4.2m.
+[ABILITIES VERIFY] PASS Backflip hop actually left the ground: peak rise 0.600m at 5.50m/s launch, brought back down by the existing gravity.
+[ABILITIES VERIFY] PASS Backflip does not rotate the physics root or turn the hero.
+[ABILITIES VERIFY] PASS Backflip dash window closes when its configured window ends.
+[ABILITIES VERIFY] PASS Cooldown CONTROL refuses an immediate second backflip.
+[ABILITIES VERIFY] PASS Refusal is the backflip cooldown ('Blocked: cooldown') with 1.43s of 2.50s still remaining.
+[ABILITIES VERIFY] PASS Refused backflip neither counted a use nor emitted a presentation event.
+[ABILITIES VERIFY] PASS Airborne CONTROL is genuinely off the ground.
+[ABILITIES VERIFY] PASS Airborne CONTROL refuses the grounded-only backflip ('Blocked: airborne').
+[ABILITIES VERIFY] PASS CONTROL: hero reached real ground contact.
+[ABILITIES VERIFY] PASS CONTROL: backflip cooldown counts down to exactly zero.
+[ABILITIES VERIFY] PASS Recharged backflip fires again (use 2), so the cooldown is a real gate rather than a permanent block.
+[ABILITIES VERIFY] PASS Backflip returns the presentation to locomotion once the dash ends (state=Locomotion, grounded=True, local velocity=(0.00, 0.00, 0.00)).
+[ABILITIES VERIFY] FAIL System.Exception: CONTROL: existing grounded jump still accepted after the backflip.

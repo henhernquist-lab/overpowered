@@ -16,6 +16,7 @@ MonoBehaviour:
     WalkSpeed: 5.2
     RunSpeed: 9
     JumpSpeed: 8.5
+    AirJumpSpeed: 7
     Gravity: 24
     FlightLift: 16
     FlightForwardBoost: 8

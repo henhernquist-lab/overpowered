@@ -7,6 +7,11 @@ public sealed class SuperHeroController : MonoBehaviour
     Camera view;
     float verticalVelocity;
     float airbornePeakHeight;
+    bool airJumpUsed, jumpLaunched;
+    public bool AirJumpAvailable => !airJumpUsed;
+    bool TraversalInputAllowed => powers != null && Time.timeScale > 0f && WorldSession.Instance != null &&
+        !WorldSession.Instance.MenuOpen && !WorldSession.Instance.PlayerDead &&
+        (WorldSession.Instance.Mode == null || !WorldSession.Instance.Mode.Ended);
     PowerUser powers;
     MovementSettings movement;
     public float FlightFuel => powers?.Flight?.Fuel ?? 0f;
@@ -64,7 +69,7 @@ public sealed class SuperHeroController : MonoBehaviour
 
     void Awake() { controller = GetComponent<CharacterController>(); view = Camera.main; airbornePeakHeight = transform.position.y; }
     public void Initialize(PowerUser user, MovementSettings settings) { powers = user; movement = settings; }
-    public void ResetMotion() { verticalVelocity = 0f; airbornePeakHeight = transform.position.y; }
+    public void ResetMotion() { verticalVelocity = 0f; airbornePeakHeight = transform.position.y; airJumpUsed = jumpLaunched = false; }
     void Update()
     {
         if (powers == null) return;
@@ -75,7 +80,7 @@ public sealed class SuperHeroController : MonoBehaviour
         powers.Channel(!AbilityDriving && !WorldSession.Instance.MenuOpen && !WorldSession.Instance.PlayerDead &&
             (Input.GetMouseButton(0) || powers.ScriptedHold), Time.deltaTime);
         if(AbilityDriving)return;
-        bool acceptsInput = !WorldSession.Instance.MenuOpen && !WorldSession.Instance.PlayerDead;
+        bool acceptsInput = TraversalInputAllowed;
         Vector3 forward = Vector3.Scale(view.transform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 right = Vector3.Scale(view.transform.right, new Vector3(1,0,1)).normalized;
         Vector3 move = acceptsInput ? (forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal")).normalized : Vector3.zero;
@@ -85,7 +90,7 @@ public sealed class SuperHeroController : MonoBehaviour
         if (move.sqrMagnitude > 0f) transform.forward = Vector3.Slerp(transform.forward, move, Time.deltaTime * movement.TurnResponse);
         float speed = (Input.GetKey(KeyCode.LeftShift) || ScriptedRun ? movement.RunSpeed : movement.WalkSpeed) * powers.HeroStats.MoveSpeed;
         if (controller.isGrounded && verticalVelocity < 0f) verticalVelocity = -movement.GroundStickSpeed;
-        if (acceptsInput && controller.isGrounded && Input.GetButtonDown("Jump")) TryJump();
+        if (acceptsInput && Input.GetButtonDown("Jump")) TryJump();
         if (flying)
         {
             verticalVelocity = Mathf.MoveTowards(verticalVelocity, (Input.GetKey(KeyCode.Space) || ScriptedAscend) ? movement.FlightLift : 0f, movement.FlightLift * movement.FlightResponse * Time.deltaTime);
@@ -97,7 +102,15 @@ public sealed class SuperHeroController : MonoBehaviour
         float impactSpeed = Mathf.Max(0f, -verticalVelocity);
         // A frozen frame (hit pause / timeScale 0) moves nothing; skipping the zero Move keeps the CharacterController's
         // ground contact, so jump/backflip input stays valid through a hit pause.
-        if (Time.deltaTime > 0f) controller.Move((move * speed + Vector3.up * verticalVelocity) * Time.deltaTime);
+        if (Time.deltaTime > 0f)
+        {
+            var flags = controller.Move((move * speed + Vector3.up * verticalVelocity) * Time.deltaTime);
+            if ((flags & CollisionFlags.Above) != 0 && verticalVelocity > 0f) verticalVelocity = 0f;
+            // Reset only on a downward move that actually contacts support, never a stale isGrounded
+            // immediately after launch, a pause, or an upward contact with a ceiling.
+            if ((flags & CollisionFlags.Below) != 0 && verticalVelocity <= 0f)
+                airJumpUsed = jumpLaunched = false;
+        }
         PresentationState = new HeroPresentationState(transform.InverseTransformDirection(controller.velocity),
             controller.isGrounded, flying && !controller.isGrounded);
         // CharacterController can alternate ground contact for sub-skin-width moves.
@@ -172,6 +185,7 @@ public sealed class SuperHeroController : MonoBehaviour
         backflipReadyAt = Time.time + HeroAbilityTuning.BackflipCooldown;
         BackflipCount++;
         verticalVelocity = HeroAbilityTuning.BackflipHopSpeed;
+        jumpLaunched = true;
         LastBackflipResult = $"BACKFLIP: {HeroAbilityTuning.BackflipDistance:0.0} m backward in {HeroAbilityTuning.BackflipSeconds:0.00}s";
         BackflipStarted?.Invoke();
         StartCoroutine(BackflipDash());
@@ -363,8 +377,21 @@ public sealed class SuperHeroController : MonoBehaviour
     void OnDisable() { Dashing = false; }
     public bool TryJump()
     {
-        if(!controller.isGrounded)return false;
-        verticalVelocity=movement.JumpSpeed;Jumped?.Invoke();return true;
+        if (!TraversalInputAllowed || AbilityDriving || Dashing || BackflipActive || GroundPounding) return false;
+        if (controller.isGrounded)
+        {
+            if (jumpLaunched) return false;
+            verticalVelocity = movement.JumpSpeed;
+        }
+        else
+        {
+            if (airJumpUsed) return false;
+            airJumpUsed = true;
+            verticalVelocity = movement.AirJumpSpeed;
+        }
+        jumpLaunched = true;
+        Jumped?.Invoke();
+        return true;
     }
     // Used by deterministic test and the in-game verification harness.
     public void DebugSetResources(float fuel, int newCharges, float newCooldown = 0f)

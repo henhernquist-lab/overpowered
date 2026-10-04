@@ -4098,3 +4098,26 @@ with untouched off-axis targets. Existing first-person suite retains -85 checks 
 samples configured -89 around tight walls/overhangs and full Feel impulses (0 clipped samples).
 Database and real save hashes unchanged according to runner manifests. Camera comfort remains
 unverified by a human. Phase1 complete; traversal phases and final regression still pending.
+
+
+### Movement Phase 2 — one universal air jump verified, 2026-10-04
+
+Before checkpointa88ab57. SuperHeroController keeps grounded JumpSpeed8.5 and Gravity24;
+GameTuning.Movement.AirJumpSpeed7 gives one extra jump, replacing current vertical velocity.
+Only actual downward CharacterController contact replenishes it; a launch latch rejects stale
+isGrounded calls before the next Move. Walk-off receives the same one air jump. ResetMotion
+clears state on respawn. Pause/menu/death/session end and motion-owning abilities refuse jumps;
+Backflip keeps its own motion window. No loadout, resource, invulnerability or root-rotation change.
+
+Bundled SDK build0 warnings/0 errors. Fresh MovementVerification.Jump116 PASS/0 FAIL,
+BackflipHurricane64/0, Humanoid69/0, all exit0 (jump-gates-corrected manifests).
+All3 heroes exercised with non-Flight loadouts through existing progression gates.
+Measured at120Hz: first1.4692m unchanged; air jump0.9917m additional; combined2.4608m.
+Controls cover third-call/spam rejection, real landing, walk-off, pause position, death/respawn,
+menu/end refusal, upright root, and Backflip before returning to a regular grounded jump.
+
+Retained failed attempt `jump-gates/BackflipHurricaneVerification.Run.checks.txt`:21 PASS/1 FAIL.
+Cause was the verifier leaving MenuOpen=true while requesting a jump. New intended input gate
+correctly refused it. Both Backflip and Humanoid verifiers now assert menu-open refusal before
+closing the menu and retaining the original positive jump/presentation assertions. No control
+was removed or threshold weakened. Phase2 complete; human jump-strength judgment remains pending.

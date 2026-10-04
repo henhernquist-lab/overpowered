@@ -40,6 +40,8 @@ public sealed class GameTuning : ScriptableObject
 {
     public float WalkSpeed = PrototypeTuning.WalkSpeed, RunSpeed = PrototypeTuning.RunSpeed;
     public float JumpSpeed = PrototypeTuning.JumpSpeed, Gravity = PrototypeTuning.Gravity;
+    [Tooltip("One universal air jump per landing; vertical speed replaces current fall speed.")]
+    public float AirJumpSpeed = 7f;
     public float FlightLift = PrototypeTuning.FlightLift, FlightForwardBoost = PrototypeTuning.FlightForwardBoost;
     public float TurnResponse = 14f, GroundStickSpeed = 2f, FlightResponse = 3f;
     public float Health = 100f, RespawnDelay = 3f, Energy = 100f, EnergyRecharge = 12f;

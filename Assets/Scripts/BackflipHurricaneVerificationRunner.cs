@@ -81,7 +81,7 @@ public sealed class BackflipHurricaneVerificationRunner : MonoBehaviour
             Check(selected.Id==HeroId&&profile.SetLoadout(selected,profile.EquippedA,profile.EquippedB,selected.Primary,selected.Secondary),"Gesture hero selected through progression: "+selected.DisplayName);
         }
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene("Prototype");
-        W.MenuOpen=true; // Verification drives the abilities directly; the hero keeps its normal physics.
+        W.MenuOpen=false; // Movement entry points obey the same input gates as live gameplay.
         Check(P.Animator!=null&&P.Animator.runtimeAnimatorController!=null,"CONTROL: shared humanoid Animator is live before the gestures.");
         Log($"CONFIG backflip: cooldown={HeroAbilityTuning.BackflipCooldown:F2}s dash={HeroAbilityTuning.BackflipSeconds:F2}s distance={HeroAbilityTuning.BackflipDistance:F1}m hop={HeroAbilityTuning.BackflipHopSpeed:F2}m/s; clip start={P.Tuning.BackflipStartSeconds:F3}s length={P.Tuning.Backflip.length:F4}s fitted playback={((P.Tuning.Backflip.length-P.Tuning.BackflipStartSeconds)/HeroAbilityTuning.BackflipSeconds):F2}x");
         Log($"CONFIG hurricane kick: start={P.Tuning.KickStartSeconds:F3}s impact={P.Tuning.KickImpactSeconds:F3}s playback={P.Tuning.KickPlayback:F2}x -> configured windup={P.Tuning.KickWindup*1000:F1}ms; force x{HeroAbilityTuning.KickForceMultiplier:F2} damage x{HeroAbilityTuning.KickDamageMultiplier:F2} radius={HeroAbilityTuning.KickRadius:F2}m vs punch radius {W.Powers.Stats(W.Powers.Strength).Radius:F2}m");
@@ -126,6 +126,7 @@ public sealed class BackflipHurricaneVerificationRunner : MonoBehaviour
         Check(W.Hero.TryBackflip()&&W.Hero.BackflipCount==2&&events==2,"Recharged backflip fires again (use 2), so the cooldown is a real gate rather than a permanent block.");
         yield return new WaitForSeconds(HeroAbilityTuning.BackflipSeconds+.45f);
         Check(P.State=="Locomotion",$"Backflip returns the presentation to locomotion once the dash ends (state={P.State}, grounded={W.Hero.GetComponent<CharacterController>().isGrounded}, local velocity={W.Hero.PresentationState.LocalVelocity:F2}).");
+        W.MenuOpen=true;Check(!W.Hero.TryJump(),"CONTROL: menu-open grounded jump is refused.");W.MenuOpen=false;
         Check(W.Hero.TryJump(),"CONTROL: existing grounded jump still accepted after the backflip.");
         yield return null;Check(P.State=="Jump","CONTROL: jump still dispatches its existing presentation event.");
         yield return new WaitForSeconds(1.6f);

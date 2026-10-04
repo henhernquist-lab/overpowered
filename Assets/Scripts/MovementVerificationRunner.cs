@@ -14,6 +14,7 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
     protected override IEnumerator Checks()
     {
         yield return Scene(GameFlow.HomeScene);
+        if(Stage=="jump"){Time.captureDeltaTime=1f/120;yield return JumpControls();Time.captureDeltaTime=0;yield break;}
         yield return Enter(F.Heroes[0],"flight","strength","free-play");
         foreach(var group in W.City.Buildings.GroupBy(b=>b.District))
             Log($"GEOMETRY {W.City.Plan.Districts[group.Key].Name}: {group.Count()} buildings, height {group.Min(b=>b.Size.y):F3}..{group.Max(b=>b.Size.y):F3}m.");
@@ -85,6 +86,61 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
             Check(probe.Hit&&!miss.Hit,"Physical projectile hits upward target; off-axis CONTROL untouched first="+first);
             Destroy(target);Destroy(off);yield return null;
         }
+    }
+    IEnumerator JumpControls()
+    {
+        // A non-Flight loadout proves traversal is universal rather than an ownership side effect.
+        yield return Home();Profile.Data.Points=20;
+        if(!Profile.Owns(Power("fire")))Check(Profile.Buy(Power("fire")),"Unlock non-Flight test loadout through progression.");
+        yield return Enter(F.Heroes[0],"strength","fire","free-play");
+        Isolate();PlaceHero(new Vector3(0,150.05f,0),true);
+        yield return new WaitForSeconds(.2f);
+        float floor=W.Hero.transform.position.y;
+        Check(W.Hero.TryJump(),"Universal grounded jump without Flight.");
+        Check(!W.Hero.TryJump(),"CONTROL repeated call before leaving ground cannot relaunch.");
+        float first=floor;
+        for(int i=0;i<43;i++){yield return null;first=Mathf.Max(first,W.Hero.transform.position.y);}
+        Check(!CC.isGrounded&&W.Hero.TryJump(),"Exactly one air jump without Flight.");
+        Check(!W.Hero.TryJump(),"CONTROL third jump refused immediately.");
+        float second=W.Hero.transform.position.y,peak=second;int refused=0;
+        for(int i=0;i<100;i++){yield return null;peak=Mathf.Max(peak,W.Hero.transform.position.y);if(!CC.isGrounded){Check(!W.Hero.TryJump(),"CONTROL airborne spam refused.");refused++;}}
+        Log($"MEASURED double jump: first apex={first-floor:F4}m, air-jump rise={peak-second:F4}m, combined peak={peak-floor:F4}m.");
+        Check(first-floor>1.3f&&first-floor<1.6f&&peak-second>.8f&&peak-second<1.1f,"Ground jump unchanged; air correction remains modest.");
+        yield return new WaitForSeconds(.5f);
+        Check(CC.isGrounded&&W.Hero.AirJumpAvailable&&W.Hero.TryJump(),"Real landing restores one jump.");
+        W.Mode.SetPaused(true);var held=W.Hero.transform.position;
+        Check(!W.Hero.TryJump(),"CONTROL paused air jump refused.");
+        for(int i=0;i<4;i++)yield return null;
+        Check(Vector3.Distance(held,W.Hero.transform.position)<.001f,"Pause halts movement.");W.Mode.SetPaused(false);
+        PlaceHero(new Vector3(59,150.05f,0),true);yield return new WaitForSeconds(.2f);
+        W.Hero.ScriptedMove=Vector3.right;
+        float deadline=Time.time+2;
+        while(CC.isGrounded&&Time.time<deadline)yield return null;
+        W.Hero.ScriptedMove=Vector3.zero;
+        Check(!CC.isGrounded&&W.Hero.TryJump()&&!W.Hero.TryJump(),"Walk off floor edge: one air jump, no second air jump.");
+        Check(Mathf.Abs(W.Hero.transform.up.y-1)<.0001f,"Jump never pitches or rolls physics root.");
+        W.DamagePlayer(W.Health,true);Check(W.PlayerDead&&!W.Hero.TryJump(),"CONTROL dead hero cannot jump; no invulnerability granted.");
+        yield return new WaitForSeconds(W.Tuning.Movement.RespawnDelay+.2f);
+        Check(!W.PlayerDead&&W.Hero.AirJumpAvailable,"Respawn clears stale air-jump state through ResetMotion.");
+        PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.3f);
+        Check(W.Hero.TryBackflip(),"Existing grounded Backflip remains available.");
+        Check(!W.Hero.TryJump(),"CONTROL jump cannot steal Backflip motion while active.");
+        yield return new WaitForSeconds(1.2f);
+        Check(CC.isGrounded&&W.Hero.TryJump(),"Normal jump restored after Backflip landing.");
+        W.Mode.EndToResults();Check(!W.Hero.TryJump(),"CONTROL session-ended jump refused before scene transition.");
+        yield return Scene(GameFlow.HomeScene);
+        foreach(var hero in F.Heroes.Skip(1))
+        {
+            yield return Home();Profile.Data.Points=100;
+            var pair=hero.AvailablePowers.Where(p=>!p.Effect.IsFlight).Take(2).ToArray();
+            foreach(var power in pair)if(!Profile.Owns(power))Check(Profile.Buy(power),"Unlock non-Flight control loadout for "+hero.DisplayName);
+            yield return Enter(hero,pair[0].Id,pair[1].Id,"free-play");
+            Isolate();PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.2f);
+            Check(!W.Powers.IsEquipped(Power("flight"))&&W.Hero.TryJump(),hero.DisplayName+" grounded jump without Flight.");
+            yield return new WaitForSeconds(.36f);
+            Check(W.Hero.TryJump()&&!W.Hero.TryJump(),hero.DisplayName+" exactly one air jump without Flight.");
+        }
+
     }
 }
 #endif

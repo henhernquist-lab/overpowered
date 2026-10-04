@@ -180,7 +180,8 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
         float min=1;bool clip=false;float until=Time.time+3;
         while(Time.time<until){yield return null;min=Mathf.Min(min,P.PoseRoot.parent.localScale.y);clip|=P.State=="Land";}
         Check(landings==1&&clip&&min<.95f,$"Actual controller fall: {landings} impact at {impact:F3}m/s; Land clip played with single existing squash minY={min:F3}, recovered={P.PoseRoot.parent.localScale.y:F3}; collider={W.Hero.GetComponent<CharacterController>().height:F3}m.");
-        Check(W.Hero.TryJump(),"Existing grounded jump accepted.");yield return null;Check(P.State=="Jump","Jump presentation comes from real movement event.");W.Hero.enabled=false;P.VerificationState=new HeroPresentationState(Vector3.zero,true,false);yield return new WaitForSeconds(1);
+        Check(!W.Hero.TryJump(),"CONTROL menu-open grounded jump refused.");W.MenuOpen=false;
+        Check(W.Hero.TryJump(),"Existing grounded jump accepted.");yield return null;Check(P.State=="Jump","Jump presentation comes from real movement event.");W.Hero.enabled=false;W.MenuOpen=true;P.VerificationState=new HeroPresentationState(Vector3.zero,true,false);yield return new WaitForSeconds(1);
     }
     PowerDefinition fireDefinition,iceDefinition;
     IEnumerator Casting()
