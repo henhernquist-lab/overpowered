@@ -1,0 +1,479 @@
+PASS Library: 10 hero and 11 villain missions (Core 4 + 5, World 6 + 6; Rooftop Rescue omitted, see STATUS).
+PASS Downtown: 3 authored missions (armored-heist/Villain, highrise-panic/Hero, corporate-raid/Villain).
+PASS Docks: 2 authored missions (smuggler-intercept/Hero, dockyard-score/Villain).
+PASS Park: 2 authored missions (public-event-attack/Hero, park-chaos/Villain).
+PASS Residential: 2 authored missions (neighbourhood-siege/Hero, safehouse-break-in/Villain).
+PASS staged-pursuit: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-pursuit: every group / point / anchor reference resolves.
+PASS staged-pursuit: 4 stages [GET TO THE CRASH > CATCH THE RUNNERS > RECOVER THE BAG > RETURN IT TO THE BANK] - 3 kinds, 0 hold-R stage(s), needs powers/combat.
+PASS staged-pursuit: stage sequence differs from every other mission.
+PASS staged-convoy-intercept: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-convoy-intercept: every group / point / anchor reference resolves.
+PASS staged-convoy-intercept: 4 stages [INTERCEPT THE CONVOY > STOP THE TRUCKS > DROP THE GUNMEN > SMASH THE WEAPON CRATES] - 4 kinds, 0 hold-R stage(s), needs powers/combat.
+PASS staged-convoy-intercept: stage sequence differs from every other mission.
+PASS staged-blackout: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-blackout: every group / point / anchor reference resolves.
+PASS staged-blackout: 2 stages [RESTORE THE RELAYS > CLEAR THE LOOTERS] - 2 kinds, 1 hold-R stage(s), needs powers/combat.
+PASS staged-blackout: stage sequence differs from every other mission.
+PASS staged-hold-the-block: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-hold-the-block: every group / point / anchor reference resolves.
+PASS staged-hold-the-block: 4 stages [REACH THE BLOCK > HOLD THE BLOCK > BEAT THE ENFORCER > LEAD THEM TO THE SHELTER] - 4 kinds, 0 hold-R stage(s), needs powers/combat.
+PASS staged-hold-the-block: stage sequence differs from every other mission.
+PASS staged-armored-heist: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-armored-heist: every group / point / anchor reference resolves.
+PASS staged-armored-heist: 4 stages [TAKE OUT THE GUARDS > BREACH THE STRONGROOM > GRAB THE CASH > GET TO THE PICKUP] - 4 kinds, 0 hold-R stage(s), needs powers/combat.
+PASS staged-armored-heist: stage sequence differs from every other mission.
+PASS staged-sabotage-run: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-sabotage-run: every group / point / anchor reference resolves.
+PASS staged-sabotage-run: 4 stages [HIT NODE A > HIT NODE B > HIT NODE C > GET CLEAR] - 2 kinds, 0 hold-R stage(s), needs powers/combat.
+PASS staged-sabotage-run: stage sequence differs from every other mission.
+PASS staged-convoy-robbery: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-convoy-robbery: every group / point / anchor reference resolves.
+PASS staged-convoy-robbery: 6 stages [FIND THE ARMOURED CAR > STOP THE ARMOURED CAR > DROP THE ESCORT > CRACK THE CARGO DOOR > TAKE THE CASH > GET AWAY] - 6 kinds, 1 hold-R stage(s), needs powers/combat.
+PASS staged-convoy-robbery: stage sequence differs from every other mission.
+PASS staged-distraction: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-distraction: every group / point / anchor reference resolves.
+PASS staged-distraction: 4 stages [MAKE A SCENE > SLIP THE CORDON > GET TO THE REAL TARGET > CRACK THE SAFE] - 4 kinds, 1 hold-R stage(s), needs powers/combat.
+PASS staged-distraction: stage sequence differs from every other mission.
+PASS staged-getaway: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-getaway: every group / point / anchor reference resolves.
+PASS staged-getaway: 3 stages [REACH YOUR CREW > GET THE CREW TO THE VAN > SHAKE THE PURSUIT] - 3 kinds, 0 hold-R stage(s), needs powers/combat.
+PASS staged-getaway: stage sequence differs from every other mission.
+PASS staged-highrise-panic: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-highrise-panic: every group / point / anchor reference resolves.
+PASS staged-highrise-panic: 5 stages [REACH THE TOWER > CLEAR THE BLOCKED EXITS > HOLD THE LOBBY > STOP THE ATTACK LEADER > LEAD SURVIVORS TO TRIAGE] - 5 kinds, 0 hold-R stage(s), needs powers/combat.
+PASS staged-highrise-panic: stage sequence differs from every other mission.
+PASS staged-corporate-raid: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-corporate-raid: every group / point / anchor reference resolves.
+PASS staged-corporate-raid: 5 stages [KNOCK OUT SECURITY > DOWNLOAD THE PROTOTYPE > TAKE THE PROTOTYPE > EXFILTRATE THROUGH ANOTHER DISTRICT > LOSE THE PURSUIT] - 5 kinds, 1 hold-R stage(s), needs powers/combat.
+PASS staged-corporate-raid: stage sequence differs from every other mission.
+PASS staged-smuggler-intercept: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-smuggler-intercept: every group / point / anchor reference resolves.
+PASS staged-smuggler-intercept: 4 stages [GET TO THE QUAY > STOP THE SMUGGLER TRUCKS > DROP THE GUARDS > SECURE THE CARGO BEFORE EXTRACTION] - 4 kinds, 1 hold-R stage(s), needs powers/combat.
+PASS staged-smuggler-intercept: stage sequence differs from every other mission.
+PASS staged-dockyard-score: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-dockyard-score: every group / point / anchor reference resolves.
+PASS staged-dockyard-score: 3 stages [CUT THE ALARMS > STEAL THE CARGO > GET TO THE BOAT] - 3 kinds, 0 hold-R stage(s), needs powers/combat.
+PASS staged-dockyard-score: stage sequence differs from every other mission.
+PASS staged-public-event-attack: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-public-event-attack: every group / point / anchor reference resolves.
+PASS staged-public-event-attack: 4 stages [GET TO THE FESTIVAL > PROTECT THE CROWDS > DROP THE ATTACKERS > CATCH THE RINGLEADER] - 4 kinds, 0 hold-R stage(s), needs powers/combat.
+PASS staged-public-event-attack: stage sequence differs from every other mission.
+PASS staged-park-chaos: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-park-chaos: every group / point / anchor reference resolves.
+PASS staged-park-chaos: 5 stages [WRECK THE PARK > DRAW THE HEAT > DROP THE COURIER'S ESCORT > CRACK THE CASE > LOSE THE PURSUIT] - 5 kinds, 1 hold-R stage(s), needs powers/combat.
+PASS staged-park-chaos: stage sequence differs from every other mission.
+PASS staged-neighbourhood-siege: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-neighbourhood-siege: every group / point / anchor reference resolves.
+PASS staged-neighbourhood-siege: 4 stages [REACH THE STREET > SAVE THE HOUSES > BEAT THE ENFORCER > WALK THE FAMILIES TO SHELTER] - 4 kinds, 0 hold-R stage(s), needs powers/combat.
+PASS staged-neighbourhood-siege: stage sequence differs from every other mission.
+PASS staged-safehouse-break-in: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-safehouse-break-in: every group / point / anchor reference resolves.
+PASS staged-safehouse-break-in: 4 stages [FIND THE SAFEHOUSE > CLEAR THE GUARDS > TAKE THE LEDGER > SLIP AWAY] - 4 kinds, 1 hold-R stage(s), needs powers/combat.
+PASS staged-safehouse-break-in: stage sequence differs from every other mission.
+PASS staged-citywide-pursuit: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-citywide-pursuit: every group / point / anchor reference resolves.
+PASS staged-citywide-pursuit: 4 stages [GET TO THE CRASH > CATCH THE DRIVER BEFORE THE HIDEOUT > RAID THE HIDEOUT > TAKE DOWN THE CREW] - 3 kinds, 0 hold-R stage(s), needs powers/combat.
+PASS staged-citywide-pursuit: stage sequence differs from every other mission.
+PASS staged-emergency-relay: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-emergency-relay: every group / point / anchor reference resolves.
+PASS staged-emergency-relay: 5 stages [STOP THE MUGGING > RESPOND: GAS LEAK > SHUT THE VALVE > RESPOND: TRAPPED FAMILY > KEEP THE FAMILY SAFE] - 4 kinds, 1 hold-R stage(s), needs powers/combat.
+PASS staged-emergency-relay: stage sequence differs from every other mission.
+PASS staged-multi-point-heist: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-multi-point-heist: every group / point / anchor reference resolves.
+PASS staged-multi-point-heist: 7 stages [DISTRACTION ONE > BLOW THE FIRST DECOY > DISTRACTION TWO > BLOW THE SECOND DECOY > HIT THE REAL TARGET > CRACK THE VAULT > LOSE THE PURSUIT] - 3 kinds, 0 hold-R stage(s), needs powers/combat.
+PASS staged-multi-point-heist: stage sequence differs from every other mission.
+PASS staged-cross-town-getaway: encounter asset with a StagedScenario and no legacy cast.
+PASS staged-cross-town-getaway: every group / point / anchor reference resolves.
+PASS staged-cross-town-getaway: 5 stages [CHECKPOINT ONE > SMASH THE ROADBLOCK > CHECKPOINT TWO > BACK TO THE GARAGE > LOSE THE LAST TAIL] - 3 kinds, 0 hold-R stage(s), needs powers/combat.
+PASS staged-cross-town-getaway: stage sequence differs from every other mission.
+PASS hero-rotation exists with 19 valid options.
+PASS CONTROL: the shipping hero mode still has no Selection (the rotation is dormant until the content switch).
+PASS hero-rotation keeps all 6 of the mode's current encounters.
+PASS hero-rotation: staged-pursuit weight 1.2, from band 0, districts [Downtown, Residential], category -.
+PASS hero-rotation: staged-convoy-intercept weight 1, from band 0, districts [Docks, Downtown, West Boulevard, East Boulevard, Harbour Boulevard], category -.
+PASS hero-rotation: staged-blackout weight 1, from band 0, districts [Downtown, Residential], category -.
+PASS hero-rotation: staged-hold-the-block weight 1, from band 1, districts [Residential, Downtown], category -.
+PASS hero-rotation: staged-highrise-panic weight 1, from band 0, districts [Downtown], category emergency.
+PASS hero-rotation: staged-smuggler-intercept weight 1, from band 0, districts [Docks], category vehicle.
+PASS hero-rotation: staged-public-event-attack weight 1, from band 0, districts [Park], category defence.
+PASS hero-rotation: staged-neighbourhood-siege weight 1, from band 0, districts [Residential], category defence.
+PASS hero-rotation: staged-citywide-pursuit weight 1, from band 0, districts [Downtown], category chase.
+PASS hero-rotation: staged-emergency-relay weight 1, from band 0, districts [], category emergency.
+PASS Band 0 in Downtown over 400 picks: 15 different encounters, none of the later-band missions (staged-hold-the-block).
+PASS villain-rotation exists with 18 valid options.
+PASS CONTROL: the shipping villain mode still has no Selection (the rotation is dormant until the content switch).
+PASS villain-rotation keeps all 6 of the mode's current encounters.
+PASS villain-rotation: staged-armored-heist weight 1, from band 1, districts [Downtown], category -.
+PASS villain-rotation: staged-sabotage-run weight 1, from band 2, districts [Docks, Downtown], category -.
+PASS villain-rotation: staged-convoy-robbery weight 1, from band 0, districts [Docks, West Boulevard, East Boulevard, Harbour Boulevard], category -.
+PASS villain-rotation: staged-distraction weight 1, from band 0, districts [], category -.
+PASS villain-rotation: staged-getaway weight 1.2, from band 0, districts [], category -.
+PASS villain-rotation: staged-corporate-raid weight 1, from band 0, districts [Downtown], category heist.
+PASS villain-rotation: staged-dockyard-score weight 1, from band 0, districts [Docks], category heist.
+PASS villain-rotation: staged-park-chaos weight 1, from band 0, districts [Park], category chaos.
+PASS villain-rotation: staged-safehouse-break-in weight 1, from band 0, districts [Residential], category break-in.
+PASS villain-rotation: staged-multi-point-heist weight 1, from band 1, districts [], category heist.
+PASS villain-rotation: staged-cross-town-getaway weight 1, from band 0, districts [], category chase.
+PASS Band 0 in Downtown over 400 picks: 11 different encounters, none of the later-band missions (staged-armored-heist, staged-sabotage-run, staged-multi-point-heist).
+---- STREET PURSUIT (Hero, staged-pursuit)
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Real encounter site found for Street pursuit
+PASS Street pursuit spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1000, yaw 55, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS CONTROL: before the hero arrives the crew holds position (no chase starts off-screen).
+PASS Stage 0 "GET TO THE CRASH" (ReachArea) solved -> stage 1.
+PASS Arrival starts the chase; runners scatter to 3 different exits.
+MEASURED runner distance to exit over 1.5 s: 62.1->55.2 m, 44.1->37.2 m, 42.4->35.5 m.
+PASS Runners really head for their exits.
+PASS A runner held in place (rooted) re-routes to its next exit after 2 s (exit 1 -> 2).
+PASS FAIL PATH: FAILED "catch the runners: the target got away" (expected "got away").
+PASS Latched at stage 1: started [1,1,0,0], completed [1,0,0,0].
+PASS A free encounter site in Downtown (district 0).
+PASS Street pursuit spawned in its home district Downtown (seed 1001).
+PASS HUD objective line for stage 0: "GET TO THE CRASH 150 M".
+PASS Stage 0 "GET TO THE CRASH" (ReachArea) solved -> stage 1.
+PASS HUD objective line for stage 1: "CATCH THE RUNNERS 0/3".
+PASS Stage 1 "CATCH THE RUNNERS" (ChaseExit) solved -> stage 2.
+PASS HUD objective line for stage 2: "RECOVER THE BAG 0/1".
+PASS Stage 2 "RECOVER THE BAG" (CollectItems) solved -> stage 3.
+PASS HUD objective line for stage 3: "RETURN IT TO THE BANK 11 M".
+PASS HUD target for "RETURN IT TO THE BANK" is its destination in district 0 (Downtown).
+PASS Stage 3 "RETURN IT TO THE BANK" (ReachArea) solved -> Complete.
+PASS SOLVE: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1,1,1], completed [1,1,1,1]).
+PASS Exactly one outcome for the mission.
+---- CONVOY INTERCEPT (Hero, staged-convoy-intercept)
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Real encounter site found for Convoy intercept
+PASS Convoy intercept spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1002, yaw 71, mirrored True, band 0, +0 hostiles, timeouts x1.00).
+PASS CONTROL: the trucks wait until the hero closes in.
+PASS Gunmen and crates do not exist yet (they come out of the stopped trucks).
+PASS Stage 0 "INTERCEPT THE CONVOY" (ReachArea) solved -> stage 1.
+PASS Closing in starts the convoy: both trucks drive.
+PASS CONTROL: a light hit (40% of the stop impulse) does not stop a truck.
+PASS FAIL PATH: FAILED "stop the trucks: a vehicle got away" (expected "a vehicle got away").
+PASS Latched at stage 1: started [1,1,0,0], completed [1,0,0,0].
+PASS A free encounter site in Docks (district 3).
+PASS Convoy intercept spawned in its home district Docks (seed 1003).
+PASS HUD objective line for stage 0: "INTERCEPT THE CONVOY 151 M".
+PASS Stage 0 "INTERCEPT THE CONVOY" (ReachArea) solved -> stage 1.
+PASS HUD objective line for stage 1: "STOP THE TRUCKS 0/2".
+PASS Stage 1 "STOP THE TRUCKS" (StopVehicles) solved -> stage 2.
+PASS HUD objective line for stage 2: "DROP THE GUNMEN 0/3".
+PASS Stage 2 "DROP THE GUNMEN" (DefeatTargets) solved -> stage 3.
+PASS HUD objective line for stage 3: "SMASH THE WEAPON CRATES 0/2".
+PASS Stage 3 "SMASH THE WEAPON CRATES" (DestroyTargets) solved -> Complete.
+PASS SOLVE: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1,1,1], completed [1,1,1,1]).
+PASS Exactly one outcome for the mission.
+---- BLACKOUT RESPONSE (Hero, staged-blackout)
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Real encounter site found for Blackout response
+PASS Blackout response spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1004, yaw 87, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+In-memory clone: relay stage timeout 120 s -> 16 s.
+PASS Holding R restores one relay: "RESTORE THE RELAYS 1/3".
+PASS A saboteur left beside a restored relay knocks it out again after 2.5 s: "RESTORE THE RELAYS 0/3".
+PASS FAIL PATH: FAILED "Timed out: restore the relays" (expected "Timed out: restore the relays").
+PASS Latched at stage 0: started [1,0], completed [0,0].
+PASS A free encounter site in Downtown (district 0).
+PASS Blackout response spawned in its home district Downtown (seed 1005).
+PASS HUD objective line for stage 0: "RESTORE THE RELAYS 0/3".
+PASS Stage 0 "RESTORE THE RELAYS" (InteractTargets) solved -> stage 1.
+PASS HUD objective line for stage 1: "CLEAR THE LOOTERS 0/3".
+PASS Stage 1 "CLEAR THE LOOTERS" (DefeatTargets) solved -> Complete.
+PASS SOLVE: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1], completed [1,1]).
+PASS Exactly one outcome for the mission.
+---- HOLD THE BLOCK (Hero, staged-hold-the-block)
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Real encounter site found for Hold the block
+PASS Hold the block spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1006, yaw 103, mirrored True, band 0, +0 hostiles, timeouts x1.00).
+In-memory clone: hold stage 40 s -> 120 s so an unattended block is certain to be lost first.
+PASS CONTROL: nobody is hurt before the hero arrives.
+PASS Stage 0 "REACH THE BLOCK" (ReachArea) solved -> stage 1.
+PASS Arrival starts the defence.
+MEASURED unattended defence: 4 raiders spawned in total, at most 4 alive at once (cap 4).
+PASS Raiders hurt the residents, reinforcements keep arriving, never more than the cap alive.
+PASS FAIL PATH: FAILED "hold the block: 2 lost" (expected "hold the block: 2 lost").
+PASS Latched at stage 1: started [1,1,0,0], completed [1,0,0,0].
+PASS A free encounter site in Residential (district 2).
+PASS Hold the block spawned in its home district Residential (seed 1007).
+PASS HUD objective line for stage 0: "REACH THE BLOCK 150 M".
+PASS Stage 0 "REACH THE BLOCK" (ReachArea) solved -> stage 1.
+PASS HUD objective line for stage 1: "HOLD THE BLOCK 0/40".
+PASS Stage 1 "HOLD THE BLOCK" (ProtectActors) solved -> stage 2.
+PASS HUD objective line for stage 2: "BEAT THE ENFORCER 0/1".
+PASS Stage 2 "BEAT THE ENFORCER" (DefeatTargets) solved -> stage 3.
+PASS HUD objective line for stage 3: "LEAD THEM TO THE SHELTER 0/3".
+PASS HUD target for "LEAD THEM TO THE SHELTER" is its destination in district 2 (Residential).
+PASS Escort: walking up to residents makes them follow (1/3).
+NOTE escort: followers warped the last 2 m (walking there is NavMesh time, not stage logic).
+PASS Stage 3 "LEAD THEM TO THE SHELTER" (EscortActors) solved -> Complete.
+PASS SOLVE: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1,1,1], completed [1,1,1,1]).
+PASS Exactly one outcome for the mission.
+---- ARMOURED STRONGROOM (Villain, staged-armored-heist)
+PASS Save VECTOR with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+PASS Real encounter site found for Armoured strongroom
+PASS Armoured strongroom spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1008, yaw 119, mirrored True, band 0, +0 hostiles, timeouts x1.00).
+In-memory clone: cash stage timeout 35 s -> 6 s.
+PASS CONTROL (wrong order): the strongroom door ignores a 9999-damage blast while its guards stand.
+PASS Stage 0 "TAKE OUT THE GUARDS" (DefeatTargets) solved -> stage 1.
+PASS Guards down: the door is exposed.
+PASS Stage 1 "BREACH THE STRONGROOM" (DestroyTargets) solved -> stage 2.
+PASS Breach: Heat 2.25 -> 3.25, 2 response officers, 3 cash bags dropped at the door.
+PASS FAIL PATH: FAILED "Timed out: grab the cash" (expected "Timed out: grab the cash").
+PASS Latched at stage 2: started [1,1,1,0], completed [1,1,0,0].
+PASS A free encounter site in Downtown (district 0).
+PASS Armoured strongroom spawned in its home district Downtown (seed 1009).
+PASS HUD objective line for stage 0: "TAKE OUT THE GUARDS 0/3".
+PASS Stage 0 "TAKE OUT THE GUARDS" (DefeatTargets) solved -> stage 1.
+PASS HUD objective line for stage 1: "BREACH THE STRONGROOM 0/1".
+PASS Stage 1 "BREACH THE STRONGROOM" (DestroyTargets) solved -> stage 2.
+PASS HUD objective line for stage 2: "GRAB THE CASH 0/3".
+PASS Stage 2 "GRAB THE CASH" (CollectItems) solved -> stage 3.
+PASS HUD objective line for stage 3: "GET TO THE PICKUP 52 M".
+PASS HUD target for "GET TO THE PICKUP" is its destination in district 0 (Downtown).
+PASS Stage 3 "GET TO THE PICKUP" (ReachArea) solved -> Complete.
+PASS SOLVE: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1,1,1], completed [1,1,1,1]).
+PASS Exactly one outcome for the mission.
+---- SABOTAGE RUN (Villain, staged-sabotage-run)
+PASS Save VECTOR with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+PASS Real encounter site found for Sabotage run
+PASS Sabotage run spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1010, yaw 135, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+In-memory clone: node B timeout 45 s -> 5 s.
+PASS CONTROL (wrong order): node B ignores hits while node A is the target.
+PASS Stage 0 "HIT NODE A" (DestroyTargets) solved -> stage 1.
+PASS Node A down: only node B is exposed.
+PASS FAIL PATH: FAILED "Timed out: hit node b" (expected "Timed out: hit node b").
+PASS Latched at stage 1: started [1,1,0,0], completed [1,0,0,0].
+PASS A free encounter site in Docks (district 3).
+PASS Sabotage run spawned in its home district Docks (seed 1011).
+PASS Seeded security nodes occupy distinct sidewalk sites ((-196.00, 0.12, -154.00), (-200.00, 0.12, -184.00), (-217.00, 0.12, -154.00)).
+PASS HUD objective line for stage 0: "HIT NODE A 0/1".
+PASS Stage 0 "HIT NODE A" (DestroyTargets) solved -> stage 1.
+PASS HUD objective line for stage 1: "HIT NODE B 0/1".
+PASS Stage 1 "HIT NODE B" (DestroyTargets) solved -> stage 2.
+PASS HUD objective line for stage 2: "HIT NODE C 0/1".
+PASS Stage 2 "HIT NODE C" (DestroyTargets) solved -> stage 3.
+PASS HUD objective line for stage 3: "GET CLEAR 0 M".
+PASS Stage 3 "GET CLEAR" (EscapeRadius) solved -> Complete.
+PASS SOLVE: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1,1,1], completed [1,1,1,1]).
+PASS Exactly one outcome for the mission.
+---- ARMOURED CAR ROBBERY (Villain, staged-convoy-robbery)
+PASS Save VECTOR with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+PASS Real encounter site found for Armoured car robbery
+PASS Armoured car robbery spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1012, yaw 151, mirrored True, band 0, +0 hostiles, timeouts x1.00).
+PASS Stage 0 "FIND THE ARMOURED CAR" (ReachArea) solved -> stage 1.
+PASS The armoured car drives off when the villain closes in.
+PASS Wrecking the car stops it (the stop stage completes)...
+PASS Stage 2 "DROP THE ESCORT" (DefeatTargets) solved -> stage 3.
+PASS FAIL PATH: FAILED "crack the cargo door: objective lost" (expected "crack the cargo door: objective lost").
+PASS Latched at stage 3: started [1,1,1,1,0,0], completed [1,1,1,0,0,0].
+PASS A free encounter site in Docks (district 3).
+PASS Armoured car robbery spawned in its home district Docks (seed 1013).
+PASS HUD objective line for stage 0: "FIND THE ARMOURED CAR 150 M".
+PASS Stage 0 "FIND THE ARMOURED CAR" (ReachArea) solved -> stage 1.
+PASS HUD objective line for stage 1: "STOP THE ARMOURED CAR 0/1".
+PASS Stage 1 "STOP THE ARMOURED CAR" (StopVehicles) solved -> stage 2.
+PASS HUD objective line for stage 2: "DROP THE ESCORT 0/3".
+PASS Stage 2 "DROP THE ESCORT" (DefeatTargets) solved -> stage 3.
+PASS HUD objective line for stage 3: "CRACK THE CARGO DOOR 0/1".
+PASS Stage 3 "CRACK THE CARGO DOOR" (InteractTargets) solved -> stage 4.
+PASS HUD objective line for stage 4: "TAKE THE CASH 0/2".
+PASS Stage 4 "TAKE THE CASH" (CollectItems) solved -> stage 5.
+PASS HUD objective line for stage 5: "GET AWAY 53 M".
+PASS Stage 5 "GET AWAY" (EscapeRadius) solved -> Complete.
+PASS SOLVE: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1,1,1,1,1], completed [1,1,1,1,1,1]).
+PASS Exactly one outcome for the mission.
+---- THE DISTRACTION JOB (Villain, staged-distraction)
+PASS Save VECTOR with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+PASS Real encounter site found for The distraction job
+PASS The distraction job spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1014, yaw 168, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+In-memory clone: cordon timeout 40 s -> 5 s.
+PASS CONTROL: 1 Heat star is not a scene yet.
+PASS 2 stars: the police take the bait (3 cordon officers).
+PASS FAIL PATH: FAILED "Timed out: slip the cordon" (expected "Timed out: slip the cordon").
+PASS Latched at stage 1: started [1,1,0,0], completed [1,0,0,0].
+PASS Real encounter site found for The distraction job
+PASS The distraction job spawned at (28.00, 0.00, 88.00) with its StagedScenario (seed 1015, yaw 356, mirrored True, band 0, +0 hostiles, timeouts x1.00).
+PASS HUD objective line for stage 0: "MAKE A SCENE 2/2".
+PASS Stage 0 "MAKE A SCENE" (RaiseHeat) solved -> stage 1.
+PASS HUD objective line for stage 1: "SLIP THE CORDON 0 M".
+PASS Stage 1 "SLIP THE CORDON" (EscapeRadius) solved -> stage 2.
+PASS HUD objective line for stage 2: "GET TO THE REAL TARGET 65 M".
+PASS HUD target for "GET TO THE REAL TARGET" is its destination in district 0 (Downtown).
+PASS Stage 2 "GET TO THE REAL TARGET" (ReachArea) solved -> stage 3.
+PASS HUD objective line for stage 3: "CRACK THE SAFE 0/1".
+PASS Stage 3 "CRACK THE SAFE" (InteractTargets) solved -> Complete.
+PASS SOLVE: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1,1,1], completed [1,1,1,1]).
+PASS Exactly one outcome for the mission.
+---- GETAWAY (Villain, staged-getaway)
+PASS Save VECTOR with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+PASS Real encounter site found for Getaway
+PASS Getaway spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1016, yaw 184, mirrored True, band 0, +0 hostiles, timeouts x1.00).
+PASS CONTROL: the crew waits (not following, unhurt) until the villain reaches them.
+PASS Stage 0 "REACH YOUR CREW" (ReachArea) solved -> stage 1.
+PASS Reaching the crew: they follow.
+MEASURED unattended escort: 3 hunters spawned, at most 3 alive (cap 3).
+PASS Hunter reinforcements respect the cap.
+PASS FAIL PATH: FAILED "get the crew to the van: 2 lost" (expected "get the crew to the van: 2 lost").
+PASS Latched at stage 1: started [1,1,0], completed [1,0,0].
+PASS Real encounter site found for Getaway
+PASS Getaway spawned at (-28.00, 0.00, 32.00) with its StagedScenario (seed 1017, yaw 12, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS HUD objective line for stage 0: "REACH YOUR CREW 150 M".
+PASS Stage 0 "REACH YOUR CREW" (ReachArea) solved -> stage 1.
+PASS HUD objective line for stage 1: "GET THE CREW TO THE VAN 0/2".
+PASS HUD target for "GET THE CREW TO THE VAN" is its destination in district 0 (Downtown).
+PASS Escort: walking up to crew makes them follow (1/2).
+NOTE escort: followers warped the last 2 m (walking there is NavMesh time, not stage logic).
+PASS Stage 1 "GET THE CREW TO THE VAN" (EscortActors) solved -> stage 2.
+PASS HUD objective line for stage 2: "SHAKE THE PURSUIT 58 M".
+PASS Stage 2 "SHAKE THE PURSUIT" (EscapeRadius) solved -> Complete.
+PASS SOLVE: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1,1], completed [1,1,1]).
+PASS Exactly one outcome for the mission.
+---- HIGH-RISE PANIC (Hero, staged-highrise-panic)
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS staged-highrise-panic: has a timed stage absence cannot complete (CLEAR THE BLOCKED EXITS).
+In-memory clone: stage 1 "CLEAR THE BLOCKED EXITS" timeout 60 s -> 3 s.
+PASS A free encounter site in Downtown (district 0).
+PASS High-rise panic spawned in its home district Downtown (seed 1018).
+PASS Stage 0 "REACH THE TOWER" (ReachArea) solved -> stage 1.
+PASS Solved up to stage 1.
+PASS FAIL PATH: FAILED "Timed out: clear the blocked exits" (started [1,1,0,0,0], completed [1,0,0,0,0]).
+PASS A free encounter site in Downtown (district 0).
+PASS High-rise panic spawned in its home district Downtown (seed 1019).
+PASS HUD objective line for stage 0: "REACH THE TOWER 151 M".
+PASS HUD target for "REACH THE TOWER" is its destination in district 0 (Downtown).
+PASS Stage 0 "REACH THE TOWER" (ReachArea) solved -> stage 1.
+PASS HUD objective line for stage 1: "CLEAR THE BLOCKED EXITS 0/2".
+PASS Stage 1 "CLEAR THE BLOCKED EXITS" (DestroyTargets) solved -> stage 2.
+PASS HUD objective line for stage 2: "HOLD THE LOBBY 0/35".
+PASS Stage 2 "HOLD THE LOBBY" (ProtectActors) solved -> stage 3.
+PASS HUD objective line for stage 3: "STOP THE ATTACK LEADER 0/1".
+PASS Stage 3 "STOP THE ATTACK LEADER" (DefeatTargets) solved -> stage 4.
+PASS HUD objective line for stage 4: "LEAD SURVIVORS TO TRIAGE 0/4".
+PASS HUD target for "LEAD SURVIVORS TO TRIAGE" is its destination in district 0 (Downtown).
+PASS Escort: walking up to evacuees makes them follow (1/4).
+NOTE escort: followers warped the last 2 m (walking there is NavMesh time, not stage logic).
+PASS Stage 4 "LEAD SURVIVORS TO TRIAGE" (EscortActors) solved -> Complete.
+PASS SOLVE: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1,1,1,1], completed [1,1,1,1,1]).
+PASS Exactly one outcome for the mission.
+---- CORPORATE RAID (Villain, staged-corporate-raid)
+PASS Save VECTOR with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+PASS staged-corporate-raid: has a timed stage absence cannot complete (KNOCK OUT SECURITY).
+In-memory clone: stage 0 "KNOCK OUT SECURITY" timeout 70 s -> 3 s.
+PASS A free encounter site in Downtown (district 0).
+PASS Corporate raid spawned in its home district Downtown (seed 1020).
+PASS Solved up to stage 0.
+PASS FAIL PATH: FAILED "Timed out: knock out security" (started [1,0,0,0,0], completed [0,0,0,0,0]).
+PASS A free encounter site in Downtown (district 0).
+PASS Corporate raid spawned in its home district Downtown (seed 1021).
+PASS Cross-district: 1 destination(s) outside the home district Downtown: exfil -> Residential.
+Distinct districts across the mission: 2; fallbacks: none.
+PASS No destination needed a fallback on this city.
+PASS HUD objective line for stage 0: "KNOCK OUT SECURITY 0/2".
+PASS Stage 0 "KNOCK OUT SECURITY" (DestroyTargets) solved -> stage 1.
+PASS HUD objective line for stage 1: "DOWNLOAD THE PROTOTYPE 0/1".
+PASS Stage 1 "DOWNLOAD THE PROTOTYPE" (InteractTargets) solved -> stage 2.
+PASS HUD objective line for stage 2: "TAKE THE PROTOTYPE 0/1".
+PASS Stage 2 "TAKE THE PROTOTYPE" (CollectItems) solved -> stage 3.
+PASS HUD objective line for stage 3: "EXFILTRATE THROUGH ANOTHER DISTRICT 225 M".
+PASS HUD target for "EXFILTRATE THROUGH ANOTHER DISTRICT" is its destination in district 2 (Residential).
+PASS Stage 3 "EXFILTRATE THROUGH ANOTHER DISTRICT" (ReachArea) solved -> stage 4.
+PASS HUD objective line for stage 4: "LOSE THE PURSUIT 0/1".
+PASS Stage 4 "LOSE THE PURSUIT" (LosePursuit) solved -> Complete.
+Stage destinations visited 1 district(s): Residential (mission site in Downtown).
+PASS SOLVE: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1,1,1,1], completed [1,1,1,1,1]).
+PASS Exactly one outcome for the mission.
+---- SMUGGLER INTERCEPT (Hero, staged-smuggler-intercept)
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS staged-smuggler-intercept: has a timed stage absence cannot complete (SECURE THE CARGO BEFORE EXTRACTION).
+In-memory clone: stage 3 "SECURE THE CARGO BEFORE EXTRACTION" timeout 60 s -> 3 s.
+PASS A free encounter site in Docks (district 3).
+PASS Smuggler intercept spawned in its home district Docks (seed 1022).
+PASS Stage 0 "GET TO THE QUAY" (ReachArea) solved -> stage 1.
+PASS Stage 1 "STOP THE SMUGGLER TRUCKS" (StopVehicles) solved -> stage 2.
+PASS Stage 2 "DROP THE GUARDS" (DefeatTargets) solved -> stage 3.
+PASS Solved up to stage 3.
+PASS FAIL PATH: FAILED "Timed out: secure the cargo before extraction" (started [1,1,1,1], completed [1,1,1,0]).
+PASS A free encounter site in Docks (district 3).
+PASS Smuggler intercept spawned in its home district Docks (seed 1023).
+PASS HUD objective line for stage 0: "GET TO THE QUAY 151 M".
+PASS Stage 0 "GET TO THE QUAY" (ReachArea) solved -> stage 1.
+PASS HUD objective line for stage 1: "STOP THE SMUGGLER TRUCKS 0/2".
+PASS Stage 1 "STOP THE SMUGGLER TRUCKS" (StopVehicles) solved -> stage 2.
+PASS HUD objective line for stage 2: "DROP THE GUARDS 0/3".
+PASS Stage 2 "DROP THE GUARDS" (DefeatTargets) solved -> stage 3.
+PASS HUD objective line for stage 3: "SECURE THE CARGO BEFORE EXTRACTION 0/3".
+PASS Stage 3 "SECURE THE CARGO BEFORE EXTRACTION" (InteractTargets) solved -> Complete.
+PASS SOLVE: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1,1,1], completed [1,1,1,1]).
+PASS Exactly one outcome for the mission.
+---- DOCKYARD SCORE (Villain, staged-dockyard-score)
+PASS Save VECTOR with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+PASS staged-dockyard-score: has a timed stage absence cannot complete (CUT THE ALARMS).
+In-memory clone: stage 0 "CUT THE ALARMS" timeout 70 s -> 3 s.
+PASS A free encounter site in Docks (district 3).
+PASS Dockyard score spawned in its home district Docks (seed 1024).
+PASS Solved up to stage 0.
+PASS FAIL PATH: FAILED "Timed out: cut the alarms" (started [1,0,0], completed [0,0,0]).
+PASS A free encounter site in Docks (district 3).
+PASS Dockyard score spawned in its home district Docks (seed 1025).
+PASS HUD objective line for stage 0: "CUT THE ALARMS 0/3".
+PASS Stage 0 "CUT THE ALARMS" (DestroyTargets) solved -> stage 1.
+PASS HUD objective line for stage 1: "STEAL THE CARGO 0/4".
+PASS Stage 1 "STEAL THE CARGO" (CollectItems) solved -> stage 2.
+PASS HUD objective line for stage 2: "GET TO THE BOAT 98 M".
+PASS HUD target for "GET TO THE BOAT" is its destination in district 3 (Docks).
+PASS Stage 2 "GET TO THE BOAT" (ReachArea) solved -> Complete.
+PASS SOLVE: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1,1], completed [1,1,1]).
+PASS Exactly one outcome for the mission.
+---- PUBLIC EVENT ATTACK (Hero, staged-public-event-attack)
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS staged-public-event-attack: has a timed stage absence cannot complete (CATCH THE RINGLEADER).
+In-memory clone: stage 3 "CATCH THE RINGLEADER" timeout 70 s -> 3 s.
+PASS A free encounter site in Park (district 1).
+PASS Public event attack spawned in its home district Park (seed 1026).
+PASS Stage 0 "GET TO THE FESTIVAL" (ReachArea) solved -> stage 1.
+PASS Stage 1 "PROTECT THE CROWDS" (ProtectActors) solved -> Failed.
+FAIL System.Exception: Solved up to stage 3.
+  at SessionVerificationRunner.Check (System.Boolean ok, System.String line) [0x0001b] in /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/Powers/SessionVerificationRunner.cs:53 
+  at StagedMissionVerificationRunner+<GenericFail>d__14.MoveNext () [0x001d5] in /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/Missions/StagedMissionVerificationRunner.cs:197 
+  at SessionVerificationRunner+<Start>d__24.MoveNext () [0x00071] in /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/Powers/SessionVerificationRunner.cs:45 

@@ -1,0 +1,123 @@
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+---- POSITIVE: survive -> reach -> collect -> destroy
+PASS Real encounter site found for Verification staged positive
+PASS Verification staged positive spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1000, yaw 0, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS Stage 0 active, objective line "HOLD ON 0/1".
+PASS CONTROL (wrong order): a 500-damage blast on the door during stage 0 is ignored (ignored hits 1, health 60/60).
+PASS Survive stage completes after 0.6 s: stage 1 active (started [1,1,0,0], completed [1,0,0,0]).
+PASS Reach stage shows a distance line: "GET TO THE MARK 151 M".
+PASS CONTROL: 150 m above the site the reach stage does not complete.
+PASS CONTROL (wrong order): standing on the cache during the reach stage does not collect it.
+PASS Reaching the mark completes stage 1 (started [1,1,1,0], completed [1,1,0,0]).
+PASS Collecting the cache completes stage 2; line "BREAK THE DOOR 0/1".
+PASS The door is armed now that its stage is active.
+PASS A 30-damage blast chips the armed door (30/60); mission still running.
+PASS A second blast destroys the door.
+PASS Mission outcome: SUCCESS "All objectives complete.".
+PASS Every stage started and completed exactly once (started [1,1,1,1], completed [1,1,1,1]; events after subscribe: 3 started, 4 completed).
+PASS CONTROL: TryComplete after the end does nothing.
+PASS Exactly one outcome and one success recorded (outcomes 1, successes +1).
+MEASURED reward: outcome XP 60, session XpEarned +60 (mode SuccessXp 60; kills elsewhere would add to the session figure).
+PASS The mission reward was paid once (not twice).
+---- FAILURE: protect stage, and failure beating a simultaneous success
+PASS Real encounter site found for Verification staged protect control
+PASS Verification staged protect control spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1001, yaw 0, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS CONTROL: nobody lost -> SUCCESS "All objectives complete." (started [1,1], completed [1,1]).
+PASS Real encounter site found for Verification staged protect
+PASS Verification staged protect spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1002, yaw 0, mirrored False, band 1, +0 hostiles, timeouts x1.00).
+PASS One VIP killed before the stage's first tick.
+PASS Loss beats the simultaneous success: FAILED "keep them alive: 1 lost".
+PASS Latched FAILED: no stage completed, the next stage never started (started [1,0], completed [0,0]).
+PASS CONTROL: a tick after the failure changes nothing (no success after failure).
+PASS One FAILED outcome, no success recorded (failures +1, successes +0).
+---- TIMEOUT
+PASS Real encounter site found for Verification staged timeout
+PASS Verification staged timeout spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1003, yaw 0, mirrored False, band 1, +0 hostiles, timeouts x1.00).
+PASS CONTROL: at 0.50 s (timeout 1 s) the mission is still running.
+PASS Stage timeout fails the mission: FAILED "Timed out: get there".
+PASS The failure came from the stage timeout, not the encounter deadline (600 s).
+---- HOLD GATE: an interact target is inert until its stage
+PASS Real encounter site found for Verification staged hold gate
+PASS Verification staged hold gate spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1004, yaw 0, mirrored False, band 1, +0 hostiles, timeouts x1.00).
+PASS CONTROL (wrong order): holding R at the panel during stage 0 does nothing.
+PASS Stage 1 active: the panel is now interactable.
+PASS Holding R through the hack stage completes it: SUCCESS "All objectives complete." (started [1,1], completed [1,1]).
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+---- BONUS GOALS (paid once, on success only)
+PASS Real encounter site found for Verification staged bonus clean
+PASS Verification staged bonus clean spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1005, yaw 0, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS Clean run: all four goals met (FAST, UNTOUCHED, QUIET, NOBODY LOST), one bonus grant of 75 XP.
+PASS Real encounter site found for Verification staged bonus messy
+PASS Verification staged bonus messy spawned at (-28.00, 0.00, 32.00) with its StagedScenario (seed 1006, yaw 0, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS CONTROL: a lost VIP and 1 damage taken forfeit those two goals; FAST + QUIET still pay 30 XP.
+PASS Real encounter site found for Verification staged bonus failed
+PASS Verification staged bonus failed spawned at (-28.00, 0.00, -24.00) with its StagedScenario (seed 1007, yaw 0, mirrored False, band 1, +0 hostiles, timeouts x1.00).
+PASS CONTROL: a FAILED mission pays no bonus even though FAST / UNTOUCHED / QUIET would hold.
+---- VARIATION (seeded layout, difficulty band)
+PASS Real encounter site found for Verification staged plain layout
+PASS Verification staged plain layout spawned at (-28.00, 0.00, 32.00) with its StagedScenario (seed 7, yaw 0, mirrored False, band 2, +0 hostiles, timeouts x1.00).
+PASS CONTROL: variation off keeps the authored points, counts and timers.
+PASS Real encounter site found for Verification staged varied layout
+PASS Verification staged varied layout spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 7, yaw 138, mirrored True, band 2, +2 hostiles, timeouts x0.81).
+PASS Seed 7: yaw 138.0, mirrored True; both points rotated / mirrored about the site with distances kept.
+PASS Band 2 (2 successes / step 1): +2 thugs (cap 2), protected civilians unscaled, stage timeout 24.3 s (x0.81).
+PASS Both variation probes complete normally.
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+---- MULTI-POINT GROUPS AND MULTI-GROUP STAGES
+PASS Real encounter site found for Verification staged multi-group
+PASS Verification staged multi-group spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 1008, yaw 0, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS A target group with AtPoint "a,b" puts one member at each point.
+PASS Actor groups spawn at their own points; the comma key "left,right" reads all four members.
+PASS CONTROL: one loss across the two groups (allowed 1) keeps the stage running.
+PASS A second loss in the OTHER group fails the combined stage: FAILED "guard both: 2 lost".
+---- SEARCH AMONG DECOYS
+PASS Real encounter site found for Verification staged search
+PASS Verification staged search spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 77, yaw 0, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS Real encounter site found for Verification staged search seed probe
+PASS Verification staged search seed probe spawned at (-28.00, 0.00, 32.00) with its StagedScenario (seed 77, yaw 0, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS Exactly one real target, the same one for the same seed (index 3).
+PASS A decoy reveals itself (stage continues) and OnDecoy spawns a defender AT that decoy ($here).
+PASS Holding R at the real target completes the search: SUCCESS "All objectives complete.".
+---- DEFEND BESIEGED TARGETS
+PASS Real encounter site found for Verification staged defend
+PASS Verification staged defend spawned at (-28.00, 0.00, -24.00) with its StagedScenario (seed 1009, yaw 0, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS An unattended raider besieges the house to destruction (siege damage 20.0, player hits 0): FAILED "save the houses: 1 lost".
+PASS Real encounter site found for Verification staged defend control
+PASS Verification staged defend control spawned at (-28.00, 0.00, -24.00) with its StagedScenario (seed 1010, yaw 0, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS CONTROL: raider down -> the house survives the 2 s and the stage completes.
+---- CROSS-DISTRICT DESTINATIONS
+PASS Real encounter site found for Verification staged cross-district
+PASS Verification staged cross-district spawned at (-28.00, 0.00, -24.00) with its StagedScenario (seed 4242, yaw 0, mirrored False, band 1, +0 hostiles, timeouts x1.00).
+PASS Real encounter site found for Verification staged cross-district probe
+PASS Verification staged cross-district probe spawned at (28.00, 0.00, 32.00) with its StagedScenario (seed 4242, yaw 0, mirrored False, band 1, +0 hostiles, timeouts x1.00).
+PASS Site district 0 (Downtown), B in 3 (Docks), C in 1 (Park): three distinct districts.
+PASS The same seed picks the same destinations.
+PASS An unknown DistrictTag is relaxed and recorded (c: no district tagged no-such-tag), not a failure.
+PASS The HUD objective API points at B (GO TO B 246 M).
+PASS Reaching B moves the objective to C; C had been made unreachable and was repaired at stage start (repairs 1), so the HUD points at a reachable C.
+PASS Reaching the repaired C completes the mission: SUCCESS "All objectives complete.".
+PASS Save VECTOR with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+---- LOSE PURSUIT vs ESCAPE RADIUS (villain)
+PASS Real encounter site found for Verification staged lose pursuit
+PASS Verification staged lose pursuit spawned at (-28.00, 0.00, -24.00) with its StagedScenario (seed 1011, yaw 0, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS Real encounter site found for Verification staged escape radius
+PASS Verification staged escape radius spawned at (-28.00, 0.00, 32.00) with its StagedScenario (seed 1012, yaw 0, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS A hostile cop in view: Pursued.
+PASS CONTROL: 30 m from the cop while it still engages -> the LOSE PURSUIT stage does NOT complete.
+Escape-radius stage meanwhile: hero 162 m from its site (a literal distance rule, kept for missions that want it).
+PASS Out of sight and far away, the pursuit clears (Escaped) and the stage completes: SUCCESS "All objectives complete.".
+PASS The EscapeRadius stage completes on distance alone (it stays available).
+---- CRITICAL ESCORT
+PASS Real encounter site found for Verification staged critical escort
+PASS Verification staged critical escort spawned at (-28.00, 0.00, -24.00) with its StagedScenario (seed 1013, yaw 0, mirrored False, band 1, +0 hostiles, timeouts x1.00).
+PASS The escort destination is in another district.
+PASS Losing the critical escorted actor fails the mission at once: FAILED "get the witness out: 1 lost".
+LIMIT: hero moved by teleport; blasts through CombatImpact.Blast (the punch / Fire / synergy path) rather than input. NPCs, NavMesh and physics are live.

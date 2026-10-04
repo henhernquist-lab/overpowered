@@ -4246,3 +4246,25 @@ First-person repeat and matched performance are still being completed at this ch
 Bundled SDK clean rebuild after the handoff correction:0 warnings/0 errors,
 `Verification/Movement/build-final.txt`. FirstPerson.Run repeated211 PASS/0 FAIL, exit0.
 Fresh FirstPerson.Reload5 PASS/0 FAIL, exit0; save/database hashes unchanged for all three transition-fixed processes.
+
+
+### Movement matched performance — first after run retained, investigation ongoing
+
+Source d320807. WorldProfile movement-after,3 rounds,1 generation, worldActive,
+exit0; exactly1 Editor reported throughout; real save and Sidekick database unchanged.
+Street FPS61.46/74.32/68.61; mean16.27/13.45/14.58ms; whole-frame GC1698/1719/1742B.
+Median68.61 vs baseline75.07 FPS (-8.6066%); median14.58 vs13.32ms (+1.26ms).
+This is not accepted as a clean performance pass. Script update in the separate profiled
+sample was0.704 vs0.710ms before, whole-frame allocation median1719 vs1720B; neither
+identifies a traversal cost increase. Host load averages differ and live NPC/render counts
+vary; a no-code-change repeat is running. Preserve this result regardless of repeat outcome.
+
+
+### Retained pre-movement recovery evidence — not movement acceptance
+
+The earlier recovery run produced SplineRouteVerification.Run72 PASS/0 FAIL. Its captures
+and results are now checkpointed rather than left dirty. Separate-process Spline Reload
+remains unrun in this continuation because the attached movement task replaced the queue.
+StageFramework108/0 and StagedMission443/1 result copies are retained alongside their earlier
+recovery evidence; the staged protected-civilian verifier failure is not fixed by movement.
+No shipping mission pools were enabled; mission/cloud/Phase9/final overnight gates remain.
