@@ -85,7 +85,7 @@ public sealed class PrototypeHUD : MonoBehaviour
         if(current!=null) GUILayout.Label($"{current.Definition.DisplayName} {current.Charges}/{p.Stats(current).Charges} charges | cooldown {current.Cooldown:F2}s");
         }
         GUILayout.Label(p.Message); GUILayout.Label(w.Hero.LastPunchResult); GUILayout.Label(w.Message);
-        GUILayout.Label("WASD · Shift run · Space jump/ascend · F secondary (hold airborne for Flight)\n1/2 select attacks · LMB use attack · E punch · RMB hurricane kick · Hold R interact\nQ backflip · Tab powers/upgrades · Esc pause / results / home");
+        GUILayout.Label("WASD move / wall climb · Shift run · Space jump / wall jump / Flight ascend · Left Ctrl release wall\nF secondary (hold airborne for Flight) · 1/2 select attacks · LMB use attack · E punch · RMB hurricane kick\nHold R interact · Q backflip · Tab powers/upgrades · Esc pause / results / home");
         if(p.HeldBody!=null) GUILayout.Label("Telekinesis: LMB hurl; timeout releases safely.");
         if(w.Mode==null&&progress.Data.Side==PlayerSide.Villain) GUILayout.Label($"Chaos: destroy props {w.ChaosProgress}/{w.Tuning.Crimes.ChaosTarget}");
         foreach(var line in ObjectiveLines(w)) GUILayout.Label(line);

@@ -221,7 +221,9 @@ public sealed class HumanoidPresentation : MonoBehaviour
         bool panic=npc!=null&&npc.Role==NpcRole.Civilian&&npc.Fleeing&&!npc.Dead;
         Animator.SetFloat("GaitRate",panic?Tuning.PanicPlayback:1);
         if(dead)return;
-        if(Time.time>=actionUntil)Change(state.Flying?"Fly":!state.Grounded?"Air":panic?"Panic":state.LocalVelocity.z<Tuning.BackThreshold?"Back":Ranged&&MeasuredSpeed>.1f?"Armed":"Locomotion");
+        // Existing Air clip is a conservative wall-climb placeholder. The CharacterController alone owns translation;
+        // no root motion or new clip dependency is introduced for this pass.
+        if(Time.time>=actionUntil)Change(state.Flying?"Fly":state.Climbing?"Air":!state.Grounded?"Air":panic?"Panic":state.LocalVelocity.z<Tuning.BackThreshold?"Back":Ranged&&MeasuredSpeed>.1f?"Armed":"Locomotion");
     }
     HeroPresentationState ReadState()
     {

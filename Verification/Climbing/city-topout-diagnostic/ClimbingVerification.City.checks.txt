@@ -1,0 +1,16 @@
+PASS Climbing build uses two attacks and a non-Flight secondary.
+PASS City route uses reproducible generated seed 2409.
+PASS Generated district exists: Downtown
+PASS Street approach latches onto real Downtown structural wall.
+PASS Generated Downtown facade climbs a full storey.
+PASS Generated Downtown facade supports sideways traversal.
+PASS Tall Downtown tower is included in generated-wall testing.
+PASS Generated district exists: Residential
+PASS Street approach latches onto real Residential structural wall.
+PASS Generated Residential facade climbs a full storey.
+PASS Generated Residential facade supports sideways traversal.
+PASS Generated district exists: Docks
+PASS Street approach latches onto real Docks structural wall.
+PASS Generated Docks facade climbs a full storey.
+PASS Generated Docks facade supports sideways traversal.
+FAIL System.Exception: Generated Docks building route tops out on its real supported roof.

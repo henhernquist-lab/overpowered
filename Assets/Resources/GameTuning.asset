@@ -22,6 +22,17 @@ MonoBehaviour:
     MantleReach: 0.65
     MantleSpeed: 5
     MantleMaxDrop: 0.75
+    ClimbSpeed: 5
+    ClimbSideSpeed: 4
+    ClimbLatchDistance: 0.5
+    ClimbNormalYLimit: 0.25
+    ClimbMinimumWallHeight: 2.2
+    ClimbMinimumWallWidth: 1.5
+    ClimbDetachPushSpeed: 5
+    ClimbWallJumpSpeed: 8.5
+    ClimbRelatchDelay: 0.35
+    ClimbTopOutDistance: 2.4
+    ClimbTopOutSpeed: 5
     Gravity: 24
     FlightLift: 14
     FlightForwardBoost: 8

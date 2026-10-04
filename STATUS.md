@@ -4390,3 +4390,40 @@ restored the license connection. No code or gameplay asset has changed yet.
 keep the existing mantle for short ledges, and use that collision-checked transition
 for roof top-out where possible. Ground contact alone refills the air jump; wall
 latch and wall jump will not. Preserve existing camera/aim and power ownership.
+
+### Universal climbing implementation checkpoint — 2026-10-04
+
+The existing `SuperHeroController` now has a geometry-based attached state, W/S
+vertical climb, A/D wall traverse, Space wall jump and Left Ctrl detach. It never
+pitches the physics root or bypasses `CharacterController.Move`. The existing
+short mantle remains; roof top-out reuses its standing-capsule and two-segment
+collision checks with separate tuning. Attacks are conservatively unavailable
+while attached through the controller input path; existing power gates remain.
+Static wide/tall mostly-vertical walls qualify without tags. Floors, ceilings,
+rigidbodies, NPCs, destructible clutter and generated props are excluded.
+
+Current asset values: vertical 5 m/s, sideways 4 m/s, additional latch reach
+0.5 m, absolute wall-normal Y limit 0.25, minimum collider height 2.2 m and
+width 1.5 m, wall-jump push 5 m/s and upward speed 8.5 m/s, re-latch delay
+0.35 s, top-out reach 2.4 m and motion speed 5 m/s. These are provisional feel
+values. Climbing does not refill the universal air jump; real downward ground
+contact does. Force Field, Flight handoff, camera-in-climb and broader regression
+controls are still pending. An existing Air animation is the conservative visual
+placeholder; Henry must judge it in play.
+
+Fresh Unity sequence and retained failures: initial fixture **exit 1, 12 PASS /
+1 FAIL** because the synthetic roof deck was mistakenly above its lip. With
+parapet-style fixture geometry it passed **21/0**. The updated pause rule passed
+in the next fixture run **22/0**, exit 0. The first generated-city run passed
+full-storey rise and sideways traverse on Downtown, Residential and Docks walls
+but failed roof top-out (**15/1**, exit 1); separate diagnostics repeated **15/1**
+twice. Exact cause: the top-out probe saw the Docks roof deck at 11.30 m while a
+solid parapet topped at 11.82 m and blocked the capsule across-path. Raising the
+centrally tuned top-out reach to 2.4 m lets the probe see that lip before the
+facade contact ends. The same actual seed-2409 generated route then passed
+**16/0**, exit 0, including Docks roof arrival at 11.38 m, Downtown tower
+106.13 m tall, and full-storey/sideways checks in all three built districts.
+Measured fixture speeds were exactly 5.000 m/s vertical and 4.000 m/s sideways
+at 120 Hz; the failed and passing logs are under `Verification/Climbing`.
+No claims yet about a complete street-to-roof route, active-climb FPS, camera
+comfort or all requested negative/regression gates.

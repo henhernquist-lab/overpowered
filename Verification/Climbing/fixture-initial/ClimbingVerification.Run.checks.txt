@@ -1,0 +1,13 @@
+PASS Climbing build uses two attacks and a non-Flight secondary.
+PASS Street-height fixture starts on real support.
+PASS CONTROL moving away cannot latch.
+PASS Tall static facade latches without a tag or power.
+PASS Attached climb moves at configured vertical speed.
+PASS Wall distance remains bounded while attached.
+PASS Sideways traversal follows the wall.
+PASS Wall latch did not spend or refill a fresh air jump.
+PASS Wall jump detaches immediately.
+PASS Wall jump pushes out and up in real motion.
+PASS Wall jump preserves exactly one unused air jump.
+PASS Full-storey top-out route re-latches after actual reset.
+FAIL System.Exception: Full-height wall reaches supported roof through collision-checked top-out.

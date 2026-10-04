@@ -7,6 +7,7 @@ public sealed class SuperHeroController : MonoBehaviour
     Camera view;
     float verticalVelocity;
     float flightBoost = 1f;
+    Vector3 wallJumpVelocity;
     float airbornePeakHeight;
     bool airJumpUsed, jumpLaunched;
     public bool AirJumpAvailable => !airJumpUsed;
@@ -48,6 +49,7 @@ public sealed class SuperHeroController : MonoBehaviour
     public bool AbilityDriving=>powers?.SynergyRunner!=null&&powers.SynergyRunner.DrivesMotion;
     public CollisionFlags MoveAbility(Vector3 velocity,bool flying)
     {
+        EndClimb();
         flightBoost=1f;
         verticalVelocity=0;
         bool grounded=controller.isGrounded;
@@ -61,6 +63,9 @@ public sealed class SuperHeroController : MonoBehaviour
     public Vector3 ScriptedMove; public bool ScriptedRun;
     // Verification input follows the exact same flight resource and motion path as keyboard input.
     public bool ScriptedFlight, ScriptedAscend, ScriptedSecondaryPress;
+    /// Verification input for the wall-local movement path; normal play uses WASD.
+    public bool ScriptedClimbOverride, ScriptedClimbJump, ScriptedClimbCancel;
+    public Vector2 ScriptedClimbInput;
     bool BasicMelee(bool kick)
     {
         if(Time.time<basicReadyAt||powers.SynergyRunner.Busy)return false;
@@ -71,7 +76,7 @@ public sealed class SuperHeroController : MonoBehaviour
 
     void Awake() { controller = GetComponent<CharacterController>(); view = Camera.main; airbornePeakHeight = transform.position.y; }
     public void Initialize(PowerUser user, MovementSettings settings) { powers = user; movement = settings; }
-    public void ResetMotion() { flightBoost = 1f; verticalVelocity = 0f; airbornePeakHeight = transform.position.y; airJumpUsed = jumpLaunched = false; Mantling = mantleUsed = false; }
+    public void ResetMotion() { flightBoost = 1f; verticalVelocity = 0f; wallJumpVelocity=Vector3.zero; airbornePeakHeight = transform.position.y; airJumpUsed = jumpLaunched = false; Mantling = mantleUsed = false; EndClimb();climbRelatchAt=0; }
     void Update()
     {
         if (powers == null) return;
@@ -79,17 +84,31 @@ public sealed class SuperHeroController : MonoBehaviour
         if (view == null) return;
         powers.Tick(Time.deltaTime, controller.isGrounded);
         // Channeled powers (Laser Eyes) run while the fire button stays held; anything that takes input away ends them.
-        powers.Channel(!AbilityDriving && !WorldSession.Instance.MenuOpen && !WorldSession.Instance.PlayerDead &&
+        powers.Channel(!Climbing && !AbilityDriving && !WorldSession.Instance.MenuOpen && !WorldSession.Instance.PlayerDead &&
             (Input.GetMouseButton(0) || powers.ScriptedHold), Time.deltaTime);
-        if(AbilityDriving){Mantling=false;return;}
+        if(AbilityDriving){Mantling=false;EndClimb();return;}
         if(Mantling){MoveMantle();return;}
+        bool climbFlightFrame=false;
+        if(Climbing)
+        {
+            if(TraversalInputAllowed && !controller.isGrounded && (Input.GetKey(KeyCode.F)||ScriptedFlight) &&
+                powers.EquippedSecondary!=null && powers.EquippedSecondary.Effect.IsFlight && powers.ConsumeFlight(Time.deltaTime))
+            {EndClimb();climbFlightFrame=true;}
+            else
+            {
+                if(TraversalInputAllowed && (Input.GetKeyDown(KeyCode.F)||ScriptedSecondaryPress))
+                {powers.UseSecondary();ScriptedSecondaryPress=false;if(Dashing)EndClimb();}
+                if(Climbing){MoveClimb();return;}
+            }
+        }
         bool acceptsInput = TraversalInputAllowed;
         Vector3 forward = Vector3.Scale(view.transform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 right = Vector3.Scale(view.transform.right, new Vector3(1,0,1)).normalized;
         Vector3 move = acceptsInput ? (forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal")).normalized : Vector3.zero;
         if (acceptsInput && ScriptedMove.sqrMagnitude > 0f) move = Vector3.ProjectOnPlane(ScriptedMove, Vector3.up).normalized;
         MoveInput = move;
-        bool flying = acceptsInput && !controller.isGrounded && (Input.GetKey(KeyCode.F) || ScriptedFlight) && powers.ConsumeFlight(Time.deltaTime);
+        bool flying = acceptsInput && !controller.isGrounded && (Input.GetKey(KeyCode.F) || ScriptedFlight) &&
+            (climbFlightFrame || powers.ConsumeFlight(Time.deltaTime));
         bool secondaryPressed=Input.GetKeyDown(KeyCode.F)||ScriptedSecondaryPress;
         ScriptedSecondaryPress=false;
         if (acceptsInput && secondaryPressed && powers.EquippedSecondary != null && !powers.EquippedSecondary.Effect.IsFlight)
@@ -100,6 +119,7 @@ public sealed class SuperHeroController : MonoBehaviour
         // While Flight is active, Space retains its ascend role rather than spending the universal air jump.
         if (acceptsInput && !flying && Input.GetButtonDown("Jump")) TryJump();
         if (!flying && move.sqrMagnitude > .1f && TryMantle(move)) { MoveMantle(); return; }
+        if (!flying && move.sqrMagnitude > .1f && TryClimb(move)) { MoveClimb(); return; }
         if (flying)
         {
             verticalVelocity = Mathf.MoveTowards(verticalVelocity, (Input.GetKey(KeyCode.Space) || ScriptedAscend) ? movement.FlightLift : 0f, movement.FlightLift * movement.FlightResponse * Time.deltaTime);
@@ -114,7 +134,9 @@ public sealed class SuperHeroController : MonoBehaviour
         // ground contact, so jump/backflip input stays valid through a hit pause.
         if (Time.deltaTime > 0f)
         {
-            var flags = controller.Move((move * speed + Vector3.up * verticalVelocity) * Time.deltaTime);
+            var flags = controller.Move((move * speed + wallJumpVelocity + Vector3.up * verticalVelocity) * Time.deltaTime);
+            wallJumpVelocity=Vector3.MoveTowards(wallJumpVelocity,Vector3.zero,movement.ClimbDetachPushSpeed /
+                Mathf.Max(.01f,movement.ClimbRelatchDelay)*Time.deltaTime);
             if ((flags & CollisionFlags.Above) != 0 && verticalVelocity > 0f) verticalVelocity = 0f;
             // Reset only on a downward move that actually contacts support, never a stale isGrounded
             // immediately after launch, a pause, or an upward contact with a ceiling.
@@ -186,7 +208,7 @@ public sealed class SuperHeroController : MonoBehaviour
     // gravity arc. Repositioning only: no invincibility window, i-frames or dodge state is added.
     public bool TryBackflip()
     {
-        if(!TraversalInputAllowed||Mantling){LastBackflipResult="Blocked: traversal input";return false;}
+        if(!TraversalInputAllowed||Mantling||Climbing){LastBackflipResult="Blocked: traversal input";return false;}
         if(powers?.SynergyRunner!=null&&powers.SynergyRunner.Busy){LastBackflipResult="Blocked: synergy";return false;}
         if (powers == null || controller == null) { LastBackflipResult = "Blocked: no hero"; return false; }
         if (Time.time < backflipUntil) { LastBackflipResult = "Blocked: already flipping"; return false; }
@@ -356,6 +378,7 @@ public sealed class SuperHeroController : MonoBehaviour
     {
         direction.y = 0f;
         if (Dashing || direction.sqrMagnitude < .0001f || distance <= 0f) return false;
+        EndClimb();
         StartCoroutine(DashRoutine(direction.normalized, distance, Mathf.Max(.02f, seconds), onStep));
         return true;
     }
@@ -385,11 +408,96 @@ public sealed class SuperHeroController : MonoBehaviour
         foreach (var c in ignored) if (c != null && controller != null) Physics.IgnoreCollision(controller, c, false);
         Dashing = false;
     }
-    void OnDisable() { Dashing = false; Mantling = false; }
+    void OnDisable() { Dashing = false; Mantling = false; EndClimb(); }
+    public bool Climbing { get; private set; }
+    public Vector3 ClimbNormal { get; private set; }
+    public string LastClimbResult { get; private set; }="Ready";
+    public string LastTopOutFailure { get; private set; }="None";
+    public Collider LastTopOutBlocker { get; private set; }
+    public Collider LastTopOutTop { get; private set; }
+    public float LastTopOutHeight { get; private set; }
+    float climbRelatchAt;
+    void EndClimb()
+    {
+        Climbing=false;ClimbNormal=Vector3.zero;
+    }
+    bool Climbable(RaycastHit hit)
+    {
+        var c=hit.collider;
+        if(!TraversalObstacle(c)||c.attachedRigidbody!=null||
+            Mathf.Abs(hit.normal.y)>movement.ClimbNormalYLimit)return false;
+        if(c.GetComponentInParent<CityNpc>()!=null||c.GetComponentInParent<BreakableProp>()!=null||
+            c.GetComponentInParent<CityArtProp>()!=null)return false;
+        var size=c.bounds.size;
+        return size.y>=movement.ClimbMinimumWallHeight &&
+            Mathf.Max(size.x,size.z)>=movement.ClimbMinimumWallWidth;
+    }
+    /// Geometry-only latch: generated structural colliders need no marker or extra component.
+    public bool TryClimb(Vector3 towardWall)
+    {
+        if(!TraversalInputAllowed||Climbing||Mantling||AbilityDriving||Dashing||BackflipActive||GroundPounding||
+            Time.time<climbRelatchAt)return false;
+        towardWall=Vector3.ProjectOnPlane(towardWall,Vector3.up).normalized;
+        if(towardWall.sqrMagnitude<.5f)return false;
+        Vector3 chest=transform.position+Vector3.up*(controller.center.y+controller.height*.2f);
+        if(!Physics.Raycast(chest,towardWall,out var hit,controller.radius+movement.ClimbLatchDistance,~0,QueryTriggerInteraction.Ignore)||
+            !Climbable(hit)||Vector3.Dot(towardWall,-hit.normal)<.5f)return false;
+        Climbing=true;ClimbNormal=hit.normal;
+        wallJumpVelocity=Vector3.zero;verticalVelocity=0f;flightBoost=1f;
+        LastClimbResult="Latched";return true;
+    }
+    /// The wall never refills the air jump. Only a real downward contact with ground does.
+    public bool TryWallJump()
+    {
+        if(!Climbing||!TraversalInputAllowed)return false;
+        Vector3 normal=ClimbNormal;EndClimb();
+        climbRelatchAt=Time.time+movement.ClimbRelatchDelay;
+        wallJumpVelocity=normal*movement.ClimbDetachPushSpeed;
+        verticalVelocity=movement.ClimbWallJumpSpeed;
+        jumpLaunched=true;LastClimbResult="Wall jump";Jumped?.Invoke();
+        return true;
+    }
+    void MoveClimb()
+    {
+        if(!TraversalInputAllowed)
+        {
+            if(WorldSession.Instance.MenuOpen||WorldSession.Instance.PlayerDead||
+                WorldSession.Instance.Mode?.Paused==true||WorldSession.Instance.Mode?.Ended==true)EndClimb();
+            return;
+        }
+        bool jump=ScriptedClimbJump||Input.GetButtonDown("Jump");ScriptedClimbJump=false;
+        if(jump){TryWallJump();return;}
+        bool cancel=ScriptedClimbCancel||Input.GetKeyDown(KeyCode.LeftControl);ScriptedClimbCancel=false;
+        if(cancel){EndClimb();climbRelatchAt=Time.time+movement.ClimbRelatchDelay;LastClimbResult="Released";return;}
+        Vector2 axis=ScriptedClimbOverride?ScriptedClimbInput:
+            new Vector2(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical"));
+        if(axis.y>0f&&TryMantle(-ClimbNormal,true))
+        {EndClimb();LastClimbResult="Topping out";MoveMantle();return;}
+        Vector3 tangent=Vector3.Cross(ClimbNormal,Vector3.up).normalized;
+        Vector3 chest=transform.position+Vector3.up*(controller.center.y+controller.height*.2f);
+        float reach=controller.radius+movement.ClimbLatchDistance*2f;
+        if(!Physics.Raycast(chest,-ClimbNormal,out var face,reach,~0,QueryTriggerInteraction.Ignore)||!Climbable(face))
+        {EndClimb();LastClimbResult="Wall ended";return;}
+        Vector3 correction=-face.normal*Mathf.Clamp(face.distance-controller.radius-controller.skinWidth-.03f,
+            -movement.ClimbLatchDistance,movement.ClimbLatchDistance);
+        Vector3 velocity=Vector3.up*(axis.y*movement.ClimbSpeed)+tangent*(axis.x*movement.ClimbSideSpeed);
+        Vector3 step=velocity*Time.deltaTime+correction;
+        var flags=controller.Move(step);
+        PresentationState=new HeroPresentationState(transform.InverseTransformDirection(controller.velocity),false,false,true);
+        if((flags&CollisionFlags.Above)!=0&&axis.y>0f&&TryMantle(-ClimbNormal,true))
+        {EndClimb();LastClimbResult="Topping out";return;}
+        if((flags&CollisionFlags.Below)!=0&&axis.y<0f)
+        {EndClimb();airJumpUsed=jumpLaunched=mantleUsed=false;LastClimbResult="Landed";return;}
+        chest=transform.position+Vector3.up*(controller.center.y+controller.height*.2f);
+        if(!Physics.Raycast(chest,-face.normal,out var next,reach,~0,QueryTriggerInteraction.Ignore)||!Climbable(next))
+        {EndClimb();LastClimbResult="Wall ended";return;}
+        ClimbNormal=next.normal;
+    }
     public bool Mantling { get; private set; }
     public int MantleCount { get; private set; }
     public string LastMantleResult { get; private set; }="Ready";
     Vector3 mantleLift, mantleEnd;
+    float activeMantleSpeed;
     bool mantleAcross, mantleUsed;
     float mantleDeadline;
     readonly RaycastHit[] traversalHits = new RaycastHit[16];
@@ -416,10 +524,12 @@ public sealed class SuperHeroController : MonoBehaviour
         float half=Mathf.Max(0,controller.height*.5f-controller.radius-controller.skinWidth);
         int count=Physics.CapsuleCastNonAlloc(center+Vector3.up*half,center-Vector3.up*half,
             controller.radius+controller.skinWidth,delta.normalized,traversalHits,delta.magnitude,~0,QueryTriggerInteraction.Ignore);
+        lastPathHitCount=count;
         if(count==traversalHits.Length)return false;
         for(int i=0;i<count;i++)if(TraversalObstacle(traversalHits[i].collider))return false;
         return true;
     }
+    int lastPathHitCount;
     /// A grounded short blink. The entire standing capsule and travel corridor must be clear,
     /// and the destination must have a walkable support surface.
     public bool TryTeleport(float distance)
@@ -438,35 +548,50 @@ public sealed class SuperHeroController : MonoBehaviour
         return true;
     }
     /// Geometric ledge probe, shared by player input and verification. No building tags/components required.
-    public bool TryMantle(Vector3 direction)
+    public bool TryMantle(Vector3 direction)=>TryMantle(direction,false);
+    bool MantleRefused(string reason,bool fromClimb)
+    {if(fromClimb)LastTopOutFailure=reason;return false;}
+    bool TryMantle(Vector3 direction,bool fromClimb)
     {
-        if(!TraversalInputAllowed||Mantling||mantleUsed||AbilityDriving||Dashing||BackflipActive||GroundPounding)return false;
+        if(!TraversalInputAllowed||Mantling||(mantleUsed&&!fromClimb)||AbilityDriving||Dashing||BackflipActive||GroundPounding)return MantleRefused("movement state",fromClimb);
         direction=Vector3.ProjectOnPlane(direction,Vector3.up).normalized;
-        if(direction.sqrMagnitude<.5f||Vector3.Dot(direction,transform.forward)<.5f)return false;
+        if(direction.sqrMagnitude<.5f||!fromClimb&&Vector3.Dot(direction,transform.forward)<.5f)return MantleRefused("direction",fromClimb);
+        float maximum=fromClimb?movement.ClimbTopOutDistance:movement.MantleMaxHeight;
         Vector3 feet=transform.position;
         // A front face is required; reaching into empty air must never create an upward step.
         if(!Physics.Raycast(feet+Vector3.up*movement.MantleMinHeight,direction,out var face,
             controller.radius+movement.MantleReach,~0,QueryTriggerInteraction.Ignore)||
-            !TraversalObstacle(face.collider)||face.rigidbody!=null||Vector3.Dot(face.normal,direction)>-.4f)return false;
+            !TraversalObstacle(face.collider)||face.rigidbody!=null||Vector3.Dot(face.normal,direction)>-.4f)return MantleRefused("front face",fromClimb);
         Vector3 probe=face.point+direction*.03f;
-        probe.y=feet.y+movement.MantleMaxHeight+.02f;
-        if(!Physics.Raycast(probe,Vector3.down,out var top,movement.MantleMaxHeight-movement.MantleMinHeight+.02f,
-            ~0,QueryTriggerInteraction.Ignore)||top.rigidbody!=null||top.normal.y<Mathf.Cos(controller.slopeLimit*Mathf.Deg2Rad))return false;
+        probe.y=feet.y+maximum+.02f;
+        if(!Physics.Raycast(probe,Vector3.down,out var top,maximum-movement.MantleMinHeight+.02f,
+            ~0,QueryTriggerInteraction.Ignore)||top.rigidbody!=null||top.normal.y<Mathf.Cos(controller.slopeLimit*Mathf.Deg2Rad))return MantleRefused("top surface",fromClimb);
+        if(fromClimb){LastTopOutTop=top.collider;LastTopOutHeight=top.point.y;}
         float height=top.point.y-feet.y;
-        if(height<movement.MantleMinHeight||height>movement.MantleMaxHeight)return false;
+        if(height<movement.MantleMinHeight||height>maximum)return MantleRefused("top height",fromClimb);
         // Sample support beyond the lip separately: a parapet may be higher than its roof.
         Vector3 inside=face.point+direction*(controller.radius*2+controller.skinWidth);
         inside.y=top.point.y+.02f;
         if(!Physics.Raycast(inside,Vector3.down,out var support,movement.MantleMaxDrop+.02f,~0,QueryTriggerInteraction.Ignore)||
-            support.rigidbody!=null||support.normal.y<Mathf.Cos(controller.slopeLimit*Mathf.Deg2Rad))return false;
+            support.rigidbody!=null||support.normal.y<Mathf.Cos(controller.slopeLimit*Mathf.Deg2Rad))return MantleRefused("inside support",fromClimb);
         // Clear the whole capsule on the lower standing surface, not just while above the lip.
         // Otherwise the descent catches a parapet side even though the elevated sweep is clear.
-        if(!CapsuleClear(support.point+Vector3.up*(controller.skinWidth+.02f)))return false;
+        if(!CapsuleClear(support.point+Vector3.up*(controller.skinWidth+.02f)))return MantleRefused("standing capsule",fromClimb);
         Vector3 end=new Vector3(inside.x,top.point.y+controller.skinWidth+.02f,inside.z);
         Vector3 lift=new Vector3(feet.x,end.y,feet.z);
-        if(!CapsuleClear(lift)||!CapsuleClear(end)||!CapsulePathClear(feet,lift)||!CapsulePathClear(lift,end))return false;
+        if(!CapsuleClear(lift))return MantleRefused("lift capsule",fromClimb);
+        if(!CapsuleClear(end))return MantleRefused("end capsule",fromClimb);
+        if(!CapsulePathClear(feet,lift))return MantleRefused("vertical path",fromClimb);
+        if(!CapsulePathClear(lift,end))
+        {
+            if(fromClimb)for(int i=0;i<lastPathHitCount&&i<traversalHits.Length;i++)
+                if(TraversalObstacle(traversalHits[i].collider)){LastTopOutBlocker=traversalHits[i].collider;break;}
+            return MantleRefused("across path",fromClimb);
+        }
+        if(fromClimb)LastTopOutFailure="None";
         flightBoost=1f;LastMantleResult="Climbing";Mantling=true;mantleUsed=true;mantleAcross=false;mantleLift=lift;mantleEnd=end;
-        mantleDeadline=Time.time+(Vector3.Distance(feet,lift)+Vector3.Distance(lift,end))/Mathf.Max(.1f,movement.MantleSpeed)+.5f;
+        activeMantleSpeed=fromClimb?movement.ClimbTopOutSpeed:movement.MantleSpeed;
+        mantleDeadline=Time.time+(Vector3.Distance(feet,lift)+Vector3.Distance(lift,end))/Mathf.Max(.1f,activeMantleSpeed)+.5f;
         verticalVelocity=0;return true;
     }
     void MoveMantle()
@@ -474,7 +599,7 @@ public sealed class SuperHeroController : MonoBehaviour
         if(!TraversalInputAllowed){if(WorldSession.Instance.PlayerDead||WorldSession.Instance.Mode?.Ended==true)Mantling=false;return;}
         Vector3 target=mantleAcross?mantleEnd:mantleLift;
         Vector3 before=transform.position;
-        Vector3 step=Vector3.MoveTowards(before,target,movement.MantleSpeed*Time.deltaTime)-before;
+        Vector3 step=Vector3.MoveTowards(before,target,activeMantleSpeed*Time.deltaTime)-before;
         var flags=controller.Move(step);
         PresentationState=new HeroPresentationState(transform.InverseTransformDirection(controller.velocity),controller.isGrounded,false);
         if((flags&(CollisionFlags.Above|CollisionFlags.Sides))!=0||Time.time>mantleDeadline)
@@ -488,6 +613,7 @@ public sealed class SuperHeroController : MonoBehaviour
 
     public bool TryJump()
     {
+        if(Climbing)return TryWallJump();
         if (!TraversalInputAllowed || Mantling || AbilityDriving || Dashing || BackflipActive || GroundPounding) return false;
         if (controller.isGrounded)
         {

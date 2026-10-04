@@ -1,0 +1,7 @@
+MEASURED generated Downtown building=Building 1 — Teal offices start=(-16.17, 0.17, -4.68) height=106.13m rise=3.750m speed=5.000m/s.
+MEASURED generated Downtown sideways=1.633m.
+MEASURED generated Residential building=Building 3 — Sandstone terraces start=(188.04, 0.17, 67.58) height=12.53m rise=3.750m speed=5.000m/s.
+MEASURED generated Residential sideways=1.633m.
+MEASURED generated Docks building=Building 4 — Brick warehouse start=(-71.71, 0.17, -134.68) height=11.13m rise=3.750m speed=5.000m/s.
+MEASURED generated Docks sideways=1.633m.
+MEASURED generated Docks roof result=Wall ended/Ready refusal=across path pos=(-71.70, 7.92, -136.31) roof=11.300 bounds=Center: (-59.00, 1.72, -134.68), Extents: (12.21, 1.60, 10.37).

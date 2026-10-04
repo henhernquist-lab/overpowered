@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "ClimbingVerification.City",
+    "commit": "21fd8a58b395f6b30cc182d7c01da7bbb416259a",
+    "status_before": "M .freebuff/project-id\n M Assets/Resources/GameTuning.asset\n M Assets/Scripts/GameTuning.cs\n M Assets/Scripts/HeroPresentationState.cs\n M Assets/Scripts/HumanoidPresentation.cs\n M Assets/Scripts/PrototypeHUD.cs\n M Assets/Scripts/SuperHeroController.cs\n?? Assets/Editor/ClimbingVerification.cs\n?? Assets/Editor/ClimbingVerification.cs.meta\n?? Assets/Scripts/ClimbingVerificationRunner.cs\n?? Assets/Scripts/ClimbingVerificationRunner.cs.meta\n?? Verification/Climbing/",
+    "started_utc": "2026-10-04T22:34:31.606121+00:00",
+    "save_before": "eec464258211eb2e09498061618cf57b67f63c57f77f20015e92990e616ce899",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Climbing/city-parapet-clearance/ClimbingVerification.City.log",
+    "pid": 69335,
+    "exit": 0,
+    "seconds": 36.5,
+    "pass": 16,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Resources/GameTuning.asset\n M Assets/Scripts/GameTuning.cs\n M Assets/Scripts/HeroPresentationState.cs\n M Assets/Scripts/HumanoidPresentation.cs\n M Assets/Scripts/PrototypeHUD.cs\n M Assets/Scripts/SuperHeroController.cs\n?? Assets/Editor/ClimbingVerification.cs\n?? Assets/Editor/ClimbingVerification.cs.meta\n?? Assets/Scripts/ClimbingVerificationRunner.cs\n?? Assets/Scripts/ClimbingVerificationRunner.cs.meta\n?? Verification/Climbing/"
+  }
+]

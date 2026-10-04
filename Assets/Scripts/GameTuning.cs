@@ -44,6 +44,17 @@ public sealed class GameTuning : ScriptableObject
     public float AirJumpSpeed = 8.5f;
     [Tooltip("Geometric mantle height above current feet, forward reach beyond capsule radius, motion speed, and allowed drop behind a parapet (metres / m/s).")]
     public float MantleMinHeight = .25f, MantleMaxHeight = 1.8f, MantleReach = .65f, MantleSpeed = 5f, MantleMaxDrop = .75f;
+    [Header("Universal wall climbing")]
+    [Tooltip("Vertical and sideways wall travel speeds in m/s. Climbing is available to every hero without stamina.")]
+    public float ClimbSpeed = 5f, ClimbSideSpeed = 4f;
+    [Tooltip("Additional reach beyond the player capsule and maximum absolute wall-normal Y component.")]
+    public float ClimbLatchDistance = .5f, ClimbNormalYLimit = .25f;
+    [Tooltip("Reject narrow clutter and short objects even when their face is vertical.")]
+    public float ClimbMinimumWallHeight = 2.2f, ClimbMinimumWallWidth = 1.5f;
+    [Tooltip("Wall-jump push and upward speeds; re-latch delay prevents instant same-face repetition.")]
+    public float ClimbDetachPushSpeed = 5f, ClimbWallJumpSpeed = 8.5f, ClimbRelatchDelay = .35f;
+    [Tooltip("How far below a roof lip top-out may begin and the speed of its collision-checked lift/across motion.")]
+    public float ClimbTopOutDistance = 2.4f, ClimbTopOutSpeed = 5f;
     public float FlightLift = 14f, FlightForwardBoost = PrototypeTuning.FlightForwardBoost;
     public float TurnResponse = 14f, GroundStickSpeed = 2f, FlightResponse = 2.5f;
     [Tooltip("Boost multiplier gained per second when activating flight (1 to FlightForwardBoost).") ]

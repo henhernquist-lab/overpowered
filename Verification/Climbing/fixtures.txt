@@ -1,0 +1,26 @@
+PASS Climbing build uses two attacks and a non-Flight secondary.
+PASS Street-height fixture starts on real support.
+PASS CONTROL moving away cannot latch.
+PASS Tall static facade latches without a tag or power.
+MEASURED climb vertical=5.000m/s rise=3.250m wallGap=0.110m.
+PASS Attached climb moves at configured vertical speed.
+PASS Wall distance remains bounded while attached.
+MEASURED climb sideways=4.000m/s move=2.233m.
+PASS Sideways traversal follows the wall.
+PASS Wall latch did not spend or refill a fresh air jump.
+PASS Wall jump detaches immediately.
+PASS Wall jump pushes out and up in real motion.
+PASS Wall jump preserves exactly one unused air jump.
+PASS Full-storey top-out route re-latches after actual reset.
+MEASURED top-out state-end pos=(0.00, 170.10, 1.64) result=Topping out/Complete.
+MEASURED top-out pos=(0.00, 169.83, 1.64) grounded=True result=Topping out/Complete.
+PASS Full-height wall reaches supported roof through collision-checked top-out.
+PASS Physics root stays upright on the roof.
+PASS CONTROL small clutter cannot latch.
+PASS CONTROL moving or rigidbody car cannot latch.
+PASS CONTROL floor cannot latch.
+PASS CONTROL ceiling cannot latch.
+PASS State cleanup fixture latches.
+PASS Pause clears climb state without moving the hero.
+PASS Unpaused hero can relatch legitimately.
+PASS Death clears climbing state.
