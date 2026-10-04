@@ -1,0 +1,2 @@
+ALLOC mantle blocked-headroom probe: 0 managed bytes /1000 calls.
+MANTLE generated lip result=Interrupted flags=Sides position=(9.00, 66.52, 121.06) target=(9.00, 66.52, 121.07) deadline=False count=0 grounded=True pos=(9.00, 66.22, 121.06) roof=Center: (9.00, 65.86, 125.00), Extents: (5.51, 0.04, 4.49)

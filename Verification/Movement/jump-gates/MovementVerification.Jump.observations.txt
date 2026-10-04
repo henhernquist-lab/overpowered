@@ -1,0 +1,1 @@
+MEASURED double jump: first apex=1.4692m, air-jump rise=0.9917m, combined peak=2.4608m.

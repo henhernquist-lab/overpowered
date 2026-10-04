@@ -1,0 +1,3 @@
+PASS Save VECTOR with flight + strength through the loadout API.
+PASS Session equips flight + strength.
+FAIL System.Exception: Valid ledge begins mantle height=0.7

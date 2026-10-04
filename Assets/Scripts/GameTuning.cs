@@ -42,6 +42,8 @@ public sealed class GameTuning : ScriptableObject
     public float JumpSpeed = PrototypeTuning.JumpSpeed, Gravity = PrototypeTuning.Gravity;
     [Tooltip("One universal air jump per landing; vertical speed replaces current fall speed.")]
     public float AirJumpSpeed = 7f;
+    [Tooltip("Geometric mantle height above current feet, forward reach beyond capsule radius, motion speed, and allowed drop behind a parapet (metres / m/s).")]
+    public float MantleMinHeight = .25f, MantleMaxHeight = 1.8f, MantleReach = .65f, MantleSpeed = 5f, MantleMaxDrop = .75f;
     public float FlightLift = PrototypeTuning.FlightLift, FlightForwardBoost = PrototypeTuning.FlightForwardBoost;
     public float TurnResponse = 14f, GroundStickSpeed = 2f, FlightResponse = 3f;
     public float Health = 100f, RespawnDelay = 3f, Energy = 100f, EnergyRecharge = 12f;

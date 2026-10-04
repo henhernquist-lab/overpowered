@@ -17,6 +17,11 @@ MonoBehaviour:
     RunSpeed: 9
     JumpSpeed: 8.5
     AirJumpSpeed: 7
+    MantleMinHeight: 0.25
+    MantleMaxHeight: 1.8
+    MantleReach: 0.65
+    MantleSpeed: 5
+    MantleMaxDrop: 0.75
     Gravity: 24
     FlightLift: 16
     FlightForwardBoost: 8

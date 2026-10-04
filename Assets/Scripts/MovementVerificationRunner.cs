@@ -14,6 +14,7 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
     protected override IEnumerator Checks()
     {
         yield return Scene(GameFlow.HomeScene);
+        if(Stage=="mantle"){Time.captureDeltaTime=1f/120;yield return MantleControls();yield return CityRoute(false);Time.captureDeltaTime=0;yield break;}
         if(Stage=="jump"){Time.captureDeltaTime=1f/120;yield return JumpControls();Time.captureDeltaTime=0;yield break;}
         yield return Enter(F.Heroes[0],"flight","strength","free-play");
         foreach(var group in W.City.Buildings.GroupBy(b=>b.District))
@@ -142,5 +143,144 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
         }
 
     }
+    IEnumerator MantleControls()
+    {
+        yield return Enter(F.Heroes[0],"flight","strength","free-play");
+        Isolate();
+        foreach(float height in new[]{.7f,1.6f})
+        {
+            var ledge=Wall(new Vector3(0,150+height*.5f,1.5f),new Vector3(4,height,2));
+            PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.2f);
+            int count=W.Hero.MantleCount;
+            Check(W.Hero.TryMantle(Vector3.forward),"Valid ledge begins mantle height="+height);
+            Check(!W.Hero.TryMantle(Vector3.forward),"CONTROL cannot restart an active mantle.");
+            float end=Time.time+2;while(W.Hero.Mantling&&Time.time<end)yield return null;
+            yield return new WaitForSeconds(.3f);
+            Check(W.Hero.MantleCount==count+1&&CC.isGrounded&&W.Hero.transform.position.y>150+height-.1f,"Mantle reaches supported top through CharacterController height="+height);
+            Check(Mathf.Abs(W.Hero.transform.up.y-1)<.0001f,"Mantle keeps physics root upright.");
+            Destroy(ledge);yield return null;
+        }
+        var wall=Wall(new Vector3(0,151.2f,1.5f),new Vector3(4,2.4f,2));
+        PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.2f);
+        Check(!W.Hero.TryMantle(Vector3.forward),"CONTROL ledge above maximum height refused.");
+        wall.transform.localScale=new Vector3(4,20,.1f);wall.transform.position=new Vector3(0,160,1);
+        Physics.SyncTransforms();Check(!W.Hero.TryMantle(Vector3.forward),"CONTROL sheer face with no reachable top refused.");
+        wall.transform.localScale=new Vector3(4,1,2);wall.transform.position=new Vector3(0,150.5f,1.5f);Physics.SyncTransforms();
+        Check(!W.Hero.TryMantle(Vector3.back),"CONTROL backward motion cannot mantle forward obstacle.");
+        var ceiling=Wall(new Vector3(0,152.5f,1.5f),new Vector3(4,.2f,2));
+        Check(!W.Hero.TryMantle(Vector3.forward),"CONTROL blocked standing headroom refused.");
+        // Same real geometric probe repeated; allocation measured outside logging/formatting.
+        W.Hero.TryMantle(Vector3.forward);
+        long before=GC.GetAllocatedBytesForCurrentThread();
+        for(int i=0;i<1000;i++)W.Hero.TryMantle(Vector3.forward);
+        long bytes=GC.GetAllocatedBytesForCurrentThread()-before;
+        Log($"ALLOC mantle blocked-headroom probe: {bytes} managed bytes /1000 calls.");
+        Check(bytes==0,"Geometric traversal probe has no per-call managed allocations.");
+        ceiling.transform.position=new Vector3(0,152.1f,0);ceiling.transform.localScale=new Vector3(4,.2f,1);Physics.SyncTransforms();
+        Check(!W.Hero.TryMantle(Vector3.forward),"CONTROL low ceiling along lift path refused.");
+        Destroy(wall);Destroy(ceiling);yield return null;
+        var contact=W.Hero.gameObject.AddComponent<MovementMantleContactProbe>();
+        var building=W.City.GetComponentsInChildren<ArtBuilding>().OrderBy(b=>b.transform.position.y).First();
+        var roof=building.GetComponents<BoxCollider>().Where(c=>Mathf.Abs(c.size.y-.08f)<.01f&&c.size.x>3&&c.size.z>3).OrderByDescending(c=>c.bounds.max.y).First();
+        var b=roof.bounds;
+        PlaceHero(new Vector3(b.center.x,b.max.y+.08f,b.min.z-.55f),true);
+        bool starts=W.Hero.TryMantle(Vector3.forward);
+        if(!starts)
+        {
+            Vector3 feet=new Vector3(b.center.x,b.max.y+CC.skinWidth+.02f,b.min.z+CC.radius*2+CC.skinWidth);
+            Vector3 center=feet+CC.center;float half=CC.height*.5f-CC.radius;
+            foreach(var obstacle in Physics.OverlapCapsule(center+Vector3.up*half,center-Vector3.up*half,CC.radius,~0,QueryTriggerInteraction.Ignore))
+                if(obstacle.transform.root!=W.Hero.transform)Log($"BLOCKED ROOF standing at={feet} collider={obstacle.name} bounds={obstacle.bounds}");
+        }
+        Check(!starts,"CONTROL actual rooftop billboard blocks the standing capsule.");
+        PlaceHero(new Vector3(b.center.x+b.extents.x*.5f,b.max.y+.08f,b.min.z-.55f),true);
+        Check(!W.Hero.TryMantle(Vector3.forward),"CONTROL antenna corner inside controller contact margin refused before movement.");
+        PlaceHero(new Vector3(b.center.x+b.extents.x*.4f,b.max.y+.08f,b.min.z-.55f),true);
+        Check(W.Hero.TryMantle(Vector3.forward),"Clear approach on same generated roof parapet begins mantle.");
+        int prior=W.Hero.MantleCount;float deadline=Time.time+2;
+        while(W.Hero.Mantling&&Time.time<deadline)yield return null;
+        yield return new WaitForSeconds(.5f);
+        Log($"MANTLE generated lip result={W.Hero.LastMantleResult} contact={contact.LastCollider?.name} bounds={contact.LastCollider?.bounds} normal={contact.Normal} stepOffset={CC.stepOffset} count={W.Hero.MantleCount-prior} grounded={CC.isGrounded} pos={W.Hero.transform.position} roof={b}");
+        Check(W.Hero.MantleCount==prior+1&&CC.isGrounded&&W.Hero.transform.position.z>b.min.z,"Generated roof lip reached and grounded; no authored traversal components.");
+        Log($"GEOMETRY roof-lip fixture building={building.name} roof={b} arrival={W.Hero.transform.position}. Initial placement is a fixture, not the street-to-roof route proof.");
+    }
+    IEnumerator CityRoute(bool flight)
+    {
+        yield return Home();Profile.Data.Points=100;
+        if(!Profile.Owns(Power("fire")))Check(Profile.Buy(Power("fire")),"Unlock non-Flight route pair.");
+        yield return Enter(F.Heroes[0],flight?"flight":"fire","strength","free-play");
+        // Seed2409: actual quay -> lighthouse pier west railing -> Harbour Light podium roof.
+        // No fixture geometry or collider modifications; only the initial street placement is scripted.
+        Check(W.Tuning.City.Seed==2409,"Reproducible route uses city seed2409.");
+        var landmark=W.City.Plan.Structures.First(s=>s.Recipe=="Harbour Light");
+        Vector3 start=new Vector3(-22,.13f,-207);
+        PlaceHero(start,true);yield return new WaitForSeconds(.3f);
+        Check(CC.isGrounded,"Route starts on real quay street support.");
+        start=W.Hero.transform.position;
+        int jumps=0;Action jumped=()=>jumps++;W.Hero.Jumped+=jumped;
+        int mantles=W.Hero.MantleCount;float fuel=W.Hero.FlightFuel,time=Time.time;
+        W.Hero.ScriptedRun=true;
+        routeRecording=true;routeFuel=0;StartCoroutine(RecordRouteFuel());
+        Check(W.Hero.TryJump(),"Route ground jump accepted.");
+        if(flight)
+        {
+            yield return null;W.Hero.ScriptedFlight=W.Hero.ScriptedAscend=true;
+            float end=Time.time+2;
+            while(W.Hero.transform.position.y<landmark.Position.y+4.3f&&Time.time<end)yield return null;
+            W.Hero.ScriptedAscend=false;
+            Check(W.Hero.transform.position.y>landmark.Position.y+4,"Flight reaches podium clearance.");
+        }
+        yield return Travel(new Vector3(-18.8f,0,-207),flight?1.5f:3);
+        if(!flight){W.Hero.ScriptedMove=Vector3.zero;yield return new WaitForSeconds(.8f);Check(CC.isGrounded,"Low pier railing cleared onto real support.");}
+        yield return Travel(new Vector3(-18.8f,0,-246.8f),flight?2:7);
+        if(!flight)Check(W.Hero.TryJump(),"Ground jump clears actual lighthouse-platform railing.");
+        yield return Travel(new Vector3(-18.8f,0,-250.9f),flight?1:2);
+        if(!flight)yield return new WaitForSeconds(.6f);
+        W.Hero.ScriptedMove=Vector3.zero;
+        if(!flight)
+        {
+            Check(CC.isGrounded&&W.Hero.TryJump(),"Roof approach starts a grounded jump.");
+            yield return new WaitForSeconds(.35f);
+            Check(W.Hero.TryJump()&&!W.Hero.TryJump(),"Roof approach uses one air jump; third refused.");
+        }
+        W.Hero.ScriptedMove=Vector3.back;
+        float deadline=Time.time+3;
+        while(W.Hero.transform.position.z>-252.7f&&Time.time<deadline)yield return null;
+        W.Hero.ScriptedMove=Vector3.zero;W.Hero.ScriptedFlight=W.Hero.ScriptedAscend=false;W.Hero.ScriptedRun=false;
+        yield return new WaitForSeconds(1);
+        routeRecording=false;
+        float seconds=Time.time-time,used=routeFuel;
+        W.Hero.Jumped-=jumped;
+        Check(CC.isGrounded&&W.Hero.transform.position.y>landmark.Position.y+3.9f&&W.Hero.transform.position.z<-252.3f,
+            "Actual Harbour Light podium rooftop arrival, Flight="+flight+" at "+W.Hero.transform.position);
+        Check(flight?used>0:!W.Powers.IsEquipped(Power("flight"))&&Mathf.Abs(used)<.001f&&W.Hero.MantleCount>mantles,
+            "Route uses intended traversal resources, Flight="+flight);
+        Log($"ROUTE seed2409 flight={flight} start={start} end={W.Hero.transform.position} seconds={seconds:F4} vertical={W.Hero.transform.position.y-start.y:F4} jumps={jumps} mantles={W.Hero.MantleCount-mantles} fuelUsed={used:F4}. Podium roof only; no claim of access to the sheer upper lighthouse tower.");
+    }
+    IEnumerator Travel(Vector3 target,float timeout)
+    {
+        float end=Time.time+timeout;bool running=W.Hero.ScriptedRun;
+        while(Time.time<end)
+        {
+            Vector3 delta=Vector3.ProjectOnPlane(target-W.Hero.transform.position,Vector3.up);
+            if(delta.magnitude<.25f)break;
+            if(delta.magnitude<.8f)W.Hero.ScriptedRun=false;
+            W.Hero.ScriptedMove=delta.normalized;yield return null;
+        }
+        W.Hero.ScriptedMove=Vector3.zero;W.Hero.ScriptedRun=running;
+        Check(Vector3.ProjectOnPlane(target-W.Hero.transform.position,Vector3.up).magnitude<.5f,"Route waypoint reached "+target+" actual="+W.Hero.transform.position);
+    }
+    bool routeRecording;float routeFuel;
+    IEnumerator RecordRouteFuel()
+    {
+        float prior=W.Hero.FlightFuel;
+        while(routeRecording){yield return null;float now=W.Hero.FlightFuel;routeFuel+=Mathf.Max(0,prior-now);prior=now;}
+    }
+}
+public sealed class MovementMantleContactProbe : MonoBehaviour
+{
+    public Collider LastCollider;public Vector3 Normal;
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {if(GetComponent<SuperHeroController>().Mantling){LastCollider=hit.collider;Normal=hit.normal;}}
 }
 #endif

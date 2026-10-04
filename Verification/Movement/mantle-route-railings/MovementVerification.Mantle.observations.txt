@@ -1,0 +1,2 @@
+ALLOC mantle blocked-headroom probe: 0 managed bytes /1000 calls.
+BLOCKED ROOF standing at=(9.00, 66.00, 121.35) collider=City Billboard bounds=Center: (9.17, 67.30, 121.77), Extents: (1.40, 1.40, 0.25)

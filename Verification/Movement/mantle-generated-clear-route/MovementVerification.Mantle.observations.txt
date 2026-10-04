@@ -1,0 +1,3 @@
+ALLOC mantle blocked-headroom probe: 0 managed bytes /1000 calls.
+BLOCKED ROOF standing at=(9.00, 66.00, 121.35) collider=City Billboard bounds=Center: (9.17, 67.30, 121.77), Extents: (1.40, 1.40, 0.25)
+MANTLE generated lip result=Interrupted flags=Sides position=(11.75, 66.52, 121.29) target=(11.75, 66.52, 121.35) deadline=False count=0 grounded=True pos=(11.75, 65.98, 121.29) roof=Center: (9.00, 65.86, 125.00), Extents: (5.51, 0.04, 4.49)

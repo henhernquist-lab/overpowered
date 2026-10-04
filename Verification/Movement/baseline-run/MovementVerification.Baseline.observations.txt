@@ -1,0 +1,9 @@
+GEOMETRY Downtown: 37 buildings, height 21.600..106.100m.
+GEOMETRY Residential: 20 buildings, height 6.000..18.500m.
+GEOMETRY Docks: 6 buildings, height 7.200..11.100m.
+MEASURED first jump peak=1.4692m, launch=8.500m/s, gravity=24.000m/s², dt=0.008333.
+MEASURED flight 2s: ascent=29.1983m, horizontal=143.4750m, fuel=1.9916, final velocity=(0.00, 16.00, 72.00), lift=16, response=3.
+MEASURED camera first=False input=-10.00 renderedPitch=-7.591 camera=(0.00, 151.49, -7.97).
+MEASURED camera first=False input=65.00 renderedPitch=83.100 camera=(0.00, 158.12, -0.67).
+MEASURED camera first=True input=-85.00 renderedPitch=-85.000 camera=(0.00, 151.67, 0.00).
+MEASURED camera first=True input=85.00 renderedPitch=85.000 camera=(0.00, 151.67, 0.00).

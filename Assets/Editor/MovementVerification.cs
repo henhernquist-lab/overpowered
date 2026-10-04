@@ -10,6 +10,7 @@ public static class MovementVerification
     const string Key="Overpowered.MovementVerification";static double deadline;
     static MovementVerification(){EditorApplication.update+=()=>{if(deadline>0&&EditorApplication.timeSinceStartup>deadline){Debug.LogError("Movement verification timeout");Finish(1);}};}
     public static void Baseline()=>Start("baseline");
+    public static void Mantle()=>Start("mantle");
     public static void Jump()=>Start("jump");
     public static void Camera()=>Start("camera");
     public static void Run()=>Start("movement");

@@ -76,6 +76,8 @@ def main():
         record['database_unchanged'] = record['database_before'] == stamp(database)
         record['status_after'] = git('status', '--short')
         (out / (entry + '.checks.txt')).write_text('\n'.join(checks) + '\n')
+        observations = [line for line in lines if re.match(r'^(?:\[[^\]]+\]\s*)?(?:MEASURED|MANTLE|ROUTE|BLOCKED ROOF|ALLOC|GEOMETRY|CONFIG)\b', line)]
+        (out / (entry + '.observations.txt')).write_text('\n'.join(observations) + '\n')
         records.append(record)
         (out / 'manifest.json').write_text(json.dumps(records, indent=2) + '\n')
         print(f"END {entry}: exit {record['exit']}, {record['pass']} PASS, {record['fail']} FAIL, {record['seconds']}s", flush=True)

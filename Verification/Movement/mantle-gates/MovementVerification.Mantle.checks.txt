@@ -1,0 +1,18 @@
+PASS Save VECTOR with flight + strength through the loadout API.
+PASS Session equips flight + strength.
+PASS Valid ledge begins mantle height=0.7
+PASS CONTROL cannot restart an active mantle.
+PASS Mantle reaches supported top through CharacterController height=0.7
+PASS Mantle keeps physics root upright.
+PASS Valid ledge begins mantle height=1.6
+PASS CONTROL cannot restart an active mantle.
+PASS Mantle reaches supported top through CharacterController height=1.6
+PASS Mantle keeps physics root upright.
+PASS CONTROL ledge above maximum height refused.
+PASS CONTROL sheer face with no reachable top refused.
+PASS CONTROL backward motion cannot mantle forward obstacle.
+PASS CONTROL blocked standing headroom refused.
+PASS Geometric traversal probe has no per-call managed allocations.
+PASS CONTROL low ceiling along lift path refused.
+PASS Actual generated roof parapet begins mantle.
+FAIL System.Exception: Generated roof lip reached and grounded; no authored traversal components.

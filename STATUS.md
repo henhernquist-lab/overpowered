@@ -4121,3 +4121,49 @@ Cause was the verifier leaving MenuOpen=true while requesting a jump. New intend
 correctly refused it. Both Backflip and Humanoid verifiers now assert menu-open refusal before
 closing the menu and retaining the original positive jump/presentation assertions. No control
 was removed or threshold weakened. Phase2 complete; human jump-strength judgment remains pending.
+
+
+### Movement Phase 3 — in progress, generated-lip failure retained
+
+Phase2 checkpointf45319c. Mantle fixtures0.7/1.6m pass; too-high/no-top/backward/
+headroom/ceiling/repeat controls pass; blocked-headroom probe measures0 managed bytes/1000 calls.
+First generated parapet attempt failed after starting:17 PASS/1 FAIL. Contact diagnostic
+also17/1: CharacterController reportedSides near endpoint, then rested against the parapet.
+No collision control was relaxed. Endpoint was moved farther inside, and a lower standing-height
+capsule-clearance requirement was added. That version refuses the original generated fixture
+before moving (16 PASS/1 FAIL); identifying its blocking geometry is in progress.
+Evidence directories `mantle-gates`, `mantle-contact-diagnostic`, `mantle-standing-clearance`.
+Phase3 is NOT complete, and no city-route success or Flight change is claimed yet.
+
+
+### Movement Phase 3 — geometric mantle and real non-Flight route PASS, 2026-10-04
+
+Final `mantle-route-railings`:35 PASS/0 FAIL, exit0. GameTuning.Movement adds minimum
+height0.25m, maximum1.8m above current feet, reach0.65m beyond capsule radius, speed5m/s,
+and maximum0.75m drop behind a lip. SuperHeroController probes a front face, walkable top,
+supported landing, standing capsule and both lift/across sweeps; actual motion uses CC.Move.
+Existing CharacterController height/radius/stepOffset remain unchanged. Input/ability/death
+and per-airborne-use guards prevent parallel movement, repeated starts and endless wall climbing.
+Probe uses fixed nonalloc arrays and fails closed on overflow. Zero managed bytes measured
+across1000 actual blocked-headroom probes. No city geometry or vendor asset changes.
+
+Failure investigation correction/complete evidence: the original landing area has a real
+City Billboard. Moving inside and checking standing clearance correctly rejects it. The
+adjacent approach hit a City Antenna corner (normal -0.71,0,-0.70): nominal radius clearance
+missed CharacterController's contact margin. Queries now include skin width sideways while
+preserving capsule height (inflating vertically had incorrectly overlapped the departure floor).
+Both actual billboard and antenna approaches are retained as negative controls, and a clear
+approach on that SAME generated Slate tower successfully mantles/lands. Side-contact aborts,
+ceiling checks and all original thresholds remain intact. No stepOffset workaround was used.
+Additional retained failed counts: support-diagnostic16/1; generated-clear-route18/1;
+collider-diagnostic18/1; contact-margin2/1 (floor overlap); bounded-capsule28/1 (route railing).
+Every attempt's checks/observations/manifest is under Verification/Movement.
+
+Actual generated seed2409 route: quay street(-22,0.13,-207), pier west railing, platform
+north railing, then ground jump -> single air jump -> mantle onto Harbour Light podium.
+No fixtures, collider changes or mid-route teleports. Arrival(-18.80,4.08,-252.83),
+time8.7750s, gain3.9500m,4 jumps,1 mantle,0 fuel, non-Flight fire+strength loadout.
+The initial route stopped at the platform's second railing; adding a real ground jump
+negotiated it. This proves one lower rooftop route, NOT access to the sheer upper lighthouse
+or every high-rise. Intermediate solid ledges are still required. Human mantle smoothness
+and broader city-route coverage remain unverified. Phase3 complete; Flight/final gates pending.
