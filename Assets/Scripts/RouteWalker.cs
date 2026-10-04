@@ -173,7 +173,13 @@ public sealed class RouteWalker
         var target = Routes.Routes[t.To]; TargetRoute = t.To; TargetS = t.ToAt;
         ChooseDirection(target, t.ToAt, heading);
         Vector3 to = LanePoint(target, t.ToAt); transferring = true; crossFrom = npc.transform.position; crossTo = to;
-        if (Riding) { State = Mode.Crossing; crossFrom = railPos; crossTo = to; crossDone = 0f; crossLength = Vector3.Distance(crossFrom, crossTo); CrossProfile(); }
+        if (Riding)
+        {
+            // railPos already includes the join blend; carrying it into the crossing applies it twice.
+            blend = 0f; blendOffset = Vector3.zero;
+            State = Mode.Crossing; crossFrom = railPos; crossTo = to; crossDone = 0f;
+            crossLength = Vector3.Distance(crossFrom, crossTo); CrossProfile();
+        }
         else { State = Mode.Joining; joinStarted = Time.time; nextJoinPath = Time.time + Tuning.RepathSeconds; PathTo(to); }
     }
     /// Far street crossing: the NavMesh surface height along the straight link, sampled once per crossing (1 m spacing), so
@@ -187,6 +193,9 @@ public sealed class RouteWalker
             Vector3 p = Vector3.Lerp(crossFrom, crossTo, i / (float)(crossSamples - 1));
             crossHeights[i] = NavMesh.SamplePosition(p, out var hit, 1.5f, NavMesh.AllAreas) ? hit.position.y : p.y;
         }
+        // Preserve the actual endpoints when NavMesh sampling chooses the road below an elevated route.
+        crossHeights[0] = crossFrom.y;
+        crossHeights[crossSamples - 1] = crossTo.y;
     }
     float CrossHeight(float t)
     {

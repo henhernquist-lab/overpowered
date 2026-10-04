@@ -1,5 +1,23 @@
 # Prototype Status
 
+## Recovery checkpoint: spline transfer fixes — 2026-10-03
+
+Recovered the committed integration `0b7cbb6` (including Sidekick material fix `b7cb2fe` and spline branch
+`a3b744a`) in the persistent sibling worktree `op-overnight-recovery`, branch `codex/overnight-recovery`.
+The former `/private/tmp/op-overnight-integration` files and its uncommitted evidence had been removed during
+inactivity. The source fixes below were reconstructed from this task's recorded diffs, not recovered from disk.
+
+`RouteWalker` now clears the already-applied join offset when a far rider starts a crossing, and keeps crossing
+height endpoints equal to the actual departure and destination. This addresses the previously observed visible
+jump when the NavMesh sample selected the road under an elevated route or a join offset was applied twice.
+Historical task output reported 72 PASS / 8 Reload PASS after these fixes, but those uncommitted result files
+are gone; **these are not fresh verification results for the recovered tree**.
+
+Fresh verification on October 3 is blocked: Unity 6000.6.0f1 exits 198 before loading the project with
+“No valid Unity Editor license found. Please activate your license.” Re-run `SplineRouteVerification.Run`
+and its separate-process `Reload` after licensing is restored. No new performance or screenshot claim is made.
+
+
 ## Sidekick material-slot integrity — 2026-09-28 (`codex/sidekick-material-integrity`)
 
 The live humanoid, Forge preview, and first-launch intro now recolour only renderer slots that use the hero's
