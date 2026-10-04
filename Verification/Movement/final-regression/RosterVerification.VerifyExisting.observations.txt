@@ -1,0 +1,6 @@
+MEASURED before root: target 6.93 m/s, control 6.70 m/s (live AI approaching a hero-side player).
+MEASURED during root (2.7 s): target 0.000 m/s, control 1.67 m/s.
+MEASURED after root: target 0.95 m/s.
+MEASURED 1 s hold: 1.007 s held, damage 35.88 (expected ~38.3 at 38/s), energy drained 20.21 (expected ~20.1 = drain 32/s - regen 12/s), Heat +0.250.
+MEASURED dash: 9.00 m horizontal (data 9 m in 0.18 s), 0.03 m vertical, direction z 9.00.
+MEASURED pull: distance to core 4.18, 5.52, 6.12 -> 0.48, 0.48, 0.32 m.

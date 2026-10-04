@@ -1,5 +1,5 @@
 PASS World bootstrapped with city, powers, and progression.
-PASS Seeded city: 36 solid buildings; civilians=24
+PASS Seeded city: 63 solid buildings (== planned 63) across 3 districts; civilians=24
 PASS Same seed reproduced layout samples.
 PASS NavMesh has complete sidewalk-to-sidewalk route.
 PASS Fresh progression: level=1, points=0.
@@ -11,7 +11,8 @@ PASS Seventh power discovered from DATA only; exact same projectile effect asset
 PASS Seventh power owned but NOT equipped (session loadout flight + strength).
 PASS CONTROL: unequipped seventh power refused by the equip gate (Select/Use false, "Power not equipped"); charges 3->3, cooldown 0.00->0.00, energy 100.00->100.00.
 PASS CONTROL: refused seventh power spawned no projectile (0 before/after) and the target did not move: displacement=0.0000m.
-PASS Real flight resource path: start=6, after 2s=4, after 6s=0; empty rejects.
+PASS Real flight resource path: start=6, after 2s=3.8, after 6s=0; empty rejects.
+PASS Airborne CONTROL cannot recharge empty flight fuel.
 PASS Ground recharge after 1s=2.5s.
 PASS Charged punch normal CONTROL fires.
 PASS Punch cooldown rejects immediate retry.
@@ -25,7 +26,7 @@ PASS CONTROL: hero vector whose roster lacks the pair cannot equip seventh power
 PASS Equipped owned seventh power + Strength on verification-hero through PlayerProgression.SetLoadout before the session.
 PASS New sandbox session receives verification-7 + strength and keeps progression level=5.
 PASS Seventh power activated via normal selected-power path.
-PASS Seventh projectile hit real Rigidbody: impulse setting=200 N·s; displacement=12.992m; velocity=32.672m/s.
+PASS Seventh projectile hit real Rigidbody: impulse setting=200 N·s; displacement=13.642m; velocity=32.550m/s.
 PASS CONTROL: live in-session loadout change refused (Telekinesis + Ice).
 PASS CONTROL: hero verification-hero whose roster lacks the pair cannot equip Telekinesis + Ice.
 PASS Equipped owned Telekinesis + Ice on vector through PlayerProgression.SetLoadout before the session.
@@ -34,7 +35,9 @@ PASS Catalog restored to its 3 shipping heroes once the Telekinesis + Ice sessio
 LIMIT: the seventh-power test hero is registered in the loaded ForgeCatalog IN MEMORY ONLY (ScriptableObject.CreateInstance, no asset file, catalog never marked dirty or saved) and removed as soon as the Telekinesis + Ice session (shipping hero vector) has started; the shipping roster itself cannot equip verification-7.
 PASS Telekinesis grabs the aimed Rigidbody.
 PASS Second activation hurls the already-paid grab.
-PASS Telekinesis hurl velocity=444.519m/s.
+PASS Telekinesis hurl velocity=40.000m/s.
+FIXTURE Ice before deferred-destroy cleanup: aimed old thrown body=True, aimed Ice body=False; old position=(-28.00, 1.12, 8.95), new position=(-28.00, 1.12, 10.00).
+PASS Ice fixture CONTROL: retired throw collider no longer occludes new target.
 PASS Ice freezes a targeted Rigidbody.
 PASS Ice expires and restores original physics constraints.
 PASS Real prop destruction: Heat=3.50; police 2 -> 6; high-tier max HP=137.
@@ -48,8 +51,8 @@ PASS Immediate repeat switch CONTROL rejected.
 PASS Same fire event as Villain: Heat delta=1.00; opposite Hero outcome; same character=Overpowered Hero.
 PASS Cops become hostile on side switch; owned strength tier remains 1
 PASS Existing patrol cop placed in attack range on NavMesh.
-PASS Hostile cop attacked through live AI: player HP 100 -> 86.
+PASS Hostile cop attacked through live AI: player HP 92 -> 78.
 PASS Defeating cop as Villain awards XP and disables dead NPC navigation.
 PASS Performance population: civilians=24, cops=6, on-NavMesh cops=6.
-MEASURED 1280x720 rendered Editor Play Mode: frames=266; seconds=5.010; FPS=53.10; p95 frame ms=21.87; GPU=AMD Radeon Pro 5300; CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz.
+MEASURED 1280x720 rendered Editor Play Mode: frames=289; seconds=5.007; FPS=57.72; p95 frame ms=20.94; GPU=AMD Radeon Pro 5300; CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz.
 PASS Saved level=5, strength tier=1; will verify in a separate Unity process.

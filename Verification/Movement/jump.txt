@@ -108,10 +108,10 @@ PASS CONTROL session-ended jump refused before scene transition.
 PASS Save TITAN with fire + ice through the loadout API.
 PASS Session equips fire + ice.
 PASS fire selected for LMB (key 1).
-PASS TITAN grounded jump without Flight.
+PASS TITAN grounded jump without Flight; unequipped Flight refuses consumption.
 PASS TITAN exactly one air jump without Flight.
 PASS Save NOVA with fire + ice through the loadout API.
 PASS Session equips fire + ice.
 PASS fire selected for LMB (key 1).
-PASS NOVA grounded jump without Flight.
+PASS NOVA grounded jump without Flight; unequipped Flight refuses consumption.
 PASS NOVA exactly one air jump without Flight.

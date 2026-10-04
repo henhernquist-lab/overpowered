@@ -4268,3 +4268,28 @@ remains unrun in this continuation because the attached movement task replaced t
 StageFramework108/0 and StagedMission443/1 result copies are retained alongside their earlier
 recovery evidence; the staged protected-civilian verifier failure is not fixed by movement.
 No shipping mission pools were enabled; mission/cloud/Phase9/final overnight gates remain.
+
+
+### Movement final evidence checkpoint — 2026-10-04
+
+Implementation source d320807; inherited recovery evidence ef4de9d. All functional gates
+listed in Verification/Movement/final-gate-summary.txt pass with actual exits/counts and
+save/database integrity. SDK clean rebuild0 warnings/0 errors. Exact tuning, route results,
+source files, test changes and remaining limits: docs/movement-foundation-report.md.
+
+Unchanged performance repeat at d320807 exited0: street79.53/77.27/61.63 FPS,
+12.57/12.94/16.23ms, GC1683/1701/1691B per frame. Median77.27FPS (+2.93%) and
+12.94ms (-0.38ms) versus before75.07/13.32, but one slow round remains. All six after
+rounds median71.465FPS/14.015ms. Do not cherry-pick the faster repeat: performance
+acceptance remains INCONCLUSIVE. No stable traversal-attributable slowdown established,
+but the original8.61% regression is not erased. Quiet-host matched recapture and standalone
+performance remain outstanding. City structure/initial camera match; live NPC state varies.
+Both after processes report one Editor; its import worker is expected. No content/detail cuts.
+Median whole-frame GC1720 before,1719 first after,1691 repeat; blocked mantle probe0B/1000
+calls. These do not prove all active traversal paths allocate nothing.
+
+Confirmed incidental Unity welcome-screen meta rewritten to its original committed bytes;
+Sidekick vendor materials/database and real save retained. Unrelated .freebuff/project-id
+change left untouched. Functional movement work is checkpointed, not a claim that the
+overnight build is finished. Henry still needs to judge double-jump strength, mantle
+smoothness, camera comfort and whether the Flight nerf is too much or too little.

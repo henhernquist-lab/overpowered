@@ -1,0 +1,62 @@
+{
+  "movement-before": {
+    "fps": [
+      72.99,
+      75.07,
+      75.63
+    ],
+    "ms": [
+      13.7,
+      13.32,
+      13.22
+    ],
+    "gc_bytes": [
+      1725,
+      1720,
+      1711
+    ],
+    "median_fps": 75.07,
+    "median_ms": 13.32,
+    "median_gc_bytes": 1720
+  },
+  "movement-after": {
+    "fps": [
+      61.46,
+      74.32,
+      68.61
+    ],
+    "ms": [
+      16.27,
+      13.45,
+      14.58
+    ],
+    "gc_bytes": [
+      1698,
+      1719,
+      1742
+    ],
+    "median_fps": 68.61,
+    "median_ms": 14.58,
+    "median_gc_bytes": 1719
+  },
+  "movement-after-repeat": {
+    "fps": [
+      79.53,
+      77.27,
+      61.63
+    ],
+    "ms": [
+      12.57,
+      12.94,
+      16.23
+    ],
+    "gc_bytes": [
+      1683,
+      1701,
+      1691
+    ],
+    "median_fps": 77.27,
+    "median_ms": 12.94,
+    "median_gc_bytes": 1691
+  }
+}

@@ -1,0 +1,16 @@
+camera-gates: CameraVerification.Verify = 45 PASS / 0 FAIL; exit 0; source 99f07cba932e492a87b891a052cba4023eb82086; save unchanged=True; database unchanged=True
+flight-gates: CityVerification.Run = 55 PASS / 0 FAIL; exit 0; source 78e2a89c62ae9f0572913bbb283610f2f5c393ca; save unchanged=True; database unchanged=True
+flight-gates: CityVerification.Reload = 5 PASS / 0 FAIL; exit 0; source 78e2a89c62ae9f0572913bbb283610f2f5c393ca; save unchanged=True; database unchanged=True
+flight-transition-fixed: MovementVerification.Flight = 37 PASS / 0 FAIL; exit 0; source 558d610b9a4e9c5a0293084730cb7cddb27340d4; save unchanged=True; database unchanged=True
+flight-transition-fixed: FirstPersonVerification.Run = 211 PASS / 0 FAIL; exit 0; source 558d610b9a4e9c5a0293084730cb7cddb27340d4; save unchanged=True; database unchanged=True
+flight-transition-fixed: FirstPersonVerification.Reload = 5 PASS / 0 FAIL; exit 0; source 558d610b9a4e9c5a0293084730cb7cddb27340d4; save unchanged=True; database unchanged=True
+final-regression: MovementVerification.Jump = 116 PASS / 0 FAIL; exit 0; source 558d610b9a4e9c5a0293084730cb7cddb27340d4; save unchanged=True; database unchanged=True
+final-regression: MovementVerification.Mantle = 36 PASS / 0 FAIL; exit 0; source 558d610b9a4e9c5a0293084730cb7cddb27340d4; save unchanged=True; database unchanged=True
+final-regression: MovementVerification.Camera = 38 PASS / 0 FAIL; exit 0; source 558d610b9a4e9c5a0293084730cb7cddb27340d4; save unchanged=True; database unchanged=True
+final-regression: BackflipHurricaneVerification.Run = 64 PASS / 0 FAIL; exit 0; source 558d610b9a4e9c5a0293084730cb7cddb27340d4; save unchanged=True; database unchanged=True
+final-regression: HumanoidVerification.Run = 69 PASS / 0 FAIL; exit 0; source 558d610b9a4e9c5a0293084730cb7cddb27340d4; save unchanged=True; database unchanged=True
+final-regression: RosterVerification.VerifyExisting = 194 PASS / 0 FAIL; exit 0; source 558d610b9a4e9c5a0293084730cb7cddb27340d4; save unchanged=True; database unchanged=True
+final-regression: RosterVerification.Reload = 3 PASS / 0 FAIL; exit 0; source 558d610b9a4e9c5a0293084730cb7cddb27340d4; save unchanged=True; database unchanged=True
+final-regression: ModeVerification.VerifyExisting = 79 PASS / 0 FAIL; exit 0; source 558d610b9a4e9c5a0293084730cb7cddb27340d4; save unchanged=True; database unchanged=True
+final-regression: ModeVerification.Reload = 2 PASS / 0 FAIL; exit 0; source 558d610b9a4e9c5a0293084730cb7cddb27340d4; save unchanged=True; database unchanged=True
+route-visible-roof: MovementVerification.Route = 28 PASS / 0 FAIL; exit 0; source 8f3b891d1e5ac629695cd234a43a3c3e529b0367; save unchanged=True; database unchanged=True

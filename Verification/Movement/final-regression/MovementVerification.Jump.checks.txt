@@ -1,0 +1,116 @@
+PASS Save VECTOR with strength + fire through the loadout API.
+PASS Session equips strength + fire.
+PASS Universal grounded jump without Flight.
+PASS CONTROL repeated call before leaving ground cannot relaunch.
+PASS Exactly one air jump without Flight.
+PASS CONTROL third jump refused immediately.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS Ground jump unchanged; air correction remains modest.
+PASS Real landing restores one jump.
+PASS CONTROL paused air jump refused.
+PASS Pause halts movement.
+PASS Walk off floor edge: one air jump, no second air jump.
+PASS Jump never pitches or rolls physics root.
+PASS CONTROL dead hero cannot jump; no invulnerability granted.
+PASS Respawn clears stale air-jump state through ResetMotion.
+PASS Existing grounded Backflip remains available.
+PASS CONTROL jump cannot steal Backflip motion while active.
+PASS Normal jump restored after Backflip landing.
+PASS CONTROL session-ended jump refused before scene transition.
+PASS Save TITAN with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+PASS TITAN grounded jump without Flight; unequipped Flight refuses consumption.
+PASS TITAN exactly one air jump without Flight.
+PASS Save NOVA with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+PASS NOVA grounded jump without Flight; unequipped Flight refuses consumption.
+PASS NOVA exactly one air jump without Flight.

@@ -37,17 +37,18 @@ PASS hero-first-ice real cast accepted.
 PASS hero-first-ice aimed target frozen; off-axis CONTROL not frozen.
 PASS First-person hides own body; Animator and shadows retained.
 PASS Paused toggle CONTROL refused.
+PASS Tight corner eye volume clear at pitch -89
 PASS Tight corner eye volume clear at pitch -85
 PASS Tight corner eye volume clear at pitch 0
 PASS Tight corner eye volume clear at pitch 85
-MEASURED first-person Feel impulse (tight corner): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED first-person Feel impulse (tight corner): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
 PASS Positive control: the Feel impulse really moves the first-person eye (tight corner, max 0.160m).
-PASS Feel impulse never puts the first-person near plane inside geometry (tight corner): 0 overlapping samples of 3960.
+PASS Feel impulse never puts the first-person near plane inside geometry (tight corner): 0 overlapping samples of 5280.
 PASS Low-overhang positive control compresses eye below requested 1.62m height.
 PASS Compressed eye remains outside overhang/walls.
-MEASURED first-person Feel impulse (low overhang): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED first-person Feel impulse (low overhang): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
 PASS Positive control: the Feel impulse really moves the first-person eye (low overhang, max 0.160m).
-PASS Feel impulse never puts the first-person near plane inside geometry (low overhang): 0 overlapping samples of 3960.
+PASS Feel impulse never puts the first-person near plane inside geometry (low overhang): 0 overlapping samples of 5280.
 PASS Close-wall fire accepted from clear eye.
 PASS Projectile spawn cannot skip wall inside original 1.7m muzzle offset.
 PASS Close-wall projectile actually impacts intervening wall.
@@ -95,17 +96,18 @@ PASS hero-first-telekinesis real cast accepted.
 PASS hero-first-telekinesis aimed target held, not off-axis control.
 PASS First-person hides own body; Animator and shadows retained.
 PASS Paused toggle CONTROL refused.
+PASS Tight corner eye volume clear at pitch -89
 PASS Tight corner eye volume clear at pitch -85
 PASS Tight corner eye volume clear at pitch 0
 PASS Tight corner eye volume clear at pitch 85
-MEASURED first-person Feel impulse (tight corner): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED first-person Feel impulse (tight corner): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
 PASS Positive control: the Feel impulse really moves the first-person eye (tight corner, max 0.160m).
-PASS Feel impulse never puts the first-person near plane inside geometry (tight corner): 0 overlapping samples of 3960.
+PASS Feel impulse never puts the first-person near plane inside geometry (tight corner): 0 overlapping samples of 5280.
 PASS Low-overhang positive control compresses eye below requested 1.62m height.
 PASS Compressed eye remains outside overhang/walls.
-MEASURED first-person Feel impulse (low overhang): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED first-person Feel impulse (low overhang): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
 PASS Positive control: the Feel impulse really moves the first-person eye (low overhang, max 0.160m).
-PASS Feel impulse never puts the first-person near plane inside geometry (low overhang): 0 overlapping samples of 3960.
+PASS Feel impulse never puts the first-person near plane inside geometry (low overhang): 0 overlapping samples of 5280.
 PASS Close-wall fire accepted from clear eye.
 PASS Projectile spawn cannot skip wall inside original 1.7m muzzle offset.
 PASS Close-wall projectile actually impacts intervening wall.
@@ -153,17 +155,18 @@ PASS villain-first-ice real cast accepted.
 PASS villain-first-ice aimed target frozen; off-axis CONTROL not frozen.
 PASS First-person hides own body; Animator and shadows retained.
 PASS Paused toggle CONTROL refused.
+PASS Tight corner eye volume clear at pitch -89
 PASS Tight corner eye volume clear at pitch -85
 PASS Tight corner eye volume clear at pitch 0
 PASS Tight corner eye volume clear at pitch 85
-MEASURED first-person Feel impulse (tight corner): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED first-person Feel impulse (tight corner): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
 PASS Positive control: the Feel impulse really moves the first-person eye (tight corner, max 0.160m).
-PASS Feel impulse never puts the first-person near plane inside geometry (tight corner): 0 overlapping samples of 3960.
+PASS Feel impulse never puts the first-person near plane inside geometry (tight corner): 0 overlapping samples of 5280.
 PASS Low-overhang positive control compresses eye below requested 1.62m height.
 PASS Compressed eye remains outside overhang/walls.
-MEASURED first-person Feel impulse (low overhang): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED first-person Feel impulse (low overhang): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
 PASS Positive control: the Feel impulse really moves the first-person eye (low overhang, max 0.160m).
-PASS Feel impulse never puts the first-person near plane inside geometry (low overhang): 0 overlapping samples of 3960.
+PASS Feel impulse never puts the first-person near plane inside geometry (low overhang): 0 overlapping samples of 5280.
 PASS Close-wall fire accepted from clear eye.
 PASS Projectile spawn cannot skip wall inside original 1.7m muzzle offset.
 PASS Close-wall projectile actually impacts intervening wall.
@@ -211,17 +214,18 @@ PASS villain-first-telekinesis real cast accepted.
 PASS villain-first-telekinesis aimed target held, not off-axis control.
 PASS First-person hides own body; Animator and shadows retained.
 PASS Paused toggle CONTROL refused.
+PASS Tight corner eye volume clear at pitch -89
 PASS Tight corner eye volume clear at pitch -85
 PASS Tight corner eye volume clear at pitch 0
 PASS Tight corner eye volume clear at pitch 85
-MEASURED first-person Feel impulse (tight corner): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED first-person Feel impulse (tight corner): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
 PASS Positive control: the Feel impulse really moves the first-person eye (tight corner, max 0.160m).
-PASS Feel impulse never puts the first-person near plane inside geometry (tight corner): 0 overlapping samples of 3960.
+PASS Feel impulse never puts the first-person near plane inside geometry (tight corner): 0 overlapping samples of 5280.
 PASS Low-overhang positive control compresses eye below requested 1.62m height.
 PASS Compressed eye remains outside overhang/walls.
-MEASURED first-person Feel impulse (low overhang): 3960 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-85 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED first-person Feel impulse (low overhang): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
 PASS Positive control: the Feel impulse really moves the first-person eye (low overhang, max 0.160m).
-PASS Feel impulse never puts the first-person near plane inside geometry (low overhang): 0 overlapping samples of 3960.
+PASS Feel impulse never puts the first-person near plane inside geometry (low overhang): 0 overlapping samples of 5280.
 PASS Close-wall fire accepted from clear eye.
 PASS Projectile spawn cannot skip wall inside original 1.7m muzzle offset.
 PASS Close-wall projectile actually impacts intervening wall.
@@ -238,10 +242,10 @@ PASS Actual forward motion drives bounded flight FOV.
 PASS Synergy FOV adds to flight instead of fighting it.
 PASS Non-flight recovery restores baseline FOV after flight/kick.
 BENCH same city position=(-28.00, 8.12, 4.00), matched world pitch=2.261, civilians=26, cops=7; 1280x720 camera+HUD, single render/frame.
-MEASURED third-person phase=0: FPS=77.37, draw calls=277.6.
-MEASURED first-person phase=1: FPS=76.87, draw calls=265.2.
-MEASURED first-person phase=2: FPS=73.26, draw calls=267.9.
-MEASURED third-person phase=3: FPS=81.66, draw calls=278.6.
+MEASURED third-person phase=0: FPS=86.50, draw calls=280.0.
+MEASURED first-person phase=1: FPS=86.59, draw calls=267.5.
+MEASURED first-person phase=2: FPS=80.09, draw calls=276.9.
+MEASURED third-person phase=3: FPS=80.28, draw calls=290.2.
 PASS Benchmark remained alive with populated city simulation running.
-PAIRED same-scene means: third-person=79.52 FPS; first-person=75.07 FPS; delta=-5.60%. Perspective naturally changes visible geometry; no content or population cut.
+PAIRED same-scene means: third-person=83.39 FPS; first-person=83.34 FPS; delta=-0.06%. Perspective naturally changes visible geometry; no content or population cut.
 LIMIT: gameplay/UI/collision entry points and actual rendered frames tested; no hardware B-key injection, human feel or standalone FPS claim.

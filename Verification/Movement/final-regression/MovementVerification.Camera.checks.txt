@@ -1,0 +1,38 @@
+PASS Save VECTOR with flight + strength through the loadout API.
+PASS Session equips flight + strength.
+PASS Baseline fixture genuinely grounded.
+PASS Grounded jump accepted.
+PASS Ground jump remains within original ballistic envelope.
+PASS Flight activates via real controller and resource gates.
+PASS View reaches configured limit through existing orbit/eye math.
+PASS CONTROL pitch overshoot clamps at -85 first=False
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.
+PASS View reaches configured limit through existing orbit/eye math.
+PASS CONTROL pitch overshoot clamps at 65 first=False
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.
+PASS Toggle view for pitch controls.
+PASS View reaches configured limit through existing orbit/eye math.
+PASS CONTROL pitch overshoot clamps at -89 first=True
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.
+PASS View reaches configured limit through existing orbit/eye math.
+PASS CONTROL pitch overshoot clamps at 85 first=True
+PASS Center ray remains aligned with crosshair.
+PASS No camera roll or physics-root rotation.
+PASS Camera collision volume clear at configured limit.
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Change aim verification view.
+PASS Upward limit gameplay aim hits crosshair target first=False
+PASS Upward-limit Fire cast accepted.
+PASS Physical projectile hits upward target; off-axis CONTROL untouched first=False
+PASS Change aim verification view.
+PASS Upward limit gameplay aim hits crosshair target first=True
+PASS Upward-limit Fire cast accepted.
+PASS Physical projectile hits upward target; off-axis CONTROL untouched first=True

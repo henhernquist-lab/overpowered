@@ -145,3 +145,10 @@ InitTestScene*.unity*
 /Verification/Splines/**/saves/
 
 /Verification/Movement/saves/
+
+# Verification sandbox saves and process-local reload pointers (never player data).
+/Verification/StageFramework/saves/
+/Verification/StagedMissions/saves/
+/Verification/Roster/saves/
+/Verification/Roster/save-path.txt
+/Verification/City/save-path.txt

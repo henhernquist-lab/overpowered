@@ -30,11 +30,13 @@ PASS Route starts on real quay street support.
 PASS Route ground jump accepted.
 PASS Route waypoint reached (-18.80, 0.00, -207.00) actual=(-19.05, 1.60, -207.00)
 PASS Low pier railing cleared onto real support.
-PASS Route waypoint reached (-18.80, 0.00, -246.80) actual=(-18.80, 0.20, -246.55)
+PASS Route waypoint reached (-14.00, 0.00, -246.80) actual=(-14.03, 0.20, -246.58)
 PASS Ground jump clears actual lighthouse-platform railing.
-PASS Route waypoint reached (-18.80, 0.00, -250.90) actual=(-18.80, 1.40, -250.67)
+PASS Route waypoint reached (-14.00, 0.00, -250.90) actual=(-14.00, 1.40, -250.67)
 PASS Roof approach starts a grounded jump.
 PASS Roof approach uses one air jump; third refused.
-PASS Actual Harbour Light podium rooftop arrival, Flight=False at (-18.80, 4.08, -252.83)
+PASS Actual Harbour Light podium rooftop arrival, Flight=False at (-14.00, 4.08, -252.82)
+PASS Arrival capsule is inside visible cylindrical podium footprint, radial=5.176, radius=6.000; not merely its box-collider corner.
 PASS Route uses intended traversal resources, Flight=False
-ROUTE seed2409 flight=False start=(-22.00, 0.13, -207.00) end=(-18.80, 4.08, -252.83) seconds=8.7750 vertical=3.9500 jumps=4 mantles=1 fuelUsed=0.0000. Podium roof only; no claim of access to the sheer upper lighthouse tower.
+IMAGE Verification/Movement/route-no-flight.png
+ROUTE seed2409 flight=False start=(-22.00, 0.13, -207.00) end=(-14.00, 4.08, -252.82) seconds=8.8250 vertical=3.9500 jumps=4 mantles=1 fuelUsed=0.0000. Podium roof only; no claim of access to the sheer upper lighthouse tower.
