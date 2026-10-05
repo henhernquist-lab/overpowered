@@ -14,9 +14,18 @@ PASS Climbing camera stays outside geometry and root upright, first-person=True
 PASS Climbing preserves center-screen aiming, first-person=True
 PASS Force Field can activate without detaching from a wall.
 PASS Wall latch did not spend or refill a fresh air jump.
+PASS Climb-cancel releases the wall without a jump.
+PASS Released hero returns to actual falling motion.
+PASS Wall jump fixture re-latches after a real reset.
 PASS Wall jump detaches immediately.
+PASS CONTROL same-wall re-latch is refused during wall-jump cooldown.
 PASS Wall jump pushes out and up in real motion.
 PASS Wall jump preserves exactly one unused air jump.
+PASS Spent-air-jump control launches from ground.
+PASS Air jump can be spent before reaching a wall.
+PASS Latching while airborne does not refill a spent air jump.
+PASS Wall jump after a spent air jump cannot create another air jump.
+PASS Actual landing restores the spent air jump.
 PASS Full-storey top-out route re-latches after actual reset.
 MEASURED top-out state-end pos=(0.00, 170.10, 1.64) result=Topping out/Complete.
 MEASURED top-out pos=(0.00, 169.83, 1.64) grounded=True result=Topping out/Complete.
@@ -28,6 +37,11 @@ PASS CONTROL floor cannot latch.
 PASS CONTROL ceiling cannot latch.
 PASS CONTROL wall outside normal tolerance cannot latch.
 PASS CONTROL NPC capsule cannot latch.
+ALLOC no-wall climbing probe: 0 managed bytes /1000 calls.
+PASS No-wall latch probe makes no per-call managed allocation.
+PASS Unsupported overhang fixture latches below the lip.
+MEASURED unsupported overhang pos=(0.00, 159.42, 0.31) refusal=inside support.
+PASS CONTROL overhang without a standing point cannot top out or cross the solid lip.
 PASS Blocked top-out fixture latches below its lip.
 MEASURED blocked top-out pos=(0.00, 159.59, 0.31) refusal=standing capsule mantle=Complete.
 PASS CONTROL overhead obstruction prevents top-out without crossing solid geometry.
@@ -39,3 +53,5 @@ PASS Flight handoff fixture equips Flight through progression.
 PASS Flight handoff starts on a real attached wall.
 PASS Equipped Flight spends fuel once and cleanly takes movement from climbing.
 PASS Ending Flight against a wall does not latch without movement input.
+PASS Session-end control starts attached to a wall.
+PASS Session end destroys or clears the old attached controller.

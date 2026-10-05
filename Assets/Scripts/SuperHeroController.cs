@@ -588,7 +588,7 @@ public sealed class SuperHeroController : MonoBehaviour
                 if(TraversalObstacle(traversalHits[i].collider)){LastTopOutBlocker=traversalHits[i].collider;break;}
             return MantleRefused("across path",fromClimb);
         }
-        if(fromClimb)LastTopOutFailure="None";
+        if(fromClimb){LastTopOutFailure="None";LastTopOutBlocker=null;}
         flightBoost=1f;LastMantleResult="Climbing";Mantling=true;mantleUsed=true;mantleAcross=false;mantleLift=lift;mantleEnd=end;
         activeMantleSpeed=fromClimb?movement.ClimbTopOutSpeed:movement.MantleSpeed;
         mantleDeadline=Time.time+(Vector3.Distance(feet,lift)+Vector3.Distance(lift,end))/Mathf.Max(.1f,activeMantleSpeed)+.5f;

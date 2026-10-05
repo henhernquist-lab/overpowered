@@ -4477,3 +4477,25 @@ unchanged negative cast/payment/presentation controls passed. Fresh
 `Verification/Climbing/humanoid-fixed` passed Humanoid **70/0** and CityArt
 **31/0**, both exit 0. All rerun save/database hashes matched before and after.
 Power, mode and matched dense-street performance gates still remain.
+
+### Universal climbing final traversal controls — 2026-10-04
+
+Added real release/fall, unsupported-overhang, session-end and second generated
+building wall-jump controls. The first expanded sequence in
+`Verification/Climbing/final-controls` passed fixture **44/0** and city **26/0**,
+exit 0. The no-wall hot-path probe allocated **0 managed bytes per 1,000 calls**;
+an unsupported lip reported `inside support` and did not top out. The different
+Docks warehouse wall jump moved the hero from (-248.45, 0.17, -134.68) to
+(-249.23, 1.45, -134.68) in 0.22 s, then one air jump and ground return
+succeeded. The generated second-wall segment uses a controlled reposition
+between buildings; the first warehouse street-to-roof-and-back segment is
+continuous. A successful top-out now clears the old diagnostic blocker value.
+
+Stronger air-jump controls at the current source ran in
+`Verification/Climbing/airjump-final`: fixture **50/0** and generated city
+**26/0**, both exit 0. They spent the air jump before wall contact, proved
+that latch/wall jump did not refill it, refused immediate same-wall re-latch,
+and verified real ground contact restored it. Both processes kept the real
+save and Sidekick database hashes unchanged. The SDK source build immediately
+before this final addition had **0 warnings / 0 errors**; run it again on the
+final source. Power/mode and matched dense-street performance gates remain.

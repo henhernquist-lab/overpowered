@@ -60,12 +60,30 @@ public sealed class ClimbingVerificationRunner : SessionVerificationRunner
         }
         Check(W.Powers.UseSecondary()&&W.Hero.Climbing,"Force Field can activate without detaching from a wall.");
         Check(W.Hero.AirJumpAvailable,"Wall latch did not spend or refill a fresh air jump.");
+        W.Hero.ScriptedClimbCancel=true;yield return null;
+        Check(!W.Hero.Climbing&&W.Hero.LastClimbResult=="Released","Climb-cancel releases the wall without a jump.");
+        float releaseHeight=W.Hero.transform.position.y;yield return new WaitForSeconds(.15f);
+        Check(W.Hero.transform.position.y<releaseHeight-.05f,"Released hero returns to actual falling motion.");
+        PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.1f);
+        Check(W.Hero.TryClimb(Vector3.forward),"Wall jump fixture re-latches after a real reset.");
         begin=W.Hero.transform.position;
         Check(W.Hero.TryWallJump()&&!W.Hero.Climbing,"Wall jump detaches immediately.");
+        Check(!W.Hero.TryClimb(Vector3.forward),"CONTROL same-wall re-latch is refused during wall-jump cooldown.");
         yield return new WaitForSeconds(.25f);
         Check(W.Hero.transform.position.z<begin.z-.4f&&W.Hero.transform.position.y>begin.y+.7f,"Wall jump pushes out and up in real motion.");
         Check(W.Hero.AirJumpAvailable&&W.Hero.TryJump()&&!W.Hero.TryJump(),"Wall jump preserves exactly one unused air jump.");
         W.Hero.ScriptedClimbOverride=false;
+        PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.1f);
+        Check(W.Hero.TryJump(),"Spent-air-jump control launches from ground.");
+        yield return new WaitForSeconds(.12f);
+        Check(W.Hero.TryJump()&&!W.Hero.AirJumpAvailable,"Air jump can be spent before reaching a wall.");
+        Check(W.Hero.TryClimb(Vector3.forward)&&!W.Hero.AirJumpAvailable,
+            "Latching while airborne does not refill a spent air jump.");
+        Check(W.Hero.TryWallJump()&&!W.Hero.TryJump(),
+            "Wall jump after a spent air jump cannot create another air jump.");
+        float groundDeadline=Time.time+5;
+        while(!CC.isGrounded&&Time.time<groundDeadline)yield return null;
+        Check(CC.isGrounded&&W.Hero.AirJumpAvailable,"Actual landing restores the spent air jump.");
         PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.2f);
         Check(W.Hero.TryClimb(Vector3.forward),"Full-storey top-out route re-latches after actual reset.");
         W.Hero.ScriptedClimbOverride=true;W.Hero.ScriptedClimbInput=new Vector2(0,1);
@@ -97,6 +115,24 @@ public sealed class ClimbingVerificationRunner : SessionVerificationRunner
         var npc=Actor(new Vector3(0,150.05f,1),NpcRole.Civilian,20);
         Check(!W.Hero.TryClimb(Vector3.forward),"CONTROL NPC capsule cannot latch.");npc.gameObject.SetActive(false);Destroy(npc.gameObject);
         yield return null;
+        // Hot-path control away from a wall, without logging or scene queries inside the sample.
+        W.Hero.TryClimb(Vector3.forward);
+        long beforeAlloc=GC.GetAllocatedBytesForCurrentThread();
+        for(int i=0;i<1000;i++)W.Hero.TryClimb(Vector3.forward);
+        long probeBytes=GC.GetAllocatedBytesForCurrentThread()-beforeAlloc;
+        Log($"ALLOC no-wall climbing probe: {probeBytes} managed bytes /1000 calls.");
+        Check(probeBytes==0,"No-wall latch probe makes no per-call managed allocation.");
+        var unsupportedWall=Wall(new Vector3(0,156,1),new Vector3(6,12,.4f));
+        var unsupportedLip=Wall(new Vector3(0,162.2f,1.2f),new Vector3(6,.1f,.6f));
+        PlaceHero(new Vector3(0,160.2f,0),true);yield return null;
+        Check(W.Hero.TryClimb(Vector3.forward),"Unsupported overhang fixture latches below the lip.");
+        W.Hero.ScriptedClimbOverride=true;W.Hero.ScriptedClimbInput=new Vector2(0,1);
+        int unsupportedMantles=W.Hero.MantleCount;yield return new WaitForSeconds(.45f);
+        Log($"MEASURED unsupported overhang pos={W.Hero.transform.position} refusal={W.Hero.LastTopOutFailure}.");
+        Check(W.Hero.MantleCount==unsupportedMantles&&W.Hero.transform.position.y<162.5f,
+            "CONTROL overhang without a standing point cannot top out or cross the solid lip.");
+        Destroy(unsupportedWall);Destroy(unsupportedLip);
+        W.Hero.ScriptedClimbInput=Vector2.zero;
         var blockedWall=Wall(new Vector3(0,156,1),new Vector3(6,12,.4f));
         var blockedRoof=Wall(new Vector3(0,161.7f,2.2f),new Vector3(6,.1f,2));
         var blockedCeiling=Wall(new Vector3(0,163,1.4f),new Vector3(6,.3f,3));
@@ -130,7 +166,7 @@ public sealed class ClimbingVerificationRunner : SessionVerificationRunner
             "Flight handoff fixture equips Flight through progression.");
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/free-play"));
         yield return Scene(GameFlow.CityScene);
-        Isolate();var wall=Wall(new Vector3(0,156,1),new Vector3(6,12,.4f));
+        Isolate();Wall(new Vector3(0,156,1),new Vector3(6,12,.4f));
         PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.15f);
         Check(W.Hero.TryClimb(Vector3.forward),"Flight handoff starts on a real attached wall.");
         W.Hero.ScriptedClimbOverride=true;W.Hero.ScriptedClimbInput=new Vector2(0,1);
@@ -141,7 +177,10 @@ public sealed class ClimbingVerificationRunner : SessionVerificationRunner
         W.Hero.ScriptedFlight=false;W.Hero.ScriptedClimbOverride=false;W.Hero.ScriptedMove=Vector3.zero;
         yield return null;yield return null;
         Check(!W.Hero.Climbing,"Ending Flight against a wall does not latch without movement input.");
-        Destroy(wall);
+        PlaceHero(new Vector3(0,150.05f,0),true);yield return null;
+        Check(W.Hero.TryClimb(Vector3.forward),"Session-end control starts attached to a wall.");
+        var attached=W.Hero;W.Mode.ReturnHome();yield return Scene(GameFlow.HomeScene);
+        Check(attached==null||!attached.Climbing,"Session end destroys or clears the old attached controller.");
     }
     IEnumerator CityControls()
     {
@@ -219,6 +258,31 @@ public sealed class ClimbingVerificationRunner : SessionVerificationRunner
                 while(!CC.isGrounded&&Time.time<landDeadline)yield return null;
                 Log($"MEASURED generated Docks return pos={W.Hero.transform.position} grounded={CC.isGrounded}.");
                 Check(CC.isGrounded&&W.Hero.transform.position.y<2f,"Generated street-to-roof route returns to ground.");
+                ArtBuilding second=null;BoxCollider secondFace=null;
+                foreach(var candidate in candidates.Where(b=>b!=chosen))
+                {
+                    var structural=candidate.GetComponents<BoxCollider>()
+                        .Where(c=>c.bounds.size.y>=W.Tuning.Movement.ClimbMinimumWallHeight&&
+                            c.bounds.size.x>3&&c.bounds.size.z>3&&
+                            Mathf.Abs(c.bounds.min.y-candidate.transform.position.y)<.3f)
+                        .OrderByDescending(c=>c.bounds.size.x*c.bounds.size.z).FirstOrDefault();
+                    if(structural==null)continue;
+                    var bounds=structural.bounds;
+                    PlaceHero(new Vector3(bounds.min.x-CC.radius-.12f,bounds.min.y+.05f,bounds.center.z),true);
+                    if(!W.Hero.TryClimb(Vector3.right))continue;
+                    second=candidate;secondFace=structural;break;
+                }
+                Check(second!=null,"A different generated Docks wall supports the return wall jump.");
+                Vector3 secondStart=W.Hero.transform.position;
+                Check(W.Hero.TryWallJump()&&!W.Hero.Climbing,"Real second-building wall jump detaches.");
+                yield return new WaitForSeconds(.22f);
+                Log($"MEASURED generated Docks second-wall jump building={second.name} from={secondStart} to={W.Hero.transform.position} face={secondFace.bounds}.");
+                Check(W.Hero.transform.position.x<secondStart.x-.35f&&W.Hero.transform.position.y>secondStart.y+.65f,
+                    "Second generated wall jump produces real away/up displacement.");
+                Check(W.Hero.TryJump()&&!W.Hero.TryJump(),"Second generated wall jump retains exactly one air jump.");
+                landDeadline=Time.time+5;
+                while(!CC.isGrounded&&Time.time<landDeadline)yield return null;
+                Check(CC.isGrounded&&W.Hero.transform.position.y<2f,"Second wall-jump route returns to street support.");
             }
             W.Hero.ScriptedClimbOverride=false;W.Hero.ScriptedClimbInput=Vector2.zero;
             if(name=="Downtown")Check(roofY-start.y>45f,"Tall Downtown tower is included in generated-wall testing.");

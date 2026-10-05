@@ -9,7 +9,7 @@ PASS Generated Downtown facade supports sideways traversal.
 PASS Tall Downtown tower is included in generated-wall testing.
 PASS Generated district exists: Residential
 PASS Street approach latches onto real Residential structural wall.
-MEASURED generated Residential building=Building 3 — Sandstone terraces start=(188.04, 0.17, 67.58) height=12.53m rise=3.792m speed=5.000m/s.
+MEASURED generated Residential building=Building 3 — Sandstone terraces start=(188.04, 0.17, 67.58) height=12.53m rise=3.750m speed=5.000m/s.
 PASS Generated Residential facade climbs a full storey.
 MEASURED generated Residential sideways=1.633m.
 PASS Generated Residential facade supports sideways traversal.
@@ -21,9 +21,15 @@ MEASURED generated Docks building=Building 4 — Brick warehouse start=(-71.70, 
 PASS Generated Docks facade climbs a full storey.
 MEASURED generated Docks sideways=1.633m.
 PASS Generated Docks facade supports sideways traversal.
-MEASURED generated Docks roof result=Topping out/Complete refusal=None top=Building 4 — Brick warehouse@11.820 blocker=Building 4 — Brick warehouse/Center: (-71.12, 11.52, -135.00), Extents: (0.09, 0.30, 10.69) pos=(-70.37, 11.38, -136.31) roof=11.300 bounds=Center: (-59.00, 1.72, -134.68), Extents: (12.21, 1.60, 10.37).
+MEASURED generated Docks roof result=Topping out/Complete refusal=None top=Building 4 — Brick warehouse@11.820 blocker=/ pos=(-70.37, 11.38, -136.31) roof=11.300 bounds=Center: (-59.00, 1.72, -134.68), Extents: (12.21, 1.60, 10.37).
 PASS Generated Docks building route tops out on its real supported roof.
 PASS Generated roof launches a normal grounded jump for the return route.
 PASS After leaving the real roof, exactly one air jump remains available.
 MEASURED generated Docks return pos=(-73.23, 0.20, -136.31) grounded=True.
 PASS Generated street-to-roof route returns to ground.
+PASS A different generated Docks wall supports the return wall jump.
+PASS Real second-building wall jump detaches.
+MEASURED generated Docks second-wall jump building=Building 58 — Brick warehouse from=(-248.45, 0.17, -134.68) to=(-249.23, 1.45, -134.68) face=Center: (-236.00, 1.56, -134.68), Extents: (11.95, 1.44, 11.30).
+PASS Second generated wall jump produces real away/up displacement.
+PASS Second generated wall jump retains exactly one air jump.
+PASS Second wall-jump route returns to street support.

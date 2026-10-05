@@ -1,0 +1,50 @@
+PASS Climbing build uses two attacks and a non-Flight secondary.
+PASS Street-height fixture starts on real support.
+PASS CONTROL moving away cannot latch.
+PASS Tall static facade latches without a tag or power.
+PASS Attached climb moves at configured vertical speed.
+PASS Wall distance remains bounded while attached.
+PASS Sideways traversal follows the wall.
+PASS Climbing camera stays outside geometry and root upright, first-person=False
+PASS Climbing preserves center-screen aiming, first-person=False
+PASS Switch climbing camera view.
+PASS Climbing camera stays outside geometry and root upright, first-person=True
+PASS Climbing preserves center-screen aiming, first-person=True
+PASS Force Field can activate without detaching from a wall.
+PASS Wall latch did not spend or refill a fresh air jump.
+PASS Climb-cancel releases the wall without a jump.
+PASS Released hero returns to actual falling motion.
+PASS Wall jump fixture re-latches after a real reset.
+PASS Wall jump detaches immediately.
+PASS CONTROL same-wall re-latch is refused during wall-jump cooldown.
+PASS Wall jump pushes out and up in real motion.
+PASS Wall jump preserves exactly one unused air jump.
+PASS Spent-air-jump control launches from ground.
+PASS Air jump can be spent before reaching a wall.
+PASS Latching while airborne does not refill a spent air jump.
+PASS Wall jump after a spent air jump cannot create another air jump.
+PASS Actual landing restores the spent air jump.
+PASS Full-storey top-out route re-latches after actual reset.
+PASS Full-height wall reaches supported roof through collision-checked top-out.
+PASS Physics root stays upright on the roof.
+PASS CONTROL small clutter cannot latch.
+PASS CONTROL moving or rigidbody car cannot latch.
+PASS CONTROL floor cannot latch.
+PASS CONTROL ceiling cannot latch.
+PASS CONTROL wall outside normal tolerance cannot latch.
+PASS CONTROL NPC capsule cannot latch.
+PASS No-wall latch probe makes no per-call managed allocation.
+PASS Unsupported overhang fixture latches below the lip.
+PASS CONTROL overhang without a standing point cannot top out or cross the solid lip.
+PASS Blocked top-out fixture latches below its lip.
+PASS CONTROL overhead obstruction prevents top-out without crossing solid geometry.
+PASS State cleanup fixture latches.
+PASS Pause clears climb state without moving the hero.
+PASS Unpaused hero can relatch legitimately.
+PASS Death clears climbing state.
+PASS Flight handoff fixture equips Flight through progression.
+PASS Flight handoff starts on a real attached wall.
+PASS Equipped Flight spends fuel once and cleanly takes movement from climbing.
+PASS Ending Flight against a wall does not latch without movement input.
+PASS Session-end control starts attached to a wall.
+PASS Session end destroys or clears the old attached controller.
