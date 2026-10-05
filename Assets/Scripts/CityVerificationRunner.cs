@@ -122,7 +122,7 @@ public sealed class CityVerificationRunner : MonoBehaviour
         // A shipping hero only equips powers on its roster, so the data-only seventh power needs a hero whose roster has it.
         // That hero exists IN MEMORY ONLY (CreateInstance, DontSave, no asset file) and is appended to the loaded catalog at
         // runtime; the catalog is never marked dirty and its original array is restored in finally (and again in Finish()).
-        var testHero=TestHero(forge.Heroes[0],seventh.Definition,w.Powers.Strength.Definition);
+        var testHero=TestHero(forge.Heroes[0],seventh.Definition,w.Powers.Strength.Definition,w.Powers.EquippedSecondary);
         int shippingHeroes=forge.Heroes.Length; Register(forge,testHero);
         IEnumerator e;
         try
@@ -249,10 +249,11 @@ public sealed class CityVerificationRunner : MonoBehaviour
         Check(w.Powers.EquippedA==a&&w.Powers.EquippedB==b&&w.Progression.Data.Level>1,$"New sandbox session receives {w.Powers.EquippedA.Id} + {w.Powers.EquippedB.Id} and keeps progression level={w.Progression.Data.Level}.");
     }
     static ForgeCatalog registeredCatalog; static HeroDefinition[] originalHeroes;
-    static HeroDefinition TestHero(HeroDefinition look,PowerDefinition a,PowerDefinition b)
+    static HeroDefinition TestHero(HeroDefinition look,PowerDefinition a,PowerDefinition b,PowerDefinition secondary)
     {
         var hero=ScriptableObject.CreateInstance<HeroDefinition>(); hero.hideFlags=HideFlags.DontSave; hero.name="verification-hero";
-        hero.Id="verification-hero"; hero.DisplayName="VERIFICATION HERO"; hero.AvailablePowers=new[]{a,b}; hero.DefaultA=a; hero.DefaultB=b;
+        hero.Id="verification-hero"; hero.DisplayName="VERIFICATION HERO";
+        hero.AvailablePowers=new[]{a,b,secondary}; hero.DefaultA=a; hero.DefaultB=b;
         hero.CharacterPrefab=look.CharacterPrefab; hero.Portrait=look.Portrait; hero.Primary=look.Primary; hero.Secondary=look.Secondary; hero.VisualScale=look.VisualScale; hero.Animation=look.Animation;
         return hero;
     }

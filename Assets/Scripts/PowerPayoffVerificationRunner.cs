@@ -82,7 +82,7 @@ public sealed class PowerPayoffVerificationRunner : MonoBehaviour
         foreach(bool first in new[]{false,true})foreach(float mass in new[]{45f,400f})yield return Throw(first,mass);
         yield return Throw(false,400,true);
         yield return ThrowWall();
-        GameFlow.Instance.Home();yield return Enter("flight","telekinesis");
+        GameFlow.Instance.Home();yield return Enter("telekinesis","lightning");
         yield return Orbit();
         Log("LIMIT: real gameplay entry points and PhysX steps, not hardware input or human feel acceptance. FPS is in the separate PowerPayoffBenchmark run.");
     }
@@ -180,15 +180,17 @@ public sealed class PowerPayoffVerificationRunner : MonoBehaviour
         Check(probe.Hit==wall.GetComponent<Collider>()&&target.Health==1000,"Real wall collision blocks throw; NPC behind wall unharmed");
         Destroy(body.gameObject);Destroy(target.gameObject);Destroy(wall);yield return null;
     }
-    /// Orbit Throw (Flight + Telekinesis) was removed by the five-synergy cap. What this section protected, the Telekinesis LMB
-    /// path while a synergy is equipped, is now checked as: Flight + Telekinesis resolves no synergy, C is refused with no
-    /// cooldown, and LMB Telekinesis still performs its own paid grab (not a synergy release).
+    /// Orbit Throw was removed by the five-synergy cap. With two attack slots and Flight in the F slot,
+    /// a Telekinesis + Lightning attack pair has no synergy: C must refuse without a cooldown,
+    /// while LMB Telekinesis still performs its own paid grab and throw.
     IEnumerator Orbit()
     {
         var body=Crate(stage+new Vector3(0,1.5f,4));
         U.Select(Power("telekinesis"));Aim(body.worldCenterOfMass);
         var runner=U.SynergyRunner;
-        Check(U.Synergy==null&&!runner.TryActivate()&&runner.Cooldown==0&&runner.Feedback=="No synergy for this pair","Flight + Telekinesis: no synergy in the capped set; C refused with no cooldown.");
+        Check(U.EquippedSecondary?.Id=="flight"&&U.Synergy==null&&!runner.TryActivate()&&
+            runner.Cooldown==0&&runner.Feedback=="No synergy for this pair",
+            "Flight secondary and Telekinesis + Lightning attacks: no synergy in the capped set; C refused with no cooldown.");
         var tk=U.Powers.Find(p=>p.Definition.Id=="telekinesis");int charges=tk.Charges;
         Check(U.Use(tk)&&U.HeldBody==body&&tk.Charges==charges-1,"LMB Telekinesis performs its own paid grab.");
         yield return new WaitForSeconds(.3f);

@@ -4499,3 +4499,25 @@ and verified real ground contact restored it. Both processes kept the real
 save and Sidekick database hashes unchanged. The SDK source build immediately
 before this final addition had **0 warnings / 0 errors**; run it again on the
 final source. Power/mode and matched dense-street performance gates remain.
+
+### Universal climbing power, city and mode regression checkpoint — 2026-10-05
+
+One Unity Editor process at a time. In `Verification/Climbing/power-mode-regression`,
+Secondary.Run **41/0**, separate-process Reload **3/0**, HeroForge.VerifyExisting
+**124/0** and separate-process Reload **3/0** all exited 0. PowerPayoff then
+stopped at **85/1**, exit 1, because its historical fixture tried to equip
+Flight as an attack. The revised control uses Telekinesis + Lightning attacks,
+Flight secondary and the same no-synergy/paid Telekinesis checks. Fresh
+`Verification/Climbing/power-city-mode-fixed` PowerPayoff passed **89/0**,
+exit 0. City then stopped at **25/1**, exit 1: its in-memory verification hero
+listed the two test attacks but omitted the now-required secondary from its
+allowed roster. The production loadout gate correctly refused that invalid
+fixture. Adding the current secondary only to that temporary test hero made
+`Verification/Climbing/city-mode-fixed` City.Run pass **55/0** and separate-
+process Reload **5/0**, both exit 0. Mode.VerifyExisting passed **79/0** and
+separate-process Reload **2/0**, both exit 0. The exact failed and passing
+manifests/checks are retained. Every manifest reports unchanged real save and
+Sidekick database hashes before/after its process. The SDK source build after
+the verifier fixes reported **0 warnings / 0 errors**. No shipping hero roster,
+power assets, loadout gates or mode definitions were changed for these tests.
+Matched dense-street performance and final artifact audit remain.
