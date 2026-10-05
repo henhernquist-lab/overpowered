@@ -52,6 +52,18 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
             var profile=UnityEngine.Object.FindAnyObjectByType<ModeScreens>().Profile;var chosen=Resources.Load<ForgeCatalog>("ForgeCatalog").Hero(HeroId);
             Check(chosen.Id==HeroId&&profile.SetLoadout(chosen,profile.EquippedA,profile.EquippedB,chosen.Primary,chosen.Secondary),$"Hero under test selected through PlayerProgression.SetLoadout: {chosen.DisplayName}.");
         }
+        // This suite later proves that owned Fire and Ice cannot cast until equipped. Establish
+        // that negative-control loadout through the same pre-session ownership/equip gates.
+        var initialProfile=FindAnyObjectByType<ModeScreens>().Profile;
+        var strength=Resources.Load<PowerDefinition>("Powers/strength");
+        var telekinesis=Resources.Load<PowerDefinition>("Powers/telekinesis");
+        initialProfile.Data.Points=20;
+        if(!initialProfile.Owns(strength))Check(initialProfile.Buy(strength),"Own Strength for the unequipped-cast control.");
+        if(!initialProfile.Owns(telekinesis))Check(initialProfile.Buy(telekinesis),"Own Telekinesis for the unequipped-cast control.");
+        var initialLoadout=initialProfile.Data.Loadout;
+        Check(initialProfile.SetLoadout(initialProfile.SelectedHero,strength,telekinesis,initialProfile.EquippedSecondary,
+            initialLoadout.Primary,initialLoadout.Secondary),
+            "Establish Strength + Telekinesis attacks before testing unequipped Fire and Ice.");
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene("Prototype");
         var selected=W.Progression.SelectedHero;var model=selected!=null&&selected.CharacterPrefab!=null?selected.CharacterPrefab:P.Tuning.Model;
         Log($"HERO under test: {(selected!=null?selected.DisplayName:"(none)")} = {model.name}");

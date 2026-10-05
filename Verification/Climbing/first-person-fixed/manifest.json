@@ -1,0 +1,53 @@
+[
+  {
+    "entry": "FirstPersonVerification.Run",
+    "commit": "7ad8e3b6fe25b740f4a0942be1e771be1e84701a",
+    "status_before": "M .freebuff/project-id\n M Assets/Scripts/FirstPersonVerificationRunner.cs\n M Verification/Abilities/results.txt\n M Verification/Cameras/fixed-hero-paused.png\n M Verification/Cameras/fixed-hero.png\n M Verification/Cameras/fixed-villain-paused.png\n M Verification/Cameras/fixed-villain.png\n M Verification/Cameras/fixed.txt\n M Verification/FirstPerson/hero-first-fire.png\n M Verification/FirstPerson/hero-first-ice.png\n M Verification/FirstPerson/hero-first-telekinesis.png\n M Verification/FirstPerson/hero-third-fire.png\n M Verification/FirstPerson/hero-third-ice.png\n M Verification/FirstPerson/hero-third-telekinesis.png\n M Verification/FirstPerson/results.txt\n M Verification/FirstPerson/tight-space-first.png\n M Verification/FirstPerson/tight-space-look-down.png\n M Verification/FirstPerson/villain-first-fire.png\n M Verification/FirstPerson/villain-first-ice.png\n M Verification/FirstPerson/villain-first-telekinesis.png\n M Verification/FirstPerson/villain-third-fire.png\n M Verification/FirstPerson/villain-third-ice.png\n M Verification/FirstPerson/villain-third-telekinesis.png\n M Verification/Movement/camera.txt\n M Verification/Movement/mantle.txt\n M docs/secondary-loadout.md\n?? Verification/Climbing/core-regression/\n?? Verification/Climbing/saves/",
+    "started_utc": "2026-10-05T02:43:22.498579+00:00",
+    "save_before": "eec464258211eb2e09498061618cf57b67f63c57f77f20015e92990e616ce899",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Climbing/first-person-fixed/FirstPersonVerification.Run.log",
+    "pid": 4051,
+    "exit": 0,
+    "seconds": 152.29,
+    "pass": 211,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Scripts/FirstPersonVerificationRunner.cs\n M Verification/Abilities/results.txt\n M Verification/Cameras/fixed-hero-paused.png\n M Verification/Cameras/fixed-hero.png\n M Verification/Cameras/fixed-villain-paused.png\n M Verification/Cameras/fixed-villain.png\n M Verification/Cameras/fixed.txt\n M Verification/FirstPerson/city-first.png\n M Verification/FirstPerson/city-third.png\n M Verification/FirstPerson/hero-first-fire.png\n M Verification/FirstPerson/hero-first-ice.png\n M Verification/FirstPerson/hero-first-telekinesis.png\n M Verification/FirstPerson/hero-third-fire.png\n M Verification/FirstPerson/hero-third-ice.png\n M Verification/FirstPerson/hero-third-telekinesis.png\n M Verification/FirstPerson/results.txt\n M Verification/FirstPerson/tight-space-first.png\n M Verification/FirstPerson/tight-space-look-down.png\n M Verification/FirstPerson/villain-first-fire.png\n M Verification/FirstPerson/villain-first-ice.png\n M Verification/FirstPerson/villain-first-telekinesis.png\n M Verification/FirstPerson/villain-third-fire.png\n M Verification/FirstPerson/villain-third-ice.png\n M Verification/FirstPerson/villain-third-telekinesis.png\n M Verification/Movement/camera.txt\n M Verification/Movement/mantle.txt\n M docs/secondary-loadout.md\n?? Verification/Climbing/core-regression/\n?? Verification/Climbing/saves/"
+  },
+  {
+    "entry": "FirstPersonVerification.Reload",
+    "commit": "7ad8e3b6fe25b740f4a0942be1e771be1e84701a",
+    "status_before": "M .freebuff/project-id\n M Assets/Scripts/FirstPersonVerificationRunner.cs\n M Verification/Abilities/results.txt\n M Verification/Cameras/fixed-hero-paused.png\n M Verification/Cameras/fixed-hero.png\n M Verification/Cameras/fixed-villain-paused.png\n M Verification/Cameras/fixed-villain.png\n M Verification/Cameras/fixed.txt\n M Verification/FirstPerson/city-first.png\n M Verification/FirstPerson/city-third.png\n M Verification/FirstPerson/hero-first-fire.png\n M Verification/FirstPerson/hero-first-ice.png\n M Verification/FirstPerson/hero-first-telekinesis.png\n M Verification/FirstPerson/hero-third-fire.png\n M Verification/FirstPerson/hero-third-ice.png\n M Verification/FirstPerson/hero-third-telekinesis.png\n M Verification/FirstPerson/results.txt\n M Verification/FirstPerson/tight-space-first.png\n M Verification/FirstPerson/tight-space-look-down.png\n M Verification/FirstPerson/villain-first-fire.png\n M Verification/FirstPerson/villain-first-ice.png\n M Verification/FirstPerson/villain-first-telekinesis.png\n M Verification/FirstPerson/villain-third-fire.png\n M Verification/FirstPerson/villain-third-ice.png\n M Verification/FirstPerson/villain-third-telekinesis.png\n M Verification/Movement/camera.txt\n M Verification/Movement/mantle.txt\n M docs/secondary-loadout.md\n?? Verification/Climbing/core-regression/\n?? Verification/Climbing/first-person-fixed/\n?? Verification/Climbing/saves/",
+    "started_utc": "2026-10-05T02:45:54.987875+00:00",
+    "save_before": "eec464258211eb2e09498061618cf57b67f63c57f77f20015e92990e616ce899",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Climbing/first-person-fixed/FirstPersonVerification.Reload.log",
+    "pid": 4452,
+    "exit": 0,
+    "seconds": 25.16,
+    "pass": 5,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Scripts/FirstPersonVerificationRunner.cs\n M Verification/Abilities/results.txt\n M Verification/Cameras/fixed-hero-paused.png\n M Verification/Cameras/fixed-hero.png\n M Verification/Cameras/fixed-villain-paused.png\n M Verification/Cameras/fixed-villain.png\n M Verification/Cameras/fixed.txt\n M Verification/FirstPerson/city-first.png\n M Verification/FirstPerson/city-third.png\n M Verification/FirstPerson/hero-first-fire.png\n M Verification/FirstPerson/hero-first-ice.png\n M Verification/FirstPerson/hero-first-telekinesis.png\n M Verification/FirstPerson/hero-third-fire.png\n M Verification/FirstPerson/hero-third-ice.png\n M Verification/FirstPerson/hero-third-telekinesis.png\n M Verification/FirstPerson/reload.txt\n M Verification/FirstPerson/results.txt\n M Verification/FirstPerson/tight-space-first.png\n M Verification/FirstPerson/tight-space-look-down.png\n M Verification/FirstPerson/villain-first-fire.png\n M Verification/FirstPerson/villain-first-ice.png\n M Verification/FirstPerson/villain-first-telekinesis.png\n M Verification/FirstPerson/villain-third-fire.png\n M Verification/FirstPerson/villain-third-ice.png\n M Verification/FirstPerson/villain-third-telekinesis.png\n M Verification/Movement/camera.txt\n M Verification/Movement/mantle.txt\n M docs/secondary-loadout.md\n?? Verification/Climbing/core-regression/\n?? Verification/Climbing/first-person-fixed/\n?? Verification/Climbing/saves/"
+  },
+  {
+    "entry": "HumanoidVerification.Run",
+    "commit": "7ad8e3b6fe25b740f4a0942be1e771be1e84701a",
+    "status_before": "M .freebuff/project-id\n M Assets/Scripts/FirstPersonVerificationRunner.cs\n M Verification/Abilities/results.txt\n M Verification/Cameras/fixed-hero-paused.png\n M Verification/Cameras/fixed-hero.png\n M Verification/Cameras/fixed-villain-paused.png\n M Verification/Cameras/fixed-villain.png\n M Verification/Cameras/fixed.txt\n M Verification/FirstPerson/city-first.png\n M Verification/FirstPerson/city-third.png\n M Verification/FirstPerson/hero-first-fire.png\n M Verification/FirstPerson/hero-first-ice.png\n M Verification/FirstPerson/hero-first-telekinesis.png\n M Verification/FirstPerson/hero-third-fire.png\n M Verification/FirstPerson/hero-third-ice.png\n M Verification/FirstPerson/hero-third-telekinesis.png\n M Verification/FirstPerson/reload.txt\n M Verification/FirstPerson/results.txt\n M Verification/FirstPerson/tight-space-first.png\n M Verification/FirstPerson/tight-space-look-down.png\n M Verification/FirstPerson/villain-first-fire.png\n M Verification/FirstPerson/villain-first-ice.png\n M Verification/FirstPerson/villain-first-telekinesis.png\n M Verification/FirstPerson/villain-third-fire.png\n M Verification/FirstPerson/villain-third-ice.png\n M Verification/FirstPerson/villain-third-telekinesis.png\n M Verification/Movement/camera.txt\n M Verification/Movement/mantle.txt\n M docs/secondary-loadout.md\n?? Verification/Climbing/core-regression/\n?? Verification/Climbing/first-person-fixed/\n?? Verification/Climbing/saves/",
+    "started_utc": "2026-10-05T02:46:20.314468+00:00",
+    "save_before": "eec464258211eb2e09498061618cf57b67f63c57f77f20015e92990e616ce899",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Climbing/first-person-fixed/HumanoidVerification.Run.log",
+    "pid": 4671,
+    "exit": 1,
+    "seconds": 38.97,
+    "pass": 40,
+    "fail": 1,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Scripts/FirstPersonVerificationRunner.cs\n M Verification/Abilities/results.txt\n M Verification/Cameras/fixed-hero-paused.png\n M Verification/Cameras/fixed-hero.png\n M Verification/Cameras/fixed-villain-paused.png\n M Verification/Cameras/fixed-villain.png\n M Verification/Cameras/fixed.txt\n M Verification/FirstPerson/city-first.png\n M Verification/FirstPerson/city-third.png\n M Verification/FirstPerson/hero-first-fire.png\n M Verification/FirstPerson/hero-first-ice.png\n M Verification/FirstPerson/hero-first-telekinesis.png\n M Verification/FirstPerson/hero-third-fire.png\n M Verification/FirstPerson/hero-third-ice.png\n M Verification/FirstPerson/hero-third-telekinesis.png\n M Verification/FirstPerson/reload.txt\n M Verification/FirstPerson/results.txt\n M Verification/FirstPerson/tight-space-first.png\n M Verification/FirstPerson/tight-space-look-down.png\n M Verification/FirstPerson/villain-first-fire.png\n M Verification/FirstPerson/villain-first-ice.png\n M Verification/FirstPerson/villain-first-telekinesis.png\n M Verification/FirstPerson/villain-third-fire.png\n M Verification/FirstPerson/villain-third-ice.png\n M Verification/FirstPerson/villain-third-telekinesis.png\n M Verification/Humanoid/death.png\n M Verification/Humanoid/forward-flight.png\n M Verification/Humanoid/hover.png\n M Verification/Humanoid/idle-model.png\n M Verification/Humanoid/normal-jog.png\n M Verification/Humanoid/panic-20.png\n M Verification/Humanoid/panic-60.png\n M Verification/Humanoid/punch-impact.png\n M Verification/Humanoid/results.txt\n M Verification/Movement/camera.txt\n M Verification/Movement/mantle.txt\n M docs/secondary-loadout.md\n?? Verification/Climbing/core-regression/\n?? Verification/Climbing/first-person-fixed/\n?? Verification/Climbing/saves/"
+  }
+]

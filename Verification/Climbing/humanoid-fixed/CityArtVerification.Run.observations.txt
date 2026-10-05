@@ -1,0 +1,2 @@
+[ART VERIFY] MEASURED seed=2409: 1280x720 Editor actual renders, frames=232, seconds=5.002, FPS=46.38, p95=23.94ms, draw calls median/max=610/610, SetPass median=122; vs recorded 155 FPS=-70.1%; GPU=AMD Radeon Pro 5300.
+[ART VERIFY] MEASURED seed=3226: 1280x720 Editor actual renders, frames=213, seconds=5.017, FPS=42.46, p95=26.03ms, draw calls median/max=616/620, SetPass median=118; vs recorded 155 FPS=-72.6%; GPU=AMD Radeon Pro 5300.

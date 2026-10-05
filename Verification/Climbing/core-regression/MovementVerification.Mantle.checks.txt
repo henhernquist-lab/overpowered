@@ -1,0 +1,35 @@
+PASS Saved two attack powers and a separate secondary through progression.
+PASS Session received the exact three-slot build.
+PASS Valid ledge begins mantle height=0.7
+PASS CONTROL cannot restart an active mantle.
+PASS Mantle reaches supported top through CharacterController height=0.7
+PASS Mantle keeps physics root upright.
+PASS Valid ledge begins mantle height=1.6
+PASS CONTROL cannot restart an active mantle.
+PASS Mantle reaches supported top through CharacterController height=1.6
+PASS Mantle keeps physics root upright.
+PASS CONTROL ledge above maximum height refused.
+PASS CONTROL sheer face with no reachable top refused.
+PASS CONTROL backward motion cannot mantle forward obstacle.
+PASS CONTROL blocked standing headroom refused.
+PASS Geometric traversal probe has no per-call managed allocations.
+PASS CONTROL low ceiling along lift path refused.
+PASS CONTROL actual rooftop billboard blocks the standing capsule.
+PASS CONTROL antenna corner inside controller contact margin refused before movement.
+PASS Clear approach on same generated roof parapet begins mantle.
+PASS Generated roof lip reached and grounded; no authored traversal components.
+PASS Saved two attack powers and a separate secondary through progression.
+PASS Session received the exact three-slot build.
+PASS Reproducible route uses city seed2409.
+PASS Route starts on real quay street support.
+PASS Route ground jump accepted.
+PASS Route waypoint reached (-18.80, 0.00, -207.00) actual=(-19.05, 2.15, -207.00)
+PASS Low pier railing cleared onto real support.
+PASS Route waypoint reached (-14.00, 0.00, -246.80) actual=(-14.03, 0.20, -246.58)
+PASS Ground jump clears actual lighthouse-platform railing.
+PASS Route waypoint reached (-14.00, 0.00, -250.90) actual=(-14.00, 2.15, -250.67)
+PASS Roof approach starts a grounded jump.
+PASS Roof approach uses one air jump; third refused.
+PASS Actual Harbour Light podium rooftop arrival, Flight=False at (-14.00, 4.08, -252.83)
+PASS Arrival capsule is inside visible cylindrical podium footprint, radial=5.167, radius=6.000; not merely its box-collider corner.
+PASS Route uses intended traversal resources, Flight=False

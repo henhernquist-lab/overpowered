@@ -1,0 +1,5 @@
+ALLOC mantle blocked-headroom probe: 0 managed bytes /1000 calls.
+BLOCKED ROOF standing at=(9.00, 66.00, 121.35) collider=City Billboard bounds=Center: (9.17, 67.30, 121.77), Extents: (1.40, 1.40, 0.25)
+MANTLE generated lip result=Complete contact= bounds= normal=(0.00, 0.00, 0.00) stepOffset=0.3 count=1 grounded=True pos=(11.20, 65.98, 121.34) roof=Center: (9.00, 65.86, 125.00), Extents: (5.51, 0.04, 4.49)
+GEOMETRY roof-lip fixture building=Building 0 — Slate tower roof=Center: (9.00, 65.86, 125.00), Extents: (5.51, 0.04, 4.49) arrival=(11.20, 65.98, 121.34). Initial placement is a fixture, not the street-to-roof route proof.
+ROUTE seed2409 flight=False start=(-22.00, 0.13, -207.00) end=(-14.00, 4.08, -252.83) seconds=8.8000 vertical=3.9500 jumps=4 mantles=1 fuelUsed=0.0000. Podium roof only; no claim of access to the sheer upper lighthouse tower.

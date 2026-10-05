@@ -4453,3 +4453,27 @@ the street at (-73.23, 0.20, -136.31). This is one complete real warehouse
 route; it does not prove top-out on every roof or visual feel. Broader movement,
 camera, first-person, combat, humanoid, city and power regressions and matched
 performance remain pending at this checkpoint.
+
+### Universal climbing core regression checkpoint — 2026-10-04
+
+One Editor process at a time, with unchanged real progression-save and Sidekick
+database hashes in every manifest entry. At source `7ad8e3b`, the fresh
+`Verification/Climbing/core-regression` sequence passed Jump **126/0**, Mantle
+**35/0**, Flight **37/0**, movement Camera **37/0**, Backflip/Hurricane **64/0**
+and Camera **45/0** (all exit 0). It stopped on FirstPerson **204/1**, exit 1:
+the historical verifier tried to equip Flight as an attack, which the current
+two-attack-plus-F-secondary ownership gate correctly refused. No camera or
+climbing assertion failed. The failed log remains in the evidence directory.
+
+The FirstPerson verifier now equips Fire + Strength + Flight secondary through
+`PlayerProgression.SetLoadout` and checks all three slots on a fresh reload.
+`Verification/Climbing/first-person-fixed` passed FirstPerson.Run **211/0** and
+separate-process Reload **5/0**, both exit 0. Its following Humanoid run stopped
+at **40/1**, exit 1: an old negative control expected Fire to be unequipped
+while the new default attack loadout already equipped it. The verifier now
+establishes Strength + Telekinesis through the normal pre-session progression
+gate, then checks that owned but unequipped Fire and Ice cannot cast. The
+unchanged negative cast/payment/presentation controls passed. Fresh
+`Verification/Climbing/humanoid-fixed` passed Humanoid **70/0** and CityArt
+**31/0**, both exit 0. All rerun save/database hashes matched before and after.
+Power, mode and matched dense-street performance gates still remain.

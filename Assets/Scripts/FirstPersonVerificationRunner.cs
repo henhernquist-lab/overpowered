@@ -44,11 +44,13 @@ public sealed class FirstPersonVerificationRunner : MonoBehaviour
         {if(Time.realtimeSinceStartup>until)throw new Exception("Scene timeout");yield return null;}
         yield return null;yield return null;
     }
-    void Equip(string a,string b)
+    void Equip(string a,string b,string secondary=null)
     {
         var p=FindAnyObjectByType<ModeScreens>().Profile;p.Data.Points=20;
-        foreach(string id in new[]{a,b})if(!p.Owns(Power(id)))Check(p.Buy(Power(id)),"Unlock "+id+" through progression.");
-        Check(p.SetLoadout(Resources.Load<ForgeCatalog>("ForgeCatalog").Heroes[0],Power(a),Power(b),CityColor.Blue,CityColor.Cyan),"Equip "+a+" / "+b+" through saved loadout.");
+        foreach(string id in new[]{a,b,secondary})if(id!=null&&!p.Owns(Power(id)))Check(p.Buy(Power(id)),"Unlock "+id+" through progression.");
+        var utility=secondary!=null?Power(secondary):p.EquippedSecondary;
+        Check(p.SetLoadout(Resources.Load<ForgeCatalog>("ForgeCatalog").Heroes[0],Power(a),Power(b),utility,CityColor.Blue,CityColor.Cyan),
+            "Equip "+a+" / "+b+" with "+utility.Id+" secondary through saved loadout.");
     }
     void Place(Vector3 at)
     {var cc=W.Hero.GetComponent<CharacterController>();cc.enabled=false;W.Hero.transform.position=at;cc.enabled=true;W.Hero.ResetMotion();Physics.SyncTransforms();}
@@ -63,7 +65,9 @@ public sealed class FirstPersonVerificationRunner : MonoBehaviour
         if(Reload)
         {
             Check(profile.Data.FirstPerson,"SECOND PROCESS restores first-person preference in existing save.");
-            Check(profile.Data.Loadout.PowerA=="flight"&&profile.Data.Loadout.PowerB=="strength"&&profile.Data.Level>=1,"Existing loadout/progression preserved.");
+            Check(profile.Data.Loadout.PowerA=="fire"&&profile.Data.Loadout.PowerB=="strength"&&
+                profile.Data.Loadout.SecondaryPower=="flight"&&profile.Data.Level>=1,
+                "Existing two attacks, Flight secondary and progression preserved.");
             var fresh=new GameObject("Fresh control").AddComponent<PlayerProgression>();
             fresh.Initialize(Resources.Load<GameTuning>("GameTuning").Progression,Resources.LoadAll<PowerDefinition>("Powers"),Path.GetFullPath(Folder+"fresh-"+Guid.NewGuid()+".json"));
             Check(!fresh.Data.FirstPerson,"Fresh save CONTROL defaults to third-person.");
@@ -98,7 +102,7 @@ public sealed class FirstPersonVerificationRunner : MonoBehaviour
             GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);
             Check(FindAnyObjectByType<ModeScreens>().Profile.Data.FirstPerson,"Mode -> Home retains preference.");
         }
-        Equip("flight","strength");GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);
+        Equip("fire","strength","flight");GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);
         Check(Rig.FirstPerson,"Hero reload starts in saved view.");W.Hero.enabled=false;Place(new Vector3(0,153,0));Rig.SetLook(0,0);
         for(int i=0;i<50;i++){W.Hero.MoveAbility(Vector3.zero,true);yield return null;}
         Check(Rig.FlightFov<.1f,"Hover CONTROL has no forward-flight FOV increase.");

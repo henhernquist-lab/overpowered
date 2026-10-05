@@ -1,0 +1,41 @@
+[HUMANOID VERIFY] PASS Home camera retained.
+[HUMANOID VERIFY] PASS Player uses the selected hero's valid Humanoid (vector-rigged: 1 skinned mesh(es)), no capsule renderer.
+[HUMANOID VERIFY] PASS CONTROL: player collider unchanged: height=1.800m radius=.380m; NPC capsule=1.800m/.350m.
+[HUMANOID VERIFY] PASS Reference skinned vertices height=1.7658m, visual scale=1.0194, fitted height=1.8000m; exactly one authoritative player collider.
+[HUMANOID VERIFY] PASS SAME controller asset on player and all 33 civilians/cops/criminals.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Intermediate-speed CONTROL has two nonzero clip weights, not a snapped state.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Intermediate-speed CONTROL has two nonzero clip weights, not a snapped state.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Negative actual local velocity selects Standing Run Back.
+[HUMANOID VERIFY] PASS Normal charged punch accepted.
+[HUMANOID VERIFY] PASS Cooldown CONTROL refuses immediate second punch.
+[HUMANOID VERIFY] PASS Windup CONTROL has no premature force.
+[HUMANOID VERIFY] PASS Actual force and evaluated clip impact marker align within two rendered frames.
+[HUMANOID VERIFY] PASS Real force=1350 N·s, mass=45kg, velocity=17.192m/s, displacement=3.782m.
+[HUMANOID VERIFY] PASS Zero-charge CONTROL refuses punch.
+[HUMANOID VERIFY] PASS Rejected punches emit no extra impact.
+[HUMANOID VERIFY] PASS Original 1.25s charge recharge retained.
+[HUMANOID VERIFY] PASS Fuel exhausted after six seconds at configured burn rate.
+[HUMANOID VERIFY] PASS Grounded fuel recharge 0 -> 2.500 in 1s.
+[HUMANOID VERIFY] PASS Real NPC damage triggers Hit Reaction.
+[HUMANOID VERIFY] PASS Undamaged NPC CONTROL plays neither hit nor death.
+[HUMANOID VERIFY] PASS Lethal damage triggers Death, disables navigation/collision; no root 90-degree flip.
+[HUMANOID VERIFY] PASS Real player damage triggers Hit Reaction.
+[HUMANOID VERIFY] PASS Hover vs forward distinct: body difference=76.18deg, hand height 0.925->1.931m; maximum rendered-frame pitch change=5.07deg.
+[HUMANOID VERIFY] PASS Uncaptured live transition CONTROL stays below 20 degrees per rendered frame.
+[HUMANOID VERIFY] PASS Flight CONTROL gives the original flight head overlay full ownership after the gaze fade.
+[HUMANOID VERIFY] PASS Landing transition releases flight bones/root smoothly.
+[HUMANOID VERIFY] PASS Normal-jog CONTROL is not alarmed and has no panic overlay.
+[HUMANOID VERIFY] PASS Live fleeing civilian: Standing Run Forward at 1.45x, lean=23.46deg, raised/flailing hand Y=1.09..1.67m; head yaw=-19.0..42.2deg.
+[HUMANOID VERIFY] PASS Actual controller fall: 1 impact at 15.601m/s; Land clip played with single existing squash minY=0.785, recovered=1.000; collider=1.800m.
+[HUMANOID VERIFY] PASS CONTROL menu-open grounded jump refused.
+[HUMANOID VERIFY] PASS Existing grounded jump accepted.
+[HUMANOID VERIFY] PASS Jump presentation comes from real movement event.
+[HUMANOID VERIFY] PASS Fire Blast and Ice both configured for shared Casting Spell presentation.
+[HUMANOID VERIFY] FAIL System.Exception: Fire Blast and Ice owned through earned points but NOT equipped (session loadout fire + strength).
