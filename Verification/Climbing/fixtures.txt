@@ -7,6 +7,12 @@ PASS Attached climb moves at configured vertical speed.
 PASS Wall distance remains bounded while attached.
 MEASURED climb sideways=4.000m/s move=2.233m.
 PASS Sideways traversal follows the wall.
+PASS Climbing camera stays outside geometry and root upright, first-person=False
+PASS Climbing preserves center-screen aiming, first-person=False
+PASS Switch climbing camera view.
+PASS Climbing camera stays outside geometry and root upright, first-person=True
+PASS Climbing preserves center-screen aiming, first-person=True
+PASS Force Field can activate without detaching from a wall.
 PASS Wall latch did not spend or refill a fresh air jump.
 PASS Wall jump detaches immediately.
 PASS Wall jump pushes out and up in real motion.
@@ -20,7 +26,16 @@ PASS CONTROL small clutter cannot latch.
 PASS CONTROL moving or rigidbody car cannot latch.
 PASS CONTROL floor cannot latch.
 PASS CONTROL ceiling cannot latch.
+PASS CONTROL wall outside normal tolerance cannot latch.
+PASS CONTROL NPC capsule cannot latch.
+PASS Blocked top-out fixture latches below its lip.
+MEASURED blocked top-out pos=(0.00, 159.59, 0.31) refusal=standing capsule mantle=Complete.
+PASS CONTROL overhead obstruction prevents top-out without crossing solid geometry.
 PASS State cleanup fixture latches.
 PASS Pause clears climb state without moving the hero.
 PASS Unpaused hero can relatch legitimately.
 PASS Death clears climbing state.
+PASS Flight handoff fixture equips Flight through progression.
+PASS Flight handoff starts on a real attached wall.
+PASS Equipped Flight spends fuel once and cleanly takes movement from climbing.
+PASS Ending Flight against a wall does not latch without movement input.

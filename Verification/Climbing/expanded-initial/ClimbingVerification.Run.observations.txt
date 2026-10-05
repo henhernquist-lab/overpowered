@@ -1,0 +1,5 @@
+MEASURED climb vertical=5.000m/s rise=3.250m wallGap=0.110m.
+MEASURED climb sideways=4.000m/s move=2.233m.
+MEASURED top-out state-end pos=(0.00, 170.10, 1.64) result=Topping out/Complete.
+MEASURED top-out pos=(0.00, 169.83, 1.64) grounded=True result=Topping out/Complete.
+MEASURED blocked top-out pos=(0.00, 159.59, 0.31) refusal=standing capsule mantle=Complete.

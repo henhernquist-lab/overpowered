@@ -1,0 +1,36 @@
+[
+  {
+    "entry": "ClimbingVerification.Run",
+    "commit": "7b2d0a1865f5af153f8094d545cf0627fa48065b",
+    "status_before": "M .freebuff/project-id\n M Assets/Scripts/ClimbingVerificationRunner.cs\n M docs/secondary-loadout.md\n?? Verification/Climbing/saves/",
+    "started_utc": "2026-10-05T02:35:40.319738+00:00",
+    "save_before": "eec464258211eb2e09498061618cf57b67f63c57f77f20015e92990e616ce899",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Climbing/expanded-initial/ClimbingVerification.Run.log",
+    "pid": 1848,
+    "exit": 0,
+    "seconds": 42.3,
+    "pass": 36,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Scripts/ClimbingVerificationRunner.cs\n M Verification/Climbing/fixtures.txt\n M docs/secondary-loadout.md\n?? Verification/Climbing/saves/"
+  },
+  {
+    "entry": "ClimbingVerification.City",
+    "commit": "7b2d0a1865f5af153f8094d545cf0627fa48065b",
+    "status_before": "M .freebuff/project-id\n M Assets/Scripts/ClimbingVerificationRunner.cs\n M Verification/Climbing/fixtures.txt\n M docs/secondary-loadout.md\n?? Verification/Climbing/expanded-initial/\n?? Verification/Climbing/saves/",
+    "started_utc": "2026-10-05T02:36:22.759664+00:00",
+    "save_before": "eec464258211eb2e09498061618cf57b67f63c57f77f20015e92990e616ce899",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Climbing/expanded-initial/ClimbingVerification.City.log",
+    "pid": 2129,
+    "exit": 0,
+    "seconds": 27.89,
+    "pass": 21,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Scripts/ClimbingVerificationRunner.cs\n M Verification/Climbing/city.txt\n M Verification/Climbing/fixtures.txt\n M docs/secondary-loadout.md\n?? Verification/Climbing/expanded-initial/\n?? Verification/Climbing/saves/"
+  }
+]

@@ -4427,3 +4427,29 @@ Measured fixture speeds were exactly 5.000 m/s vertical and 4.000 m/s sideways
 at 120 Hz; the failed and passing logs are under `Verification/Climbing`.
 No claims yet about a complete street-to-roof route, active-climb FPS, camera
 comfort or all requested negative/regression gates.
+
+### Universal climbing expanded movement gates — 2026-10-04
+
+At core checkpoint `7b2d0a1`, expanded dedicated Unity suites ran sequentially
+with one Editor: `ClimbingVerification.Run` **36 PASS / 0 FAIL**, exit 0, and
+`ClimbingVerification.City` **21 PASS / 0 FAIL**, exit 0
+(`Verification/Climbing/expanded-initial`). The real save and Sidekick database
+hashes matched before/after both processes. The fixture measures 5.000 m/s
+vertical, 4.000 m/s sideways and 0.110 m capsule-to-wall gap while attached;
+wall jump pushes away/up and leaves the air jump unused. Both camera views
+kept the center ray aligned and avoided camera-geometry overlap in that fixture.
+Force Field activated while attached; Flight took over with one frame of fuel
+payment, and releasing Flight without movement input did not re-latch. Tiny
+clutter, a rigidbody car, floor, ceiling, a 22-degree tilted wall and an NPC
+failed to latch. A blocked overhead top-out stayed outside solid geometry;
+pause and death cleared climb state.
+
+On actual seed-2409 geometry, the hero climbed 3.750 m of a 106.13 m Downtown
+office tower, 3.792 m of a Residential terrace and 3.750 m of a Docks warehouse;
+each allowed 1.633 m of sideways movement. The Docks route began supported on
+the street outside latch range, moved into a generated wall to latch, topped
+onto its real roof, jumped off with exactly one air jump, and landed back on
+the street at (-73.23, 0.20, -136.31). This is one complete real warehouse
+route; it does not prove top-out on every roof or visual feel. Broader movement,
+camera, first-person, combat, humanoid, city and power regressions and matched
+performance remain pending at this checkpoint.
