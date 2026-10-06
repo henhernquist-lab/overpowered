@@ -4584,3 +4584,17 @@ slowdown is real, but a stable climbing-caused regression is not established.
 The performance gate remains **inconclusive**, especially because these idle
 samples do not measure sustained active climbing. Exact table and markers:
 `Verification/Climbing/performance-summary.md`.
+
+### Universal climbing handoff inventory — 2026-10-05
+
+The climbing branch is `codex/universal-climbing` from `652f7d4`. Durable
+checkpoints: `21fd8a5` baseline/city geometry, `7b2d0a1` movement and top-out,
+`7ad8e3b` handoffs/city route, `82fd3c7` camera and humanoid gates, `d69bf4b`
+air-jump/generated-wall controls, `1bf5ab7` power/city/mode controls,
+`693fcfb` presentation/probe/performance evidence, and `562f02b` refreshed
+Unity captures. `Verification/Climbing/changed-files.txt` lists each changed
+path relative to the base commit. Functional automation and the final SDK
+build pass, but active-climbing throughput and human camera/feel judgment
+remain open, so this is not a full performance or game-completion sign-off.
+The unrelated working-tree edits to `.freebuff/project-id` and
+`docs/secondary-loadout.md` were not staged or changed by this handoff.
