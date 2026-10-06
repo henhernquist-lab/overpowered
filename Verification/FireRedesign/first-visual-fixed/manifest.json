@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "FireVisualVerification.Run",
+    "commit": "9032da9c066bd8453a520e4dd5462929b6469baa",
+    "status_before": "M .freebuff/project-id\n M Assets/Scripts/FireBlastEffect.cs\n M Assets/Scripts/Powers/FireVisualVerificationRunner.cs\n M Assets/Scripts/PrototypeBootstrap.cs\n M docs/secondary-loadout.md\n?? Assets/Scripts/Powers/FireProjectilePool.cs\n?? Assets/Scripts/Powers/FireProjectilePool.cs.meta\n?? Verification/FireRedesign/final-results.txt\n?? Verification/FireRedesign/first-visual/",
+    "started_utc": "2026-10-06T09:05:29.524542+00:00",
+    "save_before": "394d47c07ae841b28e7288560ef698d68375344ed28ad5f58b88f9819562e367",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/FireRedesign/first-visual-fixed/FireVisualVerification.Run.log",
+    "pid": 29033,
+    "exit": 0,
+    "seconds": 31.23,
+    "pass": 7,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Scripts/FireBlastEffect.cs\n M Assets/Scripts/Powers/FireVisualVerificationRunner.cs\n M Assets/Scripts/PrototypeBootstrap.cs\n M docs/secondary-loadout.md\n?? Assets/Scripts/Powers/FireProjectilePool.cs\n?? Assets/Scripts/Powers/FireProjectilePool.cs.meta\n?? Verification/FireRedesign/final-results.txt\n?? Verification/FireRedesign/final-side.png\n?? Verification/FireRedesign/final-third-person.png\n?? Verification/FireRedesign/first-visual/"
+  }
+]

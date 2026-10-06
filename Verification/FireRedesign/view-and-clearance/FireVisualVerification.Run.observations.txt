@@ -1,0 +1,3 @@
+MEASURED fire launch: instances 12->12, size=1.000, colliderRadius=0.175, speed=28.000, material=visual children, meshes=1022->1022, materials=122->122.
+MEASURED fire active 1280x720: FPS=173.07, mean=5.778ms, whole-frame GC=0B/frame, frames=70, renderers=1772, particles=8, materials=122, meshes=1022.
+MEASURED fire after impact: projectile objects=12, materials=122, meshes=1022.

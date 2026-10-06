@@ -4801,3 +4801,61 @@ The earlier shoulder-camera sample was 209.00 FPS / 4.785 ms and is not a
 matched before/after comparator. Both manifests record unchanged real save
 and Sidekick database hashes. Human visual judgment and broader regression
 are pending.
+
+### Fire Blast pooled bolt and contact checkpoint — 2026-10-06
+
+`FireBlastEffect` now launches from a 12-slot, session-prebuilt
+`FireProjectilePool`. The root remains a 0.175 m-radius SphereCollider with
+Rigidbody gravity off and ContinuousDynamic collision; the pre-existing aim
+direction, origin overlap rejection, spawn sweep, 28 m/s velocity and
+`CombatImpact.Blast` call are unchanged. No PowerDefinition data changed.
+Each pooled root carries three renderers: a shared eight-sided compressed
+bolt mesh in `Palette/Fire`, a smaller leading Cream core using the same mesh,
+and a shared short red taper mesh. They orient with Rigidbody travel. Tiny
+travel embers use the existing fixed `ImpactParticlePool`.
+
+Four prebuilt Fire impact rings create a brief cream expansion and small
+warm flash at `Collision.GetContact(0).point`, with a bounded burst of pooled
+particles. The damage blast still happens at the original Rigidbody position
+and time. Near the first-person camera, only the visible bolt begins smaller
+and slightly below/right, converging toward the unchanged physical center
+ray. A nonalloc forward clearance check shrinks the mesh as it approaches a
+wall, without changing the sphere collider. The ring and ember count shrink
+for near-eye impacts. A close-wall launch does not request a new travel light;
+`WorldLightingDirector.ReleasePower` detaches a pooled projectile's prior
+follow light before that Transform can be reused. Shared palette materials
+and the two generated meshes are owned for one session, never per cast.
+
+The dedicated Fire verifier's most recent run passed **34/0**, exit 0, at
+`Verification/FireRedesign/close-wall-light/`. It proves prebuilt objects,
+unchanged collider/data, directional shared layers, real collision contact,
+nearby criminal damaged **1000→955** only after impact, outside-radius
+control **1000→1000**, four repeated casts with stable projectile/renderer/
+particle/material/mesh counts, first-person entry, and near-wall visual and
+physical interception. The first full FirstPerson regression after pooling
+passed **211/0** plus a separate-process **5/0** reload at
+`Verification/FireRedesign/early-first-person/`; this was before the latest
+near-eye light reduction, so a final rerun remains. The supplemental source
+build after the presentation change passed 0 warnings / 0 errors.
+
+In the same isolated side-camera 1280x720, ~0.4 s render fixture, baseline
+was **158.63 FPS / 6.304 ms** and the latest Fire run was **207.34 FPS /
+4.823 ms**; the intervening after runs varied from 168.59 to 201.87 FPS.
+This variability prevents a speedup claim. The active after frame had 1772
+renderers (baseline 1769), 8 ParticleSystems (same), 122 materials (one
+additional shared Fire VFX swatch) and 1022 meshes (two shared bolt/taper
+meshes versus 1020). Counts stayed fixed over repeated casts. The sampled
+render-loop thread showed 0 B/frame in both baseline and after; this does
+not measure Unity's whole-frame or one-time pool-build allocation.
+
+Intermediate verifier failures are retained: an initial **6/1** assumed the
+old renderer still lived on the projectile root; later **16/1** attempts used
+Cop radius fixtures that the live Heat system reconciled away. The harness
+now verifies the actual child-renderer structure and uses stable Criminal
+controls, without changing production damage or Heat logic. Captures are
+`Verification/FireRedesign/baseline-side.png`, `final-side.png`,
+`final-impact.png`, `final-first-person-launch.png` and
+`final-first-person-close-wall.png`. The close-wall view still fills with the
+nearby wall itself; Henry must judge whether the smaller bolt, short taper,
+impact and first-person visibility feel right. Full relevant regressions and
+final checkpoint commit remain pending.

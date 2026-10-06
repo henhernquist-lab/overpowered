@@ -1,0 +1,17 @@
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Fire data baseline: 0.35m sphere collider, 28m/s, 3m blast, 45 damage.
+PASS Fire projectile objects are all prebuilt before the first cast.
+PASS Real Fire Blast activation through the equip gate.
+PASS Physical Fire projectile exists in travel.
+PASS Pooled projectile retains the original 0.175m physics sphere and continuous collision.
+PASS Warm body, hot leading core and red taper use shared palette materials and shared bolt mesh.
+PASS Directional visible layers follow physical travel, with core ahead and taper behind.
+PASS Fire projectile finishes on the real wall collision.
+PASS Impact presentation starts only after the physical collision.
+PASS Pooled expanding ring is placed at the real collision contact point.
+PASS Repeated real Fire cast accepted through PowerUser, cast 0.
+PASS Damage waits for physical impact; near and outside-radius controls are unchanged during travel, cast 0.
+PASS One real wall collision, one pooled contact response, and projectile returned, cast 0.
+FAIL UnityEngine.MissingReferenceException: The object of type 'CityNpc' has been destroyed but you are still trying to access it.

@@ -1,0 +1,43 @@
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Fire data baseline: 0.35m sphere collider, 28m/s, 3m blast, 45 damage.
+PASS Fire projectile objects are all prebuilt before the first cast.
+PASS Real Fire Blast activation through the equip gate.
+PASS Physical Fire projectile exists in travel.
+PASS Pooled projectile retains the original 0.175m physics sphere and continuous collision.
+PASS Warm body, hot leading core and red taper use shared palette materials and shared bolt mesh.
+PASS Directional visible layers follow physical travel, with core ahead and taper behind.
+MEASURED fire launch: instances 12->12, size=1.000, colliderRadius=0.175, speed=28.000, material=visual children, meshes=1022->1022, materials=122->122.
+IMAGE Verification/FireRedesign/final-third-person.png
+IMAGE Verification/FireRedesign/final-side.png
+MEASURED fire active 1280x720: FPS=207.34, mean=4.823ms, whole-frame GC=0B/frame, frames=83, renderers=1772, particles=8, materials=122, meshes=1022.
+PASS Fire projectile finishes on the real wall collision.
+PASS Impact presentation starts only after the physical collision.
+PASS Pooled expanding ring is placed at the real collision contact point.
+IMAGE Verification/FireRedesign/final-impact.png
+MEASURED fire after impact: projectile objects=12, materials=122, meshes=1022.
+PASS Repeated real Fire cast accepted through PowerUser, cast 0.
+PASS Damage waits for physical impact; near and outside-radius controls are unchanged during travel, cast 0.
+PASS One real wall collision, one pooled contact response, and projectile returned, cast 0.
+MEASURED Fire radius control: impact=(0.00, 151.01, 15.85), near=(1.20, 150.00, 14.50) health 1000->955, outside=(4.50, 150.00, 14.50) health 1000->1000.
+PASS Real 3m Fire blast damages the nearby NPC only at impact; outside-radius NPC untouched.
+PASS Repeated real Fire cast accepted through PowerUser, cast 1.
+PASS Damage waits for physical impact; near and outside-radius controls are unchanged during travel, cast 1.
+PASS One real wall collision, one pooled contact response, and projectile returned, cast 1.
+PASS Repeated real Fire cast accepted through PowerUser, cast 2.
+PASS Damage waits for physical impact; near and outside-radius controls are unchanged during travel, cast 2.
+PASS One real wall collision, one pooled contact response, and projectile returned, cast 2.
+PASS Repeated real Fire cast accepted through PowerUser, cast 3.
+PASS Damage waits for physical impact; near and outside-radius controls are unchanged during travel, cast 3.
+PASS One real wall collision, one pooled contact response, and projectile returned, cast 3.
+PASS Four repeated casts reuse all projectile, renderer, particle, material and mesh resources.
+PASS Switch to real first-person Fire Blast camera.
+PASS First-person gameplay aim still begins at the eye camera.
+PASS First-person real Fire cast accepted.
+PASS First-person visible entry is camera-safe and below/right of the unchanged center aim ((0.58, 0.43, 1.62)).
+IMAGE Verification/FireRedesign/final-first-person-launch.png
+PASS Clear eye permits near-wall Fire cast.
+PASS Near-wall visual and physics launch stay on the camera side of the obstacle.
+PASS Nearby wall intercepts the real projectile and receives the contact effect.
+IMAGE Verification/FireRedesign/final-first-person-close-wall.png

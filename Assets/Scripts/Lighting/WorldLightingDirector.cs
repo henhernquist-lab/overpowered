@@ -113,6 +113,13 @@ public sealed class WorldLightingDirector : MonoBehaviour
         if(spec==null||!spec.Enabled||spec.Travel<=0||source==null||power==null||power.Length==0)return;
         int i=Slot(spec,source.position);LightPower(i,spec,source.position,config.PowerLights.MaxFollowSeconds,source);
     }
+    /// Stop a pooled projectile's travel light before its Transform is reused by a later cast.
+    public void ReleasePower(Transform source)
+    {
+        if(source==null||power==null)return;
+        for(int i=0;i<follow.Length;i++)if(follow[i]==source)
+        {follow[i]=null;expires[i]=Mathf.Min(expires[i],Time.time+config.PowerLights.FadeOutSeconds);}
+    }
     public void HoldPower(PowerLightSpec spec,Vector3 point)
     {
         if(spec==null||!spec.Enabled||power==null||power.Length==0)return;

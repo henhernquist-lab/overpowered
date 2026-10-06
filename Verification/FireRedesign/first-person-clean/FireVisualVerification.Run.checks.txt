@@ -1,0 +1,34 @@
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Fire data baseline: 0.35m sphere collider, 28m/s, 3m blast, 45 damage.
+PASS Fire projectile objects are all prebuilt before the first cast.
+PASS Real Fire Blast activation through the equip gate.
+PASS Physical Fire projectile exists in travel.
+PASS Pooled projectile retains the original 0.175m physics sphere and continuous collision.
+PASS Warm body, hot leading core and red taper use shared palette materials and shared bolt mesh.
+PASS Directional visible layers follow physical travel, with core ahead and taper behind.
+PASS Fire projectile finishes on the real wall collision.
+PASS Impact presentation starts only after the physical collision.
+PASS Pooled expanding ring is placed at the real collision contact point.
+PASS Repeated real Fire cast accepted through PowerUser, cast 0.
+PASS Damage waits for physical impact; near and outside-radius controls are unchanged during travel, cast 0.
+PASS One real wall collision, one pooled contact response, and projectile returned, cast 0.
+PASS Real 3m Fire blast damages the nearby NPC only at impact; outside-radius NPC untouched.
+PASS Repeated real Fire cast accepted through PowerUser, cast 1.
+PASS Damage waits for physical impact; near and outside-radius controls are unchanged during travel, cast 1.
+PASS One real wall collision, one pooled contact response, and projectile returned, cast 1.
+PASS Repeated real Fire cast accepted through PowerUser, cast 2.
+PASS Damage waits for physical impact; near and outside-radius controls are unchanged during travel, cast 2.
+PASS One real wall collision, one pooled contact response, and projectile returned, cast 2.
+PASS Repeated real Fire cast accepted through PowerUser, cast 3.
+PASS Damage waits for physical impact; near and outside-radius controls are unchanged during travel, cast 3.
+PASS One real wall collision, one pooled contact response, and projectile returned, cast 3.
+PASS Four repeated casts reuse all projectile, renderer, particle, material and mesh resources.
+PASS Switch to real first-person Fire Blast camera.
+PASS First-person gameplay aim still begins at the eye camera.
+PASS First-person real Fire cast accepted.
+PASS First-person visible entry is camera-safe and below/right of the unchanged center aim ((0.58, 0.43, 1.62)).
+PASS Clear eye permits near-wall Fire cast.
+PASS Near-wall visual and physics launch stay on the camera side of the obstacle.
+PASS Nearby wall intercepts the real projectile and receives the contact effect.

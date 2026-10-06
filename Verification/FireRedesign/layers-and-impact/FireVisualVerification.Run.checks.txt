@@ -1,0 +1,7 @@
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Fire data baseline: 0.35m sphere collider, 28m/s, 3m blast, 45 damage.
+PASS Real Fire Blast activation through the equip gate.
+PASS Physical Fire projectile exists in travel.
+PASS Fire projectile finishes on the real wall collision.

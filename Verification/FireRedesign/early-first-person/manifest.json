@@ -1,0 +1,36 @@
+[
+  {
+    "entry": "FirstPersonVerification.Run",
+    "commit": "9032da9c066bd8453a520e4dd5462929b6469baa",
+    "status_before": "M .freebuff/project-id\n M Assets/Scripts/FireBlastEffect.cs\n M Assets/Scripts/Powers/FireVisualVerificationRunner.cs\n M Assets/Scripts/PrototypeBootstrap.cs\n M docs/secondary-loadout.md\n?? Assets/Scripts/Powers/FireProjectilePool.cs\n?? Assets/Scripts/Powers/FireProjectilePool.cs.meta\n?? Verification/FireRedesign/final-impact.png\n?? Verification/FireRedesign/final-results.txt\n?? Verification/FireRedesign/final-side.png\n?? Verification/FireRedesign/final-third-person.png\n?? Verification/FireRedesign/first-visual-fixed/\n?? Verification/FireRedesign/first-visual/\n?? Verification/FireRedesign/layers-and-impact/",
+    "started_utc": "2026-10-06T09:07:55.203124+00:00",
+    "save_before": "394d47c07ae841b28e7288560ef698d68375344ed28ad5f58b88f9819562e367",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/FireRedesign/early-first-person/FirstPersonVerification.Run.log",
+    "pid": 29455,
+    "exit": 0,
+    "seconds": 146.87,
+    "pass": 211,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Scripts/FireBlastEffect.cs\n M Assets/Scripts/Powers/FireVisualVerificationRunner.cs\n M Assets/Scripts/PrototypeBootstrap.cs\n M Verification/FirstPerson/city-first.png\n M Verification/FirstPerson/city-third.png\n M Verification/FirstPerson/hero-first-fire.png\n M Verification/FirstPerson/hero-first-ice.png\n M Verification/FirstPerson/hero-first-telekinesis.png\n M Verification/FirstPerson/hero-third-fire.png\n M Verification/FirstPerson/hero-third-ice.png\n M Verification/FirstPerson/hero-third-telekinesis.png\n M Verification/FirstPerson/results.txt\n M Verification/FirstPerson/tight-space-look-down.png\n M Verification/FirstPerson/villain-first-fire.png\n M Verification/FirstPerson/villain-first-ice.png\n M Verification/FirstPerson/villain-first-telekinesis.png\n M Verification/FirstPerson/villain-third-fire.png\n M Verification/FirstPerson/villain-third-ice.png\n M Verification/FirstPerson/villain-third-telekinesis.png\n M docs/secondary-loadout.md\n?? Assets/Scripts/Powers/FireProjectilePool.cs\n?? Assets/Scripts/Powers/FireProjectilePool.cs.meta\n?? Verification/FireRedesign/final-impact.png\n?? Verification/FireRedesign/final-results.txt\n?? Verification/FireRedesign/final-side.png\n?? Verification/FireRedesign/final-third-person.png\n?? Verification/FireRedesign/first-visual-fixed/\n?? Verification/FireRedesign/first-visual/\n?? Verification/FireRedesign/layers-and-impact/"
+  },
+  {
+    "entry": "FirstPersonVerification.Reload",
+    "commit": "9032da9c066bd8453a520e4dd5462929b6469baa",
+    "status_before": "M .freebuff/project-id\n M Assets/Scripts/FireBlastEffect.cs\n M Assets/Scripts/Powers/FireVisualVerificationRunner.cs\n M Assets/Scripts/PrototypeBootstrap.cs\n M Verification/FirstPerson/city-first.png\n M Verification/FirstPerson/city-third.png\n M Verification/FirstPerson/hero-first-fire.png\n M Verification/FirstPerson/hero-first-ice.png\n M Verification/FirstPerson/hero-first-telekinesis.png\n M Verification/FirstPerson/hero-third-fire.png\n M Verification/FirstPerson/hero-third-ice.png\n M Verification/FirstPerson/hero-third-telekinesis.png\n M Verification/FirstPerson/results.txt\n M Verification/FirstPerson/tight-space-look-down.png\n M Verification/FirstPerson/villain-first-fire.png\n M Verification/FirstPerson/villain-first-ice.png\n M Verification/FirstPerson/villain-first-telekinesis.png\n M Verification/FirstPerson/villain-third-fire.png\n M Verification/FirstPerson/villain-third-ice.png\n M Verification/FirstPerson/villain-third-telekinesis.png\n M docs/secondary-loadout.md\n?? Assets/Scripts/Powers/FireProjectilePool.cs\n?? Assets/Scripts/Powers/FireProjectilePool.cs.meta\n?? Verification/FireRedesign/early-first-person/\n?? Verification/FireRedesign/final-impact.png\n?? Verification/FireRedesign/final-results.txt\n?? Verification/FireRedesign/final-side.png\n?? Verification/FireRedesign/final-third-person.png\n?? Verification/FireRedesign/first-visual-fixed/\n?? Verification/FireRedesign/first-visual/\n?? Verification/FireRedesign/layers-and-impact/",
+    "started_utc": "2026-10-06T09:10:22.356658+00:00",
+    "save_before": "394d47c07ae841b28e7288560ef698d68375344ed28ad5f58b88f9819562e367",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/FireRedesign/early-first-person/FirstPersonVerification.Reload.log",
+    "pid": 29772,
+    "exit": 0,
+    "seconds": 26.49,
+    "pass": 5,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Scripts/FireBlastEffect.cs\n M Assets/Scripts/Powers/FireVisualVerificationRunner.cs\n M Assets/Scripts/PrototypeBootstrap.cs\n M Verification/FirstPerson/city-first.png\n M Verification/FirstPerson/city-third.png\n M Verification/FirstPerson/hero-first-fire.png\n M Verification/FirstPerson/hero-first-ice.png\n M Verification/FirstPerson/hero-first-telekinesis.png\n M Verification/FirstPerson/hero-third-fire.png\n M Verification/FirstPerson/hero-third-ice.png\n M Verification/FirstPerson/hero-third-telekinesis.png\n M Verification/FirstPerson/results.txt\n M Verification/FirstPerson/tight-space-look-down.png\n M Verification/FirstPerson/villain-first-fire.png\n M Verification/FirstPerson/villain-first-ice.png\n M Verification/FirstPerson/villain-first-telekinesis.png\n M Verification/FirstPerson/villain-third-fire.png\n M Verification/FirstPerson/villain-third-ice.png\n M Verification/FirstPerson/villain-third-telekinesis.png\n M docs/secondary-loadout.md\n?? Assets/Scripts/Powers/FireProjectilePool.cs\n?? Assets/Scripts/Powers/FireProjectilePool.cs.meta\n?? Verification/FireRedesign/early-first-person/\n?? Verification/FireRedesign/final-impact.png\n?? Verification/FireRedesign/final-results.txt\n?? Verification/FireRedesign/final-side.png\n?? Verification/FireRedesign/final-third-person.png\n?? Verification/FireRedesign/first-visual-fixed/\n?? Verification/FireRedesign/first-visual/\n?? Verification/FireRedesign/layers-and-impact/"
+  }
+]

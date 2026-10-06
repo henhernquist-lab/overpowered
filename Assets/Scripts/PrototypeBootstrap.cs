@@ -28,6 +28,7 @@ public static class PrototypeBootstrap
         RenderSettings.ambientLight = new Color(.45f,.5f,.6f);
         var lighting=Resources.Load<WorldLighting>("WorldLighting");
         if(lighting!=null)new GameObject("World lighting").AddComponent<WorldLightingDirector>().Initialize(WorldSession.Instance,sun,camera,lighting);
+        FireProjectilePool.Create(WorldSession.Instance);
         if (!Application.isBatchMode) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; }
         new GameObject("Prototype HUD").AddComponent<PrototypeHUD>(); // F3 debug panel, pause + Tab menus, defeated notice
         new GameObject("Game HUD").AddComponent<GameHud>();
