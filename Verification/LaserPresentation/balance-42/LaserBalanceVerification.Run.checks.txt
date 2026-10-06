@@ -1,0 +1,24 @@
+PASS Save VECTOR with laser-eyes + strength through the loadout API.
+PASS Session equips laser-eyes + strength.
+PASS laser-eyes selected for LMB (key 1).
+PASS Laser starts fixed-window comparison through its loadout gate.
+PASS Real laser-eyes hit the single stationary target in its fixed input window.
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Real fire hit the single stationary target in its fixed input window.
+PASS Save VECTOR with lightning + strength through the loadout API.
+PASS Session equips lightning + strength.
+PASS lightning selected for LMB (key 1).
+PASS Real lightning hit the single stationary target in its fixed input window.
+PASS Save VECTOR with poison + strength through the loadout API.
+PASS Session equips poison + strength.
+PASS poison selected for LMB (key 1).
+PASS Real poison hit the single stationary target in its fixed input window.
+PASS Save VECTOR with strength + fire through the loadout API.
+PASS Session equips strength + fire.
+PASS Real strength hit the single stationary target in its fixed input window.
+PASS Save VECTOR with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+PASS Real basic-melee hit the single stationary target in its fixed input window.

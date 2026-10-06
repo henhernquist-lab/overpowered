@@ -1,0 +1,79 @@
+[FEEL] PASS Feel sandbox: runtime COPY of the free-play definition (0 civilians, no police) selected through GameFlow.
+[FEEL] PASS Feel sandbox: session with FeelDirector and the ThirdPersonCamera as the active feel camera.
+[FEEL] PASS Real jump dismisses the mission briefing (the card covers the crosshair).
+[FEEL] PASS FeelDirector reads GameTuning.Feel (the single source of feel values).
+[FEEL] PASS Configured hit pause 60 ms lies in the 50-80 ms band.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (hit pause ON).
+[FEEL] PASS Hit pause started at the impact.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+[FEEL] PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (hit pause ON).
+[FEEL] PASS Hit pause started at the impact.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+[FEEL] PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (hit pause ON).
+[FEEL] PASS Hit pause started at the impact.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+[FEEL] PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (hit pause ON).
+[FEEL] PASS Hit pause started at the impact.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+[FEEL] PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+[FEEL] PASS The first physics step after the impact waited out the pause (75.3, 74.8, 75.2, 78.1 ms) vs the control (15.5, 12.9, 9.5, 13.2 ms).
+[FEEL] PASS Pair 1 (same geometry, |Δrel| 0.00 mm): velocity after the pause == no-pause control (v1 |Δ| 0.0000 m/s of 20.386; v10 |Δ| 0.0000; ratio 1.0000 -> impulse applied once, not lost, not doubled).
+[FEEL] PASS Pair 2 (same geometry, |Δrel| 0.00 mm): velocity after the pause == no-pause control (v1 |Δ| 0.0000 m/s of 20.386; v10 |Δ| 0.0000; ratio 1.0000 -> impulse applied once, not lost, not doubled).
+[FEEL] PASS Pair 3 (same geometry, |Δrel| 0.00 mm): velocity after the pause == no-pause control (v1 |Δ| 0.0000 m/s of 20.386; v10 |Δ| 0.0000; ratio 1.0000 -> impulse applied once, not lost, not doubled).
+[FEEL] PASS Pair 4 (same geometry, |Δrel| 0.00 mm): velocity after the pause == no-pause control (v1 |Δ| 0.0000 m/s of 20.386; v10 |Δ| 0.0000; ratio 1.0000 -> impulse applied once, not lost, not doubled).
+[FEEL] PASS 4 pause/control pairs with identical geometry compared (of 4 pause trials).
+[FEEL] PASS Every trial's crate was really launched (impulse applied).
+[FEEL] PASS Real Super Strength punch accepted (windup 125 ms; force follows the windup).
+[FEEL] PASS Impact classified HEAVY from data: 1350 N·s >= Feel.HeavyImpulse 1000 (HEAVY impact 1350 N·s).
+[FEEL] PASS timeScale 0 at the impact callback (hit pause started in the impact frame 4837).
+[FEEL] PASS Impact cue: exactly one AudioSource plays the punch cue (1).
+[FEEL] PASS Breaking the crate added Heat (Hero side: destruction = Heat, no XP) -> the HUD Heat flash tween started ('+0.35') while still inside the pause.
+[FEEL] PASS Hit pause lasted 61.5 ms real time (configured 60 ms, frame-granular; last frame dt 3.3 ms).
+[FEEL] PASS Measured hit pause 61.5 ms is inside 50-80 ms (+5 ms frame tolerance).
+[FEEL] PASS timeScale restored to its previous value (1).
+[FEEL] PASS FixedUpdate during the pause: 0 steps counted up to restore (the impact frame's own steps may precede the callback).
+[FEEL] PASS Game time frozen through the pause (Time.time advanced 0.000 ms over 10 frames).
+[FEEL] PASS FixedUpdate resumes after the pause (6 steps in 0.1 s).
+[FEEL] PASS HUD Heat-delta tween advances DURING the pause (unscaled): translate y 0.00 -> -0.36 -> -0.61 -> -0.70 -> -0.77 -> -0.86 -> -0.92 -> -1.00 -> -1.08 -> -1.16 -> -1.21 px while timeScale was 0.
+[FEEL] PASS Camera FOV kick animates during the pause (unscaled): [1.77,1.67,1.59,1.50,1.44,1.35,1.27,1.19,1.14,1.08] deg.
+[FEEL] PASS The punch cue's AudioSource keeps playing through the pause (timeSamples +1879; AudioSources are not timeScale-bound; AudioDirector ties nothing to timeScale).
+[FEEL] PASS The cue fired during the pause is not re-triggered on resume (1 voice).
+[FEEL] PASS Particles: heavy-hit burst + prop-break burst emitted from the pool (bursts 8 -> 10).
+[FEEL] PASS BreakableProp shard logic unchanged: rigidbodies 517 -> 521 (crate removed, 5 shards).
+[FEEL] PASS Heavy hit sent one camera impulse.
+[FEEL] PASS At rest the camera FOV equals Camera.FieldOfView 65.
+[FEEL] PASS Mid-kick render used position rest+offset (0.00,-0.06,-0.05) (|0.079| m) and FOV 67.28 = 65 + 2.28.
+[FEEL] PASS After the render the camera transform and FOV are back at the follow pose (the aim ray and physics never see the kick).
+[FEEL] PASS Crosshair (aim) ray during an active kick is identical before and after the kicked render — gameplay aiming never sees the shake.
+[FEEL] PASS Back to rest after the window: zero offset, FOV exactly Camera.FieldOfView, camera-to-hero offset unchanged (no drift).
+[FEEL] PASS Real heavy punch for the pause-menu CONTROL.
+[FEEL] PASS Inside the hit pause (timeScale 0, TimeArbiter.HitPaused).
+[FEEL] PASS Pause menu opened DURING the hit pause: the hit pause is dropped, the menu holds timeScale 0.
+[FEEL] PASS Still paused 300 ms later (77 frames all timeScale 0): the expired hit pause did NOT unpause the game.
+[FEEL] PASS CONTROL: a heavy impact while paused is refused by the arbiter (timeScale stays 0).
+[FEEL] PASS Unpaused -> timeScale 1 on all 60 frames for 0.2 s (no stale hit-pause restore).
+[FEEL] PASS Real CombatImpact.Blast #1 with Super Strength stats (1350 N·s) hit crate 0 at 0 ms.
+[FEEL] PASS Real CombatImpact.Blast #2 with Super Strength stats (1350 N·s) hit crate 1 at 44 ms.
+[FEEL] PASS Real CombatImpact.Blast #3 with Super Strength stats (1350 N·s) hit crate 2 at 87 ms.
+[FEEL] PASS Real CombatImpact.Blast #4 with Super Strength stats (1350 N·s) hit crate 3 at 133 ms.
+[FEEL] PASS Real CombatImpact.Blast #5 with Super Strength stats (1350 N·s) hit crate 4 at 180 ms.
+[FEEL] PASS 5 heavy hits in 181 ms (< 200 ms): [0, 44, 87, 133, 180] ms.
+[FEEL] PASS Rate limit: ONE hit pause started, 4 refused (Feel.HitPauseMinInterval 0.4 s).
+[FEEL] PASS timeScale restored after the single pause.
+[FEEL] PASS CONTROL: after the min interval a new heavy hit pauses again (the limit is a rate, not a block).
+[FEEL] PASS Rusher contact damage 9 < Feel.HeavyIncomingDamage 15 -> light by data.
+[FEEL] PASS CONTROL light hit (Rusher): no hit pause, no camera impulse; timeScale 1 on all 209 sampled frames.
+[FEEL] PASS Brute contact damage 27 >= Feel.HeavyIncomingDamage 15 -> HEAVY by data.
+[FEEL] PASS Brute slam landing on the player: hit pause + camera impulse (HEAVY incoming 27).
+[FEEL] FAIL System.Exception: Inside the hit pause (knockback + idle frames frozen) the hero keeps ground contact [True,True,True] and a backflip input is ACCEPTED (Blocked: traversal input) — the combat contract 'a shoved player can still backflip' holds through the freeze.

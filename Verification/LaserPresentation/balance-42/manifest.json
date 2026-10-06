@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "LaserBalanceVerification.Run",
+    "commit": "4564ed441662180bd2ae4c246e9213ad1e28087f",
+    "status_before": "M .freebuff/project-id\n M Assets/Resources/Powers/laser-eyes.asset\n M Verification/Roster/darkness-rooted.png\n M Verification/Roster/eclipse-beam.png\n M Verification/Roster/force-field.png\n M Verification/Roster/laser-beam.png\n M Verification/Roster/lightning-chain.png\n M Verification/Roster/poison-spread.png\n M Verification/Roster/results.txt\n M Verification/Roster/solar-flare-beam.png\n M Verification/Roster/void-grasp.png\n M docs/secondary-loadout.md",
+    "started_utc": "2026-10-06T01:31:43.145390+00:00",
+    "save_before": "394d47c07ae841b28e7288560ef698d68375344ed28ad5f58b88f9819562e367",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/LaserPresentation/balance-42/LaserBalanceVerification.Run.log",
+    "pid": 18860,
+    "exit": 0,
+    "seconds": 39.32,
+    "pass": 24,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Resources/Powers/laser-eyes.asset\n M Verification/LaserPresentation/balance.txt\n M Verification/Roster/darkness-rooted.png\n M Verification/Roster/eclipse-beam.png\n M Verification/Roster/force-field.png\n M Verification/Roster/laser-beam.png\n M Verification/Roster/lightning-chain.png\n M Verification/Roster/poison-spread.png\n M Verification/Roster/results.txt\n M Verification/Roster/solar-flare-beam.png\n M Verification/Roster/void-grasp.png\n M docs/secondary-loadout.md"
+  }
+]

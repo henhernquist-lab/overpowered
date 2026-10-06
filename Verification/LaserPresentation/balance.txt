@@ -2,12 +2,12 @@ PASS Save VECTOR with laser-eyes + strength through the loadout API.
 PASS Session equips laser-eyes + strength.
 PASS laser-eyes selected for LMB (key 1).
 PASS Laser starts fixed-window comparison through its loadout gate.
-MEASURED balance laser-eyes: targetDistance=10.0m window=3.000s casts=1 attempts=0 delivered=114.00 DPS=38.00 netEnergyChange=60.00 range=26.0m targetAlive=True.
+MEASURED balance laser-eyes: targetDistance=10.0m window=3.008s casts=1 attempts=0 delivered=126.00 DPS=41.88 netEnergyChange=60.17 range=26.0m targetAlive=True.
 PASS Real laser-eyes hit the single stationary target in its fixed input window.
 PASS Save VECTOR with fire + strength through the loadout API.
 PASS Session equips fire + strength.
 PASS fire selected for LMB (key 1).
-MEASURED balance fire: targetDistance=10.0m window=3.000s casts=4 attempts=4 delivered=180.00 DPS=60.00 netEnergyChange=6.70 range=20.0m targetAlive=True.
+MEASURED balance fire: targetDistance=10.0m window=3.000s casts=4 attempts=4 delivered=135.00 DPS=45.00 netEnergyChange=6.70 range=20.0m targetAlive=True.
 PASS Real fire hit the single stationary target in its fixed input window.
 PASS Save VECTOR with lightning + strength through the loadout API.
 PASS Session equips lightning + strength.
@@ -21,7 +21,7 @@ MEASURED balance poison: targetDistance=10.0m window=3.000s casts=1 attempts=1 d
 PASS Real poison hit the single stationary target in its fixed input window.
 PASS Save VECTOR with strength + fire through the loadout API.
 PASS Session equips strength + fire.
-MEASURED balance strength: targetDistance=1.8m window=3.000s casts=4 attempts=419 delivered=140.00 DPS=46.67 netEnergyChange=0.00 range=close melee targetAlive=True.
+MEASURED balance strength: targetDistance=1.8m window=3.000s casts=4 attempts=415 delivered=140.00 DPS=46.67 netEnergyChange=0.00 range=close melee targetAlive=True.
 PASS Real strength hit the single stationary target in its fixed input window.
 PASS Save VECTOR with fire + ice through the loadout API.
 PASS Session equips fire + ice.

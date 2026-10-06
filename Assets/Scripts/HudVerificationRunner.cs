@@ -268,8 +268,10 @@ public sealed class HudVerificationRunner : MonoBehaviour
     IEnumerator DefaultLoadout(PowerDefinition a, PowerDefinition b)
     {
         var p = W.Powers;
-        Check(hud.Slots.Count == 3 && hud.Slots[0].Id == a.Id && hud.Slots[1].Id == b.Id && hud.Slots[2].Synergy == p.Synergy && p.Synergy == forge.Resolve(a, b),
-            $"Default loadout bar: {string.Join(" | ", hud.Slots.Select(s => s.Id + "[" + s.KeyText + "]"))} = EquippedA {a.Id} + EquippedB {b.Id} + synergy {p.Synergy?.Id}.");
+        Check(hud.Slots.Count == 4 && hud.Slots[0].Id == a.Id && hud.Slots[1].Id == b.Id &&
+              hud.Slots[2].Id == p.EquippedSecondary?.Id && hud.Slots[2].KeyText == "F" &&
+              hud.Slots[3].Synergy == p.Synergy && p.Synergy == forge.Resolve(a, b, p.EquippedSecondary),
+            $"Default loadout bar: {string.Join(" | ", hud.Slots.Select(s => s.Id + "[" + s.KeyText + "]"))} = EquippedA {a.Id} + EquippedB {b.Id} + secondary {p.EquippedSecondary?.Id} + synergy {p.Synergy?.Id}.");
         Check(!GameHud.Shown(hud.MeleeHint), "Strength equipped -> no unslotted basic-melee hint.");
         var flight = hud.Slots.FirstOrDefault(s => s.Flight);
         if (flight != null) Check(flight.FuelFill != null && flight.Pips.Count == 0 && Mathf.Abs(flight.FuelFraction - p.Flight.Fuel / p.Stats(p.Flight).Duration) < .01f, $"Flight slot shows fuel {flight.FuelFraction:P0} instead of charge pips.");
@@ -355,20 +357,26 @@ public sealed class HudVerificationRunner : MonoBehaviour
         Check(ui.Profile.SetLoadout(heroDefinition, fire, ice, loadout.Primary, loadout.Secondary), $"PlayerProgression.SetLoadout -> {heroDefinition.Id} / Fire + Ice.");
         var mode = Resources.LoadAll<GameModeDefinition>("Modes").First(m => m.Id == "hero");
         yield return Launch(mode);
-        var p = W.Powers; var synergy = forge.Resolve(fire, ice);
+        var p = W.Powers; var synergy = forge.Resolve(fire, ice, p.EquippedSecondary);
         Check(p.EquippedA == fire && p.EquippedB == ice && p.Synergy == synergy, $"New session equips Fire + Ice; synergy {synergy?.DisplayName}.");
-        Check(hud.Slots.Count == 3 && hud.Slots[0].Id == fire.Id && hud.Slots[1].Id == ice.Id && hud.Slots[2].Synergy == synergy, "Rebuilt bar: " + string.Join(" | ", hud.Slots.Select(s => s.Id + "[" + s.KeyText + "]")));
+        Check(hud.Slots.Count == 4 && hud.Slots[0].Id == fire.Id && hud.Slots[1].Id == ice.Id &&
+              hud.Slots[2].Id == p.EquippedSecondary?.Id && hud.Slots[2].KeyText == "F" && hud.Slots[3].Synergy == synergy,
+            "Rebuilt bar: " + string.Join(" | ", hud.Slots.Select(s => s.Id + "[" + s.KeyText + "]")));
         foreach (var slot in hud.Slots.Where(s => s.Power != null))
         {
             var d = slot.Power.Definition;
-            Check(slot.Glyph == d.MenuIcon && slot.Icon.Glyph == d.MenuIcon && slot.Color == palette.Colors[(int)d.PaletteColor] && slot.Pips.Count == p.Stats(slot.Power).Charges && slot.KeyText == HudBindings.PowerKey(p, slot.Power),
-                $"{d.Id} slot: icon {slot.Icon.Glyph} = MenuIcon, colour = palette {d.PaletteColor}, {slot.Pips.Count} pips = charges, key '{slot.KeyText}' (select key from PowerUser.Powers order).");
+            bool resourceMatches = slot.Flight
+                ? slot.FuelFill != null && slot.Pips.Count == 0
+                : slot.Pips.Count == p.Stats(slot.Power).Charges;
+            Check(slot.Glyph == d.MenuIcon && slot.Icon.Glyph == d.MenuIcon && slot.Color == palette.Colors[(int)d.PaletteColor] && resourceMatches && slot.KeyText == HudBindings.PowerKey(p, slot.Power),
+                $"{d.Id} slot: icon {slot.Icon.Glyph} = MenuIcon, colour = palette {d.PaletteColor}, resource {(slot.Flight ? "fuel" : slot.Pips.Count + " pips")}, key '{slot.KeyText}' (PowerUser binding).");
         }
-        var s2 = hud.Slots[2];
-        Check(s2.Icon.Glyph == synergy.Icon && s2.Color == palette.Colors[(int)synergy.Primary] && s2.KeyText == HudBindings.KeyName(forge.SynergyKey), $"Synergy slot: {synergy.DisplayName}, icon {synergy.Icon}, colour palette {synergy.Primary}, key '{s2.KeyText}'.");
-        Check(!hud.Slots.Any(s => s.Id == "strength" || s.Id == "flight"), "CONTROL: unequipped Flight/Strength have no slot.");
+        var s3 = hud.Slots[3];
+        Check(s3.Icon.Glyph == synergy.Icon && s3.Color == palette.Colors[(int)synergy.Primary] && s3.KeyText == HudBindings.KeyName(forge.SynergyKey), $"Synergy slot: {synergy.DisplayName}, icon {synergy.Icon}, colour palette {synergy.Primary}, key '{s3.KeyText}'.");
+        Check(!hud.Slots.Any(s => s.Id == "strength") && hud.Slots.Count(s => s.Id == p.EquippedSecondary?.Id) == 1,
+            "CONTROL: unequipped Strength has no slot; equipped secondary appears exactly once.");
         Check(GameHud.Shown(hud.MeleeHint), "Strength not equipped -> small unslotted 'E / RMB MELEE' hint shown.");
-        Check(hud.BuiltSignature.StartsWith("fire|ice|" + synergy.Id), "Bar signature: " + hud.BuiltSignature);
+        Check(hud.BuiltSignature.StartsWith("fire|ice|" + p.EquippedSecondary.Id + "|" + synergy.Id), "Bar signature: " + hud.BuiltSignature);
         yield return Composite(new Vector2Int(1920, 1080), "loadout-fire-ice-1920x1080");
         var fireSlot = SlotFor("fire"); var fireRuntime = fireSlot.Power;
         Check(fireSlot.CooldownFraction == 0f && fireSlot.LitPips == p.Stats(fireRuntime).Charges, $"CONTROL before use: Fire pips {fireSlot.LitPips}/{fireSlot.Pips.Count}, radial 0.");

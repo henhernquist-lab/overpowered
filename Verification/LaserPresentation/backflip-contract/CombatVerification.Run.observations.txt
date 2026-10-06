@@ -1,0 +1,4 @@
+[COMBAT] MEASURED Rusher approach: 19.00m -> 12.99m in 0.860s = 6.99 m/s (mean NavMeshAgent speed 6.99 m/s over 379 frames; configured 7); spawned max health 39.00.
+[COMBAT] MEASURED Gunner approach: 18.99m -> 13.00m in 1.090s = 5.50 m/s (mean NavMeshAgent speed 5.50 m/s over 589 frames; configured 5.5); spawned max health 65.00.
+[COMBAT] MEASURED Gunner held distance over 6.0s (3274 frames, player stationary): min 9.78m, max 11.99m, mean 10.31m (band 8-12m); it fired 3 telegraphed shots from there, player health 92 -> 68.
+[COMBAT] MEASURED Brute approach: 19.00m -> 13.00m in 2.000s = 3.00 m/s (mean NavMeshAgent speed 3.00 m/s over 1092 frames; configured 3); spawned max health 195.00.

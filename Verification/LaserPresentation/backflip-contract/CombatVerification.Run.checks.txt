@@ -1,0 +1,24 @@
+[COMBAT] PASS Roster asset maps Criminal->Robber, Cop->Gunner, PursuingHero->Brute; token budget 2, ring 4.5m.
+[COMBAT] PASS ShootImpactSeconds lies inside the played Shoot window.
+[COMBAT] PASS Sandbox: runtime COPY of the free-play definition (0 civilians, no police, no encounters) selected through GameFlow.
+[COMBAT] PASS Sandbox city: 0 NPCs, Hero side (Criminals hostile), 0 Heat stars.
+[COMBAT] PASS Found a straight, unobstructed test lane through a street crossing.
+[COMBAT] PASS Gunner HOLDS its band while the player stands still (min 9.78 / max 11.99 m, never inside the 4.5m melee ring) and still attacks (3 shots).
+[COMBAT] PASS Approach speed measured: Rusher 6.99 > Gunner 5.50 > Brute 3.00 m/s.
+[COMBAT] PASS Rusher measured speed 6.99 m/s within 10% of its asset value 7.
+[COMBAT] PASS Gunner measured speed 5.50 m/s within 10% of its asset value 5.5.
+[COMBAT] PASS Brute measured speed 3.00 m/s within 10% of its asset value 3.
+[COMBAT] PASS Spawned max health (Criminal role, 0 stars): Rusher 39.0 : Gunner 65.0 : Brute 195.0 = 0.60 : 1 : 3.00 (standard enemy 65).
+[COMBAT] PASS Rusher HIT: windup started at 1.59m holding an attack token (pool 1/2).
+[COMBAT] PASS Rusher HIT: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS Rusher HIT: 'Punch' clip playing from windup start at fitted rate 1.037 (impact marker scheduled for release).
+[COMBAT] PASS Rusher HIT: telegraph still visible at 60 % of the windup (scale (1.50, 0.05, 1.50)).
+[COMBAT] PASS Rusher HIT: telegraph renderer hidden and token returned at release.
+[COMBAT] PASS Rusher HIT: measured windup (release - windup start) = 451.8 ms vs asset 450 ms.
+[COMBAT] PASS Rusher HIT: 'Punch' cue playing at the enemy on the release frame (hit): Attacked fires at release, hit or miss.
+[COMBAT] PASS Rusher HIT: player standing still inside the attack took EXACTLY 6.00 (= Rusher damage 6.00) at release; horizontal distance from disc centre 0.59m vs radius 1.1+player 0.38 (margin -0.89m).
+[COMBAT] PASS Rusher HIT: clip impact marker lands within 2 rendered frames of the damage.
+[COMBAT] PASS Rusher HIT: no knockback CONTROL (moved 0.00m).
+[COMBAT] PASS Rusher BACKFLIP: windup started at 1.60m holding an attack token (pool 1/2).
+[COMBAT] PASS Rusher BACKFLIP: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] FAIL System.Exception: Rusher BACKFLIP: hero facing the enemy backflips at windup start ('Blocked: traversal input').

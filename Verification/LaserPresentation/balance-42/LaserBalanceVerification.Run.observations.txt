@@ -1,0 +1,6 @@
+MEASURED balance laser-eyes: targetDistance=10.0m window=3.008s casts=1 attempts=0 delivered=126.00 DPS=41.88 netEnergyChange=60.17 range=26.0m targetAlive=True.
+MEASURED balance fire: targetDistance=10.0m window=3.000s casts=4 attempts=4 delivered=135.00 DPS=45.00 netEnergyChange=6.70 range=20.0m targetAlive=True.
+MEASURED balance lightning: targetDistance=10.0m window=3.000s casts=2 attempts=2 delivered=48.00 DPS=16.00 netEnergyChange=0.00 range=24.0m targetAlive=True.
+MEASURED balance poison: targetDistance=10.0m window=3.000s casts=1 attempts=1 delivered=30.00 DPS=10.00 netEnergyChange=0.00 range=20.0m targetAlive=True.
+MEASURED balance strength: targetDistance=1.8m window=3.000s casts=4 attempts=415 delivered=140.00 DPS=46.67 netEnergyChange=0.00 range=close melee targetAlive=True.
+MEASURED balance basic-melee: targetDistance=1.8m window=3.000s casts=5 attempts=360 delivered=40.00 DPS=13.33 netEnergyChange=0.00 range=close melee targetAlive=True.

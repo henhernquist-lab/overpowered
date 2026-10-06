@@ -4701,3 +4701,67 @@ small Laser single-target increase; range, drain and cooldown need no change.
 The first balance run stopped at **17/1** on a duplicate Strength loadout,
 which was corrected without loosening a combat assertion. Raw measurements
 and limits are retained in `Verification/LaserPresentation/balance-fixed/`.
+
+### Laser Eyes balance and final verification — 2026-10-05
+
+The only Laser Eyes balance change is `Assets/Resources/Powers/laser-eyes.asset`
+damage **38 → 42 per second** (+10.5%). The fixed three-game-second target
+test measured **38.00 → 41.88 actual DPS** at 10 m. The 42 run also measured
+Fire Blast 45 DPS (three impacts in that window), Lightning 16, Poison 10,
+Strength 46.67 at 1.8 m, and basic melee 13.33 at 1.8 m. The earlier unchanged
+Fire test measured 60 DPS (four impacts); discrete Fire impact timing crosses
+the window boundary, so neither sample alone is a steady Fire DPS claim.
+Laser's measured net energy loss remained about **60 over three seconds**
+(32/s gross drain minus 12/s regeneration), with a 10-energy start cost,
+26 m range, 0.8 s post-channel cooldown and roughly five seconds of uptime
+from 100 energy. `LaserBalanceVerification.Run` at 42 passed **24/0**, exit 0;
+see `Verification/LaserPresentation/balance-42/`.
+
+The matched isolated 1280x720 Editor active-channel fixture measured
+**217.98 FPS / 4.588 ms / 2050 whole-frame GC B/frame before**, versus
+**230.97 FPS / 4.330 ms / 2042 B/frame after**. Host and fixture variability
+prevent a speedup claim, but this sample found no regression. Pooled renderer
+count is now seven instead of one; the after sample held **7→7** renderers,
+**8→8** ParticleSystems, **121→121** materials, **1021→1021** meshes and
+**16→16** generic lines during channeling. A separate 1,000-update visual
+loop allocated **0 managed bytes after warmup**; whole gameplay frames still
+allocate about 2 KB/frame. This is not a dense-city, standalone or hardware
+playtest benchmark. `RosterVerification.VerifyExisting` passed **199/0** and
+its separate-process `Reload` **3/0**, both exit 0, in
+`Verification/LaserPresentation/roster-42/`.
+
+Final relevant Unity checks, all one Editor process at a time, exited 0:
+`LaserPresentationVerification.Run` **36/0** on the final source;
+`FirstPersonVerification.Run` **211/0** and separate-process `Reload` **5/0**;
+`CameraVerification.Verify` **45/0**; `FeelVerification.Run` **143/0**;
+`HeroForgeVerification.VerifyExisting` **124/0** and separate-process `Reload`
+**3/0**; `CombatVerification.Run` **176/0**; `HudVerification.Run` **317/0**;
+`CityVerification.Run` **55/0** and separate-process `Reload` **5/0**;
+`PowerPayoffVerification.Run` **89/0**; `BackflipHurricaneVerification.Run`
+**64/0**. Manifests under `Verification/LaserPresentation/` preserve the
+per-run counts and unchanged real save / Sidekick database hashes. The last
+SDK build passed **0 warnings / 0 errors**.
+
+The broader sweep exposed two inherited test-contract issues, preserved as
+actual failures: Feel **78/1** initially rejected backflip input during hit
+pause; the hero now accepts Q during that specific combat pause while menu,
+death and ended-mode gates remain. Feel then passed 143/0 and the dedicated
+Backflip/Hurricane suite passed 64/0. Combat **23/1** tried backflip while its
+own input-suppressing menu was open; the harness now verifies menu-open
+refusal, closes it for the player action, then restores it. Combat passed
+176/0. HUD first stopped at **62/1**, then **287/1** and **291/1** as its old
+three-slot and charge-pip expectations encountered the actual four-slot
+attack/secondary/synergy bar. Its final positive and negative controls check
+the four slots, F secondary, Flight fuel and secondary-aware synergy; it
+passed 317/0. These intermediate failures are in the corresponding
+`final-regression*`, `backflip-contract`, `hud-*` and `combat-harness-fixed`
+directories and are not counted as passing runs.
+
+Final captures are `Verification/LaserPresentation/third-person-eye-beams.png`,
+`third-person-side.png`, `first-person-beam.png`, `first-person-close-wall.png`,
+`first-person-look-up.png` and `first-person-look-down.png`. The isolated
+test scene shows two narrow bright eye rays converging on the real target and
+a thin lower-right first-person entry joining the center ray. Human playtest
+still needs to judge beam thickness, brightness, pulse, impact satisfaction,
+first-person cleanliness and whether the small damage increase feels right.
+No dense-city visual/performance or full-game completion sign-off is claimed.

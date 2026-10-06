@@ -87,6 +87,8 @@ public sealed class SuperHeroController : MonoBehaviour
         powers.Channel(!Climbing && !AbilityDriving && !WorldSession.Instance.MenuOpen && !WorldSession.Instance.PlayerDead &&
             WorldSession.Instance.Mode?.Paused!=true && WorldSession.Instance.Mode?.Ended!=true &&
             (Input.GetMouseButton(0) || powers.ScriptedHold), Time.deltaTime);
+        // The backflip may be queued during a combat hit pause; its dash coroutine holds position until time resumes.
+        if(TimeArbiter.HitPaused&&!TimeArbiter.MenuPaused&&Input.GetKeyDown(KeyCode.Q))TryBackflip();
         if(AbilityDriving){Mantling=false;EndClimb();return;}
         if(Mantling){MoveMantle();return;}
         bool climbFlightFrame=false;
@@ -209,7 +211,10 @@ public sealed class SuperHeroController : MonoBehaviour
     // gravity arc. Repositioning only: no invincibility window, i-frames or dodge state is added.
     public bool TryBackflip()
     {
-        if(!TraversalInputAllowed||Mantling||Climbing){LastBackflipResult="Blocked: traversal input";return false;}
+        bool hitPauseInput=TimeArbiter.HitPaused&&!TimeArbiter.MenuPaused&&powers!=null&&WorldSession.Instance!=null&&
+            !WorldSession.Instance.MenuOpen&&!WorldSession.Instance.PlayerDead&&WorldSession.Instance.Mode?.Paused!=true&&
+            WorldSession.Instance.Mode?.Ended!=true;
+        if(!(TraversalInputAllowed||hitPauseInput)||Mantling||Climbing){LastBackflipResult="Blocked: traversal input";return false;}
         if(powers?.SynergyRunner!=null&&powers.SynergyRunner.Busy){LastBackflipResult="Blocked: synergy";return false;}
         if (powers == null || controller == null) { LastBackflipResult = "Blocked: no hero"; return false; }
         if (Time.time < backflipUntil) { LastBackflipResult = "Blocked: already flipping"; return false; }

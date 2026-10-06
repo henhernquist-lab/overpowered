@@ -60,6 +60,16 @@ public sealed class CombatVerificationRunner : MonoBehaviour
     IEnumerator Frames(int n){for(int i=0;i<n;i++)yield return null;}
     void Move(Vector3 position){var cc=W.Hero.GetComponent<CharacterController>();cc.enabled=false;W.Hero.transform.position=position;cc.enabled=true;W.Hero.ResetMotion();Physics.SyncTransforms();}
     void Face(Vector3 direction){direction.y=0;if(direction.sqrMagnitude>1e-4f)W.Hero.transform.rotation=Quaternion.LookRotation(direction.normalized);}
+    bool BackflipFromGameplay()
+    {
+        // The harness holds MenuOpen to suppress input, but a real player cannot backflip with the menu open.
+        Check(!W.Hero.TryBackflip()&&W.Hero.LastBackflipResult=="Blocked: traversal input",
+            "CONTROL menu-open backflip is refused before the gameplay attempt.");
+        W.MenuOpen=false;
+        bool accepted=W.Hero.TryBackflip();
+        W.MenuOpen=true;
+        return accepted;
+    }
     /// TEST HARNESS: restores the player's health through reflection (WorldSession has no heal API); logged wherever used.
     void Heal(){healthProperty.SetValue(W,W.Tuning.Movement.Health);}
     static float Flat(Vector3 a,Vector3 b){a.y=b.y=0;return Vector3.Distance(a,b);}
@@ -246,7 +256,7 @@ public sealed class CombatVerificationRunner : MonoBehaviour
         Check(telegraph!=null&&telegraph.Visible&&telegraph.Renderer.enabled&&telegraph.Renderer.gameObject.activeInHierarchy&&telegraph.Renderer.sharedMaterial==CityMaterials.Get(CityColor.Fire)&&telegraph.Renderer.GetComponent<Collider>()==null,
             $"{label}: telegraph renderer active at windup start, shared palette material '{telegraph?.Renderer.sharedMaterial.name}', no collider.");
         if(AudioDirector.Instance!=null)AudioDirector.Instance.StopAll();
-        if(trial==Trial.Backflip){Face(npc.transform.position-W.Hero.transform.position);Check(W.Hero.TryBackflip(),$"{label}: hero facing the enemy backflips at windup start ('{W.Hero.LastBackflipResult}').");}
+        if(trial==Trial.Backflip){Face(npc.transform.position-W.Hero.transform.position);Check(BackflipFromGameplay(),$"{label}: hero facing the enemy backflips at windup start ('{W.Hero.LastBackflipResult}').");}
         Vector3 perp=Vector3.Cross(Vector3.up,FlatDir(npc.CommittedDirection)).normalized;
         var cc=W.Hero.GetComponent<CharacterController>();
         bool captured=false,clipChecked=false;int releases=npc.Releases;float killAt=npc.WindupStartTime+a.WindupSeconds*.5f,wouldRelease=npc.WindupStartTime+a.WindupSeconds;
@@ -302,7 +312,7 @@ public sealed class CombatVerificationRunner : MonoBehaviour
         if(trial==Trial.Late)
         {
             Face(npc.transform.position-W.Hero.transform.position);float after=W.Health;
-            Check(W.Hero.TryBackflip(),$"{label} CONTROL: backflip only AFTER release (the {lost:F2} hit already landed at release).");
+            Check(BackflipFromGameplay(),$"{label} CONTROL: backflip only AFTER release (the {lost:F2} hit already landed at release).");
             yield return new WaitForSeconds(HeroAbilityTuning.BackflipSeconds);
             Check(W.Health<=after&&hp-W.Health>=npc.ContactDamage-.001f,$"{label} CONTROL: late backflip cannot undo it: health {hp:F0} -> {W.Health:F0} (the timing window is real).");
         }
