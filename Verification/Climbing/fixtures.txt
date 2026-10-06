@@ -39,6 +39,8 @@ PASS CONTROL wall outside normal tolerance cannot latch.
 PASS CONTROL NPC capsule cannot latch.
 ALLOC no-wall climbing probe: 0 managed bytes /1000 calls.
 PASS No-wall latch probe makes no per-call managed allocation.
+MEASURED no-wall climbing probe: 0.001031 ms/call over 10000 calls.
+PASS No-wall latch probe stays below 0.05 ms per call in this Editor run.
 PASS Unsupported overhang fixture latches below the lip.
 MEASURED unsupported overhang pos=(0.00, 159.42, 0.31) refusal=inside support.
 PASS CONTROL overhang without a standing point cannot top out or cross the solid lip.

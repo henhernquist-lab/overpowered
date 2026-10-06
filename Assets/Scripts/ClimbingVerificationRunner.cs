@@ -122,6 +122,12 @@ public sealed class ClimbingVerificationRunner : SessionVerificationRunner
         long probeBytes=GC.GetAllocatedBytesForCurrentThread()-beforeAlloc;
         Log($"ALLOC no-wall climbing probe: {probeBytes} managed bytes /1000 calls.");
         Check(probeBytes==0,"No-wall latch probe makes no per-call managed allocation.");
+        var probeWatch=System.Diagnostics.Stopwatch.StartNew();
+        for(int i=0;i<10000;i++)W.Hero.TryClimb(Vector3.forward);
+        probeWatch.Stop();
+        double probeMilliseconds=probeWatch.Elapsed.TotalMilliseconds/10000.0;
+        Log($"MEASURED no-wall climbing probe: {probeMilliseconds:F6} ms/call over 10000 calls.");
+        Check(probeMilliseconds<.05,"No-wall latch probe stays below 0.05 ms per call in this Editor run.");
         var unsupportedWall=Wall(new Vector3(0,156,1),new Vector3(6,12,.4f));
         var unsupportedLip=Wall(new Vector3(0,162.2f,1.2f),new Vector3(6,.1f,.6f));
         PlaceHero(new Vector3(0,160.2f,0),true);yield return null;

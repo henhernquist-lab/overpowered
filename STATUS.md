@@ -4521,3 +4521,66 @@ Sidekick database hashes before/after its process. The SDK source build after
 the verifier fixes reported **0 warnings / 0 errors**. No shipping hero roster,
 power assets, loadout gates or mode definitions were changed for these tests.
 Matched dense-street performance and final artifact audit remain.
+
+### Universal climbing presentation and performance audit — 2026-10-05
+
+`Verification/Climbing/probe-cost-final` passed ClimbingVerification.Run
+**51 PASS / 0 FAIL**, exit 0. Its no-wall geometry probe measured **0.001031
+ms/call over 10,000 calls** and **0 managed bytes in 1,000 calls** in this
+Editor. `Verification/Climbing/sidekick-regression` passed Sidekick.Run **102/0**
+and separate-process Reload **7/0**, both exit 0. It checked suit-material and
+colour-map continuity through freeze/thaw and third/first-person views. Every
+process retained the real progression save and vendor Sidekick database bytes.
+The final SDK build after the probe addition succeeded with **0 warnings and
+0 errors**.
+
+Matched `WorldProfile.Run` dense-street active-idle-hero samples all exited 0
+with one Editor, same seed 2409, 29 NPCs, city object counts, camera placement,
+1280x720 render and Ultra quality. Before (`Verification/World/climbing-before-host`,
+source `652f7d4`) measured **82.10/82.90/78.67 FPS**, **12.18/12.06/12.71 ms**
+and **1676/1676/1686 whole-frame GC bytes**; medians **82.10 FPS / 12.18 ms /
+1676 B**. First after (`climbing-after`, source `1bf5ab7`) measured
+**59.14/57.59/56.90 FPS**, **16.91/17.36/17.58 ms** and **1697/1713/1711 B**;
+medians **57.59 FPS / 17.36 ms / 1711 B**. An unchanged-code repeat
+(`climbing-after-repeat`) measured **60.46/55.30/55.27 FPS**,
+**16.54/18.08/18.09 ms** and **1686/1734/1723 B**; medians **55.30 FPS /
+18.08 ms / 1723 B**. Both after runs are materially slower; this is an
+**unresolved performance regression**, not an accepted pass. The first after
+profile's script-update marker was 0.946 vs 0.668 ms before, while Editor
+BatchModeUpdate was 8.539 vs 5.949 ms and multiple render/animation/physics
+markers and city generation rose as well. Host load differed. A general host
+slowdown is plausible but not proven; active-idle profiling never calls
+`TryClimb` without movement input. See `Verification/Climbing/performance-summary.md`
+for the exact matched evidence and limits. Real save and Sidekick DB hashes
+remain eec464258211eb2e09498061618cf57b67f63c57f77f20015e92990e616ce899
+and 21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b.
+
+Remaining: explain or recapture the whole-frame FPS gap under controlled host
+conditions and measure active-climbing gameplay throughput; visually playtest
+latch responsiveness, vertical/sideways speed, wall jump, roof top-out, both
+camera views and whether unlimited climbing makes the city too easy. The
+generated second-wall jump is a controlled reposition between buildings;
+the first warehouse street-to-roof-and-back segment is continuous. No claim
+that every seed, roof, or obstacle shape was tested. This climbing branch did
+not alter shipping mission pools or the separate Speed/Teleport packet.
+
+### Universal climbing performance follow-up — 2026-10-05
+
+Two additional `WorldProfile.Run` diagnostics at unchanged source `1bf5ab7`
+refine the preceding assessment. A hero-inactive run
+(`Verification/World/climbing-after-hero-off`) measured **79.18/71.35/73.11
+FPS** (median **73.11**), **12.63/14.01/13.68 ms** (median **13.68**) and
+**1684/1727/1772 GC B/frame** (median **1727**). An immediately adjacent
+active-idle-hero run (`Verification/World/climbing-after-active-adjacent`)
+measured **77.41/75.71/76.74 FPS** (median **76.74**),
+**12.92/13.21/13.03 ms** (median **13.03**) and **1693/1703/1691 GC B/frame**
+(median **1693**). Both exited 0 and preserved save/database hashes. The
+adjacent active run was **6.53% below** the before FPS median and **0.85 ms
+above** its frame-time median, with script update **0.664 ms** versus **0.668
+ms** before. The severe ~55–59 FPS slowdown in the first two after runs did
+not recur under unchanged code and active-hero conditions. Host/Editor
+variability is plausible but unproven. Keep all samples: the prior observed
+slowdown is real, but a stable climbing-caused regression is not established.
+The performance gate remains **inconclusive**, especially because these idle
+samples do not measure sustained active climbing. Exact table and markers:
+`Verification/Climbing/performance-summary.md`.
