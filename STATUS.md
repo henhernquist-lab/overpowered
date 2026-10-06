@@ -4771,3 +4771,33 @@ dedicated verification evidence), and `82b1327` (final canonical captures
 and exact changed-file inventory). The user's
 unrelated `.freebuff/project-id` and `docs/secondary-loadout.md` edits remain
 unstaged; this branch has not been pushed.
+
+## Fire Blast visual redesign baseline — 2026-10-06 (`codex/fire-blast-visual-redesign`)
+
+This branch starts from Laser Eyes checkpoint `e40f889`. No Fire gameplay data,
+aim ray, collision sweep or damage rule has changed. The current Fire effect
+creates a sphere primitive **per cast** at the real spawn-sweep result, scales
+it to **0.35 m** (SphereCollider local radius 0.5), assigns shared
+`Palette/Fire`, adds a Rigidbody and `PowerProjectile`, then schedules the
+object for destruction. It travels at **28 m/s** and explodes via
+`CombatImpact.Blast` at its physical collision; Fire data is 45 damage,
+3 m blast radius, 20 m range, 0.6 s cooldown, three charges and 10 energy.
+The existing `FeelDirector` can emit shared pooled debris only when that
+blast touches a body/NPC; wall contact has no dedicated Fire flash/ring.
+`WorldLightingDirector` already uses capped pooled short-lived power lights.
+The sphere mesh is Unity's shared primitive; materials and meshes did not
+grow in the one-cast baseline, but the root GameObject and components were
+allocated per cast. The new presentation will keep this physics sphere
+authoritative while pooling its visual and physical instance.
+
+Fresh `FireVisualVerification.Baseline` passed **7/0**, exit 0, twice in this
+persistent project. The unobstructed side view is
+`Verification/FireRedesign/baseline-side.png`; it confirms a plain orange
+ball with no directional trail. In that side-camera 1280x720, 0.4 s isolated
+Editor sample, **158.63 FPS / 6.304 ms** was measured, with 1769 renderers,
+8 ParticleSystems, 121 materials and 1020 meshes; sampled thread allocation
+was 0 B/frame during the render loop (it excludes cast-time allocation).
+The earlier shoulder-camera sample was 209.00 FPS / 4.785 ms and is not a
+matched before/after comparator. Both manifests record unchanged real save
+and Sidekick database hashes. Human visual judgment and broader regression
+are pending.

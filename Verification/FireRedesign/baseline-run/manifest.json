@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "FireVisualVerification.Baseline",
+    "commit": "e40f889950c5fa8b0c72e53eb5c23b5a573a5de1",
+    "status_before": "M .freebuff/project-id\n M docs/secondary-loadout.md\n?? Assets/Editor/FireVisualVerification.cs\n?? Assets/Scripts/Powers/FireVisualVerificationRunner.cs",
+    "started_utc": "2026-10-06T08:59:23.394252+00:00",
+    "save_before": "394d47c07ae841b28e7288560ef698d68375344ed28ad5f58b88f9819562e367",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/FireRedesign/baseline-run/FireVisualVerification.Baseline.log",
+    "pid": 28297,
+    "exit": 0,
+    "seconds": 37.47,
+    "pass": 7,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M docs/secondary-loadout.md\n?? Assets/Editor/FireVisualVerification.cs\n?? Assets/Editor/FireVisualVerification.cs.meta\n?? Assets/Scripts/Powers/FireVisualVerificationRunner.cs\n?? Assets/Scripts/Powers/FireVisualVerificationRunner.cs.meta\n?? Verification/FireRedesign/"
+  }
+]
