@@ -4615,3 +4615,43 @@ The full save and Sidekick database hashes stayed unchanged. The SDK source
 build after this verifier addition passed **0 warnings / 0 errors**. The
 remaining human playtest should judge climb feel, camera framing, roof lips,
 and city difficulty; no universal all-seed traversal claim is made.
+
+## Laser Eyes presentation Phase 0 — 2026-10-05 (`codex/laser-eyes-presentation`)
+
+This branch starts at climbing checkpoint `6fcc125`. The separate Fire Blast
+redesign packet has not been worked on here. The user's unrelated
+`.freebuff/project-id` and `docs/secondary-loadout.md` edits remain unstaged.
+
+Current `LaserEyesEffect` runs the existing channeled `PowerUser` hit ray. The
+asset has **38 damage/s**, **32 energy/s gross drain**, **10 energy start gate**,
+**0.8 s post-channel cooldown**, **26 m** range, **0.1 s** damage ticks, and a
+**0.07 m** LineRenderer width. Baseline energy regeneration is 12/s, so net
+loss while held is about 20/s and a full 100-energy bar lasts roughly 5 s.
+There is one pooled beam LineRenderer in `PowerVfx` (plus 16 reusable short
+lines), lit Standard palette Red, assigned by shared material reference. It
+begins at `PowerUser.AimOrigin + direction * 0.3 m`: near the hero's generic
+head-height origin in third person, camera origin in first person. It is not
+attached to two eye transforms. `PowerUser.FindTarget` selects the real hit;
+the visible endpoint uses that exact hit point. On NPC damage ticks only, the
+effect emits three Red cube-mesh particles from the fixed `ImpactParticlePool`.
+World/prop contact has no dedicated visible flare. The historical
+`Verification/Roster/laser-beam.png` shows a thin dark line; the new baseline
+capture is retained under `Verification/LaserPresentation/before-roster-measured/`.
+No per-cast VFX GameObject, mesh or material is constructed; the pre-existing
+aiming path uses `Physics.RaycastAll`, which may allocate independently of the
+beam presentation.
+
+A new identical-source benchmark in `RosterVerificationRunner` rendered the
+1280x720 isolated 150 m fixture during a real sustained channel:
+**217.98 FPS / 4.588 ms mean**, **2050 whole-frame GC B/frame**, LineRenderers
+**1→1**, ParticleSystems **8→8**, Materials **121→121**, Meshes **1021→1021**,
+PowerVfx line pool **16→16**. This is an Editor fixture with a manual render,
+not a dense-city or standalone FPS figure. `RosterVerification.VerifyExisting`
+got **66 PASS / 1 FAIL** (exit 1) after recording that sample: its Force Field
+fixture still tries to equip a secondary as an attack. Two earlier baseline
+runs failed sooner: **1/1** on a stale 11-power count (Teleport makes 12), then
+**38/1** on benchmark camera disabling, which made `Camera.main` null. The
+roster-count control now asserts the exact 12 IDs and the benchmark keeps the
+aim camera enabled. No gameplay or beam code has changed yet. All run
+manifests retain real save/Sidekick database hashes; these failures are not
+reported as passes. The SDK source build is **0 warnings / 0 errors**.

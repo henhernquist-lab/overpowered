@@ -1,0 +1,2 @@
+PASS Six new PowerDefinition assets exist: darkness, laser-eyes, lightning, force-field, speed, poison
+FAIL System.Exception: Shipping roster is 11 powers.

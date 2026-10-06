@@ -1,0 +1,67 @@
+PASS Six new PowerDefinition assets exist: darkness, laser-eyes, lightning, force-field, speed, poison
+PASS Shipping roster has the exact 12 data powers, including secondary Teleport.
+PASS VECTOR can equip all six new powers (AvailablePowers).
+PASS TITAN can equip all six new powers (AvailablePowers).
+PASS NOVA can equip all six new powers (AvailablePowers).
+PASS Fresh profile owns the six new powers at tier 0 with 0 points spent.
+PASS Laser Eyes is channeled: drain 32/s, start cost 10.
+PASS The other five new powers keep the instant charge pattern.
+PASS Force Field deals no damage (defensive).
+PASS Save VECTOR with darkness + strength through the loadout API.
+PASS Session equips darkness + strength.
+PASS darkness selected for LMB (key 1).
+PASS Two clear NavMesh points 12-17 m from the hero for live criminals.
+PASS CONTROL criminal placed >60 deg from the target's bearing.
+PASS Target criminal is really moving before the root.
+PASS Shadow Tendrils cast on the aimed live criminal: Darkness activated
+PASS Target rooted (not frozen); charge spent 2->1.
+PASS Root damage == data: 4.00 vs 4.
+PASS Tendrils visible from the pooled line set while rooted.
+PASS Rooted criminal does not move.
+PASS CONTROL: the un-rooted criminal keeps moving.
+PASS Root expires after its Duration.
+PASS Target moves again after the root ends.
+PASS A rooted enemy with the player in reach still starts its attack (root is not a stun).
+PASS CONTROL: a frozen enemy in reach starts no attack.
+PASS Last charge casts.
+PASS CONTROL: zero charges refused, target untouched.
+PASS CONTROL: aiming at empty sky refuses and spends nothing.
+PASS Save VECTOR with laser-eyes + strength through the loadout API.
+PASS Session equips laser-eyes + strength.
+PASS laser-eyes selected for LMB (key 1).
+PASS Laser Eyes starts a channel: Laser Eyes channeling
+PASS Starting the channel spends no charge and no up-front energy.
+PASS Beam damage per second matches data (0.1 s tick quantisation).
+PASS Energy drains at DrainPerSecond (net of regen) while held.
+PASS Heat rose by ONE assault (0.25) across ~10 ticks, not one per tick.
+PASS CONTROL: the cop beside the beam is untouched.
+PASS Beam visible while held.
+PASS Sustained channel performance sample stayed active.
+PASS Releasing ends the channel, starts the 0.8 s cooldown, hides the beam.
+PASS CONTROL: no damage after release.
+PASS CONTROL: restart during cooldown refused.
+PASS Restart after cooldown.
+PASS Selecting another power ends the channel.
+PASS Channel again to exhaust energy.
+PASS Channel ends by itself when energy runs out (energy 0.05) and its cooldown starts.
+PASS CONTROL: cannot start below the 10 start cost (energy 0.05).
+PASS Save VECTOR with lightning + strength through the loadout API.
+PASS Session equips lightning + strength.
+PASS lightning selected for LMB (key 1).
+PASS Criminals hostile, civilian not (hero side).
+PASS CONTROL: bolt at empty floor with no enemy within reach is refused, no charge spent: No valid target
+PASS Lightning cast at the first criminal: Lightning activated
+PASS Chain order = the six planted criminals (6 struck).
+PASS Jump 0: 24.00 damage (expected 24.00).
+PASS Jump 1: 20.40 damage (expected 20.40).
+PASS Jump 2: 17.34 damage (expected 17.34).
+PASS Jump 3: 14.74 damage (expected 14.74).
+PASS Jump 4: 12.53 damage (expected 12.53).
+PASS Jump 5: 10.65 damage (expected 10.65).
+PASS CONTROL: a 7th criminal in reach is untouched (MaxArcs cap).
+PASS CONTROL: the civilian nearest the first target is never arced to.
+PASS CONTROL: the criminal behind a wall (nearer than jump 2) is skipped.
+PASS CONTROL: the criminal 20 m from the chain is untouched.
+PASS One pooled arc line per strike.
+PASS Bolt at the floor beside an enemy jumps to the nearest enemy.
+FAIL System.Exception: Save VECTOR with force-field + strength through the loadout API.

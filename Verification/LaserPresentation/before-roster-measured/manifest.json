@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "RosterVerification.VerifyExisting",
+    "commit": "6fcc12567ddb222d6598f555484fb8cc441806de",
+    "status_before": "M .freebuff/project-id\n M Assets/Scripts/Powers/RosterVerificationRunner.cs\n M Verification/Roster/darkness-rooted.png\n M Verification/Roster/laser-beam.png\n M Verification/Roster/results.txt\n M docs/secondary-loadout.md\n?? Verification/LaserPresentation/",
+    "started_utc": "2026-10-06T01:12:26.925590+00:00",
+    "save_before": "394d47c07ae841b28e7288560ef698d68375344ed28ad5f58b88f9819562e367",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/LaserPresentation/before-roster-measured/RosterVerification.VerifyExisting.log",
+    "pid": 15886,
+    "exit": 1,
+    "seconds": 50.68,
+    "pass": 66,
+    "fail": 1,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Scripts/Powers/RosterVerificationRunner.cs\n M Verification/Roster/darkness-rooted.png\n M Verification/Roster/laser-beam.png\n M Verification/Roster/lightning-chain.png\n M Verification/Roster/results.txt\n M docs/secondary-loadout.md\n?? Verification/LaserPresentation/"
+  }
+]

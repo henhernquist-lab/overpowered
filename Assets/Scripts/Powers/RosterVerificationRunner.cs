@@ -7,6 +7,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using Unity.Profiling;
 
 /// See RosterVerification. Every power is equipped through PlayerProgression.SetLoadout (the Hero Forge save path), entered in
 /// a real Hero session, and fired through PowerUser.Use (LMB) / PowerUser.Channel (held LMB) against real CityNpc actors.
@@ -34,7 +35,9 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         }
         // ---------------------------------------------------------------- data
         Check(NewPowers.All(id => Power(id) != null), "Six new PowerDefinition assets exist: " + string.Join(", ", NewPowers));
-        Check(Resources.LoadAll<PowerDefinition>("Powers").Count(p => !p.Id.StartsWith("verification-")) == 11, "Shipping roster is 11 powers.");
+        var shipping=Resources.LoadAll<PowerDefinition>("Powers").Where(p=>!p.Id.StartsWith("verification-")).Select(p=>p.Id).ToArray();
+        var expected=new[]{"darkness","fire","flight","force-field","ice","laser-eyes","lightning","poison","speed","strength","telekinesis","teleport"};
+        Check(shipping.Length==expected.Length&&expected.All(shipping.Contains),"Shipping roster has the exact 12 data powers, including secondary Teleport.");
         foreach (var hero in F.Heroes) Check(NewPowers.All(id => Array.IndexOf(hero.AvailablePowers, Power(id)) >= 0), hero.DisplayName + " can equip all six new powers (AvailablePowers).");
         Check(NewPowers.All(id => profile.Owns(Power(id)) && profile.Tier(Power(id)) == 0) && profile.Data.Points == 0, "Fresh profile owns the six new powers at tier 0 with 0 points spent.");
         var laser = Power("laser-eyes");
@@ -157,6 +160,7 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         Check(Mathf.Abs((W.Heat - heat) - W.Tuning.Heat.AssaultHeat) < .02f, $"Heat rose by ONE assault ({W.Tuning.Heat.AssaultHeat}) across ~10 ticks, not one per tick.");
         Check(control.Health == 1000, "CONTROL: the cop beside the beam is untouched.");
         Check(PowerVfx.Get().BeamVisible, "Beam visible while held."); Capture("laser-beam.png");
+        yield return LaserThroughput();
         W.Powers.Channel(false, Time.deltaTime);
         Check(W.Powers.Channeling == null && Mathf.Approximately(rt.Cooldown, stats.Cooldown) && !PowerVfx.Get().BeamVisible, $"Releasing ends the channel, starts the {stats.Cooldown} s cooldown, hides the beam.");
         hp = cop.Health; yield return new WaitForSeconds(.4f);
@@ -173,6 +177,28 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         // does for Strength) to test the energy gate on its own, in the same frame the channel ran dry.
         float dry = W.Powers.Energy; rt.Cooldown = 0f;
         Check(dry < d.ResourceCost && !W.Powers.Use(rt) && W.Powers.Message == "Blocked: energy" && W.Powers.Channeling == null, $"CONTROL: cannot start below the {d.ResourceCost} start cost (energy {dry:F2}).");
+    }
+    IEnumerator LaserThroughput()
+    {
+        var target=new RenderTexture(1280,720,24);target.Create();
+        var camera=Cam;var previous=camera.targetTexture;
+        camera.targetTexture=target;
+        for(int i=0;i<20;i++){yield return null;W.Powers.Channel(true,Time.deltaTime);camera.Render();}
+        int materialsBefore=Resources.FindObjectsOfTypeAll<Material>().Length;
+        int meshesBefore=Resources.FindObjectsOfTypeAll<Mesh>().Length;
+        int linesBefore=FindObjectsByType<LineRenderer>().Length;
+        int particlesBefore=FindObjectsByType<ParticleSystem>().Length;
+        int poolBefore=PowerVfx.Get().PoolCount;
+        using(var gc=ProfilerRecorder.StartNew(ProfilerCategory.Memory,"GC Allocated In Frame",1))
+        {
+            var watch=System.Diagnostics.Stopwatch.StartNew();int frames=0;long bytes=0;
+            while(watch.Elapsed.TotalSeconds<1.2&&W.Powers.Channeling!=null)
+            {yield return null;W.Powers.Channel(true,Time.deltaTime);camera.Render();bytes+=gc.LastValue;frames++;}
+            watch.Stop();
+            Log($"MEASURED laser 1280x720 active channel: FPS={frames/watch.Elapsed.TotalSeconds:F2} mean={watch.Elapsed.TotalMilliseconds/frames:F3}ms whole-frame GC={bytes/frames}B/frame frames={frames} lineRenderers={linesBefore}->{FindObjectsByType<LineRenderer>().Length} particleSystems={particlesBefore}->{FindObjectsByType<ParticleSystem>().Length} materials={materialsBefore}->{Resources.FindObjectsOfTypeAll<Material>().Length} meshes={meshesBefore}->{Resources.FindObjectsOfTypeAll<Mesh>().Length} beamPool={poolBefore}->{PowerVfx.Get().PoolCount}.");
+            Check(frames>20&&W.Powers.Channeling!=null,"Sustained channel performance sample stayed active.");
+        }
+        camera.targetTexture=previous;target.Release();Destroy(target);
     }
     // ---------------------------------------------------------------- LIGHTNING: chain
     IEnumerator Lightning()
