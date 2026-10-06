@@ -4598,3 +4598,20 @@ build pass, but active-climbing throughput and human camera/feel judgment
 remain open, so this is not a full performance or game-completion sign-off.
 The unrelated working-tree edits to `.freebuff/project-id` and
 `docs/secondary-loadout.md` were not staged or changed by this handoff.
+
+### Universal climbing active-city throughput — 2026-10-05
+
+The final source was extended with a paired attached-idle/ascending/idle
+sample on the **real generated Downtown tower**. `ClimbingVerification.City`
+passed **29/0**, exit 0, at `Verification/Climbing/active-city-throughput/`.
+The three 1.2-second wall-clock Editor samples measured **131.16 / 133.06 /
+139.14 FPS**, **7.624 / 7.515 / 7.187 ms/frame**, and **1502 / 1397 / 1390
+whole-frame GC B/frame**. The ascending segment rose **6.667 m** and stayed
+attached; idle segments had zero rise. Active climb was within the adjacent
+idle throughput in this scene. The hero camera changes height, the verifier
+fixes `Time.captureDeltaTime` at 1/120, and this is not the earlier dense-street
+camera sample, so broader performance acceptance remains **inconclusive**.
+The full save and Sidekick database hashes stayed unchanged. The SDK source
+build after this verifier addition passed **0 warnings / 0 errors**. The
+remaining human playtest should judge climb feel, camera framing, roof lips,
+and city difficulty; no universal all-seed traversal claim is made.

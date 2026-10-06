@@ -34,6 +34,9 @@ Verification/Cameras/fixed.txt
 Verification/City/city.png
 Verification/City/results.txt
 Verification/City/seventh-power.asset
+Verification/Climbing/active-city-throughput/ClimbingVerification.City.checks.txt
+Verification/Climbing/active-city-throughput/ClimbingVerification.City.observations.txt
+Verification/Climbing/active-city-throughput/manifest.json
 Verification/Climbing/airjump-final/ClimbingVerification.City.checks.txt
 Verification/Climbing/airjump-final/ClimbingVerification.City.observations.txt
 Verification/Climbing/airjump-final/ClimbingVerification.Run.checks.txt

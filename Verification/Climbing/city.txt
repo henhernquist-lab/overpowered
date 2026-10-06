@@ -6,6 +6,12 @@ MEASURED generated Downtown building=Building 1 — Teal offices start=(-16.17, 
 PASS Generated Downtown facade climbs a full storey.
 MEASURED generated Downtown sideways=1.633m.
 PASS Generated Downtown facade supports sideways traversal.
+MEASURED generated Downtown attached idle-before: 131.16 FPS, 7.624 ms/frame, 1502 whole-frame GC B/frame, rise=0.000m, frames=158, attached=True.
+PASS Generated Downtown attached idle-before throughput sample maintains expected movement state.
+MEASURED generated Downtown attached ascending: 133.06 FPS, 7.515 ms/frame, 1397 whole-frame GC B/frame, rise=6.667m, frames=160, attached=True.
+PASS Generated Downtown attached ascending throughput sample maintains expected movement state.
+MEASURED generated Downtown attached idle-after: 139.14 FPS, 7.187 ms/frame, 1390 whole-frame GC B/frame, rise=0.000m, frames=167, attached=True.
+PASS Generated Downtown attached idle-after throughput sample maintains expected movement state.
 PASS Tall Downtown tower is included in generated-wall testing.
 PASS Generated district exists: Residential
 PASS Street approach latches onto real Residential structural wall.

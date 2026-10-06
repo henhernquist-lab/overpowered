@@ -1,0 +1,29 @@
+PASS Climbing build uses two attacks and a non-Flight secondary.
+PASS City route uses reproducible generated seed 2409.
+PASS Generated district exists: Downtown
+PASS Street approach latches onto real Downtown structural wall.
+PASS Generated Downtown facade climbs a full storey.
+PASS Generated Downtown facade supports sideways traversal.
+PASS Generated Downtown attached idle-before throughput sample maintains expected movement state.
+PASS Generated Downtown attached ascending throughput sample maintains expected movement state.
+PASS Generated Downtown attached idle-after throughput sample maintains expected movement state.
+PASS Tall Downtown tower is included in generated-wall testing.
+PASS Generated district exists: Residential
+PASS Street approach latches onto real Residential structural wall.
+PASS Generated Residential facade climbs a full storey.
+PASS Generated Residential facade supports sideways traversal.
+PASS Generated district exists: Docks
+PASS Street approach latches onto real Docks structural wall.
+PASS Docks route begins on genuine street support outside latch range.
+PASS Real street movement automatically latches to the generated warehouse wall.
+PASS Generated Docks facade climbs a full storey.
+PASS Generated Docks facade supports sideways traversal.
+PASS Generated Docks building route tops out on its real supported roof.
+PASS Generated roof launches a normal grounded jump for the return route.
+PASS After leaving the real roof, exactly one air jump remains available.
+PASS Generated street-to-roof route returns to ground.
+PASS A different generated Docks wall supports the return wall jump.
+PASS Real second-building wall jump detaches.
+PASS Second generated wall jump produces real away/up displacement.
+PASS Second generated wall jump retains exactly one air jump.
+PASS Second wall-jump route returns to street support.

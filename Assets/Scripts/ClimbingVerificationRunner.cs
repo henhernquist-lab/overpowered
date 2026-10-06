@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using Unity.Profiling;
 
 public sealed class ClimbingVerificationRunner : SessionVerificationRunner
 {
@@ -243,6 +244,12 @@ public sealed class ClimbingVerificationRunner : SessionVerificationRunner
             Log($"MEASURED generated {name} sideways={Vector3.Distance(new Vector3(raised.x,0,raised.z),new Vector3(W.Hero.transform.position.x,0,W.Hero.transform.position.z)):F3}m.");
             Check(W.Hero.Climbing&&Vector3.Distance(new Vector3(raised.x,0,raised.z),new Vector3(W.Hero.transform.position.x,0,W.Hero.transform.position.z))>1f,
                 $"Generated {name} facade supports sideways traversal.");
+            if(name=="Downtown")
+            {
+                yield return AttachedThroughput("idle-before",Vector2.zero);
+                yield return AttachedThroughput("ascending",new Vector2(0,1));
+                yield return AttachedThroughput("idle-after",Vector2.zero);
+            }
             if(name=="Docks")
             {
                 W.Hero.ScriptedClimbInput=new Vector2(0,1);
@@ -294,6 +301,25 @@ public sealed class ClimbingVerificationRunner : SessionVerificationRunner
             if(name=="Downtown")Check(roofY-start.y>45f,"Tall Downtown tower is included in generated-wall testing.");
         }
         yield return null;
+    }
+    IEnumerator AttachedThroughput(string label,Vector2 input)
+    {
+        W.Hero.ScriptedClimbInput=input;
+        yield return new WaitForSeconds(.2f);
+        Vector3 start=W.Hero.transform.position;
+        using var gc=ProfilerRecorder.StartNew(ProfilerCategory.Memory,"GC Allocated In Frame",1);
+        var watch=System.Diagnostics.Stopwatch.StartNew();
+        long bytes=0;int frames=0;
+        while(watch.Elapsed.TotalSeconds<1.2)
+        {
+            yield return null;
+            bytes+=gc.LastValue;frames++;
+        }
+        watch.Stop();
+        float rise=W.Hero.transform.position.y-start.y;
+        Log($"MEASURED generated Downtown attached {label}: {frames/watch.Elapsed.TotalSeconds:F2} FPS, {watch.Elapsed.TotalMilliseconds/frames:F3} ms/frame, {bytes/frames} whole-frame GC B/frame, rise={rise:F3}m, frames={frames}, attached={W.Hero.Climbing}.");
+        Check(W.Hero.Climbing&&(input.y>0?rise>4.5f:Mathf.Abs(rise)<.2f),
+            "Generated Downtown attached "+label+" throughput sample maintains expected movement state.");
     }
 }
 #endif
