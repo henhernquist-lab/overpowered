@@ -33,7 +33,7 @@ PASS Punch frozen prop accepted
 PASS Prop shatter restores physics: speed=52.76m/s
 PASS Freeze normal 65HP enemy
 PASS Lethal shatter punch
-PASS Lethal shatter CONTROL: dead body still launches at 32.12m/s, uses existing death lifetime
+PASS Lethal shatter CONTROL: dead body still launches at 32.02m/s, uses existing death lifetime
 PASS Freeze before non-melee CONTROL
 PASS Non-melee blast CONTROL: 7 damage, still frozen, no shatter
 PASS Thawed target punch
@@ -75,7 +75,7 @@ PASS Grab 400kg in third person
 PASS Second click throws despite zero charges/cooldown: already paid grab
 PASS Release costs no extra charges or energy
 PASS Throw contacts aimed NPC: 400kg, first=False
-PASS Throw MISS=0.0467m, contact=(-26.000, 201.084, 21.668), crosshair=(-26.026, 201.045, 21.669), AddForce impulse=10427.9N.s, measured velocity delta~10298.3N.s, displacement=14.03m
+PASS Throw MISS=0.0467m, contact=(-26.000, 201.084, 21.668), crosshair=(-26.026, 201.045, 21.669), AddForce impulse=10468.3N.s, measured velocity delta~10339.3N.s, displacement=13.98m
 PASS Impact damage=65.00, transferred impulse=2400.0N.s; off-axis CONTROL 0 damage
 PASS NPC launch speed=30.727m/s
 PASS Lethal throw preserves physical launch through death animation

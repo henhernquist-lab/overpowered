@@ -4765,3 +4765,9 @@ a thin lower-right first-person entry joining the center ray. Human playtest
 still needs to judge beam thickness, brightness, pulse, impact satisfaction,
 first-person cleanliness and whether the small damage increase feels right.
 No dense-city visual/performance or full-game completion sign-off is claimed.
+Durable branch checkpoints are `c718ad9` (baseline), `4564ed4` (pooled
+presentation and controls) and `68a16f4` (42 DPS, full regression fixes and
+dedicated verification evidence). The final canonical capture refresh and
+changed-file inventory are recorded in the following checkpoint. The user's
+unrelated `.freebuff/project-id` and `docs/secondary-loadout.md` edits remain
+unstaged; this branch has not been pushed.

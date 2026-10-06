@@ -242,10 +242,10 @@ PASS Actual forward motion drives bounded flight FOV.
 PASS Synergy FOV adds to flight instead of fighting it.
 PASS Non-flight recovery restores baseline FOV after flight/kick.
 BENCH same city position=(-28.00, 8.12, 4.00), matched world pitch=2.261, civilians=26, cops=7; 1280x720 camera+HUD, single render/frame.
-MEASURED third-person phase=0: FPS=91.75, draw calls=281.4.
-MEASURED first-person phase=1: FPS=88.23, draw calls=269.2.
-MEASURED first-person phase=2: FPS=83.13, draw calls=278.9.
-MEASURED third-person phase=3: FPS=75.29, draw calls=292.2.
+MEASURED third-person phase=0: FPS=93.95, draw calls=282.0.
+MEASURED first-person phase=1: FPS=94.35, draw calls=271.4.
+MEASURED first-person phase=2: FPS=90.41, draw calls=278.6.
+MEASURED third-person phase=3: FPS=88.39, draw calls=292.2.
 PASS Benchmark remained alive with populated city simulation running.
-PAIRED same-scene means: third-person=83.52 FPS; first-person=85.68 FPS; delta=2.59%. Perspective naturally changes visible geometry; no content or population cut.
+PAIRED same-scene means: third-person=91.17 FPS; first-person=92.38 FPS; delta=1.33%. Perspective naturally changes visible geometry; no content or population cut.
 LIMIT: gameplay/UI/collision entry points and actual rendered frames tested; no hardware B-key injection, human feel or standalone FPS claim.

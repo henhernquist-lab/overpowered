@@ -1,5 +1,5 @@
 PASS Six new PowerDefinition assets exist: darkness, laser-eyes, lightning, force-field, speed, poison
-PASS Shipping roster is 11 powers.
+PASS Shipping roster has the exact 12 data powers, including secondary Teleport.
 PASS VECTOR can equip all six new powers (AvailablePowers).
 PASS TITAN can equip all six new powers (AvailablePowers).
 PASS NOVA can equip all six new powers (AvailablePowers).
@@ -8,7 +8,7 @@ PASS Laser Eyes is channeled: drain 32/s, start cost 10.
 PASS The other five new powers keep the instant charge pattern.
 PASS Force Field deals no damage (defensive).
 DATA darkness: damage=4 force=0 range=22 duration=3.5 charges=2 recharge=5s cooldown=0.6s energy=15 drain=0/s colour=UiPurple
-DATA laser-eyes: damage=38 force=60 range=26 duration=0 charges=1 recharge=1s cooldown=0.8s energy=10 drain=32/s colour=Red
+DATA laser-eyes: damage=42 force=60 range=26 duration=0 charges=1 recharge=1s cooldown=0.8s energy=10 drain=32/s colour=Red
 DATA lightning: damage=24 force=300 range=24 duration=4 charges=2 recharge=2.5s cooldown=0.75s energy=18 drain=0/s colour=Cream
 DATA force-field: damage=0 force=0 range=0 duration=6 charges=1 recharge=12s cooldown=1s energy=25 drain=0/s colour=Blue
 DATA speed: damage=8 force=0 range=9 duration=0.18 charges=3 recharge=2.5s cooldown=0.35s energy=8 drain=0/s colour=Amber
@@ -19,18 +19,18 @@ PASS Session equips darkness + strength.
 PASS darkness selected for LMB (key 1).
 PASS Two clear NavMesh points 12-17 m from the hero for live criminals.
 PASS CONTROL criminal placed >60 deg from the target's bearing.
-MEASURED before root: target 6.93 m/s, control 6.70 m/s (live AI approaching a hero-side player).
+MEASURED before root: target 6.91 m/s, control 6.73 m/s (live AI approaching a hero-side player).
 PASS Target criminal is really moving before the root.
 PASS Shadow Tendrils cast on the aimed live criminal: Darkness activated
 PASS Target rooted (not frozen); charge spent 2->1.
 PASS Root damage == data: 4.00 vs 4.
 PASS Tendrils visible from the pooled line set while rooted.
 IMAGE Verification/Roster/darkness-rooted.png
-MEASURED during root (2.7 s): target 0.000 m/s, control 1.67 m/s.
+MEASURED during root (2.7 s): target 0.000 m/s, control 1.62 m/s.
 PASS Rooted criminal does not move.
 PASS CONTROL: the un-rooted criminal keeps moving.
 PASS Root expires after its Duration.
-MEASURED after root: target 0.95 m/s.
+MEASURED after root: target 0.88 m/s.
 PASS Target moves again after the root ends.
 PASS A rooted enemy with the player in reach still starts its attack (root is not a stun).
 PASS CONTROL: a frozen enemy in reach starts no attack.
@@ -43,21 +43,24 @@ PASS Session equips laser-eyes + strength.
 PASS laser-eyes selected for LMB (key 1).
 PASS Laser Eyes starts a channel: Laser Eyes channeling
 PASS Starting the channel spends no charge and no up-front energy.
-MEASURED 1 s hold: 1.007 s held, damage 35.88 (expected ~38.3 at 38/s), energy drained 20.21 (expected ~20.1 = drain 32/s - regen 12/s), Heat +0.250.
+MEASURED 1 s hold: 1.002 s held, damage 38.27 (expected ~42.1 at 42/s), energy drained 20.11 (expected ~20.0 = drain 32/s - regen 12/s), Heat +0.250.
 PASS Beam damage per second matches data (0.1 s tick quantisation).
 PASS Energy drains at DrainPerSecond (net of regen) while held.
 PASS Heat rose by ONE assault (0.25) across ~10 ticks, not one per tick.
 PASS CONTROL: the cop beside the beam is untouched.
 PASS Beam visible while held.
 IMAGE Verification/Roster/laser-beam.png
+IMAGE Verification/Roster/laser-beam-side.png
+MEASURED laser 1280x720 active channel: FPS=230.97 mean=4.330ms whole-frame GC=2042B/frame frames=278 lineRenderers=7->7 particleSystems=8->8 materials=121->121 meshes=1021->1021 beamPool=16->16.
+PASS Sustained channel performance sample stayed active.
 PASS Releasing ends the channel, starts the 0.8 s cooldown, hides the beam.
 PASS CONTROL: no damage after release.
 PASS CONTROL: restart during cooldown refused.
 PASS Restart after cooldown.
 PASS Selecting another power ends the channel.
 PASS Channel again to exhaust energy.
-PASS Channel ends by itself when energy runs out (energy 0.07) and its cooldown starts.
-PASS CONTROL: cannot start below the 10 start cost (energy 0.07).
+PASS Channel ends by itself when energy runs out (energy 0.04) and its cooldown starts.
+PASS CONTROL: cannot start below the 10 start cost (energy 0.04).
 ---- LIGHTNING (chain)
 PASS Save VECTOR with lightning + strength through the loadout API.
 PASS Session equips lightning + strength.
@@ -80,9 +83,8 @@ PASS One pooled arc line per strike.
 IMAGE Verification/Roster/lightning-chain.png
 PASS Bolt at the floor beside an enemy jumps to the nearest enemy.
 ---- FORCE FIELD (defensive)
-PASS Save VECTOR with force-field + strength through the loadout API.
-PASS Session equips force-field + strength.
-PASS force-field selected for LMB (key 1).
+PASS Save VECTOR with Strength + Fire attacks and force-field secondary through the loadout API.
+PASS Session caches the valid secondary force-field in its F slot.
 PASS Force Field raised: 60 absorb for 6 s.
 IMAGE Verification/Roster/force-field.png
 PASS 25 damage fully absorbed: health 100, field 35, 0 damage events.
@@ -94,9 +96,8 @@ PASS CONTROL: unblockable damage (kill plane path) bypasses the field.
 PASS Field expires after its Duration.
 PASS CONTROL: expired field absorbs nothing.
 ---- SPEED (burst dash)
-PASS Save VECTOR with speed + strength through the loadout API.
-PASS Session equips speed + strength.
-PASS speed selected for LMB (key 1).
+PASS Save VECTOR with Strength + Fire attacks and speed secondary through the loadout API.
+PASS Session caches the valid secondary speed in its F slot.
 PASS Dash starts: Speed activated
 MEASURED dash: 9.00 m horizontal (data 9 m in 0.18 s), 0.03 m vertical, direction z 9.00.
 PASS Dash covers its Range along the aim, through the enemy in its path.
@@ -139,6 +140,7 @@ PASS Pair darkness + poison -> none (only capped synergies allowed).
 PASS Pair darkness + speed -> none (only capped synergies allowed).
 PASS Pair darkness + strength -> none (only capped synergies allowed).
 PASS Pair darkness + telekinesis -> void-grasp (only capped synergies allowed).
+PASS Pair darkness + teleport -> none (only capped synergies allowed).
 PASS Pair fire + force-field -> none (only capped synergies allowed).
 PASS Pair fire + laser-eyes -> solar-flare (only capped synergies allowed).
 PASS Pair fire + lightning -> none (only capped synergies allowed).
@@ -156,6 +158,7 @@ PASS Pair force-field + poison -> none (only capped synergies allowed).
 PASS Pair force-field + speed -> none (only capped synergies allowed).
 PASS Pair force-field + strength -> none (only capped synergies allowed).
 PASS Pair force-field + telekinesis -> none (only capped synergies allowed).
+PASS Pair force-field + teleport -> none (only capped synergies allowed).
 PASS Pair ice + laser-eyes -> none (only capped synergies allowed).
 PASS Pair ice + lightning -> none (only capped synergies allowed).
 PASS Pair ice + poison -> none (only capped synergies allowed).
@@ -165,15 +168,19 @@ PASS Pair laser-eyes + poison -> none (only capped synergies allowed).
 PASS Pair laser-eyes + speed -> none (only capped synergies allowed).
 PASS Pair laser-eyes + strength -> none (only capped synergies allowed).
 PASS Pair laser-eyes + telekinesis -> none (only capped synergies allowed).
+PASS Pair laser-eyes + teleport -> none (only capped synergies allowed).
 PASS Pair lightning + poison -> none (only capped synergies allowed).
 PASS Pair lightning + speed -> none (only capped synergies allowed).
 PASS Pair lightning + strength -> none (only capped synergies allowed).
 PASS Pair lightning + telekinesis -> none (only capped synergies allowed).
+PASS Pair lightning + teleport -> none (only capped synergies allowed).
 PASS Pair poison + speed -> none (only capped synergies allowed).
 PASS Pair poison + strength -> none (only capped synergies allowed).
 PASS Pair poison + telekinesis -> none (only capped synergies allowed).
+PASS Pair poison + teleport -> none (only capped synergies allowed).
 PASS Pair speed + strength -> none (only capped synergies allowed).
 PASS Pair speed + telekinesis -> none (only capped synergies allowed).
+PASS Pair speed + teleport -> none (only capped synergies allowed).
 PASS Exactly three pairs involving a new power have a synergy (Solar Flare, Void Grasp, Eclipse Beam).
 REPORT legacy synergies outside the cap, left in place (not deleted):
 PASS Save VECTOR with fire + laser-eyes through the loadout API.
