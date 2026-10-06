@@ -3,15 +3,15 @@ PASS Home launches hero
 PASS hero uses its authored cycle asset.
 PASS Hero starts at the unchanged 1.2-intensity daytime sun.
 PASS Day has zero active point lights; both pools are bounded.
-MEASURED day: 79.09 FPS, 12.64 ms/frame, draw calls 280, street=0/4, power=0/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 238 frames, AMD Radeon Pro 5300.
+MEASURED day: 79.57 FPS, 12.57 ms/frame, draw calls 281, street=0/4, power=0/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 239 frames, AMD Radeon Pro 5300.
 PASS day respects both fixed point-light caps.
 PASS Dusk raises shared palette emission to a partial glow.
-MEASURED dusk: 79.19 FPS, 12.63 ms/frame, draw calls 323, street=3/4, power=0/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 238 frames, AMD Radeon Pro 5300.
+MEASURED dusk: 78.48 FPS, 12.74 ms/frame, draw calls 330, street=3/4, power=0/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 236 frames, AMD Radeon Pro 5300.
 PASS dusk respects both fixed point-light caps.
 PASS Night keeps emissive windows/signs and nearby street lights active.
-MEASURED night: 80.01 FPS, 12.50 ms/frame, draw calls 324, street=3/4, power=0/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 241 frames, AMD Radeon Pro 5300.
+MEASURED night: 83.71 FPS, 11.95 ms/frame, draw calls 328, street=3/4, power=0/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 252 frames, AMD Radeon Pro 5300.
 PASS night respects both fixed point-light caps.
-MEASURED night-combat-max-lights: 78.16 FPS, 12.79 ms/frame, draw calls 379, street=3/4, power=4/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 235 frames, AMD Radeon Pro 5300.
+MEASURED night-combat-max-lights: 77.60 FPS, 12.89 ms/frame, draw calls 380, street=3/4, power=4/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 233 frames, AMD Radeon Pro 5300.
 PASS night-combat-max-lights respects both fixed point-light caps.
 PASS night-combat-max-lights keeps exactly four pooled power flashes active at the cap.
 PASS Lighting cycle and pooled flashes reuse the same shared city palette materials.
@@ -19,9 +19,9 @@ PASS Real equipped Fire cast requests a pooled point light.
 PASS Fire leaves a visible short-lived point light while its projectile travels.
 PASS Fire + Ice equips a synergy whose shockwave ring can be rendered at night (Thermal Shock).
 PASS Night: the live Thermal Shock ring uses the unlit Cyan palette swatch, unchanged by the night cycle.
-MEASURED night synergy ring (Cyan, swatch luma 0.739): 444 ring pixels; mean luma unlit ring 0.627, lit-swatch CONTROL 0.632, ground under ring 0.179.
-PASS Night: the unlit ring reads against the night street (luma 0.627 vs ground 0.179, 444 pixels).
-CONTROL night lit-swatch ring luma 0.632 vs unlit 0.627 (difference -0.005).
+MEASURED night synergy ring (Cyan, swatch luma 0.739): 441 ring pixels; mean luma unlit ring 0.628, lit-swatch CONTROL 0.633, ground under ring 0.179.
+PASS Night: the unlit ring reads against the night street (luma 0.628 vs ground 0.179, 441 pixels).
+CONTROL night lit-swatch ring luma 0.633 vs unlit 0.628 (difference -0.005).
 PASS Home launches villain
 PASS villain uses its authored cycle asset.
 PASS Villain starts at the authored dusk preset.

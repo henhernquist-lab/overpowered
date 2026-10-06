@@ -11,7 +11,7 @@ PASS Directional visible layers follow physical travel, with core ahead and tape
 MEASURED fire launch: instances 12->12, size=1.000, colliderRadius=0.175, speed=28.000, material=visual children, meshes=1022->1022, materials=122->122.
 IMAGE Verification/FireRedesign/final-third-person.png
 IMAGE Verification/FireRedesign/final-side.png
-MEASURED fire active 1280x720: FPS=207.34, mean=4.823ms, whole-frame GC=0B/frame, frames=83, renderers=1772, particles=8, materials=122, meshes=1022.
+MEASURED fire active 1280x720: FPS=223.91, mean=4.466ms, whole-frame GC=0B/frame, frames=90, renderers=1772, particles=8, materials=122, meshes=1022.
 PASS Fire projectile finishes on the real wall collision.
 PASS Impact presentation starts only after the physical collision.
 PASS Pooled expanding ring is placed at the real collision contact point.

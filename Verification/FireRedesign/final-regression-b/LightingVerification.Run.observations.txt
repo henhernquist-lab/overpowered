@@ -1,0 +1,5 @@
+[LIGHTING] MEASURED day: 79.57 FPS, 12.57 ms/frame, draw calls 281, street=0/4, power=0/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 239 frames, AMD Radeon Pro 5300.
+[LIGHTING] MEASURED dusk: 78.48 FPS, 12.74 ms/frame, draw calls 330, street=3/4, power=0/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 236 frames, AMD Radeon Pro 5300.
+[LIGHTING] MEASURED night: 83.71 FPS, 11.95 ms/frame, draw calls 328, street=3/4, power=0/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 252 frames, AMD Radeon Pro 5300.
+[LIGHTING] MEASURED night-combat-max-lights: 77.60 FPS, 12.89 ms/frame, draw calls 380, street=3/4, power=4/4, 1280x720 Editor Play Mode single gameplay camera, same viewpoint, 233 frames, AMD Radeon Pro 5300.
+[LIGHTING] MEASURED night synergy ring (Cyan, swatch luma 0.739): 441 ring pixels; mean luma unlit ring 0.628, lit-swatch CONTROL 0.633, ground under ring 0.179.

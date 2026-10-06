@@ -10,7 +10,7 @@ PASS Zero-point upgrade CONTROL rejected.
 PASS Seventh power discovered from DATA only; exact same projectile effect asset as Fire Blast.
 PASS Seventh power owned but NOT equipped (session loadout fire + strength).
 PASS CONTROL: unequipped seventh power refused by the equip gate (Select/Use false, "Power not equipped"); charges 3->3, cooldown 0.00->0.00, energy 100.00->100.00.
-PASS CONTROL: refused seventh power spawned no projectile (0 before/after) and the target did not move: displacement=0.0000m.
+PASS CONTROL: refused seventh power spawned no projectile (12 before/after) and the target did not move: displacement=0.0000m.
 PASS Real flight resource path: start=6, after 2s=3.8, after 6s=0; empty rejects.
 PASS Airborne CONTROL cannot recharge empty flight fuel.
 PASS Ground recharge after 1s=2.5s.
@@ -54,5 +54,5 @@ PASS Existing patrol cop placed in attack range on NavMesh.
 PASS Hostile cop attacked through live AI: player HP 92 -> 78.
 PASS Defeating cop as Villain awards XP and disables dead NPC navigation.
 PASS Performance population: civilians=24, cops=6, on-NavMesh cops=6.
-MEASURED 1280x720 rendered Editor Play Mode: frames=307; seconds=5.005; FPS=61.33; p95 frame ms=18.64; GPU=AMD Radeon Pro 5300; CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz.
+MEASURED 1280x720 rendered Editor Play Mode: frames=314; seconds=5.015; FPS=62.61; p95 frame ms=18.27; GPU=AMD Radeon Pro 5300; CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz.
 PASS Saved level=5, strength tier=1; will verify in a separate Unity process.

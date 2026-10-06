@@ -1,0 +1,4 @@
+FAIL System.Exception: 11 powers, all available to VECTOR: darkness, fire, flight, force-field, ice, laser-eyes, lightning, poison, speed, strength, telekinesis, teleport.
+  at SessionVerificationRunner.Check (System.Boolean ok, System.String line) [0x0001b] in /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/Powers/SessionVerificationRunner.cs:53
+  at LoadoutMatrixVerificationRunner+<Checks>d__13.MoveNext () [0x000c6] in /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/LoadoutMatrixVerificationRunner.cs:30
+  at SessionVerificationRunner+<Start>d__24.MoveNext () [0x00071] in /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/Powers/SessionVerificationRunner.cs:45

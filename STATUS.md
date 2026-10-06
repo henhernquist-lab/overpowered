@@ -4859,3 +4859,57 @@ controls, without changing production damage or Heat logic. Captures are
 nearby wall itself; Henry must judge whether the smaller bolt, short taper,
 impact and first-person visibility feel right. Full relevant regressions and
 final checkpoint commit remain pending.
+
+### Fire Blast final regression and delivery — 2026-10-06
+
+The production Fire presentation is checkpointed at `59b1371` after baseline
+`9032da9`; this branch started at Laser Eyes `e40f889`. The final source
+retains Fire's 45 base damage, 3 m radius, 20 m range, 28 m/s velocity,
+0.35 m physical diameter, 0.6 s cooldown, three charges and 10-energy cost.
+The damage event still occurs at the Rigidbody collision, and the same
+camera/PowerUser aim and close-wall spawn sweep remain authoritative.
+
+Fresh final, sequential Unity runs on the committed production source:
+- `FireVisualVerification.Run` **34/0**, exit 0.
+- `FirstPersonVerification.Run` **211/0**, separate-process `Reload` **5/0**.
+- `CameraVerification.Verify` **45/0**.
+- `FeelVerification.Run` **143/0**.
+- `HudVerification.Run` **317/0**.
+- `CityVerification.Run` **55/0**, separate-process `Reload` **5/0**.
+- `PowerPayoffVerification.Run` **89/0**.
+- `LightingVerification.Run` **31/0** (pooled power-light regression).
+- `HumanoidVerification.Run` **70/0** (shared Fire casting presentation).
+- `HeroForgeVerification.VerifyExisting` **124/0**, separate-process `Reload`
+  **3/0**.
+
+Every passing run above exited 0 and its manifest reports unchanged real
+progression-save and Sidekick database hashes. Exact checks and process
+manifests are in `Verification/FireRedesign/final-regression-a/`,
+`final-regression-b/`, `compatibility/`, and `hero-forge-compat/`.
+`Verification/FireRedesign/build.txt` records the final SDK build:
+**0 warnings / 0 errors**. `git diff --check` passed.
+
+One *extra*, pre-existing `LoadoutMatrixVerification.Run` is **0 PASS /
+1 FAIL**, exit 1. It stops at an 11-power assertion even though the current
+shipping roster contains 12, including Teleport. Its later all-pairs design
+also tries to equip secondary powers as attack slots, contrary to the current
+two-attacks-plus-one-secondary gates. It did not reach a Fire-specific check;
+its failure was not suppressed or counted as a Fire pass. The raw failed
+checks and log remain in `Verification/FireRedesign/compatibility/` and
+`Verification/LoadoutMatrix/results.txt`. Updating that full legacy matrix to
+the current role model is a separate verifier migration, not a gameplay gate
+change.
+
+Final visual captures were inspected. The side view shows a compact orange
+bolt with a red directional taper and bright leading point instead of the
+baseline ball. The wall impact shows a brief ring and pooled sparks; the
+first-person entry starts below/right of the center aim. A very close wall
+necessarily occupies nearly the whole first-person view; the near-eye ring,
+sparks and light were reduced, and the physical and visible spawn stay on the
+camera side. The automated isolated-camera performance figures above show
+no material/mesh growth across casts but are too variable to establish an FPS
+gain or a dense-city performance sign-off. Henry still needs to judge the
+bolt silhouette, trail length, explosion punch, first-person visibility,
+and clutter when firing repeatedly in a real city scene. No push was made;
+the user's `.freebuff/project-id` and `docs/secondary-loadout.md` edits
+remain unstaged and unchanged.

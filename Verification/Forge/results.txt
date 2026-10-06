@@ -11,7 +11,7 @@ PASS Slot 1 collision repairs slot 2 immediately.
 PASS Slot 2 UI excludes duplicate.
 PASS Select Fire + Ice attacks and Speed secondary.
 PASS Successful Forge save starts the Cinemachine preview reveal without blocking the form.
-PASS Cinemachine preview camera actually orbits the selected hero (heading -28.0 -> 17.5 deg, camera moved up to 2.03 m, 128 frames).
+PASS Cinemachine preview camera actually orbits the selected hero (heading -28.0 -> 17.5 deg, camera moved up to 2.03 m, 145 frames).
 PASS Short Forge reveal settles on the front view (heading 0) without delaying navigation.
 PASS Pair lookup is order-independent.
 PASS Enter Hero with saved build.
@@ -29,13 +29,13 @@ PASS Pause CONTROL freezes synergy motion/cooldown and rejects activation.
 PASS Sonic Slam rises then collides with actual ground exactly once.
 PASS Sonic force moves real 45kg Rigidbody.
 PASS Outside-radius CONTROL has no horizontal launch.
-MEASURED Sonic peak=154.297m, force=2600.0 N.s, bodies=1, near velocity=34.396m/s, displacement=0.615m; cooldown=34.586s.
+MEASURED Sonic peak=154.290m, force=2600.0 N.s, bodies=1, near velocity=34.396m/s, displacement=0.615m; cooldown=34.586s.
 PASS Cooldown still blocks after animation ends.
 PASS Actual pooled ParticleSystem / ring emitted once.
 PASS Real ParticleSystem contains bounded live particles.
 PASS Particle positions advance over real frames (not a frozen emission counter).
 PASS All six VFX slots share the same particle mesh.
-PASS Every pooled synergy ring shares one cached palette ring material; 6 more bursts create no material (121->121).
+PASS Every pooled synergy ring shares one cached palette ring material; 6 more bursts create no material (122->122).
 PASS Ring is the unlit Cream palette swatch (not the lit Standard swatch) and is owned by the session's CityMaterials.
 PASS Equipped Flight positive control consumes the configured fuel cost.
 PASS Equipped Strength uses existing paid punch.
@@ -123,11 +123,11 @@ PASS Thermal Shock completes within bounded duration.
 PASS Thermal Shock cooldown remains after action.
 PASS Thermal affected-target bonus CONTROL: 42.5 vs clean 25
 PASS Thermal Shock emits bounded pooled effects.
-SYNERGY Thermal Shock: impacts=1, VFX emissions=1, cooldown=29.70
+SYNERGY Thermal Shock: impacts=1, VFX emissions=1, cooldown=29.69
 BENCH population civilians=26, cops=9; 1280x720 single camera.
-MEASURED Forge idle phase=0: FPS=65.79, draws=307.2, pool=6.
-MEASURED Forge FX stress phase=1: FPS=71.50, draws=313.3, pool=6.
-MEASURED Forge FX stress phase=2: FPS=70.25, draws=311.6, pool=6.
-MEASURED Forge idle phase=3: FPS=69.17, draws=302.4, pool=6.
-FORGE COST paired means: idle=67.48 FPS, repeated pooled FX=70.87 FPS, difference=-3.39 FPS, frame delta=-0.709ms. Stress emits every 100ms; not a standalone GPU-time measurement.
+MEASURED Forge idle phase=0: FPS=71.72, draws=305.8, pool=6.
+MEASURED Forge FX stress phase=1: FPS=73.55, draws=311.5, pool=6.
+MEASURED Forge FX stress phase=2: FPS=75.03, draws=309.8, pool=6.
+MEASURED Forge idle phase=3: FPS=78.37, draws=299.7, pool=6.
+FORGE COST paired means: idle=75.05 FPS, repeated pooled FX=74.29 FPS, difference=0.76 FPS, frame delta=0.136ms. Stress emits every 100ms; not a standalone GPU-time measurement.
 LIMIT: no human feel test; real gameplay entry points, not hardware key injection. Free Play/Endless Fight remain disabled existing definitions.

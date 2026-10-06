@@ -81,7 +81,7 @@ PASS hero-default-loadout-after-punch: composite contains the HUD hud-bottom-cen
 PASS hero-default-loadout-after-punch: crosshair drawn into the composite (32.4 % of its box changed).
 PASS hero-default-loadout-after-punch: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
 CAPTURE hero-default-loadout-after-punch.png 1920x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 100 %, hud-vitals 99 %, hud-bottom-centre 100 %.
-PASS Punch impact landed after the windup (frame 289); PUNCH: 0 bodies hit @ 1350 N·s.
+PASS Punch impact landed after the windup (frame 294); PUNCH: 0 bodies hit @ 1350 N·s.
 PASS After impact the pips still match the runtime: 2/3.
 PASS Synergy slot key 'C' from ForgeCatalog.SynergyKey (C); radial 0 while ready.
 PASS Synergy Sonic Slam used for real -> radial 1.00 (runner cooldown 35.0/35.0s).
@@ -105,7 +105,7 @@ PASS hero-heat-star-pop: composite contains the HUD hud-bottom-centre (pixels ch
 PASS hero-heat-star-pop: crosshair drawn into the composite (32.4 % of its box changed).
 PASS hero-heat-star-pop: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
 CAPTURE hero-heat-star-pop.png 1920x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 100 %, hud-vitals 99 %, hud-bottom-centre 100 %.
-PASS Star 4 popped to scale 1.31 and settled at 1.00 while Time.timeScale was 0 (unscaled-time animation).
+PASS Star 4 popped to scale 1.30 and settled at 1.00 while Time.timeScale was 0 (unscaled-time animation).
 PASS CONTROL: unchanged stars did not pop.
 PASS GameFlow.Select launches villain
 PASS Villain Mode: session runs this definition; GameHud + PrototypeHUD exist.
@@ -330,16 +330,16 @@ PASS Gameplay camera found for loadout-fire-ice-after-fire
 PASS loadout-fire-ice-after-fire: composite contains the HUD hud-level (pixels changed vs the camera-only render: 99.5 %).
 PASS loadout-fire-ice-after-fire: composite contains the HUD hud-heat (pixels changed vs the camera-only render: 99.2 %).
 PASS loadout-fire-ice-after-fire: composite contains the HUD hud-top-centre (pixels changed vs the camera-only render: 99.5 %).
-PASS loadout-fire-ice-after-fire: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.5 %).
-PASS loadout-fire-ice-after-fire: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.7 %).
-PASS loadout-fire-ice-after-fire: crosshair drawn into the composite (32.4 % of its box changed).
+PASS loadout-fire-ice-after-fire: composite contains the HUD hud-vitals (pixels changed vs the camera-only render: 98.6 %).
+PASS loadout-fire-ice-after-fire: composite contains the HUD hud-bottom-centre (pixels changed vs the camera-only render: 99.6 %).
+PASS loadout-fire-ice-after-fire: crosshair drawn into the composite (32.2 % of its box changed).
 PASS loadout-fire-ice-after-fire: PIXEL centre-clear — 330480 centre-zone pixels outside the crosshair box are identical to the camera-only render (max channel diff 0/255, 0 > 3).
 CAPTURE loadout-fire-ice-after-fire.png 1920x1080 composited (gameplay camera + HUD panel, one render target); HUD coverage: hud-level 100 %, hud-heat 99 %, hud-top-centre 100 %, hud-vitals 99 %, hud-bottom-centre 100 %.
-MEASURED A old IMGUI debug HUD (GameHud hidden): frames=328, FPS=81.8, mean=12.22ms, p95=13.35ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
-MEASURED B new GameHud (IMGUI debug hidden): frames=319, FPS=79.5, mean=12.58ms, p95=13.91ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
-MEASURED A old IMGUI debug HUD (GameHud hidden): frames=296, FPS=73.7, mean=13.56ms, p95=17.35ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
-MEASURED B new GameHud (IMGUI debug hidden): frames=309, FPS=77.2, mean=12.95ms, p95=13.96ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
-MEASURED GameHud.LateUpdate CPU per frame (B phases): 0.048 ms / 0.069 ms.
-MEASURED A/B summary: old IMGUI mean 77.8 FPS, new GameHud mean 78.4 FPS (+0.8%).
+MEASURED A old IMGUI debug HUD (GameHud hidden): frames=363, FPS=90.6, mean=11.03ms, p95=11.71ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
+MEASURED B new GameHud (IMGUI debug hidden): frames=354, FPS=88.5, mean=11.30ms, p95=12.20ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
+MEASURED A old IMGUI debug HUD (GameHud hidden): frames=361, FPS=90.0, mean=11.11ms, p95=11.86ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
+MEASURED B new GameHud (IMGUI debug hidden): frames=354, FPS=88.3, mean=11.33ms, p95=11.97ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
+MEASURED GameHud.LateUpdate CPU per frame (B phases): 0.042 ms / 0.064 ms.
+MEASURED A/B summary: old IMGUI mean 90.3 FPS, new GameHud mean 88.4 FPS (-2.2%).
 LIMIT: batch mode dispatched no IMGUI repaint events, so phase A measures the frame WITHOUT the old IMGUI panel's draw cost; the A/B therefore bounds the new HUD's full cost rather than a like-for-like swap.
 LIMIT: no hardware keyboard in batch mode; the F3 control calls PrototypeHUD.ToggleDebug, the method the F3 handler calls. Captures come from batch-mode Metal render targets, not a physical display. The restyled Esc pause and Tab upgrade menus are still IMGUI (out of scope).
