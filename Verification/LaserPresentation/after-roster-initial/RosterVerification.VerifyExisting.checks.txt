@@ -1,0 +1,199 @@
+PASS Six new PowerDefinition assets exist: darkness, laser-eyes, lightning, force-field, speed, poison
+PASS Shipping roster has the exact 12 data powers, including secondary Teleport.
+PASS VECTOR can equip all six new powers (AvailablePowers).
+PASS TITAN can equip all six new powers (AvailablePowers).
+PASS NOVA can equip all six new powers (AvailablePowers).
+PASS Fresh profile owns the six new powers at tier 0 with 0 points spent.
+PASS Laser Eyes is channeled: drain 32/s, start cost 10.
+PASS The other five new powers keep the instant charge pattern.
+PASS Force Field deals no damage (defensive).
+PASS Save VECTOR with darkness + strength through the loadout API.
+PASS Session equips darkness + strength.
+PASS darkness selected for LMB (key 1).
+PASS Two clear NavMesh points 12-17 m from the hero for live criminals.
+PASS CONTROL criminal placed >60 deg from the target's bearing.
+PASS Target criminal is really moving before the root.
+PASS Shadow Tendrils cast on the aimed live criminal: Darkness activated
+PASS Target rooted (not frozen); charge spent 2->1.
+PASS Root damage == data: 4.00 vs 4.
+PASS Tendrils visible from the pooled line set while rooted.
+PASS Rooted criminal does not move.
+PASS CONTROL: the un-rooted criminal keeps moving.
+PASS Root expires after its Duration.
+PASS Target moves again after the root ends.
+PASS A rooted enemy with the player in reach still starts its attack (root is not a stun).
+PASS CONTROL: a frozen enemy in reach starts no attack.
+PASS Last charge casts.
+PASS CONTROL: zero charges refused, target untouched.
+PASS CONTROL: aiming at empty sky refuses and spends nothing.
+PASS Save VECTOR with laser-eyes + strength through the loadout API.
+PASS Session equips laser-eyes + strength.
+PASS laser-eyes selected for LMB (key 1).
+PASS Laser Eyes starts a channel: Laser Eyes channeling
+PASS Starting the channel spends no charge and no up-front energy.
+PASS Beam damage per second matches data (0.1 s tick quantisation).
+PASS Energy drains at DrainPerSecond (net of regen) while held.
+PASS Heat rose by ONE assault (0.25) across ~10 ticks, not one per tick.
+PASS CONTROL: the cop beside the beam is untouched.
+PASS Beam visible while held.
+PASS Sustained channel performance sample stayed active.
+PASS Releasing ends the channel, starts the 0.8 s cooldown, hides the beam.
+PASS CONTROL: no damage after release.
+PASS CONTROL: restart during cooldown refused.
+PASS Restart after cooldown.
+PASS Selecting another power ends the channel.
+PASS Channel again to exhaust energy.
+PASS Channel ends by itself when energy runs out (energy 0.07) and its cooldown starts.
+PASS CONTROL: cannot start below the 10 start cost (energy 0.07).
+PASS Save VECTOR with lightning + strength through the loadout API.
+PASS Session equips lightning + strength.
+PASS lightning selected for LMB (key 1).
+PASS Criminals hostile, civilian not (hero side).
+PASS CONTROL: bolt at empty floor with no enemy within reach is refused, no charge spent: No valid target
+PASS Lightning cast at the first criminal: Lightning activated
+PASS Chain order = the six planted criminals (6 struck).
+PASS Jump 0: 24.00 damage (expected 24.00).
+PASS Jump 1: 20.40 damage (expected 20.40).
+PASS Jump 2: 17.34 damage (expected 17.34).
+PASS Jump 3: 14.74 damage (expected 14.74).
+PASS Jump 4: 12.53 damage (expected 12.53).
+PASS Jump 5: 10.65 damage (expected 10.65).
+PASS CONTROL: a 7th criminal in reach is untouched (MaxArcs cap).
+PASS CONTROL: the civilian nearest the first target is never arced to.
+PASS CONTROL: the criminal behind a wall (nearer than jump 2) is skipped.
+PASS CONTROL: the criminal 20 m from the chain is untouched.
+PASS One pooled arc line per strike.
+PASS Bolt at the floor beside an enemy jumps to the nearest enemy.
+PASS Save VECTOR with Strength + Fire attacks and force-field secondary through the loadout API.
+PASS Session caches the valid secondary force-field in its F slot.
+PASS Force Field raised: 60 absorb for 6 s.
+PASS 25 damage fully absorbed: health 100, field 35, 0 damage events.
+PASS 50 damage: field absorbs its last 35, 15 reaches health (85); field broken, rings hidden.
+PASS CONTROL: with the field down, damage reaches health in full.
+PASS Raise again.
+PASS CONTROL: re-cast while up is refused and spends no charge.
+PASS CONTROL: unblockable damage (kill plane path) bypasses the field.
+PASS Field expires after its Duration.
+PASS CONTROL: expired field absorbs nothing.
+PASS Save VECTOR with Strength + Fire attacks and speed secondary through the loadout API.
+PASS Session caches the valid secondary speed in its F slot.
+PASS Dash starts: Speed activated
+PASS Dash covers its Range along the aim, through the enemy in its path.
+PASS Criminal in the path clipped once: 8 damage.
+PASS CONTROL: civilian in the path untouched (hostile only).
+PASS CONTROL: criminal 3 m to the side untouched.
+PASS NPC collision restored after the dash.
+PASS Dash toward a wall.
+PASS CONTROL: the wall stops the dash at 3.04 m (no tunnelling).
+PASS CONTROL: zero charges refused.
+PASS Save VECTOR with poison + strength through the loadout API.
+PASS Session equips poison + strength.
+PASS poison selected for LMB (key 1).
+PASS Poison the criminal.
+PASS Poison the cop.
+PASS Total poison damage == 10/s x 6 s = 60 (60.00); then it stops.
+PASS Poisoning a cop adds ONE assault of Heat (0.250) over 12 ticks.
+PASS Poison a 10 HP criminal with neighbours.
+PASS The poisoned criminal dies from the poison ticks.
+PASS Poison jumped to the three nearest enemies (events 3).
+PASS Spread targets are generation 1.
+PASS CONTROL: the 4th enemy in range is skipped (MaxSpreadTargets).
+PASS CONTROL: the civilian beside it is not poisoned (enemies only).
+PASS CONTROL: the enemy 7.5 m away (radius 6) is not poisoned.
+PASS Killed by a non-poison hit while poisoned: the poison still spreads.
+PASS Short poison has run out.
+PASS CONTROL: dying after the poison ran out spreads nothing.
+PASS CONTROL: generation 3 (the cap) does not spread further.
+PASS The five in-scope synergies exist exactly once: sonic-slam, thermal-shock, solar-flare, void-grasp, eclipse-beam
+PASS Pair darkness + fire -> none (only capped synergies allowed).
+PASS Pair darkness + flight -> none (only capped synergies allowed).
+PASS Pair darkness + force-field -> none (only capped synergies allowed).
+PASS Pair darkness + ice -> none (only capped synergies allowed).
+PASS Pair darkness + laser-eyes -> eclipse-beam (only capped synergies allowed).
+PASS Pair darkness + lightning -> none (only capped synergies allowed).
+PASS Pair darkness + poison -> none (only capped synergies allowed).
+PASS Pair darkness + speed -> none (only capped synergies allowed).
+PASS Pair darkness + strength -> none (only capped synergies allowed).
+PASS Pair darkness + telekinesis -> void-grasp (only capped synergies allowed).
+PASS Pair darkness + teleport -> none (only capped synergies allowed).
+PASS Pair fire + force-field -> none (only capped synergies allowed).
+PASS Pair fire + laser-eyes -> solar-flare (only capped synergies allowed).
+PASS Pair fire + lightning -> none (only capped synergies allowed).
+PASS Pair fire + poison -> none (only capped synergies allowed).
+PASS Pair fire + speed -> none (only capped synergies allowed).
+PASS Pair flight + force-field -> none (only capped synergies allowed).
+PASS Pair flight + laser-eyes -> none (only capped synergies allowed).
+PASS Pair flight + lightning -> none (only capped synergies allowed).
+PASS Pair flight + poison -> none (only capped synergies allowed).
+PASS Pair flight + speed -> none (only capped synergies allowed).
+PASS Pair force-field + ice -> none (only capped synergies allowed).
+PASS Pair force-field + laser-eyes -> none (only capped synergies allowed).
+PASS Pair force-field + lightning -> none (only capped synergies allowed).
+PASS Pair force-field + poison -> none (only capped synergies allowed).
+PASS Pair force-field + speed -> none (only capped synergies allowed).
+PASS Pair force-field + strength -> none (only capped synergies allowed).
+PASS Pair force-field + telekinesis -> none (only capped synergies allowed).
+PASS Pair force-field + teleport -> none (only capped synergies allowed).
+PASS Pair ice + laser-eyes -> none (only capped synergies allowed).
+PASS Pair ice + lightning -> none (only capped synergies allowed).
+PASS Pair ice + poison -> none (only capped synergies allowed).
+PASS Pair ice + speed -> none (only capped synergies allowed).
+PASS Pair laser-eyes + lightning -> none (only capped synergies allowed).
+PASS Pair laser-eyes + poison -> none (only capped synergies allowed).
+PASS Pair laser-eyes + speed -> none (only capped synergies allowed).
+PASS Pair laser-eyes + strength -> none (only capped synergies allowed).
+PASS Pair laser-eyes + telekinesis -> none (only capped synergies allowed).
+PASS Pair laser-eyes + teleport -> none (only capped synergies allowed).
+PASS Pair lightning + poison -> none (only capped synergies allowed).
+PASS Pair lightning + speed -> none (only capped synergies allowed).
+PASS Pair lightning + strength -> none (only capped synergies allowed).
+PASS Pair lightning + telekinesis -> none (only capped synergies allowed).
+PASS Pair lightning + teleport -> none (only capped synergies allowed).
+PASS Pair poison + speed -> none (only capped synergies allowed).
+PASS Pair poison + strength -> none (only capped synergies allowed).
+PASS Pair poison + telekinesis -> none (only capped synergies allowed).
+PASS Pair poison + teleport -> none (only capped synergies allowed).
+PASS Pair speed + strength -> none (only capped synergies allowed).
+PASS Pair speed + telekinesis -> none (only capped synergies allowed).
+PASS Pair speed + teleport -> none (only capped synergies allowed).
+PASS Exactly three pairs involving a new power have a synergy (Solar Flare, Void Grasp, Eclipse Beam).
+PASS Save VECTOR with fire + laser-eyes through the loadout API.
+PASS Session equips fire + laser-eyes.
+PASS fire selected for LMB (key 1).
+PASS Fire + Laser Eyes resolves to Solar Flare (no unlock step).
+PASS CONTROL: no target under the crosshair refuses with no cooldown.
+PASS Solar Flare fires immediately when equipped.
+PASS Focusing beam drawn.
+PASS Eruption hits both enemies in 6 m for 60: 60.0 / 60.0.
+PASS Targets left burning (feeds Thermal Shock's bonus rule).
+PASS CONTROL: the enemy 12 m away is untouched.
+PASS Beam hidden after the eruption.
+PASS Solar Flare: mid-cooldown use refused (39.5 s left).
+PASS Solar Flare: long cooldown 40 s (normal powers <= 1 s).
+PASS Save VECTOR with darkness + telekinesis through the loadout API.
+PASS Session equips darkness + telekinesis.
+PASS darkness selected for LMB (key 1).
+PASS Darkness + Telekinesis resolves to Void Grasp.
+PASS CONTROL: a singularity with no enemy in reach is refused with no cooldown.
+PASS Void Grasp opens immediately when equipped.
+PASS Exactly the three enemies in reach are grasped.
+PASS Each grasped enemy is physically pulled >1.5 m toward the core.
+PASS CONTROL: the civilian inside the radius is not pulled.
+PASS CONTROL: the enemy outside the radius is untouched.
+PASS Collapse blast damages every grasped enemy (45).
+PASS Survivors left rooted for 2.5 s.
+PASS Void Grasp: mid-cooldown use refused (38.6 s left).
+PASS Void Grasp: long cooldown 40 s (normal powers <= 1 s).
+PASS Save VECTOR with darkness + laser-eyes through the loadout API.
+PASS Session equips darkness + laser-eyes.
+PASS darkness selected for LMB (key 1).
+PASS Darkness + Laser Eyes resolves to Eclipse Beam.
+PASS CONTROL: aiming at the floor (no enemy) refuses with no cooldown.
+PASS Eclipse Beam starts on the aimed enemy.
+PASS Darkness field roots the target before any damage.
+PASS Beam fires through the field.
+PASS One single-target hit of 160 (160.0).
+PASS CONTROL: the enemy 1.3 m beside the target takes nothing (no area blast).
+PASS Eclipse Beam: mid-cooldown use refused (43.9 s left).
+PASS Eclipse Beam: long cooldown 45 s (normal powers <= 1 s).
+PASS Save Laser Eyes + Poison for the separate-process Reload.

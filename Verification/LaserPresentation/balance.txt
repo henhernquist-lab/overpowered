@@ -1,0 +1,31 @@
+PASS Save VECTOR with laser-eyes + strength through the loadout API.
+PASS Session equips laser-eyes + strength.
+PASS laser-eyes selected for LMB (key 1).
+PASS Laser starts fixed-window comparison through its loadout gate.
+MEASURED balance laser-eyes: targetDistance=10.0m window=3.000s casts=1 attempts=0 delivered=114.00 DPS=38.00 netEnergyChange=60.00 range=26.0m targetAlive=True.
+PASS Real laser-eyes hit the single stationary target in its fixed input window.
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+MEASURED balance fire: targetDistance=10.0m window=3.000s casts=4 attempts=4 delivered=180.00 DPS=60.00 netEnergyChange=6.70 range=20.0m targetAlive=True.
+PASS Real fire hit the single stationary target in its fixed input window.
+PASS Save VECTOR with lightning + strength through the loadout API.
+PASS Session equips lightning + strength.
+PASS lightning selected for LMB (key 1).
+MEASURED balance lightning: targetDistance=10.0m window=3.000s casts=2 attempts=2 delivered=48.00 DPS=16.00 netEnergyChange=0.00 range=24.0m targetAlive=True.
+PASS Real lightning hit the single stationary target in its fixed input window.
+PASS Save VECTOR with poison + strength through the loadout API.
+PASS Session equips poison + strength.
+PASS poison selected for LMB (key 1).
+MEASURED balance poison: targetDistance=10.0m window=3.000s casts=1 attempts=1 delivered=30.00 DPS=10.00 netEnergyChange=0.00 range=20.0m targetAlive=True.
+PASS Real poison hit the single stationary target in its fixed input window.
+PASS Save VECTOR with strength + fire through the loadout API.
+PASS Session equips strength + fire.
+MEASURED balance strength: targetDistance=1.8m window=3.000s casts=4 attempts=419 delivered=140.00 DPS=46.67 netEnergyChange=0.00 range=close melee targetAlive=True.
+PASS Real strength hit the single stationary target in its fixed input window.
+PASS Save VECTOR with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+MEASURED balance basic-melee: targetDistance=1.8m window=3.000s casts=5 attempts=360 delivered=40.00 DPS=13.33 netEnergyChange=0.00 range=close melee targetAlive=True.
+PASS Real basic-melee hit the single stationary target in its fixed input window.
+LIMIT: three game-seconds on stationary single criminal in the isolated fixture. Fire/Strength in-flight hits after the deadline are excluded; Poison's remaining DoT is excluded. Multi-target damage, reach, mobility and human feel are different advantages.

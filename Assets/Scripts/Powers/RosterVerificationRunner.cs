@@ -160,6 +160,10 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         Check(Mathf.Abs((W.Heat - heat) - W.Tuning.Heat.AssaultHeat) < .02f, $"Heat rose by ONE assault ({W.Tuning.Heat.AssaultHeat}) across ~10 ticks, not one per tick.");
         Check(control.Health == 1000, "CONTROL: the cop beside the beam is untouched.");
         Check(PowerVfx.Get().BeamVisible, "Beam visible while held."); Capture("laser-beam.png");
+        var oldPosition=Cam.transform.position;var oldRotation=Cam.transform.rotation;
+        Cam.transform.position=W.Hero.transform.position+new Vector3(2.5f,2f,-3f);
+        Cam.transform.LookAt(Chest(cop));Capture("laser-beam-side.png");
+        Cam.transform.SetPositionAndRotation(oldPosition,oldRotation);
         yield return LaserThroughput();
         W.Powers.Channel(false, Time.deltaTime);
         Check(W.Powers.Channeling == null && Mathf.Approximately(rt.Cooldown, stats.Cooldown) && !PowerVfx.Get().BeamVisible, $"Releasing ends the channel, starts the {stats.Cooldown} s cooldown, hides the beam.");
@@ -200,6 +204,16 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         }
         camera.targetTexture=previous;target.Release();Destroy(target);
     }
+    IEnumerator EnterSecondary(string id)
+    {
+        yield return Home();
+        var hero=F.Heroes[0];
+        Check(Profile.SetLoadout(hero,Power("strength"),Power("fire"),Power(id),hero.Primary,hero.Secondary),
+            "Save "+hero.DisplayName+" with Strength + Fire attacks and "+id+" secondary through the loadout API.");
+        GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);
+        Check(W.Powers.EquippedA==Power("strength")&&W.Powers.EquippedB==Power("fire")&&W.Powers.EquippedSecondary==Power(id),
+            "Session caches the valid secondary "+id+" in its F slot.");
+    }
     // ---------------------------------------------------------------- LIGHTNING: chain
     IEnumerator Lightning()
     {
@@ -237,7 +251,7 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
     IEnumerator ForceField()
     {
         Log("---- FORCE FIELD (defensive)");
-        yield return Enter("force-field", "strength");
+        yield return EnterSecondary("force-field");
         Isolate(); var rt = Runtime("force-field"); var stats = W.Powers.Stats(rt); var effect = (ForceFieldEffect)rt.Definition.Effect;
         int damagedEvents = 0; Action<bool> count = died => damagedEvents++; W.PlayerDamaged += count;
         float health = W.Health;
@@ -264,7 +278,7 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
     IEnumerator Speed()
     {
         Log("---- SPEED (burst dash)");
-        yield return Enter("speed", "strength");
+        yield return EnterSecondary("speed");
         Isolate(); var rt = Runtime("speed"); var stats = W.Powers.Stats(rt);
         var inPath = Actor(new Vector3(0, 150, 4.5f), NpcRole.Criminal, 1000);
         var civilian = Actor(new Vector3(.4f, 150, 6.5f), NpcRole.Civilian, 1000);

@@ -12,6 +12,12 @@ public sealed class PowerVfx : MonoBehaviour
     readonly Vector3[] buffer = new Vector3[MaxPoints];
     public static PowerVfx Instance { get; private set; }
     public LineRenderer Beam { get; private set; }
+    LineRenderer laserRight, laserHaloLeft, laserHaloRight, laserImpactRing, laserImpactCrossH, laserImpactCrossV;
+    public LineRenderer LaserRight => laserRight;
+    public LineRenderer LaserHaloLeft => laserHaloLeft;
+    public LineRenderer LaserHaloRight => laserHaloRight;
+    public int LaserRendererCount => Beam == null ? 0 : 7;
+    public bool LaserImpactVisible => laserImpactRing != null && laserImpactRing.gameObject.activeSelf;
     /// Lines handed out since the session started (test/diagnostic counter).
     public int Draws { get; private set; }
     public int PoolCount => lines?.Length ?? 0;
@@ -32,6 +38,10 @@ public sealed class PowerVfx : MonoBehaviour
         lines = new LineRenderer[PoolSize]; until = new float[PoolSize];
         for (int i = 0; i < PoolSize; i++) lines[i] = Create("Pooled power line " + i);
         Beam = Create("Pooled power beam");
+        laserRight=Create("Laser right core");laserHaloLeft=Create("Laser left halo");laserHaloRight=Create("Laser right halo");
+        laserImpactRing=Create("Laser impact ring");laserImpactCrossH=Create("Laser impact horizontal");laserImpactCrossV=Create("Laser impact vertical");
+        // Built-in unlit palette swatches are shared for the session, including across repeated channels.
+        CityMaterials.GetVfx(CityColor.Cream);CityMaterials.GetVfx(CityColor.Red);
     }
     LineRenderer Create(string name)
     {
@@ -70,11 +80,58 @@ public sealed class PowerVfx : MonoBehaviour
     public void ShowBeam(Vector3 from, Vector3 to, CityColor color, float width)
     {
         if (Beam == null) return;
+        HideLaserExtras();
         Beam.sharedMaterial = CityMaterials.Get(color); Beam.widthMultiplier = width; Beam.positionCount = 2;
         Beam.SetPosition(0, from); Beam.SetPosition(1, to);
         if (!Beam.gameObject.activeSelf) { Beam.gameObject.SetActive(true); Draws++; }
     }
-    public void HideBeam() { if (Beam != null) Beam.gameObject.SetActive(false); }
+    static void Segment(LineRenderer line,Material material,float width,Vector3 from,Vector3 to)
+    {
+        line.sharedMaterial=material;line.widthMultiplier=width;line.positionCount=2;
+        line.SetPosition(0,from);line.SetPosition(1,to);line.gameObject.SetActive(true);
+    }
+    /// Presentation only: the endpoint is supplied by LaserEyesEffect's existing gameplay ray.
+    public void ShowLaser(Vector3 left,Vector3 right,Vector3 merge,Vector3 hitPoint,bool firstPerson,bool contact,
+        float coreWidth,float haloWidth,float impactRadius,Vector3 viewRight,Vector3 viewUp)
+    {
+        var core=CityMaterials.GetVfx(CityColor.Cream);var halo=CityMaterials.GetVfx(CityColor.Red);
+        float pulse=1f+.075f*Mathf.Sin(Time.time*17f);
+        if(firstPerson)
+        {
+            // Separate straight segments avoid the large camera-facing join wedge of a three-point LineRenderer.
+            Segment(Beam,core,coreWidth*.5f*pulse,left,merge);
+            Segment(laserHaloLeft,halo,haloWidth*.3f*pulse,left,merge);
+            Segment(laserRight,core,coreWidth*.35f*pulse,merge,hitPoint);
+            Segment(laserHaloRight,halo,haloWidth*.24f*pulse,merge,hitPoint);
+        }
+        else
+        {
+            Segment(Beam,core,coreWidth*pulse,left,hitPoint);
+            Segment(laserRight,core,coreWidth*pulse,right,hitPoint);
+            Segment(laserHaloLeft,halo,haloWidth*pulse,left,hitPoint);
+            Segment(laserHaloRight,halo,haloWidth*pulse,right,hitPoint);
+        }
+        if(!contact){HideLaserImpact();return;}
+        float radius=impactRadius*(.9f+.1f*Mathf.Sin(Time.time*23f));
+        laserImpactRing.sharedMaterial=halo;laserImpactRing.widthMultiplier=coreWidth*.8f;laserImpactRing.positionCount=9;
+        for(int i=0;i<9;i++)
+        {
+            float angle=i*Mathf.PI*.25f;
+            laserImpactRing.SetPosition(i,hitPoint+(viewRight*Mathf.Cos(angle)+viewUp*Mathf.Sin(angle))*radius);
+        }
+        laserImpactRing.gameObject.SetActive(true);
+        Segment(laserImpactCrossH,core,coreWidth*.8f,hitPoint-viewRight*radius*.45f,hitPoint+viewRight*radius*.45f);
+        Segment(laserImpactCrossV,core,coreWidth*.8f,hitPoint-viewUp*radius*.45f,hitPoint+viewUp*radius*.45f);
+    }
+    void HideLaserImpact()
+    {laserImpactRing.gameObject.SetActive(false);laserImpactCrossH.gameObject.SetActive(false);laserImpactCrossV.gameObject.SetActive(false);}
+    void HideLaserExtras()
+    {
+        if(laserRight==null)return;
+        laserRight.gameObject.SetActive(false);laserHaloLeft.gameObject.SetActive(false);laserHaloRight.gameObject.SetActive(false);
+        HideLaserImpact();
+    }
+    public void HideBeam() { if (Beam != null) Beam.gameObject.SetActive(false);HideLaserExtras(); }
     void LateUpdate()
     {
         if (lines == null) return;

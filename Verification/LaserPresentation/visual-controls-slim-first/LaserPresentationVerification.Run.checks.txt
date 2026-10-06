@@ -1,0 +1,36 @@
+PASS Save VECTOR with laser-eyes + strength through the loadout API.
+PASS Session equips laser-eyes + strength.
+PASS laser-eyes selected for LMB (key 1).
+PASS Third-person center aim selects the intended real target.
+PASS Laser channel starts through the equipped power gate.
+PASS Real damage reaches the center target, not the off-axis CONTROL.
+PASS Impact flare appears at the real third-person ray contact.
+PASS Third-person travel uses two pooled eye cores, two halos and bounded contact lines.
+PASS Both visible rays begin near the animated head and converge on the true hit point.
+PASS Release hides every laser layer, repeat 0.
+PASS Repeat cast starts through the normal gate, repeat 0.
+PASS Release hides every laser layer, repeat 1.
+PASS Repeat cast starts through the normal gate, repeat 1.
+PASS Release hides every laser layer, repeat 2.
+PASS Repeat cast starts through the normal gate, repeat 2.
+PASS Release hides every laser layer, repeat 3.
+PASS Repeat cast starts through the normal gate, repeat 3.
+PASS Repeated casts keep material, mesh, LineRenderer, ParticleSystem and pool counts stable.
+PASS Laser presentation update makes no per-tick managed allocation after warmup.
+PASS Switch to first-person Laser Eyes.
+PASS First-person aim still originates at the protected eye camera.
+PASS First-person center ray selects the same intended target.
+PASS First-person channel starts.
+PASS First-person impact stays on the real center-ray contact.
+PASS First-person peripheral entry merges into a thin beam on the real aim ray, without head origins.
+PASS First-person beam begins in the lower-center view without head geometry ((0.59, 0.32, 0.80)).
+PASS First-person view keeps player visuals in shadow-only mode without disabling their renderers.
+PASS Nearby wall intercepts the real beam before the enemy CONTROL.
+PASS First-person visible origin remains on the camera side of the nearby wall.
+PASS Extreme first-person pitch -75 keeps visual endpoint on the unchanged center aim ray.
+PASS Extreme first-person pitch 75 keeps visual endpoint on the unchanged center aim ray.
+PASS Release immediately hides the first-person beam and impact.
+PASS Start held channel for pause control.
+PASS Pause ends the channel and all beam layers.
+PASS Start channel for death control.
+PASS Death ends the channel and all beam layers.

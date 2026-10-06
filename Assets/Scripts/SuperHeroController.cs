@@ -85,6 +85,7 @@ public sealed class SuperHeroController : MonoBehaviour
         powers.Tick(Time.deltaTime, controller.isGrounded);
         // Channeled powers (Laser Eyes) run while the fire button stays held; anything that takes input away ends them.
         powers.Channel(!Climbing && !AbilityDriving && !WorldSession.Instance.MenuOpen && !WorldSession.Instance.PlayerDead &&
+            WorldSession.Instance.Mode?.Paused!=true && WorldSession.Instance.Mode?.Ended!=true &&
             (Input.GetMouseButton(0) || powers.ScriptedHold), Time.deltaTime);
         if(AbilityDriving){Mantling=false;EndClimb();return;}
         if(Mantling){MoveMantle();return;}

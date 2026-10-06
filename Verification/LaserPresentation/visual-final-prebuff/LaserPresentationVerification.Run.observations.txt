@@ -1,0 +1,1 @@
+MEASURED pooled laser presentation: 0 managed bytes /1000 visual updates; materials=121, meshes=1020, LineRenderers=7, ParticleSystems=8, generic pool=16.

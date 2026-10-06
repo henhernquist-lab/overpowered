@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: LaserEyes
   m_EditorClassIdentifier: Assembly-CSharp::LaserEyesEffect
   TickSeconds: 0.1
-  BeamWidth: 0.07
-  MuzzleForward: 0.3
-  HitParticles: 3
+  BeamWidth: 0.024
+  MuzzleForward: 0.8
+  EyeSeparation: 0.12
+  HaloWidth: 0.045
+  ImpactRadius: 0.12
+  SparkInterval: 0.14
+  HitParticles: 2

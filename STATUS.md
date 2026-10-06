@@ -4655,3 +4655,49 @@ roster-count control now asserts the exact 12 IDs and the benchmark keeps the
 aim camera enabled. No gameplay or beam code has changed yet. All run
 manifests retain real save/Sidekick database hashes; these failures are not
 reported as passes. The SDK source build is **0 warnings / 0 errors**.
+
+### Laser Eyes pooled beam and camera checkpoint — 2026-10-05
+
+`PowerVfx` now builds six additional Laser-only LineRenderers once per session
+beside its original beam and 16 generic lines. Shared palette-owned unlit Cream
+and Red materials provide narrow bright cores and smaller red halos; a compact
+ring/cross at the **actual `FindTarget` hit point** and two pooled cube sparks
+per 0.14 s provide contact feedback on NPCs, props and world geometry. No
+damage ray, aim math, collision, save, or other power effect was changed. The
+third-person rays start near opposite sides of the Sidekick head bone and
+converge at the real aim point. First person draws a short, lower-right
+peripheral entry and a much thinner segment along the true camera center ray;
+close-hit widths scale down. A first attempt with 0.14 m opaque halos made a
+large third-person wedge; it was rejected after inspection and narrowed to
+**0.024 m core, 0.045 m halo, 0.12 m eye separation**. A three-point
+first-person LineRenderer also made a large end-on wedge; separate straight
+segments replaced it. Captures of the revised result are under
+`Verification/LaserPresentation/visual-final-prebuff/`. Visual quality still
+requires Henry's judgment.
+
+The dedicated `LaserPresentationVerification.Run` passes **36/0**, exit 0, on
+the revised close-wall scaling. It checks real damage and off-axis refusal,
+two eye origins and exact hit endpoints, first-person center ray and safe
+lower-camera origin, near-wall interception, up/down aim, release, pause and
+death cleanup. Four repeated casts kept material, mesh, LineRenderer,
+ParticleSystem and fixed-pool counts unchanged; 1,000 direct pooled visual
+updates allocated **0 managed bytes** on the test thread. An earlier dedicated
+run stopped at **26/1** because its assertion incorrectly expected the
+first-person renderers to be disabled; the camera correctly retains them in
+`ShadowsOnly` mode. The stronger truthful shadow-only assertion passed. The
+full roster regression with the secondary-slot fixtures corrected passed
+**199/0**, exit 0, before the last close-wall visual scaling. Every manifest
+reports unchanged real save and Sidekick database hashes.
+
+The fixed-window real balance fixture (`LaserBalanceVerification.Run`) passed
+**24/0**, exit 0, at unchanged **38 DPS** Laser data. Three game-seconds on a
+stationary single criminal measured Laser Eyes **38.00 DPS** at 10 m (114
+damage, 60 net energy lost), Fire Blast **60.00 DPS** at 10 m (180 damage),
+Lightning **16.00 DPS** at 10 m (48), Poison **10.00 DPS** at 10 m (30), Strength
+**46.67 DPS** at 1.8 m (140) and basic melee **13.33 DPS** at 1.8 m (40).
+Fire is shorter-range area damage, Lightning chains, Poison continues after
+the window and spreads, and melee requires contact. This supports only a
+small Laser single-target increase; range, drain and cooldown need no change.
+The first balance run stopped at **17/1** on a duplicate Strength loadout,
+which was corrected without loosening a combat assertion. Raw measurements
+and limits are retained in `Verification/LaserPresentation/balance-fixed/`.
