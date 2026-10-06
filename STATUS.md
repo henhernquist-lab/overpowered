@@ -4907,10 +4907,13 @@ first-person entry starts below/right of the center aim. A very close wall
 necessarily occupies nearly the whole first-person view; the near-eye ring,
 sparks and light were reduced, and the physical and visible spawn stay on the
 camera side. The automated isolated-camera performance figures above show
-no material/mesh growth across casts but are too variable to establish an FPS
-gain or a dense-city performance sign-off. Henry still needs to judge the
-bolt silhouette, trail length, explosion punch, first-person visibility,
-and clutter when firing repeatedly in a real city scene. No push was made;
+no material/mesh growth across casts. The final committed-source Fire sample
+was **223.91 FPS / 4.466 ms**, versus the matched baseline **158.63 FPS /
+6.304 ms**; after runs varied from 168.59 to 223.91 FPS, so this does not
+establish an FPS gain or a dense-city performance sign-off. Henry still
+needs to judge the bolt silhouette, trail length, explosion punch,
+first-person visibility, and clutter when firing repeatedly in a real city
+scene. No push was made;
 the user's `.freebuff/project-id` and `docs/secondary-loadout.md` edits
 remain unstaged and unchanged.
 
