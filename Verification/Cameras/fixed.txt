@@ -6,13 +6,13 @@ PASS Home -> hero selection accepted.
 PASS hero: exactly one enabled scene Game camera; count=1.
 PASS hero: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
 PASS hero: MainCamera follows the current player (not a verification camera).
-PASS hero: actual camera rendered 230400/230400 pixels; quantized colors=1018, natural render callbacks before capture=0.
+PASS hero: actual camera rendered 230400/230400 pixels; quantized colors=1029, natural render callbacks before capture=0.
 PASS hero: disabled-camera CONTROL excluded from rendering camera list.
 PASS Correct live mode: hero.
 PASS hero-paused: exactly one enabled scene Game camera; count=1.
 PASS hero-paused: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
 PASS hero-paused: MainCamera follows the current player (not a verification camera).
-PASS hero-paused: actual camera rendered 230400/230400 pixels; quantized colors=1038, natural render callbacks before capture=1.
+PASS hero-paused: actual camera rendered 230400/230400 pixels; quantized colors=1024, natural render callbacks before capture=1.
 PASS hero-paused: disabled-camera CONTROL excluded from rendering camera list.
 PASS hero-results: exactly one enabled scene Game camera; count=1.
 PASS hero-results: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
@@ -32,7 +32,7 @@ PASS Correct live mode: villain.
 PASS villain-paused: exactly one enabled scene Game camera; count=1.
 PASS villain-paused: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
 PASS villain-paused: MainCamera follows the current player (not a verification camera).
-PASS villain-paused: actual camera rendered 230400/230400 pixels; quantized colors=780, natural render callbacks before capture=1.
+PASS villain-paused: actual camera rendered 230400/230400 pixels; quantized colors=790, natural render callbacks before capture=1.
 PASS villain-paused: disabled-camera CONTROL excluded from rendering camera list.
 PASS villain-results: exactly one enabled scene Game camera; count=1.
 PASS villain-results: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).

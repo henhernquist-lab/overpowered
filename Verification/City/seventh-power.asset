@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerDefinition
   Id: verification-7
   DisplayName: Verification power 7
+  Role: 0
   Description: Launch an explosive physics projectile at the crosshair.
   Effect: {fileID: 11400000, guid: 8949018453c804f20a57c47d929925e4, type: 2}
   InitiallyUnlocked: 1

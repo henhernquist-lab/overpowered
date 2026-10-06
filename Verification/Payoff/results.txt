@@ -59,9 +59,9 @@ PASS Grab 45kg in first person
 PASS Second click throws despite zero charges/cooldown: already paid grab
 PASS Release costs no extra charges or energy
 PASS Throw contacts aimed NPC: 45kg, first=True
-PASS Throw MISS=0.0369m, contact=(-26.000, 201.036, 21.668), crosshair=(-26.037, 201.034, 21.670), AddForce impulse=1924.7N.s, measured velocity delta~1920.5N.s, displacement=14.00m
-PASS Impact damage=35.00, transferred impulse=1177.4N.s; off-axis CONTROL 0 damage
-PASS NPC launch speed=15.425m/s
+PASS Throw MISS=0.0368m, contact=(-26.000, 201.036, 21.668), crosshair=(-26.037, 201.034, 21.670), AddForce impulse=1919.9N.s, measured velocity delta~1915.6N.s, displacement=14.05m
+PASS Impact damage=35.00, transferred impulse=1177.2N.s; off-axis CONTROL 0 damage
+PASS NPC launch speed=15.422m/s
 PASS Collision pays damage once
 PASS Grab 400kg in first person
 PASS Second click throws despite zero charges/cooldown: already paid grab
@@ -75,7 +75,7 @@ PASS Grab 400kg in third person
 PASS Second click throws despite zero charges/cooldown: already paid grab
 PASS Release costs no extra charges or energy
 PASS Throw contacts aimed NPC: 400kg, first=False
-PASS Throw MISS=0.0467m, contact=(-26.000, 201.084, 21.668), crosshair=(-26.026, 201.045, 21.669), AddForce impulse=10468.3N.s, measured velocity delta~10339.3N.s, displacement=13.98m
+PASS Throw MISS=0.0467m, contact=(-26.000, 201.084, 21.668), crosshair=(-26.026, 201.045, 21.669), AddForce impulse=10427.9N.s, measured velocity delta~10298.3N.s, displacement=14.03m
 PASS Impact damage=65.00, transferred impulse=2400.0N.s; off-axis CONTROL 0 damage
 PASS NPC launch speed=30.727m/s
 PASS Lethal throw preserves physical launch through death animation
@@ -83,13 +83,8 @@ PASS Collision pays damage once
 PASS Wall CONTROL grab
 PASS Wall CONTROL throw
 PASS Real wall collision blocks throw; NPC behind wall unharmed
-PASS Equip flight + telekinesis
-PASS Existing Orbit Throw gathers three real props
-PASS Same LMB power input requests existing Orbit Throw volley
-ORBIT release 1: t=16.1612s velocity=4.711m/s
-ORBIT release 2: t=16.3136s velocity=6.861m/s
-ORBIT release 3: t=16.4644s velocity=8.454m/s
-PASS All three released through existing sequential coroutine
-PASS Orbit intervals=0.152/0.151s; configured=0.150s
-PASS Release did not reset or bypass synergy cooldown
+PASS Equip telekinesis + lightning
+PASS Flight secondary and Telekinesis + Lightning attacks: no synergy in the capped set; C refused with no cooldown.
+PASS LMB Telekinesis performs its own paid grab.
+PASS Second LMB throws the held prop (no orbit release path).
 LIMIT: real gameplay entry points and PhysX steps, not hardware input or human feel acceptance. FPS is in the separate PowerPayoffBenchmark run.

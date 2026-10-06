@@ -1,12 +1,12 @@
-PASS Save VECTOR with flight + strength through the loadout API.
-PASS Session equips flight + strength.
+PASS Saved two attack powers and a separate secondary through progression.
+PASS Session received the exact three-slot build.
 GEOMETRY Downtown: 37 buildings, height 21.600..106.100m.
 GEOMETRY Residential: 20 buildings, height 6.000..18.500m.
 GEOMETRY Docks: 6 buildings, height 7.200..11.100m.
 PASS Baseline fixture genuinely grounded.
 PASS Grounded jump accepted.
-MEASURED first jump peak=1.4692m, launch=8.500m/s, gravity=24.000m/s², dt=0.008333.
-PASS Ground jump remains within original ballistic envelope.
+MEASURED first jump peak=2.0417m, launch=10.000m/s, gravity=24.000m/s², dt=0.008333.
+PASS Ground jump matches configured ballistic rise.
 MEASURED flight 2s: ascent=25.0592m, horizontal=127.9875m, fuel=2.1908, final velocity=(0.00, 14.00, 72.00), lift=14, response=2.5.
 PASS Flight activates via real controller and resource gates.
 PASS View reaches configured limit through existing orbit/eye math.
@@ -34,9 +34,8 @@ PASS CONTROL pitch overshoot clamps at 85 first=True
 PASS Center ray remains aligned with crosshair.
 PASS No camera roll or physics-root rotation.
 PASS Camera collision volume clear at configured limit.
-PASS Save VECTOR with fire + strength through the loadout API.
-PASS Session equips fire + strength.
-PASS fire selected for LMB (key 1).
+PASS Saved two attack powers and a separate secondary through progression.
+PASS Session received the exact three-slot build.
 PASS Change aim verification view.
 PASS Upward limit gameplay aim hits crosshair target first=False
 PASS Upward-limit Fire cast accepted.

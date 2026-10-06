@@ -11,7 +11,7 @@ PASS Slot 1 collision repairs slot 2 immediately.
 PASS Slot 2 UI excludes duplicate.
 PASS Select Fire + Ice attacks and Speed secondary.
 PASS Successful Forge save starts the Cinemachine preview reveal without blocking the form.
-PASS Cinemachine preview camera actually orbits the selected hero (heading -28.0 -> 17.6 deg, camera moved up to 2.03 m, 146 frames).
+PASS Cinemachine preview camera actually orbits the selected hero (heading -28.0 -> 17.5 deg, camera moved up to 2.03 m, 53 frames).
 PASS Short Forge reveal settles on the front view (heading 0) without delaying navigation.
 PASS Pair lookup is order-independent.
 PASS Enter Hero with saved build.
@@ -29,7 +29,7 @@ PASS Pause CONTROL freezes synergy motion/cooldown and rejects activation.
 PASS Sonic Slam rises then collides with actual ground exactly once.
 PASS Sonic force moves real 45kg Rigidbody.
 PASS Outside-radius CONTROL has no horizontal launch.
-MEASURED Sonic peak=154.295m, force=2600.0 N.s, bodies=1, near velocity=34.396m/s, displacement=0.615m; cooldown=34.598s.
+MEASURED Sonic peak=154.284m, force=2600.0 N.s, bodies=1, near velocity=34.396m/s, displacement=0.615m; cooldown=34.599s.
 PASS Cooldown still blocks after animation ends.
 PASS Actual pooled ParticleSystem / ring emitted once.
 PASS Real ParticleSystem contains bounded live particles.
@@ -123,11 +123,11 @@ PASS Thermal Shock completes within bounded duration.
 PASS Thermal Shock cooldown remains after action.
 PASS Thermal affected-target bonus CONTROL: 42.5 vs clean 25
 PASS Thermal Shock emits bounded pooled effects.
-SYNERGY Thermal Shock: impacts=1, VFX emissions=1, cooldown=29.70
+SYNERGY Thermal Shock: impacts=1, VFX emissions=1, cooldown=29.69
 BENCH population civilians=26, cops=9; 1280x720 single camera.
-MEASURED Forge idle phase=0: FPS=65.36, draws=307.1, pool=6.
-MEASURED Forge FX stress phase=1: FPS=64.80, draws=314.1, pool=6.
-MEASURED Forge FX stress phase=2: FPS=67.28, draws=312.1, pool=6.
-MEASURED Forge idle phase=3: FPS=69.14, draws=302.3, pool=6.
-FORGE COST paired means: idle=67.25 FPS, repeated pooled FX=66.04 FPS, difference=1.21 FPS, frame delta=0.272ms. Stress emits every 100ms; not a standalone GPU-time measurement.
+MEASURED Forge idle phase=0: FPS=48.63, draws=307.1, pool=6.
+MEASURED Forge FX stress phase=1: FPS=52.17, draws=313.8, pool=6.
+MEASURED Forge FX stress phase=2: FPS=49.11, draws=311.6, pool=6.
+MEASURED Forge idle phase=3: FPS=45.79, draws=297.0, pool=6.
+FORGE COST paired means: idle=47.21 FPS, repeated pooled FX=50.64 FPS, difference=-3.43 FPS, frame delta=-1.434ms. Stress emits every 100ms; not a standalone GPU-time measurement.
 LIMIT: no human feel test; real gameplay entry points, not hardware key injection. Free Play/Endless Fight remain disabled existing definitions.

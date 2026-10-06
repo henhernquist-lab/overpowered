@@ -1,5 +1,5 @@
 PASS Fresh initial preference is third-person.
-PASS Equip fire / ice through saved loadout.
+PASS Equip fire / ice with flight secondary through saved loadout.
 PASS Launch hero
 PASS Third-person restores body renderers.
 PASS hero-third-fire select equipped power.
@@ -57,7 +57,7 @@ PASS hero first -> third restores view.
 PASS Body visible again after reverse toggle.
 PASS Persist first-person through existing profile.
 PASS Mode -> Home retains preference.
-PASS Equip fire / telekinesis through saved loadout.
+PASS Equip fire / telekinesis with flight secondary through saved loadout.
 PASS Launch hero
 PASS hero first -> third toggle.
 PASS Third-person restores body renderers.
@@ -116,7 +116,7 @@ PASS hero first -> third restores view.
 PASS Body visible again after reverse toggle.
 PASS Persist first-person through existing profile.
 PASS Mode -> Home retains preference.
-PASS Equip fire / ice through saved loadout.
+PASS Equip fire / ice with flight secondary through saved loadout.
 PASS Launch villain
 PASS villain first -> third toggle.
 PASS Third-person restores body renderers.
@@ -175,7 +175,7 @@ PASS villain first -> third restores view.
 PASS Body visible again after reverse toggle.
 PASS Persist first-person through existing profile.
 PASS Mode -> Home retains preference.
-PASS Equip fire / telekinesis through saved loadout.
+PASS Equip fire / telekinesis with flight secondary through saved loadout.
 PASS Launch villain
 PASS villain first -> third toggle.
 PASS Third-person restores body renderers.
@@ -234,7 +234,7 @@ PASS villain first -> third restores view.
 PASS Body visible again after reverse toggle.
 PASS Persist first-person through existing profile.
 PASS Mode -> Home retains preference.
-PASS Equip flight / strength through saved loadout.
+PASS Equip fire / strength with flight secondary through saved loadout.
 PASS Hero reload starts in saved view.
 PASS Hover CONTROL has no forward-flight FOV increase.
 MEASURED forward flight FOV=69.997, additive=4.997 degrees; base=65.
@@ -242,10 +242,10 @@ PASS Actual forward motion drives bounded flight FOV.
 PASS Synergy FOV adds to flight instead of fighting it.
 PASS Non-flight recovery restores baseline FOV after flight/kick.
 BENCH same city position=(-28.00, 8.12, 4.00), matched world pitch=2.261, civilians=26, cops=7; 1280x720 camera+HUD, single render/frame.
-MEASURED third-person phase=0: FPS=86.50, draw calls=280.0.
-MEASURED first-person phase=1: FPS=86.59, draw calls=267.5.
-MEASURED first-person phase=2: FPS=80.09, draw calls=276.9.
-MEASURED third-person phase=3: FPS=80.28, draw calls=290.2.
+MEASURED third-person phase=0: FPS=91.75, draw calls=281.4.
+MEASURED first-person phase=1: FPS=88.23, draw calls=269.2.
+MEASURED first-person phase=2: FPS=83.13, draw calls=278.9.
+MEASURED third-person phase=3: FPS=75.29, draw calls=292.2.
 PASS Benchmark remained alive with populated city simulation running.
-PAIRED same-scene means: third-person=83.39 FPS; first-person=83.34 FPS; delta=-0.06%. Perspective naturally changes visible geometry; no content or population cut.
+PAIRED same-scene means: third-person=83.52 FPS; first-person=85.68 FPS; delta=2.59%. Perspective naturally changes visible geometry; no content or population cut.
 LIMIT: gameplay/UI/collision entry points and actual rendered frames tested; no hardware B-key injection, human feel or standalone FPS claim.

@@ -8,7 +8,7 @@ PASS Spent one point on strength.
 PASS Upgraded strength: force=1890, max charges=4, points=0.
 PASS Zero-point upgrade CONTROL rejected.
 PASS Seventh power discovered from DATA only; exact same projectile effect asset as Fire Blast.
-PASS Seventh power owned but NOT equipped (session loadout flight + strength).
+PASS Seventh power owned but NOT equipped (session loadout fire + strength).
 PASS CONTROL: unequipped seventh power refused by the equip gate (Select/Use false, "Power not equipped"); charges 3->3, cooldown 0.00->0.00, energy 100.00->100.00.
 PASS CONTROL: refused seventh power spawned no projectile (0 before/after) and the target did not move: displacement=0.0000m.
 PASS Real flight resource path: start=6, after 2s=3.8, after 6s=0; empty rejects.
@@ -20,7 +20,7 @@ PASS Three punches exhausted charges; zero-charge fire rejected.
 PASS Time-driven recharge restored a working punch.
 PASS Telekinesis and Ice owned from the start at tier 0 (InitiallyUnlocked data); the 3 earned points stay unspent for tiers.
 PASS CONTROL: unequipped Telekinesis and Ice refused by the equip gate (Select/Use false); nothing grabbed, frozen or charged.
-PASS Test hero 'verification-hero' registered in memory only (no asset file; catalog not dirty); roster=verification-7+strength.
+PASS Test hero 'verification-hero' registered in memory only (no asset file; catalog not dirty); roster=verification-7+strength+flight.
 PASS CONTROL: live in-session loadout change refused (seventh power + Strength).
 PASS CONTROL: hero vector whose roster lacks the pair cannot equip seventh power + Strength.
 PASS Equipped owned seventh power + Strength on verification-hero through PlayerProgression.SetLoadout before the session.
@@ -54,5 +54,5 @@ PASS Existing patrol cop placed in attack range on NavMesh.
 PASS Hostile cop attacked through live AI: player HP 92 -> 78.
 PASS Defeating cop as Villain awards XP and disables dead NPC navigation.
 PASS Performance population: civilians=24, cops=6, on-NavMesh cops=6.
-MEASURED 1280x720 rendered Editor Play Mode: frames=289; seconds=5.007; FPS=57.72; p95 frame ms=20.94; GPU=AMD Radeon Pro 5300; CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz.
+MEASURED 1280x720 rendered Editor Play Mode: frames=227; seconds=5.012; FPS=45.29; p95 frame ms=27.50; GPU=AMD Radeon Pro 5300; CPU=Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz.
 PASS Saved level=5, strength tier=1; will verify in a separate Unity process.

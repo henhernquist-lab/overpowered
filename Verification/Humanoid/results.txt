@@ -1,4 +1,5 @@
 PASS Home camera retained.
+PASS Establish Strength + Telekinesis attacks before testing unequipped Fire and Ice.
 HERO under test: VECTOR = vector-rigged
 PASS Player uses the selected hero's valid Humanoid (vector-rigged: 1 skinned mesh(es)), no capsule renderer.
 PASS CONTROL: player collider unchanged: height=1.800m radius=.380m; NPC capsule=1.800m/.350m.
@@ -8,7 +9,7 @@ BLEND requested=0.00 actual controller=0.000 animator Speed=0.000 m/s: Idle=1.00
 PASS Continuous actual-speed parameter tracks measured motion.
 BLEND requested=0.90 actual controller=0.900 animator Speed=0.899 m/s: Idle=0.501, Walking=0.499
 PASS Continuous actual-speed parameter tracks measured motion.
-BLEND requested=1.80 actual controller=1.800 animator Speed=1.799 m/s: Idle=0.001, Walking=0.999
+BLEND requested=1.80 actual controller=1.800 animator Speed=1.798 m/s: Idle=0.006, Walking=0.994
 PASS Continuous actual-speed parameter tracks measured motion.
 BLEND requested=3.40 actual controller=3.400 animator Speed=3.398 m/s: Walking=0.501, Jog Forward=0.499
 PASS Continuous actual-speed parameter tracks measured motion.
@@ -24,9 +25,9 @@ PASS Negative actual local velocity selects Standing Run Back.
 PASS Normal charged punch accepted.
 PASS Cooldown CONTROL refuses immediate second punch.
 PASS Windup CONTROL has no premature force.
-PUNCH source start=0.3667s impact=0.5667s playback=1.60; configured windup=125.00ms; visual marker t=6.31882 frame=605; real force t=6.31882 frame=605; offset=0.00ms/0 frames.
+PUNCH source start=0.3667s impact=0.5667s playback=1.60; configured windup=125.00ms; visual marker t=6.49776 frame=699; real force t=6.49776 frame=699; offset=0.00ms/0 frames.
 PASS Actual force and evaluated clip impact marker align within two rendered frames.
-PASS Real force=1350 N·s, mass=45kg, velocity=17.192m/s, displacement=3.782m.
+PASS Real force=1350 N·s, mass=45kg, velocity=17.192m/s, displacement=3.438m.
 PASS Zero-charge CONTROL refuses punch.
 PASS Rejected punches emit no extra impact.
 PASS Original 1.25s charge recharge retained.
@@ -38,26 +39,26 @@ PASS Undamaged NPC CONTROL plays neither hit nor death.
 PASS Lethal damage triggers Death, disables navigation/collision; no root 90-degree flip.
 PASS Real player damage triggers Hit Reaction.
 FLIGHT hover weight=0.998 pitch=0.00 hand=(-0.389, 0.925, 0.090)
-FLIGHT transition frame 4: blend=0.313, pitch=24.44
-FLIGHT transition frame 12: blend=0.622, pitch=48.53
-FLIGHT transition frame 59: blend=0.988, pitch=77.07
-PASS Hover vs forward distinct: body difference=77.07deg, hand height 0.925->1.931m; maximum rendered-frame pitch change=6.06deg.
+FLIGHT transition frame 4: blend=0.248, pitch=19.30
+FLIGHT transition frame 12: blend=0.532, pitch=41.47
+FLIGHT transition frame 59: blend=0.968, pitch=75.47
+PASS Hover vs forward distinct: body difference=75.47deg, hand height 0.925->1.931m; maximum rendered-frame pitch change=4.33deg.
 PASS Uncaptured live transition CONTROL stays below 20 degrees per rendered frame.
 PASS Flight CONTROL gives the original flight head overlay full ownership after the gaze fade.
 PASS Landing transition releases flight bones/root smoothly.
 PASS Normal-jog CONTROL is not alarmed and has no panic overlay.
-PASS Live fleeing civilian: Standing Run Forward at 1.45x, lean=23.93deg, raised/flailing hand Y=1.12..1.69m; head yaw=-64.1..54.4deg.
-PANIC path deviation sample=1.295m, configured amplitude=1.50m; NavMesh sampling remains authoritative.
-PASS Actual controller fall: 1 impact at 15.493m/s; Land clip played with single existing squash minY=0.787, recovered=1.000; collider=1.800m.
+PASS Live fleeing civilian: Standing Run Forward at 1.45x, lean=23.59deg, raised/flailing hand Y=1.08..1.71m; head yaw=-13.4..48.4deg.
+PANIC path deviation sample=1.321m, configured amplitude=1.50m; NavMesh sampling remains authoritative.
+PASS Actual controller fall: 1 impact at 15.573m/s; Land clip played with single existing squash minY=0.786, recovered=1.000; collider=1.800m.
 PASS CONTROL menu-open grounded jump refused.
 PASS Existing grounded jump accepted.
 PASS Jump presentation comes from real movement event.
 PASS Fire Blast and Ice both configured for shared Casting Spell presentation.
-PASS Fire Blast and Ice owned through earned points but NOT equipped (session loadout flight + strength).
+PASS Fire Blast and Ice owned through earned points but NOT equipped (session loadout strength + telekinesis).
 PASS CONTROL: unequipped Fire Blast and Ice refused by the equip gate (Select/Use false, "Power not equipped").
 PASS CONTROL: refused unequipped casts charged nothing (Fire charges 3->3, Ice charges 2->2, energy 100.00->100.00).
 PASS CONTROL: refused unequipped casts spawned no projectile (0 before/after), froze nothing, raised no Activated event and played no Casting Spell (state=Locomotion).
-MEASURED populated skinned/Animator city: civilians=26, cops=7, active animators=37; 1280x720, frames=280, seconds=5.011, FPS=55.88, p95=23.30ms, drawcalls median/max=594/598; previous city seed2409=50.25 FPS (11.2%), historical155=(-63.9%); AMD Radeon Pro 5300.
+MEASURED populated skinned/Animator city: civilians=26, cops=7, active animators=37; 1280x720, frames=69, seconds=5.034, FPS=13.71, p95=89.90ms, drawcalls median/max=598/606; previous city seed2409=50.25 FPS (-72.7%), historical155=(-91.2%); AMD Radeon Pro 5300.
 PASS Owned Fire Blast + Ice equipped through PlayerProgression.SetLoadout before the session.
 PASS New session receives equipped pair fire + ice.
 PASS Real Fire Blast activation succeeds.
@@ -68,7 +69,7 @@ PASS Equip telekinesis through progression for the rig test.
 PASS Animation Rigging graph is live on the visual Animator; root motion stays off.
 PASS Select equipped telekinesis.
 PASS Actual telekinesis cast acquires the real movable prop.
-RIG held arms: left alignment=0.942, right=0.941, weight=0.750, root drift=0.00000m.
+RIG held arms: left alignment=0.947, right=0.945, weight=0.750, root drift=0.00000m.
 PASS Both hands aim toward the held prop through real IK without moving the physics root.
 PASS Rigged hero can enter first person.
 PASS First-person CONTROL removes gaze while preserving the hidden Animator and hold pose.
@@ -79,10 +80,10 @@ PASS Near promotion rebuilds the awareness rig.
 PASS Hit clip CONTROL has zero rig weights.
 PASS Death CONTROL clears both rig weights.
 PASS Villain mode spawns same humanoid/controller and renders.
-COP gait sample: phase=Approach, agent speed=0.189m/s, measured speed=0.189m/s, state=Armed, windup frames skipped=0, budget left=9.97s of 10s.
-PASS Moving cop (phase=Approach) actual speed=0.189m/s selects shared Pistol Run.
+COP gait sample: phase=Approach, agent speed=0.253m/s, measured speed=0.253m/s, state=Armed, windup frames skipped=0, budget left=9.96s of 10s.
+PASS Moving cop (phase=Approach) actual speed=0.253m/s selects shared Pistol Run.
 PASS CONTROL: patrol cop at 0 stars is hostile=False (per-side data, hostile from 1).
 PASS Heat raised to 1 star(s): the same patrol cop is now hostile.
 PASS Live hostile cop attack: HP 100->90; shared controller plays Shooting Gun.
-COP shooting clip sample: left hand local=(0.045, 1.592, 0.554), presentation yaw=90.0deg; physics root still navigates normally.
+COP shooting clip sample: left hand local=(0.046, 1.590, 0.556), presentation yaw=90.0deg; physics root still navigates normally.
 PASS Hero and Villain return Home without camera regression.
