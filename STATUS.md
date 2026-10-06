@@ -4913,3 +4913,10 @@ bolt silhouette, trail length, explosion punch, first-person visibility,
 and clutter when firing repeatedly in a real city scene. No push was made;
 the user's `.freebuff/project-id` and `docs/secondary-loadout.md` edits
 remain unstaged and unchanged.
+
+The durable Fire branch checkpoints are `9032da9` (measured ball baseline),
+`59b1371` (pooled bolt, camera and impact presentation) and `55e3ffe`
+(fresh regression manifests, captures, build result, exact changed-file
+inventory and preserved optional verifier failure). The Fire presentation
+packet is implemented and its requested verifiers are complete; the legacy
+Loadout Matrix migration and human visual judgment remain open.
