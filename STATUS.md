@@ -5023,3 +5023,43 @@ shipping mission pool, vendor asset/database, difficulty or render pipeline chan
 Durable Phase Shift source/content checkpoints: `270ad4b` and `eb6e97e`.
 Full 17-point report and exact file inventory: `docs/phase-shift-report.md`.
 Runtime execution remains blocked by the open user Editor; source checks only.
+
+## Four-power visual polish Phase 0 — 2026-10-08 (`codex/power-polish-dark-lightning-poison-shield`)
+
+Started at `c2e4b6a` with the pre-existing `.freebuff/project-id`,
+`docs/secondary-loadout.md` and `ProjectSettings/SidekickToolDownloaderAutoShown.txt`
+unchanged. Current Unity Editor is open but the project lacks the Unity Pipeline live
+connection; a second batch Editor cannot safely run. These are source and historical
+capture findings, not a fresh Play Mode measurement. Historical images inspected:
+`Verification/Roster/darkness-rooted.png`, `lightning-chain.png`, `poison-spread.png`
+and `force-field.png`. Fresh day/night and first-person before captures remain blocked.
+
+Darkness gameplay roots one aimed NPC for data Duration and deals data Damage. The
+current RootedLook redraws four lit `PowerVfx` arcs from a 0.75 m ground spread every
+0.3 s. The archived capture shows dark, long lines near the target, with weak contrast
+against the street and no clear body restraint. A redraw line may remain for 0.05 s
+after the root ends. The root and off-target controls are in RosterVerification.
+
+Lightning gameplay records the exact ordered LastChain with hostile/LOS/MaxArcs gates.
+All six existing visual arcs use the same 0.08 m width, duration and lit palette
+material. The historical image shows a uniform dull zigzag; the first target does not
+read as the dominant strike. The Roster suite already asserts order, damage, skipped
+civilian/walled/outside/seventh targets and one line per actual strike.
+
+Poison applies a small burst, then only three tiny shared particles per real 0.5 s
+DoT tick. Spreads use one thin, lit green arc per actual chosen recipient. The
+archived capture shows a nearly invisible long green line and little target status.
+Generation/count/damage/expiration controls exist in the Roster suite.
+
+Force Field uses three arbitrary rotating circles around the physics root, each lit
+blue. Absorb has no source direction or visible ripple; break has a larger burst,
+expiry merely hides the rings. The historical capture does not visibly show the
+barrier from its camera pose. First-person uses the same root-owned rings, which can
+interfere with near-eye reading. Existing Roster checks exact capacity, break,
+expiry, unblockable bypass and rings active only while raised.
+
+`PowerVfx` has 16 transient pooled lines, plus the separately pooled Laser renderers.
+ImpactParticlePool is fixed per session; CityMaterials owns shared lit/unlit palette
+swatches. First-person ThirdPersonCamera hides only renderers under the hero's visual
+root; root-owned shield lines stay visible. Gameplay values and power assets are
+unchanged at this audit. No new FPS/GC/object count or visual PASS is claimed.
