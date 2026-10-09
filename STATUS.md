@@ -5063,3 +5063,15 @@ ImpactParticlePool is fixed per session; CityMaterials owns shared lit/unlit pal
 swatches. First-person ThirdPersonCamera hides only renderers under the hero's visual
 root; root-owned shield lines stay visible. Gameplay values and power assets are
 unchanged at this audit. No new FPS/GC/object count or visual PASS is claimed.
+
+### Darkness restraint presentation checkpoint — 2026-10-08
+
+`StatusPowerVfx` now builds a fixed 8-slot × 4-line Darkness restraint pool and a
+32-slot Poison cue pool per session. The pool reuses shared unlit palette swatches;
+no geometry/material is created per cast or status tick. Each rooted target leases
+close helical navy bands with thin lighter edges, and the aimed cast adds one brief
+snap from the view-aware origin to the real target. Root/death/disable releases the
+lease immediately; the underlying Root/Damage rules and power data are unchanged.
+The 8-root pool can miss if more than eight simultaneous targets are rooted; this
+must be observed in runtime stress and is not treated as passing. SDK build is
+0 warnings/0 errors; no Unity runtime result or fresh capture yet.

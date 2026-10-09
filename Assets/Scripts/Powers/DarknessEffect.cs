@@ -21,35 +21,39 @@ public sealed class DarknessEffect : PowerEffect
         npc.Root(stats.Duration);
         npc.Damage(stats.Damage, user);
         var color = power.Definition.PaletteColor;
-        if (!npc.Dead) RootedLook.Show(npc, this, color);
+        if (!npc.Dead)
+        {
+            RootedLook.Show(npc, this, color);
+            // A brief aimed snap establishes the target; the leased body bands carry the held state.
+            var snap=PowerVfx.Get().Arc(user.AimOrigin,npc.transform.position+Vector3.up,
+                4,.045f,CityColor.UiMuted,.035f,.12f);
+            if(snap!=null)snap.sharedMaterial=CityMaterials.GetVfx(CityColor.UiMuted);
+        }
         FeelDirector.Instance?.Particles.Burst(npc.transform.position + Vector3.up * .15f, color, CastParticles);
         return true;
     }
 }
-/// Visible root: tendrils from the ground to the NPC's waist, redrawn from the PowerVfx pool while CityNpc.Rooted holds.
+/// Visible root: four closely wrapped, leased tendril bands. The gameplay root is unchanged.
 public sealed class RootedLook : MonoBehaviour
 {
-    CityNpc npc; DarknessEffect settings; CityColor color; float nextDraw;
+    CityNpc npc; int slot=-1;
     public int Draws { get; private set; }
-    public bool Showing => enabled && npc != null && !npc.Dead && npc.Rooted;
+    public bool Showing => enabled && npc != null && !npc.Dead && npc.Rooted && slot>=0;
     public static RootedLook Show(CityNpc target, DarknessEffect settings, CityColor color)
     {
-        var look = target.GetComponent<RootedLook>(); if (look == null) look = target.gameObject.AddComponent<RootedLook>();
-        look.npc = target; look.settings = settings; look.color = color; look.nextDraw = 0f; look.enabled = true; return look;
+        var look=target.GetComponent<RootedLook>();if(look==null)look=target.gameObject.AddComponent<RootedLook>();
+        look.npc=target;look.enabled=true;
+        if(look.slot<0){look.slot=StatusPowerVfx.Get().AcquireRoot(target);if(look.slot>=0)look.Draws++;}
+        return look;
     }
     void Update()
     {
-        if (npc == null || npc.Dead || !npc.Rooted) { enabled = false; return; }
-        if (Time.time < nextDraw) return;
-        nextDraw = Time.time + settings.RedrawSeconds;
-        var vfx = PowerVfx.Get(); Vector3 feet = npc.transform.position;
-        for (int i = 0; i < settings.Tendrils; i++)
-        {
-            float a = (i + Random.value * .5f) * Mathf.PI * 2f / Mathf.Max(1, settings.Tendrils);
-            Vector3 root = feet + new Vector3(Mathf.Cos(a), .02f, Mathf.Sin(a)) * settings.TendrilSpread;
-            Vector3 grip = feet + Vector3.up * settings.TendrilHeight * (.6f + .4f * Random.value);
-            vfx.Arc(root, grip, 4, settings.TendrilJitter, color, settings.TendrilWidth, settings.RedrawSeconds + .05f);
-        }
-        Draws++;
+        if(npc==null||npc.Dead||!npc.Rooted){enabled=false;return;}
+        if(slot<0){slot=StatusPowerVfx.Get().AcquireRoot(npc);if(slot>=0)Draws++;}
+    }
+    void OnDisable()
+    {
+        if(slot>=0&&npc!=null&&StatusPowerVfx.Existing!=null)StatusPowerVfx.Existing.ReleaseRoot(npc,slot);
+        slot=-1;
     }
 }
