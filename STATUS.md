@@ -5098,3 +5098,22 @@ get none. All damage, spread radius/count/order/generation and Heat logic remain
 The existing Roster controls add tick-to-pulse and actual-recipient visual checks.
 SDK build 0 warnings/errors. Actual night/first-person readability and pool-cap
 behavior require the pending Unity run.
+
+### Force Field shell and impact checkpoint — 2026-10-08
+
+`PlayerShield` now owns a fixed five-circle shell, one reusable local hit ripple,
+and two restrained first-person peripheral lines. All use shared unlit palette
+materials. An intersecting CityNpc attack primes the actual source side only
+when a shield is raised and Phase Shift is not blocking the attack; otherwise
+the pre-existing generic damage path gives a forward fallback. Real absorbed
+damage animates the local ripple, capacity changes line weight, depletion makes
+an immediate bright break/pop, and natural expiry tapers line width over 0.24 s.
+The shell is hidden from the first-person eye while the peripheral cue remains;
+after break its cue persists only for the short hit response. Shield capacity,
+damage routing, unblockable bypass, charges, cooldown and duration are unchanged.
+Roster controls now also check root lease release, exact ordered Lightning
+visual targets, poison pulse/spread counts, and shield ripple on real vs.
+unshielded damage. The Poison pulse baseline is captured before the first cast.
+SDK source build: 0 warnings, 0 errors; `git diff --check` clean. Unity runtime,
+night/first-person captures, pool stress and dense-scene performance remain
+unverified while the user's Editor owns this project without a live connection.

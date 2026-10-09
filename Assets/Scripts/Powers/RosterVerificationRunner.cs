@@ -107,7 +107,9 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         Check(target.Rooted && !target.Frozen && rt.Charges == charges - 1, $"Target rooted (not frozen); charge spent {charges}->{rt.Charges}.");
         Check(Mathf.Abs(hp - target.Health - stats.Damage) < .01f, $"Root damage == data: {hp - target.Health:F2} vs {stats.Damage}.");
         yield return null;
-        Check(target.GetComponent<RootedLook>() != null && target.GetComponent<RootedLook>().Showing && PowerVfx.Get().ActiveLines > 0, "Tendrils visible from the pooled line set while rooted.");
+        Check(target.GetComponent<RootedLook>() != null && target.GetComponent<RootedLook>().Showing &&
+            StatusPowerVfx.Get().ActiveRoots==1 && PowerVfx.Get().ActiveLines > 0,
+            "One real rooted target owns a pooled restraint and aimed activation snap.");
         Capture("darkness-rooted.png");
         yield return Speeds(new[] { target, control }, stats.Duration - .8f, v);
         Log($"MEASURED during root ({stats.Duration - .8f:F1} s): target {v[0]:F3} m/s, control {v[1]:F2} m/s.");
@@ -115,6 +117,8 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         Check(v[1] > .3f && !control.Rooted, "CONTROL: the un-rooted criminal keeps moving.");
         yield return new WaitForSeconds(1.2f);
         Check(!target.Rooted, "Root expires after its Duration.");
+        yield return null;
+        Check(StatusPowerVfx.Get().ActiveRoots==0,"Root expiry releases the restraint pool lease.");
         yield return Speeds(new[] { target }, 1f, v);
         Log($"MEASURED after root: target {v[0]:F2} m/s.");
         Check(v[0] > .3f, "Target moves again after the root ends.");
@@ -242,7 +246,13 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         Check(civilian.Health == 1000, "CONTROL: the civilian nearest the first target is never arced to.");
         Check(walled.Health == 1000, "CONTROL: the criminal behind a wall (nearer than jump 2) is skipped.");
         Check(far.Health == 1000, "CONTROL: the criminal 20 m from the chain is untouched.");
-        Check(PowerVfx.Get().Draws - draws == chain.Length, "One pooled arc line per strike."); Capture("lightning-chain.png");
+        Check(LightningEffect.LastVisualStrikes.Count==chain.Length&&
+            LightningEffect.LastVisualStrikes.Select(x=>x.Target).SequenceEqual(chain)&&
+            LightningEffect.LastVisualStrikes[0].Width>LightningEffect.LastVisualStrikes[1].Width*2&&
+            LightningEffect.LastVisualStrikes.Skip(2).All(x=>x.Width<LightningEffect.LastVisualStrikes[1].Width)&&
+            !LightningEffect.LastVisualStrikes.Any(x=>x.Target==beyondCap||x.Target==civilian||x.Target==walled),
+            "Visual arcs follow actual ordered hit targets; primary is dominant, skipped controls have no fake arc.");
+        Check(PowerVfx.Get().Draws - draws == chain.Length*2, "One core and one cached afterglow per real strike."); Capture("lightning-chain.png");
         yield return new WaitForSeconds(stats.Cooldown + .05f);
         float first = chain[0].Health; Aim(new Vector3(.5f, 150, 8.5f));
         Check(W.Powers.Use(rt) && LightningEffect.LastChain.Count > 0 && LightningEffect.LastChain[0] == chain[0] && chain[0].Health < first, "Bolt at the floor beside an enemy jumps to the nearest enemy.");
@@ -257,13 +267,18 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         float health = W.Health;
         Check(W.Powers.Use(rt) && W.Powers.Shield != null && W.Powers.Shield.Up && W.Powers.Shield.RingsVisible, $"Force Field raised: {effect.Capacity} absorb for {stats.Duration} s.");
         Capture("force-field.png");
+        int ripples=W.Powers.Shield.HitRipples;
         W.DamagePlayer(25);
+        Check(W.Powers.Shield.HitRipples==ripples+1&&W.Powers.Shield.HitRippleVisible,
+            "Real absorbed amount triggers one local ripple on the boundary.");
         Check(W.Health == health && Mathf.Abs(W.Powers.Shield.Remaining - (effect.Capacity - 25)) < .01f && damagedEvents == 0, $"25 damage fully absorbed: health {W.Health}, field {W.Powers.Shield.Remaining}, 0 damage events.");
         W.DamagePlayer(50);
         float through = 50 - (effect.Capacity - 25);
         Check(Mathf.Abs(W.Health - (health - through)) < .01f && !W.Powers.Shield.Up && W.Powers.Shield.LastEnd == "broken" && !W.Powers.Shield.RingsVisible && damagedEvents == 1,
             $"50 damage: field absorbs its last {effect.Capacity - 25}, {through} reaches health ({W.Health}); field broken, rings hidden.");
+        ripples=W.Powers.Shield.HitRipples;
         health = W.Health; W.DamagePlayer(10);
+        Check(W.Powers.Shield.HitRipples==ripples,"CONTROL: damage with no raised shield draws no new ripple.");
         Check(Mathf.Abs(W.Health - (health - 10)) < .01f, "CONTROL: with the field down, damage reaches health in full.");
         rt.Charges = 1; rt.Cooldown = 0; Check(W.Powers.Use(rt) && W.Powers.Shield.Up, "Raise again.");
         rt.Charges = 1; rt.Cooldown = 0; Check(!W.Powers.Use(rt) && rt.Charges == 1 && W.Powers.Message == "Force field already up", "CONTROL: re-cast while up is refused and spends no charge.");
@@ -312,9 +327,14 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         Isolate(); var rt = Runtime("poison"); var stats = W.Powers.Stats(rt); var effect = (PoisonEffect)rt.Definition.Effect;
         var p = Actor(new Vector3(-6, 150, 10), NpcRole.Criminal, 1000); var cop = Actor(new Vector3(-10, 150, 10), NpcRole.Cop, 1000);
         yield return new WaitForSeconds(.3f);
+        int pulsesBefore=StatusPowerVfx.Get().PoisonPulses;
         Aim(Chest(p)); Check(W.Powers.Use(rt), "Poison the criminal.");
         rt.Cooldown = 0; float heat = W.Heat; Aim(Chest(cop)); Check(W.Powers.Use(rt), "Poison the cop.");
+        var statusPool=StatusPowerVfx.Get();
         yield return new WaitForSeconds(stats.Duration + .6f);
+        int actualTicks=p.GetComponent<Poisoned>().Ticks+cop.GetComponent<Poisoned>().Ticks;
+        Check(statusPool.PoisonPulses-pulsesBefore==actualTicks&&statusPool.ActivePoisons==0,
+            "Each real DoT tick gives one pooled toxic pulse and expiry clears both status visuals.");
         float expected = stats.Damage * stats.Duration;
         Check(Mathf.Abs(1000 - p.Health - expected) < .01f && !p.GetComponent<Poisoned>().Active, $"Total poison damage == {stats.Damage}/s x {stats.Duration} s = {expected} ({1000 - p.Health:F2}); then it stops.");
         Check(Mathf.Abs((W.Heat - heat) - W.Tuning.Heat.AssaultHeat) < .02f, $"Poisoning a cop adds ONE assault of Heat ({W.Heat - heat:F3}) over {cop.GetComponent<Poisoned>().Ticks} ticks.");
@@ -323,12 +343,16 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         var n1 = Actor(new Vector3(2, 150, 10), NpcRole.Criminal, 1000); var n2 = Actor(new Vector3(0, 150, 12.5f), NpcRole.Criminal, 1000);
         var n3 = Actor(new Vector3(-3, 150, 10.5f), NpcRole.Criminal, 1000); var fourth = Actor(new Vector3(4, 150, 13), NpcRole.Criminal, 1000);
         var civ = Actor(new Vector3(1, 150, 8), NpcRole.Civilian, 1000); var outside = Actor(new Vector3(0, 150, 17.5f), NpcRole.Criminal, 1000);
-        int spreads = 0; Action<CityNpc, CityNpc> onSpread = (a, b) => spreads++; Poisoned.Spreading += onSpread;
+        int spreads=0,visualSpreads=Poisoned.VisualSpreads;
+        Action<CityNpc, CityNpc> onSpread=(a,b)=>spreads++;Poisoned.Spreading+=onSpread;
         rt.Charges = Mathf.Max(rt.Charges, 1); rt.Cooldown = 0; Aim(Chest(s)); Check(W.Powers.Use(rt), "Poison a 10 HP criminal with neighbours.");
         float until = Time.time + 3; while (!s.Dead && Time.time < until) yield return null;
         Check(s.Dead, "The poisoned criminal dies from the poison ticks.");
         bool On(CityNpc n) { var q = n.GetComponent<Poisoned>(); return q != null && q.Active; }
         Check(On(n1) && On(n2) && On(n3) && spreads == 3, $"Poison jumped to the three nearest enemies (events {spreads}).");
+        Check(Poisoned.VisualSpreads-visualSpreads==spreads&&
+            new[]{n1,n2,n3}.All(n=>n.GetComponent<Poisoned>().VisualActive),
+            "Spread visuals match only the three actual poisoned recipients, all with active pooled status cues.");
         Check(new[] { n1, n2, n3 }.All(n => n.GetComponent<Poisoned>().Generation == 1), "Spread targets are generation 1.");
         Check(!On(fourth), "CONTROL: the 4th enemy in range is skipped (MaxSpreadTargets).");
         Check(!On(civ), "CONTROL: the civilian beside it is not poisoned (enemies only).");
