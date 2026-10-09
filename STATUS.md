@@ -5019,3 +5019,7 @@ Secondary covers Teleport; Phase adds direct comparisons. Recover a matched pre-
 baseline safely and measure final dense combat. Capture and visually inspect Phase in
 both views. Full report/handoff: `docs/phase-shift-report.md`. Task NOT complete; no
 shipping mission pool, vendor asset/database, difficulty or render pipeline changes.
+
+Durable Phase Shift source/content checkpoints: `270ad4b` and `eb6e97e`.
+Full 17-point report and exact file inventory: `docs/phase-shift-report.md`.
+Runtime execution remains blocked by the open user Editor; source checks only.
