@@ -4923,3 +4923,37 @@ The durable Fire branch checkpoints are `9032da9` (measured ball baseline),
 inventory and preserved optional verifier failure). The Fire presentation
 packet is implemented and its requested verifiers are complete; the legacy
 Loadout Matrix migration and human visual judgment remain open.
+
+
+## Phase Shift audit — 2026-10-08 (`codex/phase-shift-secondary`)
+
+Started at `170350b`, preserving pre-existing `.freebuff/project-id`,
+`docs/secondary-loadout.md`, and `ProjectSettings/SidekickToolDownloaderAutoShown.txt`.
+Current content has eight combat powers and Flight/Speed/Force Field/Teleport secondaries.
+ProgressSave v1 stores HeroId, PowerA, PowerB, SecondaryPower and suit colours in
+HeroLoadout. ValidateLoadout currently prefers Flight; all three hero assets expose it.
+Runtime Flight references remain in controller fuel/movement, camera/presentation, HUD,
+Sonic Slam and historical verifiers. No current traversal requirement needs Flight: jump,
+double jump, mantle and climb are universal. Retain Flight runtime/assets; replace its
+hero-roster references with Phase Shift, update content setup and migrate through
+PlayerProgression validation + normal Save, preserving unrelated profile fields.
+
+Speed is a damaging short burst through the existing controller, Teleport requires a
+clear standing capsule/path and supported destination, Shield absorbs finite capacity.
+CityNpc melee and Gunner releases both call WorldSession.DamagePlayer; Gunner is a
+committed hitscan shape, not a physical hostile projectile. Kill plane uses unblockable
+damage. Phase should filter this authoritative path, stop channels, block activation
+and melee/synergy entry points, and ignore only NPC collider pairs. No global controller
+disable, new movement controller, health store, or material instances are needed.
+HUD already reads the secondary definition; F uses PowerUser.UseSecondary. First-person
+uses ThirdPersonCamera and view-aware aim. Existing shared palette and pooled line
+geometry can provide an outline/echo with separate peripheral first-person placement.
+Implementation, migration and all fresh verification are pending. Added a matched dense
+combat baseline harness before changing gameplay; no performance result yet.
+
+Phase 0 execution limitation: sequential baseline launcher refused because the user's
+Editor already owns this project. CLI confirms the Editor has no Pipeline package/live
+connection. Licensing startup resolved a Personal entitlement; no second Editor was
+started, no process killed and no open scene closed. Baseline has NOT run.
+Initial evasion source extensions compile with the Unity SDK: 0 warnings/0 errors.
+They are inactive until Phase Shift content is added. No runtime PASS is claimed.

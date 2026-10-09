@@ -68,7 +68,7 @@ public sealed class SuperHeroController : MonoBehaviour
     public Vector2 ScriptedClimbInput;
     bool BasicMelee(bool kick)
     {
-        if(Time.time<basicReadyAt||powers.SynergyRunner.Busy)return false;
+        if(powers.OffensiveActionsBlocked||Time.time<basicReadyAt||powers.SynergyRunner.Busy)return false;
         basicReadyAt=Time.time+powers.Forge.BasicCooldown;
         if(kick)PerformHurricaneKick(BasicStats());else PerformPunch(powers.Strength.Definition,BasicStats());
         return true;
@@ -176,6 +176,7 @@ public sealed class SuperHeroController : MonoBehaviour
     string MeleeCredit => powers.Strength != null && (powers.Forge == null || powers.IsEquipped(powers.Strength.Definition)) ? powers.Strength.Definition.Id : "melee";
     public bool TryPunch()
     {
+        if(powers.OffensiveActionsBlocked)return false;
         if(powers.Forge!=null&&!powers.IsEquipped(powers.Strength.Definition))return BasicMelee(false);
         bool fired = powers.Use(powers.Strength);
         if (!fired) LastPunchResult = powers.Message;
@@ -195,8 +196,9 @@ public sealed class SuperHeroController : MonoBehaviour
     public void PresentPunch(){PunchStarted?.Invoke();}
     System.Collections.IEnumerator PunchAfterWindup(PowerDefinition definition,PowerStats stats,float delay,bool pause)
     {
+        int epoch=offenseEpoch;
         yield return new WaitForSeconds(delay);
-        if(WorldSession.Instance!=null&&!WorldSession.Instance.PlayerDead&&(WorldSession.Instance.Mode==null||!WorldSession.Instance.Mode.Ended))ApplyPunch(definition,stats,pause);
+        if(epoch==offenseEpoch&&!powers.OffensiveActionsBlocked&&WorldSession.Instance!=null&&!WorldSession.Instance.PlayerDead&&(WorldSession.Instance.Mode==null||!WorldSession.Instance.Mode.Ended))ApplyPunch(definition,stats,pause);
     }
     void ApplyPunch(PowerDefinition definition,PowerStats stats,bool pause=false)
     {
@@ -244,6 +246,7 @@ public sealed class SuperHeroController : MonoBehaviour
     // gesture, force, damage and radius it applies.
     public bool TryHurricaneKick()
     {
+        if(powers!=null&&powers.OffensiveActionsBlocked)return false;
         if (powers == null || powers.Strength == null) { LastKickResult = "Power locked"; return false; }
         if(powers.Forge!=null&&!powers.IsEquipped(powers.Strength.Definition))return BasicMelee(true);
         hurricaneKickPending = true;
@@ -263,8 +266,9 @@ public sealed class SuperHeroController : MonoBehaviour
     }
     System.Collections.IEnumerator HurricaneKickAfterWindup(PowerStats stats, float delay, bool pause)
     {
+        int epoch=offenseEpoch;
         yield return new WaitForSeconds(delay);
-        if(WorldSession.Instance!=null&&!WorldSession.Instance.PlayerDead&&(WorldSession.Instance.Mode==null||!WorldSession.Instance.Mode.Ended))ApplyHurricaneKick(stats, pause);
+        if(epoch==offenseEpoch&&!powers.OffensiveActionsBlocked&&WorldSession.Instance!=null&&!WorldSession.Instance.PlayerDead&&(WorldSession.Instance.Mode==null||!WorldSession.Instance.Mode.Ended))ApplyHurricaneKick(stats, pause);
     }
     void ApplyHurricaneKick(PowerStats stats, bool pause = false)
     {
@@ -383,7 +387,7 @@ public sealed class SuperHeroController : MonoBehaviour
     public bool Dash(Vector3 direction, float distance, float seconds, System.Action onStep)
     {
         direction.y = 0f;
-        if (Dashing || direction.sqrMagnitude < .0001f || distance <= 0f) return false;
+        if (powers.OffensiveActionsBlocked || Dashing || direction.sqrMagnitude < .0001f || distance <= 0f) return false;
         EndClimb();
         StartCoroutine(DashRoutine(direction.normalized, distance, Mathf.Max(.02f, seconds), onStep));
         return true;
@@ -423,6 +427,12 @@ public sealed class SuperHeroController : MonoBehaviour
     public Collider LastTopOutTop { get; private set; }
     public float LastTopOutHeight { get; private set; }
     float climbRelatchAt;
+    int offenseEpoch;
+    public void BeginEvasion()
+    {
+        EndClimb();offenseEpoch++;chargeStart=-1;ClearModifiers();
+        // Preserve vertical velocity and spent air-jump state.
+    }
     void EndClimb()
     {
         Climbing=false;ClimbNormal=Vector3.zero;
@@ -441,7 +451,7 @@ public sealed class SuperHeroController : MonoBehaviour
     /// Geometry-only latch: generated structural colliders need no marker or extra component.
     public bool TryClimb(Vector3 towardWall)
     {
-        if(!TraversalInputAllowed||Climbing||Mantling||AbilityDriving||Dashing||BackflipActive||GroundPounding||
+        if(powers.OffensiveActionsBlocked||!TraversalInputAllowed||Climbing||Mantling||AbilityDriving||Dashing||BackflipActive||GroundPounding||
             Time.time<climbRelatchAt)return false;
         towardWall=Vector3.ProjectOnPlane(towardWall,Vector3.up).normalized;
         if(towardWall.sqrMagnitude<.5f)return false;
@@ -540,7 +550,7 @@ public sealed class SuperHeroController : MonoBehaviour
     /// and the destination must have a walkable support surface.
     public bool TryTeleport(float distance)
     {
-        if(!TraversalInputAllowed||!controller.isGrounded||Mantling||AbilityDriving||Dashing||BackflipActive||GroundPounding)return false;
+        if(powers.OffensiveActionsBlocked||!TraversalInputAllowed||!controller.isGrounded||Mantling||AbilityDriving||Dashing||BackflipActive||GroundPounding)return false;
         Vector3 direction=Vector3.ProjectOnPlane(view!=null?view.transform.forward:transform.forward,Vector3.up).normalized;
         if(direction.sqrMagnitude<.5f||distance<=0f)return false;
         Vector3 from=transform.position;
@@ -559,7 +569,7 @@ public sealed class SuperHeroController : MonoBehaviour
     {if(fromClimb)LastTopOutFailure=reason;return false;}
     bool TryMantle(Vector3 direction,bool fromClimb)
     {
-        if(!TraversalInputAllowed||Mantling||(mantleUsed&&!fromClimb)||AbilityDriving||Dashing||BackflipActive||GroundPounding)return MantleRefused("movement state",fromClimb);
+        if(powers.OffensiveActionsBlocked||!TraversalInputAllowed||Mantling||(mantleUsed&&!fromClimb)||AbilityDriving||Dashing||BackflipActive||GroundPounding)return MantleRefused("movement state",fromClimb);
         direction=Vector3.ProjectOnPlane(direction,Vector3.up).normalized;
         if(direction.sqrMagnitude<.5f||!fromClimb&&Vector3.Dot(direction,transform.forward)<.5f)return MantleRefused("direction",fromClimb);
         float maximum=fromClimb?movement.ClimbTopOutDistance:movement.MantleMaxHeight;

@@ -46,6 +46,7 @@ public sealed class SynergyRunner : MonoBehaviour
     }
     public bool TryActivate()
     {
+        if(User.OffensiveActionsBlocked){Feedback="Cannot attack while phased";return false;}
         if(!Live){Feedback="Unavailable while paused, in menu or defeated";return false;}
         if(Busy&&Definition.Effect.Repeat(this))return false;
         if(Busy||User.Hero.BackflipActive){Feedback="Finish the current move";return false;}

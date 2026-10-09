@@ -158,3 +158,6 @@ InitTestScene*.unity*
 /Verification/LaserPresentation/saves/
 /Verification/FireRedesign/saves/
 /Verification/LoadoutMatrix/save-path.txt
+
+Verification/PhaseShift/saves/
+Verification/PhaseShift/save-path.txt

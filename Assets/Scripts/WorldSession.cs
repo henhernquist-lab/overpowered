@@ -154,7 +154,7 @@ public sealed class WorldSession : MonoBehaviour
         if (damage<=0||PlayerDead||(Mode!=null&&Mode.Ended)) return;
         if (!unblockable&&Powers!=null) damage=Powers.AbsorbIncoming(damage);
         if (damage<=0) return;
-        Health=Mathf.Max(0,Health-damage); PlayerDamaged?.Invoke(PlayerDead); if (PlayerDead) {Powers.Release(false);Mode?.PlayerDefeated();}
+        Health=Mathf.Max(0,Health-damage); PlayerDamaged?.Invoke(PlayerDead); if (PlayerDead) {Powers.Phase?.End();Powers.Release(false);Mode?.PlayerDefeated();}
     }
     public void ResolveCrime(CrimeEvent crime)
     {

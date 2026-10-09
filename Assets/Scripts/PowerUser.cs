@@ -52,6 +52,8 @@ public sealed class PowerUser : MonoBehaviour
     }
     /// Force Field (or null): the player's damage-absorbing shield. WorldSession.DamagePlayer routes damage through it.
     public PlayerShield Shield { get; private set; }
+    public PlayerPhaseShift Phase { get; private set; }
+    public bool OffensiveActionsBlocked => Phase != null && Phase.Active;
     /// The session hero's archetype (baseline without a Forge hero).
     public HeroStats HeroStats => HeroDefinition != null && HeroDefinition.Stats != null ? HeroDefinition.Stats : HeroStats.Baseline;
     public float MaxEnergy => config.Energy * HeroStats.MaxEnergy;
@@ -104,6 +106,8 @@ public sealed class PowerUser : MonoBehaviour
         Synergy=Forge?.Resolve(EquippedA,EquippedB,EquippedSecondary);
         Selected = Powers.Find(p=>p.Definition==EquippedA)??Strength; progression.Changed += Refresh;
         Refresh();
+        var phaseDefinition=System.Array.Find(definitions,d=>d.Effect is PhaseShiftEffect);
+        if(phaseDefinition!=null){Phase=gameObject.AddComponent<PlayerPhaseShift>();Phase.Initialize(this,phaseDefinition.PaletteColor);}
         // Stats: one equipped session per power (a Forge loadout's two powers; without a Forge every power counts).
         foreach (var p in Powers) if (IsEquipped(p.Definition) && progression.Owns(p.Definition)) { var u = progression.Usage(p.Definition.Id, true); if (u != null) u.Sessions++; }
         if(Forge!=null){SynergyRunner=gameObject.AddComponent<SynergyRunner>();SynergyRunner.Initialize(this);}
@@ -147,7 +151,7 @@ public sealed class PowerUser : MonoBehaviour
         return Use(power);
     }
     /// Damage the player is about to take, after the Force Field (if raised) absorbs what it can.
-    public float AbsorbIncoming(float damage) => Shield != null ? Shield.Absorb(damage) : damage;
+    public float AbsorbIncoming(float damage) => OffensiveActionsBlocked ? 0f : Shield != null ? Shield.Absorb(damage) : damage;
     /// The player's single shield component (created on first use, then reused for every later cast).
     public PlayerShield ShieldComponent()
     {
@@ -169,11 +173,12 @@ public sealed class PowerUser : MonoBehaviour
     }
     public bool ConsumeFlight(float dt)
     {
-        if (dt<=0||Flight == null || !IsEquipped(Flight.Definition)||!Progression.Owns(Flight.Definition) || Flight.Fuel <= 0f) return false;
+        if (OffensiveActionsBlocked||dt<=0||Flight == null || !IsEquipped(Flight.Definition)||!Progression.Owns(Flight.Definition) || Flight.Fuel <= 0f) return false;
         Flight.Fuel = Mathf.Max(0f, Flight.Fuel - dt * Flight.Definition.ResourceCost); return true;
     }
     public bool Use(PowerRuntime power)
     {
+        if(OffensiveActionsBlocked){Message="Cannot attack while phased";return false;}
         if(power==null||!Powers.Contains(power)||!IsEquipped(power.Definition)){Message="Power not equipped";return false;}
         if(SynergyRunner!=null&&SynergyRunner.Busy)
         {
@@ -217,7 +222,7 @@ public sealed class PowerUser : MonoBehaviour
     {
         if (Channeling == null) return;
         var power = Channeling;
-        if (!held || Selected != power || !IsEquipped(power.Definition) || (SynergyRunner != null && SynergyRunner.Busy)) { EndChannel(); return; }
+        if (OffensiveActionsBlocked || !held || Selected != power || !IsEquipped(power.Definition) || (SynergyRunner != null && SynergyRunner.Busy)) { EndChannel(); return; }
         if (dt <= 0f) return;   // paused / hit-pause frame: nothing drains, nothing ticks
         float cost = power.Definition.DrainPerSecond * dt;
         if (Energy < cost) { Message = "Blocked: energy"; EndChannel(); return; }
@@ -248,7 +253,7 @@ public sealed class PowerUser : MonoBehaviour
     {
         if (HeldBody == null) return;
         HeldBody.useGravity = heldGravity;
-        if (hurl)
+        if (hurl && !OffensiveActionsBlocked)
         {
             ((TelekinesisEffect)heldPower.Definition.Effect).Throw(this, heldPower, HeldBody);
             Message = "Thrown";
@@ -263,7 +268,7 @@ public sealed class PowerUser : MonoBehaviour
         Vector3 target = AimOrigin + AimDirection * d.HoldDistance;
         HeldBody.AddForce((target - HeldBody.position) * d.HoldSpring - HeldBody.linearVelocity * d.HoldDamping, ForceMode.Acceleration);
     }
-    void OnDisable() { Release(false); EndChannel(); }
+    void OnDisable() { Phase?.End(); Release(false); EndChannel(); }
     void OnDestroy() { if (Progression != null) Progression.Changed -= Refresh; }
 }
 /// One NPC hit caused by the player (see PowerUser.Hit). Credit = power id, "melee", "synergy:<id>" or null (uncredited).
