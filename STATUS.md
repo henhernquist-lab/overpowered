@@ -5087,3 +5087,14 @@ a skipped target. VisualStrike instrumentation records the actual target/order;
 Roster controls now assert that record and 2 bounded lines per real hit. PowerVfx
 prewarms shared Blue/Leaf swatches at pool setup. SDK build 0 warnings/errors;
 visual order, camera obstruction and FPS await Play Mode inspection.
+
+### Poison contamination presentation checkpoint — 2026-10-08
+
+`Poisoned.Apply` leases one bounded organic waist cue per actual poisoned NPC from
+the status pool. Each real DoT tick pulses that cue once; death/expiry/disable
+releases it. The existing one-per-recipient spread loop now renders a short unlit
+wisp toward each real chosen target and records a bounded visual count; nonrecipients
+get none. All damage, spread radius/count/order/generation and Heat logic remain.
+The existing Roster controls add tick-to-pulse and actual-recipient visual checks.
+SDK build 0 warnings/errors. Actual night/first-person readability and pool-cap
+behavior require the pending Unity run.

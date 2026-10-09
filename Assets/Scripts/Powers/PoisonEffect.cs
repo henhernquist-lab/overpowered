@@ -40,7 +40,9 @@ public sealed class Poisoned : MonoBehaviour
     /// Poisoned = ticks still owed. Duration is converted to a whole tick count, so the total is exactly dps x duration.
     public bool Active => npc != null && !npc.Dead && ticksLeft > 0;
     public bool Spread => spread;
-    bool lethalTick;
+    bool lethalTick; int visualSlot=-1;
+    public bool VisualActive => visualSlot>=0&&Active;
+    public static int VisualSpreads { get; private set; }
     /// (from, to) each time poison jumps from a dying NPC to a new one.
     public static event System.Action<CityNpc, CityNpc> Spreading;
     static readonly Collider[] nearby = new Collider[64];
@@ -56,11 +58,13 @@ public sealed class Poisoned : MonoBehaviour
         p.Generation = wasActive ? Mathf.Min(p.Generation, generation) : generation;
         if (!wasActive) { p.nextTick = Time.time + settings.TickSeconds; p.assaulted = false; p.spread = false; }
         p.enabled = true;
+        if(p.visualSlot<0)p.visualSlot=StatusPowerVfx.Get().AcquirePoison(p);
         return p;
     }
     void Update()
     {
         if (!Active) { enabled = false; return; }
+        if(visualSlot<0)visualSlot=StatusPowerVfx.Get().AcquirePoison(this);
         // An ended session (results pending) must not keep killing NPCs and paying XP; pause already stops Time.time.
         var world = WorldSession.Instance; if (world != null && world.Mode != null && world.Mode.Ended) { enabled = false; return; }
         if (Time.time < nextTick) return;
@@ -68,6 +72,7 @@ public sealed class Poisoned : MonoBehaviour
         float damage = dps * settings.TickSeconds;
         TotalDamage += damage; Ticks++;
         bool first = !assaulted; assaulted = true;
+        if(visualSlot>=0&&StatusPowerVfx.Existing!=null)StatusPowerVfx.Existing.PulsePoison(this,visualSlot);
         FeelDirector.Instance?.Particles.Burst(npc.transform.position + Vector3.up * 1.2f, color, settings.TickParticles);
         lethalTick = true;
         using (source != null ? source.Credit(credit) : default) npc.Damage(damage, source, first);   // a lethal tick raises Damaged(true) -> OnDamaged spreads
@@ -101,11 +106,19 @@ public sealed class Poisoned : MonoBehaviour
             foreach (var target in chosen)
             {
                 Apply(target, source, settings, dps, baseSeconds * settings.SpreadDurationScale, Generation + 1, color);
-                vfx.Arc(origin + Vector3.up, target.transform.position + Vector3.up, 5, .25f, color, settings.SpreadArcWidth, settings.SpreadArcSeconds);
+                var from=origin+Vector3.up;var to=target.transform.position+Vector3.up;
+                var arc=vfx.Arc(from,to,5,.16f,color,settings.SpreadArcWidth*1.5f,settings.SpreadArcSeconds);
+                if(arc!=null)arc.sharedMaterial=CityMaterials.GetVfx(CityColor.Leaf);
+                VisualSpreads++;
                 Spreading?.Invoke(npc, target);
             }
         }
         finally { ListPool<CityNpc>.Release(chosen); }
+    }
+    void OnDisable()
+    {
+        if(visualSlot>=0&&StatusPowerVfx.Existing!=null)StatusPowerVfx.Existing.ReleasePoison(this,visualSlot);
+        visualSlot=-1;
     }
     void OnDestroy() { if (npc != null) npc.Damaged -= OnDamaged; }
 }
