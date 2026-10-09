@@ -22,7 +22,7 @@ MonoBehaviour:
   VisualScale: {x: 1.2, y: 1, z: 1.2}
   AvailablePowers:
   - {fileID: 11400000, guid: 47447a4e3bd444764a997e77ec7feb5c, type: 2}
-  - {fileID: 11400000, guid: cf2bcb051324544df9997cb5bf016c10, type: 2}
+  - {fileID: 11400000, guid: 6243e621011f4044ab96fff7056d2d6d, type: 2}
   - {fileID: 11400000, guid: b03f599ff1c364029838b1577dec15b7, type: 2}
   - {fileID: 11400000, guid: cf8bf79c81570416f835a3043495579d, type: 2}
   - {fileID: 11400000, guid: 8dbf8910c4e3b45fda1e445661b0290c, type: 2}

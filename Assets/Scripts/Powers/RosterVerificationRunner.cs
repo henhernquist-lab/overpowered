@@ -36,8 +36,8 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         // ---------------------------------------------------------------- data
         Check(NewPowers.All(id => Power(id) != null), "Six new PowerDefinition assets exist: " + string.Join(", ", NewPowers));
         var shipping=Resources.LoadAll<PowerDefinition>("Powers").Where(p=>!p.Id.StartsWith("verification-")).Select(p=>p.Id).ToArray();
-        var expected=new[]{"darkness","fire","flight","force-field","ice","laser-eyes","lightning","poison","speed","strength","telekinesis","teleport"};
-        Check(shipping.Length==expected.Length&&expected.All(shipping.Contains),"Shipping roster has the exact 12 data powers, including secondary Teleport.");
+        var expected=new[]{"darkness","fire","flight","force-field","ice","laser-eyes","lightning","poison","speed","strength","telekinesis","teleport","phase-shift"};
+        Check(shipping.Length==expected.Length&&expected.All(shipping.Contains),"Exact 13 retained definitions: 12 selectable powers plus legacy Flight.");
         foreach (var hero in F.Heroes) Check(NewPowers.All(id => Array.IndexOf(hero.AvailablePowers, Power(id)) >= 0), hero.DisplayName + " can equip all six new powers (AvailablePowers).");
         Check(NewPowers.All(id => profile.Owns(Power(id)) && profile.Tier(Power(id)) == 0) && profile.Data.Points == 0, "Fresh profile owns the six new powers at tier 0 with 0 points spent.");
         var laser = Power("laser-eyes");

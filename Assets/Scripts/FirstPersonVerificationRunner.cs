@@ -66,8 +66,8 @@ public sealed class FirstPersonVerificationRunner : MonoBehaviour
         {
             Check(profile.Data.FirstPerson,"SECOND PROCESS restores first-person preference in existing save.");
             Check(profile.Data.Loadout.PowerA=="fire"&&profile.Data.Loadout.PowerB=="strength"&&
-                profile.Data.Loadout.SecondaryPower=="flight"&&profile.Data.Level>=1,
-                "Existing two attacks, Flight secondary and progression preserved.");
+                profile.Data.Loadout.SecondaryPower=="phase-shift"&&profile.Data.Level>=1,
+                "Existing two attacks and progression preserved; retired Flight repairs to Phase Shift.");
             var fresh=new GameObject("Fresh control").AddComponent<PlayerProgression>();
             fresh.Initialize(Resources.Load<GameTuning>("GameTuning").Progression,Resources.LoadAll<PowerDefinition>("Powers"),Path.GetFullPath(Folder+"fresh-"+Guid.NewGuid()+".json"));
             Check(!fresh.Data.FirstPerson,"Fresh save CONTROL defaults to third-person.");
@@ -102,6 +102,8 @@ public sealed class FirstPersonVerificationRunner : MonoBehaviour
             GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);
             Check(FindAnyObjectByType<ModeScreens>().Profile.Data.FirstPerson,"Mode -> Home retains preference.");
         }
+        using(var legacyFlight=new LegacyFlightVerificationScope())
+        {
         Equip("fire","strength","flight");GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);
         Check(Rig.FirstPerson,"Hero reload starts in saved view.");W.Hero.enabled=false;Place(new Vector3(0,153,0));Rig.SetLook(0,0);
         for(int i=0;i<50;i++){W.Hero.MoveAbility(Vector3.zero,true);yield return null;}
@@ -113,6 +115,7 @@ public sealed class FirstPersonVerificationRunner : MonoBehaviour
         Rig.KickFov(3,.16f);yield return null;Check(Cam.fieldOfView>70,"Synergy FOV adds to flight instead of fighting it.");
         float until=Time.time+1.5f;while(Time.time<until){W.Hero.MoveAbility(Vector3.zero,false);yield return null;}
         Check(Mathf.Abs(Cam.fieldOfView-65)<.1f,"Non-flight recovery restores baseline FOV after flight/kick.");
+        }
         yield return Performance();
         if(!Rig.FirstPerson)Rig.ToggleView();W.Progression.Save();
         Log("LIMIT: gameplay/UI/collision entry points and actual rendered frames tested; no hardware B-key injection, human feel or standalone FPS claim.");

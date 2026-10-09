@@ -57,21 +57,21 @@ public sealed class HeroForgeVerificationRunner : MonoBehaviour
             var l=menu.Profile.Data.Loadout;
             Check(l.HeroId=="nova"&&l.PowerA=="fire"&&l.PowerB=="ice"&&l.SecondaryPower=="speed"&&l.Primary==CityColor.Red&&l.Secondary==CityColor.Cyan,"SECOND PROCESS restores exact hero, attack pair, secondary and suit roles.");
             var fresh=new GameObject("Fresh control").AddComponent<PlayerProgression>();fresh.Initialize(Resources.Load<GameTuning>("GameTuning").Progression,Resources.LoadAll<PowerDefinition>("Powers"),Path.GetFullPath("Verification/Forge/fresh-"+Guid.NewGuid()+".json"));
-            Check(fresh.Data.Level==1&&fresh.Data.Loadout.PowerA=="fire"&&fresh.Data.Loadout.PowerB=="strength"&&fresh.Data.Loadout.SecondaryPower=="flight",
-                "Fresh save CONTROL starts level 1 with two combat powers and Flight secondary.");yield break;
+            Check(fresh.Data.Level==1&&fresh.Data.Loadout.PowerA=="fire"&&fresh.Data.Loadout.PowerB=="strength"&&fresh.Data.Loadout.SecondaryPower=="phase-shift",
+                "Fresh save CONTROL starts level 1 with two combat powers and Phase Shift secondary.");yield break;
         }
         Submit(menu.ForgeButton);yield return null;
         var screen=menu.ForgeScreen;
         Check(screen!=null&&screen.Root.resolvedStyle.display!=DisplayStyle.None,"Home button opens Forge in existing panel.");
         Check(screen.Preview!=null&&screen.Preview.IsCreated(),"Character preview render texture exists.");
-        Check(!menu.Profile.SetLoadout(F.Heroes[0],Power("fire"),Power("fire"),Power("flight"),CityColor.Blue,CityColor.Cyan),"Duplicate combat pair CONTROL rejected by save API.");
+        Check(!menu.Profile.SetLoadout(F.Heroes[0],Power("fire"),Power("fire"),Power("phase-shift"),CityColor.Blue,CityColor.Cyan),"Duplicate combat pair CONTROL rejected by save API.");
         // Every shipping power is owned from the start (InitiallyUnlocked data): no point is spent to equip any pair.
         Check(Resources.LoadAll<PowerDefinition>("Powers").All(p=>menu.Profile.Owns(p))&&menu.Profile.Data.Points==0,"Fresh profile owns every power with 0 points spent (InitiallyUnlocked data).");
         Check(!screen.Root.Query<Button>().ToList().Any(b=>b.text.StartsWith("UNLOCK")),"Forge shows no UNLOCK purchase buttons.");
         {
             // Ownership gate CONTROL (kept intact): a power missing from the save is still refused by Forge and SetLoadout.
             var owned=menu.Profile.Data.Powers.Find(o=>o.Id=="fire");menu.Profile.Data.Powers.Remove(owned);
-            bool refused=!screen.SelectPower(1,Power("fire"))&&!menu.Profile.SetLoadout(F.Heroes[0],Power("strength"),Power("fire"),Power("flight"),CityColor.Blue,CityColor.Cyan);
+            bool refused=!screen.SelectPower(1,Power("fire"))&&!menu.Profile.SetLoadout(F.Heroes[0],Power("strength"),Power("fire"),Power("phase-shift"),CityColor.Blue,CityColor.Cyan);
             menu.Profile.Data.Powers.Add(owned);
             Check(refused&&menu.Profile.Owns(Power("fire")),"Unowned-power CONTROL (ownership removed in memory only) rejected by Forge and SetLoadout; ownership restored.");
         }
@@ -100,9 +100,11 @@ public sealed class HeroForgeVerificationRunner : MonoBehaviour
         Check(!W.Powers.Use(W.Powers.Strength)&&!W.Powers.Select(W.Powers.Strength),"Unequipped Strength CONTROL cannot be selected or fired directly.");
         Check(W.Hero.TryPunch(),"Basic punch remains available without Strength.");yield return new WaitForSeconds(.3f);
         Check(Mathf.Approximately(W.Hero.LastForce,F.BasicForce),"Basic melee force is reduced, not hidden super strength: "+W.Hero.LastForce+" N.s.");
-        Check(!W.Progression.SetLoadout(F.Heroes[0],Power("fire"),Power("strength"),Power("flight"),CityColor.Blue,CityColor.Cyan),"Live loadout mutation CONTROL refused.");
+        Check(!W.Progression.SetLoadout(F.Heroes[0],Power("fire"),Power("strength"),Power("phase-shift"),CityColor.Blue,CityColor.Cyan),"Live loadout mutation CONTROL refused.");
         Check(W.Hero.GetComponent<HumanoidPresentation>().Animator.gameObject.name=="NOVA","Selected humanoid model instantiated.");
         GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);menu=FindAnyObjectByType<ModeScreens>();
+        using(var legacyFlight=new LegacyFlightVerificationScope())
+        {
         Check(menu.Profile.SetLoadout(F.Hero("titan"),Power("strength"),Power("telekinesis"),Power("flight"),CityColor.Teal,CityColor.Amber),"Save TITAN Strength + Telekinesis attacks with Flight for Sonic synergy.");
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);
         var hero=W.Hero;var cc=hero.GetComponent<CharacterController>();var slam=W.Powers.SynergyRunner;
@@ -154,6 +156,7 @@ public sealed class HeroForgeVerificationRunner : MonoBehaviour
         Check(hero.TryBackflip(),"Backflip remains available.");float hp=W.Health;W.DamagePlayer(1);Check(W.Health==hp-1,"Backflip CONTROL has no invincibility.");
         GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);menu=FindAnyObjectByType<ModeScreens>();
         Check(ringMaterial==null,"Leaving the session destroys the unlit ring material with its CityMaterials owner.");
+        }
         Check(menu.Profile.SetLoadout(F.Hero("nova"),Power("fire"),Power("ice"),Power("speed"),CityColor.Red,CityColor.Cyan),"Save final three-slot loadout for separate-process test.");
         int level=menu.Profile.Data.Level;GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/villain"));yield return Scene(GameFlow.CityScene);
         Check(W.Powers.EquippedA==Power("fire")&&W.Progression.Data.Level==level,"Villain mode switch preserves build and progression.");

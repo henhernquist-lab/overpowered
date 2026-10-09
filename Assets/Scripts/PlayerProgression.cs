@@ -115,7 +115,7 @@ public sealed class PlayerProgression : MonoBehaviour
         // Older two-slot saves may have placed Flight, Speed or Force Field in either combat slot.
         var utility=Array.Find(utilities,p=>p.Id==old?.SecondaryPower)??
             Array.Find(utilities,p=>p.Id==old?.PowerA||p.Id==old?.PowerB)??
-            Array.Find(utilities,p=>p.Id=="flight")??utilities[0];
+            Array.Find(utilities,p=>p.Effect is PhaseShiftEffect)??utilities[0];
         Data.Loadout=new HeroLoadout{HeroId=hero.Id,PowerA=a.Id,PowerB=b.Id,SecondaryPower=utility.Id,
             Primary=forge.ColorOrDefault(Data.Loadout?.Primary??hero.Primary,hero.Primary),
             Secondary=forge.ColorOrDefault(Data.Loadout?.Secondary??hero.Secondary,hero.Secondary)};
@@ -269,7 +269,13 @@ public sealed class PlayerProgression : MonoBehaviour
             var d = Array.Find(definitions, v => v.Id == p.Id);
             if (d != null) p.Tier = Mathf.Clamp(p.Tier, 0, d.Upgrades.Length);
         }
+        string previousLoadout=JsonUtility.ToJson(Data.Loadout);
         ValidateLoadout();
+        if(previousLoadout!=JsonUtility.ToJson(Data.Loadout))
+        {
+            Repairs.Add("Loadout repaired to current selectable roster");
+            Save(); // Repair is durable immediately, including before the first session or application quit.
+        }
         Changed?.Invoke();
     }
     void OnApplicationQuit() { Save(); }

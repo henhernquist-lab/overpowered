@@ -18,7 +18,7 @@ public static class HeroForgeSetup
         HeroDefinition Hero(string id,string title,float width,CityColor primary,CityColor secondary,string a,string b)
         {
             var d=ScriptableObject.CreateInstance<HeroDefinition>();d.Id=id;d.DisplayName=title;d.CharacterPrefab=model;
-            d.VisualScale=new Vector3(width,1,width);d.Primary=primary;d.Secondary=secondary;d.AvailablePowers=powers;
+            d.VisualScale=new Vector3(width,1,width);d.Primary=primary;d.Secondary=secondary;d.AvailablePowers=powers.Where(p=>(p.Effect==null||!p.Effect.IsFlight)).ToArray();
             d.DefaultA=Power(a);d.DefaultB=Power(b);AssetDatabase.CreateAsset(d,"Assets/Resources/Forge/Heroes/"+id+".asset");return d;
         }
         catalog.Heroes=new[]{Hero("vector","VECTOR",1,CityColor.Blue,CityColor.Cyan,"fire","strength"),

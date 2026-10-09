@@ -11,6 +11,7 @@ public sealed class PlayerPhaseShift : MonoBehaviour
     public float Remaining => Active ? Mathf.Max(0, until-Time.time) : 0;
     public int Activations { get; private set; }
     public int Recoveries { get; private set; }
+    public int UnresolvedRecoveries { get; private set; }
     public int IgnoredCount => ignored.Count;
     public const int EchoCount=3;
     PowerUser user; CharacterController body; float until, pulseUntil, nextEcho;
@@ -52,7 +53,7 @@ public sealed class PlayerPhaseShift : MonoBehaviour
             user.Hero.Dashing||user.Hero.BackflipActive||user.Hero.GroundPounding||user.Hero.Mantling||
             user.SynergyRunner!=null&&user.SynergyRunner.Busy||!WorldClear(transform.position))return false;
         user.EndChannel();user.Release(false);user.Shield?.Drop(false);user.Hero.BeginEvasion();
-        historyCount=historyNext=0;Remember();Active=true;until=Time.time+Mathf.Max(.01f,seconds);
+        historyCount=historyNext=0;if(Clear(transform.position,true))Remember();Active=true;until=Time.time+Mathf.Max(.01f,seconds);
         Activations++;pulseUntil=Time.time+.12f;nextEcho=0;
         foreach(var npc in WorldSession.Instance.Npcs)Ignore(npc);
         CityNpc.Spawned+=Ignore;
@@ -81,7 +82,8 @@ public sealed class PlayerPhaseShift : MonoBehaviour
         if(outline==null)return;
         outline.enabled=visible&&!first;
         outline.widthMultiplier=Time.time<pulseUntil?.06f:.025f;
-        if(Active&&!first&&Time.time>=nextEcho)
+        if(Active&&!first&&Time.time>=nextEcho&&(nextEcho==0||
+            (transform.position-echoPositions[(echoNext+EchoCount-1)%EchoCount]).sqrMagnitude>.0025f))
         {
             echoPositions[echoNext]=transform.position;echoRotations[echoNext]=transform.rotation;
             echoUntil[echoNext]=Time.time+.24f;echoNext=(echoNext+1)%EchoCount;nextEcho=Time.time+.09f;
@@ -120,9 +122,14 @@ public sealed class PlayerPhaseShift : MonoBehaviour
         for(int i=0;i<count;i++)
         {
             var c=overlaps[i];if(c.transform.root==transform)continue;
-            if(!includeNpc&&c.GetComponentInParent<CityNpc>()!=null)continue;
+            if(c.GetComponentInParent<CityNpc>()!=null)continue;
             return false;
         }
+        if(!includeNpc)return true;
+        // World tolerates the controller's normal contact skin; NPC exit needs full-body clearance.
+        count=Physics.OverlapCapsuleNonAlloc(a,b,body.radius+.02f,overlaps,~0,QueryTriggerInteraction.Ignore);
+        if(count==overlaps.Length)return false;
+        for(int i=0;i<count;i++)if(overlaps[i].GetComponentInParent<CityNpc>()!=null)return false;
         return true;
     }
     bool WorldPath(Vector3 target)
@@ -140,6 +147,18 @@ public sealed class PlayerPhaseShift : MonoBehaviour
         if(!Clear(target,true)||!WorldPath(target))return false;
         body.Move(target-transform.position);Physics.SyncTransforms();return Clear(transform.position,true);
     }
+    bool ReversePathClear(Vector3 from,Vector3 to)
+    {
+        if(!Clear(from,true))return false;
+        Vector3 delta=to-from;Capsule(from,out var a,out var b,out float r);
+        float length=delta.magnitude;if(length<.001f)return true;
+        int count=Physics.CapsuleCastNonAlloc(a,b,r,delta/length,hits,length,~0,QueryTriggerInteraction.Ignore);
+        if(count==hits.Length)return false;
+        for(int i=0;i<count;i++)
+            if(hits[i].collider.transform.root!=transform&&hits[i].collider.GetComponentInParent<CityNpc>()==null&&
+                hits[i].distance<length-body.skinWidth)return false;
+        return true;
+    }
     public void End()
     {
         if(!Active)return;
@@ -147,10 +166,22 @@ public sealed class PlayerPhaseShift : MonoBehaviour
         if(body!=null&&body.enabled&&!Clear(transform.position,true))
         {
             bool recovered=false;
-            for(int radius=1;radius<=6&&!recovered;radius++)for(int i=0;i<16&&!recovered;i++)
-                recovered=Recover(transform.position+Quaternion.Euler(0,i*22.5f,0)*Vector3.forward*(radius*.3f));
-            for(int i=0;i<historyCount&&!recovered;i++)recovered=Recover(history[(historyNext-1-i+history.Length)%history.Length]);
+            Vector3 origin=transform.position;
+            if(WorldClear(origin))
+            {
+                for(int radius=1;radius<=6&&!recovered;radius++)for(int i=0;i<16&&!recovered;i++)
+                    recovered=Recover(origin+Quaternion.Euler(0,i*22.5f,0)*Vector3.forward*(radius*.3f));
+            }
+            // A world overlap can arise from an external moving collider. Retreat only toward a recorded
+            // free pose on the same side: reverse sweep must reach within one controller skin of this pose.
+            for(int i=0;i<historyCount&&!recovered;i++)
+            {
+                var target=history[(historyNext-1-i+history.Length)%history.Length];
+                if(!WorldClear(origin)&&!ReversePathClear(target,origin))continue;
+                recovered=Recover(target);
+            }
             if(recovered)Recoveries++;
+            else {UnresolvedRecoveries++;Debug.LogWarning("Phase exit found no world-safe free position; restoring NPC collisions without teleporting through geometry.");}
         }
         Active=false;CityNpc.Spawned-=Ignore;
         foreach(var c in ignored)if(c!=null&&body!=null)Physics.IgnoreCollision(body,c,false);

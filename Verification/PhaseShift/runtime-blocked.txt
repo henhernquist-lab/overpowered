@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/tools/verify-sequential.py", line 92, in <module>
+    sys.exit(main())
+  File "/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/tools/verify-sequential.py", line 47, in main
+    raise RuntimeError('Cannot establish an idle Editor; running Editor PIDs: ' + processes.stdout.strip() + processes.stderr)
+RuntimeError: Cannot establish an idle Editor; running Editor PIDs: 55649

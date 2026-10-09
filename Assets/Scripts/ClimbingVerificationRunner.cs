@@ -21,7 +21,7 @@ public sealed class ClimbingVerificationRunner : SessionVerificationRunner
         yield return Scene(GameFlow.CityScene);
         Time.captureDeltaTime=1f/120;
         if(Stage=="city")yield return CityControls();
-        else {yield return FixtureControls();yield return FlightHandoff();}
+        else {yield return FixtureControls();yield return PhaseHandoff();}
         Time.captureDeltaTime=0;
     }
     IEnumerator FixtureControls()
@@ -164,26 +164,27 @@ public sealed class ClimbingVerificationRunner : SessionVerificationRunner
         Check(W.PlayerDead&&!W.Hero.Climbing,"Death clears climbing state.");
         Destroy(wall);
     }
-    IEnumerator FlightHandoff()
+    IEnumerator PhaseHandoff()
     {
         yield return new WaitForSeconds(W.Tuning.Movement.RespawnDelay+.2f);
         yield return Home();
         var hero=F.Heroes[0];
-        Check(Profile.SetLoadout(hero,Power("fire"),Power("strength"),Power("flight"),hero.Primary,hero.Secondary),
-            "Flight handoff fixture equips Flight through progression.");
+        Check(Profile.SetLoadout(hero,Power("fire"),Power("strength"),Power("phase-shift"),hero.Primary,hero.Secondary),
+            "Phase handoff fixture equips Phase Shift through progression.");
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/free-play"));
         yield return Scene(GameFlow.CityScene);
         Isolate();Wall(new Vector3(0,156,1),new Vector3(6,12,.4f));
         PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.15f);
-        Check(W.Hero.TryClimb(Vector3.forward),"Flight handoff starts on a real attached wall.");
+        Check(W.Hero.TryClimb(Vector3.forward),"Phase handoff starts on a real attached wall.");
         W.Hero.ScriptedClimbOverride=true;W.Hero.ScriptedClimbInput=new Vector2(0,1);
         yield return new WaitForSeconds(.15f);
-        float fuel=W.Hero.FlightFuel;W.Hero.ScriptedFlight=true;yield return null;
-        Check(!W.Hero.Climbing&&W.Hero.PresentationState.Flying&&W.Hero.FlightFuel<fuel,
-            "Equipped Flight spends fuel once and cleanly takes movement from climbing.");
-        W.Hero.ScriptedFlight=false;W.Hero.ScriptedClimbOverride=false;W.Hero.ScriptedMove=Vector3.zero;
-        yield return null;yield return null;
-        Check(!W.Hero.Climbing,"Ending Flight against a wall does not latch without movement input.");
+        W.Hero.ScriptedSecondaryPress=true;yield return null;
+        Check(!W.Hero.Climbing&&W.Powers.Phase.Active&&!W.Hero.PresentationState.Flying,
+            "Phase Shift detaches cleanly without creating Flight motion.");
+        Check(!W.Hero.TryClimb(Vector3.forward),"Cannot relatch while phased.");
+        W.Hero.ScriptedClimbOverride=false;W.Hero.ScriptedMove=Vector3.zero;
+        yield return new WaitForSeconds(.8f);
+        Check(!W.Hero.Climbing&&!W.Powers.Phase.Active,"Phase expires without an automatic wall relatch.");
         PlaceHero(new Vector3(0,150.05f,0),true);yield return null;
         Check(W.Hero.TryClimb(Vector3.forward),"Session-end control starts attached to a wall.");
         var attached=W.Hero;W.Mode.ReturnHome();yield return Scene(GameFlow.HomeScene);

@@ -15,7 +15,7 @@ public sealed class SecondaryVerificationRunner : SessionVerificationRunner
         yield return Scene(GameFlow.HomeScene);
         var hero=F.Heroes[0];var profile=Profile;
         var combat=new[]{"strength","fire","ice","telekinesis","darkness","laser-eyes","lightning","poison"};
-        var secondary=new[]{"flight","speed","force-field","teleport"};
+        var secondary=new[]{"phase-shift","speed","force-field","teleport"};
         Check(combat.All(id=>Power(id)!=null&&Power(id).Role==PowerRole.Combat)&&
             secondary.All(id=>Power(id)!=null&&Power(id).Role==PowerRole.Secondary),"Exactly the requested eight combat and four secondary powers have their assigned roles.");
         Check(hero.AvailablePowers.Contains(Power("teleport"))&&F.Heroes.All(h=>h.AvailablePowers.Contains(Power("teleport"))),
@@ -35,8 +35,8 @@ public sealed class SecondaryVerificationRunner : SessionVerificationRunner
         var migrated=new GameObject("Old loadout migration control").AddComponent<PlayerProgression>();
         migrated.Initialize(Resources.Load<GameTuning>("GameTuning").Progression,Resources.LoadAll<PowerDefinition>("Powers"),oldPath);
         Check(migrated.EquippedA.Role==PowerRole.Combat&&migrated.EquippedB.Role==PowerRole.Combat&&
-            migrated.EquippedA!=migrated.EquippedB&&migrated.EquippedSecondary==Power("flight")&&migrated.Owns(Power("strength")),
-            "Old Flight + Strength save migrates to two combat attacks and Flight secondary without losing ownership.");
+            migrated.EquippedA!=migrated.EquippedB&&migrated.EquippedSecondary==Power("phase-shift")&&migrated.Owns(Power("strength")),
+            "Old Flight + Strength save migrates to two combat attacks and Phase Shift secondary without losing ownership.");
         Destroy(migrated.gameObject);
         Check(!profile.SetLoadout(hero,Power("flight"),Power("fire"),Power("speed"),hero.Primary,hero.Secondary)&&
             !profile.SetLoadout(hero,Power("fire"),Power("ice"),Power("fire"),hero.Primary,hero.Secondary),
@@ -68,10 +68,11 @@ public sealed class SecondaryVerificationRunner : SessionVerificationRunner
             Check(secondary.Where(other=>other!=id).All(other=>!user.IsEquipped(Power(other))),
                 "CONTROL other secondary powers are unequipped.");
             Isolate();PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.2f);
-            if(id=="flight")
+            if(id=="phase-shift")
             {
-                Check(user.ConsumeFlight(.1f),"F Flight slot consumes fuel through its ownership gate.");
-                Check(!user.UseSecondary(),"Flight remains a held movement action, not an instant cast.");
+                int before=ability.Charges;W.Hero.ScriptedSecondaryPress=true;yield return null;
+                Check(user.Phase.Active&&ability.Charges==before-1,"F Phase Shift activates and spends one charge.");
+                Check(!user.ConsumeFlight(.1f),"Retained Flight cannot spend fuel when removed from the loadout.");
             }
             else if(id=="speed")
             {

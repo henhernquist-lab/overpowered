@@ -10,7 +10,7 @@ public static class PhaseShiftVerification
     const string Key="Overpowered.PhaseShiftVerification";
     const string Folder="Verification/PhaseShift/";
     static double deadline;
-    static PhaseShiftVerification() { EditorApplication.update+=()=>{if(deadline>0&&EditorApplication.timeSinceStartup>deadline){Debug.LogError("Secondary verification timeout");Finish(1);}}; }
+    static PhaseShiftVerification() { EditorApplication.update+=()=>{if(deadline>0&&EditorApplication.timeSinceStartup>deadline){Debug.LogError("Phase Shift verification timeout");Finish(1);}}; }
     public static void Baseline()=>Begin("baseline");
     public static void Run()=>Begin("run");
     public static void Reload()=>Begin("reload");
@@ -35,7 +35,7 @@ public static class PhaseShiftVerification
     static void Launch()
     {
         var stage=SessionState.GetString(Key,"");if(stage=="")return;
-        var go=new GameObject("Secondary verifier");UnityEngine.Object.DontDestroyOnLoad(go);
+        var go=new GameObject("Phase Shift verifier");UnityEngine.Object.DontDestroyOnLoad(go);
         var runner=go.AddComponent<PhaseShiftVerificationRunner>();runner.Stage=stage;runner.Finished=Finish;
     }
     static void Finish(int code)

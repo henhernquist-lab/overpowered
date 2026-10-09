@@ -72,7 +72,14 @@ public static class RosterSetup
             d.ResourceCost=18f;d.Damage=0f;d.Force=0f;d.Range=8f;d.Duration=0f;
             d.PaletteColor=CityColor.Blue;d.MenuIcon=MenuGlyph.Star;
         });
-        foreach(var id in new[]{"flight","speed","force-field","teleport"})
+        Define("phase-shift", "Phase Shift", Effect<PhaseShiftEffect>("PhaseShift"), d =>
+        {
+            d.Description="Briefly evade ordinary attacks and pass NPC bodies. World walls stay solid; attacks are locked.";
+            d.Role=PowerRole.Secondary;d.Charges=2;d.ChargeRecharge=5f;d.Cooldown=.2f;
+            d.ResourceCost=0;d.Damage=d.Force=0;d.Duration=.75f;
+            d.PaletteColor=CityColor.UiPurple;d.CastingPresentation=false;d.Upgrades=Array.Empty<PowerTier>();
+        });
+        foreach(var id in new[]{"flight","speed","force-field","teleport","phase-shift"})
         {
             var path="Assets/Resources/Powers/"+id+".asset";
             var power=AssetDatabase.LoadAssetAtPath<PowerDefinition>(path);
@@ -156,12 +163,14 @@ public static class RosterSetup
         AssetDatabase.SaveAssets();
         var powers = AssetDatabase.FindAssets("t:PowerDefinition", new[] { "Assets/Resources/Powers" })
             .Select(g => AssetDatabase.LoadAssetAtPath<PowerDefinition>(AssetDatabase.GUIDToAssetPath(g)))
-            .Where(p => p != null && !p.Id.StartsWith("verification-")).OrderBy(p => p.Id, StringComparer.Ordinal).ToArray();
+            .Where(p => p != null && (p.Effect==null||!p.Effect.IsFlight) && !p.Id.StartsWith("verification-")).OrderBy(p => p.Id, StringComparer.Ordinal).ToArray();
         var catalog = AssetDatabase.LoadAssetAtPath<ForgeCatalog>("Assets/Resources/ForgeCatalog.asset");
         if (catalog == null) return;
         foreach (var hero in catalog.Heroes)
         {
             if (hero == null) continue;
+            hero.AvailablePowers=hero.AvailablePowers.Where(p=>p!=null&&(p.Effect==null||!p.Effect.IsFlight)).ToArray();
+            EditorUtility.SetDirty(hero);
             var missing = powers.Where(p => Array.IndexOf(hero.AvailablePowers, p) < 0).ToArray();
             if (missing.Length == 0) continue;
             hero.AvailablePowers = hero.AvailablePowers.Concat(missing).ToArray();

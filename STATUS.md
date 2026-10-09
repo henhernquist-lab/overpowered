@@ -4957,3 +4957,65 @@ connection. Licensing startup resolved a Personal entitlement; no second Editor 
 started, no process killed and no open scene closed. Baseline has NOT run.
 Initial evasion source extensions compile with the Unity SDK: 0 warnings/0 errors.
 They are inactive until Phase Shift content is added. No runtime PASS is claimed.
+
+
+## Phase Shift implementation checkpoint — 2026-10-08 (runtime BLOCKED)
+
+Foundation commit: `270ad4b`. Current source implements PhaseShiftEffect + per-player
+PlayerPhaseShift; PowerUser owns activation/payment and incoming evasion before Shield.
+Data: .75s, 2 charges, 5s recharge, .2s base cooldown (existing hero cooldown multiplier
+applies), zero energy, no upgrades. Phase blocks new PowerUser actions, basic/Strength
+melee, Hurricane and synergy before payment; stops Laser and invalidates pending paid
+melee windups. Climb detaches without resetting air jump or vertical velocity; relatch,
+mantle, Speed and Teleport are refused while active. Existing dash/backflip/pound/mantle/
+synergy prevent activation. An existing shield drops on accepted activation.
+
+NPC collider pairs only are ignored, including newly spawned actors; pre-existing
+ignores are not owned or restored. CharacterController stays enabled. Exit searches
+world-swept free positions and recorded safe history; no direct transform teleport.
+If no safe position exists, it restores collisions and reports UnresolvedRecoveries;
+this hard crowded/invalid-geometry case is NOT verified and remains an acceptance risk.
+World geometry stays solid throughout. Ordinary damage goes through the original
+DamagePlayer→AbsorbIncoming path and becomes zero; unblockable/kill-plane bypass it.
+Death/disable/session completion clear evasion and owned collision ignores.
+
+Presentation is a cached outline, 3 moving echoes and 2 first-person peripheral lines
+with shared palette materials. Sidekick renderers/materials are untouched. No aim,
+FOV, roll or post-processing changes. Visual readability is NOT yet inspected.
+
+All three hero assets replace selectable Flight with Phase Shift. Flight implementation,
+asset, ownership history, fuel/camera and legacy Sonic Slam remain. Save version stays1;
+ValidateLoadout prefers Phase Shift and immediately saves repaired selections through
+normal Save. Other profile fields are untouched by this migration. Setup code follows
+the same roster. No user-authored secondary-loadout documentation was overwritten.
+
+Dedicated PhaseShift Run/Reload now defines fresh/migration, damage/real Rusher/Gunner,
+wall/floor/ceiling, NPC overlap/spawn/restore, resource, offensive refusal, Laser stop,
+windup cancellation, double jump, pause/death/kill-plane/teardown, FP aim, Speed/Teleport
+comparison, fixed-pool growth and dense combat controls. Gunner uses a committed hit
+shape, so a physical hostile projectile control is not applicable to current code.
+Secondary/Roster/Forge/FirstPerson/Climbing assumptions updated. Legacy Flight regression
+uses explicitly labelled IN-MEMORY scoped roster fixtures, retaining original equip/
+ownership/payment controls; no production gate bypass. Historical LoadoutMatrix still
+assumes 11 powers in two undifferentiated slots and remains a separate known stale suite.
+
+Actual execution: SDK source build 0 warnings/0 errors, `git diff --check` clean.
+Unity runtime has NOT launched for this task: existing user Editor PID55649 owns this
+project and has no Pipeline/live-control connection. Sequential launcher refused before
+spawning another Editor, twice. Licensing startup did resolve a Personal entitlement;
+this is an Editor-contention blocker, not the historical license198 failure. Evidence:
+`Verification/PhaseShift/source-build.txt`, `runtime-blocked.txt`. Launcher now prints
+only process IDs instead of full Editor command lines (which can contain credentials).
+No fresh runtime PASS/FAIL counts, no reload result, no performance measurements and
+no captures exist. Baseline code at270ad4b predates content activation; a true before/after
+measurement remains outstanding. Running Baseline on the final tree measures an inactive
+Phase control, NOT a pre-change build. Do not relabel that as the historical baseline.
+
+Next: after the user saves/closes Unity, run dedicated Run + separate Reload; investigate
+failures without weakening controls. Then Secondary, Roster.VerifyExisting + Reload,
+HeroForge.VerifyExisting + Reload, Combat, FirstPerson + Reload, Camera, Movement.Jump
+and .Mantle/.Camera, Climbing, HUD, Mode + Reload. Roster includes Shield and Speed;
+Secondary covers Teleport; Phase adds direct comparisons. Recover a matched pre-content
+baseline safely and measure final dense combat. Capture and visually inspect Phase in
+both views. Full report/handoff: `docs/phase-shift-report.md`. Task NOT complete; no
+shipping mission pool, vendor asset/database, difficulty or render pipeline changes.

@@ -24,6 +24,7 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
     protected override IEnumerator Checks()
     {
         yield return Scene(GameFlow.HomeScene);
+        using var legacyFlight=new LegacyFlightVerificationScope();
         if(Stage=="route"){Time.captureDeltaTime=1f/120;yield return CityRoute(false);yield return CityRoute(true);Time.captureDeltaTime=0;yield break;}
         if(Stage=="mantle"){Time.captureDeltaTime=1f/120;yield return MantleControls();yield return CityRoute(false);Time.captureDeltaTime=0;yield break;}
         if(Stage=="jump"){Time.captureDeltaTime=1f/120;yield return JumpControls();Time.captureDeltaTime=0;yield break;}

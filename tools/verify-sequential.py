@@ -42,9 +42,9 @@ def main():
             parser.error('Expected an Editor Class.Method entry: ' + entry)
         if entry.endswith('.Reload') and not any(entry.removesuffix('.Reload') + suffix in passed for suffix in ('.Run', '.VerifyExisting')):
             parser.error('Reload requires a successful Run in this invocation: ' + entry)
-        processes = subprocess.run(['pgrep', '-fl', str(unity)], capture_output=True, text=True)
+        processes = subprocess.run(['pgrep', '-f', str(unity)], capture_output=True, text=True)
         if processes.returncode != 1:
-            raise RuntimeError('Cannot establish an idle Editor: ' + processes.stdout + processes.stderr)
+            raise RuntimeError('Cannot establish an idle Editor; running Editor PIDs: ' + processes.stdout.strip() + processes.stderr)
         log = out / (entry + '.log')
         if log.exists():
             raise RuntimeError('Evidence already exists; choose a new --out directory: ' + str(log))
