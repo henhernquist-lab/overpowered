@@ -5075,3 +5075,15 @@ lease immediately; the underlying Root/Damage rules and power data are unchanged
 The 8-root pool can miss if more than eight simultaneous targets are rooted; this
 must be observed in runtime stress and is not treated as passing. SDK build is
 0 warnings/0 errors; no Unity runtime result or fresh capture yet.
+
+### Lightning strike hierarchy checkpoint — 2026-10-08
+
+The existing MaxArcs/target/LOS/damage loop is unchanged. Each actual chain step
+now renders one unlit core plus the same cached bent geometry as a brief blue
+residual path. The first strike is wider/cream with a larger pooled particle pop;
+chain widths and pops shrink in order. First-person visuals begin just right/below
+the eye while gameplay ray/target selection stays unchanged. No arc is emitted for
+a skipped target. VisualStrike instrumentation records the actual target/order;
+Roster controls now assert that record and 2 bounded lines per real hit. PowerVfx
+prewarms shared Blue/Leaf swatches at pool setup. SDK build 0 warnings/errors;
+visual order, camera obstruction and FPS await Play Mode inspection.

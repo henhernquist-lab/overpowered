@@ -41,7 +41,7 @@ public sealed class PowerVfx : MonoBehaviour
         laserRight=Create("Laser right core");laserHaloLeft=Create("Laser left halo");laserHaloRight=Create("Laser right halo");
         laserImpactRing=Create("Laser impact ring");laserImpactCrossH=Create("Laser impact horizontal");laserImpactCrossV=Create("Laser impact vertical");
         // Built-in unlit palette swatches are shared for the session, including across repeated channels.
-        CityMaterials.GetVfx(CityColor.Cream);CityMaterials.GetVfx(CityColor.Red);
+        CityMaterials.GetVfx(CityColor.Cream);CityMaterials.GetVfx(CityColor.Red);CityMaterials.GetVfx(CityColor.Blue);CityMaterials.GetVfx(CityColor.Leaf);
     }
     LineRenderer Create(string name)
     {
@@ -58,7 +58,7 @@ public sealed class PowerVfx : MonoBehaviour
         count = Mathf.Clamp(count, 2, MaxPoints);
         int i = cursor; cursor = (cursor + 1) % lines.Length;
         var line = lines[i];
-        line.sharedMaterial = CityMaterials.Get(color); line.widthMultiplier = width; line.positionCount = count;
+        line.sharedMaterial = CityMaterials.Get(color); line.sortingOrder=0; line.widthMultiplier = width; line.positionCount = count;
         for (int p = 0; p < count; p++) line.SetPosition(p, points[p]);
         until[i] = Time.time + seconds; line.gameObject.SetActive(true); Draws++;
         return line;

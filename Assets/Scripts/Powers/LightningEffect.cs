@@ -21,6 +21,14 @@ public sealed class LightningEffect : PowerEffect
     /// Targets struck by the most recent cast, in chain order (tests and presentation read it).
     public static readonly List<CityNpc> LastChain = new List<CityNpc>();
     public static readonly List<float> LastDamages = new List<float>();
+    public readonly struct VisualStrike
+    {
+        public readonly CityNpc Target; public readonly Vector3 From, To; public readonly float Width;
+        public VisualStrike(CityNpc target,Vector3 from,Vector3 to,float width)
+        {Target=target;From=from;To=to;Width=width;}
+    }
+    public static readonly List<VisualStrike> LastVisualStrikes=new List<VisualStrike>(8);
+    static readonly Vector3[] afterglowPoints=new Vector3[PowerVfx.MaxPoints];
     public override bool Execute(PowerUser user, PowerRuntime power)
     {
         var stats = user.Stats(power);
@@ -29,21 +37,38 @@ public sealed class LightningEffect : PowerEffect
         if (first != null && first.Dead) first = null;
         if (first == null) first = Next(hit.point, null, null, user);
         if (first == null) { user.Message = "No one in reach of the bolt."; return false; }
-        LastChain.Clear(); LastDamages.Clear();
+        LastChain.Clear(); LastDamages.Clear(); LastVisualStrikes.Clear();
         // Pooled per cast (nested-safe: a nested cast rents its own set), never a shared static set.
         var struck = HashSetPool<CityNpc>.Get();
         try {
         var vfx = PowerVfx.Get(); var color = power.Definition.PaletteColor;
         Vector3 from = user.AimOrigin + user.AimDirection * .5f;
+        var camera=Camera.main;var rig=camera!=null?camera.GetComponent<ThirdPersonCamera>():null;
+        if(rig!=null&&rig.isActiveAndEnabled&&rig.FirstPerson)
+            from=camera.transform.position+camera.transform.right*.18f-camera.transform.up*.12f+camera.transform.forward*.35f;
         float damage = stats.Damage;
         var current = first;
         for (int jump = 0; current != null && jump <= Mathf.Max(0, MaxArcs); jump++)
         {
             Vector3 chest = current.transform.position + Vector3.up * 1.1f;
-            vfx.Arc(from, chest, ArcSegments, ArcJitter, color, ArcWidth, ArcSeconds);
+            // One ordered gameplay strike has one bright core and one faint longer-lived path.
+            // Both share the exact same bent geometry: no extra/fake jump can appear.
+            float width=jump==0?ArcWidth*2.5f:ArcWidth*.85f*Mathf.Pow(.8f,jump-1);
+            int segments=Mathf.Clamp(ArcSegments,1,PowerVfx.MaxPoints-1);
+            var core=vfx.Arc(from,chest,segments,ArcJitter*(jump==0?.7f:1f),color,width,
+                jump==0?ArcSeconds:ArcSeconds*.75f);
+            if(core!=null)
+            {
+                core.sharedMaterial=CityMaterials.GetVfx(jump==0?CityColor.Cream:CityColor.Blue);core.sortingOrder=1;
+                int points=core.positionCount;
+                for(int p=0;p<points;p++)afterglowPoints[p]=core.GetPosition(p);
+                var glow=vfx.Line(afterglowPoints,points,CityColor.Blue,width*(jump==0?1.5f:1.2f),ArcSeconds+.13f);
+                if(glow!=null){glow.sharedMaterial=CityMaterials.GetVfx(CityColor.Blue);glow.sortingOrder=0;}
+            }
+            LastVisualStrikes.Add(new VisualStrike(current,from,chest,width));
             struck.Add(current); LastChain.Add(current); LastDamages.Add(damage);
             current.Damage(damage, user);
-            FeelDirector.Instance?.Particles.Burst(chest, color, HitParticles);
+            FeelDirector.Instance?.Particles.Burst(chest,jump==0?CityColor.Cream:CityColor.Blue, jump==0?HitParticles*2:Mathf.Max(2,HitParticles/2));
             from = chest; damage *= Falloff;
             current = jump < MaxArcs ? Next(current.transform.position, current, struck, user) : null;
         }
