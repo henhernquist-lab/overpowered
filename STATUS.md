@@ -5177,3 +5177,35 @@ World city verification passed 57/57 and separate-process Reload passed 3/3
 isolated saves; launcher manifests report unchanged personal save and Sidekick
 database hashes. Dense-city profiling, matched pre-change performance evidence,
 and Henry's in-motion visual judgment are still pending.
+
+### Four-power profiling and capture completion — 2026-10-10
+
+The optional city frame fixture initially failed after 131 PASS / 1 FAIL when
+it disabled its camera then looked it up again through `Camera.main` (which
+returns no disabled camera). It now retains that reference locally. The final
+focused `PowerPolishVerification.Run` completed 134 PASS / 0 FAIL, exit 0
+(`Verification/PowerPolish/captures-final-20261010-r2/manifest.json`). Its
+real-city night comparison at 1280×720 with a fixed camera measured 76.30 FPS
+and 13.106 ms/frame idle before Darkness, versus 73.96 FPS and 13.520 ms/frame
+while one real root remained active: -2.34 FPS / +0.414 ms, with active
+renderers 1750→1754, particle systems 8→8, loaded materials 109→112. Those
+three materials are session pool swatches resolved at first use, not per-cast
+material instances; 12 subsequent Darkness casts kept material count stable.
+This short active-vs-idle sample is not a matched old-code vs new-code result.
+
+Tagged `WorldProfile.Run` on source checkpoint `ee5a3c4` exited 0 and recorded
+populated Free Play (29 NPCs, 3 Heat, seed 2409) street samples 83.55/83.57/
+84.78 FPS, 11.97/11.97/11.80 ms mean, 12.75/13.28/12.54 ms p95, and
+1658/1669/1654 whole-frame GC bytes. Median street FPS is 83.57 and median
+mean frame time 11.97 ms. Evidence:
+`Verification/World/power-polish-final-20261010/results.txt`. The profiler is
+batch Editor Play Mode with idle parked hero at 1280×720, not standalone
+performance or a before/after VFX benchmark. Historical city samples in STATUS
+ran on different revisions and host conditions, so no causal FPS delta is
+claimed. Final SDK build: 0 warnings, 0 errors.
+
+Full eight-part visual/pooling/test/performance/human review report:
+`docs/power-polish-report.md`. No mission pools were activated and no Sidekick
+vendor material/database change was made. Henry's in-motion appearance review,
+especially night Darkness density, chain timing, Poison tick clarity and shield
+first-person distraction, remains open.

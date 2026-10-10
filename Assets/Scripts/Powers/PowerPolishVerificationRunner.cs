@@ -155,11 +155,26 @@ public sealed class PowerPolishVerificationRunner:SessionVerificationRunner
         View(false);Lighting.SetTime(.75f);
         var target=Actor(W.City.Spawn+Vector3.forward*8,NpcRole.Criminal,1000);
         Aim(Chest(target));
+        var texture=new RenderTexture(1280,720,24);texture.Create();
+        yield return ProfileFrames("city night idle before Darkness",texture,1.5f);
         Check(W.Powers.Use(Runtime("darkness"))&&target.Rooted,
             "Real city-night Darkness cast roots its aimed target.");
         yield return null;
         Check(StatusPowerVfx.Get().ActiveRoots==1,"City-night target owns the close restraint in real street lighting.");
         Capture("darkness-night-city-third.png");
+        yield return ProfileFrames("same city night with Darkness root active",texture,1.5f);
+        Check(target.Rooted&&StatusPowerVfx.Get().ActiveRoots==1,
+            "Active city profile retained the real rooted status through its sample.");
+        texture.Release();Destroy(texture);
+    }
+    IEnumerator ProfileFrames(string label,RenderTexture texture,float seconds)
+    {
+        var camera=Cam;var previous=camera.targetTexture;bool enabled=camera.enabled;
+        camera.enabled=false;camera.targetTexture=texture;
+        var timer=System.Diagnostics.Stopwatch.StartNew();int frames=0;
+        while(timer.Elapsed.TotalSeconds<seconds){camera.Render();frames++;yield return null;}
+        camera.targetTexture=previous;camera.enabled=enabled;
+        Log($"MEASURED {label}: {frames/timer.Elapsed.TotalSeconds:F2} FPS, {timer.Elapsed.TotalMilliseconds/Mathf.Max(1,frames):F3} ms/frame, {frames} frames, {FindObjectsByType<Renderer>().Length} active renderers, {FindObjectsByType<ParticleSystem>().Length} particle systems, {Resources.FindObjectsOfTypeAll<Material>().Length} loaded materials.");
     }
 }
 #endif

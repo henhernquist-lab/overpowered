@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "PowerPolishVerification.Run",
+    "commit": "9fb75f67e2667fd8e6d71cb533f60ee47ab2eff9",
+    "status_before": "M .freebuff/project-id\n M Assets/Scripts/Powers/RosterVerificationRunner.cs\n M Verification/Roster/darkness-rooted.png\n M Verification/Roster/eclipse-beam.png\n M Verification/Roster/force-field.png\n M Verification/Roster/laser-beam-side.png\n M Verification/Roster/laser-beam.png\n M Verification/Roster/lightning-chain.png\n M Verification/Roster/poison-spread.png\n M Verification/Roster/results.txt\n M Verification/Roster/solar-flare-beam.png\n M Verification/Roster/void-grasp.png\n M docs/secondary-loadout.md\n?? Assets/Editor/PowerPolishVerification.cs\n?? Assets/Editor/PowerPolishVerification.cs.meta\n?? Assets/Scripts/Powers/PowerPolishVerificationRunner.cs\n?? Assets/Scripts/Powers/PowerPolishVerificationRunner.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/PowerPolish/",
+    "started_utc": "2026-10-10T17:57:14.212439+00:00",
+    "save_before": "42d5a91e2f25867f1a7dc408eced25c9e9a962adf28cf56c7e9a336f8e3695c0",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/PowerPolish/captures-20261010/PowerPolishVerification.Run.log",
+    "pid": 1945,
+    "exit": 1,
+    "seconds": 30.16,
+    "pass": 28,
+    "fail": 1,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M Assets/Scripts/Powers/RosterVerificationRunner.cs\n M Verification/Roster/darkness-rooted.png\n M Verification/Roster/eclipse-beam.png\n M Verification/Roster/force-field.png\n M Verification/Roster/laser-beam-side.png\n M Verification/Roster/laser-beam.png\n M Verification/Roster/lightning-chain.png\n M Verification/Roster/poison-spread.png\n M Verification/Roster/results.txt\n M Verification/Roster/solar-flare-beam.png\n M Verification/Roster/void-grasp.png\n M docs/secondary-loadout.md\n?? Assets/Editor/PowerPolishVerification.cs\n?? Assets/Editor/PowerPolishVerification.cs.meta\n?? Assets/Scripts/Powers/PowerPolishVerificationRunner.cs\n?? Assets/Scripts/Powers/PowerPolishVerificationRunner.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/PowerPolish/"
+  }
+]

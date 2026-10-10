@@ -1,0 +1,57 @@
+[WORLD VERIFY] PASS GameFlow.Select hero (world verification copy)
+[WORLD VERIFY] PASS [A1] District Downtown: 37 buildings, 29 static structures, 6 encounter sites on NavMesh; NavMesh build 73 ms.
+[WORLD VERIFY] PASS [A1] District Park: 0 buildings, 144 static structures, 4 encounter sites on NavMesh; NavMesh build 70 ms.
+[WORLD VERIFY] PASS [A1] District Residential: 20 buildings, 92 static structures, 3 encounter sites on NavMesh; NavMesh build 54 ms.
+[WORLD VERIFY] PASS [A1] District Docks: 6 buildings, 181 static structures, 4 encounter sites on NavMesh; NavMesh build 79 ms.
+[WORLD VERIFY] PASS [A1] 63 buildings: 0 overlapping footprints (0), 0 in water, 0 within 13 m of a landmark centre; 3 landmarks.
+[WORLD VERIFY] PASS [A1] Overlap-test CONTROL: building 0 vs a copy shifted 1 m = overlap; shifted by its width + 1 m = no overlap.
+[WORLD VERIFY] PASS [A1] Spawn (-28.0,0.1,4.0) is on walkable NavMesh (nearest (-28.0,0.1,4.0), 0.05 m).
+[WORLD VERIFY] PASS [A1] Downtown reachable on NavMesh from spawn: farthest site (28.0,0.0,88.0), path complete, 104 m, 6 corners.
+[WORLD VERIFY] PASS [A1] Park reachable on NavMesh from spawn: farthest site (-250.0,0.1,-40.0), path complete, 228 m, 5 corners.
+[WORLD VERIFY] PASS [A1] Residential reachable on NavMesh from spawn: farthest site (212.0,0.0,85.0), path complete, 262 m, 8 corners.
+[WORLD VERIFY] PASS [A1] Docks reachable on NavMesh from spawn: farthest site (212.0,0.1,-150.0), path complete, 310 m, 8 corners.
+[WORLD VERIFY] PASS [A1] Reachability CONTROL: open sea at (228.0,-0.6,-258.0) (50 m off the south shore) has no NavMesh and no complete path.
+[WORLD VERIFY] PASS [A1] Encounters spread across districts: 8 active set-pieces in 4 districts (Downtown, Park, Residential, Docks, Downtown, Park, Residential, Docks).
+[WORLD VERIFY] PASS GameFlow.Select hero (world verification copy)
+[WORLD VERIFY] PASS [A2] District Downtown: 37 buildings, 29 static structures, 6 encounter sites on NavMesh; NavMesh build 66 ms.
+[WORLD VERIFY] PASS [A2] District Park: 0 buildings, 144 static structures, 4 encounter sites on NavMesh; NavMesh build 64 ms.
+[WORLD VERIFY] PASS [A2] District Residential: 20 buildings, 92 static structures, 3 encounter sites on NavMesh; NavMesh build 54 ms.
+[WORLD VERIFY] PASS [A2] District Docks: 6 buildings, 181 static structures, 4 encounter sites on NavMesh; NavMesh build 73 ms.
+[WORLD VERIFY] PASS [A2] 63 buildings: 0 overlapping footprints (0), 0 in water, 0 within 13 m of a landmark centre; 3 landmarks.
+[WORLD VERIFY] PASS [A2] Overlap-test CONTROL: building 0 vs a copy shifted 1 m = overlap; shifted by its width + 1 m = no overlap.
+[WORLD VERIFY] PASS [A2] Spawn (-28.0,0.1,4.0) is on walkable NavMesh (nearest (-28.0,0.1,4.0), 0.05 m).
+[WORLD VERIFY] PASS [A2] Downtown reachable on NavMesh from spawn: farthest site (28.0,0.0,88.0), path complete, 104 m, 6 corners.
+[WORLD VERIFY] PASS [A2] Park reachable on NavMesh from spawn: farthest site (-250.0,0.1,-40.0), path complete, 228 m, 5 corners.
+[WORLD VERIFY] PASS [A2] Residential reachable on NavMesh from spawn: farthest site (212.0,0.0,85.0), path complete, 262 m, 8 corners.
+[WORLD VERIFY] PASS [A2] Docks reachable on NavMesh from spawn: farthest site (212.0,0.1,-150.0), path complete, 310 m, 8 corners.
+[WORLD VERIFY] PASS [A2] Reachability CONTROL: open sea at (228.0,-0.6,-258.0) (50 m off the south shore) has no NavMesh and no complete path.
+[WORLD VERIFY] PASS [A2] Encounters spread across districts: 8 active set-pieces in 4 districts (Downtown, Park, Residential, Docks, Downtown, Park, Residential, Docks).
+[WORLD VERIFY] PASS GameFlow.Select hero (world verification copy)
+[WORLD VERIFY] PASS [B] District Downtown: 41 buildings, 29 static structures, 6 encounter sites on NavMesh; NavMesh build 58 ms.
+[WORLD VERIFY] PASS [B] District Park: 0 buildings, 144 static structures, 4 encounter sites on NavMesh; NavMesh build 68 ms.
+[WORLD VERIFY] PASS [B] District Residential: 30 buildings, 92 static structures, 3 encounter sites on NavMesh; NavMesh build 58 ms.
+[WORLD VERIFY] PASS [B] District Docks: 6 buildings, 182 static structures, 4 encounter sites on NavMesh; NavMesh build 79 ms.
+[WORLD VERIFY] PASS [B] 77 buildings: 0 overlapping footprints (0), 0 in water, 0 within 13 m of a landmark centre; 3 landmarks.
+[WORLD VERIFY] PASS [B] Overlap-test CONTROL: building 0 vs a copy shifted 1 m = overlap; shifted by its width + 1 m = no overlap.
+[WORLD VERIFY] PASS [B] Spawn (-25.5,0.1,6.5) is on walkable NavMesh (nearest (-25.5,0.1,6.5), 0.05 m).
+[WORLD VERIFY] PASS [B] Downtown reachable on NavMesh from spawn: farthest site (25.5,0.0,83.0), path complete, 95 m, 6 corners.
+[WORLD VERIFY] PASS [B] Park reachable on NavMesh from spawn: farthest site (-250.0,0.1,-40.0), path complete, 234 m, 7 corners.
+[WORLD VERIFY] PASS [B] Residential reachable on NavMesh from spawn: farthest site (212.0,0.0,86.0), path complete, 264 m, 9 corners.
+[WORLD VERIFY] PASS [B] Docks reachable on NavMesh from spawn: farthest site (212.0,0.1,-150.0), path complete, 308 m, 14 corners.
+[WORLD VERIFY] PASS [B] Reachability CONTROL: open sea at (228.0,-0.6,-258.0) (50 m off the south shore) has no NavMesh and no complete path.
+[WORLD VERIFY] PASS [B] Encounters spread across districts: 8 active set-pieces in 4 districts (Downtown, Park, Residential, Docks, Downtown, Park, Residential, Docks).
+[WORLD VERIFY] PASS DETERMINISM CONTROL: seed 2409 built twice gives an identical plan, prop placement and static-geometry fingerprint (92226 chars, hash 8E7F5DD5).
+[WORLD VERIFY] PASS Different seed 3226 gives a different layout (hash DC779A41 vs 8E7F5DD5).
+[WORLD VERIFY] PASS GameFlow.Select hero (world verification copy)
+[WORLD VERIFY] PASS GameHud present.
+[WORLD VERIFY] PASS HUD waypoint at the new distances: target (27.7,0.1,-20.2) of Bank break-out at 261 m (independent 261 m), on-screen=True, label "261 M".
+[WORLD VERIFY] PASS Waypoint distance label reads the long distance.
+[WORLD VERIFY] PASS Facing away at 261 m: the edge arrow points back to the target (angle 177).
+[WORLD VERIFY] PASS Rooftop contract: 5 discovery markers with ids 2409:roof:0, 2409:roof:1, 2409:roof:2, 2409:roof:3, 2409:roof:4 on the first 5 buildings (districts Downtown,Downtown,Downtown,Residential,Docks).
+[WORLD VERIFY] PASS Standing on the roof claims 2409:roof:0 into the Rooftops save field; marker removed.
+[WORLD VERIFY] PASS NpcLod active.
+[WORLD VERIFY] PASS Both tiers populated in a live session.
+[WORLD VERIFY] PASS Hostile criminal spawned 120 m from the hero.
+[WORLD VERIFY] PASS FAR tier: animator off (manual steps 9 in 2.0 s), presentation off, avoidance off, AI ticks 8 over 430 frames (~4.0/s), windups 0.
+[WORLD VERIFY] PASS CONTROL promoted: within 2 frames animator, presentation and obstacle avoidance are back on.
+[WORLD VERIFY] PASS CONTROL promoted NPC fights again: windups 1, releases 1, hits 1, attack clip impact marker at t=10.10 vs release t=10.10; AI ticked 182 times in 182 frames (every frame).

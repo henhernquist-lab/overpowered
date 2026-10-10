@@ -1,0 +1,29 @@
+PASS Save legal darkness loadout through progression.
+PASS Session equips requested primary and secondary.
+PASS Scene lighting director exists for paired day/night captures.
+PASS darkness real equipped cast in third person, day.
+PASS Lightning primary visual points at the actual first recipient.
+PASS Darkness restrained target has a live pooled body cue.
+PASS Poisoned target has a live pooled contamination cue.
+PASS Destroyed rooted target returns its restraint lease.
+PASS darkness real equipped cast in third person, night.
+PASS Lightning primary visual points at the actual first recipient.
+PASS Darkness restrained target has a live pooled body cue.
+PASS Poisoned target has a live pooled contamination cue.
+PASS Destroyed rooted target returns its restraint lease.
+PASS Enter first person.
+PASS darkness real equipped cast in first person, day.
+PASS Lightning primary visual points at the actual first recipient.
+PASS Darkness restrained target has a live pooled body cue.
+PASS Poisoned target has a live pooled contamination cue.
+PASS Destroyed rooted target returns its restraint lease.
+PASS darkness real equipped cast in first person, night.
+PASS Lightning primary visual points at the actual first recipient.
+PASS Darkness restrained target has a live pooled body cue.
+PASS Poisoned target has a live pooled contamination cue.
+PASS Destroyed rooted target returns its restraint lease.
+PASS Return to third person.
+PASS darkness repeated equipped cast 0.
+PASS darkness repeated equipped cast 1.
+PASS darkness repeated equipped cast 2.
+FAIL System.Exception: darkness repeated equipped cast 3.
