@@ -21,10 +21,12 @@ public sealed class PlayerPhaseShift : MonoBehaviour
     readonly Vector3[] history=new Vector3[64]; int historyCount, historyNext;
     readonly LineRenderer[] echoes=new LineRenderer[EchoCount];
     readonly float[] echoUntil=new float[EchoCount];
-    LineRenderer outline; readonly LineRenderer[] edges=new LineRenderer[2];
+    LineRenderer outline,outlineSide,pulseRing; readonly LineRenderer[] edges=new LineRenderer[2];
     int echoNext;
     readonly Vector3[] echoPositions=new Vector3[EchoCount];
     readonly Quaternion[] echoRotations=new Quaternion[EchoCount];
+    public int VisualRendererCount=>outline==null?0:EchoCount+5;
+    public bool WorldPulseVisible=>pulseRing!=null&&pulseRing.enabled;
     public void Initialize(PowerUser owner,CityColor color)
     {
         user=owner;body=GetComponent<CharacterController>();
@@ -35,7 +37,12 @@ public sealed class PlayerPhaseShift : MonoBehaviour
             new Vector3(.2f,1.82f,0),new Vector3(.22f,1.5f,0),new Vector3(.55f,1.35f,0),
             new Vector3(.36f,.75f,0),new Vector3(.28f,.1f,0),new Vector3(.1f,.1f,0),
             new Vector3(0,.75f,0),new Vector3(-.1f,.1f,0),new Vector3(-.28f,.1f,0)};
+        // The hero mesh is slimmer than the physics capsule. Keep the ghost close to the rendered body.
+        for(int i=0;i<shape.Length;i++)shape[i]=new Vector3(shape[i].x*.68f,.18f+(shape[i].y-.1f)*.8f,0);
         outline.SetPositions(shape);
+        outlineSide=Line("Phase side silhouette",shape.Length,color);
+        for(int i=0;i<shape.Length;i++)outlineSide.SetPosition(i,new Vector3(0,shape[i].y,shape[i].x));
+        pulseRing=Line("Phase boundary pulse",13,color);
         for(int i=0;i<EchoCount;i++){echoRotations[i]=Quaternion.identity;echoes[i]=Line("Phase echo "+i,shape.Length,color);echoes[i].SetPositions(shape);}
         for(int i=0;i<2;i++)edges[i]=Line("Phase peripheral "+i,3,color);
     }
@@ -80,8 +87,23 @@ public sealed class PlayerPhaseShift : MonoBehaviour
         bool first=rig!=null&&rig.isActiveAndEnabled&&rig.FirstPerson;
         bool visible=Active||Time.time<pulseUntil;
         if(outline==null)return;
-        outline.enabled=visible&&!first;
-        outline.widthMultiplier=Time.time<pulseUntil?.06f:.025f;
+        float facing=camera!=null?Mathf.Abs(Vector3.Dot((camera.transform.position-transform.position).normalized,transform.forward)):1f;
+        outline.enabled=visible&&!first&&facing>.35f;
+        outlineSide.enabled=visible&&!first&&facing<.65f;
+        outline.widthMultiplier=Time.time<pulseUntil?.032f:.02f;
+        outlineSide.widthMultiplier=Time.time<pulseUntil?.027f:.016f;
+        pulseRing.enabled=!first&&Time.time<pulseUntil;
+        if(pulseRing.enabled)
+        {
+            float progress=1f-Mathf.Clamp01((pulseUntil-Time.time)/.12f);
+            float size=.25f+progress*.52f;
+            pulseRing.widthMultiplier=.035f*(1f-progress);
+            for(int i=0;i<13;i++)
+            {
+                float a=i*Mathf.PI*2f/12f;
+                pulseRing.SetPosition(i,new Vector3(Mathf.Cos(a)*size,.9f,Mathf.Sin(a)*size));
+            }
+        }
         if(Active&&!first&&Time.time>=nextEcho&&(nextEcho==0||
             (transform.position-echoPositions[(echoNext+EchoCount-1)%EchoCount]).sqrMagnitude>.0025f))
         {
@@ -93,12 +115,12 @@ public sealed class PlayerPhaseShift : MonoBehaviour
             // World-space placement via cached pose; parent motion must not drag the old outline.
             echoes[i].transform.SetPositionAndRotation(echoPositions[i],echoRotations[i]);
             echoes[i].enabled=!first&&Time.time<echoUntil[i];
-            echoes[i].widthMultiplier=.022f*Mathf.Clamp01((echoUntil[i]-Time.time)/.24f);
+            echoes[i].widthMultiplier=.02f*Mathf.Clamp01((echoUntil[i]-Time.time)/.24f);
         }
         for(int i=0;i<2;i++)
         {
             var edge=edges[i];edge.enabled=visible&&first;if(!edge.enabled)continue;
-            edge.useWorldSpace=true;edge.widthMultiplier=.0025f;
+            edge.useWorldSpace=true;edge.widthMultiplier=.0025f*(Active?1f:.6f);
             float x=i==0?.09f:.91f;
             edge.SetPosition(0,camera.ViewportToWorldPoint(new Vector3(x,.35f,.3f)));
             edge.SetPosition(1,camera.ViewportToWorldPoint(new Vector3(x+(i==0?-.015f:.015f),.5f,.3f)));
@@ -187,5 +209,7 @@ public sealed class PlayerPhaseShift : MonoBehaviour
         foreach(var c in ignored)if(c!=null&&body!=null)Physics.IgnoreCollision(body,c,false);
         ignored.Clear();pulseUntil=Time.time+.12f;
     }
-    void OnDisable(){End();if(outline!=null)outline.enabled=false;foreach(var e in echoes)if(e!=null)e.enabled=false;foreach(var e in edges)if(e!=null)e.enabled=false;}
+    void OnDisable(){End();if(outline!=null)outline.enabled=false;if(outlineSide!=null)outlineSide.enabled=false;
+        if(pulseRing!=null)pulseRing.enabled=false;foreach(var e in echoes)if(e!=null)e.enabled=false;
+        foreach(var e in edges)if(e!=null)e.enabled=false;}
 }

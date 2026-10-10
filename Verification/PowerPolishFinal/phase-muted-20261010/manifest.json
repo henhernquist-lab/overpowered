@@ -1,0 +1,36 @@
+[
+  {
+    "entry": "PhaseShiftVerification.Run",
+    "commit": "5f3cd0ad7dcc9ffe585f95445e689516281d64ab",
+    "status_before": "M .freebuff/project-id\n M \"Assets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uxml.meta\"\n M Assets/Scripts/Powers/PhaseShiftVerificationRunner.cs\n M Assets/Scripts/Powers/PlayerPhaseShift.cs\n M Assets/Scripts/Powers/RosterVerificationRunner.cs\n M Assets/Scripts/Powers/SpeedDashEffect.cs\n M Assets/Scripts/Powers/TeleportEffect.cs\n M Assets/Scripts/SecondaryVerificationRunner.cs\n M Assets/Scripts/VerificationHarness.cs\n M Verification/Roster/darkness-rooted.png\n M Verification/Roster/eclipse-beam.png\n M Verification/Roster/force-field.png\n M Verification/Roster/laser-beam-side.png\n M Verification/Roster/laser-beam.png\n M Verification/Roster/lightning-chain.png\n M Verification/Roster/poison-spread.png\n M Verification/Roster/results.txt\n M Verification/Roster/solar-flare-beam.png\n M Verification/Roster/void-grasp.png\n M Verification/Secondary/results.txt\n M docs/secondary-loadout.md\n M tools/verify-sequential.py\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/PhaseShift/phase-first-person.png\n?? Verification/PhaseShift/phase-third-person.png\n?? Verification/PhaseShift/reload.txt\n?? Verification/PhaseShift/run-dense.png\n?? Verification/PhaseShift/run.txt\n?? Verification/PowerPolishFinal/secondary-gates-20261010/",
+    "started_utc": "2026-10-10T19:01:37.154633+00:00",
+    "save_before": "42d5a91e2f25867f1a7dc408eced25c9e9a962adf28cf56c7e9a336f8e3695c0",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/PowerPolishFinal/phase-muted-20261010/PhaseShiftVerification.Run.log",
+    "pid": 14328,
+    "exit": 0,
+    "seconds": 73.61,
+    "pass": 142,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M \"Assets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uxml.meta\"\n M Assets/Scripts/Powers/PhaseShiftVerificationRunner.cs\n M Assets/Scripts/Powers/PlayerPhaseShift.cs\n M Assets/Scripts/Powers/RosterVerificationRunner.cs\n M Assets/Scripts/Powers/SpeedDashEffect.cs\n M Assets/Scripts/Powers/TeleportEffect.cs\n M Assets/Scripts/SecondaryVerificationRunner.cs\n M Assets/Scripts/VerificationHarness.cs\n M Verification/Roster/darkness-rooted.png\n M Verification/Roster/eclipse-beam.png\n M Verification/Roster/force-field.png\n M Verification/Roster/laser-beam-side.png\n M Verification/Roster/laser-beam.png\n M Verification/Roster/lightning-chain.png\n M Verification/Roster/poison-spread.png\n M Verification/Roster/results.txt\n M Verification/Roster/solar-flare-beam.png\n M Verification/Roster/void-grasp.png\n M Verification/Secondary/results.txt\n M docs/secondary-loadout.md\n M tools/verify-sequential.py\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/PhaseShift/phase-first-person.png\n?? Verification/PhaseShift/phase-third-person.png\n?? Verification/PhaseShift/reload.txt\n?? Verification/PhaseShift/run-dense.png\n?? Verification/PhaseShift/run.txt\n?? Verification/PowerPolishFinal/secondary-gates-20261010/"
+  },
+  {
+    "entry": "PhaseShiftVerification.Reload",
+    "commit": "5f3cd0ad7dcc9ffe585f95445e689516281d64ab",
+    "status_before": "M .freebuff/project-id\n M \"Assets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uxml.meta\"\n M Assets/Scripts/Powers/PhaseShiftVerificationRunner.cs\n M Assets/Scripts/Powers/PlayerPhaseShift.cs\n M Assets/Scripts/Powers/RosterVerificationRunner.cs\n M Assets/Scripts/Powers/SpeedDashEffect.cs\n M Assets/Scripts/Powers/TeleportEffect.cs\n M Assets/Scripts/SecondaryVerificationRunner.cs\n M Assets/Scripts/VerificationHarness.cs\n M Verification/Roster/darkness-rooted.png\n M Verification/Roster/eclipse-beam.png\n M Verification/Roster/force-field.png\n M Verification/Roster/laser-beam-side.png\n M Verification/Roster/laser-beam.png\n M Verification/Roster/lightning-chain.png\n M Verification/Roster/poison-spread.png\n M Verification/Roster/results.txt\n M Verification/Roster/solar-flare-beam.png\n M Verification/Roster/void-grasp.png\n M Verification/Secondary/results.txt\n M docs/secondary-loadout.md\n M tools/verify-sequential.py\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/PhaseShift/phase-first-person.png\n?? Verification/PhaseShift/phase-third-person.png\n?? Verification/PhaseShift/reload.txt\n?? Verification/PhaseShift/run-dense.png\n?? Verification/PhaseShift/run.txt\n?? Verification/PowerPolishFinal/phase-muted-20261010/\n?? Verification/PowerPolishFinal/secondary-gates-20261010/",
+    "started_utc": "2026-10-10T19:02:50.916869+00:00",
+    "save_before": "42d5a91e2f25867f1a7dc408eced25c9e9a962adf28cf56c7e9a336f8e3695c0",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/PowerPolishFinal/phase-muted-20261010/PhaseShiftVerification.Reload.log",
+    "pid": 14553,
+    "exit": 0,
+    "seconds": 21.81,
+    "pass": 3,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M \"Assets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uxml.meta\"\n M Assets/Scripts/Powers/PhaseShiftVerificationRunner.cs\n M Assets/Scripts/Powers/PlayerPhaseShift.cs\n M Assets/Scripts/Powers/RosterVerificationRunner.cs\n M Assets/Scripts/Powers/SpeedDashEffect.cs\n M Assets/Scripts/Powers/TeleportEffect.cs\n M Assets/Scripts/SecondaryVerificationRunner.cs\n M Assets/Scripts/VerificationHarness.cs\n M Verification/Roster/darkness-rooted.png\n M Verification/Roster/eclipse-beam.png\n M Verification/Roster/force-field.png\n M Verification/Roster/laser-beam-side.png\n M Verification/Roster/laser-beam.png\n M Verification/Roster/lightning-chain.png\n M Verification/Roster/poison-spread.png\n M Verification/Roster/results.txt\n M Verification/Roster/solar-flare-beam.png\n M Verification/Roster/void-grasp.png\n M Verification/Secondary/results.txt\n M docs/secondary-loadout.md\n M tools/verify-sequential.py\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/PhaseShift/phase-first-person.png\n?? Verification/PhaseShift/phase-third-person.png\n?? Verification/PhaseShift/reload.txt\n?? Verification/PhaseShift/run-dense.png\n?? Verification/PhaseShift/run.txt\n?? Verification/PowerPolishFinal/phase-muted-20261010/\n?? Verification/PowerPolishFinal/secondary-gates-20261010/"
+  }
+]

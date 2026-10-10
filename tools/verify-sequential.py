@@ -10,6 +10,7 @@ import argparse
 import datetime
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -54,8 +55,11 @@ def main():
                       save_before=stamp(save), database_before=stamp(database), log=str(log.relative_to(root)))
         print('START ' + entry, flush=True)
         started = time.monotonic()
+        # Keep automated Play Mode verification from producing audible game SFX on the user's computer.
+        # The editor-only runtime hook mutes the listener; AudioSources still play for source-state tests.
+        environment = dict(os.environ, OP_VERIFY_SILENT='1')
         with subprocess.Popen([str(unity), '-batchmode', '-projectPath', str(root),
-                               '-executeMethod', entry, '-logFile', str(log)], cwd=root) as process:
+                               '-executeMethod', entry, '-logFile', str(log)], cwd=root, env=environment) as process:
             record['pid'] = process.pid
             try:
                 record['exit'] = process.wait(timeout=args.timeout)

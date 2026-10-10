@@ -1,0 +1,142 @@
+PASS Fresh save selects Phase Shift, never Flight.
+PASS Every hero exposes exactly the four intended secondaries.
+PASS Legacy Flight selection is refused through normal save gate.
+PASS Save legal loadout with phase-shift
+PASS Phase has a fixed three-dimensional silhouette, echoes, boundary pulse and two first-person edge cues.
+PASS Phase data: .75 seconds, two charges, 5 seconds recharge, zero energy.
+PASS Activation spends exactly one charge and zero energy.
+PASS Only NPC pair ignored; CharacterController remains enabled.
+PASS NPC spawned during phase joins the temporary ignore set.
+PASS Ordinary incoming damage refused.
+PASS Explicit unblockable damage still applies.
+PASS Primary, melee, Hurricane Kick and synergy all refuse during phase.
+PASS Refused offense spends no resources, starts no cooldown, spawns no projectile and deals no damage.
+PASS Enabled controller passes through NPC body.
+PASS End-overlap fixture actually overlaps NPC.
+PASS Phase expires.
+PASS Measured phase duration matches data within one frame margin.
+PASS NPC overlap resolves and owned ignores restore at end.
+PASS Ordinary incoming damage works immediately after phase.
+PASS Second charge works.
+PASS Zero charges alone refuses after cooldown has elapsed.
+PASS Charge replenishes after configured real elapsed recharge.
+PASS World collision control phase activates.
+PASS Building wall remains solid during phase.
+PASS Floor remains solid during phase.
+PASS Ceiling remains solid during phase.
+PASS Grounded jump before phase.
+PASS Double jump remains available during phase.
+PASS Phase does not refill double jump.
+PASS Pause control activates.
+PASS Pause freezes evasion duration.
+PASS Paused activation refuses without payment.
+PASS Phase ends an existing shield rather than stacking perfect defense.
+PASS Speed motion fixture starts before phase.
+PASS Phase cannot overlap an existing Speed dash or spend a refused charge.
+PASS Teleport and Speed motion cannot start during phase.
+PASS Visual warmup activates.
+PASS Stress activation 0
+PASS Stress activation 1
+PASS Stress activation 2
+PASS Stress activation 3
+PASS Stress activation 4
+PASS Stress activation 5
+PASS Stress activation 6
+PASS Stress activation 7
+PASS Stress activation 8
+PASS Stress activation 9
+PASS Stress activation 10
+PASS Stress activation 11
+PASS Stress activation 12
+PASS Stress activation 13
+PASS Stress activation 14
+PASS Stress activation 15
+PASS Stress activation 16
+PASS Stress activation 17
+PASS Stress activation 18
+PASS Stress activation 19
+PASS Repeated phase has no material, mesh, renderer or object growth.
+PASS Third-person capture activates.
+PASS Third-person activation uses a short outward boundary pulse.
+PASS First-person phase activates.
+PASS First-person phase keeps its world pulse away from the eye and preserves aim/FOV.
+PASS Aim unchanged after phase ends.
+PASS Death control active.
+PASS Unblockable death immediately clears evasion and collisions.
+PASS Save legal loadout with phase-shift
+PASS Real Laser Eyes channel starts.
+PASS Phase cleanly stops existing Laser channel.
+PASS Save legal loadout with phase-shift
+PASS Real Rusher spawned for phase-shift
+PASS Real Rusher commits attack.
+PASS phase-shift activates before committed Rusher release.
+PASS Real Rusher attack releases.
+PASS phase-shift avoids health loss on an actual intersecting Rusher hit.
+PASS Phase refuses melee and uses no shield capacity.
+PASS Save legal loadout with force-field
+PASS Real Rusher spawned for force-field
+PASS Real Rusher commits attack.
+PASS force-field activates before committed Rusher release.
+PASS Real Rusher attack releases.
+PASS force-field avoids health loss on an actual intersecting Rusher hit.
+PASS Shield spends finite capacity on same attack.
+PASS Shield permits paid melee while raised.
+PASS Save legal loadout with phase-shift
+PASS Real Gunner spawned for phase-shift
+PASS Real Gunner commits attack.
+PASS phase-shift activates before committed Gunner release.
+PASS Real Gunner attack releases.
+PASS phase-shift avoids health loss on an actual intersecting Gunner hit.
+PASS Phase refuses melee and uses no shield capacity.
+PASS Save legal loadout with force-field
+PASS Real Gunner spawned for force-field
+PASS Real Gunner commits attack.
+PASS force-field activates before committed Gunner release.
+PASS Real Gunner attack releases.
+PASS force-field avoids health loss on an actual intersecting Gunner hit.
+PASS Shield spends finite capacity on same attack.
+PASS Shield permits paid melee while raised.
+PASS Save legal loadout with phase-shift
+PASS phase-shift comparison activates.
+PASS Phase activation does not relocate.
+PASS Phase movement matches normal walk speed, without a speed multiplier.
+PASS Save legal loadout with speed
+PASS speed comparison activates.
+PASS Speed covers substantially more distance than Phase over the same interval.
+PASS Save legal loadout with teleport
+PASS teleport comparison activates.
+PASS Teleport immediately relocates by its configured range.
+PASS Save legal loadout with phase-shift
+PASS Phase starts after paid melee windup.
+PASS Previously queued melee windup cannot impact during phase.
+PASS Cancelled melee does not resume after phase ends.
+PASS Normal attacking returns immediately after phase.
+PASS Fresh post-phase attack really impacts.
+PASS Kill-plane control starts phased.
+PASS Actual WorldSession kill plane defeats and clears phase.
+PASS Save legal loadout with phase-shift
+PASS Dense actor spawned 0
+PASS Dense actor spawned 1
+PASS Dense actor spawned 2
+PASS Dense actor spawned 3
+PASS Dense actor spawned 4
+PASS Dense actor spawned 5
+PASS Dense actor spawned 6
+PASS Dense actor spawned 7
+PASS Dense actor spawned 8
+PASS Dense actor spawned 9
+PASS Dense actor spawned 10
+PASS Dense actor spawned 11
+PASS Dense actor spawned 12
+PASS Dense actor spawned 13
+PASS Dense actor spawned 14
+PASS Dense actor spawned 15
+PASS Dense actor spawned 16
+PASS Dense actor spawned 17
+PASS Dense real enemy attacks occurred during measurement.
+PASS Dense stress actually activates Phase repeatedly while enemies attack (harness refills charges).
+PASS Session teardown control active.
+PASS Session teardown clears Phase state and ignores.
+PASS Old Flight fixture migrates without changing progression.
+PASS Migration preserves every other serialized profile field.
+PASS Repair written immediately through normal save path.

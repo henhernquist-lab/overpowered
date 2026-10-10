@@ -1,0 +1,5 @@
+MEASURED Phase pool: outlines=2, boundary=1, echoes=3, peripheral=2, materials=110, meshes=1018, renderers=1895, objects=4250.
+MEASURED phase-shift .7s traversal: distance=3.640m; Phase=3.640m, ordinary expected=3.640m.
+MEASURED speed .7s traversal: distance=12.649m; Phase=3.640m, ordinary expected=3.640m.
+MEASURED Teleport instant distance=8.000m; Phase instant distance=0m.
+MEASURED run dense combat 18 enemies 1280x720: FPS=86.47, mean=11.565ms, whole-frame GC=0 B/frame, frames=692, releases=13, materials=109, meshes=1019, renderers=1888, objects=3666, particles=22.

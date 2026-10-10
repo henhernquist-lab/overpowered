@@ -1,6 +1,23 @@
 using System.Collections;
 using UnityEngine;
 
+#if UNITY_EDITOR
+// Batch verifiers exercise real AudioSources, but do not need to play through the user's speakers.
+// Only the sequential verification launcher sets this flag; ordinary Editor and game audio are unchanged.
+internal static class VerificationSilentAudio
+{
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void MuteBatchOutput()
+    {
+        if(System.Environment.GetEnvironmentVariable("OP_VERIFY_SILENT")=="1")
+        {
+            AudioListener.volume=0f;
+            Debug.Log("Verification batch audio listener muted; gameplay AudioSources remain active.");
+        }
+    }
+}
+#endif
+
 public sealed class VerificationHarness : MonoBehaviour
 {
     SuperHeroController hero;

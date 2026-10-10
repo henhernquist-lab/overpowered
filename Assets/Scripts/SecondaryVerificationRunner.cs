@@ -95,18 +95,24 @@ public sealed class SecondaryVerificationRunner : SessionVerificationRunner
             }
             else
             {
+                Cam.transform.position=new Vector3(12,155,-9);Cam.transform.LookAt(new Vector3(0,151,4));
                 var before=W.Hero.transform.position;int charges=ability.Charges;
+                int visualBefore=PowerVfx.Get().Draws;
                 W.Hero.ScriptedSecondaryPress=true;yield return null;
                 Check(Vector3.Distance(before,W.Hero.transform.position)>7f&&ability.Charges==charges-1,
                     "F Teleport moves to clear supported ground and pays one charge.");
+                Check(PowerVfx.Get().Draws==visualBefore+2,"Teleport draws one bounded departure pop and one arrival pop, without a connecting trail.");
+                Capture("teleport-departure-arrival.png");
                 PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.2f);
                 Vector3 direction=Vector3.ProjectOnPlane(Cam.transform.forward,Vector3.up).normalized;
                 var wall=GameObject.CreatePrimitive(PrimitiveType.Cube);
                 wall.transform.position=W.Hero.transform.position+direction*4+Vector3.up;
                 wall.transform.localScale=new Vector3(4,2,1);wall.transform.rotation=Quaternion.LookRotation(direction);
                 Physics.SyncTransforms();ability.Cooldown=0;charges=ability.Charges;before=W.Hero.transform.position;
+                visualBefore=PowerVfx.Get().Draws;
                 Check(!user.UseSecondary()&&ability.Charges==charges&&Vector3.Distance(before,W.Hero.transform.position)<.01f,
                     "CONTROL Teleport cannot pass a wall or spend a charge on blocked travel.");
+                Check(PowerVfx.Get().Draws==visualBefore,"Blocked Teleport shows no misleading departure or arrival pop.");
                 Destroy(wall);
             }
         }

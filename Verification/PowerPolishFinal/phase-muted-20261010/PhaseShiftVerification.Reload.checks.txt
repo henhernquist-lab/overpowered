@@ -1,0 +1,3 @@
+PASS Separate process reload keeps repaired Phase Shift secondary.
+PASS Separate process preserves migrated hero, primary powers, level, XP and points.
+PASS Separate process preserves suit colours.

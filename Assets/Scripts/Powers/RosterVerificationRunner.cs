@@ -302,10 +302,18 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         yield return new WaitForSeconds(.3f);
         Aim(W.Hero.transform.position + new Vector3(0, 1.5f, 20)); Vector3 start = W.Hero.transform.position;
         Check(W.Powers.Use(rt) && W.Hero.Dashing, "Dash starts: " + W.Powers.Message);
+        var speedVisual=W.Hero.GetComponentInChildren<DashTrail>();int priorStreaks=speedVisual!=null?speedVisual.StreakCount:0;
+        yield return new WaitForSeconds(.07f);
+        Check(speedVisual!=null&&speedVisual.Emitting&&speedVisual.StreakCount>priorStreaks,
+            "Speed has visible bounded displacement streaks during its real dash, before the end snap.");
+        Capture("speed-dash.png");
         yield return new WaitForSeconds(stats.Duration + .3f);
         Vector3 moved = W.Hero.transform.position - start; float flat = new Vector2(moved.x, moved.z).magnitude;
         Log($"MEASURED dash: {flat:F2} m horizontal (data {stats.Range} m in {stats.Duration} s), {moved.y:F2} m vertical, direction z {moved.z:F2}.");
         Check(!W.Hero.Dashing && Mathf.Abs(flat - stats.Range) < .6f && moved.z > stats.Range - .6f, "Dash covers its Range along the aim, through the enemy in its path.");
+        Check(speedVisual!=null&&speedVisual.RendererCount==12&&speedVisual.StreakCount>priorStreaks&&
+            Vector3.Dot(speedVisual.LastVisualDirection,moved.normalized)>.9f&&!speedVisual.Emitting,
+            "Speed uses bounded side streaks aligned with real dash displacement and stops emitting at the end.");
         Check(Mathf.Abs(1000 - inPath.Health - stats.Damage) < .01f, $"Criminal in the path clipped once: {1000 - inPath.Health} damage.");
         Check(civilian.Health == 1000, "CONTROL: civilian in the path untouched (hostile only).");
         Check(aside.Health == 1000, "CONTROL: criminal 3 m to the side untouched.");

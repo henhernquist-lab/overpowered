@@ -40,6 +40,7 @@ public sealed class PhaseShiftVerificationRunner : SessionVerificationRunner
         Check(!Profile.SetLoadout(F.Heroes[0],Power("fire"),Power("ice"),Power("flight"),CityColor.Red,CityColor.Cyan),"Legacy Flight selection is refused through normal save gate.");
         yield return EnterPhase();Isolate();
         var user=W.Powers;var phase=user.Phase;var rt=user.SecondaryRuntime;var fire=Runtime("fire");
+        Check(phase.VisualRendererCount==8,"Phase has a fixed three-dimensional silhouette, echoes, boundary pulse and two first-person edge cues.");
         Check(rt.Definition.Duration==.75f&&rt.Definition.Charges==2&&rt.Definition.ChargeRecharge==5&&rt.Definition.ResourceCost==0,"Phase data: .75 seconds, two charges, 5 seconds recharge, zero energy.");
         var npc=Actor(new Vector3(0,150,1),NpcRole.Criminal,1000);var collider=npc.GetComponent<Collider>();
         float energy=user.Energy,started=Time.time;int charges=rt.Charges;
@@ -92,11 +93,17 @@ public sealed class PhaseShiftVerificationRunner : SessionVerificationRunner
         for(int i=0;i<20;i++){Refill();Check(user.UseSecondary(),"Stress activation "+i);yield return null;phase.End();}
         yield return new WaitForSeconds(.3f);
         Check(materials==Resources.FindObjectsOfTypeAll<Material>().Length&&meshes==Resources.FindObjectsOfTypeAll<Mesh>().Length&&renderers==FindObjectsByType<Renderer>(FindObjectsInactive.Include).Length&&objects==FindObjectsByType<Transform>(FindObjectsInactive.Include).Length,"Repeated phase has no material, mesh, renderer or object growth.");
-        Log($"MEASURED Phase pool: outlines=1 echoes={PlayerPhaseShift.EchoCount} peripheral=2, materials={materials}, meshes={meshes}, renderers={renderers}, objects={objects}.");
-        Aim(W.Hero.transform.position+Vector3.forward*4+Vector3.up);Refill();Check(user.UseSecondary(),"Third-person capture activates.");yield return null;Capture("phase-third-person.png");phase.End();
-        var rig=Cam.GetComponent<ThirdPersonCamera>();rig.enabled=true;if(!rig.FirstPerson)rig.ToggleView();rig.SetLook(15,-5);yield return null;yield return null;
+        Log($"MEASURED Phase pool: outlines=2, boundary=1, echoes={PlayerPhaseShift.EchoCount}, peripheral=2, materials={materials}, meshes={meshes}, renderers={renderers}, objects={objects}.");
+        // Use the shipping camera distance and a clear portion of the isolated floor. The prior fixture's
+        // one-metre shoulder camera and adjacent NPC made its screenshot unsuitable for judging silhouette scale.
+        PlaceHero(new Vector3(12,150.05f,0),true);
+        var rig=Cam.GetComponent<ThirdPersonCamera>();rig.enabled=true;if(rig.FirstPerson)rig.ToggleView();rig.SetLook(0,10);
+        yield return null;yield return null;
+        Refill();Check(user.UseSecondary(),"Third-person capture activates.");yield return null;
+        Check(phase.WorldPulseVisible,"Third-person activation uses a short outward boundary pulse.");Capture("phase-third-person.png");phase.End();
+        if(!rig.FirstPerson)rig.ToggleView();rig.SetLook(15,-5);yield return null;yield return null;
         var aim=user.AimDirection;float fov=Cam.fieldOfView;Refill();Check(user.UseSecondary(),"First-person phase activates.");yield return null;Capture("phase-first-person.png");
-        Check(Vector3.Angle(aim,user.AimDirection)<.01f&&Mathf.Abs(Cam.fieldOfView-fov)<.01f,"First-person phase preserves aim and FOV.");phase.End();yield return new WaitForSeconds(.3f);
+        Check(!phase.WorldPulseVisible&&Vector3.Angle(aim,user.AimDirection)<.01f&&Mathf.Abs(Cam.fieldOfView-fov)<.01f,"First-person phase keeps its world pulse away from the eye and preserves aim/FOV.");phase.End();yield return new WaitForSeconds(.3f);
         Check(Vector3.Angle(aim,user.AimDirection)<.01f,"Aim unchanged after phase ends.");
         // Death is immediate; ignores must restore before any respawn or next session.
         Refill();Check(user.UseSecondary(),"Death control active.");W.DamagePlayer(W.Health,true);
