@@ -21,6 +21,14 @@ public sealed class PowerPayoffVerificationRunner : MonoBehaviour
     void Observe(string message,string trace,LogType type){if((type==LogType.Exception||type==LogType.Error)&&trace.Contains("Assets/Scripts/"))error=message;}
     void Log(string s){lines.Add(s);Debug.Log(s);File.WriteAllLines(Folder+"results.txt",lines);}
     void Check(bool ok,string s){if(!ok)throw new Exception(s);Log("PASS "+s);}
+    void Capture(string file)
+    {
+        var target=new RenderTexture(1280,720,24);var previous=Cam.targetTexture;Cam.targetTexture=target;Cam.Render();Cam.targetTexture=previous;
+        var active=RenderTexture.active;RenderTexture.active=target;
+        var image=new Texture2D(1280,720,TextureFormat.RGB24,false);image.ReadPixels(new Rect(0,0,1280,720),0,0);image.Apply();
+        File.WriteAllBytes(Folder+file,image.EncodeToPNG());RenderTexture.active=active;Destroy(image);target.Release();Destroy(target);
+        Log("IMAGE "+Folder+file);
+    }
     IEnumerator Start()
     {
         Directory.CreateDirectory(Folder);var stack=new Stack<IEnumerator>();stack.Push(Run());
@@ -151,6 +159,7 @@ public sealed class PowerPayoffVerificationRunner : MonoBehaviour
         var visual=U.TelekinesisVisual;
         Check(visual!=null&&visual.Holding&&visual.RendererCount==5,"Telekinesis leases its fixed target rings, tether and trail for the actual held body.");
         yield return new WaitForSeconds(.25f);
+        Capture("telekinesis-held-"+(first?"first":"third")+".png");
         var target=Npc(stage+new Vector3(2,0,18));var control=Npc(stage+new Vector3(6,0,18));
         if(lethal)target.SetCombatStats(65,0);
         Aim(target.transform.position+Vector3.up*.9f,first);Physics.SyncTransforms();
@@ -161,10 +170,12 @@ public sealed class PowerPayoffVerificationRunner : MonoBehaviour
         Check(tk.Charges==0&&U.Energy==energy,"Release costs no extra charges or energy");tk.Charges=charges;
         var impact=body.GetComponent<ThrownProp>();float until=Time.time+2;
         yield return new WaitForFixedUpdate();yield return new WaitForFixedUpdate();
+        Capture("telekinesis-throw-"+(first?"first":"third")+".png");
         float launchImpulse=(body.linearVelocity-velocity).magnitude*mass;
         while(!impact.Spent&&Time.time<until)yield return null;
         float miss=Vector3.Distance(aim,impact.LastContact);
         Check(impact.Spent,$"Throw contacts aimed NPC: {mass}kg, first={first}");
+        if(impact.Spent)Capture("telekinesis-impact-"+(first?"first":"third")+".png");
         Check(visual.ImpactCount==visualImpacts+1&&!visual.Throwing&&Vector3.Distance(visual.LastImpactPoint,impact.LastContact)<.01f,
             "Telekinesis payoff follows one real Rigidbody collision at the exact gameplay contact.");
         Check(miss<.5f,$"Throw MISS={miss:F4}m, contact={impact.LastContact:F3}, crosshair={aim:F3}, AddForce impulse={impact.LaunchImpulse.magnitude:F1}N.s, measured velocity delta~{launchImpulse:F1}N.s, displacement={Vector3.Distance(start,body.position):F2}m");

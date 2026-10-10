@@ -73,9 +73,9 @@ public sealed class TelekinesisPresentation : MonoBehaviour
     {
         held=body;thrown=null;color=swatch;trailCount=0;impactUntil=0;
         var collider=body.GetComponent<Collider>();
-        radius=collider!=null?Mathf.Clamp(collider.bounds.extents.magnitude*.62f,.32f,1.15f):.45f;
+        radius=collider!=null?Mathf.Clamp(collider.bounds.extents.magnitude*.72f,.42f,1.15f):.45f;
         var material=CityMaterials.GetVfx(color);
-        foreach(var ring in rings){ring.sharedMaterial=material;ring.enabled=true;}
+        foreach(var ring in rings){ring.sharedMaterial=material;ring.widthMultiplier=.032f;ring.enabled=true;}
         tether.sharedMaterial=CityMaterials.GetVfx(CityColor.Cyan);
         pulse.sharedMaterial=CityMaterials.GetVfx(CityColor.Cream);
         tether.enabled=pulse.enabled=true;trail.enabled=false;
@@ -132,12 +132,12 @@ public sealed class TelekinesisPresentation : MonoBehaviour
             Vector3 end=center+(first?camera.transform.right:transform.right)*(size*.65f);
             Vector3 middle=Vector3.Lerp(start,end,.5f)+Vector3.up*(.09f*Mathf.Sin(Time.time*7f));
             tether.SetPosition(0,start);tether.SetPosition(1,middle);tether.SetPosition(2,end);
-            tether.widthMultiplier=first?.013f:.022f;
+            tether.widthMultiplier=first?.0045f:.018f;
             float t=Mathf.Repeat(Time.time*1.8f,1f);
             Vector3 p= t<.5f?Vector3.Lerp(start,middle,t*2f):Vector3.Lerp(middle,end,(t-.5f)*2f);
             Vector3 direction=(end-start).normalized;
             pulse.SetPosition(0,p-direction*.055f);pulse.SetPosition(1,p+direction*.055f);
-            pulse.widthMultiplier=first?.018f:.035f;
+            pulse.widthMultiplier=first?.012f:.028f;
         }
         if(thrown!=null)
         {

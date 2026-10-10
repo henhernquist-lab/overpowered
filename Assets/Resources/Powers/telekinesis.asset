@@ -38,7 +38,7 @@ MonoBehaviour:
   HoldDamping: 10
   HoldMaxMass: 500
   Color: {r: 1, g: 0.25, b: 0.03, a: 1}
-  PaletteColor: 16
+  PaletteColor: 15
   CastingPresentation: 0
   MenuIcon: 4
   Upgrades:

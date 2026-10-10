@@ -133,8 +133,17 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         PlaceHero(frozen.transform.position + frozen.transform.forward * 1.5f);
         yield return new WaitForSeconds(1.5f);
         Check(frozen.Windups == frozenWindups, "CONTROL: a frozen enemy in reach starts no attack.");
+        // The AI attack controls above deliberately move the hero into melee range and let both actors roam.
+        // Reset to a clear, measured aim fixture for the independent charge/empty-target controls below.
+        target.Agent.enabled=false;control.Agent.enabled=false;
+        target.transform.position=new Vector3(5,150.05f,6);control.transform.position=new Vector3(0,150.05f,6);
+        PlaceHero(new Vector3(0,150.05f,0));Physics.SyncTransforms();
         // Charges CONTROL: 2 charges, 5 s recharge; the second cast is allowed, the third refused.
-        rt.Cooldown = 0; rt.Charges = 1; Aim(Chest(control)); Check(W.Powers.Use(rt), "Last charge casts.");
+        rt.Cooldown = 0; rt.Charges = 1; Aim(Chest(control));
+        Check(W.Powers.FindTarget(stats.Range,out var lastTarget)&&lastTarget.collider.GetComponentInParent<CityNpc>()==control,
+            "Charge fixture's real aim ray hits the intended criminal before payment.");
+        bool lastCharge=W.Powers.Use(rt);
+        Check(lastCharge,$"Last charge casts: {W.Powers.Message}; energy={W.Powers.Energy:F1}, targetDistance={Vector3.Distance(W.Hero.transform.position,control.transform.position):F2}m.");
         rt.Cooldown = 0; hp = target.Health; Aim(Chest(target)); bool third = W.Powers.Use(rt);
         Check(!third && W.Powers.Message == "Blocked: 0 charges" && target.Health == hp, "CONTROL: zero charges refused, target untouched.");
         rt.Charges = 1; rt.Cooldown = 0; Aim(W.Hero.transform.position + Vector3.up * 60 + Vector3.forward * 5); int before = rt.Charges;

@@ -141,7 +141,13 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
         yield return new WaitForSeconds(.2f);Check(rb.linearVelocity.magnitude>1&&Vector3.Distance(start,rb.position)>.1f,$"Real force={W.Hero.LastForce} N·s, mass={rb.mass}kg, velocity={rb.linearVelocity.magnitude:F3}m/s, displacement={Vector3.Distance(start,rb.position):F3}m.");
         W.Hero.DebugSetResources(6,0);Check(!W.Hero.TryPunch(),"Zero-charge CONTROL refuses punch.");yield return new WaitForSeconds(.2f);Check(fired==1,"Rejected punches emit no extra impact.");
         W.Hero.DebugSimulateGround(1.25f);Check(W.Hero.Charges==1,"Original 1.25s charge recharge retained.");
-        W.Hero.DebugSetResources(6,3);W.Hero.DebugSimulateFlight(2);Log($"FLIGHT fuel 6 -> {W.Hero.FlightFuel:F3}");W.Hero.DebugSimulateFlight(4);Check(W.Hero.FlightFuel==0,"Fuel exhausted after six seconds at configured burn rate.");W.Hero.DebugSimulateGround(1);Check(Mathf.Approximately(W.Hero.FlightFuel,2.5f),"Grounded fuel recharge 0 -> 2.500 in 1s.");Destroy(target);
+        W.Hero.DebugSetResources(6,3);
+        Check(!W.Powers.IsEquipped(W.Powers.Flight.Definition),"Current Humanoid session has no equipped Flight secondary.");
+        W.Hero.DebugSimulateFlight(6);
+        Check(Mathf.Approximately(W.Hero.FlightFuel,6f),"Unequipped Flight CONTROL cannot spend fuel through the real consumption gate.");
+        W.Hero.DebugSetResources(0,3);W.Hero.DebugSimulateGround(1);
+        Check(Mathf.Approximately(W.Hero.FlightFuel,W.Powers.Flight.Definition.GroundRecharge),"Grounded fuel recharge still follows the Flight definition.");
+        Destroy(target);
     }
     IEnumerator Damage()
     {
