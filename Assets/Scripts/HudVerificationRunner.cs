@@ -267,11 +267,12 @@ public sealed class HudVerificationRunner : MonoBehaviour
 
     IEnumerator DefaultLoadout(PowerDefinition a, PowerDefinition b)
     {
-        var p = W.Powers;
-        Check(hud.Slots.Count == 4 && hud.Slots[0].Id == a.Id && hud.Slots[1].Id == b.Id &&
+        var p = W.Powers;var resolved=forge.Resolve(a,b,p.EquippedSecondary);
+        Check(hud.Slots.Count == (resolved==null?3:4) && hud.Slots[0].Id == a.Id && hud.Slots[1].Id == b.Id &&
               hud.Slots[2].Id == p.EquippedSecondary?.Id && hud.Slots[2].KeyText == "F" &&
-              hud.Slots[3].Synergy == p.Synergy && p.Synergy == forge.Resolve(a, b, p.EquippedSecondary),
+              p.Synergy == resolved && (resolved==null||hud.Slots[3].Synergy == resolved),
             $"Default loadout bar: {string.Join(" | ", hud.Slots.Select(s => s.Id + "[" + s.KeyText + "]"))} = EquippedA {a.Id} + EquippedB {b.Id} + secondary {p.EquippedSecondary?.Id} + synergy {p.Synergy?.Id}.");
+        if(resolved==null)Check(hud.Slots.All(s=>s.Synergy==null),"CONTROL: a loadout with no resolved synergy shows no phantom synergy slot.");
         Check(!GameHud.Shown(hud.MeleeHint), "Strength equipped -> no unslotted basic-melee hint.");
         var flight = hud.Slots.FirstOrDefault(s => s.Flight);
         if (flight != null) Check(flight.FuelFill != null && flight.Pips.Count == 0 && Mathf.Abs(flight.FuelFraction - p.Flight.Fuel / p.Stats(p.Flight).Duration) < .01f, $"Flight slot shows fuel {flight.FuelFraction:P0} instead of charge pips.");
@@ -291,6 +292,7 @@ public sealed class HudVerificationRunner : MonoBehaviour
             Check(strength.LitPips == p.Strength.Charges, $"After impact the pips still match the runtime: {strength.LitPips}/{strength.Pips.Count}.");
         }
         var synergy = hud.Slots.FirstOrDefault(s => s.Synergy != null);
+        if(synergy==null){Check(!p.SynergyRunner.TryActivate(),"CONTROL: default pair with no synergy cannot activate a missing action.");yield break;}
         Check(synergy.CooldownFraction == 0f && synergy.KeyText == HudBindings.KeyName(forge.SynergyKey), $"Synergy slot key '{synergy.KeyText}' from ForgeCatalog.SynergyKey ({forge.SynergyKey}); radial 0 while ready.");
         yield return Realtime(.8f);
         if (p.SynergyRunner.TryActivate())

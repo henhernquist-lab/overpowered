@@ -5156,3 +5156,24 @@ floor for equal-angle captures and resource stability, not a dense-city FPS
 benchmark. A matched pre-change FPS/frame-time baseline and broad regressions
 are still outstanding. Historical Roster screenshots are not a matched
 before/after night or first-person baseline.
+
+### Four-power final source regressions — 2026-10-10
+
+After checkpoint `b3d98f1`, the final `RosterVerification.VerifyExisting` again
+passed 212/212 and its separate `Reload` passed 3/3
+(`Verification/PowerPolish/roster-final-20261010/manifest.json`). Sequential
+regressions passed Combat 176/176, FirstPerson 211/211 and separate Reload 5/5,
+Camera.Verify 45/45, and Feel 143/143
+(`Verification/PowerPolish/regression-a-20261010/manifest.json`). HeroForge
+VerifyExisting passed 136/136 and separate Reload 3/3. The initial HUD run
+reached 62 PASS and 1 FAIL: its historical default-loadout test demanded a
+fourth synergy slot although the current Fire + Strength + Phase Shift default
+resolves no synergy. The HUD test now checks the actual catalog resolution,
+expects three slots when no synergy exists, and explicitly refuses a phantom
+synergy activation; its real synergy-present controls remain. Fresh HUD rerun:
+308 PASS, 0 FAIL (`Verification/PowerPolish/hud-rerun-20261010/manifest.json`).
+World city verification passed 57/57 and separate-process Reload passed 3/3
+(`Verification/PowerPolish/world-20261010/manifest.json`). These suites used
+isolated saves; launcher manifests report unchanged personal save and Sidekick
+database hashes. Dense-city profiling, matched pre-change performance evidence,
+and Henry's in-motion visual judgment are still pending.
