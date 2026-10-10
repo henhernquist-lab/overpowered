@@ -1,0 +1,28 @@
+PASS Six new PowerDefinition assets exist: darkness, laser-eyes, lightning, force-field, speed, poison
+PASS Exact 13 retained definitions: 12 selectable powers plus legacy Flight.
+PASS VECTOR can equip all six new powers (AvailablePowers).
+PASS TITAN can equip all six new powers (AvailablePowers).
+PASS NOVA can equip all six new powers (AvailablePowers).
+PASS Fresh profile owns the six new powers at tier 0 with 0 points spent.
+PASS Laser Eyes is channeled: drain 32/s, start cost 10.
+PASS The other five new powers keep the instant charge pattern.
+PASS Force Field deals no damage (defensive).
+PASS Save VECTOR with darkness + strength through the loadout API.
+PASS Session equips darkness + strength.
+PASS darkness selected for LMB (key 1).
+PASS Two clear NavMesh points 12-17 m from the hero for live criminals.
+PASS CONTROL criminal placed >60 deg from the target's bearing.
+PASS Target criminal is really moving before the root.
+PASS Shadow Tendrils cast on the aimed live criminal: Darkness activated
+PASS Target rooted (not frozen); charge spent 2->1.
+PASS Root damage == data: 4.00 vs 4.
+PASS Real target cast emits a brief aimed activation snap.
+PASS One real rooted target owns a pooled restraint.
+PASS Rooted criminal does not move.
+PASS CONTROL: the un-rooted criminal keeps moving.
+PASS Root expires after its Duration.
+PASS Root expiry releases the restraint pool lease.
+PASS Target moves again after the root ends.
+PASS A rooted enemy with the player in reach still starts its attack (root is not a stun).
+PASS CONTROL: a frozen enemy in reach starts no attack.
+FAIL System.Exception: Last charge casts.

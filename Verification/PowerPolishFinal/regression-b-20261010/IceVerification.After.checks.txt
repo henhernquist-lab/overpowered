@@ -1,0 +1,34 @@
+PASS Equip Ice + Strength through the saved loadout.
+PASS third-person: live Rusher target and off-axis CONTROL spawned on the NavMesh.
+PASS third-person: target is genuinely moving under its own AI before the cast (7.00 m/s).
+PASS third-person: crosshair ray selects the live target (Criminal).
+PASS third-person: real Ice cast accepted and paid (Ice activated).
+PASS third-person: aimed NPC Frozen flag set; off-axis CONTROL not frozen.
+PASS third-person: off-axis CONTROL untouched (health 500, never frozen).
+PASS third-person: NPC locomotion halted during the freeze (7.00 -> 0.00 m/s).
+PASS third-person: freeze duration 4.01s matches Stats.Duration.
+PASS third-person: NPC resumes moving after thaw (2.71 m/s mean over 1.5 s).
+PASS third-person: Ice dealt its configured damage (5 = Stats.Damage 5).
+PASS third-person: the cast shows pooled ice bursts at the hand and at the target (2).
+PASS third-person: frozen NPC is VISIBLY frozen (shared Cyan palette material on all 2 renderers, pose held).
+PASS third-person: visible state clears on thaw (original materials, Animator.speed 1).
+PASS first-person: live Rusher target and off-axis CONTROL spawned on the NavMesh.
+PASS first-person: target is genuinely moving under its own AI before the cast (7.00 m/s).
+PASS first-person: crosshair ray selects the live target (Criminal).
+PASS first-person: real Ice cast accepted and paid (Ice activated).
+PASS first-person: aimed NPC Frozen flag set; off-axis CONTROL not frozen.
+PASS first-person: off-axis CONTROL untouched (health 500, never frozen).
+PASS first-person: NPC locomotion halted during the freeze (7.00 -> 0.00 m/s).
+PASS first-person: freeze duration 4.00s matches Stats.Duration.
+PASS first-person: NPC resumes moving after thaw (2.74 m/s mean over 1.5 s).
+PASS first-person: Ice dealt its configured damage (5 = Stats.Damage 5).
+PASS first-person: the cast shows pooled ice bursts at the hand and at the target (2).
+PASS first-person: frozen NPC is VISIBLY frozen (shared Cyan palette material on all 2 renderers, pose held).
+PASS first-person: visible state clears on thaw (original materials, Animator.speed 1).
+PASS Prop: found a clear drop column 9 m from the hero.
+PASS Prop: Ice cast on a falling 45 kg crate accepted.
+PASS Prop: falling crate stops in mid-air for the freeze and falls again after.
+PASS Prop: off-axis CONTROL crate never frozen.
+PASS Prop: frozen crate shows the shared Cyan palette material and returns to its own shared material after thaw; control untouched.
+PASS Out-of-range CONTROL setup: an NPC on the crosshair beyond range with nothing else inside range (last blocker: ).
+PASS Out-of-range CONTROL: NPC 28.0 m away (range 20 m) on the crosshair -> refused ("No valid target"), not frozen, not damaged, no charge spent.

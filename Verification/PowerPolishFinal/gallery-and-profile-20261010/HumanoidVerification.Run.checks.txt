@@ -1,0 +1,25 @@
+[HUMANOID VERIFY] PASS Home camera retained.
+[HUMANOID VERIFY] PASS Establish Strength + Telekinesis attacks before testing unequipped Fire and Ice.
+[HUMANOID VERIFY] PASS Player uses the selected hero's valid Humanoid (vector-rigged: 1 skinned mesh(es)), no capsule renderer.
+[HUMANOID VERIFY] PASS CONTROL: player collider unchanged: height=1.800m radius=.380m; NPC capsule=1.800m/.350m.
+[HUMANOID VERIFY] PASS Reference skinned vertices height=1.7658m, visual scale=1.0194, fitted height=1.8000m; exactly one authoritative player collider.
+[HUMANOID VERIFY] PASS SAME controller asset on player and all 33 civilians/cops/criminals.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Intermediate-speed CONTROL has two nonzero clip weights, not a snapped state.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Intermediate-speed CONTROL has two nonzero clip weights, not a snapped state.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Negative actual local velocity selects Standing Run Back.
+[HUMANOID VERIFY] PASS Normal charged punch accepted.
+[HUMANOID VERIFY] PASS Cooldown CONTROL refuses immediate second punch.
+[HUMANOID VERIFY] PASS Windup CONTROL has no premature force.
+[HUMANOID VERIFY] PASS Actual force and evaluated clip impact marker align within two rendered frames.
+[HUMANOID VERIFY] PASS Real force=1350 N·s, mass=45kg, velocity=17.192m/s, displacement=3.782m.
+[HUMANOID VERIFY] PASS Zero-charge CONTROL refuses punch.
+[HUMANOID VERIFY] PASS Rejected punches emit no extra impact.
+[HUMANOID VERIFY] PASS Original 1.25s charge recharge retained.
+[HUMANOID VERIFY] FAIL System.Exception: Fuel exhausted after six seconds at configured burn rate.

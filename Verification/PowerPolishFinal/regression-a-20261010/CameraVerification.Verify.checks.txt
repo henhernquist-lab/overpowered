@@ -1,0 +1,45 @@
+[CAMERA VERIFY] PASS home: exactly one enabled scene Game camera; count=1.
+[CAMERA VERIFY] PASS home: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+[CAMERA VERIFY] PASS home: actual camera rendered 230400/230400 pixels; quantized colors=1, natural render callbacks before capture=0.
+[CAMERA VERIFY] PASS home: disabled-camera CONTROL excluded from rendering camera list.
+[CAMERA VERIFY] PASS Home -> hero selection accepted.
+[CAMERA VERIFY] PASS hero: exactly one enabled scene Game camera; count=1.
+[CAMERA VERIFY] PASS hero: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+[CAMERA VERIFY] PASS hero: MainCamera follows the current player (not a verification camera).
+[CAMERA VERIFY] PASS hero: actual camera rendered 230400/230400 pixels; quantized colors=1011, natural render callbacks before capture=0.
+[CAMERA VERIFY] PASS hero: disabled-camera CONTROL excluded from rendering camera list.
+[CAMERA VERIFY] PASS Correct live mode: hero.
+[CAMERA VERIFY] PASS hero-paused: exactly one enabled scene Game camera; count=1.
+[CAMERA VERIFY] PASS hero-paused: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+[CAMERA VERIFY] PASS hero-paused: MainCamera follows the current player (not a verification camera).
+[CAMERA VERIFY] PASS hero-paused: actual camera rendered 230400/230400 pixels; quantized colors=1021, natural render callbacks before capture=1.
+[CAMERA VERIFY] PASS hero-paused: disabled-camera CONTROL excluded from rendering camera list.
+[CAMERA VERIFY] PASS hero-results: exactly one enabled scene Game camera; count=1.
+[CAMERA VERIFY] PASS hero-results: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+[CAMERA VERIFY] PASS hero-results: actual camera rendered 230400/230400 pixels; quantized colors=1, natural render callbacks before capture=0.
+[CAMERA VERIFY] PASS hero-results: disabled-camera CONTROL excluded from rendering camera list.
+[CAMERA VERIFY] PASS hero-return-home: exactly one enabled scene Game camera; count=1.
+[CAMERA VERIFY] PASS hero-return-home: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+[CAMERA VERIFY] PASS hero-return-home: actual camera rendered 230400/230400 pixels; quantized colors=1, natural render callbacks before capture=0.
+[CAMERA VERIFY] PASS hero-return-home: disabled-camera CONTROL excluded from rendering camera list.
+[CAMERA VERIFY] PASS Home -> villain selection accepted.
+[CAMERA VERIFY] PASS villain: exactly one enabled scene Game camera; count=1.
+[CAMERA VERIFY] PASS villain: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+[CAMERA VERIFY] PASS villain: MainCamera follows the current player (not a verification camera).
+[CAMERA VERIFY] PASS villain: actual camera rendered 230400/230400 pixels; quantized colors=796, natural render callbacks before capture=0.
+[CAMERA VERIFY] PASS villain: disabled-camera CONTROL excluded from rendering camera list.
+[CAMERA VERIFY] PASS Correct live mode: villain.
+[CAMERA VERIFY] PASS villain-paused: exactly one enabled scene Game camera; count=1.
+[CAMERA VERIFY] PASS villain-paused: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+[CAMERA VERIFY] PASS villain-paused: MainCamera follows the current player (not a verification camera).
+[CAMERA VERIFY] PASS villain-paused: actual camera rendered 230400/230400 pixels; quantized colors=782, natural render callbacks before capture=1.
+[CAMERA VERIFY] PASS villain-paused: disabled-camera CONTROL excluded from rendering camera list.
+[CAMERA VERIFY] PASS villain-results: exactly one enabled scene Game camera; count=1.
+[CAMERA VERIFY] PASS villain-results: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+[CAMERA VERIFY] PASS villain-results: actual camera rendered 230400/230400 pixels; quantized colors=1, natural render callbacks before capture=0.
+[CAMERA VERIFY] PASS villain-results: disabled-camera CONTROL excluded from rendering camera list.
+[CAMERA VERIFY] PASS villain-return-home: exactly one enabled scene Game camera; count=1.
+[CAMERA VERIFY] PASS villain-return-home: 'Main Camera', enabled=True, active=True, target=Display 1, rect=(x:0.00, y:0.00, width:1.00, height:1.00).
+[CAMERA VERIFY] PASS villain-return-home: actual camera rendered 230400/230400 pixels; quantized colors=1, natural render callbacks before capture=0.
+[CAMERA VERIFY] PASS villain-return-home: disabled-camera CONTROL excluded from rendering camera list.
+[CAMERA VERIFY] PASS No game-code errors/exceptions during camera flow (Editor Search errors recorded separately).

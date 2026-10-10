@@ -1,0 +1,1 @@
+[WORLD PROFILE] PASS No BreakableProp renderer is part of a static batch (516 breakable renderers checked).

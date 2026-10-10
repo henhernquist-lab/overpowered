@@ -1,0 +1,1 @@
+MEASURED baseline dense combat 18 enemies 1280x720: FPS=73.93, mean=13.526ms, whole-frame GC=0 B/frame, frames=592, releases=12, materials=109, meshes=1019, renderers=1888, objects=3739, particles=22.
