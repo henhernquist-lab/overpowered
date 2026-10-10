@@ -38,7 +38,7 @@ All screenshot names below are under [`Verification/PowerPolishFinal/After/`](..
 | Force Field | Start → persistent composed shell → local hit ripple and immediate break/expiry; low persistent, medium hit | Peripheral hit cue captured | `force-field-shell-third.png`, `force-field-hit-first.png` |
 | Phase Shift | Brief boundary pulse → ghosted outline and three echoes, normal-speed intangible traversal → clean rematerialization | Peripheral edge cue leaves crosshair clear | `phase-shift-{third,first}.png`, `phase-shift-dense.png` |
 
-The table identifies the capture gaps: Strength, Laser, Speed and Teleport have no new dedicated first-person action image in this gallery, even though relevant camera/control suites passed. No isolated screenshot can prove instant recognition or comfort during live input.
+The table identifies the capture gaps: Strength, Laser, Speed and Teleport have no new dedicated first-person action image in this gallery, even though relevant camera/control suites passed. Direct inspection also found that the Strength impact frame mostly shows the hero and cube rather than an obvious burst, and the wide paired Teleport view renders its two blue pops quite small. Their mechanical controls pass, but those images do **not** establish strong visual payoff at normal play distance. No isolated screenshot can prove instant recognition or comfort during live input.
 
 ## Before/after evidence and color hierarchy
 
@@ -75,6 +75,6 @@ Henry still needs to play in motion and decide which powers look cheap, whether 
 
 1. Capture and tune live first-person Speed, Teleport, Laser and Strength at normal camera motion, with direct crosshair and near-wall inspection.
 2. Run a player-controlled mixed-power crowd encounter and shorten secondary layers where objectives or enemy telegraphs disappear.
-3. Add a brief, clearly visible Laser contact treatment if human review finds the current precise beam payoff too subtle.
+3. Improve the weak Strength impact frame and verify Teleport's small endpoint pops at the normal gameplay camera distance; tune their payoff only if play confirms the readability gap.
 4. Tune the timing of Telekinesis collision burst against actual wall, floor and NPC impacts at normal play speed.
-5. Build a reproducible same-scene, same-host old/new performance capture before any further VFX pass, so cost claims have a true baseline.
+5. Build a reproducible same-scene, same-host old/new performance capture before any further VFX pass, so cost claims have a true baseline. Laser contact treatment can follow if its current precise beam payoff proves too subtle in motion.
