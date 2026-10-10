@@ -46,7 +46,8 @@ public sealed class PowerPayoffVerificationRunner : MonoBehaviour
     {
         yield return Scene(GameFlow.HomeScene);
         var profile=FindAnyObjectByType<ModeScreens>().Profile;
-        Check(profile.SetLoadout(Resources.Load<ForgeCatalog>("ForgeCatalog").Heroes[0],Def(a),Def(b),CityColor.Blue,CityColor.Cyan),"Equip "+a+" + "+b);
+        Check(profile.SetLoadout(Resources.Load<ForgeCatalog>("ForgeCatalog").Heroes[0],Def(a),Def(b),Def("phase-shift"),CityColor.Blue,CityColor.Cyan),
+            "Equip "+a+" + "+b+" with the shipping Phase Shift secondary");
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);
         stage=W.City.Spawn+Vector3.up*200;
         U.Hero.enabled=false;var cc=U.GetComponent<CharacterController>();cc.enabled=false;U.transform.SetPositionAndRotation(stage,Quaternion.identity);cc.enabled=true;U.Hero.ResetMotion();
@@ -147,13 +148,16 @@ public sealed class PowerPayoffVerificationRunner : MonoBehaviour
         var tk=Power("telekinesis");U.Tick(100,true);U.Select(tk);
         var body=Crate(stage+new Vector3(1,1.5f,4),mass);body.useGravity=true;Aim(body.position,first);
         Check(U.Use(tk)&&U.HeldBody==body,$"Grab {mass}kg in {(first?"first":"third")} person");
+        var visual=U.TelekinesisVisual;
+        Check(visual!=null&&visual.Holding&&visual.RendererCount==5,"Telekinesis leases its fixed target rings, tether and trail for the actual held body.");
         yield return new WaitForSeconds(.25f);
         var target=Npc(stage+new Vector3(2,0,18));var control=Npc(stage+new Vector3(6,0,18));
         if(lethal)target.SetCombatStats(65,0);
         Aim(target.transform.position+Vector3.up*.9f,first);Physics.SyncTransforms();
         Vector3 aim=U.AimPoint(U.Stats(tk).Range,body),start=body.position,velocity=body.linearVelocity;
         int charges=tk.Charges;float energy=U.Energy,hp=target.Health;tk.Cooldown=1;tk.Charges=0;
-        Check(U.Use(tk)&&U.HeldBody==null,"Second click throws despite zero charges/cooldown: already paid grab");
+        int visualImpacts=visual.ImpactCount;
+        Check(U.Use(tk)&&U.HeldBody==null&&visual.Throwing,"Second click throws the real held body with a bounded trailing cue despite zero charges/cooldown.");
         Check(tk.Charges==0&&U.Energy==energy,"Release costs no extra charges or energy");tk.Charges=charges;
         var impact=body.GetComponent<ThrownProp>();float until=Time.time+2;
         yield return new WaitForFixedUpdate();yield return new WaitForFixedUpdate();
@@ -161,6 +165,8 @@ public sealed class PowerPayoffVerificationRunner : MonoBehaviour
         while(!impact.Spent&&Time.time<until)yield return null;
         float miss=Vector3.Distance(aim,impact.LastContact);
         Check(impact.Spent,$"Throw contacts aimed NPC: {mass}kg, first={first}");
+        Check(visual.ImpactCount==visualImpacts+1&&!visual.Throwing&&Vector3.Distance(visual.LastImpactPoint,impact.LastContact)<.01f,
+            "Telekinesis payoff follows one real Rigidbody collision at the exact gameplay contact.");
         Check(miss<.5f,$"Throw MISS={miss:F4}m, contact={impact.LastContact:F3}, crosshair={aim:F3}, AddForce impulse={impact.LaunchImpulse.magnitude:F1}N.s, measured velocity delta~{launchImpulse:F1}N.s, displacement={Vector3.Distance(start,body.position):F2}m");
         Check(hp-target.Health>0&&impact.LastImpulse>0&&control.Health==1000,$"Impact damage={hp-target.Health:F2}, transferred impulse={impact.LastImpulse:F1}N.s; off-axis CONTROL 0 damage");
         yield return new WaitForFixedUpdate();yield return new WaitForFixedUpdate();
@@ -180,7 +186,7 @@ public sealed class PowerPayoffVerificationRunner : MonoBehaviour
         Check(probe.Hit==wall.GetComponent<Collider>()&&target.Health==1000,"Real wall collision blocks throw; NPC behind wall unharmed");
         Destroy(body.gameObject);Destroy(target.gameObject);Destroy(wall);yield return null;
     }
-    /// Orbit Throw was removed by the five-synergy cap. With two attack slots and Flight in the F slot,
+    /// Orbit Throw was removed by the five-synergy cap. With two attack slots and Phase Shift in the F slot,
     /// a Telekinesis + Lightning attack pair has no synergy: C must refuse without a cooldown,
     /// while LMB Telekinesis still performs its own paid grab and throw.
     IEnumerator Orbit()
@@ -188,9 +194,9 @@ public sealed class PowerPayoffVerificationRunner : MonoBehaviour
         var body=Crate(stage+new Vector3(0,1.5f,4));
         U.Select(Power("telekinesis"));Aim(body.worldCenterOfMass);
         var runner=U.SynergyRunner;
-        Check(U.EquippedSecondary?.Id=="flight"&&U.Synergy==null&&!runner.TryActivate()&&
+        Check(U.EquippedSecondary?.Id=="phase-shift"&&U.Synergy==null&&!runner.TryActivate()&&
             runner.Cooldown==0&&runner.Feedback=="No synergy for this pair",
-            "Flight secondary and Telekinesis + Lightning attacks: no synergy in the capped set; C refused with no cooldown.");
+            "Phase Shift secondary and Telekinesis + Lightning attacks: no synergy in the capped set; C refused with no cooldown.");
         var tk=U.Powers.Find(p=>p.Definition.Id=="telekinesis");int charges=tk.Charges;
         Check(U.Use(tk)&&U.HeldBody==body&&tk.Charges==charges-1,"LMB Telekinesis performs its own paid grab.");
         yield return new WaitForSeconds(.3f);

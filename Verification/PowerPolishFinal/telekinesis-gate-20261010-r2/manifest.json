@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "PowerPayoffVerification.Run",
+    "commit": "75a0518c0820da447c2249e64279472a9d1ffc30",
+    "status_before": "M .freebuff/project-id\n M \"Assets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uxml.meta\"\n M Assets/Scripts/PowerPayoffVerificationRunner.cs\n M Assets/Scripts/PowerUser.cs\n M Assets/Scripts/Powers/PhaseShiftVerificationRunner.cs\n M Assets/Scripts/Powers/PlayerPhaseShift.cs\n M Assets/Scripts/Powers/RosterVerificationRunner.cs\n M Assets/Scripts/Powers/SpeedDashEffect.cs\n M Assets/Scripts/Powers/TeleportEffect.cs\n M Assets/Scripts/SecondaryVerificationRunner.cs\n M Assets/Scripts/TelekinesisEffect.cs\n M Verification/Payoff/results.txt\n M docs/secondary-loadout.md\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/PowerPolishFinal/",
+    "started_utc": "2026-10-10T18:54:02.058903+00:00",
+    "save_before": "42d5a91e2f25867f1a7dc408eced25c9e9a962adf28cf56c7e9a336f8e3695c0",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/PowerPolishFinal/telekinesis-gate-20261010-r2/PowerPayoffVerification.Run.log",
+    "pid": 13180,
+    "exit": 0,
+    "seconds": 46.2,
+    "pass": 99,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M \"Assets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uxml.meta\"\n M Assets/Scripts/PowerPayoffVerificationRunner.cs\n M Assets/Scripts/PowerUser.cs\n M Assets/Scripts/Powers/PhaseShiftVerificationRunner.cs\n M Assets/Scripts/Powers/PlayerPhaseShift.cs\n M Assets/Scripts/Powers/RosterVerificationRunner.cs\n M Assets/Scripts/Powers/SpeedDashEffect.cs\n M Assets/Scripts/Powers/TeleportEffect.cs\n M Assets/Scripts/SecondaryVerificationRunner.cs\n M Assets/Scripts/TelekinesisEffect.cs\n M Verification/Payoff/results.txt\n M docs/secondary-loadout.md\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/PowerPolishFinal/"
+  }
+]

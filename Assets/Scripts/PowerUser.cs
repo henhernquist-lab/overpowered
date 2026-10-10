@@ -13,6 +13,7 @@ public sealed class PowerUser : MonoBehaviour
     public string Message = "Ready";
     public event System.Action<PowerDefinition> Activated;
     public Rigidbody HeldBody { get; private set; }
+    public TelekinesisPresentation TelekinesisVisual { get; private set; }
     public ForgeCatalog Forge {get;private set;}
     public PowerDefinition EquippedA {get;private set;}
     public PowerDefinition EquippedB {get;private set;}
@@ -248,6 +249,8 @@ public sealed class PowerUser : MonoBehaviour
     {
         Release(false); HeldBody = body; heldPower = power; heldGravity = body.useGravity; body.useGravity = false;
         heldUntil = Time.time + Stats(power).Duration;
+        if(TelekinesisVisual==null)TelekinesisVisual=gameObject.AddComponent<TelekinesisPresentation>();
+        TelekinesisVisual.Grab(body,power.Definition.PaletteColor);
     }
     public void Release(bool hurl)
     {
@@ -256,8 +259,10 @@ public sealed class PowerUser : MonoBehaviour
         if (hurl && !OffensiveActionsBlocked)
         {
             ((TelekinesisEffect)heldPower.Definition.Effect).Throw(this, heldPower, HeldBody);
+            TelekinesisVisual?.Throw(HeldBody);
             Message = "Thrown";
         }
+        else TelekinesisVisual?.Release();
         HeldBody = null; heldPower = null;
     }
     void FixedUpdate()
@@ -291,6 +296,8 @@ public sealed class ThrownProp : MonoBehaviour
     void OnCollisionEnter(Collision other)
     {
         if (spent || Time.time > expiry || owner == null || other.transform.root == owner.transform) return;
+        // Presentation follows the actual thrown Rigidbody and its first real contact, including walls and ground.
+        if(other.contactCount>0)owner.TelekinesisVisual?.Impact(GetComponent<Rigidbody>(),other.GetContact(0).point);
         var npc = other.collider.GetComponentInParent<CityNpc>(); if (npc == null) return;
         if(npc.Dead)return;
         LastContact=other.GetContact(0).point;
