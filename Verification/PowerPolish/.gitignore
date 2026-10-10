@@ -1,0 +1,11 @@
+# Keep local Unity logs, isolated saves and intermediate attempts available
+# without mixing them into the reviewed final evidence checkpoint.
+*.log
+*.observations.txt
+saves/
+captures-20261010-r2/
+captures-20261010-r3/
+captures-20261010-r4/
+captures-20261010-r5/
+captures-20261010-r6/
+roster-20261010/

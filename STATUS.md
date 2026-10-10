@@ -5209,3 +5209,10 @@ Full eight-part visual/pooling/test/performance/human review report:
 vendor material/database change was made. Henry's in-motion appearance review,
 especially night Darkness density, chain timing, Poison tick clarity and shield
 first-person distraction, remains open.
+
+Durable four-power checkpoints: `3bad058` audit; `cc31669` Darkness pool;
+`6e96bd3` Lightning; `9dabfc0` Poison; `9fb75f6` Force Field; `b3d98f1`
+view/night verifier and capture fixes; `ee5a3c4` HUD control; `6d96df6`
+final captures, exact regression manifests, tagged city profile and full report.
+The branch has no push or shipping-pool activation. User-authored local changes
+remain outside these commits.
