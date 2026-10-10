@@ -44,8 +44,9 @@ public sealed class LightningEffect : PowerEffect
         var vfx = PowerVfx.Get(); var color = power.Definition.PaletteColor;
         Vector3 from = user.AimOrigin + user.AimDirection * .5f;
         var camera=Camera.main;var rig=camera!=null?camera.GetComponent<ThirdPersonCamera>():null;
-        if(rig!=null&&rig.isActiveAndEnabled&&rig.FirstPerson)
-            from=camera.transform.position+camera.transform.right*.18f-camera.transform.up*.12f+camera.transform.forward*.35f;
+        bool firstPerson=rig!=null&&rig.isActiveAndEnabled&&rig.FirstPerson;
+        if(firstPerson)
+            from=camera.transform.position+camera.transform.right*.28f-camera.transform.up*.32f+camera.transform.forward*2.4f;
         float damage = stats.Damage;
         var current = first;
         for (int jump = 0; current != null && jump <= Mathf.Max(0, MaxArcs); jump++)
@@ -54,15 +55,16 @@ public sealed class LightningEffect : PowerEffect
             // One ordered gameplay strike has one bright core and one faint longer-lived path.
             // Both share the exact same bent geometry: no extra/fake jump can appear.
             float width=jump==0?ArcWidth*2.5f:ArcWidth*.85f*Mathf.Pow(.8f,jump-1);
-            int segments=Mathf.Clamp(ArcSegments,1,PowerVfx.MaxPoints-1);
-            var core=vfx.Arc(from,chest,segments,ArcJitter*(jump==0?.7f:1f),color,width,
+            if(firstPerson)width*=.3f; // preserve hierarchy without a near-eye screen-sized ribbon
+            int segments=firstPerson?2:Mathf.Clamp(ArcSegments,1,PowerVfx.MaxPoints-1);
+            var core=vfx.Arc(from,chest,segments,firstPerson?.015f:ArcJitter*(jump==0?.7f:1f),color,width,
                 jump==0?ArcSeconds:ArcSeconds*.75f);
             if(core!=null)
             {
                 core.sharedMaterial=CityMaterials.GetVfx(jump==0?CityColor.Cream:CityColor.Blue);core.sortingOrder=1;
                 int points=core.positionCount;
                 for(int p=0;p<points;p++)afterglowPoints[p]=core.GetPosition(p);
-                var glow=vfx.Line(afterglowPoints,points,CityColor.Blue,width*(jump==0?1.5f:1.2f),ArcSeconds+.13f);
+                var glow=vfx.Line(afterglowPoints,points,CityColor.Blue,width*(jump==0?(firstPerson?1.1f:1.5f):1.2f),ArcSeconds+.13f);
                 if(glow!=null){glow.sharedMaterial=CityMaterials.GetVfx(CityColor.Blue);glow.sortingOrder=0;}
             }
             LastVisualStrikes.Add(new VisualStrike(current,from,chest,width));

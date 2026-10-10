@@ -58,7 +58,7 @@ public sealed class StatusPowerVfx : MonoBehaviour
             {
                 bool accent=b>=2;
                 var line=slot.Bands[b]=Create("Shadow band "+i+"/"+b,pivot,
-                    accent?CityColor.UiMuted:CityColor.UiNavy,9,false,accent?.018f:.065f);
+                    accent?CityColor.UiMuted:CityColor.UiNavy,9,false,accent?.035f:.065f);
                 for(int p=0;p<9;p++)
                 {
                     float t=p/8f;
@@ -70,7 +70,7 @@ public sealed class StatusPowerVfx : MonoBehaviour
         }
         for(int i=0;i<PoisonCapacity;i++)
         {
-            var ring=Create("Toxic contamination "+i,transform,CityColor.Leaf,PoisonPoints,true,.028f);
+            var ring=Create("Toxic contamination "+i,transform,CityColor.Leaf,PoisonPoints,true,.035f);
             poisons[i]=new PoisonSlot{Ring=ring};
         }
     }
@@ -128,7 +128,7 @@ public sealed class StatusPowerVfx : MonoBehaviour
             float radius=.31f+.13f*(1f-pulse)*pulse;
             Vector3 foot=s.Owner.transform.position;
             s.Ring.transform.position=foot+Vector3.up*.8f;
-            s.Ring.widthMultiplier=.024f+.035f*pulse;
+            s.Ring.widthMultiplier=.033f+.04f*pulse;
             for(int p=0;p<PoisonPoints;p++)
             {
                 float a=p*Mathf.PI*2/PoisonPoints;

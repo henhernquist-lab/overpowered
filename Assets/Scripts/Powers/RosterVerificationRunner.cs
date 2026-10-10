@@ -106,10 +106,11 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         Check(W.Powers.Use(rt), "Shadow Tendrils cast on the aimed live criminal: " + W.Powers.Message);
         Check(target.Rooted && !target.Frozen && rt.Charges == charges - 1, $"Target rooted (not frozen); charge spent {charges}->{rt.Charges}.");
         Check(Mathf.Abs(hp - target.Health - stats.Damage) < .01f, $"Root damage == data: {hp - target.Health:F2} vs {stats.Damage}.");
+        Check(PowerVfx.Get().ActiveLines>0,"Real target cast emits a brief aimed activation snap.");
         yield return null;
         Check(target.GetComponent<RootedLook>() != null && target.GetComponent<RootedLook>().Showing &&
-            StatusPowerVfx.Get().ActiveRoots==1 && PowerVfx.Get().ActiveLines > 0,
-            "One real rooted target owns a pooled restraint and aimed activation snap.");
+            StatusPowerVfx.Get().ActiveRoots==1,
+            "One real rooted target owns a pooled restraint.");
         Capture("darkness-rooted.png");
         yield return Speeds(new[] { target, control }, stats.Duration - .8f, v);
         Log($"MEASURED during root ({stats.Duration - .8f:F1} s): target {v[0]:F3} m/s, control {v[1]:F2} m/s.");

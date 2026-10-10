@@ -25,8 +25,12 @@ public sealed class DarknessEffect : PowerEffect
         {
             RootedLook.Show(npc, this, color);
             // A brief aimed snap establishes the target; the leased body bands carry the held state.
-            var snap=PowerVfx.Get().Arc(user.AimOrigin,npc.transform.position+Vector3.up,
-                4,.045f,CityColor.UiMuted,.035f,.12f);
+            var camera=Camera.main;var rig=camera!=null?camera.GetComponent<ThirdPersonCamera>():null;
+            bool first=rig!=null&&rig.isActiveAndEnabled&&rig.FirstPerson;
+            Vector3 origin=first?camera.transform.position+camera.transform.forward*2f+
+                camera.transform.right*.2f-camera.transform.up*.2f:user.AimOrigin;
+            var snap=PowerVfx.Get().Arc(origin,npc.transform.position+Vector3.up,
+                first?2:4,first?.015f:.045f,CityColor.UiMuted,first?.012f:.035f,.12f);
             if(snap!=null)snap.sharedMaterial=CityMaterials.GetVfx(CityColor.UiMuted);
         }
         FeelDirector.Instance?.Particles.Burst(npc.transform.position + Vector3.up * .15f, color, CastParticles);

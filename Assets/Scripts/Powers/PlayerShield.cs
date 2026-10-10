@@ -163,10 +163,10 @@ public sealed class PlayerShield : MonoBehaviour
             bool impact=Time.time<rippleUntil&&
                 (i==0?Vector3.Dot(LastHitDirection,camera.transform.right)<0:Vector3.Dot(LastHitDirection,camera.transform.right)>=0);
             line.sharedMaterial=CityMaterials.GetVfx(impact?CityColor.Cream:color);
-            float x=i==0?.1f:.9f;
-            line.SetPosition(0,camera.ViewportToWorldPoint(new Vector3(x,.27f,.35f)));
-            line.SetPosition(1,camera.ViewportToWorldPoint(new Vector3(x+(i==0?-.015f:.015f),.5f,.35f)));
-            line.SetPosition(2,camera.ViewportToWorldPoint(new Vector3(x,.73f,.35f)));
+            float x=i==0?.02f:.98f;
+            line.SetPosition(0,camera.ViewportToWorldPoint(new Vector3(x,.35f,.35f)));
+            line.SetPosition(1,camera.ViewportToWorldPoint(new Vector3(x+(i==0?-.01f:.01f),.5f,.35f)));
+            line.SetPosition(2,camera.ViewportToWorldPoint(new Vector3(x,.65f,.35f)));
             float strength=raised?(.5f+.5f*Mathf.Clamp01(Remaining/Mathf.Max(.01f,Capacity))):
                 Mathf.Max(Mathf.Clamp01((fadeUntil-Time.time)/.24f),Mathf.Clamp01((rippleUntil-Time.time)/.38f));
             line.widthMultiplier=.003f*strength+(impact?.007f*Mathf.Clamp01((rippleUntil-Time.time)/.22f):0f);

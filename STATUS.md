@@ -5117,3 +5117,42 @@ unshielded damage. The Poison pulse baseline is captured before the first cast.
 SDK source build: 0 warnings, 0 errors; `git diff --check` clean. Unity runtime,
 night/first-person captures, pool stress and dense-scene performance remain
 unverified while the user's Editor owns this project without a live connection.
+
+### Four-power focused visual verification — 2026-10-10
+
+The Editor became idle. Fresh `RosterVerification.VerifyExisting` passed 212/212
+with 0 failures, and separate-process `Reload` passed 3/3 with 0 failures
+(`Verification/PowerPolish/roster-20261010/manifest.json`). The first focused
+visual run failed at repeated Darkness cast 3 (28 PASS, 1 FAIL) because its
+stress fixture spent all hero energy without refilling. This was a verifier
+setup error, not evidence of a Darkness gameplay failure. The fixture now
+refills through the existing power clock for stress only and waits for every
+short-lived line to clear between camera/lighting samples. Subsequent focused
+runs passed; latest `PowerPolishVerification.Run` is 133 PASS, 0 FAIL, exit 0,
+with unchanged personal save and Sidekick DB hashes
+(`Verification/PowerPolish/captures-20261010-r6/manifest.json`).
+
+Final captures under `Verification/PowerPolish/` include day/night × third/first
+for each power, Force Field active/hit in both views, and
+`darkness-night-city-third.png` against actual dark buildings. These are
+screenshots for human assessment, not an aesthetic PASS. Image inspection found
+the early Lightning first-person capture contained a previous third-person
+bolt still within its 0.35 s lifetime. The final verifier confirms all transient
+lines are clear before each view change. Darkness's near-eye activation snap
+was shortened; its body accent and Poison's organic status ring were thickened
+for night. First-person Lightning uses a shorter, restrained near-eye ribbon;
+the first target remains the real first hit. Force Field is a five-circle
+barrier in third person and brief peripheral lines in first person. The city
+night Darkness capture shows a close restraint, though the target is small at
+the authored gameplay camera distance; Henry still needs to judge density and
+readability in motion.
+
+Warm-to-12-repeat focused resource measurements (all in Unity batch Play Mode):
+Darkness, Lightning, Poison each held materials 113→113, meshes 1018→1018,
+GameObjects 4188→4188, renderers 1968→1968, with 0 new status-pool misses and
+16 fixed transient lines. Force Field held materials 111→111, meshes 1018→1018,
+GameObjects 4100→4100 and renderers 1889→1889. The focused suite is an isolated
+floor for equal-angle captures and resource stability, not a dense-city FPS
+benchmark. A matched pre-change FPS/frame-time baseline and broad regressions
+are still outstanding. Historical Roster screenshots are not a matched
+before/after night or first-person baseline.
