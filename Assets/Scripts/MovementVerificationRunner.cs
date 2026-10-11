@@ -135,15 +135,19 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
         Isolate();PlaceHero(new Vector3(0,150.05f,0),true);
         yield return new WaitForSeconds(.2f);
         float floor=W.Hero.transform.position.y;
-        Check(W.Hero.TryJump(),"Universal grounded jump without Flight.");
+        var pose=W.Hero.GetComponent<HumanoidPresentation>();int flips=pose.DoubleJumpCount;
+        var hips=pose.Animator.GetBoneTransform(HumanBodyBones.Hips);Vector3 idleHips=hips.localPosition;
+        Check(W.Hero.TryJump()&&pose.State=="Jump"&&pose.DoubleJumpCount==flips,"Universal first jump stays on normal Jump presentation, without a forward flip.");
         Check(!W.Hero.TryJump(),"CONTROL repeated call before leaving ground cannot relaunch.");
         float first=floor;
         for(int i=0;i<43;i++){yield return null;first=Mathf.Max(first,W.Hero.transform.position.y);}
-        Check(!CC.isGrounded&&W.Hero.TryJump(),"Exactly one air jump without Flight.");
-        Check(!W.Hero.TryJump(),"CONTROL third jump refused immediately.");
-        float second=W.Hero.transform.position.y,peak=second;int refused=0;
-        for(int i=0;i<100;i++){yield return null;peak=Mathf.Max(peak,W.Hero.transform.position.y);if(!CC.isGrounded){Check(!W.Hero.TryJump(),"CONTROL airborne spam refused.");refused++;}}
+        Check(!CC.isGrounded&&W.Hero.TryJump()&&pose.State=="Double Jump"&&pose.DoubleJumpCount==flips+1,"Exactly one air jump dispatches Running Forward Flip without Flight.");
+        Check(!W.Hero.TryJump()&&pose.DoubleJumpCount==flips+1,"CONTROL third jump cannot retrigger the flip.");
+        float second=W.Hero.transform.position.y,peak=second,maxHipOffset=0;int refused=0;
+        for(int i=0;i<100;i++){yield return null;peak=Mathf.Max(peak,W.Hero.transform.position.y);if(pose.State=="Double Jump")maxHipOffset=Mathf.Max(maxHipOffset,Vector3.Distance(hips.localPosition,idleHips));if(!CC.isGrounded){Check(!W.Hero.TryJump(),"CONTROL airborne spam refused.");refused++;}}
         Log($"MEASURED double jump: first apex={first-floor:F4}m, air-jump rise={peak-second:F4}m, combined peak={peak-floor:F4}m.");
+        Check(maxHipOffset<.3f,$"Forward-flip baked hip travel stays centered on the gameplay capsule (max offset {maxHipOffset:F3}m).");
+        Check(pose.State!="Double Jump","Forward flip releases to airborne/falling or landing presentation after its short playback.");
         float firstExpected=W.Tuning.Movement.JumpSpeed*W.Tuning.Movement.JumpSpeed/(2*W.Tuning.Movement.Gravity);
         float airExpected=W.Tuning.Movement.AirJumpSpeed*W.Tuning.Movement.AirJumpSpeed/(2*W.Tuning.Movement.Gravity);
         Check(first-floor>firstExpected*.92f&&first-floor<firstExpected*1.02f&&peak-second>airExpected*.9f&&peak-second<airExpected*1.02f,
@@ -174,7 +178,7 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
         foreach(var hero in F.Heroes.Skip(1))
         {
             yield return Home();Profile.Data.Points=100;
-            var pair=hero.AvailablePowers.Where(p=>!p.Effect.IsFlight).Take(2).ToArray();
+            var pair=hero.AvailablePowers.Where(p=>p.Role==PowerRole.Combat).Take(2).ToArray();
             foreach(var power in pair)if(!Profile.Owns(power))Check(Profile.Buy(power),"Unlock non-Flight control loadout for "+hero.DisplayName);
             yield return EnterBuild(hero,pair[0].Id,pair[1].Id,"speed");
             Isolate();PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.2f);

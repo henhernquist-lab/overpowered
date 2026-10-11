@@ -75,7 +75,7 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
         Check(W.Hero.GetComponent<CharacterController>().height==1.8f&&W.Hero.GetComponent<CharacterController>().radius==.38f,"CONTROL: player collider unchanged: height=1.800m radius=.380m; NPC capsule=1.800m/.350m.");
         Check(W.Hero.GetComponentsInChildren<Collider>().Length==1,$"Reference skinned vertices height={P.ReferenceMeshHeight:F4}m, visual scale={P.ModelScale:F4}, fitted height={P.ReferenceMeshHeight*P.ModelScale:F4}m; exactly one authoritative player collider.");
         Check(W.Npcs.All(n=>n.GetComponent<HumanoidPresentation>().Animator.runtimeAnimatorController==P.Animator.runtimeAnimatorController),$"SAME controller asset on player and all {W.Npcs.Count} civilians/cops/criminals.");
-        yield return Locomotion();yield return Punch();yield return Damage();yield return Flight();yield return Panic();yield return Landing();yield return Casting();yield return Benchmark();yield return EquippedCasting();yield return RiggingControls();
+        yield return Locomotion();yield return Taunt();yield return Punch();yield return Damage();yield return Flight();yield return Panic();yield return Landing();yield return Casting();yield return Benchmark();yield return EquippedCasting();yield return RiggingControls();
         W.Hero.enabled=false;GameFlow.Instance.Home();yield return Scene("Home");
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/villain"));yield return Scene("Prototype");W.Hero.enabled=false;
         Check(P.Animator.runtimeAnimatorController==Resources.Load<HumanoidAnimationTuning>("HumanoidAnimationTuning").Controller&&Camera.main!=null,"Villain mode spawns same humanoid/controller and renders.");
@@ -106,7 +106,7 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
         yield return new WaitForSeconds(W.Tuning.Movement.RespawnDelay+.2f);
         Check(!W.PlayerDead&&P.State!="Death","Actual respawn releases death presentation.");
         int hits=P.HitCount;W.DamagePlayer(1);yield return null;
-        Check(P.HitCount==hits+1&&P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"),"Post-respawn damage CONTROL plays Hit; canceled punch leaves no stale deferred animation.");
+        Check(P.HitCount==hits+1&&P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Head Hit"),"Post-respawn damage CONTROL plays the short Head Hit; canceled punch leaves no stale deferred animation.");
         GameFlow.Instance.Home();yield return Scene("Home");
     }
     IEnumerator Locomotion()
@@ -125,6 +125,15 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
         P.VerificationState=new HeroPresentationState(Vector3.back*3,true,false);yield return new WaitForSeconds(.3f);
         Check(P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Back"),"Negative actual local velocity selects Standing Run Back.");
         P.VerificationState=new HeroPresentationState(Vector3.zero,true,false);yield return new WaitForSeconds(.3f);
+    }
+    IEnumerator Taunt()
+    {
+        P.VerificationState=new HeroPresentationState(Vector3.zero,true,false);
+        P.VerificationPretendIdle(P.Tuning.TauntIdleDelay+.2f);yield return null;
+        Check(P.State=="Taunt","Long idle dispatches low-priority Taunt only on the hero.");
+        P.VerificationState=new HeroPresentationState(Vector3.forward*3,true,false);yield return null;
+        Check(P.State!="Taunt","Movement immediately cancels the idle Taunt without delaying locomotion.");
+        P.VerificationState=new HeroPresentationState(Vector3.zero,true,false);yield return null;
     }
     IEnumerator Punch()
     {
@@ -154,11 +163,12 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
         var a=W.Npcs.First(n=>n.Role==NpcRole.Civilian&&!n.Dead);var b=W.Npcs.Last(n=>n.Role==NpcRole.Civilian&&!n.Dead);
         var ap=a.GetComponent<HumanoidPresentation>();var bp=b.GetComponent<HumanoidPresentation>();int before=ap.HitCount;
         a.Agent.Warp(W.City.Spawn);a.Freeze(5,ice:false);
-        a.Damage(1,null);yield return null;Check(ap.HitCount==before+1&&ap.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"),"Real NPC damage triggers Hit Reaction.");
-        Check(bp.HitCount==0&&bp.DeathCount==0&&!bp.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"),"Undamaged NPC CONTROL plays neither hit nor death.");
+        a.Damage(1,null);yield return null;Check(ap.HitCount==before+1&&ap.Animator.GetCurrentAnimatorStateInfo(0).IsName("Head Hit"),"Real light NPC damage triggers Head Hit reaction.");
+        Check(bp.HitCount==0&&bp.DeathCount==0&&!bp.Animator.GetCurrentAnimatorStateInfo(0).IsName("Head Hit"),"Undamaged NPC CONTROL plays neither hit nor death.");
+        a.Damage(1,null,true,1500f);yield return null;Check(ap.Animator.GetCurrentAnimatorStateInfo(0).IsName("Shoved Spin"),"Strong actual impulse selects Shoved Spin without changing damage rules.");
         a.Damage(10000,null);yield return null;Check(ap.DeathCount==1&&ap.Animator.GetCurrentAnimatorStateInfo(0).IsName("Death")&&!a.Agent.enabled,"Lethal damage triggers Death, disables navigation/collision; no root 90-degree flip.");
         yield return new WaitForSeconds(.5f);Capture("death",a.transform.position);
-        int playerHits=P.HitCount;W.DamagePlayer(1);yield return null;Check(P.HitCount==playerHits+1&&P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"),"Real player damage triggers Hit Reaction.");yield return new WaitForSeconds(1);
+        int playerHits=P.HitCount;W.DamagePlayer(1);yield return null;Check(P.HitCount==playerHits+1&&P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Head Hit"),"Real player damage triggers brief Head Hit reaction.");yield return new WaitForSeconds(1);
     }
     IEnumerator Flight()
     {
@@ -182,7 +192,10 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
     {
         var npc=CityNpc.Spawn(W,W.City.Spawn,NpcRole.Civilian);var p=npc.GetComponent<HumanoidPresentation>();
         p.VerificationState=new HeroPresentationState(Vector3.forward*5,true,false);yield return new WaitForSeconds(.5f);Check(!npc.Fleeing&&p.State=="Locomotion","Normal-jog CONTROL is not alarmed and has no panic overlay.");Capture("normal-jog",npc.transform.position);
-        npc.Alarm(npc.transform.position+Vector3.back*3);float min=999,max=-999;float yawMin=999,yawMax=-999;
+        npc.Alarm(npc.transform.position+Vector3.back*3);yield return null;
+        Check(p.State=="Terrified","Civilian entering a real alarm starts the brief Terrified pose.");
+        yield return new WaitForSeconds(p.Tuning.TerrifiedReactionSeconds+.1f);
+        float min=999,max=-999;float yawMin=999,yawMax=-999;
         for(int i=0;i<90;i++)
         {
             yield return null;var hand=p.PoseRoot.InverseTransformPoint(p.Animator.GetBoneTransform(HumanBodyBones.LeftHand).position);min=Mathf.Min(min,hand.y);max=Mathf.Max(max,hand.y);
@@ -195,8 +208,9 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
     IEnumerator Landing()
     {
         P.VerificationState=null;Move(W.City.Spawn+Vector3.up*5);int landings=0;float impact=0;W.Hero.Landed+=v=>{landings++;impact=v;};W.Hero.enabled=true;
-        float min=1;bool clip=false;float until=Time.time+3;
-        while(Time.time<until){yield return null;min=Mathf.Min(min,P.PoseRoot.parent.localScale.y);clip|=P.State=="Land";}
+        float min=1;bool clip=false,fall=false;float until=Time.time+3;
+        while(Time.time<until){yield return null;min=Mathf.Min(min,P.PoseRoot.parent.localScale.y);clip|=P.State=="Land";fall|=P.State=="Fall";}
+        Check(fall,"Meaningful downward airborne velocity selects the trimmed Falling loop before landing.");
         Check(landings==1&&clip&&min<.95f,$"Actual controller fall: {landings} impact at {impact:F3}m/s; Land clip played with single existing squash minY={min:F3}, recovered={P.PoseRoot.parent.localScale.y:F3}; collider={W.Hero.GetComponent<CharacterController>().height:F3}m.");
         Check(!W.Hero.TryJump(),"CONTROL menu-open grounded jump refused.");W.MenuOpen=false;
         Check(W.Hero.TryJump(),"Existing grounded jump accepted.");yield return null;Check(P.State=="Jump","Jump presentation comes from real movement event.");W.Hero.enabled=false;W.MenuOpen=true;P.VerificationState=new HeroPresentationState(Vector3.zero,true,false);yield return new WaitForSeconds(1);

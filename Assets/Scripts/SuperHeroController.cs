@@ -11,6 +11,7 @@ public sealed class SuperHeroController : MonoBehaviour
     float airbornePeakHeight;
     bool airJumpUsed, jumpLaunched;
     public bool AirJumpAvailable => !airJumpUsed;
+    public bool LastJumpWasAir { get; private set; }
     bool TraversalInputAllowed => powers != null && Time.timeScale > 0f && WorldSession.Instance != null &&
         !WorldSession.Instance.MenuOpen && !WorldSession.Instance.PlayerDead &&
         (WorldSession.Instance.Mode == null || !WorldSession.Instance.Mode.Ended);
@@ -25,6 +26,7 @@ public sealed class SuperHeroController : MonoBehaviour
     public HeroPresentationState PresentationState { get; private set; }
     public event System.Action PunchStarted;
     public event System.Action Jumped;
+    public event System.Action ClimbReleased;
     public event System.Action PunchImpacted;
     public float PunchWindupSeconds { get; set; }
     public float LastImpactTime { get; private set; }=-1;
@@ -76,13 +78,14 @@ public sealed class SuperHeroController : MonoBehaviour
 
     void Awake() { controller = GetComponent<CharacterController>(); view = Camera.main; airbornePeakHeight = transform.position.y; }
     public void Initialize(PowerUser user, MovementSettings settings) { powers = user; movement = settings; }
-    public void ResetMotion() { flightBoost = 1f; verticalVelocity = 0f; wallJumpVelocity=Vector3.zero; airbornePeakHeight = transform.position.y; airJumpUsed = jumpLaunched = false; Mantling = mantleUsed = false; EndClimb();climbRelatchAt=0; }
+    public void ResetMotion() { flightBoost = 1f; verticalVelocity = 0f; wallJumpVelocity=Vector3.zero; airbornePeakHeight = transform.position.y; airJumpUsed = jumpLaunched = false; LastJumpWasAir=false; Mantling = mantleUsed = false; EndClimb();climbRelatchAt=0; comboStage=0;comboExpires=-1f; }
     void Update()
     {
         if (powers == null) return;
         if (view == null) view = Camera.main;
         if (view == null) return;
         powers.Tick(Time.deltaTime, controller.isGrounded);
+        if(powers.OffensiveActionsBlocked||WorldSession.Instance.PlayerDead||WorldSession.Instance.Mode?.Ended==true){comboStage=0;comboExpires=-1f;}
         // Channeled powers (Laser Eyes) run while the fire button stays held; anything that takes input away ends them.
         powers.Channel(!Climbing && !AbilityDriving && !WorldSession.Instance.MenuOpen && !WorldSession.Instance.PlayerDead &&
             WorldSession.Instance.Mode?.Paused!=true && WorldSession.Instance.Mode?.Ended!=true &&
@@ -246,6 +249,8 @@ public sealed class SuperHeroController : MonoBehaviour
     // gesture, force, damage and radius it applies.
     public bool TryHurricaneKick()
     {
+        // RMB is its own action even when a basic E combo is waiting for a follow-up.
+        comboStage=0;comboExpires=-1f;
         if(powers!=null&&powers.OffensiveActionsBlocked)return false;
         if (powers == null || powers.Strength == null) { LastKickResult = "Power locked"; return false; }
         if(powers.Forge!=null&&!powers.IsEquipped(powers.Strength.Definition))return BasicMelee(true);
@@ -314,7 +319,7 @@ public sealed class SuperHeroController : MonoBehaviour
         var feel = WorldSession.Instance != null ? WorldSession.Instance.Tuning.Feel : null; if (feel == null) return;
         if (TimeArbiter.RequestHitPause(Melee.FinisherHitPauseSeconds, feel.HitPauseMinInterval, feel.HitPauseTimeScale)) FinisherPauses++;
     }
-    /// One tap: punch, punch, then the kick finisher (bigger force + damage + short hit pause). A tap after ComboWindow
+    /// One tap: punch, then the kick finisher (bigger force + damage + short hit pause). A tap after ComboWindow
     /// restarts the string; a refused tap (cooldown / no charges) does not advance it.
     public bool TryComboAttack()
     {
@@ -436,6 +441,10 @@ public sealed class SuperHeroController : MonoBehaviour
     void EndClimb()
     {
         Climbing=false;ClimbNormal=Vector3.zero;
+        // Exits can return before the ordinary movement branch writes a new frame.
+        // Clear the presentation flag now so a release/wall jump cannot re-enter Climb.
+        if(controller!=null)PresentationState=new HeroPresentationState(
+            transform.InverseTransformDirection(controller.velocity),controller.isGrounded,false);
     }
     bool Climbable(RaycastHit hit)
     {
@@ -470,7 +479,7 @@ public sealed class SuperHeroController : MonoBehaviour
         climbRelatchAt=Time.time+movement.ClimbRelatchDelay;
         wallJumpVelocity=normal*movement.ClimbDetachPushSpeed;
         verticalVelocity=movement.ClimbWallJumpSpeed;
-        jumpLaunched=true;LastClimbResult="Wall jump";Jumped?.Invoke();
+        jumpLaunched=true;LastJumpWasAir=false;LastClimbResult="Wall jump";Jumped?.Invoke();
         return true;
     }
     void MoveClimb()
@@ -484,7 +493,7 @@ public sealed class SuperHeroController : MonoBehaviour
         bool jump=ScriptedClimbJump||Input.GetButtonDown("Jump");ScriptedClimbJump=false;
         if(jump){TryWallJump();return;}
         bool cancel=ScriptedClimbCancel||Input.GetKeyDown(KeyCode.LeftControl);ScriptedClimbCancel=false;
-        if(cancel){EndClimb();climbRelatchAt=Time.time+movement.ClimbRelatchDelay;LastClimbResult="Released";return;}
+        if(cancel){EndClimb();climbRelatchAt=Time.time+movement.ClimbRelatchDelay;LastClimbResult="Released";ClimbReleased?.Invoke();return;}
         Vector2 axis=ScriptedClimbOverride?ScriptedClimbInput:
             new Vector2(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical"));
         if(axis.y>0f&&TryMantle(-ClimbNormal,true))
@@ -634,12 +643,14 @@ public sealed class SuperHeroController : MonoBehaviour
         if (controller.isGrounded)
         {
             if (jumpLaunched) return false;
+            LastJumpWasAir=false;
             verticalVelocity = movement.JumpSpeed;
         }
         else
         {
             if (airJumpUsed) return false;
             airJumpUsed = true;
+            LastJumpWasAir=true;
             verticalVelocity = movement.AirJumpSpeed;
         }
         jumpLaunched = true;

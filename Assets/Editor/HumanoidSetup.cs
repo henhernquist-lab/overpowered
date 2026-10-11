@@ -116,7 +116,10 @@ public static class HumanoidSetup
         Add("Fall",t.Falling,"GaitRate");Add("Jump Down",t.JumpingDown,"ActionRate");
         Add("Head Hit",t.HeadHit,"ActionRate");Add("Shoved Spin",t.ShovedSpin,"ActionRate");
         Add("Terrified",t.Terrified,"ActionRate");Add("Taunt",t.Taunt,"ActionRate");
-        Add("Martelo Kick",t.MarteloKick,"ActionRate");
+        // Combo finisher and RMB are separate gameplay paths over the same paid kick
+        // gesture, so they deliberately share the Hurricane Kick state and clip.
+        var unused=machine.states.FirstOrDefault(s=>s.state.name=="Martelo Kick").state;
+        if(unused!=null)machine.RemoveState(unused);
         var hurricane=machine.states.FirstOrDefault(s=>s.state.name=="Hurricane Kick").state;
         if(hurricane!=null){hurricane.motion=t.MarteloKick;EditorUtility.SetDirty(hurricane);}
     }

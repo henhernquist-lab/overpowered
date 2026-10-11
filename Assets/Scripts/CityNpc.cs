@@ -48,6 +48,7 @@ public sealed class CityNpc : MonoBehaviour
     /// Body velocity: the far-route rail while riding, otherwise the NavMeshAgent's (presentation reads this).
     public Vector3 Velocity => Walker!=null&&Walker.Riding ? Walker.Velocity : Agent!=null&&Agent.enabled ? Agent.velocity : Vector3.zero;
     public event System.Action<bool> Damaged;
+    public float LastImpactImpulse { get; private set; }
     /// Fired at RELEASE, whether the committed shape hits or misses (audio/presentation stay in sync with the strike).
     public event System.Action Attacked;
     /// Fired when the NPC commits: stopped, facing and shape locked, telegraph shown.
@@ -118,12 +119,15 @@ public sealed class CityNpc : MonoBehaviour
         if(ice&&!Dead){iceUntil=Mathf.Max(iceUntil,Time.time+duration);FrozenLook.Show(gameObject,CityColor.Cyan,()=>this!=null&&!Dead&&IceFrozen);}
     }
     public void Thaw() { frozenUntil=iceUntil=Time.time;GetComponent<FrozenLook>()?.Clear(); }
-    public void Damage(float amount, PowerUser source) { Damage(amount, source, true); }
+    public void Damage(float amount, PowerUser source) { Damage(amount, source, true, 0f); }
     /// assault=false: a continuing tick of an effect whose first hit already counted as the assault (poison, a held beam), so
     /// it does not add Heat every tick. A kill still counts as a defeat for XP/Heat.
-    public void Damage(float amount, PowerUser source, bool assault)
+    public void Damage(float amount, PowerUser source, bool assault) { Damage(amount, source, assault, 0f); }
+    /// The impulse only selects presentation intensity. Damage, navigation and physics are unchanged.
+    public void Damage(float amount, PowerUser source, bool assault, float impactImpulse)
     {
         if (Dead || amount <= 0f) return;
+        LastImpactImpulse=impactImpulse;
         float before = Health;
         Health = Mathf.Max(0f, Health-amount);
         if (source != null) source.ReportDamage(this, before - Health, Dead, assault);   // per-power stats / style / challenges (no gameplay effect)

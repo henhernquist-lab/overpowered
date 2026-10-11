@@ -4,17 +4,28 @@ using System.Linq;
 using UnityEngine;
 
 /// See MeleeVerification. Uses TryComboAttack / TryHeavyAttack / TryGroundPound, the methods the E key routes to, on the
-/// isolated floor with AI-off criminals of 1000 HP (damage is measured as health lost). Strength-equipped (VECTOR, flight +
+/// isolated floor with AI-off criminals of 1000 HP (damage is measured as health lost). Strength-equipped (VECTOR, speed +
 /// strength) and basic-melee (fire + ice) sessions.
 public sealed class MeleeVerificationRunner : SessionVerificationRunner
 {
     protected override string Folder => "Verification/Melee/";
     protected override string ResultFile => "results.txt";
     MeleeSettings M => W.Tuning.Melee;
+    IEnumerator EnterMelee(string attackA,string attackB,string secondary)
+    {
+        yield return Home();var hero=F.Heroes[0];Profile.Data.Points=100;
+        foreach(var id in new[]{attackA,attackB,secondary})if(!Profile.Owns(Power(id)))
+            Check(Profile.Buy(Power(id)),"Unlock melee-test power through progression: "+id);
+        Check(Profile.SetLoadout(hero,Power(attackA),Power(attackB),Power(secondary),hero.Primary,hero.Secondary),
+            $"Save two melee-test attacks ({attackA}, {attackB}) and {secondary} secondary through progression.");
+        GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);
+        Check(W.Powers.EquippedA==Power(attackA)&&W.Powers.EquippedB==Power(attackB)&&
+            W.Powers.EquippedSecondary==Power(secondary),"Melee session retains exact two-attack/one-secondary loadout.");
+    }
     protected override IEnumerator Checks()
     {
         yield return Scene(GameFlow.HomeScene);
-        yield return Enter("flight", "strength");
+        yield return EnterMelee("strength", "fire", "speed");
         var m = M; var s = W.Powers.Stats(W.Powers.Strength); var hero = W.Hero;
         Log($"DATA melee: combo {m.ComboLength} hits / {m.ComboWindow} s window, finisher x{m.FinisherForceMultiplier} force x{m.FinisherDamageMultiplier} damage + {m.FinisherHitPauseSeconds} s pause; heavy tap<{m.HeavyTapThreshold} s, cap {m.HeavyMaxChargeSeconds} s -> x{m.HeavyMaxForceMultiplier}/x{m.HeavyMaxDamageMultiplier}; pound >= {m.PoundMinHeight} m, radius {m.PoundRadius}, x{m.PoundForceMultiplier}/x{m.PoundDamageMultiplier}. Strength: {s.Force} N.s, {s.Damage} dmg.");
         Isolate();
@@ -23,24 +34,25 @@ public sealed class MeleeVerificationRunner : SessionVerificationRunner
         // ---------------------------------------------------------------- combo string
         Log("---- COMBO (Strength equipped)");
         hero.DebugSetResources(6, 3, 0); float hp = target.Health;
-        Check(hero.TryComboAttack() && hero.LastComboStage == 1, "Tap 1 = combo stage 1 (punch).");
+        var pose=hero.GetComponent<HumanoidPresentation>();
+        Check(m.ComboLength==2&&Mathf.Approximately(m.ComboWindow,.9f),"CONFIG: E combo is punch -> Martelo kick in the existing 0.9 s window.");
+        Check(hero.TryComboAttack() && hero.LastComboStage == 1 && pose.State=="Punch", "Tap 1 = combo stage 1 (punch), never Martelo.");
         yield return new WaitForSeconds(.55f);
         Check(Mathf.Abs(hp - target.Health - s.Damage) < .01f && Mathf.Approximately(hero.LastForce, s.Force), $"Stage 1 punch: {hp - target.Health:F2} dmg @ {hero.LastForce} N.s (plain punch).");
-        hp = target.Health;
-        Check(hero.TryComboAttack() && hero.LastComboStage == 2, "Tap 2 inside the window = stage 2 (punch).");
-        yield return new WaitForSeconds(.55f);
-        Check(Mathf.Abs(hp - target.Health - s.Damage) < .01f, $"Stage 2 punch: {hp - target.Health:F2} dmg.");
         hp = target.Health; int pauses = TimeArbiter.HitPausesStarted;
-        Check(hero.TryComboAttack() && hero.LastComboStage == 3, "Tap 3 = the kick finisher.");
+        float priorKick=hero.LastKickImpactTime;
+        Check(hero.TryComboAttack() && hero.LastComboStage == 2 && pose.State=="Hurricane Kick" &&
+            pose.Tuning.HurricaneKick==pose.Tuning.MarteloKick, "Tap 2 inside window = Martelo kick finisher on shared melee path.");
         yield return new WaitForSeconds(.8f);
+        Check(hero.LastKickImpactTime>priorKick,"Second tap caused exactly one authoritative kick impact after windup.");
         float finisherForce = s.Force * HeroAbilityTuning.KickForceMultiplier * m.FinisherForceMultiplier, finisherDamage = s.Damage * HeroAbilityTuning.KickDamageMultiplier * m.FinisherDamageMultiplier;
         Check(Mathf.Abs(hero.LastKickForce - finisherForce) < .5f && Mathf.Abs(hp - target.Health - finisherDamage) < .05f,
             $"Finisher: {hero.LastKickForce:F0} N.s (kick x{m.FinisherForceMultiplier}), {hp - target.Health:F2} dmg (expected {finisherDamage:F2}).");
         Check(TimeArbiter.HitPausesStarted > pauses, "Finisher impact produced a hit pause.");
         hero.DebugSetResources(6, 3, 0);
-        Check(hero.TryComboAttack() && hero.LastComboStage == 1, "After the finisher the next tap restarts at stage 1.");
+        Check(hero.TryComboAttack() && hero.LastComboStage == 1 && pose.State=="Punch", "After the finisher the next tap restarts at a punch.");
         yield return new WaitForSeconds(m.ComboWindow + .3f); hero.DebugSetResources(6, 3, 0);
-        Check(hero.TryComboAttack() && hero.LastComboStage == 1, $"CONTROL: a tap after the {m.ComboWindow} s window restarts at stage 1 (not 2).");
+        Check(hero.TryComboAttack() && hero.LastComboStage == 1 && pose.State=="Punch", $"CONTROL: a tap after the {m.ComboWindow} s window restarts at punch (not Martelo).");
         yield return new WaitForSeconds(.55f); hero.DebugSetResources(6, 0, 0); int stage = hero.LastComboStage; hp = target.Health;
         Check(!hero.TryComboAttack() && hero.LastComboStage == stage, "CONTROL: a tap with 0 Strength charges is refused and does not advance the string.");
         yield return new WaitForSeconds(.6f);
@@ -91,19 +103,16 @@ public sealed class MeleeVerificationRunner : SessionVerificationRunner
         Check(hero.GroundPounds == 2, "Second pound lands.");
         // ---------------------------------------------------------------- basic melee (no Strength)
         Log("---- BASIC MELEE (Strength not equipped)");
-        yield return Enter("fire", "ice");
+        yield return EnterMelee("fire", "ice", "speed");
         Isolate(); hero = W.Hero; var basic = Actor(new Vector3(0, 150, 2.2f), NpcRole.Criminal, 1000);
         yield return new WaitForSeconds(.3f);
         float bd = F.BasicDamage, bf = F.BasicForce;
-        for (int i = 1; i <= 2; i++)
-        {
-            hp = basic.Health; pauses = TimeArbiter.HitPausesStarted;
-            Check(hero.TryComboAttack() && hero.LastComboStage == i, $"Basic tap {i} = stage {i}.");
-            yield return new WaitForSeconds(.75f);
-            Check(Mathf.Abs(hp - basic.Health - bd) < .01f && TimeArbiter.HitPausesStarted == pauses, $"Basic stage {i}: {hp - basic.Health:F2} dmg, no hit pause (light {bf} N.s, CONTROL).");
-        }
+        hp = basic.Health; pauses = TimeArbiter.HitPausesStarted;
+        Check(hero.TryComboAttack() && hero.LastComboStage == 1, "Basic tap 1 = punch without Strength.");
+        yield return new WaitForSeconds(.75f);
+        Check(Mathf.Abs(hp - basic.Health - bd) < .01f && TimeArbiter.HitPausesStarted == pauses, $"Basic punch: {hp - basic.Health:F2} dmg, no hit pause (light {bf} N.s, CONTROL).");
         hp = basic.Health; pauses = TimeArbiter.HitPausesStarted; int finisherPauses = hero.FinisherPauses;
-        Check(hero.TryComboAttack() && hero.LastComboStage == 3, "Basic tap 3 = finisher.");
+        Check(hero.TryComboAttack() && hero.LastComboStage == 2, "Basic tap 2 = Martelo finisher.");
         yield return new WaitForSeconds(.9f);
         float basicFinisher = bd * HeroAbilityTuning.KickDamageMultiplier * m.FinisherDamageMultiplier;
         Check(Mathf.Abs(hp - basic.Health - basicFinisher) < .05f && hero.FinisherPauses == finisherPauses + 1 && TimeArbiter.HitPausesStarted == pauses + 1,

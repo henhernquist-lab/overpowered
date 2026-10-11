@@ -40,11 +40,19 @@ public sealed class ClimbingVerificationRunner : SessionVerificationRunner
         Vector3 raised=W.Hero.transform.position;
         Log($"MEASURED climb vertical={(raised.y-begin.y)/(Time.time-start):F3}m/s rise={raised.y-begin.y:F3}m wallGap={.8f-raised.z-CC.radius:F3}m.");
         Check(W.Hero.Climbing&&raised.y-begin.y>2.6f&&raised.y-begin.y<3.7f,"Attached climb moves at configured vertical speed.");
+        var pose=W.Hero.GetComponent<HumanoidPresentation>();
+        Check(pose.State=="Climb"&&pose.Animator.GetFloat("ClimbRate")>.5f,"Actual upward climb uses the shared Climb animation at movement-driven rate.");
         Check(Mathf.Abs(.8f-raised.z-CC.radius)<.3f,"Wall distance remains bounded while attached.");
         W.Hero.ScriptedClimbInput=new Vector2(1,0);start=Time.time;begin=W.Hero.transform.position;
         yield return new WaitForSeconds(.55f);
         Log($"MEASURED climb sideways={(W.Hero.transform.position.x-begin.x)/(Time.time-start):F3}m/s move={W.Hero.transform.position.x-begin.x:F3}m.");
         Check(W.Hero.Climbing&&W.Hero.transform.position.x-begin.x>1.7f,"Sideways traversal follows the wall.");
+        Check(pose.State=="Climb"&&pose.Animator.GetFloat("ClimbRate")>.5f,"Sideways travel keeps the climb loop active without a second animation.");
+        W.Hero.ScriptedClimbInput=Vector2.zero;yield return new WaitForSeconds(.15f);
+        Check(W.Hero.Climbing&&pose.State=="Climb"&&pose.Animator.GetFloat("ClimbRate")<.01f,"Latched idle holds a climbing pose instead of cycling limbs.");
+        begin=W.Hero.transform.position;W.Hero.ScriptedClimbInput=new Vector2(0,-1);yield return new WaitForSeconds(.15f);
+        Check(W.Hero.Climbing&&W.Hero.transform.position.y<begin.y-.4f&&pose.State=="Climb","Descending follows real CharacterController motion with climb presentation.");
+        W.Hero.ScriptedClimbInput=Vector2.zero;
         var rig=Cam.GetComponent<ThirdPersonCamera>();rig.enabled=true;
         foreach(bool first in new[]{false,true})
         {
@@ -63,6 +71,7 @@ public sealed class ClimbingVerificationRunner : SessionVerificationRunner
         Check(W.Hero.AirJumpAvailable,"Wall latch did not spend or refill a fresh air jump.");
         W.Hero.ScriptedClimbCancel=true;yield return null;
         Check(!W.Hero.Climbing&&W.Hero.LastClimbResult=="Released","Climb-cancel releases the wall without a jump.");
+        Check(pose.ClimbReleaseCount>0&&pose.State=="Jump Down","Intentional wall release uses Jumping Down presentation once.");
         float releaseHeight=W.Hero.transform.position.y;yield return new WaitForSeconds(.15f);
         Check(W.Hero.transform.position.y<releaseHeight-.05f,"Released hero returns to actual falling motion.");
         PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.1f);

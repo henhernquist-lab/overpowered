@@ -22,6 +22,8 @@ public sealed class HumanoidPresentation : MonoBehaviour
     public string State { get; private set; }
     public int HitCount { get; private set; }
     public int DeathCount { get; private set; }
+    public int DoubleJumpCount { get; private set; }
+    public int ClimbReleaseCount { get; private set; }
     public float LastAnimationImpactTime { get; private set; }=-1;
     public int LastAnimationImpactFrame { get; private set; }=-1;
     public float LastKickAnimationImpactTime { get; private set; }=-1;
@@ -36,10 +38,13 @@ public sealed class HumanoidPresentation : MonoBehaviour
     public Transform VisualRoot { get; private set; }
 #if UNITY_EDITOR
     public HeroPresentationState? VerificationState;
+    public void VerificationPretendIdle(float seconds){lastActiveTime=Time.time-seconds;}
 #endif
     SuperHeroController hero;CityNpc npc;
     WorldSession world;PowerUser powers;Vector3 neutralHipsPosition;
-    float actionUntil, phase, lean, actionYaw, attackImpactSeconds, attackEndSeconds, attackFollowRate;bool dead, punchMarkerPending, kickMarkerPending, attackMarkerPending, deferredHit;AnimationClip attackClip;string attackMarkerState;
+    float actionUntil, phase, lean, actionYaw, attackImpactSeconds, attackEndSeconds, attackFollowRate, lastActiveTime;
+    bool dead, punchMarkerPending, kickMarkerPending, attackMarkerPending, deferredHit, deferredStrongHit, wasPanicking;
+    AnimationClip attackClip;string attackMarkerState;
     readonly Dictionary<Transform,Quaternion> neutral=new Dictionary<Transform,Quaternion>();
     public static HumanoidPresentation Create(GameObject owner,float height,SuperHeroController hero=null,CityNpc npc=null,HeroDefinition definition=null)
     {
@@ -94,10 +99,12 @@ public sealed class HumanoidPresentation : MonoBehaviour
         presentation.neutralHipsPosition=animator.GetBoneTransform(HumanBodyBones.Hips).localPosition;
         animator.runtimeAnimatorController=tuning.Controller;animator.applyRootMotion=false;animator.cullingMode=AnimatorCullingMode.AlwaysAnimate;animator.enabled=true;
         presentation.phase=(owner.GetEntityId().GetHashCode()%1000)*.013f;
+        presentation.lastActiveTime=Time.time;
         if(hero!=null)
         {
             hero.PunchWindupSeconds=tuning.PunchWindup;hero.KickWindupSeconds=tuning.KickWindup;
             hero.PunchStarted+=presentation.Punch;hero.Jumped+=presentation.Jump;hero.Landed+=presentation.Land;
+            hero.ClimbReleased+=presentation.ClimbRelease;
             hero.BackflipStarted+=presentation.Backflip;hero.HurricaneKickStarted+=presentation.HurricaneKick;
             var procedural=owner.AddComponent<ProceduralHeroAnimation>();procedural.HumanoidSquashOnly=true;
             procedural.Initialize(hero,squash,null,Resources.Load<ProceduralAnimationTuning>("ProceduralAnimationTuning"));
@@ -114,7 +121,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
     {
         if(world!=null){world.PlayerDamaged-=Damage;world.PlayerRespawned-=Revive;}
         if(powers!=null)powers.Activated-=PowerActivated;
-        if(hero!=null){hero.PunchStarted-=Punch;hero.Jumped-=Jump;hero.Landed-=Land;hero.BackflipStarted-=Backflip;hero.HurricaneKickStarted-=HurricaneKick;}
+        if(hero!=null){hero.PunchStarted-=Punch;hero.Jumped-=Jump;hero.Landed-=Land;hero.ClimbReleased-=ClimbRelease;hero.BackflipStarted-=Backflip;hero.HurricaneKickStarted-=HurricaneKick;}
         if(npc!=null){npc.Damaged-=Damage;npc.Attacked-=Attack;npc.AttackWindupStarted-=AttackWindup;npc.AttackCanceled-=AttackCanceled;}
     }
     void Start()
@@ -122,7 +129,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
         if(hero==null)return;world=WorldSession.Instance;powers=GetComponent<PowerUser>();
         world.PlayerDamaged+=Damage;world.PlayerRespawned+=Revive;powers.Activated+=PowerActivated;
     }
-    void PowerActivated(PowerDefinition definition){if(definition.CastingPresentation)Cast();}
+    void PowerActivated(PowerDefinition definition){lastActiveTime=Time.time;if(State=="Taunt")actionUntil=0;if(definition.CastingPresentation)Cast();}
     void Change(string state,bool immediate=false,float offset=0)
     {
         if(State==state&&!immediate)return;State=state;
@@ -135,26 +142,50 @@ public sealed class HumanoidPresentation : MonoBehaviour
         // Normalized clip offset is independent of playback multiplier; fixed-time offsets are not.
         Change(state,immediate,immediate?start/clip.length:start/speed);
     }
-    void Punch(){punchMarkerPending=true;Action("Punch",Tuning.Punch,Tuning.PunchPlayback,Tuning.PunchStartSeconds,true);}
-    void Jump(){Action("Jump",Tuning.Jump,Tuning.JumpPlayback);}
+    void Punch(){lastActiveTime=Time.time;punchMarkerPending=true;Action("Punch",Tuning.Punch,Tuning.PunchPlayback,Tuning.PunchStartSeconds,true);}
+    void Jump()
+    {
+        lastActiveTime=Time.time;
+        if(hero!=null&&hero.LastJumpWasAir&&Tuning.RunningForwardFlip!=null)
+        {DoubleJumpCount++;Action("Double Jump",Tuning.RunningForwardFlip,Tuning.DoubleJumpFlipPlayback,0,true);}
+        else Action("Jump",Tuning.Jump,Tuning.JumpPlayback);
+    }
     // The backflip clip is fitted to the dash window exactly, so the two cannot drift apart.
     float BackflipRate=>Mathf.Max(.01f,(Tuning.Backflip.length-Tuning.BackflipStartSeconds)/Mathf.Max(.01f,HeroAbilityTuning.BackflipSeconds));
-    void Backflip(){Action("Backflip",Tuning.Backflip,BackflipRate,Tuning.BackflipStartSeconds,true);}
-    void HurricaneKick(){kickMarkerPending=true;Action("Hurricane Kick",Tuning.HurricaneKick,Tuning.KickPlayback,Tuning.KickStartSeconds,true);}
+    void Backflip(){lastActiveTime=Time.time;Action("Backflip",Tuning.Backflip,BackflipRate,Tuning.BackflipStartSeconds,true);}
+    void HurricaneKick(){lastActiveTime=Time.time;kickMarkerPending=true;Action("Hurricane Kick",Tuning.HurricaneKick,Tuning.KickPlayback,Tuning.KickStartSeconds,true);}
+    void ClimbRelease()
+    {
+        ClimbReleaseCount++;lastActiveTime=Time.time;
+        if(Tuning.JumpingDown!=null)Action("Jump Down",Tuning.JumpingDown,Tuning.JumpDownPlayback,1.5f,true);
+    }
     void Land(float impact)
     {
         // A backflip owns the pose through its own landing; the shared Land clip is not layered over it.
         if(State=="Backflip"&&Time.time<actionUntil)return;
+        if(State=="Double Jump"||State=="Jump Down")actionUntil=0;
         if(impact>=Resources.Load<ProceduralAnimationTuning>("ProceduralAnimationTuning").LandMinimumImpactSpeed)Action("Land",Tuning.Land,Tuning.LandPlayback);
     }
-    public void Cast(){Action("Cast",Tuning.Cast,Tuning.CastPlayback);}
+    public void Cast(){lastActiveTime=Time.time;Action("Cast",Tuning.Cast,Tuning.CastPlayback);}
+    void HitReaction(bool strong)
+    {
+        var clip=strong?Tuning.ShovedSpin:Tuning.HeadHit;
+        if(clip==null){Action("Hit",Tuning.Hit,Tuning.HitPlayback,0,true);return;}
+        Action(strong?"Shoved Spin":"Head Hit",clip,strong?Tuning.ShovedSpinPlayback:Tuning.HitPlayback,0,true);
+    }
     public void Damage(bool lethal)
     {
         if(dead)return;
-        if(lethal){punchMarkerPending=false;attackMarkerPending=false;deferredHit=false;Action("Death",Tuning.Death,Tuning.ActionPlayback,0,true);dead=true;DeathCount++;}
-        else{if(punchMarkerPending||attackMarkerPending)deferredHit=true;else Action("Hit",Tuning.Hit,Tuning.HitPlayback,0,true);HitCount++;}
+        if(lethal){punchMarkerPending=false;kickMarkerPending=false;attackMarkerPending=false;deferredHit=false;Action("Death",Tuning.Death,Tuning.ActionPlayback,0,true);dead=true;DeathCount++;}
+        else
+        {
+            bool strong=npc!=null&&npc.LastImpactImpulse>=1000f;
+            if(punchMarkerPending||attackMarkerPending){deferredHit=true;deferredStrongHit=strong;}
+            else HitReaction(strong);
+            HitCount++;
+        }
     }
-    public void Revive(){dead=false;punchMarkerPending=false;deferredHit=false;actionUntil=0;Change("Locomotion",true);}
+    public void Revive(){dead=false;punchMarkerPending=false;kickMarkerPending=false;deferredHit=false;actionUntil=0;lastActiveTime=Time.time;Change("Locomotion",true);}
     bool Ranged=>npc!=null&&(npc.Archetype!=null?npc.Archetype.Kind==AttackKind.Ranged:npc.Role==NpcRole.Cop);
     // Telegraphed NPC attack: the clip starts at WINDUP START and its playback is fitted so the clip's impact marker lands
     // exactly at release (same fitted-playback pattern as the Backflip). Rusher=Punch, Gunner=Shoot, Brute=Hurricane Kick.
@@ -211,7 +242,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
     void Update()
     {
         if(Animator==null)return;
-        if(deferredHit&&!punchMarkerPending&&!attackMarkerPending){deferredHit=false;Action("Hit",Tuning.Hit,Tuning.HitPlayback,0,true);}
+        if(deferredHit&&!punchMarkerPending&&!attackMarkerPending){deferredHit=false;HitReaction(deferredStrongHit);}
         if(hero!=null){hero.PunchWindupSeconds=Tuning.PunchWindup;hero.KickWindupSeconds=Tuning.KickWindup;}
         HeroPresentationState state=ReadState();MeasuredSpeed=new Vector2(state.LocalVelocity.x,state.LocalVelocity.z).magnitude;
         Animator.SetFloat("Speed",MeasuredSpeed,Tuning.SpeedDamping,Time.deltaTime);
@@ -221,9 +252,30 @@ public sealed class HumanoidPresentation : MonoBehaviour
         bool panic=npc!=null&&npc.Role==NpcRole.Civilian&&npc.Fleeing&&!npc.Dead;
         Animator.SetFloat("GaitRate",panic?Tuning.PanicPlayback:1);
         if(dead)return;
-        // Existing Air clip is a conservative wall-climb placeholder. The CharacterController alone owns translation;
-        // no root motion or new clip dependency is introduced for this pass.
-        if(Time.time>=actionUntil)Change(state.Flying?"Fly":state.Climbing?"Air":!state.Grounded?"Air":panic?"Panic":state.LocalVelocity.z<Tuning.BackThreshold?"Back":Ranged&&MeasuredSpeed>.1f?"Armed":"Locomotion");
+        if(panic&&!wasPanicking&&Tuning.Terrified!=null)
+        {Action("Terrified",Tuning.Terrified,1f,0,true);actionUntil=Time.time+Tuning.TerrifiedReactionSeconds;}
+        wasPanicking=panic;
+        if(state.Climbing&&Tuning.Climbing!=null)
+        {
+            float climbSpeed=new Vector2(state.LocalVelocity.x,state.LocalVelocity.y).magnitude;
+            Animator.SetFloat("ClimbRate",climbSpeed<Tuning.ClimbIdleThreshold?0f:
+                Mathf.Clamp(climbSpeed/Tuning.ClimbReferenceSpeed,.5f,2f));
+            if(State!="Climb")
+            {actionUntil=0;Change("Climb",false,.25f);lastActiveTime=Time.time;}
+            return;
+        }
+        if(State=="Taunt"&&(MeasuredSpeed>.1f||!state.Grounded||Input.anyKey))actionUntil=0;
+        if(MeasuredSpeed>.1f||!state.Grounded||panic)lastActiveTime=Time.time;
+        if(Time.time>=actionUntil)
+        {
+            string next=state.Flying?"Fly":!state.Grounded?
+                state.LocalVelocity.y<-Tuning.FallingDownSpeed&&Tuning.Falling!=null?"Fall":"Air":
+                panic?"Panic":state.LocalVelocity.z<Tuning.BackThreshold?"Back":
+                Ranged&&MeasuredSpeed>.1f?"Armed":"Locomotion";
+            Change(next);
+            if(hero!=null&&next=="Locomotion"&&Tuning.Taunt!=null&&Time.time-lastActiveTime>Tuning.TauntIdleDelay)
+            {Action("Taunt",Tuning.Taunt,1f,0,true);lastActiveTime=Time.time;}
+        }
     }
     HeroPresentationState ReadState()
     {
@@ -262,7 +314,12 @@ public sealed class HumanoidPresentation : MonoBehaviour
         // Active action clips retain upper-body authority, including aerial punches/casts.
         bool clipActing=Time.time<actionUntil;
         bool acting=clipActing||(Rigging!=null&&Rigging.HoldWeight>.01f);
-        var hips=Animator.GetBoneTransform(HumanBodyBones.Hips);hips.localPosition=Vector3.Lerp(hips.localPosition,neutralHipsPosition,FlightWeight);
+        var hips=Animator.GetBoneTransform(HumanBodyBones.Hips);
+        // These source takes contain baked 0.6-3.9 m hip travel even with applyRootMotion off.
+        // Keep the visible body at its physics capsule; retain the clip's joint rotations.
+        bool inPlace=State=="Double Jump"||State=="Climb"||State=="Fall"||State=="Jump Down"||
+            State=="Shoved Spin"||State=="Hurricane Kick";
+        hips.localPosition=inPlace?neutralHipsPosition:Vector3.Lerp(hips.localPosition,neutralHipsPosition,FlightWeight);
         foreach(var item in neutral)
         {
             bool upper=acting&&(item.Key.IsChildOf(Animator.GetBoneTransform(HumanBodyBones.Spine))||item.Key==Animator.GetBoneTransform(HumanBodyBones.Spine));
