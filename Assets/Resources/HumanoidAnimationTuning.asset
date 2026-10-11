@@ -42,7 +42,24 @@ MonoBehaviour:
   ArmedRun: {fileID: -203655887218126122, guid: 2419ec150647a47d6808503b4f90b1d4, type: 3}
   Shoot: {fileID: -203655887218126122, guid: 5ba18b6d686e64222acff98afaf6f136, type: 3}
   Backflip: {fileID: -203655887218126122, guid: 8b58aaf65e0644e9fa34f0604c0ac00a, type: 3}
-  HurricaneKick: {fileID: -203655887218126122, guid: cb3c34e7eb2ab4bdbbe1ac14c9cf6095, type: 3}
+  HurricaneKick: {fileID: -203655887218126122, guid: 63a6c67e778f342a5b17e13a085a97d5, type: 3}
+  HeadHit: {fileID: -203655887218126122, guid: 74ea864c4fbe74e4db40dde1c5529d23, type: 3}
+  Taunt: {fileID: -203655887218126122, guid: 122f68c41e00f42f79d1e937aa701391, type: 3}
+  MarteloKick: {fileID: -203655887218126122, guid: 63a6c67e778f342a5b17e13a085a97d5, type: 3}
+  Falling: {fileID: -203655887218126122, guid: 4a729d0973b704c1fabe4840c133860e, type: 3}
+  Terrified: {fileID: -203655887218126122, guid: ab4a9e874f1524dbcb823886dcf0b6db, type: 3}
+  ShovedSpin: {fileID: -203655887218126122, guid: 2365e46f5a71c43ff8f6e92d63777949, type: 3}
+  JumpingDown: {fileID: -203655887218126122, guid: ea4c418e8711d4f2089b4effd9130113, type: 3}
+  Climbing: {fileID: -203655887218126122, guid: cb08382a4a30548a19c0d9fb2966e11d, type: 3}
+  RunningForwardFlip: {fileID: -203655887218126122, guid: 0e1d87cb0f5ae4f2e9e96952739fdd4f, type: 3}
+  FallingDownSpeed: 1.2
+  ClimbReferenceSpeed: 2.5
+  ClimbIdleThreshold: 0.15
+  DoubleJumpFlipPlayback: 2.2
+  ShovedSpinPlayback: 4
+  JumpDownPlayback: 2
+  TauntIdleDelay: 12
+  TerrifiedReactionSeconds: 1.1
   WalkThreshold: 1.8
   JogThreshold: 5
   RunThreshold: 9
@@ -62,12 +79,12 @@ MonoBehaviour:
   PunchImpactSeconds: 0.56666666
   PunchPlayback: 1.6
   BackflipStartSeconds: 0.6
-  KickStartSeconds: 0.333
-  KickImpactSeconds: 0.933
-  KickPlayback: 2
+  KickStartSeconds: 0.05
+  KickImpactSeconds: 0.5
+  KickPlayback: 1.5
   EnemyPunchStartSeconds: 0.1
   ShootImpactSeconds: 1.8
-  SlamStartSeconds: 0.333
+  SlamStartSeconds: 0.05
   FlightPitch: 78
   FlightFullSpeed: 10
   FlightBlendResponse: 6

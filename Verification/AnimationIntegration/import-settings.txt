@@ -1,0 +1,9 @@
+Assets/Animations/X Bot@Head Hit.fbx: Humanoid=True AvatarValid=True clip=Head Hit duration=0.9333s loop=False root-baked=true
+Assets/Animations/X Bot@Taunt.fbx: Humanoid=True AvatarValid=True clip=Taunt duration=2.8333s loop=False root-baked=true
+Assets/Animations/X Bot@Martelo 2.fbx: Humanoid=True AvatarValid=True clip=Martelo 2 duration=1.3000s loop=False root-baked=true
+Assets/Animations/X Bot@Falling.fbx: Humanoid=True AvatarValid=True clip=Falling duration=3.0000s loop=True root-baked=true
+Assets/Animations/X Bot@Terrified.fbx: Humanoid=True AvatarValid=True clip=Terrified duration=20.0000s loop=False root-baked=true
+Assets/Animations/X Bot@Shoved Reaction With Spin.fbx: Humanoid=True AvatarValid=True clip=Shoved Reaction With Spin duration=4.5333s loop=False root-baked=true
+Assets/Animations/X Bot@Jumping Down.fbx: Humanoid=True AvatarValid=True clip=Jumping Down duration=2.6667s loop=False root-baked=true
+Assets/Animations/X Bot@Climbing Ladder.fbx: Humanoid=True AvatarValid=True clip=Climbing Ladder duration=0.7667s loop=True root-baked=true
+Assets/Animations/X Bot@Running Forward Flip.fbx: Humanoid=True AvatarValid=True clip=Running Forward Flip duration=1.1000s loop=False root-baked=true

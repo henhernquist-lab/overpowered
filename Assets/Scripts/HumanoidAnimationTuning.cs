@@ -14,6 +14,11 @@ public sealed class HumanoidAnimationTuning : ScriptableObject
     public float HoldReach=.7f, HoldHandSpread=.12f;
     [Header("Clips (Backflip and Hurricane Kick are dispatched by those two gestures)")]
     public AnimationClip Idle, Walk, Jog, Run, Back, Jump, Land, Punch, Hit, Death, Cast, ArmedRun, Shoot, Backflip, HurricaneKick;
+    [Header("New Mixamo presentation (all use the existing Sidekick Avatar and shared controller)")]
+    public AnimationClip HeadHit, Taunt, MarteloKick, Falling, Terrified, ShovedSpin, JumpingDown, Climbing, RunningForwardFlip;
+    public float FallingDownSpeed=1.2f, ClimbReferenceSpeed=2.5f, ClimbIdleThreshold=.15f;
+    public float DoubleJumpFlipPlayback=2.2f, ShovedSpinPlayback=4f, JumpDownPlayback=2f;
+    public float TauntIdleDelay=12f, TerrifiedReactionSeconds=1.1f;
     [Header("Continuous locomotion: metres/second")]
     public float WalkThreshold=1.8f, JogThreshold=5f, RunThreshold=9f;
     public float SpeedDamping=.10f, TransitionSeconds=.12f, BackThreshold=-.5f;
@@ -64,5 +69,9 @@ public sealed class HumanoidAnimationTuning : ScriptableObject
         KickStartSeconds=Mathf.Max(0,KickStartSeconds);KickImpactSeconds=Mathf.Max(KickStartSeconds,KickImpactSeconds);
         EnemyPunchStartSeconds=Mathf.Clamp(EnemyPunchStartSeconds,0,PunchImpactSeconds);SlamStartSeconds=Mathf.Clamp(SlamStartSeconds,0,KickImpactSeconds);
         ShootImpactSeconds=Mathf.Clamp(ShootImpactSeconds,ShootStartSeconds,Mathf.Max(ShootStartSeconds,ShootEndSeconds));
+        FallingDownSpeed=Mathf.Max(.1f,FallingDownSpeed);ClimbReferenceSpeed=Mathf.Max(.1f,ClimbReferenceSpeed);
+        ClimbIdleThreshold=Mathf.Max(0,ClimbIdleThreshold);DoubleJumpFlipPlayback=Mathf.Max(.01f,DoubleJumpFlipPlayback);
+        ShovedSpinPlayback=Mathf.Max(.01f,ShovedSpinPlayback);JumpDownPlayback=Mathf.Max(.01f,JumpDownPlayback);
+        TauntIdleDelay=Mathf.Max(1f,TauntIdleDelay);TerrifiedReactionSeconds=Mathf.Max(.1f,TerrifiedReactionSeconds);
     }
 }

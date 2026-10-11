@@ -64,6 +64,7 @@ public static class HumanoidSetup
         t.Idle=Clip("Idle");t.Walk=Clip("Walking");t.Jog=Clip("Jog Forward");t.Run=Clip("Standing Run Forward");t.Back=Clip("Standing Run Back");
         t.Jump=Clip("Jump");t.Land=Clip("Fall A Land To Run Forward");t.Punch=Clip("Punching");t.Hit=Clip("Hit Reaction");t.Death=Clip("Death");t.Cast=Clip("Casting Spell");
         t.ArmedRun=Clip("Pistol Run");t.Shoot=Clip("Shooting Gun");t.Backflip=Clip("Backflip");t.HurricaneKick=Clip("Hurricane Kick");
+        AssignNewClips(t);
         const string controllerPath="Assets/Resources/SharedHumanoid.controller";
         var controller=AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath);
         if(controller==null)controller=AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
@@ -81,6 +82,7 @@ public static class HumanoidSetup
         Add("Air",t.Jump,"GaitRate");Add("Fly",t.Idle,"GaitRate");
         Add("Jump",t.Jump,"ActionRate");Add("Land",t.Land,"ActionRate");Add("Punch",t.Punch,"ActionRate");Add("Cast",t.Cast,"ActionRate");Add("Hit",t.Hit,"ActionRate");Add("Death",t.Death,"ActionRate");Add("Shoot",t.Shoot,"ActionRate");
         Add("Backflip",t.Backflip,"ActionRate");Add("Hurricane Kick",t.HurricaneKick,"ActionRate");
+        AddNewStates(controller,machine,t);
         t.Controller=controller;EditorUtility.SetDirty(t);EditorUtility.SetDirty(controller);
         foreach(var power in Resources.LoadAll<PowerDefinition>("Powers"))if(power.Effect is FireBlastEffect||power.Effect is IceEffect){power.CastingPresentation=true;EditorUtility.SetDirty(power);}
         AssetDatabase.SaveAssets();
@@ -88,6 +90,49 @@ public static class HumanoidSetup
     // Foot IK re-targets each foot to the clip's own foot goal. Sidekick bodies (larger heads, shorter legs than the Mixamo
     // source) otherwise sink up to ~0.09m below the ground mid-run (Verification/Sidekick/clips); the mannequin is unchanged.
     public const bool FootIK=true;
+    static void AssignNewClips(HumanoidAnimationTuning t)
+    {
+        t.HeadHit=MixamoClip("Head Hit");t.Taunt=MixamoClip("Taunt");t.MarteloKick=MixamoClip("Martelo 2");
+        t.Falling=MixamoClip("Falling");t.Terrified=MixamoClip("Terrified");t.ShovedSpin=MixamoClip("Shoved Reaction With Spin");
+        t.JumpingDown=MixamoClip("Jumping Down");t.Climbing=MixamoClip("Climbing Ladder");t.RunningForwardFlip=MixamoClip("Running Forward Flip");
+        if(t.MarteloKick==null)throw new InvalidOperationException("Martelo 2 Humanoid clip missing.");
+        t.HurricaneKick=t.MarteloKick;
+        // Peak left-foot extension is source frame 15/39 (0.500 s). Keep the existing
+        // 0.300 s authoritative windup: (0.500 - 0.050) / 1.5 = 0.300 s.
+        t.KickStartSeconds=.05f;t.KickImpactSeconds=.5f;t.KickPlayback=1.5f;t.SlamStartSeconds=.05f;
+    }
+    static AnimationClip MixamoClip(string name)=>AssetDatabase.LoadAllAssetsAtPath("Assets/Animations/X Bot@"+name+".fbx")
+        .OfType<AnimationClip>().FirstOrDefault(c=>!c.name.StartsWith("__preview__"));
+    static void AddNewStates(AnimatorController controller,AnimatorStateMachine machine,HumanoidAnimationTuning t)
+    {
+        if(!controller.parameters.Any(p=>p.name=="ClimbRate"))controller.AddParameter("ClimbRate",AnimatorControllerParameterType.Float);
+        void Add(string name,Motion clip,string rate)
+        {
+            if(clip==null||machine.states.Any(s=>s.state.name==name))return;
+            var state=machine.AddState(name);state.motion=clip;state.writeDefaultValues=true;
+            state.speedParameterActive=true;state.speedParameter=rate;state.iKOnFeet=FootIK;
+        }
+        Add("Double Jump",t.RunningForwardFlip,"ActionRate");Add("Climb",t.Climbing,"ClimbRate");
+        Add("Fall",t.Falling,"GaitRate");Add("Jump Down",t.JumpingDown,"ActionRate");
+        Add("Head Hit",t.HeadHit,"ActionRate");Add("Shoved Spin",t.ShovedSpin,"ActionRate");
+        Add("Terrified",t.Terrified,"ActionRate");Add("Taunt",t.Taunt,"ActionRate");
+        Add("Martelo Kick",t.MarteloKick,"ActionRate");
+        var hurricane=machine.states.FirstOrDefault(s=>s.state.name=="Hurricane Kick").state;
+        if(hurricane!=null){hurricane.motion=t.MarteloKick;EditorUtility.SetDirty(hurricane);}
+    }
+    [MenuItem("Overpowered/Animation/Integrate new Mixamo clips into shared controller")]
+    public static void IntegrateNewMixamo()
+    {
+        var t=AssetDatabase.LoadAssetAtPath<HumanoidAnimationTuning>("Assets/Resources/HumanoidAnimationTuning.asset");
+        var controller=AssetDatabase.LoadAssetAtPath<AnimatorController>("Assets/Resources/SharedHumanoid.controller");
+        if(t==null||controller==null)throw new InvalidOperationException("Existing shared Humanoid tuning/controller missing.");
+        AssignNewClips(t);
+        var machine=controller.layers[0].stateMachine;
+        AddNewStates(controller,machine,t);
+        EditorUtility.SetDirty(t);EditorUtility.SetDirty(controller);EditorUtility.SetDirty(machine);
+        AssetDatabase.SaveAssets();
+    }
+    public static void IntegrateNewMixamoBatch(){try{IntegrateNewMixamo();EditorApplication.Exit(0);}catch(Exception e){Debug.LogException(e);EditorApplication.Exit(1);}}
     /// Applies FootIK to the existing controller's states without re-importing clips or rebuilding the controller.
     [MenuItem("Overpowered/Animation/Apply foot IK setting to shared controller")]
     public static void ApplyFootIK()
