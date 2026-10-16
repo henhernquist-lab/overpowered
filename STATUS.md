@@ -1,5 +1,56 @@
 # Prototype Status
 
+## Nine-clip Mixamo integration checkpoint — 2026-10-16 (`codex/mixamo-animation-integration`)
+
+The newly supplied nine `X Bot@*.fbx` clips are integrated into the existing
+Sidekick/shared-Humanoid presentation. Source checkpoints: `1289053` (Humanoid
+import/retarget, controller states/tuning), `eae1e72` (traversal, civilian/hit
+reactions, E punch→Martelo kick and RMB Hurricane presentation), `992fc8c`
+(reaction priority and 45 actual posed Sidekick preview frames). Evidence and
+full 16-point report: `2a4aff9`. All nine clip paths, uses, durations, loop
+decisions, new states/parameter, measured root/hip samples, attack values and
+human playtest items are in `docs/mixamo-animation-integration-report.md`.
+
+Latest source `992fc8c` passed Unity Humanoid **77/0**, Jump **128/0**,
+Climbing fixture **57/0**, Climbing real city **29/0**, Melee **40/0**,
+Backflip/Hurricane **66/0**, Spline **72/0** plus separate-process Reload
+**8/0**, Combat **176/0**, and PhaseShift dense baseline **22/0**. Source
+`eae1e72` also passed Combat **176/0**, FirstPerson **211/0** plus Reload **5/0**,
+Camera **45/0**, and Mode **79/0** plus Reload **2/0**. Every cited suite exited
+0 with 0 FAIL; the sequential manifests report unchanged personal-save and
+Sidekick database hashes. Evidence: the `final-focused-20261016`,
+`final-broad-20261016`, and `broad-r1` manifests under
+`Verification/AnimationIntegration/`. The final Unity clip audit
+exited 0 and its 45 posed preview PNGs were inspected. Unity SDK source build:
+**0 warnings, 0 errors**.
+
+Preserved failed attempts: initial Jump **119 PASS/1 FAIL** (obsolete two-combat
+fixture), Climbing **19/1** (wall-release pose stayed set), three early Melee
+fixtures **0/1** each (wrong-role/unavailable loadout power). A first Humanoid
+run expected immediate Panic before the new brief Terrified onset. These are
+not counted as fresh passes; final fixtures use real ownership/equip gates,
+and movement/combat controls were not weakened.
+
+Current 18-enemy 1280×720 batch Editor fixture measured **85.60 FPS /
+11.683 ms mean**, 0 whole-frame GC B/frame over 685 frames, 1888 renderers,
+1019 meshes, 109 materials, 3739 objects, 22 particles. The pre-integration
+same-fixture sample was **73.93 FPS / 13.526 ms**, 0 B/frame over 592 frames.
+They ran in different Editor processes on different dates: this is not a
+controlled causal improvement claim. The separate Humanoid city fixture
+measured 59.46 FPS over 298 frames with 37 active animators; it is not
+comparable to the dense fixture. No standalone build or long-session memory
+profile was run.
+
+No Sidekick vendor material/database change, root-motion ownership change,
+loadout gate bypass, first-person camera attachment, or shipping mission-pool
+activation was made. The full overnight build is **not** declared finished.
+Henry still needs normal-camera in-motion judgment of flip speed, flat-wall
+climb readability/idle/sideways motion, fall and wall-drop transitions, hit
+strength, civilian Terrified timing, Martelo contact for both E and RMB, Taunt
+fit, and first-person comfort. The exact next animation task is to tune the
+specific clips/transitions that this playtest shows to be weak; a controlled
+same-host old/new benchmark is needed before attributing any FPS change.
+
 ## Recovery runtime checkpoint — 2026-10-04 UTC
 
 Source tested: `748e89d` on `codex/overnight-recovery`, clean at handoff; recovered
