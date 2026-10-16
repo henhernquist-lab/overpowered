@@ -78,7 +78,7 @@ public static class HumanoidSetup
         AnimatorState Add(string name,Motion clip,string rate)
         {var state=machine.AddState(name);state.motion=clip;state.writeDefaultValues=true;state.speedParameterActive=true;state.speedParameter=rate;state.iKOnFeet=FootIK;return state;}
         machine.defaultState=Add("Locomotion",tree,"GaitRate");
-        Add("Back",t.Back,"GaitRate");Add("Armed",t.ArmedRun,"GaitRate");Add("Panic",t.Run,"GaitRate");
+        Add("Back",t.Back,"GaitRate");Add("Armed",t.ArmedRun,"GaitRate");
         Add("Air",t.Jump,"GaitRate");Add("Fly",t.Idle,"GaitRate");
         Add("Jump",t.Jump,"ActionRate");Add("Land",t.Land,"ActionRate");Add("Punch",t.Punch,"ActionRate");Add("Cast",t.Cast,"ActionRate");Add("Hit",t.Hit,"ActionRate");Add("Death",t.Death,"ActionRate");Add("Shoot",t.Shoot,"ActionRate");
         Add("Backflip",t.Backflip,"ActionRate");Add("Hurricane Kick",t.HurricaneKick,"ActionRate");
@@ -93,13 +93,13 @@ public static class HumanoidSetup
     static void AssignNewClips(HumanoidAnimationTuning t)
     {
         t.HeadHit=MixamoClip("Head Hit");t.Taunt=MixamoClip("Taunt");t.MarteloKick=MixamoClip("Martelo 2");
-        t.Falling=MixamoClip("Falling");t.Terrified=MixamoClip("Terrified");t.ShovedSpin=MixamoClip("Shoved Reaction With Spin");
+        t.Falling=MixamoClip("Falling");t.Terrified=null;t.ShovedSpin=MixamoClip("Shoved Reaction With Spin");
         t.JumpingDown=MixamoClip("Jumping Down");t.Climbing=MixamoClip("Climbing Ladder");t.RunningForwardFlip=MixamoClip("Running Forward Flip");
         if(t.MarteloKick==null)throw new InvalidOperationException("Martelo 2 Humanoid clip missing.");
-        t.HurricaneKick=t.MarteloKick;
-        // Peak left-foot extension is source frame 15/39 (0.500 s). Keep the existing
-        // 0.300 s authoritative windup: (0.500 - 0.050) / 1.5 = 0.300 s.
-        t.KickStartSeconds=.05f;t.KickImpactSeconds=.5f;t.KickPlayback=1.5f;t.SlamStartSeconds=.05f;
+        t.HurricaneKick=Clip("Hurricane Kick");
+        // Both clips reach impact after the same authoritative 0.300 s windup.
+        t.KickStartSeconds=.333f;t.KickImpactSeconds=.933f;t.KickPlayback=2f;t.SlamStartSeconds=.333f;
+        t.MarteloStartSeconds=.05f;t.MarteloImpactSeconds=.5f;t.MarteloPlayback=1.5f;
     }
     static AnimationClip MixamoClip(string name)=>AssetDatabase.LoadAllAssetsAtPath("Assets/Animations/X Bot@"+name+".fbx")
         .OfType<AnimationClip>().FirstOrDefault(c=>!c.name.StartsWith("__preview__"));
@@ -115,13 +115,11 @@ public static class HumanoidSetup
         Add("Double Jump",t.RunningForwardFlip,"ActionRate");Add("Climb",t.Climbing,"ClimbRate");
         Add("Fall",t.Falling,"GaitRate");Add("Jump Down",t.JumpingDown,"ActionRate");
         Add("Head Hit",t.HeadHit,"ActionRate");Add("Shoved Spin",t.ShovedSpin,"ActionRate");
-        Add("Terrified",t.Terrified,"ActionRate");Add("Taunt",t.Taunt,"ActionRate");
-        // Combo finisher and RMB are separate gameplay paths over the same paid kick
-        // gesture, so they deliberately share the Hurricane Kick state and clip.
-        var unused=machine.states.FirstOrDefault(s=>s.state.name=="Martelo Kick").state;
-        if(unused!=null)machine.RemoveState(unused);
+        Add("Martelo Kick",t.MarteloKick,"ActionRate");Add("Taunt",t.Taunt,"ActionRate");
+        foreach(var name in new[]{"Terrified","Panic"})
+        {var unused=machine.states.FirstOrDefault(s=>s.state.name==name).state;if(unused!=null)machine.RemoveState(unused);}
         var hurricane=machine.states.FirstOrDefault(s=>s.state.name=="Hurricane Kick").state;
-        if(hurricane!=null){hurricane.motion=t.MarteloKick;EditorUtility.SetDirty(hurricane);}
+        if(hurricane!=null){hurricane.motion=t.HurricaneKick;EditorUtility.SetDirty(hurricane);}
     }
     [MenuItem("Overpowered/Animation/Integrate new Mixamo clips into shared controller")]
     public static void IntegrateNewMixamo()
@@ -136,6 +134,7 @@ public static class HumanoidSetup
         AssetDatabase.SaveAssets();
     }
     public static void IntegrateNewMixamoBatch(){try{IntegrateNewMixamo();EditorApplication.Exit(0);}catch(Exception e){Debug.LogException(e);EditorApplication.Exit(1);}}
+    public static void ApplyAnimationCorrectionsBatch(){try{IntegrateNewMixamo();EditorApplication.Exit(0);}catch(Exception e){Debug.LogException(e);EditorApplication.Exit(1);}}
     /// Applies FootIK to the existing controller's states without re-importing clips or rebuilding the controller.
     [MenuItem("Overpowered/Animation/Apply foot IK setting to shared controller")]
     public static void ApplyFootIK()

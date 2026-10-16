@@ -25,6 +25,11 @@ public sealed class ProceduralAnimationTuning : ScriptableObject
 
     [Header("Landing")]
     [Min(0f)] public float LandMinimumImpactSpeed = 3f;
+    [Min(0f)] public float LandMinimumDrop = 1.5f;
+    [Min(0f)] public float LandStrongImpactSpeed = 12f;
+    public bool FullLanding(float impactSpeed,float drop) =>
+        impactSpeed >= LandMinimumImpactSpeed &&
+        (drop >= LandMinimumDrop || impactSpeed >= LandStrongImpactSpeed);
     [Min(.001f)] public float LandFullImpactSpeed = 16f;
     [Min(.001f)] public float LandCompressSeconds = .055f;
     [Min(.001f)] public float LandRecoverSeconds = .24f;

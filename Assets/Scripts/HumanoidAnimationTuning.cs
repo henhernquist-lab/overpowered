@@ -35,6 +35,9 @@ public sealed class HumanoidAnimationTuning : ScriptableObject
     public float BackflipStartSeconds=.6f;
     [Header("Hurricane Kick timing: source clip start / impact, seconds")]
     public float KickStartSeconds=.333f, KickImpactSeconds=.933f, KickPlayback=2f;
+    [Header("Martelo combo finisher timing: source clip start / impact, seconds")]
+    public float MarteloStartSeconds=.05f, MarteloImpactSeconds=.5f, MarteloPlayback=1.5f;
+    public float MarteloWindup=>Mathf.Max(0,(MarteloImpactSeconds-MarteloStartSeconds)/Mathf.Max(.01f,MarteloPlayback));
     // NPC telegraphed attacks start their clip at WINDUP START with playback fitted so the impact below lands at release
     // (rate = (impact - start) / archetype windup). Rusher=Punch, Gunner=Shoot, Brute=Hurricane Kick as a slam.
     // After release the gesture finishes at the clip's normal playback (PunchPlayback / ShootPlayback / KickPlayback).
@@ -67,6 +70,8 @@ public sealed class HumanoidAnimationTuning : ScriptableObject
         KickPlayback=Mathf.Max(.01f,KickPlayback);
         BackflipStartSeconds=Mathf.Max(0,BackflipStartSeconds);
         KickStartSeconds=Mathf.Max(0,KickStartSeconds);KickImpactSeconds=Mathf.Max(KickStartSeconds,KickImpactSeconds);
+        MarteloPlayback=Mathf.Max(.01f,MarteloPlayback);MarteloStartSeconds=Mathf.Max(0,MarteloStartSeconds);
+        MarteloImpactSeconds=Mathf.Max(MarteloStartSeconds,MarteloImpactSeconds);
         EnemyPunchStartSeconds=Mathf.Clamp(EnemyPunchStartSeconds,0,PunchImpactSeconds);SlamStartSeconds=Mathf.Clamp(SlamStartSeconds,0,KickImpactSeconds);
         ShootImpactSeconds=Mathf.Clamp(ShootImpactSeconds,ShootStartSeconds,Mathf.Max(ShootStartSeconds,ShootEndSeconds));
         FallingDownSpeed=Mathf.Max(.1f,FallingDownSpeed);ClimbReferenceSpeed=Mathf.Max(.1f,ClimbReferenceSpeed);

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// Adapter only. Animator owns the base skeleton; LateUpdate owns visual root lean and
-/// weighted flight/panic bones. Physics roots, controller, resource accounting stay outside.
+/// weighted flight bones. Physics roots, controller, resource accounting stay outside.
 [DefaultExecutionOrder(50)]
 public sealed class HumanoidPresentation : MonoBehaviour
 {
@@ -28,6 +28,8 @@ public sealed class HumanoidPresentation : MonoBehaviour
     public int LastAnimationImpactFrame { get; private set; }=-1;
     public float LastKickAnimationImpactTime { get; private set; }=-1;
     public int LastKickAnimationImpactFrame { get; private set; }=-1;
+    public float LastMarteloAnimationImpactTime { get; private set; }=-1;
+    public int LastMarteloAnimationImpactFrame { get; private set; }=-1;
     /// NPC telegraphed attack: clip state started at windup start, the fitted playback rate, and when the clip's
     /// impact marker was actually evaluated (compare with CityNpc.LastReleaseTime/Frame).
     public string AttackState { get; private set; }
@@ -43,7 +45,9 @@ public sealed class HumanoidPresentation : MonoBehaviour
     SuperHeroController hero;CityNpc npc;
     WorldSession world;PowerUser powers;Vector3 neutralHipsPosition;
     float actionUntil, phase, lean, actionYaw, attackImpactSeconds, attackEndSeconds, attackFollowRate, lastActiveTime;
-    bool dead, punchMarkerPending, kickMarkerPending, attackMarkerPending, deferredHit, deferredStrongHit, wasPanicking;
+    bool dead, punchMarkerPending, kickMarkerPending, marteloMarkerPending, attackMarkerPending, deferredHit, deferredStrongHit;
+    Vector3 stableClimbNormal;
+    Quaternion climbFacing=Quaternion.identity;
     AnimationClip attackClip;string attackMarkerState;
     readonly Dictionary<Transform,Quaternion> neutral=new Dictionary<Transform,Quaternion>();
     public static HumanoidPresentation Create(GameObject owner,float height,SuperHeroController hero=null,CityNpc npc=null,HeroDefinition definition=null)
@@ -103,9 +107,11 @@ public sealed class HumanoidPresentation : MonoBehaviour
         if(hero!=null)
         {
             hero.PunchWindupSeconds=tuning.PunchWindup;hero.KickWindupSeconds=tuning.KickWindup;
+            hero.ComboKickWindupSeconds=tuning.MarteloWindup;
             hero.PunchStarted+=presentation.Punch;hero.Jumped+=presentation.Jump;hero.Landed+=presentation.Land;
             hero.ClimbReleased+=presentation.ClimbRelease;
             hero.BackflipStarted+=presentation.Backflip;hero.HurricaneKickStarted+=presentation.HurricaneKick;
+            hero.MarteloKickStarted+=presentation.MarteloKick;
             var procedural=owner.AddComponent<ProceduralHeroAnimation>();procedural.HumanoidSquashOnly=true;
             procedural.Initialize(hero,squash,null,Resources.Load<ProceduralAnimationTuning>("ProceduralAnimationTuning"));
         }
@@ -121,7 +127,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
     {
         if(world!=null){world.PlayerDamaged-=Damage;world.PlayerRespawned-=Revive;}
         if(powers!=null)powers.Activated-=PowerActivated;
-        if(hero!=null){hero.PunchStarted-=Punch;hero.Jumped-=Jump;hero.Landed-=Land;hero.ClimbReleased-=ClimbRelease;hero.BackflipStarted-=Backflip;hero.HurricaneKickStarted-=HurricaneKick;}
+        if(hero!=null){hero.PunchStarted-=Punch;hero.Jumped-=Jump;hero.Landed-=Land;hero.ClimbReleased-=ClimbRelease;hero.BackflipStarted-=Backflip;hero.HurricaneKickStarted-=HurricaneKick;hero.MarteloKickStarted-=MarteloKick;}
         if(npc!=null){npc.Damaged-=Damage;npc.Attacked-=Attack;npc.AttackWindupStarted-=AttackWindup;npc.AttackCanceled-=AttackCanceled;}
     }
     void Start()
@@ -153,7 +159,8 @@ public sealed class HumanoidPresentation : MonoBehaviour
     // The backflip clip is fitted to the dash window exactly, so the two cannot drift apart.
     float BackflipRate=>Mathf.Max(.01f,(Tuning.Backflip.length-Tuning.BackflipStartSeconds)/Mathf.Max(.01f,HeroAbilityTuning.BackflipSeconds));
     void Backflip(){lastActiveTime=Time.time;Action("Backflip",Tuning.Backflip,BackflipRate,Tuning.BackflipStartSeconds,true);}
-    void HurricaneKick(){lastActiveTime=Time.time;kickMarkerPending=true;Action("Hurricane Kick",Tuning.HurricaneKick,Tuning.KickPlayback,Tuning.KickStartSeconds,true);}
+    void HurricaneKick(){lastActiveTime=Time.time;marteloMarkerPending=false;kickMarkerPending=true;Action("Hurricane Kick",Tuning.HurricaneKick,Tuning.KickPlayback,Tuning.KickStartSeconds,true);}
+    void MarteloKick(){lastActiveTime=Time.time;kickMarkerPending=false;marteloMarkerPending=true;Action("Martelo Kick",Tuning.MarteloKick,Tuning.MarteloPlayback,Tuning.MarteloStartSeconds,true);}
     void ClimbRelease()
     {
         ClimbReleaseCount++;lastActiveTime=Time.time;
@@ -164,7 +171,8 @@ public sealed class HumanoidPresentation : MonoBehaviour
         // A backflip owns the pose through its own landing; the shared Land clip is not layered over it.
         if(State=="Backflip"&&Time.time<actionUntil)return;
         if(State=="Double Jump"||State=="Jump Down")actionUntil=0;
-        if(impact>=Resources.Load<ProceduralAnimationTuning>("ProceduralAnimationTuning").LandMinimumImpactSpeed)Action("Land",Tuning.Land,Tuning.LandPlayback);
+        var landing=Resources.Load<ProceduralAnimationTuning>("ProceduralAnimationTuning");
+        if(landing!=null&&landing.FullLanding(impact,hero.LastLandingDrop))Action("Land",Tuning.Land,Tuning.LandPlayback);
     }
     public void Cast(){lastActiveTime=Time.time;Action("Cast",Tuning.Cast,Tuning.CastPlayback);}
     void HitReaction(bool strong)
@@ -176,14 +184,14 @@ public sealed class HumanoidPresentation : MonoBehaviour
     public void Damage(bool lethal)
     {
         if(dead)return;
-        if(lethal){punchMarkerPending=false;kickMarkerPending=false;attackMarkerPending=false;deferredHit=false;Action("Death",Tuning.Death,Tuning.ActionPlayback,0,true);dead=true;DeathCount++;}
+        if(lethal){punchMarkerPending=false;kickMarkerPending=marteloMarkerPending=false;attackMarkerPending=false;deferredHit=false;Action("Death",Tuning.Death,Tuning.ActionPlayback,0,true);dead=true;DeathCount++;}
         else
         {
             bool strong=npc!=null&&npc.LastImpactImpulse>=1000f;
             // A light player hit must not erase an explicit move or its clip impact marker.
             // Gameplay damage still lands; only this brief presentation reaction is skipped.
             bool playerAction=hero!=null&&Time.time<actionUntil&&
-                (State=="Backflip"||State=="Hurricane Kick"||State=="Double Jump");
+                (State=="Backflip"||State=="Hurricane Kick"||State=="Martelo Kick"||State=="Double Jump");
             if(!playerAction)
             {
                 if(punchMarkerPending||attackMarkerPending){deferredHit=true;deferredStrongHit=strong;}
@@ -192,7 +200,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
             HitCount++;
         }
     }
-    public void Revive(){dead=false;punchMarkerPending=false;kickMarkerPending=false;deferredHit=false;actionUntil=0;lastActiveTime=Time.time;Change("Locomotion",true);}
+    public void Revive(){dead=false;punchMarkerPending=false;kickMarkerPending=marteloMarkerPending=false;deferredHit=false;actionUntil=0;lastActiveTime=Time.time;Change("Locomotion",true);}
     bool Ranged=>npc!=null&&(npc.Archetype!=null?npc.Archetype.Kind==AttackKind.Ranged:npc.Role==NpcRole.Cop);
     // Telegraphed NPC attack: the clip starts at WINDUP START and its playback is fitted so the clip's impact marker lands
     // exactly at release (same fitted-playback pattern as the Backflip). Rusher=Punch, Gunner=Shoot, Brute=Hurricane Kick.
@@ -250,18 +258,14 @@ public sealed class HumanoidPresentation : MonoBehaviour
     {
         if(Animator==null)return;
         if(deferredHit&&!punchMarkerPending&&!attackMarkerPending){deferredHit=false;HitReaction(deferredStrongHit);}
-        if(hero!=null){hero.PunchWindupSeconds=Tuning.PunchWindup;hero.KickWindupSeconds=Tuning.KickWindup;}
+        if(hero!=null){hero.PunchWindupSeconds=Tuning.PunchWindup;hero.KickWindupSeconds=Tuning.KickWindup;hero.ComboKickWindupSeconds=Tuning.MarteloWindup;}
         HeroPresentationState state=ReadState();MeasuredSpeed=new Vector2(state.LocalVelocity.x,state.LocalVelocity.z).magnitude;
         Animator.SetFloat("Speed",MeasuredSpeed,Tuning.SpeedDamping,Time.deltaTime);
         float smooth=Animator.GetFloat("Speed");
         float blend=LocomotionBlend(smooth);
         Animator.SetFloat("Blend",blend);
-        bool panic=npc!=null&&npc.Role==NpcRole.Civilian&&npc.Fleeing&&!npc.Dead;
-        Animator.SetFloat("GaitRate",panic?Tuning.PanicPlayback:1);
+        Animator.SetFloat("GaitRate",1);
         if(dead)return;
-        if(panic&&!wasPanicking&&Time.time>=actionUntil&&Tuning.Terrified!=null)
-        {Action("Terrified",Tuning.Terrified,1f,0,true);actionUntil=Time.time+Tuning.TerrifiedReactionSeconds;}
-        wasPanicking=panic;
         if(state.Climbing&&Tuning.Climbing!=null)
         {
             float climbSpeed=new Vector2(state.LocalVelocity.x,state.LocalVelocity.y).magnitude;
@@ -272,12 +276,12 @@ public sealed class HumanoidPresentation : MonoBehaviour
             return;
         }
         if(State=="Taunt"&&(MeasuredSpeed>.1f||!state.Grounded||Input.anyKey))actionUntil=0;
-        if(MeasuredSpeed>.1f||!state.Grounded||panic)lastActiveTime=Time.time;
+        if(MeasuredSpeed>.1f||!state.Grounded)lastActiveTime=Time.time;
         if(Time.time>=actionUntil)
         {
             string next=state.Flying?"Fly":!state.Grounded?
                 state.LocalVelocity.y<-Tuning.FallingDownSpeed&&Tuning.Falling!=null?"Fall":"Air":
-                panic?"Panic":state.LocalVelocity.z<Tuning.BackThreshold?"Back":
+                state.LocalVelocity.z<Tuning.BackThreshold?"Back":
                 Ranged&&MeasuredSpeed>.1f?"Armed":"Locomotion";
             Change(next);
             if(hero!=null&&next=="Locomotion"&&Tuning.Taunt!=null&&Time.time-lastActiveTime>Tuning.TauntIdleDelay)
@@ -299,10 +303,12 @@ public sealed class HumanoidPresentation : MonoBehaviour
         {AnimationImpact();punchMarkerPending=false;}
         if(kickMarkerPending&&Animator.GetCurrentAnimatorStateInfo(0).IsName("Hurricane Kick")&&Animator.GetCurrentAnimatorStateInfo(0).normalizedTime*Tuning.HurricaneKick.length>=Tuning.KickImpactSeconds)
         {KickAnimationImpact();kickMarkerPending=false;}
+        if(marteloMarkerPending&&Animator.GetCurrentAnimatorStateInfo(0).IsName("Martelo Kick")&&Animator.GetCurrentAnimatorStateInfo(0).normalizedTime*Tuning.MarteloKick.length>=Tuning.MarteloImpactSeconds)
+        {LastMarteloAnimationImpactTime=Time.time;LastMarteloAnimationImpactFrame=Time.frameCount;marteloMarkerPending=false;}
         if(attackMarkerPending&&attackClip!=null&&Animator.GetCurrentAnimatorStateInfo(0).IsName(attackMarkerState)&&Animator.GetCurrentAnimatorStateInfo(0).normalizedTime*attackClip.length>=attackImpactSeconds)
         {LastAttackImpactTime=Time.time;LastAttackImpactFrame=Time.frameCount;attackMarkerPending=false;}
         if(FrozenOverlay)return;
-        ApplyPose(ReadState(),npc!=null&&npc.Fleeing&&!npc.Dead,Time.deltaTime);
+        ApplyPose(ReadState(),false,Time.deltaTime);
     }
     // Verification supplies recorded states through this same overlay path.
     public void ApplyPose(HeroPresentationState state,bool panic,float dt)
@@ -311,11 +317,21 @@ public sealed class HumanoidPresentation : MonoBehaviour
         FlightWeight=Mathf.Lerp(FlightWeight,state.Flying&&!dead?1:0,1-Mathf.Exp(-t.FlightBlendResponse*dt));
         float speed=new Vector2(state.LocalVelocity.x,state.LocalVelocity.z).magnitude;
         ForwardFlight=Mathf.Lerp(ForwardFlight,Mathf.Clamp01(speed/t.FlightFullSpeed),response);
-        PanicWeight=Mathf.Lerp(PanicWeight,panic&&!dead?1:0,1-Mathf.Exp(-t.PanicResponse*dt));
+        PanicWeight=0;
         float ground=state.Grounded&&!dead?Mathf.Clamp(state.LocalVelocity.z/t.GroundLeanFullSpeed,-1,1)*t.GroundLean:0;
-        lean=Mathf.Lerp(lean,Mathf.Lerp(ground,t.PanicLean,PanicWeight),response);
+        lean=Mathf.Lerp(lean,ground,response);
         actionYaw=Mathf.LerpAngle(actionYaw,State=="Shoot"&&Time.time<actionUntil?t.ShootVisualYaw:0,response);
-        PoseRoot.localRotation=Quaternion.Euler(Mathf.Lerp(lean,t.FlightPitch*ForwardFlight,FlightWeight),actionYaw,0);
+        // The ladder take faces opposite its model-forward axis. Rotate only the visual pivot toward
+        // the wall's outward normal so the animated chest faces inward; physics/camera remain unchanged.
+        if(state.Climbing&&hero!=null&&hero.ClimbNormal.sqrMagnitude>.5f)
+        {
+            var normal=Vector3.ProjectOnPlane(hero.ClimbNormal,Vector3.up).normalized;
+            if(stableClimbNormal.sqrMagnitude<.5f||Vector3.Angle(stableClimbNormal,normal)>3f)stableClimbNormal=normal;
+            var target=Quaternion.Inverse(transform.rotation)*Quaternion.LookRotation(stableClimbNormal,Vector3.up);
+            climbFacing=Quaternion.Slerp(climbFacing,target,1-Mathf.Exp(-18f*dt));
+        }
+        else {stableClimbNormal=Vector3.zero;climbFacing=Quaternion.Slerp(climbFacing,Quaternion.identity,response);}
+        PoseRoot.localRotation=climbFacing*Quaternion.Euler(Mathf.Lerp(lean,t.FlightPitch*ForwardFlight,FlightWeight),actionYaw,0);
         PoseRoot.localPosition=Vector3.up*(Mathf.Sin(Time.time*t.HoverBobFrequency*Mathf.PI*2)*t.HoverBobAmplitude*FlightWeight*(1-ForwardFlight));
         // Restore/override from a neutral humanoid pose, not last frame's modified pose.
         // Active action clips retain upper-body authority, including aerial punches/casts.
@@ -325,7 +341,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
         // These source takes contain baked 0.6-3.9 m hip travel even with applyRootMotion off.
         // Keep the visible body at its physics capsule; retain the clip's joint rotations.
         bool inPlace=State=="Double Jump"||State=="Climb"||State=="Fall"||State=="Jump Down"||
-            State=="Shoved Spin"||State=="Hurricane Kick";
+            State=="Shoved Spin"||State=="Hurricane Kick"||State=="Martelo Kick";
         hips.localPosition=inPlace?neutralHipsPosition:Vector3.Lerp(hips.localPosition,neutralHipsPosition,FlightWeight);
         foreach(var item in neutral)
         {
@@ -342,10 +358,6 @@ public sealed class HumanoidPresentation : MonoBehaviour
             float armWeight=acting?0:FlightWeight;
             Aim(upper,lower,Vector3.Lerp(hover,forward,ForwardFlight),armWeight);
             Aim(lower,hand,Vector3.Lerp(new Vector3(side*t.HoverArmOut,-1,t.HoverElbowForward),forward,ForwardFlight),armWeight);
-            float flail=Mathf.Sin((Time.time*t.PanicFlailFrequency+phase+side*t.PanicSidePhase)*Mathf.PI*2)*t.PanicFlailDegrees;
-            Vector3 raised=Quaternion.Euler(flail,0,side*flail)*new Vector3(side*t.PanicArmOut,t.PanicArmRaise,0);
-            float panicArms=acting?0:PanicWeight*(1-FlightWeight);
-            Aim(upper,lower,raised,panicArms);Aim(lower,hand,new Vector3(side*t.PanicForearmOut,1,t.PanicForearmForward),panicArms);
             var leg=Bone(side,HumanBodyBones.LeftLowerLeg,HumanBodyBones.RightLowerLeg);
             var thigh=Bone(side,HumanBodyBones.LeftUpperLeg,HumanBodyBones.RightUpperLeg);
             var foot=Bone(side,HumanBodyBones.LeftFoot,HumanBodyBones.RightFoot);
@@ -354,7 +366,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
             leg.localRotation*=Quaternion.Euler(t.HoverKneeBend*(1-ForwardFlight)*FlightWeight,0,0);
         }
         var head=Animator.GetBoneTransform(HumanBodyBones.Head);
-        if(!clipActing)head.localRotation*=Quaternion.Euler(-t.FlightHeadLift*ForwardFlight*FlightWeight*(1-Mathf.Clamp01(Rigging!=null?Rigging.LookWeight/Mathf.Max(.01f,t.LookWeight):0)),Mathf.Sin((Time.time*t.PanicLookBackFrequency+phase)*Mathf.PI*2)*t.PanicLookBackDegrees*PanicWeight*(1-FlightWeight),0);
+        if(!clipActing)head.localRotation*=Quaternion.Euler(-t.FlightHeadLift*ForwardFlight*FlightWeight*(1-Mathf.Clamp01(Rigging!=null?Rigging.LookWeight/Mathf.Max(.01f,t.LookWeight):0)),0,0);
     }
     Transform Bone(int side,HumanBodyBones left,HumanBodyBones right)=>Animator.GetBoneTransform(side<0?left:right);
     void Aim(Transform bone,Transform child,Vector3 localDirection,float weight)

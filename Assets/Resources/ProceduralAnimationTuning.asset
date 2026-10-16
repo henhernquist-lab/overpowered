@@ -27,6 +27,8 @@ MonoBehaviour:
   BobCyclesPerMetre: 0.65
   BobResponse: 14
   LandMinimumImpactSpeed: 3
+  LandMinimumDrop: 1.5
+  LandStrongImpactSpeed: 12
   LandFullImpactSpeed: 16
   LandCompressSeconds: 0.055
   LandRecoverSeconds: 0.24

@@ -57,7 +57,7 @@ public sealed class AudioDirector : MonoBehaviour
     }
     void Unbind()
     {
-        if(world!=null){world.Powers.Activated-=PowerActivated;world.PlayerDamaged-=PlayerDamage;world.PlayerRespawned-=Respawn;world.Hero.PunchImpacted-=Punch;world.Hero.HurricaneKickImpacted-=Punch;world.Hero.BackflipStarted-=Jump;world.Hero.Jumped-=Jump;world.Hero.Landed-=Land;}
+        if(world!=null){world.Powers.Activated-=PowerActivated;world.PlayerDamaged-=PlayerDamage;world.PlayerRespawned-=Respawn;world.Hero.PunchImpacted-=Punch;world.Hero.HurricaneKickImpacted-=Punch;world.Hero.MarteloKickImpacted-=Punch;world.Hero.BackflipStarted-=Jump;world.Hero.Jumped-=Jump;world.Hero.Landed-=Land;}
         if(actors!=null)for(int i=0;i<actors.Length;i++)RemoveActor(i);
         if(menuRoot!=null){menuRoot.UnregisterCallback<ClickEvent>(UiClicked,TrickleDown.TrickleDown);menuRoot.UnregisterCallback<NavigationSubmitEvent>(UiSubmit,TrickleDown.TrickleDown);menuRoot.UnregisterCallback<PointerOverEvent>(UiOver,TrickleDown.TrickleDown);menuRoot.UnregisterCallback<FocusInEvent>(UiFocus,TrickleDown.TrickleDown);menuRoot=null;}
         world=null;player=null;playerDistance=0;wasFlying=false;HeatIntensity=0;lastUiButton=null;lastUiFrame=-1;
@@ -68,7 +68,7 @@ public sealed class AudioDirector : MonoBehaviour
         if(current!=null&&current.Powers!=null&&world!=current)
         {
             Unbind();world=current;player=world.Hero.GetComponent<HumanoidPresentation>();
-            world.Powers.Activated+=PowerActivated;world.PlayerDamaged+=PlayerDamage;world.PlayerRespawned+=Respawn;world.Hero.PunchImpacted+=Punch;world.Hero.HurricaneKickImpacted+=Punch;world.Hero.BackflipStarted+=Jump;world.Hero.Jumped+=Jump;world.Hero.Landed+=Land;
+            world.Powers.Activated+=PowerActivated;world.PlayerDamaged+=PlayerDamage;world.PlayerRespawned+=Respawn;world.Hero.PunchImpacted+=Punch;world.Hero.HurricaneKickImpacted+=Punch;world.Hero.MarteloKickImpacted+=Punch;world.Hero.BackflipStarted+=Jump;world.Hero.Jumped+=Jump;world.Hero.Landed+=Land;
         }
         // The hero's presentation may be created after the world starts spawning NPCs (Hero Forge bootstrap order),
         // so a Bind() triggered by an early spawn can see none yet: keep resolving it until it exists.

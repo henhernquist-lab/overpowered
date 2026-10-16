@@ -9,6 +9,10 @@ public sealed class SuperHeroController : MonoBehaviour
     float flightBoost = 1f;
     Vector3 wallJumpVelocity;
     float airbornePeakHeight;
+    float airborneStartTime;
+    public float LastLandingDrop { get; private set; }
+    public float LastLandingAirTime { get; private set; }
+    public float LastLandingImpactSpeed { get; private set; }
     bool airJumpUsed, jumpLaunched;
     public bool AirJumpAvailable => !airJumpUsed;
     public bool LastJumpWasAir { get; private set; }
@@ -35,7 +39,10 @@ public sealed class SuperHeroController : MonoBehaviour
     public event System.Action BackflipStarted;
     public event System.Action HurricaneKickStarted;
     public event System.Action HurricaneKickImpacted;
+    public event System.Action MarteloKickStarted;
+    public event System.Action MarteloKickImpacted;
     public float KickWindupSeconds { get; set; }
+    public float ComboKickWindupSeconds { get; set; }
     public bool BackflipActive => Time.time < backflipUntil;
     public float BackflipCooldown => Mathf.Max(0f, backflipReadyAt - Time.time);
     public int BackflipCount { get; private set; }
@@ -45,8 +52,13 @@ public sealed class SuperHeroController : MonoBehaviour
     public int LastKickAffectedBodies { get; private set; }
     public float LastKickImpactTime { get; private set; }=-1;
     public int LastKickImpactFrame { get; private set; }=-1;
+    public float LastComboKickForce { get; private set; }
+    public int LastComboKickAffectedBodies { get; private set; }
+    public float LastComboKickImpactTime { get; private set; }=-1;
+    public int LastComboKickImpactFrame { get; private set; }=-1;
+    public string LastComboKickResult { get; private set; }="Ready";
     float backflipUntil=-1f, backflipReadyAt=-1f;
-    bool hurricaneKickPending;
+    bool kickPending, comboKickPending;
     float basicReadyAt;
     public bool AbilityDriving=>powers?.SynergyRunner!=null&&powers.SynergyRunner.DrivesMotion;
     public CollisionFlags MoveAbility(Vector3 velocity,bool flying)
@@ -55,10 +67,19 @@ public sealed class SuperHeroController : MonoBehaviour
         flightBoost=1f;
         verticalVelocity=0;
         bool grounded=controller.isGrounded;
+        if(grounded){airbornePeakHeight=transform.position.y;airborneStartTime=Time.time;}
+        else airbornePeakHeight=Mathf.Max(airbornePeakHeight,transform.position.y);
         var flags=controller.Move(velocity*Time.deltaTime);
         PresentationState=new HeroPresentationState(transform.InverseTransformDirection(controller.velocity),controller.isGrounded,flying&&!controller.isGrounded);
-        if(!grounded&&(flags&CollisionFlags.Below)!=0&&velocity.y<0)Landed?.Invoke(-velocity.y);
+        if(!grounded&&(flags&CollisionFlags.Below)!=0&&velocity.y<0)ReportLanding(-velocity.y);
         return flags;
+    }
+    void ReportLanding(float impactSpeed)
+    {
+        LastLandingImpactSpeed=impactSpeed;
+        LastLandingDrop=Mathf.Max(0,airbornePeakHeight-transform.position.y);
+        LastLandingAirTime=Mathf.Max(0,Time.time-airborneStartTime);
+        Landed?.Invoke(impactSpeed);
     }
     PowerStats BasicStats()=>new PowerStats{Damage=powers.Forge.BasicDamage*powers.HeroStats.MeleeDamage,Force=powers.Forge.BasicForce*powers.HeroStats.MeleeDamage,Radius=powers.Forge.BasicRadius};
     /// Verification only (batch mode has no keyboard): used as the camera-relative movement input when non-zero.
@@ -68,17 +89,17 @@ public sealed class SuperHeroController : MonoBehaviour
     /// Verification input for the wall-local movement path; normal play uses WASD.
     public bool ScriptedClimbOverride, ScriptedClimbJump, ScriptedClimbCancel;
     public Vector2 ScriptedClimbInput;
-    bool BasicMelee(bool kick)
+    bool BasicMelee(bool kick,bool combo=false)
     {
         if(powers.OffensiveActionsBlocked||Time.time<basicReadyAt||powers.SynergyRunner.Busy)return false;
         basicReadyAt=Time.time+powers.Forge.BasicCooldown;
-        if(kick)PerformHurricaneKick(BasicStats());else PerformPunch(powers.Strength.Definition,BasicStats());
+        if(kick)PerformKick(BasicStats(),combo);else PerformPunch(powers.Strength.Definition,BasicStats());
         return true;
     }
 
-    void Awake() { controller = GetComponent<CharacterController>(); view = Camera.main; airbornePeakHeight = transform.position.y; }
+    void Awake() { controller = GetComponent<CharacterController>(); view = Camera.main; airbornePeakHeight = transform.position.y; airborneStartTime=Time.time; }
     public void Initialize(PowerUser user, MovementSettings settings) { powers = user; movement = settings; }
-    public void ResetMotion() { flightBoost = 1f; verticalVelocity = 0f; wallJumpVelocity=Vector3.zero; airbornePeakHeight = transform.position.y; airJumpUsed = jumpLaunched = false; LastJumpWasAir=false; Mantling = mantleUsed = false; EndClimb();climbRelatchAt=0; comboStage=0;comboExpires=-1f; }
+    public void ResetMotion() { flightBoost = 1f; verticalVelocity = 0f; wallJumpVelocity=Vector3.zero; airbornePeakHeight = transform.position.y; airborneStartTime=Time.time; airJumpUsed = jumpLaunched = false; LastJumpWasAir=false; Mantling = mantleUsed = false; EndClimb();climbRelatchAt=0; comboStage=0;comboExpires=-1f; }
     void Update()
     {
         if (powers == null) return;
@@ -134,7 +155,8 @@ public sealed class SuperHeroController : MonoBehaviour
         }
         else { flightBoost = 1f; verticalVelocity -= movement.Gravity * Time.deltaTime; }
         bool wasGrounded = controller.isGrounded;
-        airbornePeakHeight = wasGrounded ? transform.position.y : Mathf.Max(airbornePeakHeight, transform.position.y);
+        if(wasGrounded){airbornePeakHeight=transform.position.y;airborneStartTime=Time.time;}
+        else airbornePeakHeight=Mathf.Max(airbornePeakHeight,transform.position.y);
         float impactSpeed = Mathf.Max(0f, -verticalVelocity);
         // A frozen frame (hit pause / timeScale 0) moves nothing; skipping the zero Move keeps the CharacterController's
         // ground contact, so jump/backflip input stays valid through a hit pause.
@@ -154,7 +176,7 @@ public sealed class SuperHeroController : MonoBehaviour
         // CharacterController can alternate ground contact for sub-skin-width moves.
         // Report actual falls, not those resting contact transitions; this does not alter motion.
         if (!wasGrounded && controller.isGrounded && airbornePeakHeight - transform.position.y > controller.skinWidth)
-            Landed?.Invoke(impactSpeed);
+            ReportLanding(impactSpeed);
         if (!acceptsInput) { chargeStart = -1f; return; }
         // E: airborne (high enough) = ground pound; otherwise press starts a charge, release decides tap (combo) or heavy.
         if (Input.GetKeyDown(KeyCode.E))
@@ -190,7 +212,7 @@ public sealed class SuperHeroController : MonoBehaviour
         // A pending ground pound / hurricane kick swaps only the executed gesture; payment, charges and cooldown
         // still come from the Super Strength runtime (or basic melee cooldown) that already accepted the activation.
         if (poundPending) { poundPending=false; stats=TakeModifiers(stats,out _); StartCoroutine(GroundPound(stats)); return; }
-        if (hurricaneKickPending) { hurricaneKickPending=false; PerformHurricaneKick(stats); return; }
+        if (kickPending) { kickPending=false; PerformKick(stats,comboKickPending); return; }
         stats=TakeModifiers(stats,out bool pause);
         PunchStarted?.Invoke();
         if(PunchWindupSeconds>0)StartCoroutine(PunchAfterWindup(definition,stats,PunchWindupSeconds,pause));
@@ -249,40 +271,61 @@ public sealed class SuperHeroController : MonoBehaviour
     // gesture, force, damage and radius it applies.
     public bool TryHurricaneKick()
     {
+        return TryKick(false);
+    }
+    // Both kicks use the existing paid Strength/basic-melee path and hit geometry. Only their
+    // animation events, windup fitting, and impact records differ.
+    bool TryKick(bool combo)
+    {
         // RMB is its own action even when a basic E combo is waiting for a follow-up.
-        comboStage=0;comboExpires=-1f;
+        if(!combo){comboStage=0;comboExpires=-1f;}
         if(powers!=null&&powers.OffensiveActionsBlocked)return false;
-        if (powers == null || powers.Strength == null) { LastKickResult = "Power locked"; return false; }
-        if(powers.Forge!=null&&!powers.IsEquipped(powers.Strength.Definition))return BasicMelee(true);
-        hurricaneKickPending = true;
+        if (powers == null || powers.Strength == null)
+        {if(combo)LastComboKickResult="Power locked";else LastKickResult="Power locked";return false;}
+        if(powers.Forge!=null&&!powers.IsEquipped(powers.Strength.Definition))return BasicMelee(true,combo);
+        kickPending = true;comboKickPending=combo;
         bool accepted = powers.Use(powers.Strength);
         // PerformPunch consumes the flag synchronously when the gesture is actually dispatched.
-        bool gestured = accepted && !hurricaneKickPending;
-        hurricaneKickPending = false;
-        if (!gestured) LastKickResult = accepted ? "Blocked: no gesture" : powers.Message;
+        bool gestured = accepted && !kickPending;
+        kickPending = comboKickPending = false;
+        if (!gestured)
+        {if(combo)LastComboKickResult=accepted?"Blocked: no gesture":powers.Message;
+         else LastKickResult=accepted?"Blocked: no gesture":powers.Message;}
         return gestured;
     }
-    void PerformHurricaneKick(PowerStats stats)
+    void PerformKick(PowerStats stats,bool combo)
     {
         stats = TakeModifiers(stats, out bool pause);
-        HurricaneKickStarted?.Invoke();
-        if (KickWindupSeconds > 0) StartCoroutine(HurricaneKickAfterWindup(stats, KickWindupSeconds, pause));
-        else ApplyHurricaneKick(stats, pause);
+        if(combo)MarteloKickStarted?.Invoke();else HurricaneKickStarted?.Invoke();
+        float windup=combo?ComboKickWindupSeconds:KickWindupSeconds;
+        if (windup > 0) StartCoroutine(KickAfterWindup(stats, windup, pause,combo));
+        else ApplyKick(stats,pause,combo);
     }
-    System.Collections.IEnumerator HurricaneKickAfterWindup(PowerStats stats, float delay, bool pause)
+    System.Collections.IEnumerator KickAfterWindup(PowerStats stats, float delay, bool pause,bool combo)
     {
         int epoch=offenseEpoch;
         yield return new WaitForSeconds(delay);
-        if(epoch==offenseEpoch&&!powers.OffensiveActionsBlocked&&WorldSession.Instance!=null&&!WorldSession.Instance.PlayerDead&&(WorldSession.Instance.Mode==null||!WorldSession.Instance.Mode.Ended))ApplyHurricaneKick(stats, pause);
+        if(epoch==offenseEpoch&&!powers.OffensiveActionsBlocked&&WorldSession.Instance!=null&&!WorldSession.Instance.PlayerDead&&(WorldSession.Instance.Mode==null||!WorldSession.Instance.Mode.Ended))ApplyKick(stats,pause,combo);
     }
-    void ApplyHurricaneKick(PowerStats stats, bool pause = false)
+    void ApplyKick(PowerStats stats,bool pause,bool combo)
     {
         stats.Radius=HeroAbilityTuning.KickRadius;
-        LastKickForce = stats.Force * HeroAbilityTuning.KickForceMultiplier;
-        using (powers.Credit(MeleeCredit)) LastKickAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * HeroAbilityTuning.KickOriginHeight + transform.forward * HeroAbilityTuning.KickOriginOffset,
-            HeroAbilityTuning.KickRadius, LastKickForce, stats.Damage * HeroAbilityTuning.KickDamageMultiplier, HeroAbilityTuning.KickUpwardForce, melee:true);
-        LastKickResult = $"HURRICANE KICK: {LastKickAffectedBodies} bodies hit @ {LastKickForce:0} N\u00b7s";
-        LastKickImpactTime=Time.time;LastKickImpactFrame=Time.frameCount;HurricaneKickImpacted?.Invoke();
+        float force=stats.Force*HeroAbilityTuning.KickForceMultiplier;
+        int bodies;
+        using (powers.Credit(MeleeCredit)) bodies=CombatImpact.Blast(powers, transform.position + Vector3.up * HeroAbilityTuning.KickOriginHeight + transform.forward * HeroAbilityTuning.KickOriginOffset,
+            HeroAbilityTuning.KickRadius, force, stats.Damage * HeroAbilityTuning.KickDamageMultiplier, HeroAbilityTuning.KickUpwardForce, melee:true);
+        if(combo)
+        {
+            LastComboKickForce=force;LastComboKickAffectedBodies=bodies;
+            LastComboKickResult=$"MARTELO KICK: {bodies} bodies hit @ {force:0} N\u00b7s";
+            LastComboKickImpactTime=Time.time;LastComboKickImpactFrame=Time.frameCount;MarteloKickImpacted?.Invoke();
+        }
+        else
+        {
+            LastKickForce=force;LastKickAffectedBodies=bodies;
+            LastKickResult=$"HURRICANE KICK: {bodies} bodies hit @ {force:0} N\u00b7s";
+            LastKickImpactTime=Time.time;LastKickImpactFrame=Time.frameCount;HurricaneKickImpacted?.Invoke();
+        }
         if (pause) FinisherPause();
     }
     // ------------------------------------------------------------------ melee depth (GameTuning.Melee)
@@ -326,9 +369,9 @@ public sealed class SuperHeroController : MonoBehaviour
         var m = Melee; if (Time.time > comboExpires) comboStage = 0;
         bool finisher = comboStage >= Mathf.Max(1, m.ComboLength) - 1;
         if (finisher) { pendingForce = m.FinisherForceMultiplier; pendingDamage = m.FinisherDamageMultiplier; pendingPause = true; }
-        bool ok = finisher ? TryHurricaneKick() : TryPunch();
+        bool ok = finisher ? TryKick(true) : TryPunch();
         ClearModifiers();
-        if (!ok) { LastMeleeResult = finisher ? LastKickResult : LastPunchResult; return false; }
+        if (!ok) { LastMeleeResult = finisher ? LastComboKickResult : LastPunchResult; return false; }
         LastComboStage = finisher ? Mathf.Max(1, m.ComboLength) : comboStage + 1;
         comboStage = finisher ? 0 : comboStage + 1; comboExpires = Time.time + m.ComboWindow;
         LastMeleeResult = finisher ? "COMBO FINISHER" : "COMBO " + LastComboStage;

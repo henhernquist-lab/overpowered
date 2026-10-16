@@ -181,9 +181,11 @@ public sealed class BackflipHurricaneVerificationRunner : MonoBehaviour
         float priorMarker=P.LastKickAnimationImpactTime;
         Check(W.Hero.TryHurricaneKick(),"Hurricane Kick accepted through the Super Strength runtime.");
         yield return null;
-        Check(P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hurricane Kick"),"Hurricane Kick dispatches the shared humanoid's Hurricane Kick state (previously Unwired Hurricane Kick).");
+        Check(P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hurricane Kick")&&
+            P.Tuning.HurricaneKick!=P.Tuning.MarteloKick&&P.Tuning.HurricaneKick.name.Contains("Hurricane"),
+            "Hurricane Kick dispatches the original spinning clip, distinct from the Martelo combo finisher.");
         int kickHits=P.HitCount;P.Damage(false);yield return null;
-        Check(P.HitCount==kickHits+1&&P.State=="Hurricane Kick"&&P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hurricane Kick"),"Light-hit presentation CONTROL leaves the active Martelo kick and impact marker intact.");
+        Check(P.HitCount==kickHits+1&&P.State=="Hurricane Kick"&&P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hurricane Kick"),"Light-hit presentation CONTROL leaves the active spinning Hurricane and impact marker intact.");
         yield return WaitFor(()=>W.Hero.LastKickImpactTime!=prior,2f,"kick force");
         Log($"KICK geometry at impact: origin={W.Hero.transform.position+Vector3.up*HeroAbilityTuning.KickOriginHeight+W.Hero.transform.forward*HeroAbilityTuning.KickOriginOffset:F2}; near target {Vector3.Distance(W.Hero.transform.position+Vector3.up*HeroAbilityTuning.KickOriginHeight+W.Hero.transform.forward*HeroAbilityTuning.KickOriginOffset,near.position):F2}m, far target {Vector3.Distance(W.Hero.transform.position+Vector3.up*HeroAbilityTuning.KickOriginHeight+W.Hero.transform.forward*HeroAbilityTuning.KickOriginOffset,far.position):F2}m from it");
         yield return WaitFor(()=>P.LastKickAnimationImpactTime!=priorMarker,1f,"kick animation impact marker");

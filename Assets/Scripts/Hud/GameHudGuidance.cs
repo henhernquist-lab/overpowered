@@ -198,9 +198,9 @@ public sealed partial class GameHud
     void BindHero(SuperHeroController hero)
     {
         if (boundHero == hero) return;
-        if (boundHero != null) { boundHero.Jumped -= OnJumped; boundHero.PunchStarted -= OnMelee; boundHero.HurricaneKickStarted -= OnMelee; boundHero.BackflipStarted -= OnBackflip; }
+        if (boundHero != null) { boundHero.Jumped -= OnJumped; boundHero.PunchStarted -= OnMelee; boundHero.HurricaneKickStarted -= OnMelee; boundHero.MarteloKickStarted -= OnMelee; boundHero.BackflipStarted -= OnBackflip; }
         boundHero = hero;
-        if (hero != null) { hero.Jumped += OnJumped; hero.PunchStarted += OnMelee; hero.HurricaneKickStarted += OnMelee; hero.BackflipStarted += OnBackflip; }
+        if (hero != null) { hero.Jumped += OnJumped; hero.PunchStarted += OnMelee; hero.HurricaneKickStarted += OnMelee; hero.MarteloKickStarted += OnMelee; hero.BackflipStarted += OnBackflip; }
     }
     void OnJumped() { DismissBriefing("input: jump"); Performed("move"); }
     void OnMelee() { DismissBriefing("input: melee"); Performed("punch"); }

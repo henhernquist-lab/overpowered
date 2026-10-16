@@ -60,7 +60,7 @@ public sealed class ProceduralHeroAnimation : MonoBehaviour
     public void PlayPunch() { punchTime = 0f; }
     public void PlayLanding(float impactSpeed)
     {
-        if (tuning == null || impactSpeed < tuning.LandMinimumImpactSpeed) return;
+        if (tuning == null || source == null || !tuning.FullLanding(impactSpeed, source.LastLandingDrop)) return;
         landTime = 0f;
         landStrength = Mathf.Clamp01(impactSpeed / Mathf.Max(.001f, tuning.LandFullImpactSpeed));
     }

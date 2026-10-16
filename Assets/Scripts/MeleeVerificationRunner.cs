@@ -40,14 +40,15 @@ public sealed class MeleeVerificationRunner : SessionVerificationRunner
         yield return new WaitForSeconds(.55f);
         Check(Mathf.Abs(hp - target.Health - s.Damage) < .01f && Mathf.Approximately(hero.LastForce, s.Force), $"Stage 1 punch: {hp - target.Health:F2} dmg @ {hero.LastForce} N.s (plain punch).");
         hp = target.Health; int pauses = TimeArbiter.HitPausesStarted;
-        float priorKick=hero.LastKickImpactTime;
-        Check(hero.TryComboAttack() && hero.LastComboStage == 2 && pose.State=="Hurricane Kick" &&
-            pose.Tuning.HurricaneKick==pose.Tuning.MarteloKick, "Tap 2 inside window = Martelo kick finisher on shared melee path.");
+        float priorKick=hero.LastComboKickImpactTime, priorHurricane=hero.LastKickImpactTime;
+        Check(hero.TryComboAttack() && hero.LastComboStage == 2 && pose.State=="Martelo Kick" &&
+            pose.Tuning.HurricaneKick!=pose.Tuning.MarteloKick, "Tap 2 inside window = distinct Martelo clip, not Hurricane.");
         yield return new WaitForSeconds(.8f);
-        Check(hero.LastKickImpactTime>priorKick,"Second tap caused exactly one authoritative kick impact after windup.");
+        Check(hero.LastComboKickImpactTime>priorKick&&hero.LastKickImpactTime==priorHurricane,
+            "Second tap caused Martelo impact after windup and no Hurricane gameplay impact.");
         float finisherForce = s.Force * HeroAbilityTuning.KickForceMultiplier * m.FinisherForceMultiplier, finisherDamage = s.Damage * HeroAbilityTuning.KickDamageMultiplier * m.FinisherDamageMultiplier;
-        Check(Mathf.Abs(hero.LastKickForce - finisherForce) < .5f && Mathf.Abs(hp - target.Health - finisherDamage) < .05f,
-            $"Finisher: {hero.LastKickForce:F0} N.s (kick x{m.FinisherForceMultiplier}), {hp - target.Health:F2} dmg (expected {finisherDamage:F2}).");
+        Check(Mathf.Abs(hero.LastComboKickForce - finisherForce) < .5f && Mathf.Abs(hp - target.Health - finisherDamage) < .05f,
+            $"Finisher: {hero.LastComboKickForce:F0} N.s (kick x{m.FinisherForceMultiplier}), {hp - target.Health:F2} dmg (expected {finisherDamage:F2}).");
         Check(TimeArbiter.HitPausesStarted > pauses, "Finisher impact produced a hit pause.");
         hero.DebugSetResources(6, 3, 0);
         Check(hero.TryComboAttack() && hero.LastComboStage == 1 && pose.State=="Punch", "After the finisher the next tap restarts at a punch.");
@@ -57,6 +58,13 @@ public sealed class MeleeVerificationRunner : SessionVerificationRunner
         Check(!hero.TryComboAttack() && hero.LastComboStage == stage, "CONTROL: a tap with 0 Strength charges is refused and does not advance the string.");
         yield return new WaitForSeconds(.6f);
         Check(target.Health == hp, "CONTROL: the refused tap dealt nothing.");
+        hero.DebugSetResources(6,3,0);yield return new WaitForSeconds(.55f);
+        float priorCombo=hero.LastComboKickImpactTime;priorHurricane=hero.LastKickImpactTime;
+        Check(hero.TryHurricaneKick()&&pose.State=="Hurricane Kick"&&pose.Tuning.HurricaneKick.name.Contains("Hurricane"),
+            "RMB path starts original spinning Hurricane clip without a prior punch.");
+        yield return new WaitForSeconds(.6f);
+        Check(hero.LastKickImpactTime>priorHurricane&&hero.LastComboKickImpactTime==priorCombo,
+            "RMB produces Hurricane gameplay impact without a Martelo/basic-combo impact.");
         // ---------------------------------------------------------------- charged heavy
         Log("---- CHARGED HEAVY");
         float lastForce = 0;
@@ -116,8 +124,8 @@ public sealed class MeleeVerificationRunner : SessionVerificationRunner
         yield return new WaitForSeconds(.9f);
         float basicFinisher = bd * HeroAbilityTuning.KickDamageMultiplier * m.FinisherDamageMultiplier;
         Check(Mathf.Abs(hp - basic.Health - basicFinisher) < .05f && hero.FinisherPauses == finisherPauses + 1 && TimeArbiter.HitPausesStarted == pauses + 1,
-            $"Basic finisher: {hp - basic.Health:F2} dmg (expected {basicFinisher:F2}) and its own hit pause although the kick is light ({hero.LastKickForce:F0} N.s).");
-        Check(hero.LastKickForce < s.Force, "CONTROL: basic-melee finisher stays weaker than a plain Strength punch.");
+            $"Basic finisher: {hp - basic.Health:F2} dmg (expected {basicFinisher:F2}) and its own hit pause although the kick is light ({hero.LastComboKickForce:F0} N.s).");
+        Check(hero.LastComboKickForce < s.Force, "CONTROL: basic-melee finisher stays weaker than a plain Strength punch.");
         Log("LIMIT: the E key's hold/tap timing itself (press -> release) needs hardware input; tests call the methods the key routes to. Feel of combo timing, charge curve and pound is not human-tested.");
     }
 }
