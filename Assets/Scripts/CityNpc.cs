@@ -5,6 +5,23 @@ public enum NpcRole { Civilian, Cop, PursuingHero, Criminal }
 /// Hostile attack cycle: Approach (hold the ring/band, ask for a token) -> Engage (token held, closing in; melee/slam only)
 /// -> Windup (committed: stopped, shape locked, telegraph shown) -> Release (re-check the committed shape) -> Recover (cooldown).
 public enum AttackPhase { Approach, Engage, Windup, Recover }
+/// Immutable result of the authoritative NPC damage operation. ResolvedDamage is the full attack value;
+/// HealthLost is capped by the health that remained (so a killing blow still reports its full strength).
+public readonly struct NpcDamageResult
+{
+    public readonly CityNpc Target;
+    public readonly PowerUser Attacker;
+    public readonly string SourceId;
+    public readonly float ResolvedDamage, HealthLost, HealthBefore, HealthAfter, MaxHealth, Time;
+    public readonly Vector3 WorldPosition;
+    public NpcDamageResult(CityNpc target, PowerUser attacker, string sourceId, float resolvedDamage,
+        float healthBefore, float healthAfter, Vector3 worldPosition)
+    {
+        Target=target; Attacker=attacker; SourceId=sourceId; ResolvedDamage=resolvedDamage;
+        HealthBefore=healthBefore; HealthAfter=healthAfter; HealthLost=healthBefore-healthAfter;
+        MaxHealth=target.MaxHealth; WorldPosition=worldPosition; Time=UnityEngine.Time.time;
+    }
+}
 public sealed class CityNpc : MonoBehaviour
 {
     public NpcRole Role { get; private set; }
@@ -12,6 +29,9 @@ public sealed class CityNpc : MonoBehaviour
     public EnemyArchetype Archetype { get; private set; }
     public float Health { get; private set; }
     public float MaxHealth { get; private set; }
+    public float CurrentHealth => Health;
+    public float HealthFraction => MaxHealth > 0f ? Mathf.Clamp01(Health / MaxHealth) : 0f;
+    public bool Alive => !Dead;
     /// Chase the player at any distance (ignores DetectionRange). Set by Endless waves.
     public bool AlwaysAggro;
     float explicitDamage = -1f;
@@ -48,6 +68,8 @@ public sealed class CityNpc : MonoBehaviour
     /// Body velocity: the far-route rail while riding, otherwise the NavMeshAgent's (presentation reads this).
     public Vector3 Velocity => Walker!=null&&Walker.Riding ? Walker.Velocity : Agent!=null&&Agent.enabled ? Agent.velocity : Vector3.zero;
     public event System.Action<bool> Damaged;
+    /// One result for every real positive damage application. Subscribers never calculate attack damage themselves.
+    public static event System.Action<NpcDamageResult> DamageApplied;
     public float LastImpactImpulse { get; private set; }
     /// Fired at RELEASE, whether the committed shape hits or misses (audio/presentation stay in sync with the strike).
     public event System.Action Attacked;
@@ -130,6 +152,9 @@ public sealed class CityNpc : MonoBehaviour
         LastImpactImpulse=impactImpulse;
         float before = Health;
         Health = Mathf.Max(0f, Health-amount);
+        var body=GetComponent<Collider>();
+        Vector3 point=body!=null ? body.bounds.center : transform.position+Vector3.up;
+        DamageApplied?.Invoke(new NpcDamageResult(this,source,source!=null?source.Crediting:null,amount,before,Health,point));
         if (source != null) source.ReportDamage(this, before - Health, Dead, assault);   // per-power stats / style / challenges (no gameplay effect)
         if (Role == NpcRole.Civilian) world.Civilians?.Harmed(this, before - Health, source, Dead);   // civilian ledger (no gameplay effect)
         if (Dead) CancelAttack(); // a killed NPC mid-windup never deals its damage
