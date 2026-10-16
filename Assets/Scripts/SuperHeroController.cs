@@ -209,7 +209,7 @@ public sealed class SuperHeroController : MonoBehaviour
     }
     public void PerformPunch(PowerDefinition definition, PowerStats stats)
     {
-        // A pending ground pound / hurricane kick swaps only the executed gesture; payment, charges and cooldown
+        // A pending ground pound / kick swaps only the executed gesture; payment, charges and cooldown
         // still come from the Super Strength runtime (or basic melee cooldown) that already accepted the activation.
         if (poundPending) { poundPending=false; stats=TakeModifiers(stats,out _); StartCoroutine(GroundPound(stats)); return; }
         if (kickPending) { kickPending=false; PerformKick(stats,comboKickPending); return; }
