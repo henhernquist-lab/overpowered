@@ -28,6 +28,7 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
         if(Stage=="route"){Time.captureDeltaTime=1f/120;yield return CityRoute(false);yield return CityRoute(true);Time.captureDeltaTime=0;yield break;}
         if(Stage=="mantle"){Time.captureDeltaTime=1f/120;yield return MantleControls();yield return CityRoute(false);Time.captureDeltaTime=0;yield break;}
         if(Stage=="jump"){Time.captureDeltaTime=1f/120;yield return JumpControls();Time.captureDeltaTime=0;yield break;}
+        if(Stage=="landing"){Time.captureDeltaTime=1f/120;yield return LandingControls();Time.captureDeltaTime=0;yield break;}
         yield return EnterBuild(F.Heroes[0],"strength","fire","flight");
         foreach(var group in W.City.Buildings.GroupBy(b=>b.District))
             Log($"GEOMETRY {W.City.Plan.Districts[group.Key].Name}: {group.Count()} buildings, height {group.Min(b=>b.Size.y):F3}..{group.Max(b=>b.Size.y):F3}m.");
@@ -99,6 +100,62 @@ public sealed class MovementVerificationRunner : SessionVerificationRunner
         }
         if(Stage=="camera")yield return UpwardAimControls();
         Time.captureDeltaTime=0;
+    }
+    IEnumerator LandingControls()
+    {
+        yield return EnterBuild(F.Heroes[0],"strength","fire","force-field");
+        Isolate();var hero=W.Hero;var pose=hero.GetComponent<HumanoidPresentation>();
+        var tuning=Resources.Load<ProceduralAnimationTuning>("ProceduralAnimationTuning");
+        Check(Mathf.Abs(tuning.LandMinimumDrop-1.5f)<.001f&&Mathf.Abs(tuning.LandStrongImpactSpeed-12f)<.001f,
+            "Landing gate uses measured 1.5 m drop or 12 m/s strong impact alongside the existing 3 m/s impact floor.");
+        foreach(var item in new[]{(name:"curb",height:.15f,full:false),(name:"hydrant",height:.7f,full:false),
+                     (name:"short ledge",height:1.1f,full:false),(name:"building ledge",height:5f,full:true)})
+        {
+            var deck=Wall(new Vector3(0,150+item.height-.05f,0),new Vector3(2,.1f,2));
+            PlaceHero(new Vector3(0,150+item.height+.08f,-.5f),true);
+            hero.ScriptedMove=Vector3.zero;yield return new WaitForSeconds(.3f);
+            Check(CC.isGrounded,"Real platform support before walking off "+item.name);
+            int events=0;float impact=0;System.Action<float> onLand=v=>{events++;impact=v;};
+            hero.Landed+=onLand;
+            float start=hero.transform.position.y,airtime=0,maxDown=0,minScale=1;bool clip=false;
+            hero.ScriptedMove=Vector3.forward;
+            float deadline=Time.time+4f;
+            while(Time.time<deadline)
+            {
+                yield return null;
+                if(!CC.isGrounded)airtime+=Time.deltaTime;
+                maxDown=Mathf.Max(maxDown,-CC.velocity.y);
+                clip|=pose.State=="Land";
+                minScale=Mathf.Min(minScale,pose.VisualRoot.localScale.y);
+                if(hero.transform.position.z>2.5f&&CC.isGrounded)break;
+            }
+            hero.ScriptedMove=Vector3.zero;
+            // The collision event is raised in Update; the squash is written in subsequent LateUpdate frames.
+            for(int i=0;i<12;i++){yield return null;clip|=pose.State=="Land";minScale=Mathf.Min(minScale,pose.VisualRoot.localScale.y);}
+            hero.Landed-=onLand;
+            float measuredDrop=start-hero.transform.position.y;
+            Log($"LANDING {item.name}: platform={item.height:F2}m drop={measuredDrop:F3}m reportedDrop={(events>0?hero.LastLandingDrop:0):F3}m preImpactDown={maxDown:F3}m/s reportedImpact={impact:F3}m/s airtime={airtime:F3}s reportedAir={(events>0?hero.LastLandingAirTime:0):F3}s events={events} clip={clip} squashMinY={minScale:F3}.");
+            Check(hero.transform.position.z>2.5f&&CC.isGrounded&&measuredDrop>item.height*.6f,
+                "Walked off "+item.name+" and landed through actual CharacterController motion.");
+            Check(clip==item.full&&(item.full?minScale<.99f:minScale>.99f),
+                item.name+" selects "+(item.full?"full Land clip/squash":"ordinary locomotion without Land clip/squash"));
+            deck.SetActive(false);Destroy(deck);yield return null;
+        }
+        PlaceHero(new Vector3(0,150.05f,0),true);yield return new WaitForSeconds(.2f);
+        int jumpEvents=0;float jumpImpact=0;System.Action<float> jumpLand=v=>{jumpEvents++;jumpImpact=v;};hero.Landed+=jumpLand;
+        Check(CC.isGrounded&&hero.TryJump(),"Normal jump launches from actual ground.");
+        bool jumpClip=false;float jumpMin=1,jumpPeak=hero.transform.position.y;float jumpDeadline=Time.time+3;
+        while(Time.time<jumpDeadline)
+        {
+            yield return null;jumpPeak=Mathf.Max(jumpPeak,hero.transform.position.y);
+            jumpClip|=pose.State=="Land";jumpMin=Mathf.Min(jumpMin,pose.VisualRoot.localScale.y);
+            if(jumpEvents>0)break;
+        }
+        for(int i=0;i<12;i++){yield return null;jumpClip|=pose.State=="Land";jumpMin=Mathf.Min(jumpMin,pose.VisualRoot.localScale.y);}
+        hero.Landed-=jumpLand;
+        Log($"LANDING normal jump: rise={jumpPeak-150:F3}m reportedDrop={hero.LastLandingDrop:F3}m impact={jumpImpact:F3}m/s airtime={hero.LastLandingAirTime:F3}s events={jumpEvents} clip={jumpClip} squashMinY={jumpMin:F3}.");
+        Check(jumpEvents>0&&jumpClip&&jumpMin<.99f&&hero.LastLandingDrop>=tuning.LandMinimumDrop,
+            "Normal jump retains its existing landing clip and recovery after a meaningful fall.");
     }
     IEnumerator UpwardAimControls()
     {

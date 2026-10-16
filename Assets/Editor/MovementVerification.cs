@@ -14,6 +14,7 @@ public static class MovementVerification
     public static void Route()=>Start("route");
     public static void Mantle()=>Start("mantle");
     public static void Jump()=>Start("jump");
+    public static void Landing()=>Start("landing");
     public static void Camera()=>Start("camera");
     public static void Run()=>Start("movement");
     static void Start(string stage){SessionState.SetString(Key,stage);EditorSceneManager.OpenScene("Assets/Scenes/Home.unity");EditorApplication.isPlaying=true;}
