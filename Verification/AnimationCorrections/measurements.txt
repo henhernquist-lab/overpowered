@@ -1,0 +1,35 @@
+Animation correction measurements copied from the final fresh verifier outputs on 2026-10-16.
+These are Editor Play Mode measurements, not a human visual sign-off or matched before/after performance study.
+
+[Verification/Climbing/fixtures.txt]
+MEASURED climb vertical=5.000m/s rise=3.250m wallGap=0.110m.
+MEASURED climb sideways=4.000m/s move=2.233m.
+FACING wall=(0.00, 0.00, 1.00) normal=(0.00, 0.00, -1.00) visualForward=(0.01, 0.00, -1.00) chest=(-0.01, 0.08, 1.00) dotInward=0.997 root=(0.00, 0.00, 0.00).
+PASS No 180-degree flip or visual jitter during wall traversal: (0.00, 0.00, 1.00) maxFrameTurn=0.11
+FACING wall=(0.00, 0.00, -1.00) normal=(0.00, 0.00, 1.00) visualForward=(0.01, 0.00, 1.00) chest=(-0.01, 0.08, -1.00) dotInward=0.997 root=(0.00, 0.00, 0.00).
+PASS No 180-degree flip or visual jitter during wall traversal: (0.00, 0.00, -1.00) maxFrameTurn=0.09
+FACING wall=(1.00, 0.00, 0.00) normal=(-1.00, 0.00, 0.00) visualForward=(-1.00, 0.00, 0.01) chest=(0.97, 0.07, 0.25) dotInward=0.966 root=(0.00, 0.00, 0.00).
+PASS No 180-degree flip or visual jitter during wall traversal: (1.00, 0.00, 0.00) maxFrameTurn=0.05
+FACING wall=(-1.00, 0.00, 0.00) normal=(1.00, 0.00, 0.00) visualForward=(1.00, 0.00, 0.01) chest=(-0.96, 0.07, -0.27) dotInward=0.961 root=(0.00, 0.00, 0.00).
+PASS No 180-degree flip or visual jitter during wall traversal: (-1.00, 0.00, 0.00) maxFrameTurn=0.10
+FACING wall=(0.71, 0.00, 0.71) normal=(-0.71, 0.00, -0.71) visualForward=(-0.70, 0.00, -0.72) chest=(0.49, 0.07, 0.87) dotInward=0.961 root=(0.00, 0.00, 0.00).
+PASS No 180-degree flip or visual jitter during wall traversal: (0.71, 0.00, 0.71) maxFrameTurn=0.10
+
+[Verification/Movement/landing.txt]
+LANDING curb: platform=0.15m drop=0.150m reportedDrop=0.121m preImpactDown=2.999m/s reportedImpact=3.200m/s airtime=0.042s reportedAir=0.042s events=1 clip=False squashMinY=1.000.
+LANDING hydrant: platform=0.70m drop=0.700m reportedDrop=0.671m preImpactDown=5.801m/s reportedImpact=6.000m/s airtime=0.158s reportedAir=0.158s events=1 clip=False squashMinY=1.000.
+LANDING short ledge: platform=1.10m drop=1.100m reportedDrop=1.071m preImpactDown=7.200m/s reportedImpact=7.400m/s airtime=0.217s reportedAir=0.217s events=1 clip=False squashMinY=1.000.
+LANDING building ledge: platform=5.00m drop=5.000m reportedDrop=4.971m preImpactDown=15.401m/s reportedImpact=15.600m/s airtime=0.558s reportedAir=0.558s events=1 clip=True squashMinY=0.786.
+LANDING normal jump: rise=2.092m reportedDrop=2.012m impact=9.800m/s airtime=0.817s events=1 clip=True squashMinY=0.865.
+
+[Verification/Abilities/results.txt]
+KICK animation marker t=8.59649 frame=1193; real force t=8.59649 frame=1193; offset=0.00ms across 0 frames.
+
+[Verification/CivilianLedger/results.txt]
+HARASS DIAGNOSTIC damage=0.101 hostile=True environment=False player=False cause=Environment summary=rescued 0, escorted 0, harmed by hostiles 2 / player 1 / environment 2, killed 1 (in missions 1).
+
+[Verification/FirstPerson/results.txt]
+PAIRED same-scene means: third-person=85.22 FPS; first-person=86.16 FPS; delta=1.10%. Perspective naturally changes visible geometry; no content or population cut.
+
+[Verification/Combat/results.txt]
+MEASURED managed allocation (profiler 'GC Allocated In Frame', valid=True): crowd ACTIVE 1388.7 B/frame over 3 s / 703 frames (528 frames with a windup, 1 releases) vs same crowd FROZEN 1375.1 B/frame over 782 frames; difference 13.6 B/frame.

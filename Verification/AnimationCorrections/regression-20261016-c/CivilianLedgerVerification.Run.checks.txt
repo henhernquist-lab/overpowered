@@ -1,0 +1,27 @@
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Two player hits on one civilian: harmed-by-player counts 1.
+PASS Hostile-scoped harm: harmed-by-hostile 1, never the player.
+PASS Unattributed damage (no source, no scope) is ENVIRONMENT - not guessed as hostile or player.
+PASS CONTROL: a criminal hit is not a civilian outcome; nobody died.
+PASS The hostile scope is closed again (default Environment).
+PASS Real encounter site found for Verification ledger mission
+PASS Verification ledger mission spawned at (-28.00, 0.00, -24.00) with its StagedScenario (seed 1000, yaw 0, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS A civilian killed during a mission: lost-in-mission +1 and killed +1 (environment-attributed, no source).
+PASS CONTROL: the despawned civilian and the one removed by the mission's cleanup are NOT counted as deaths.
+PASS Real encounter site found for Verification ledger harass
+PASS Verification ledger harass spawned at (-28.00, 0.00, -24.00) with its StagedScenario (seed 1001, yaw 0, mirrored False, band 0, +0 hostiles, timeouts x1.00).
+PASS A live victim takes real Harass damage before mission cleanup.
+PASS A raider harassing a civilian (real Harass path) is attributed to hostiles (0.1 damage).
+PASS Hostile harm remains counted once after the mission cleans up its victim.
+PASS Real encounter site found for Bank break-out
+PASS Bank break-out spawned at (-28.00, 0.00, -24.00) with its legacy encounter rules.
+PASS Holding R at a freed civilian of an original encounter: rescued +1, and holding on does not count them again.
+PASS Real encounter site found for Verification ledger escort
+PASS Verification ledger escort spawned at (-28.00, 0.00, 32.00) with its StagedScenario (seed 1003, yaw 0, mirrored False, band 1, +0 hostiles, timeouts x1.00).
+PASS Escort: walking up to walkers makes them follow (1/3).
+PASS Stage 0 "ESCORT" (EscortActors) solved -> Complete.
+PASS Escort completed with 2 of 3 alive: safely-escorted +2 (the dead one is not).
+PASS The session result carries the civilian summary (when a result is produced).
+PASS The progression save contains no civilian ledger data or per-session actor ids.

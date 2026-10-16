@@ -1,0 +1,17 @@
+PASS Saved two attack powers and a separate secondary through progression.
+PASS Session received the exact three-slot build.
+PASS Landing gate uses measured 1.5 m drop or 12 m/s strong impact alongside the existing 3 m/s impact floor.
+PASS Real platform support before walking off curb
+PASS Walked off curb and landed through actual CharacterController motion.
+PASS curb selects ordinary locomotion without Land clip/squash
+PASS Real platform support before walking off hydrant
+PASS Walked off hydrant and landed through actual CharacterController motion.
+PASS hydrant selects ordinary locomotion without Land clip/squash
+PASS Real platform support before walking off short ledge
+PASS Walked off short ledge and landed through actual CharacterController motion.
+PASS short ledge selects ordinary locomotion without Land clip/squash
+PASS Real platform support before walking off building ledge
+PASS Walked off building ledge and landed through actual CharacterController motion.
+PASS building ledge selects full Land clip/squash
+PASS Normal jump launches from actual ground.
+PASS Normal jump retains its existing landing clip and recovery after a meaningful fall.

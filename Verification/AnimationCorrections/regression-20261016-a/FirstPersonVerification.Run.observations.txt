@@ -1,0 +1,21 @@
+MEASURED hero-third-fire contact error=0.0951m, target speed=0.535m/s.
+MEASURED hero-first-fire contact error=0.0846m, target speed=0.548m/s.
+MEASURED first-person Feel impulse (tight corner): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED first-person Feel impulse (low overhang): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED hero-third-fire contact error=0.0951m, target speed=0.535m/s.
+MEASURED hero-first-fire contact error=0.0846m, target speed=0.548m/s.
+MEASURED first-person Feel impulse (tight corner): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED first-person Feel impulse (low overhang): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED villain-third-fire contact error=0.0951m, target speed=0.535m/s.
+MEASURED villain-first-fire contact error=0.0846m, target speed=0.548m/s.
+MEASURED first-person Feel impulse (tight corner): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED first-person Feel impulse (low overhang): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED villain-third-fire contact error=0.0951m, target speed=0.535m/s.
+MEASURED villain-first-fire contact error=0.0846m, target speed=0.548m/s.
+MEASURED first-person Feel impulse (tight corner): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.157m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED first-person Feel impulse (low overhang): 5280 render-offset samples, max offset=0.160m (configured 0.16m), near-plane corner radius=0.044m, closest geometry=0.127m at Low ceiling pitch=-89 source=4 t=27ms offset=(0.000,0.123,0.000).
+MEASURED forward flight FOV=69.997, additive=4.997 degrees; base=65.
+MEASURED third-person phase=0: FPS=86.33, draw calls=281.6.
+MEASURED first-person phase=1: FPS=87.70, draw calls=270.4.
+MEASURED first-person phase=2: FPS=84.62, draw calls=279.6.
+MEASURED third-person phase=3: FPS=84.12, draw calls=292.2.

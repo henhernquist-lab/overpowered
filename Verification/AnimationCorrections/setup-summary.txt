@@ -1,0 +1,6 @@
+Unity 6000.6.0f1 asset update: HumanoidSetup.ApplyAnimationCorrectionsBatch
+Batch process exit: 0 (observed by launcher on 2026-10-16).
+C# compiler error lines: 0
+C# analyzer warnings observed: UAC1001 (existing RobberyScenario.Car and editor-only HumanoidPresentation.VerificationState), UAC0005 (existing AudioSetup.AppDomain.GetAssemblies).
+Metal tessellation shader compiler messages were logged (mtl_Position missing in Mtl_ControlPointIn); the batch process still exited 0.
+HumanoidAnimationTuning.asset and SharedHumanoid.controller changed as intended; Sidekick database hash stayed unchanged during runtime verifiers.
