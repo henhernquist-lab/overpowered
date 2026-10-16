@@ -107,7 +107,49 @@ public sealed class ClimbingVerificationRunner : SessionVerificationRunner
         Check(Mathf.Abs(W.Hero.transform.up.y-1)<.0001f,"Physics root stays upright on the roof.");
         Destroy(wall);Destroy(roof);yield return null;
         W.Hero.ScriptedClimbInput=Vector2.zero;
+        yield return FacingControls();
         yield return NegativeControls();
+    }
+    IEnumerator FacingControls()
+    {
+        var pose=W.Hero.GetComponent<HumanoidPresentation>();
+        var rig=Cam.GetComponent<ThirdPersonCamera>();rig.enabled=true;
+        foreach(var direction in new[]{Vector3.forward,Vector3.back,Vector3.right,Vector3.left,new Vector3(1,0,1).normalized})
+        {
+            var face=Wall(new Vector3(0,156,0)+direction,new Vector3(8,12,.4f));
+            face.transform.rotation=Quaternion.LookRotation(direction,Vector3.up);Physics.SyncTransforms();
+            PlaceHero(new Vector3(0,153,0),true);W.Hero.ScriptedClimbOverride=true;
+            W.Hero.ScriptedClimbInput=Vector2.zero;yield return null;
+            Check(W.Hero.TryClimb(direction),"Facing fixture latches wall direction="+direction);
+            Quaternion root=W.Hero.transform.rotation,view=Cam.transform.rotation;
+            yield return new WaitForSeconds(.3f);
+            Vector3 inward=-W.Hero.ClimbNormal;Vector3 right=pose.Animator.GetBoneTransform(HumanBodyBones.RightShoulder).position;
+            Vector3 left=pose.Animator.GetBoneTransform(HumanBodyBones.LeftShoulder).position;
+            Vector3 head=pose.Animator.GetBoneTransform(HumanBodyBones.Head).position;
+            Vector3 hips=pose.Animator.GetBoneTransform(HumanBodyBones.Hips).position;
+            Vector3 chest=Vector3.Cross(right-left,head-hips).normalized;
+            Log($"FACING wall={direction} normal={W.Hero.ClimbNormal} visualForward={pose.PoseRoot.forward} chest={chest} dotInward={Vector3.Dot(chest,inward):F3} root={W.Hero.transform.rotation.eulerAngles}.");
+            Check(Vector3.Dot(chest,inward)>.6f&&Vector3.Dot(pose.PoseRoot.forward,W.Hero.ClimbNormal)>.95f,
+                "Imported climbing torso and visual pivot face the wall without a backwards pose: "+direction);
+            Check(Quaternion.Angle(root,W.Hero.transform.rotation)<.01f&&Quaternion.Angle(view,Cam.transform.rotation)<.1f,
+                "Climbing visual correction leaves physics root and camera orientation unchanged: "+direction);
+            float maxTurn=0;Vector3 last=pose.PoseRoot.forward;
+            foreach(var axis in new[]{new Vector2(0,1),new Vector2(1,0),new Vector2(0,-1)})
+            {
+                W.Hero.ScriptedClimbInput=axis;
+                for(int i=0;i<12;i++)
+                {
+                    yield return null;
+                    maxTurn=Mathf.Max(maxTurn,Vector3.Angle(last,pose.PoseRoot.forward));last=pose.PoseRoot.forward;
+                }
+                Check(W.Hero.Climbing&&Vector3.Dot(pose.PoseRoot.forward,W.Hero.ClimbNormal)>.9f,
+                    "Up/side/down traversal keeps wall-facing presentation: "+direction+" axis="+axis);
+            }
+            Check(maxTurn<15f,"No 180-degree flip or visual jitter during wall traversal: "+direction+" maxFrameTurn="+maxTurn.ToString("F2"));
+            W.Hero.ScriptedClimbInput=Vector2.zero;W.Hero.ScriptedClimbCancel=true;yield return null;
+            face.SetActive(false);Destroy(face);yield return null;
+        }
+        W.Hero.ScriptedClimbOverride=false;
     }
     IEnumerator NegativeControls()
     {
