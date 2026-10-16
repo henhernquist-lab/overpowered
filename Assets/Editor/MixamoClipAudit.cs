@@ -70,6 +70,7 @@ public static class MixamoClipAudit
                 try
                 {
                     Vector3 firstHip=Vector3.zero,lastHip=Vector3.zero,firstRoot=Vector3.zero,lastRoot=Vector3.zero;
+                    float maxHipTravel=0f;
                     Quaternion firstRotation=Quaternion.identity,lastRotation=Quaternion.identity;
                     var firstPose=new Quaternion[SampleBones.Length];var lastPose=new Quaternion[SampleBones.Length];
                     for(int i=0;i<=8;i++)
@@ -79,6 +80,7 @@ public static class MixamoClipAudit
                         var hip=animator.GetBoneTransform(HumanBodyBones.Hips);
                         if(i==0){firstHip=hip.position;firstRoot=clone.transform.position;firstRotation=clone.transform.rotation;}
                         if(i==8){lastHip=hip.position;lastRoot=clone.transform.position;lastRotation=clone.transform.rotation;}
+                        maxHipTravel=Mathf.Max(maxHipTravel,Vector3.Distance(firstHip,hip.position));
                         var pose=i==0?firstPose:i==8?lastPose:null;
                         for(int bone=0;bone<SampleBones.Length;bone++)
                         {
@@ -95,7 +97,7 @@ public static class MixamoClipAudit
                             var focus=hip.position+Vector3.up*.25f;
                             camera.transform.position=focus+new Vector3(3f,1.6f,5.4f);
                             camera.transform.LookAt(focus);
-                            Capture(camera,folder+"/Preview/"+name.Replace(' ','-').Replace('@','-')+"-"+i+".png");
+                            CapturePose(camera,clone,folder+"/Preview/"+name.Replace(' ','-').Replace('@','-')+"-"+i+".png");
                         }
                     }
                     if(name=="X Bot@Martelo 2")
@@ -111,7 +113,7 @@ public static class MixamoClipAudit
                         }
                     }
                     float poseGap=0;for(int i=0;i<SampleBones.Length;i++)poseGap+=Quaternion.Angle(firstPose[i],lastPose[i]);
-                    report.Add($"ROOT {name}: sampled-root-translation={Vector3.Distance(firstRoot,lastRoot):F3}m root-rotation={Quaternion.Angle(firstRotation,lastRotation):F1}deg hip-path={Vector3.Distance(firstHip,lastHip):F3}m mean-endpoint-bone-angle={poseGap/SampleBones.Length:F1}deg (small endpoint gap helps looping)");
+                    report.Add($"ROOT {name}: sampled-root-translation={Vector3.Distance(firstRoot,lastRoot):F3}m root-rotation={Quaternion.Angle(firstRotation,lastRotation):F1}deg hip-endpoint={Vector3.Distance(firstHip,lastHip):F3}m hip-max-from-start={maxHipTravel:F3}m mean-endpoint-bone-angle={poseGap/SampleBones.Length:F1}deg (small endpoint gap helps looping)");
                 }
                 finally{graph.Destroy();UnityEngine.Object.DestroyImmediate(clone);}
             }
@@ -122,6 +124,34 @@ public static class MixamoClipAudit
     }
     static bool Finite(Vector3 v)=>!float.IsNaN(v.x)&&!float.IsNaN(v.y)&&!float.IsNaN(v.z)&&
         !float.IsInfinity(v.x)&&!float.IsInfinity(v.y)&&!float.IsInfinity(v.z);
+    // Batch Edit Mode updates humanoid bones, but its skinned draw can lag behind the manually
+    // evaluated PlayableGraph. Bake the posed skin for each still so the preview shows the pose
+    // actually measured above, then dispose every temporary renderer and mesh.
+    static void CapturePose(Camera camera,GameObject model,string path)
+    {
+        var skins=model.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+        var snapshots=new List<GameObject>(skins.Length);
+        var meshes=new List<Mesh>(skins.Length);
+        try
+        {
+            foreach(var skin in skins)
+            {
+                if(!skin.enabled)continue;
+                var mesh=new Mesh();skin.BakeMesh(mesh);
+                var snapshot=new GameObject("Audit posed skin");snapshot.transform.SetParent(skin.transform,false);
+                snapshot.AddComponent<MeshFilter>().sharedMesh=mesh;
+                snapshot.AddComponent<MeshRenderer>().sharedMaterials=skin.sharedMaterials;
+                skin.enabled=false;snapshots.Add(snapshot);meshes.Add(mesh);
+            }
+            Capture(camera,path);
+        }
+        finally
+        {
+            foreach(var skin in skins)skin.enabled=true;
+            foreach(var snapshot in snapshots)UnityEngine.Object.DestroyImmediate(snapshot);
+            foreach(var mesh in meshes)UnityEngine.Object.DestroyImmediate(mesh);
+        }
+    }
     static void Capture(Camera camera,string path)
     {
         var target=new RenderTexture(640,480,24);target.Create();camera.targetTexture=target;camera.Render();

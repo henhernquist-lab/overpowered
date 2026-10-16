@@ -166,6 +166,8 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
         a.Damage(1,null);yield return null;Check(ap.HitCount==before+1&&ap.Animator.GetCurrentAnimatorStateInfo(0).IsName("Head Hit"),"Real light NPC damage triggers Head Hit reaction.");
         Check(bp.HitCount==0&&bp.DeathCount==0&&!bp.Animator.GetCurrentAnimatorStateInfo(0).IsName("Head Hit"),"Undamaged NPC CONTROL plays neither hit nor death.");
         a.Damage(1,null,true,1500f);yield return null;Check(ap.Animator.GetCurrentAnimatorStateInfo(0).IsName("Shoved Spin"),"Strong actual impulse selects Shoved Spin without changing damage rules.");
+        a.Alarm(a.transform.position+Vector3.back*3);yield return null;
+        Check(ap.State=="Shoved Spin"&&ap.Animator.GetCurrentAnimatorStateInfo(0).IsName("Shoved Spin"),"Panic onset CONTROL does not steal a live strong-hit reaction.");
         a.Damage(10000,null);yield return null;Check(ap.DeathCount==1&&ap.Animator.GetCurrentAnimatorStateInfo(0).IsName("Death")&&!a.Agent.enabled,"Lethal damage triggers Death, disables navigation/collision; no root 90-degree flip.");
         yield return new WaitForSeconds(.5f);Capture("death",a.transform.position);
         int playerHits=P.HitCount;W.DamagePlayer(1);yield return null;Check(P.HitCount==playerHits+1&&P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Head Hit"),"Real player damage triggers brief Head Hit reaction.");yield return new WaitForSeconds(1);

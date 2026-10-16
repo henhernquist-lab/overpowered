@@ -104,6 +104,8 @@ public sealed class BackflipHurricaneVerificationRunner : MonoBehaviour
         yield return null;
         Check(P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Backflip"),"Backflip dispatches the shared humanoid's Backflip state (previously named Unwired Backflip).");
         Check(P.State=="Backflip"&&events==1,"Presentation reports the backflip as the active action from one real event.");
+        int backflipHits=P.HitCount;P.Damage(false);yield return null;
+        Check(P.HitCount==backflipHits+1&&P.State=="Backflip"&&P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Backflip"),"Light-hit presentation CONTROL counts damage without stealing the active Backflip pose.");
         Check(W.Hero.BackflipActive&&W.Hero.BackflipCount==1,"Accepted backflip opens its dash window and counts one use.");
         float until=Time.time+HeroAbilityTuning.BackflipSeconds+.15f;
         while(Time.time<until){peak=Mathf.Max(peak,W.Hero.transform.position.y);yield return null;}
@@ -180,6 +182,8 @@ public sealed class BackflipHurricaneVerificationRunner : MonoBehaviour
         Check(W.Hero.TryHurricaneKick(),"Hurricane Kick accepted through the Super Strength runtime.");
         yield return null;
         Check(P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hurricane Kick"),"Hurricane Kick dispatches the shared humanoid's Hurricane Kick state (previously Unwired Hurricane Kick).");
+        int kickHits=P.HitCount;P.Damage(false);yield return null;
+        Check(P.HitCount==kickHits+1&&P.State=="Hurricane Kick"&&P.Animator.GetCurrentAnimatorStateInfo(0).IsName("Hurricane Kick"),"Light-hit presentation CONTROL leaves the active Martelo kick and impact marker intact.");
         yield return WaitFor(()=>W.Hero.LastKickImpactTime!=prior,2f,"kick force");
         Log($"KICK geometry at impact: origin={W.Hero.transform.position+Vector3.up*HeroAbilityTuning.KickOriginHeight+W.Hero.transform.forward*HeroAbilityTuning.KickOriginOffset:F2}; near target {Vector3.Distance(W.Hero.transform.position+Vector3.up*HeroAbilityTuning.KickOriginHeight+W.Hero.transform.forward*HeroAbilityTuning.KickOriginOffset,near.position):F2}m, far target {Vector3.Distance(W.Hero.transform.position+Vector3.up*HeroAbilityTuning.KickOriginHeight+W.Hero.transform.forward*HeroAbilityTuning.KickOriginOffset,far.position):F2}m from it");
         yield return WaitFor(()=>P.LastKickAnimationImpactTime!=priorMarker,1f,"kick animation impact marker");

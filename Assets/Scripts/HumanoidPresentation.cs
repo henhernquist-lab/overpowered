@@ -180,8 +180,15 @@ public sealed class HumanoidPresentation : MonoBehaviour
         else
         {
             bool strong=npc!=null&&npc.LastImpactImpulse>=1000f;
-            if(punchMarkerPending||attackMarkerPending){deferredHit=true;deferredStrongHit=strong;}
-            else HitReaction(strong);
+            // A light player hit must not erase an explicit move or its clip impact marker.
+            // Gameplay damage still lands; only this brief presentation reaction is skipped.
+            bool playerAction=hero!=null&&Time.time<actionUntil&&
+                (State=="Backflip"||State=="Hurricane Kick"||State=="Double Jump");
+            if(!playerAction)
+            {
+                if(punchMarkerPending||attackMarkerPending){deferredHit=true;deferredStrongHit=strong;}
+                else HitReaction(strong);
+            }
             HitCount++;
         }
     }
@@ -252,7 +259,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
         bool panic=npc!=null&&npc.Role==NpcRole.Civilian&&npc.Fleeing&&!npc.Dead;
         Animator.SetFloat("GaitRate",panic?Tuning.PanicPlayback:1);
         if(dead)return;
-        if(panic&&!wasPanicking&&Tuning.Terrified!=null)
+        if(panic&&!wasPanicking&&Time.time>=actionUntil&&Tuning.Terrified!=null)
         {Action("Terrified",Tuning.Terrified,1f,0,true);actionUntil=Time.time+Tuning.TerrifiedReactionSeconds;}
         wasPanicking=panic;
         if(state.Climbing&&Tuning.Climbing!=null)
