@@ -6,8 +6,9 @@ The newly supplied nine `X Bot@*.fbx` clips are integrated into the existing
 Sidekick/shared-Humanoid presentation. Source checkpoints: `1289053` (Humanoid
 import/retarget, controller states/tuning), `eae1e72` (traversal, civilian/hit
 reactions, E punch→Martelo kick and RMB Hurricane presentation), `992fc8c`
-(reaction priority and 45 actual posed Sidekick preview frames). Evidence and
-full 16-point report: `2a4aff9`. All nine clip paths, uses, durations, loop
+(reaction priority and 45 actual posed Sidekick preview frames), and `3013b3e`
+(audit-helper renderer-state restoration, rerun exit 0). Evidence and full
+16-point report: `2a4aff9`. All nine clip paths, uses, durations, loop
 decisions, new states/parameter, measured root/hip samples, attack values and
 human playtest items are in `docs/mixamo-animation-integration-report.md`.
 

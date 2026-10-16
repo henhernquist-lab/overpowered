@@ -1,6 +1,6 @@
 # Nine-clip Mixamo integration — 2026-10-16
 
-Branch `codex/mixamo-animation-integration`; source checkpoints `1289053`, `eae1e72`, `992fc8c`. Unity 6000.6.0f1, Built-in RP. This is an Editor source/runtime verification report, not a motion-quality sign-off or a finished-game claim. No shipping mission pool was changed.
+Branch `codex/mixamo-animation-integration`; gameplay checkpoints `1289053`, `eae1e72`, `992fc8c`; final audit-helper correction `3013b3e`; evidence checkpoint `2a4aff9`. Unity 6000.6.0f1, Built-in RP. This is an Editor source/runtime verification report, not a motion-quality sign-off or a finished-game claim. No shipping mission pool was changed.
 
 ## Clip inventory and use
 
