@@ -194,18 +194,22 @@ public sealed class HumanoidVerificationRunner : MonoBehaviour
     {
         var npc=CityNpc.Spawn(W,W.City.Spawn,NpcRole.Civilian);var p=npc.GetComponent<HumanoidPresentation>();
         p.VerificationState=new HeroPresentationState(Vector3.forward*5,true,false);yield return new WaitForSeconds(.5f);Check(!npc.Fleeing&&p.State=="Locomotion","Normal-jog CONTROL is not alarmed and has no panic overlay.");Capture("normal-jog",npc.transform.position);
-        npc.Alarm(npc.transform.position+Vector3.back*3);yield return null;
-        Check(p.State=="Terrified","Civilian entering a real alarm starts the brief Terrified pose.");
-        yield return new WaitForSeconds(p.Tuning.TerrifiedReactionSeconds+.1f);
-        float min=999,max=-999;float yawMin=999,yawMax=-999;
+        Vector3 origin=npc.transform.position;
+        npc.Alarm(npc.transform.position+Vector3.back*3);p.VerificationState=null;yield return null;
+        Check(npc.Fleeing&&p.State!="Terrified"&&p.State!="Panic"&&p.Tuning.Terrified==null,
+            "Civilian alarm retains flee AI without a Terrified clip or panic presentation state.");
+        Vector3 fleeTarget=npc.Agent.destination;float maxSpeed=0;bool ordinary=true;
         for(int i=0;i<90;i++)
         {
-            yield return null;var hand=p.PoseRoot.InverseTransformPoint(p.Animator.GetBoneTransform(HumanBodyBones.LeftHand).position);min=Mathf.Min(min,hand.y);max=Mathf.Max(max,hand.y);
-            float yaw=Mathf.DeltaAngle(0,p.Animator.GetBoneTransform(HumanBodyBones.Head).localEulerAngles.y);yawMin=Mathf.Min(yawMin,yaw);yawMax=Mathf.Max(yawMax,yaw);
+            yield return null;maxSpeed=Mathf.Max(maxSpeed,npc.Agent.velocity.magnitude);
+            ordinary&=p.State!="Terrified"&&p.State!="Panic"&&p.PanicWeight==0&&Mathf.Abs(p.Animator.GetFloat("GaitRate")-1)<.001f;
             if(i==20||i==60)Capture("panic-"+i,npc.transform.position);
         }
-        Check(p.State=="Panic"&&p.PanicWeight>.9f&&p.Animator.GetFloat("GaitRate")>1,$"Live fleeing civilian: Standing Run Forward at {p.Animator.GetFloat("GaitRate"):F2}x, lean={p.PoseRoot.localEulerAngles.x:F2}deg, raised/flailing hand Y={min:F2}..{max:F2}m; head yaw={yawMin:F1}..{yawMax:F1}deg.");
-        var straight=npc.transform.position+Vector3.forward*10;Log($"PANIC path deviation sample={Vector3.Distance(straight,npc.PanicDestination(straight)):F3}m, configured amplitude={p.Tuning.PanicPathDeviation:F2}m; NavMesh sampling remains authoritative.");p.VerificationState=null;
+        Check(ordinary,"Every fleeing frame used ordinary locomotion without a procedural scared overlay.");
+        Check(npc.Fleeing&&maxSpeed>.1f&&Vector3.Distance(origin,npc.transform.position)>.1f,
+            $"Live fleeing civilian moved {Vector3.Distance(origin,npc.transform.position):F2}m at peak {maxSpeed:F2}m/s using normal gait.");
+        Check(Vector3.Distance(origin,fleeTarget)>1f&&npc.Agent.hasPath,
+            $"Flee destination/path retained: destination={fleeTarget}, current={npc.Agent.destination}.");
     }
     IEnumerator Landing()
     {

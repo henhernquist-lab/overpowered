@@ -63,9 +63,16 @@ public sealed class CivilianLedgerVerificationRunner : StagedMissionRunner
             new ActorGroupSpec { Id = "raider", Count = 1, Ring = 1f, Behavior = ActorBehavior.Harass, BehaviorArgument = "victims" },
         };
         var e = Spawn(Definition("Verification ledger harass", sc)); var s = (StagedState)e.Scenario; Away(e);
-        var victim = s.Group("victims")[0].Npc;
-        yield return Outcome(e, 5f);
+        var victim = s.Group("victims")[0].Npc;int hostileBefore=L.Count(CivilianOutcome.HarmedByHostile);
+        // Assert on the live actor. Outcome() waits through mission cleanup, which destroys the
+        // CityNpc; Unity's overloaded null then makes CivilianLedger.Has return false.
+        yield return Until(() => victim != null && victim.Health < victim.MaxHealth, 2f);
+        Check(victim!=null&&victim.Health<victim.MaxHealth,"A live victim takes real Harass damage before mission cleanup.");
+        Log($"HARASS DIAGNOSTIC damage={victim.MaxHealth-victim.Health:F3} hostile={L.Has(victim,CivilianOutcome.HarmedByHostile)} environment={L.Has(victim,CivilianOutcome.HarmedByEnvironment)} player={L.Has(victim,CivilianOutcome.HarmedByPlayer)} cause={HarmContext.Current} summary={L.Summary}.");
         Check(victim.Health < victim.MaxHealth && L.Has(victim, CivilianOutcome.HarmedByHostile) && !L.Has(victim, CivilianOutcome.HarmedByEnvironment), $"A raider harassing a civilian (real Harass path) is attributed to hostiles ({victim.MaxHealth - victim.Health:F1} damage).");
+        yield return Outcome(e, 5f);
+        Check(Ended(e)&&L.Count(CivilianOutcome.HarmedByHostile)==hostileBefore+1,
+            "Hostile harm remains counted once after the mission cleans up its victim.");
     }
     IEnumerator LegacyRescue()
     {

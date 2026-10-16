@@ -38,8 +38,11 @@ public abstract class StagedMissionRunner : SessionVerificationRunner
             "Real encounter site found for " + def.DisplayName);
         var crime = W.SpawnEncounter(def, site);
         StagedState.SeedOverride = null;
-        Check(crime != null && crime.Encounter != null && crime.Encounter.Scenario != null, $"{def.DisplayName} spawned at {site} with its {def.Scenario.GetType().Name}" +
-            (crime.Encounter.Scenario is StagedState st ? $" (seed {st.Seed}, yaw {st.Yaw:F0}, mirrored {st.Mirrored}, band {st.Band}, +{st.ExtraActors} hostiles, timeouts x{st.TimeoutScale:F2})." : "."));
+        bool expectedScenario=def.Scenario!=null;
+        Check(crime != null && crime.Encounter != null && (crime.Encounter.Scenario != null)==expectedScenario,
+            $"{def.DisplayName} spawned at {site} with its {(expectedScenario?def.Scenario.GetType().Name:"legacy encounter rules")}" +
+            (crime!=null&&crime.Encounter!=null&&crime.Encounter.Scenario is StagedState st ?
+                $" (seed {st.Seed}, yaw {st.Yaw:F0}, mirrored {st.Mirrored}, band {st.Band}, +{st.ExtraActors} hostiles, timeouts x{st.TimeoutScale:F2})." : "."));
         return crime.Encounter;
     }
     protected string Line(CrimeEncounter e) => W.Mode.Definition.Rules.Current(e).Text;
