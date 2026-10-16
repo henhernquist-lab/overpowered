@@ -132,6 +132,7 @@ public static class MixamoClipAudit
         var skins=model.GetComponentsInChildren<SkinnedMeshRenderer>(true);
         var snapshots=new List<GameObject>(skins.Length);
         var meshes=new List<Mesh>(skins.Length);
+        var hiddenSkins=new List<SkinnedMeshRenderer>(skins.Length);
         try
         {
             foreach(var skin in skins)
@@ -141,13 +142,13 @@ public static class MixamoClipAudit
                 var snapshot=new GameObject("Audit posed skin");snapshot.transform.SetParent(skin.transform,false);
                 snapshot.AddComponent<MeshFilter>().sharedMesh=mesh;
                 snapshot.AddComponent<MeshRenderer>().sharedMaterials=skin.sharedMaterials;
-                skin.enabled=false;snapshots.Add(snapshot);meshes.Add(mesh);
+                skin.enabled=false;hiddenSkins.Add(skin);snapshots.Add(snapshot);meshes.Add(mesh);
             }
             Capture(camera,path);
         }
         finally
         {
-            foreach(var skin in skins)skin.enabled=true;
+            foreach(var skin in hiddenSkins)skin.enabled=true;
             foreach(var snapshot in snapshots)UnityEngine.Object.DestroyImmediate(snapshot);
             foreach(var mesh in meshes)UnityEngine.Object.DestroyImmediate(mesh);
         }
