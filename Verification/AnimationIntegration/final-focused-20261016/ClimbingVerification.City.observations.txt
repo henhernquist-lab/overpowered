@@ -1,0 +1,12 @@
+MEASURED generated Downtown building=Building 1 — Teal offices start=(-16.17, 0.17, -4.68) height=106.13m rise=3.792m speed=5.000m/s.
+MEASURED generated Downtown sideways=1.633m.
+MEASURED generated Downtown attached idle-before: 126.80 FPS, 7.886 ms/frame, 1508 whole-frame GC B/frame, rise=0.000m, frames=153, attached=True.
+MEASURED generated Downtown attached ascending: 111.63 FPS, 8.958 ms/frame, 1413 whole-frame GC B/frame, rise=5.583m, frames=134, attached=True.
+MEASURED generated Downtown attached idle-after: 102.91 FPS, 9.717 ms/frame, 1424 whole-frame GC B/frame, rise=0.000m, frames=124, attached=True.
+MEASURED generated Residential building=Building 3 — Sandstone terraces start=(188.04, 0.17, 67.58) height=12.53m rise=3.750m speed=5.000m/s.
+MEASURED generated Residential sideways=1.633m.
+MEASURED generated Docks building=Building 4 — Brick warehouse start=(-71.70, 0.24, -134.68) height=11.06m rise=3.750m speed=5.000m/s.
+MEASURED generated Docks sideways=1.633m.
+MEASURED generated Docks roof result=Topping out/Complete refusal=None top=Building 4 — Brick warehouse@11.820 blocker=/ pos=(-70.37, 11.38, -136.31) roof=11.300 bounds=Center: (-59.00, 1.72, -134.68), Extents: (12.21, 1.60, 10.37).
+MEASURED generated Docks return pos=(-73.23, 0.20, -136.31) grounded=True.
+MEASURED generated Docks second-wall jump building=Building 58 — Brick warehouse from=(-248.45, 0.17, -134.68) to=(-249.23, 1.45, -134.68) face=Center: (-236.00, 1.56, -134.68), Extents: (11.95, 1.44, 11.30).

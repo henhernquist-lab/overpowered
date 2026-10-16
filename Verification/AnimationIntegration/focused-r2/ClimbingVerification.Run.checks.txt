@@ -1,0 +1,20 @@
+PASS Climbing build uses two attacks and a non-Flight secondary.
+PASS Street-height fixture starts on real support.
+PASS CONTROL moving away cannot latch.
+PASS Tall static facade latches without a tag or power.
+PASS Attached climb moves at configured vertical speed.
+PASS Actual upward climb uses the shared Climb animation at movement-driven rate.
+PASS Wall distance remains bounded while attached.
+PASS Sideways traversal follows the wall.
+PASS Sideways travel keeps the climb loop active without a second animation.
+PASS Latched idle holds a climbing pose instead of cycling limbs.
+PASS Descending follows real CharacterController motion with climb presentation.
+PASS Climbing camera stays outside geometry and root upright, first-person=False
+PASS Climbing preserves center-screen aiming, first-person=False
+PASS Switch climbing camera view.
+PASS Climbing camera stays outside geometry and root upright, first-person=True
+PASS Climbing preserves center-screen aiming, first-person=True
+PASS Force Field can activate without detaching from a wall.
+PASS Wall latch did not spend or refill a fresh air jump.
+PASS Climb-cancel releases the wall without a jump.
+FAIL System.Exception: Intentional wall release uses Jumping Down presentation once.

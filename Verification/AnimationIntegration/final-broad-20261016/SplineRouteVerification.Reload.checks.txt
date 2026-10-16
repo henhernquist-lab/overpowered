@@ -1,0 +1,8 @@
+[SPLINE VERIFY] PASS Run's route fingerprint for seed 2409 exists.
+[SPLINE VERIFY] PASS Free Play selected (seed 2409, routes ON)
+[SPLINE VERIFY] PASS SEPARATE PROCESS: seed 2409 rebuilds byte-identical routes (59 routes, 994 transfers, hash 5333CDE5).
+[SPLINE VERIFY] PASS Walkers join routes in the new process (24 following after 3 s).
+[SPLINE VERIFY] PASS Run's route fingerprint for seed 3226 exists.
+[SPLINE VERIFY] PASS Free Play selected (seed 3226, routes ON)
+[SPLINE VERIFY] PASS SEPARATE PROCESS: seed 3226 rebuilds byte-identical routes (61 routes, 873 transfers, hash 5A77783B).
+[SPLINE VERIFY] PASS Walkers join routes in the new process (26 following after 3 s).

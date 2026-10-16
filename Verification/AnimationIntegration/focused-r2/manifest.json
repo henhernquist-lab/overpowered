@@ -1,0 +1,36 @@
+[
+  {
+    "entry": "MovementVerification.Jump",
+    "commit": "12890538f7e0a11b87c622dd2c909ef49429d9f3",
+    "status_before": "M .freebuff/project-id\n M \"Assets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uxml.meta\"\n M Assets/Scripts/CityNpc.cs\n M Assets/Scripts/ClimbingVerificationRunner.cs\n M Assets/Scripts/CombatImpact.cs\n M Assets/Scripts/GameTuning.cs\n M Assets/Scripts/HumanoidPresentation.cs\n M Assets/Scripts/HumanoidVerificationRunner.cs\n M Assets/Scripts/MeleeVerificationRunner.cs\n M Assets/Scripts/MovementVerificationRunner.cs\n M Assets/Scripts/SuperHeroController.cs\n M Verification/Humanoid/cop-shoot.png\n M Verification/Humanoid/death.png\n M Verification/Humanoid/forward-flight.png\n M Verification/Humanoid/hover.png\n M Verification/Humanoid/idle-model.png\n M Verification/Humanoid/normal-jog.png\n M Verification/Humanoid/panic-20.png\n M Verification/Humanoid/panic-60.png\n M Verification/Humanoid/populated-city.png\n M Verification/Humanoid/punch-impact.png\n M Verification/Humanoid/results.txt\n M Verification/Humanoid/telekinesis-rig.png\n M Verification/Movement/jump.txt\n M docs/secondary-loadout.md\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/AnimationIntegration/Preview/\n?? Verification/AnimationIntegration/focused-r1/",
+    "started_utc": "2026-10-11T00:33:49.346013+00:00",
+    "save_before": "7f8e3dc4226d35063703f9620a371507b784ab889af6e94de6f50ca88febac1a",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/AnimationIntegration/focused-r2/MovementVerification.Jump.log",
+    "pid": 32552,
+    "exit": 0,
+    "seconds": 36.21,
+    "pass": 127,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M \"Assets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uxml.meta\"\n M Assets/Scripts/CityNpc.cs\n M Assets/Scripts/ClimbingVerificationRunner.cs\n M Assets/Scripts/CombatImpact.cs\n M Assets/Scripts/GameTuning.cs\n M Assets/Scripts/HumanoidPresentation.cs\n M Assets/Scripts/HumanoidVerificationRunner.cs\n M Assets/Scripts/MeleeVerificationRunner.cs\n M Assets/Scripts/MovementVerificationRunner.cs\n M Assets/Scripts/SuperHeroController.cs\n M Verification/Humanoid/cop-shoot.png\n M Verification/Humanoid/death.png\n M Verification/Humanoid/forward-flight.png\n M Verification/Humanoid/hover.png\n M Verification/Humanoid/idle-model.png\n M Verification/Humanoid/normal-jog.png\n M Verification/Humanoid/panic-20.png\n M Verification/Humanoid/panic-60.png\n M Verification/Humanoid/populated-city.png\n M Verification/Humanoid/punch-impact.png\n M Verification/Humanoid/results.txt\n M Verification/Humanoid/telekinesis-rig.png\n M Verification/Movement/jump.txt\n M docs/secondary-loadout.md\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/AnimationIntegration/Preview/\n?? Verification/AnimationIntegration/focused-r1/"
+  },
+  {
+    "entry": "ClimbingVerification.Run",
+    "commit": "12890538f7e0a11b87c622dd2c909ef49429d9f3",
+    "status_before": "M .freebuff/project-id\n M \"Assets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uxml.meta\"\n M Assets/Scripts/CityNpc.cs\n M Assets/Scripts/ClimbingVerificationRunner.cs\n M Assets/Scripts/CombatImpact.cs\n M Assets/Scripts/GameTuning.cs\n M Assets/Scripts/HumanoidPresentation.cs\n M Assets/Scripts/HumanoidVerificationRunner.cs\n M Assets/Scripts/MeleeVerificationRunner.cs\n M Assets/Scripts/MovementVerificationRunner.cs\n M Assets/Scripts/SuperHeroController.cs\n M Verification/Humanoid/cop-shoot.png\n M Verification/Humanoid/death.png\n M Verification/Humanoid/forward-flight.png\n M Verification/Humanoid/hover.png\n M Verification/Humanoid/idle-model.png\n M Verification/Humanoid/normal-jog.png\n M Verification/Humanoid/panic-20.png\n M Verification/Humanoid/panic-60.png\n M Verification/Humanoid/populated-city.png\n M Verification/Humanoid/punch-impact.png\n M Verification/Humanoid/results.txt\n M Verification/Humanoid/telekinesis-rig.png\n M Verification/Movement/jump.txt\n M docs/secondary-loadout.md\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/AnimationIntegration/Preview/\n?? Verification/AnimationIntegration/focused-r1/\n?? Verification/AnimationIntegration/focused-r2/",
+    "started_utc": "2026-10-11T00:34:25.729883+00:00",
+    "save_before": "7f8e3dc4226d35063703f9620a371507b784ab889af6e94de6f50ca88febac1a",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/AnimationIntegration/focused-r2/ClimbingVerification.Run.log",
+    "pid": 32751,
+    "exit": 1,
+    "seconds": 26.48,
+    "pass": 19,
+    "fail": 1,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M .freebuff/project-id\n M \"Assets/JMO Assets/Welcome Screen/CFXR_WelcomeScreen.uxml.meta\"\n M Assets/Scripts/CityNpc.cs\n M Assets/Scripts/ClimbingVerificationRunner.cs\n M Assets/Scripts/CombatImpact.cs\n M Assets/Scripts/GameTuning.cs\n M Assets/Scripts/HumanoidPresentation.cs\n M Assets/Scripts/HumanoidVerificationRunner.cs\n M Assets/Scripts/MeleeVerificationRunner.cs\n M Assets/Scripts/MovementVerificationRunner.cs\n M Assets/Scripts/SuperHeroController.cs\n M Verification/Climbing/fixtures.txt\n M Verification/Humanoid/cop-shoot.png\n M Verification/Humanoid/death.png\n M Verification/Humanoid/forward-flight.png\n M Verification/Humanoid/hover.png\n M Verification/Humanoid/idle-model.png\n M Verification/Humanoid/normal-jog.png\n M Verification/Humanoid/panic-20.png\n M Verification/Humanoid/panic-60.png\n M Verification/Humanoid/populated-city.png\n M Verification/Humanoid/punch-impact.png\n M Verification/Humanoid/results.txt\n M Verification/Humanoid/telekinesis-rig.png\n M Verification/Movement/jump.txt\n M docs/secondary-loadout.md\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/AnimationIntegration/Preview/\n?? Verification/AnimationIntegration/focused-r1/\n?? Verification/AnimationIntegration/focused-r2/"
+  }
+]

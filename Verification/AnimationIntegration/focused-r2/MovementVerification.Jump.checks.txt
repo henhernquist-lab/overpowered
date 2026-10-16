@@ -1,0 +1,127 @@
+PASS Saved two attack powers and a separate secondary through progression.
+PASS Session received the exact three-slot build.
+PASS Universal first jump stays on normal Jump presentation, without a forward flip.
+PASS CONTROL repeated call before leaving ground cannot relaunch.
+PASS Exactly one air jump dispatches Running Forward Flip without Flight.
+PASS CONTROL third jump cannot retrigger the flip.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS CONTROL airborne spam refused.
+PASS Forward flip releases to airborne/falling or landing presentation after its short playback.
+PASS Both jump rises match their configured ballistic speeds; no third jump.
+PASS Real landing restores one jump.
+PASS CONTROL paused air jump refused.
+PASS Pause halts movement.
+PASS Walk off floor edge: one air jump, no second air jump.
+PASS Jump never pitches or rolls physics root.
+PASS CONTROL dead hero cannot jump; no invulnerability granted.
+PASS Respawn clears stale air-jump state through ResetMotion.
+PASS Existing grounded Backflip remains available.
+PASS CONTROL jump cannot steal Backflip motion while active.
+PASS Normal jump restored after Backflip landing.
+PASS CONTROL session-ended jump refused before scene transition.
+PASS Saved two attack powers and a separate secondary through progression.
+PASS Session received the exact three-slot build.
+PASS TITAN grounded jump without Flight; unequipped Flight refuses consumption.
+PASS TITAN exactly one air jump without Flight.
+PASS Saved two attack powers and a separate secondary through progression.
+PASS Session received the exact three-slot build.
+PASS NOVA grounded jump without Flight; unequipped Flight refuses consumption.
+PASS NOVA exactly one air jump without Flight.

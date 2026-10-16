@@ -1,0 +1,2 @@
+[ABILITIES VERIFY] CONFIG backflip: cooldown=2.50s dash=0.90s distance=4.2m hop=5.50m/s; clip start=0.600s length=2.1667s fitted playback=1.74x
+[ABILITIES VERIFY] CONFIG hurricane kick: start=0.050s impact=0.500s playback=1.50x -> configured windup=300.0ms; force x1.50 damage x1.70 radius=4.60m vs punch radius 3.30m

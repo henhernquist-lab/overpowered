@@ -1,0 +1,72 @@
+[SPLINE VERIFY] PASS CityLayout.Plan routes are pure data: seed 2409 twice identical (6029 chars), seed 3226 different.
+[SPLINE VERIFY] PASS Free Play selected (seed 2409, routes ON)
+[SPLINE VERIFY] PASS [A1] Downtown: 20 routes (2 boulevard, 6 patrol, 12 sidewalk); walk 14 / patrol 8; 4109 m; off-NavMesh samples 0/4115; transfers 430.
+[SPLINE VERIFY] PASS [A1] Park: 7 routes (1 boulevard, 1 deck, 5 path); walk 7 / patrol 7; 1121 m; off-NavMesh samples 0/1128; transfers 73.
+[SPLINE VERIFY] PASS [A1] Residential: 15 routes (2 boulevard, 1 deck, 4 patrol, 8 sidewalk); walk 11 / patrol 7; 3012 m; off-NavMesh samples 0/3017; transfers 198.
+[SPLINE VERIFY] PASS [A1] Docks: 17 routes (4 deck, 4 patrol, 1 route, 8 sidewalk); walk 13 / patrol 9; 2961 m; off-NavMesh samples 1/2970; transfers 293.
+[SPLINE VERIFY] PASS [A1] Every route is a Unity Spline (Bezier corner fillets): baked arc length within 0.00 % of Spline.GetLength() for the worst route.
+[SPLINE VERIFY] PASS Free Play selected (seed 2409, routes ON)
+[SPLINE VERIFY] PASS [A2] Downtown: 20 routes (2 boulevard, 6 patrol, 12 sidewalk); walk 14 / patrol 8; 4109 m; off-NavMesh samples 0/4115; transfers 430.
+[SPLINE VERIFY] PASS [A2] Park: 7 routes (1 boulevard, 1 deck, 5 path); walk 7 / patrol 7; 1121 m; off-NavMesh samples 0/1128; transfers 73.
+[SPLINE VERIFY] PASS [A2] Residential: 15 routes (2 boulevard, 1 deck, 4 patrol, 8 sidewalk); walk 11 / patrol 7; 3012 m; off-NavMesh samples 0/3017; transfers 198.
+[SPLINE VERIFY] PASS [A2] Docks: 17 routes (4 deck, 4 patrol, 1 route, 8 sidewalk); walk 13 / patrol 9; 2961 m; off-NavMesh samples 1/2970; transfers 293.
+[SPLINE VERIFY] PASS [A2] Every route is a Unity Spline (Bezier corner fillets): baked arc length within 0.00 % of Spline.GetLength() for the worst route.
+[SPLINE VERIFY] PASS Free Play selected (seed 3226, routes ON)
+[SPLINE VERIFY] PASS [B] Downtown: 20 routes (2 boulevard, 6 patrol, 12 sidewalk); walk 14 / patrol 8; 3699 m; off-NavMesh samples 0/3705; transfers 261.
+[SPLINE VERIFY] PASS [B] Park: 7 routes (1 boulevard, 1 deck, 5 path); walk 7 / patrol 7; 1121 m; off-NavMesh samples 0/1128; transfers 95.
+[SPLINE VERIFY] PASS [B] Residential: 15 routes (2 boulevard, 1 deck, 4 patrol, 8 sidewalk); walk 11 / patrol 7; 3068 m; off-NavMesh samples 0/3073; transfers 190.
+[SPLINE VERIFY] PASS [B] Docks: 19 routes (4 deck, 6 patrol, 1 route, 8 sidewalk); walk 13 / patrol 11; 3201 m; off-NavMesh samples 1/3210; transfers 327.
+[SPLINE VERIFY] PASS [B] Every route is a Unity Spline (Bezier corner fillets): baked arc length within 0.00 % of Spline.GetLength() for the worst route.
+[SPLINE VERIFY] PASS DETERMINISM: seed 2409 built twice in Play Mode gives identical baked routes (61 routes, fingerprint 35979 chars, hash 5333CDE5).
+[SPLINE VERIFY] PASS Different seed 3226 gives different routes (hash 5A77783B vs 5333CDE5).
+[SPLINE VERIFY] PASS Free Play selected (seed 2409, routes ON)
+[SPLINE VERIFY] PASS Free Play selected (seed 2409, routes OFF (CONTROL: old wander))
+[SPLINE VERIFY] PASS CONTROL session: routes disabled, no walker active (old RandomSidewalkNear wander).
+[SPLINE VERIFY] PASS Civilians stay on their routes: 100 % of samples walking a route or a street-crossing link; route-walking deviation median 0.24 m / p95 0.70 m / max 1.49 m (limits: >= 90%, <= 0.8 m, <= 2 m).
+[SPLINE VERIFY] PASS Route walkers keep walking: mean speed 1.78 m/s (CivilianSpeed 1.8).
+[SPLINE VERIFY] PASS CONTROL old wander is farther from the route lines: median 3.76 vs 0.37 m, p95 9.07 vs 6.16 m, within 1.5 m 29 % vs 86 %.
+[SPLINE VERIFY] PASS Free Play selected (seed 2409, routes ON)
+[SPLINE VERIFY] PASS Downtown: a walk route near the district centre.
+[SPLINE VERIFY] PASS Downtown: 24 civilians on 10 of this district's walk routes, on a route or crossing 100 %, route-walking deviation p95 0.68 m.
+[SPLINE VERIFY] PASS Downtown: 5 police patrolling (82 % following patrol routes, 2 routes, route-walking deviation median 0.17 m).
+[SPLINE VERIFY] PASS Park: a walk route near the district centre.
+[SPLINE VERIFY] PASS Park: 24 civilians on 4 of this district's walk routes, on a route or crossing 100 %, route-walking deviation p95 0.58 m.
+[SPLINE VERIFY] PASS Park: 3 police patrolling (96 % following patrol routes, 3 routes, route-walking deviation median 0.22 m).
+[SPLINE VERIFY] PASS Residential: a walk route near the district centre.
+[SPLINE VERIFY] PASS Residential: 24 civilians on 7 of this district's walk routes, on a route or crossing 100 %, route-walking deviation p95 0.63 m.
+[SPLINE VERIFY] PASS Residential: 3 police patrolling (66 % following patrol routes, 4 routes, route-walking deviation median 0.33 m).
+[SPLINE VERIFY] PASS Docks: a walk route near the district centre.
+[SPLINE VERIFY] PASS Docks: 24 civilians on 4 of this district's walk routes, on a route or crossing 100 %, route-walking deviation p95 0.58 m.
+[SPLINE VERIFY] PASS Docks: 3 police patrolling (88 % following patrol routes, 2 routes, route-walking deviation median 0.27 m).
+[SPLINE VERIFY] PASS Free Play selected (seed 2409, routes ON)
+[SPLINE VERIFY] PASS A near civilian following a route inside the camera view.
+[SPLINE VERIFY] PASS Scared civilian leaves its route immediately: alarm at frame 25672, route 'Downtown sidewalk loop 1' released at frame 25673 (1 frame(s), 0.013 s), fleeing=True.
+[SPLINE VERIFY] PASS It really runs off the route: up to 7.7 m from 'Downtown sidewalk loop 1' in 3 s, 3.0 -> 11.0 m from the scare.
+[SPLINE VERIFY] PASS CONTROL: a civilian 48 m from the scare (outside AlarmRadius 28 m) keeps walking its route (Following).
+[SPLINE VERIFY] PASS Flee ends after 7.0 s.
+[SPLINE VERIFY] PASS Afterwards it rejoins the NEAREST walk route: flee ended at (-26.6,0.08,-4.7), nearest 'Downtown sidewalk loop 5' 7.1 m away; joined 'Downtown sidewalk loop 5' (join distance 7.1 m) and was following again 3.3 s later.
+[SPLINE VERIFY] PASS Back on the route 3 s later: deviation 0.12 m, state Following.
+[SPLINE VERIFY] PASS FAR rider (82 m) scared: left the rail after 0.157 s (far AI tick 0.25 s); body back on its NavMeshAgent (updatePosition=True).
+[SPLINE VERIFY] PASS Free Play selected (seed 2409, routes ON)
+[SPLINE VERIFY] PASS 9 far NPCs are riding their routes (near 17, far 9).
+[SPLINE VERIFY] PASS FAR riders are cheap: 8 riders over 348 frames / 4.0 s made 0 NavMesh path requests, 125 AI ticks (~3.7/s each; far tick 0.25 s), 1716 rail steps (~53.5/s each: per frame while visible, per far tick otherwise); animators off: True.
+[SPLINE VERIFY] PASS FAR riders advance along the spline at their walking speed: progress/speed ratio 1.00, 1.00, 1.02, 1.06, 1.02.
+[SPLINE VERIFY] PASS A far civilian rider for the promotion test.
+[SPLINE VERIFY] PASS PROMOTION in view is seamless: promoted 1 frame(s) after the hero arrived (30 m away), visible in the camera frustum at promotion True; largest per-frame move over 40 frames 0.024 m; agent owns the body again (updatePosition True), walker Following.
+[SPLINE VERIFY] PASS After promotion it keeps walking the same network near the hero: Following, route-walking deviation 0.48 m.
+[SPLINE VERIFY] PASS DEMOTION is seamless too: demoted 1 frame(s) after the hero left (111 m), visible at demotion True; rail started with an offset blend (riding True); largest per-frame move 0.075 m.
+[SPLINE VERIFY] PASS RECYCLING still moves unseen far civilians: 24 recycled in 12 s; 24 observed relocations, all placed ON a walk route (deviation max 0.57 m) 54-104 m from the hero (band (45.00, 110.00)), following immediately; none of these jumps was inside the camera view (teleport monitor below).
+[SPLINE VERIFY] PASS Free Play selected (seed 2409, routes ON)
+[SPLINE VERIFY] PASS Villain side for the police response (Free Play allows the H switch).
+[SPLINE VERIFY] PASS Police PATROL at 0 Heat (2 cops, villain side, not hostile): 48 samples of 2 NPCs: ROUTE-WALKING deviation (route line while following, crossing link while crossing a street) median 0.42 m, p95 0.42 m, max 0.42 m (n=48); own-route deviation while following median 0.42 m, p95 0.42 m, max 0.42 m (n=48); distance to nearest route line median 0.42 m, p95 0.42 m, max 0.42 m (n=48) (near tier median 0.42 m, p95 0.42 m, max 0.42 m (n=48); far tier n/a; within rejoin radius 100 %); states following 100 %, crossing a street 0 %, joining/rejoining 0 %, none 0 %, riding the far rail 0 %; mean speed 2.26 m/s; 1 distinct routes walked.
+[SPLINE VERIFY] PASS A patrolling cop within detection range, not hostile.
+[SPLINE VERIFY] PASS Prop broken 8.1 m from the hero: Heat 0.00 -> 0.35 (1 star(s)); villain police hostile from 1.
+[SPLINE VERIFY] PASS The cop RESPONDS immediately: left patrol 'Downtown patrol loop 2' 1 frame(s) / 0.030 s after the crime (near tier).
+[SPLINE VERIFY] PASS It goes for the villain: 52.8 -> 39.1 m, windups 0, phase Approach.
+[SPLINE VERIFY] PASS Heat cleared (0 stars): the cop is no longer hostile.
+[SPLINE VERIFY] PASS Then it RETURNS to the nearest patrol route: response ended at (-34.6,0.21,42.4), nearest patrol route 'Downtown patrol loop 2' 1.9 m; joined 'Downtown patrol loop 2' and patrolling 0.5 s later.
+[SPLINE VERIFY] PASS Still patrolling 4 s later, deviation 0.37 m; police alive 2 (ReconcilePolice removed the 1-star extra).
+[SPLINE VERIFY] PASS Free Play selected (seed 2409, routes ON)
+[SPLINE VERIFY] PASS A visible NPC for the teleport-monitor CONTROL.
+[SPLINE VERIFY] PASS Teleport-monitor CONTROL: a deliberate 5.0 m warp of a visible civilian is flagged (1 violation).
+[SPLINE VERIFY] PASS No NPC moved more than the teleport limit in one frame while inside the gameplay camera frustum (all sessions of this run).

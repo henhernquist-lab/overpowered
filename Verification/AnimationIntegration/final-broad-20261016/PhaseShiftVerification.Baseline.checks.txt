@@ -1,0 +1,22 @@
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Dense actor spawned 0
+PASS Dense actor spawned 1
+PASS Dense actor spawned 2
+PASS Dense actor spawned 3
+PASS Dense actor spawned 4
+PASS Dense actor spawned 5
+PASS Dense actor spawned 6
+PASS Dense actor spawned 7
+PASS Dense actor spawned 8
+PASS Dense actor spawned 9
+PASS Dense actor spawned 10
+PASS Dense actor spawned 11
+PASS Dense actor spawned 12
+PASS Dense actor spawned 13
+PASS Dense actor spawned 14
+PASS Dense actor spawned 15
+PASS Dense actor spawned 16
+PASS Dense actor spawned 17
+PASS Dense real enemy attacks occurred during measurement.
