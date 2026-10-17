@@ -19,7 +19,7 @@ public sealed class DarknessEffect : PowerEffect
         var npc = hit.collider.GetComponentInParent<CityNpc>();
         if (npc == null || npc.Dead) { user.Message = "Aim at a person to root."; return false; }
         npc.Root(stats.Duration);
-        npc.Damage(stats.Damage, user);
+        npc.Damage(user.RollDamage(stats.Damage), user);
         var color = power.Definition.PaletteColor;
         if (!npc.Dead)
         {

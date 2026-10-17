@@ -229,7 +229,7 @@ public sealed class SuperHeroController : MonoBehaviour
     {
         LastForce = stats.Force;
         using (powers.Credit(MeleeCredit)) LastAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * definition.OriginHeight + transform.forward * definition.OriginOffset,
-            stats.Radius, stats.Force, stats.Damage, definition.UpwardForce, melee:true);
+            stats.Radius, stats.Force, powers.RollDamage(stats.Damage), definition.UpwardForce, melee:true);
         LastPunchResult = $"PUNCH: {LastAffectedBodies} bodies hit @ {LastForce:0} N·s";
         LastImpactTime=Time.time;LastImpactFrame=Time.frameCount;PunchImpacted?.Invoke();
         if(pause)FinisherPause();
@@ -313,7 +313,7 @@ public sealed class SuperHeroController : MonoBehaviour
         float force=stats.Force*HeroAbilityTuning.KickForceMultiplier;
         int bodies;
         using (powers.Credit(MeleeCredit)) bodies=CombatImpact.Blast(powers, transform.position + Vector3.up * HeroAbilityTuning.KickOriginHeight + transform.forward * HeroAbilityTuning.KickOriginOffset,
-            HeroAbilityTuning.KickRadius, force, stats.Damage * HeroAbilityTuning.KickDamageMultiplier, HeroAbilityTuning.KickUpwardForce, melee:true);
+            HeroAbilityTuning.KickRadius, force, powers.RollDamage(stats.Damage * HeroAbilityTuning.KickDamageMultiplier), HeroAbilityTuning.KickUpwardForce, melee:true);
         if(combo)
         {
             LastComboKickForce=force;LastComboKickAffectedBodies=bodies;
@@ -412,7 +412,7 @@ public sealed class SuperHeroController : MonoBehaviour
         GroundPounding = false;
         var world = WorldSession.Instance;
         if (!landed || world == null || world.PlayerDead || (world.Mode != null && world.Mode.Ended)) { LastMeleeResult = landed ? "Pound cancelled" : "Pound found no ground"; yield break; }
-        LastPoundForce = stats.Force * m.PoundForceMultiplier; LastPoundDamage = stats.Damage * m.PoundDamageMultiplier;
+        LastPoundForce = stats.Force * m.PoundForceMultiplier; LastPoundDamage = powers.RollDamage(stats.Damage * m.PoundDamageMultiplier);
         using (powers.Credit(MeleeCredit)) LastPoundBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * .3f, m.PoundRadius, LastPoundForce, LastPoundDamage, m.PoundLift, melee: true);
         LastPoundImpactTime = Time.time; GroundPounds++; GroundPoundImpacted?.Invoke();
     }

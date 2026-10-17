@@ -31,7 +31,7 @@ public sealed class PowerProjectile : MonoBehaviour
     {pool=parent;visual=presentation;body=GetComponent<Rigidbody>();sphere=GetComponent<SphereCollider>();}
     public void Initialize(PowerUser user,PowerRuntime power,Vector3 direction)
     {
-        owner=user;definition=power.Definition;stats=user.Stats(power);credit=user.Crediting;
+        owner=user;definition=power.Definition;stats=user.Stats(power);stats.Damage=user.RollDamage(stats.Damage);credit=user.Crediting;
         LaunchDirection=direction;exploded=false;returnPending=false;
         expires=Time.time+stats.Duration;emberAt=Time.time+.1f;launchedAt=Time.time;
         sphere.radius=definition.ProjectileSize*.5f;sphere.enabled=true;

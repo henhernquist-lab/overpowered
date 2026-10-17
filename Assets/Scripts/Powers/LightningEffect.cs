@@ -47,7 +47,7 @@ public sealed class LightningEffect : PowerEffect
         bool firstPerson=rig!=null&&rig.isActiveAndEnabled&&rig.FirstPerson;
         if(firstPerson)
             from=camera.transform.position+camera.transform.right*.28f-camera.transform.up*.32f+camera.transform.forward*2.4f;
-        float damage = stats.Damage;
+        float damage = user.RollDamage(stats.Damage);
         var current = first;
         for (int jump = 0; current != null && jump <= Mathf.Max(0, MaxArcs); jump++)
         {

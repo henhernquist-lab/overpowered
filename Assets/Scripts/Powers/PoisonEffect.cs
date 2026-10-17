@@ -33,7 +33,9 @@ public sealed class PoisonEffect : PowerEffect
 public sealed class Poisoned : MonoBehaviour
 {
     CityNpc npc; PowerUser source; PoisonEffect settings; CityColor color; string credit;
-    float dps, nextTick, baseSeconds; int ticksLeft; bool assaulted, spread;
+    float dps, intendedDps, tickDamage, nextTick, baseSeconds; int ticksLeft; bool assaulted, spread;
+    public float DamagePerSecond => dps;
+    public float DamagePerTick => tickDamage;
     public int Generation { get; private set; }
     public float TotalDamage { get; private set; }
     public int Ticks { get; private set; }
@@ -52,8 +54,10 @@ public sealed class Poisoned : MonoBehaviour
         if (p == null) { p = target.gameObject.AddComponent<Poisoned>(); p.npc = target; target.Damaged += p.OnDamaged; }
         bool wasActive = p.Active;
         p.source = user; p.settings = settings; p.color = color; p.baseSeconds = seconds; p.credit = user != null ? user.Crediting : null;
-        p.dps = wasActive ? Mathf.Max(p.dps, dps) : dps;
+        float rolled = user != null ? user.RollDamage(dps) : dps;
+        if (!wasActive || rolled >= p.dps) { p.dps = rolled; p.intendedDps = dps; }
         int ticks = Mathf.Max(1, Mathf.RoundToInt(seconds / Mathf.Max(.01f, settings.TickSeconds)));
+        p.tickDamage = p.dps * seconds / ticks; // exact full-duration damage, including non-integral tick durations
         p.ticksLeft = wasActive ? Mathf.Max(p.ticksLeft, ticks) : ticks;
         p.Generation = wasActive ? Mathf.Min(p.Generation, generation) : generation;
         if (!wasActive) { p.nextTick = Time.time + settings.TickSeconds; p.assaulted = false; p.spread = false; }
@@ -69,7 +73,7 @@ public sealed class Poisoned : MonoBehaviour
         var world = WorldSession.Instance; if (world != null && world.Mode != null && world.Mode.Ended) { enabled = false; return; }
         if (Time.time < nextTick) return;
         nextTick += settings.TickSeconds; ticksLeft--;
-        float damage = dps * settings.TickSeconds;
+        float damage = tickDamage;
         TotalDamage += damage; Ticks++;
         bool first = !assaulted; assaulted = true;
         if(visualSlot>=0&&StatusPowerVfx.Existing!=null)StatusPowerVfx.Existing.PulsePoison(this,visualSlot);
@@ -105,7 +109,7 @@ public sealed class Poisoned : MonoBehaviour
             var vfx = PowerVfx.Get();
             foreach (var target in chosen)
             {
-                Apply(target, source, settings, dps, baseSeconds * settings.SpreadDurationScale, Generation + 1, color);
+                Apply(target, source, settings, intendedDps, baseSeconds * settings.SpreadDurationScale, Generation + 1, color);
                 var from=origin+Vector3.up;var to=target.transform.position+Vector3.up;
                 var arc=vfx.Arc(from,to,5,.16f,color,settings.SpreadArcWidth*1.5f,settings.SpreadArcSeconds);
                 if(arc!=null)arc.sharedMaterial=CityMaterials.GetVfx(CityColor.Leaf);

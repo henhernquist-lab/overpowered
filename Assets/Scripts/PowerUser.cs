@@ -3,6 +3,8 @@ using UnityEngine;
 
 public sealed class PowerUser : MonoBehaviour
 {
+    /// Resolve one logical attack; Stats remains the authored, upgraded mean. Never call from a tick loop.
+    public float RollDamage(float mean) => WorldSession.Instance.Rolls.Damage(mean, WorldSession.Instance.Tuning.CombatRanges);
     public readonly List<PowerRuntime> Powers = new List<PowerRuntime>();
     public SuperHeroController Hero { get; private set; }
     public PlayerProgression Progression { get; private set; }
@@ -301,6 +303,7 @@ public sealed class ThrownProp : MonoBehaviour
         var npc = other.collider.GetComponentInParent<CityNpc>(); if (npc == null) return;
         if(npc.Dead)return;
         LastContact=other.GetContact(0).point;
+        if(throwSettings!=null)damage=owner.RollDamage(damage);
         if(throwSettings!=null)
         {
             LastImpulse=Mathf.Min(throwSettings.MaxImpactImpulse, GetComponent<Rigidbody>().mass * other.relativeVelocity.magnitude * throwSettings.MomentumTransfer);

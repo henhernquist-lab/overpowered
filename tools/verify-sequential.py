@@ -21,6 +21,7 @@ import time
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--out', required=True)
+    parser.add_argument('--combat-roll', type=float, choices=[0.0, 0.5, 1.0], help='Explicit fixed combat percentile for exact regression controls')
     parser.add_argument('--timeout', type=int, default=3000)
     parser.add_argument('entries', nargs='+')
     args = parser.parse_args()
@@ -58,6 +59,9 @@ def main():
         # Keep automated Play Mode verification from producing audible game SFX on the user's computer.
         # The editor-only runtime hook mutes the listener; AudioSources still play for source-state tests.
         environment = dict(os.environ, OP_VERIFY_SILENT='1')
+        if args.combat_roll is not None:
+            environment['OP_VERIFY_COMBAT_ROLL'] = str(args.combat_roll)
+            record['combat_roll'] = args.combat_roll
         with subprocess.Popen([str(unity), '-batchmode', '-projectPath', str(root),
                                '-executeMethod', entry, '-logFile', str(log)], cwd=root, env=environment) as process:
             record['pid'] = process.pid

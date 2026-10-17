@@ -23,7 +23,7 @@ public sealed class SpeedDashEffect : PowerEffect
         var trail = DashTrail.For(hero, color, TrailSeconds, TrailWidth);
         // Per-hero reusable state and a cached step delegate: no collection or closure is allocated per dash (a dash cannot
         // start while one is running, so the set is never shared between two live dashes).
-        trail.Begin(user, this, stats.Damage, color);
+        trail.Begin(user, this, user.RollDamage(stats.Damage), color);
         trail.Emitting = true;
         bool started = hero.Dash(direction, stats.Range, stats.Duration, trail.Step);
         if (!started) { trail.Emitting = false; return false; }

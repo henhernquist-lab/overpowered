@@ -34,7 +34,7 @@ public sealed class IceEffect : PowerEffect
         var npc = hit.collider.GetComponentInParent<CityNpc>();
         if (npc != null)
         {
-            npc.Freeze(stats.Duration); npc.Damage(stats.Damage, user);
+            npc.Freeze(stats.Duration); npc.Damage(user.RollDamage(stats.Damage), user);
             // Visible state for as long as the NPC's own Frozen flag holds (a later Ice/synergy freeze extends it too).
             if (!npc.Dead) FrozenLook.Show(npc.gameObject, power.Definition.PaletteColor, () => npc != null && !npc.Dead && npc.IceFrozen);
             Cast(user, power, hit.point); return true;

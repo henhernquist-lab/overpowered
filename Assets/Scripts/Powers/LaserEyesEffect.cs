@@ -14,7 +14,8 @@ public sealed class LaserEyesEffect : ChanneledEffect
     public int HitParticles = 2;
     public override bool Execute(PowerUser user, PowerRuntime power)
     {
-        BeamState.For(user).Begin(user);
+        var state = BeamState.For(user); state.Begin(user);
+        state.DamagePerSecond = user.RollDamage(user.Stats(power).Damage);
         return true;
     }
     public override void Sustain(PowerUser user, PowerRuntime power, float dt)
@@ -62,17 +63,17 @@ public sealed class LaserEyesEffect : ChanneledEffect
         {
             state.LastTarget = npc;
             if (npc.Dead) return;
-            float damage = stats.Damage * seconds;
+            float damage = state.DamagePerSecond * seconds;
             npc.Damage(damage, user, state.Struck.Add(npc));
             state.Dealt += damage;
             return;
         }
         state.LastTarget = null;
-        target.collider.GetComponentInParent<MissionTarget>()?.Hit(stats.Damage * seconds, stats.Force * seconds, user);
+        target.collider.GetComponentInParent<MissionTarget>()?.Hit(state.DamagePerSecond * seconds, stats.Force * seconds, user);
         var body = target.rigidbody;
         if (body != null && !body.isKinematic) body.AddForceAtPosition(user.AimDirection * stats.Force * seconds, target.point, ForceMode.Impulse);
         var prop = target.collider.GetComponentInParent<BreakableProp>();
-        if (prop != null) { prop.TakeDamage(stats.Damage * seconds, user); state.Dealt += stats.Damage * seconds; }
+        if (prop != null) { prop.TakeDamage(state.DamagePerSecond * seconds, user); state.Dealt += state.DamagePerSecond * seconds; }
     }
     public override void Stop(PowerUser user, PowerRuntime power)
     {
@@ -83,6 +84,7 @@ public sealed class LaserEyesEffect : ChanneledEffect
 /// Per-player beam bookkeeping (the effect asset is shared data, so live state lives on the player). Also read by tests.
 public sealed class BeamState : MonoBehaviour
 {
+    public float DamagePerSecond;
     public float Held, Pending, Dealt, NextSparkAt; public int Ticks, Channels, ImpactBursts;
     public CityNpc LastTarget;
     public Transform Head;
