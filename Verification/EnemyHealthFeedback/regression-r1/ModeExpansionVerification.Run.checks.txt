@@ -1,0 +1,39 @@
+[MODE-EXPANSION] PASS Menu component exists in Home
+[MODE-EXPANSION] PASS Fresh isolated save CONTROL: level 1, 0 sessions, 0 mode records.
+[MODE-EXPANSION] PASS Home shows ENABLED 'free-play' in the data-driven extras row below the side cards (rect (x:86.63, y:599.63, width:123.75, height:29.25)).
+[MODE-EXPANSION] PASS Home shows ENABLED 'endless-fight' in the data-driven extras row below the side cards (rect (x:222.75, y:599.63, width:235.13, height:29.25)).
+[MODE-EXPANSION] PASS Home shows ENABLED 'endless-fight-villain' in the data-driven extras row below the side cards (rect (x:470.25, y:599.63, width:252.00, height:29.25)).
+[MODE-EXPANSION] PASS No COMING SOON placeholder remains on Home.
+[MODE-EXPANSION] PASS Real Home button -> GameFlow.Select launched Free Play with Rules=null and 0 encounter definitions.
+[MODE-EXPANSION] PASS Free Play takes the profile side (Hero) and does NOT lock it.
+[MODE-EXPANSION] PASS Population: 24 civilians, 2 patrol cops.
+[MODE-EXPANSION] PASS Advanced 150s (3x Hero SpawnInterval 50s): crimes=0, CrimeEvent objects=0, CrimeEncounter objects=0, criminals=0; session not ended.
+[MODE-EXPANSION] PASS HUD: no objective/timer lines, no director line; Heat shown.
+[MODE-EXPANSION] PASS Death 1: player actually dead (health 0).
+[MODE-EXPANSION] PASS Death 1 -> respawned at full health 100; session NOT ended (defeats=1, DefeatLimit=0).
+[MODE-EXPANSION] PASS Death 2: player actually dead (health 0).
+[MODE-EXPANSION] PASS Death 2 -> respawned at full health 100; session NOT ended (defeats=2, DefeatLimit=0).
+[MODE-EXPANSION] PASS Death 3: player actually dead (health 0).
+[MODE-EXPANSION] PASS Death 3 -> respawned at full health 100; session NOT ended (defeats=3, DefeatLimit=0).
+[MODE-EXPANSION] PASS Death 4: player actually dead (health 0).
+[MODE-EXPANSION] PASS Death 4 -> respawned at full health 100; session NOT ended (defeats=4, DefeatLimit=0).
+[MODE-EXPANSION] PASS Real BreakableProp break -> WorldSession.OnDestruction: Heat 0.00 -> 0.35 (1 star).
+[MODE-EXPANSION] PASS Police respond in real time: cops 2 -> 3 (= Hero patrol 2 + 1 star x 1).
+[MODE-EXPANSION] PASS Before switch (Hero): criminal hostile, 0/3 cops hostile, 0 civilians hostile.
+[MODE-EXPANSION] PASS H action: 'Side changed. Your powers and character are unchanged.' -> Data.Side=Villain, saved to disk.
+[MODE-EXPANSION] PASS After switch (Villain): criminal NOT hostile, 3/3 cops hostile.
+[MODE-EXPANSION] PASS Immediate second switch refused by the existing cooldown CONTROL.
+[MODE-EXPANSION] PASS Free Play pause menu offers exactly: Resume | Return home (keep earned XP)
+[MODE-EXPANSION] PASS Pause 'Return home' reached the Home scene; city unloaded.
+[MODE-EXPANSION] PASS Free Play relaunch accepted by GameFlow.Select.
+[MODE-EXPANSION] PASS Relaunch starts as Villain: the side comes from the saved profile.
+[MODE-EXPANSION] PASS ShowResults=false: an explicit results request lands on Home, not Results.
+[MODE-EXPANSION] PASS Hero mode selected.
+[MODE-EXPANSION] PASS Hero CONTROL: same 150s advance -> encounters 1 at start, 2 spawned in total; CrimeEncounter objects=2.
+[MODE-EXPANSION] PASS Hero CONTROL: side switch BLOCKED ('Side is set by this mode. Return home to choose another mode.'); side stays Hero although the saved profile side was Villain.
+[MODE-EXPANSION] PASS Hero CONTROL: HUD shows the objective/timer lines.
+[MODE-EXPANSION] PASS Hero CONTROL: pause menu keeps the results option: Resume | End session / Results | Return home (keep earned XP)
+[MODE-EXPANSION] PASS Guard CONTROL: an encounter-spawning definition with no Rules/Encounters is still rejected.
+[MODE-EXPANSION] PASS Guard CONTROL: Playable=false is still rejected.
+[MODE-EXPANSION] PASS Menu component exists in Home
+[MODE-EXPANSION] FAIL System.Exception: Current power catalog = darkness, fire, flight, force-field, ice, laser-eyes, lightning, phase-shift, poison, speed, strength, telekinesis, teleport (13 powers).

@@ -1,0 +1,81 @@
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS HUD prebuilds exactly 20 reusable bars and 96 reusable number labels before any hit.
+PASS Actual spawned 0-star HP: Rusher 39, Gunner 65, Brute 195, pursuing-hero Brute 195.
+PASS Endless wave-1 composed Rusher HP 39; explicit spawn stats use this value (Heat excluded).
+PASS Undamaged unrelated enemies have no combat bars or damage records.
+PASS Clear aim reveals undamaged hostile with full authoritative HP.
+PASS Aim-only bar expires after the player looks away.
+PASS rusher bar reads actual CityNpc current/max and fill (34/39).
+IMAGE Verification/EnemyHealthFeedback/rusher-health.png
+PASS gunner bar reads actual CityNpc current/max and fill (60/65).
+IMAGE Verification/EnemyHealthFeedback/gunner-health.png
+PASS brute bar reads actual CityNpc current/max and fill (190/195).
+IMAGE Verification/EnemyHealthFeedback/brute-health.png
+PASS Neutral pursuing-hero actor gets no player-hostile bar in Hero mode.
+PASS Real Fire AoE fixture retains twelve live enemies under the legal Fire/Strength loadout.
+PASS Fire Blast activates through the equipped PowerUser gate.
+PASS Fire AoE emits one real resolved result per damaged target; outside-radius control gets none.
+PASS Fire number belongs to the impact victim and equals its authoritative resolved damage.
+IMAGE Verification/EnemyHealthFeedback/fire-damage.png
+PASS Equipped Strength starts the real first E punch.
+PASS Punch number equals authoritative 35 damage after configured windup.
+PASS Second E in the combo window starts Martelo.
+PASS Martelo number uses its separate real impact damage, with no rapid-source merge.
+PASS Save VECTOR with laser-eyes + poison through the loadout API.
+PASS Session equips laser-eyes + poison.
+PASS laser-eyes selected for LMB (key 1).
+PASS Laser channel starts through the equipped gate.
+PASS Laser 5 real ticks aggregate into truthful displayed total 21.76 (resolved 21.76); adjacent control untouched.
+IMAGE Verification/EnemyHealthFeedback/laser-aggregated.png
+PASS Poison applies through its real equipped gate; damage begins on a later tick.
+PASS Poison application invents no immediate damage number.
+PASS Rapid Poison real ticks aggregate exactly: 4 ticks, resolved 4, shown 4.
+MEASURED 12-enemy idle before feedback: 120 frames, 96.45 FPS, 10.368 ms/frame, 0 managed B/frame, GameObjects 5608, UI bars 20, number labels 96, materials 113, active bars 1.
+PASS Twelve damaged enemies use prebuilt bounded bar/number pools.
+PASS Stress Laser channel starts with legal equip.
+PASS Stress melee starts with the real controller.
+MEASURED 12-enemy active feedback: 120 frames, 91.73 FPS, 10.902 ms/frame, 0 managed B/frame, GameObjects 5608, UI bars 20, number labels 96, materials 113, active bars 12.
+MEASURED pool after stress: objects 5608->5608, materials 113->113, drops 0.
+PASS Sustained 12-target hits reuse the same UI slots without GameObject or material growth after warmup.
+MEASURED MATCHED feedback disabled, same 12-target damage workload: 120 frames, 90.99 FPS, 10.991 ms/frame, 0 managed B/frame, GameObjects 5608, UI bars 20, number labels 96, materials 113, active bars 0.
+PASS Disabled-feedback baseline still applies all 72 authoritative damage points without starting UI numbers.
+MEASURED MATCHED feedback enabled, same 12-target damage workload: 120 frames, 85.68 FPS, 11.671 ms/frame, 0 managed B/frame, GameObjects 5608, UI bars 20, number labels 96, materials 113, active bars 12.
+PASS Enabled-feedback comparison applies the same 72 damage points and starts all 72 pooled numbers without drops.
+PASS Save VECTOR with lightning + poison through the loadout API.
+PASS Session equips lightning + poison.
+PASS lightning selected for LMB (key 1).
+PASS Real Lightning chain fixture retains twelve live enemies under the legal Lightning/Poison loadout.
+PASS Lightning casts through its real equipped gate.
+PASS Lightning shows one result per actual chained target and none for the unchained control.
+IMAGE Verification/EnemyHealthFeedback/lightning-chain.png
+PASS Real equipped Lightning supplies the overkill attack.
+PASS Overkill shows full resolved 24, records only 5 health lost, and empties the real bar before cleanup.
+PASS Defeated NPC bar is released after the brief empty-bar presentation.
+PASS Hero-side friendly cop receives no ordinary enemy feedback even when harmed.
+PASS Save VECTOR with lightning + poison through the loadout API.
+PASS Session equips lightning + poison.
+PASS lightning selected for LMB (key 1).
+PASS Villain patrol starts neutral before the first assault.
+PASS First Villain assault makes the patrol hostile and displays that same hit, without losing its damage number.
+PASS Solid wall occludes the active hostile bar.
+PASS Bar returns when the wall is removed.
+PASS Beyond 38 m, damage stays real but the hostile bar is hidden.
+PASS Civilian damage produces no ordinary enemy bar or number.
+PASS Existing B-view camera enters first person.
+PASS Hostile health feedback remains visible above the actor in first person.
+PASS Existing camera returns to third person.
+PASS Actual four-star pursuing hero spawned by ReconcilePolice: 411 HP, hostile to Villain.
+PASS Save VECTOR with poison + fire through the loadout API.
+PASS Session equips poison + fire.
+PASS poison selected for LMB (key 1).
+PASS Default Poison applies through real equip with unmodified tick settings.
+PASS Default Poison completes 12 real ticks / 60 damage; unrelated target unchanged.
+PASS Default Poison primes a real lethal tick for spread.
+PASS Poison death spread produces later truthful target-owned numbers; outside-spread control receives none.
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Actual Endless wave-1 director spawns three hostile Rusher actors at 39 HP each.
+LIMIT: visual size/clutter and moment-to-moment aiming still need human Editor play. Fire/Lightning and Laser/Poison require separate legal two-attack loadouts.

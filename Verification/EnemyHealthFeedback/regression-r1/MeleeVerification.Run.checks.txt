@@ -1,0 +1,42 @@
+PASS Save two melee-test attacks (strength, fire) and speed secondary through progression.
+PASS Melee session retains exact two-attack/one-secondary loadout.
+PASS CONFIG: E combo is punch -> Martelo kick in the existing 0.9 s window.
+PASS Tap 1 = combo stage 1 (punch), never Martelo.
+PASS Stage 1 punch: 35.00 dmg @ 1350 N.s (plain punch).
+PASS Tap 2 inside window = distinct Martelo clip, not Hurricane.
+PASS Second tap caused Martelo impact after windup and no Hurricane gameplay impact.
+PASS Finisher: 3240 N.s (kick x1.6), 83.30 dmg (expected 83.30).
+PASS Finisher impact produced a hit pause.
+PASS After the finisher the next tap restarts at a punch.
+PASS CONTROL: a tap after the 0.9 s window restarts at punch (not Martelo).
+PASS CONTROL: a tap with 0 Strength charges is refused and does not advance the string.
+PASS CONTROL: the refused tap dealt nothing.
+PASS RMB path starts original spinning Hurricane clip without a prior punch.
+PASS RMB produces Hurricane gameplay impact without a Martelo/basic-combo impact.
+PASS Heavy released after 0.20 s.
+PASS Heavy 0.20 s -> charge 0.00: 1350 N.s (expected 1350), 35.00 dmg (expected 35.00).
+PASS Heavy released after 0.70 s.
+PASS Heavy 0.70 s -> charge 0.50: 2363 N.s (expected 2363), 56.00 dmg (expected 56.00).
+PASS Heavy released after 3.00 s.
+PASS Heavy 3.00 s -> charge 1.00: 3375 N.s (expected 3375), 77.00 dmg (expected 77.00).
+PASS Heavy released after 6.00 s.
+PASS Heavy 6.00 s -> charge 1.00: 3375 N.s (expected 3375), 77.00 dmg (expected 77.00).
+PASS CONTROL: holding longer than the cap adds nothing (capped).
+PASS CONTROL: a heavy with 0 Strength charges is refused.
+PASS Pound is smaller than Sonic Slam: 1822.5 < 2600 N.s, 4 < 7 m, 29.75 < 40 dmg; no synergy cooldown.
+PASS Hero airborne 6.00 m above the floor.
+PASS Ground pound starts and spends one Strength charge.
+PASS Pound lands: 1823 N.s.
+PASS Enemy 2.5 m away takes 29.75 (expected 29.75).
+PASS CONTROL: enemy 7 m away (radius 4) untouched.
+PASS Radial knockback moves a 45 kg prop: 20.95 m/s.
+PASS CONTROL: E on the ground is not a pound; no charge spent.
+PASS No long cooldown: a second pound is accepted right after the punch cooldown.
+PASS Second pound lands.
+PASS Save two melee-test attacks (fire, ice) and speed secondary through progression.
+PASS Melee session retains exact two-attack/one-secondary loadout.
+PASS Basic tap 1 = punch without Strength.
+PASS Basic punch: 8.00 dmg, no hit pause (light 160 N.s, CONTROL).
+PASS Basic tap 2 = Martelo finisher.
+PASS Basic finisher: 19.04 dmg (expected 19.04) and its own hit pause although the kick is light (384 N.s).
+PASS CONTROL: basic-melee finisher stays weaker than a plain Strength punch.

@@ -1,0 +1,14 @@
+[CITY VERIFY] PASS World bootstrapped with city, powers, and progression.
+[CITY VERIFY] PASS Seeded city: 63 solid buildings (== planned 63) across 3 districts; civilians=24
+[CITY VERIFY] PASS Same seed reproduced layout samples.
+[CITY VERIFY] PASS NavMesh has complete sidewalk-to-sidewalk route.
+[CITY VERIFY] PASS Fresh progression: level=1, points=0.
+[CITY VERIFY] PASS Unspent CONTROL: level=2, points=1, force unchanged=1350.
+[CITY VERIFY] PASS Spent one point on strength.
+[CITY VERIFY] PASS Upgraded strength: force=1890, max charges=4, points=0.
+[CITY VERIFY] PASS Zero-point upgrade CONTROL rejected.
+[CITY VERIFY] PASS Seventh power discovered from DATA only; exact same projectile effect asset as Fire Blast.
+[CITY VERIFY] PASS Seventh power owned but NOT equipped (session loadout fire + strength).
+[CITY VERIFY] PASS CONTROL: unequipped seventh power refused by the equip gate (Select/Use false, "Power not equipped"); charges 3->3, cooldown 0.00->0.00, energy 100.00->100.00.
+[CITY VERIFY] PASS CONTROL: refused seventh power spawned no projectile (12 before/after) and the target did not move: displacement=0.0000m.
+[CITY VERIFY] FAIL Real flight resource path: start=6, after 2s=6, after 6s=6; empty rejects.

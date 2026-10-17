@@ -1,0 +1,5 @@
+MEASURED 12-enemy idle before feedback: 120 frames, 96.45 FPS, 10.368 ms/frame, 0 managed B/frame, GameObjects 5608, UI bars 20, number labels 96, materials 113, active bars 1.
+MEASURED 12-enemy active feedback: 120 frames, 91.73 FPS, 10.902 ms/frame, 0 managed B/frame, GameObjects 5608, UI bars 20, number labels 96, materials 113, active bars 12.
+MEASURED pool after stress: objects 5608->5608, materials 113->113, drops 0.
+MEASURED MATCHED feedback disabled, same 12-target damage workload: 120 frames, 90.99 FPS, 10.991 ms/frame, 0 managed B/frame, GameObjects 5608, UI bars 20, number labels 96, materials 113, active bars 0.
+MEASURED MATCHED feedback enabled, same 12-target damage workload: 120 frames, 85.68 FPS, 11.671 ms/frame, 0 managed B/frame, GameObjects 5608, UI bars 20, number labels 96, materials 113, active bars 12.

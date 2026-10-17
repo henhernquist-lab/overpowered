@@ -1,0 +1,2 @@
+[MODE-EXPANSION] MEASURED darkness in Free Play: dummy health 100000 -> 99996, rooted True.
+[MODE-EXPANSION] MEASURED poison in Free Play: dummy health 100000 -> 100000, rooted False.

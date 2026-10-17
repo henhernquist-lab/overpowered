@@ -1,0 +1,6 @@
+EnemyHealthFeedbackVerification.Run was NOT executed.
+tools/verify-sequential.py --out Verification/EnemyHealthFeedback/focused-r1 EnemyHealthFeedbackVerification.Run
+stopped before launching Unity because pgrep found an Editor already open on this same recovery project, plus its two asset-import workers.
+The installed Unity CLI reported STATUS_NO_INSTANCES for Pipeline; it did not offer a safe connection to this Editor.
+No PASS/FAIL count, screenshot, FPS sample, or runtime HP observation exists from this attempted run.
+The existing Editor was left open and untouched to preserve user changes.
