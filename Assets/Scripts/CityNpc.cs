@@ -158,12 +158,15 @@ public sealed class CityNpc : MonoBehaviour
         Health = Mathf.Max(0f, Health-amount);
         var body=GetComponent<Collider>();
         Vector3 point=body!=null ? body.bounds.center : transform.position+Vector3.up;
-        DamageApplied?.Invoke(new NpcDamageResult(this,source,source!=null?source.Crediting:null,amount,before,Health,point));
+        var result=new NpcDamageResult(this,source,source!=null?source.Crediting:null,amount,before,Health,point);
         if (source != null) source.ReportDamage(this, before - Health, Dead, assault);   // per-power stats / style / challenges (no gameplay effect)
         if (Role == NpcRole.Civilian) world.Civilians?.Harmed(this, before - Health, source, Dead);   // civilian ledger (no gameplay effect)
         if (Dead) CancelAttack(); // a killed NPC mid-windup never deals its damage
         Damaged?.Invoke(Dead);
         if(source!=null&&assault) world.OnAssault(this);
+        // Assault can turn a neutral patrol hostile. Publish the captured result after that relation is updated,
+        // so the first real hit receives feedback too, while preserving the existing gameplay event order.
+        DamageApplied?.Invoke(result);
         if (!Dead) return;
         Agent.enabled=false; GetComponent<Collider>().enabled=false;
         if(source!=null) world.OnDefeat(this); Crime?.CriminalDefeated();
