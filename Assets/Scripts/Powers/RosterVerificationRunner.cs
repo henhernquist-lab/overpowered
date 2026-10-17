@@ -178,6 +178,10 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         Cam.transform.position=W.Hero.transform.position+new Vector3(2.5f,2f,-3f);
         Cam.transform.LookAt(Chest(cop));Capture("laser-beam-side.png");
         Cam.transform.SetPositionAndRotation(oldPosition,oldRotation);
+        // The measured drain assertion above is complete. Start the separate throughput fixture full,
+        // because doubled drain no longer permits both windows on one partial energy bar.
+        W.Powers.Tick(100,true);
+        Check(Mathf.Approximately(W.Powers.Energy,W.Powers.MaxEnergy),"Throughput fixture starts at full energy through normal regeneration.");
         yield return LaserThroughput();
         W.Powers.Channel(false, Time.deltaTime);
         Check(W.Powers.Channeling == null && Mathf.Approximately(rt.Cooldown, stats.Cooldown) && !PowerVfx.Get().BeamVisible, $"Releasing ends the channel, starts the {stats.Cooldown} s cooldown, hides the beam.");

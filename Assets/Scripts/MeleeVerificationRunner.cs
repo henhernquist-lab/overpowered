@@ -46,7 +46,7 @@ public sealed class MeleeVerificationRunner : SessionVerificationRunner
         yield return new WaitForSeconds(.8f);
         Check(hero.LastComboKickImpactTime>priorKick&&hero.LastKickImpactTime==priorHurricane,
             "Second tap caused Martelo impact after windup and no Hurricane gameplay impact.");
-        float finisherForce = s.Force * HeroAbilityTuning.KickForceMultiplier * m.FinisherForceMultiplier, finisherDamage = s.Damage * HeroAbilityTuning.KickDamageMultiplier * m.FinisherDamageMultiplier;
+        float finisherForce = s.Force * HeroAbilityTuning.KickForceMultiplier * m.FinisherForceMultiplier, finisherDamage = s.Damage * m.FinisherDamageMultiplier;
         Check(Mathf.Abs(hero.LastComboKickForce - finisherForce) < .5f && Mathf.Abs(hp - target.Health - finisherDamage) < .05f,
             $"Finisher: {hero.LastComboKickForce:F0} N.s (kick x{m.FinisherForceMultiplier}), {hp - target.Health:F2} dmg (expected {finisherDamage:F2}).");
         Check(TimeArbiter.HitPausesStarted > pauses, "Finisher impact produced a hit pause.");
@@ -122,7 +122,7 @@ public sealed class MeleeVerificationRunner : SessionVerificationRunner
         hp = basic.Health; pauses = TimeArbiter.HitPausesStarted; int finisherPauses = hero.FinisherPauses;
         Check(hero.TryComboAttack() && hero.LastComboStage == 2, "Basic tap 2 = Martelo finisher.");
         yield return new WaitForSeconds(.9f);
-        float basicFinisher = bd * HeroAbilityTuning.KickDamageMultiplier * m.FinisherDamageMultiplier;
+        float basicFinisher = bd * m.FinisherDamageMultiplier;
         Check(Mathf.Abs(hp - basic.Health - basicFinisher) < .05f && hero.FinisherPauses == finisherPauses + 1 && TimeArbiter.HitPausesStarted == pauses + 1,
             $"Basic finisher: {hp - basic.Health:F2} dmg (expected {basicFinisher:F2}) and its own hit pause although the kick is light ({hero.LastComboKickForce:F0} N.s).");
         Check(hero.LastComboKickForce < s.Force, "CONTROL: basic-melee finisher stays weaker than a plain Strength punch.");

@@ -19,17 +19,17 @@ public static class RosterSetup
         {
             d.Description = "Shadow Tendrils: root the aimed enemy in place. It cannot move, but can still attack what is in reach.";
             d.Charges = 2; d.ChargeRecharge = 5f; d.Cooldown = .6f; d.ResourceCost = 15f;
-            d.Damage = 4f; d.Force = 0f; d.Duration = 3.5f; d.Range = 22f;
+            d.Damage = 12f; d.Force = 0f; d.Duration = 3.5f; d.Range = 22f;
             d.PaletteColor = CityColor.UiPurple; d.MenuIcon = MenuGlyph.Orbit; d.CastingPresentation = true;
         });
         // Channeled: no charges are spent (Charges 1 only keeps the shared HUD slot's single pip full); ResourceCost is the energy
-        // needed to START; DrainPerSecond is paid while held (net ~20/s against the 12/s regen, ~5 s from full); Damage is per second.
+        // needed to START; DrainPerSecond is paid while held (net ~52/s against the 12/s regen, ~1.92 s from full); Damage is per second.
         Define("laser-eyes", "Laser Eyes", Effect<LaserEyesEffect>("LaserEyes"), d =>
         {
             d.Description = "Hold to fire a continuous beam at the crosshair. Drains energy while held.";
-            d.Activation = PowerActivation.Channeled; d.DrainPerSecond = 32f; d.ResourceCost = 10f;
+            d.Activation = PowerActivation.Channeled; d.DrainPerSecond = 64f; d.ResourceCost = 10f;
             d.Charges = 1; d.ChargeRecharge = 1f; d.Cooldown = .8f;
-            d.Damage = 38f; d.Force = 60f; d.Range = 26f; d.Duration = 0f; d.OriginHeight = 1.62f;
+            d.Damage = 42f; d.Force = 60f; d.Range = 26f; d.Duration = 0f; d.OriginHeight = 1.62f;
             d.PaletteColor = CityColor.Red; d.MenuIcon = MenuGlyph.Star; d.CastingPresentation = false;
         });
         Define("lightning", "Lightning", Effect<LightningEffect>("Lightning"), d =>
@@ -38,7 +38,7 @@ public static class RosterSetup
             // 0.75 s cooldown: synergy cooldowns must be >= 40x every instant offensive power's (Thermal Shock 30 s); its real
             // pacing gate is 2 charges with a 2.5 s recharge.
             d.Charges = 2; d.ChargeRecharge = 2.5f; d.Cooldown = .75f; d.ResourceCost = 18f;
-            d.Damage = 24f; d.Force = 300f; d.Range = 24f;
+            d.Damage = 40.8f; d.Force = 300f; d.Range = 24f;
             d.PaletteColor = CityColor.Cream; d.MenuIcon = MenuGlyph.Chevron; d.CastingPresentation = true;
         });
         // Defensive: Damage 0 (never used); Duration is the field's life; the absorb capacity lives on the effect asset.
@@ -57,12 +57,12 @@ public static class RosterSetup
             d.Damage = 8f; d.Force = 0f; d.Range = 9f; d.Duration = .18f;
             d.PaletteColor = CityColor.Amber; d.MenuIcon = MenuGlyph.Wing; d.CastingPresentation = false;
         });
-        // Damage is damage PER SECOND for Duration (10 x 6 s = 60: kills a 39 HP Endless rusher on its own, not a 65 HP cop).
+        // Damage is damage PER SECOND for Duration (12.5 x 6 s = 75 intended mean before the per-application range).
         Define("poison", "Poison", Effect<PoisonEffect>("Poison"), d =>
         {
             d.Description = "Poison the aimed enemy (damage over time). If it dies while poisoned, the poison jumps to nearby enemies.";
             d.Charges = 2; d.ChargeRecharge = 3f; d.Cooldown = .6f; d.ResourceCost = 12f;
-            d.Damage = 10f; d.Force = 0f; d.Duration = 6f; d.Range = 20f;
+            d.Damage = 12.5f; d.Force = 0f; d.Duration = 6f; d.Range = 20f;
             d.PaletteColor = CityColor.Leaf; d.MenuIcon = MenuGlyph.Crystal; d.CastingPresentation = true;
         });
         Define("teleport", "Teleport", Effect<TeleportEffect>("Teleport"), d =>

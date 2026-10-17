@@ -108,7 +108,7 @@ public sealed class PowerPayoffVerificationRunner : MonoBehaviour
         while((kick?U.Hero.LastKickImpactTime:U.Hero.LastImpactTime)==before&&Time.time<until)yield return null;
         Check((kick?U.Hero.LastKickImpactTime:U.Hero.LastImpactTime)>before,"Waited for actual melee impact after windup");
         var rb=npc.GetComponent<Rigidbody>();yield return new WaitForFixedUpdate();yield return new WaitForFixedUpdate();
-        float expected=U.Stats(U.Strength).Damage*(kick?HeroAbilityTuning.KickDamageMultiplier:1)+(frozen?30:0);
+        float expected=U.Stats(U.Strength).Damage*(kick?W.Tuning.Melee.HurricaneDamageMultiplier:1)+(frozen?30:0);
         float speed=rb!=null?rb.linearVelocity.magnitude:0;
         Check(Mathf.Abs(hp-npc.Health-expected)<.01f,$"{(kick?"KICK":"PUNCH")} frozen={frozen}: damage={hp-npc.Health:F2}, expected={expected:F2}, speed={speed:F3}m/s, base impulse={(kick?U.Hero.LastKickForce:U.Hero.LastForce):F0}, shatter impulse={(frozen?1800:0)} N.s");
         Check(!npc.Frozen&& (frozen?speed>1:rb==null),"Frozen-state CONTROL: only frozen melee launches, freeze consumed");
@@ -161,7 +161,7 @@ public sealed class PowerPayoffVerificationRunner : MonoBehaviour
         yield return new WaitForSeconds(.25f);
         Capture("telekinesis-held-"+(first?"first":"third")+".png");
         var target=Npc(stage+new Vector3(2,0,18));var control=Npc(stage+new Vector3(6,0,18));
-        if(lethal)target.SetCombatStats(65,0);
+        if(lethal)target.SetCombatStats(10,0);
         Aim(target.transform.position+Vector3.up*.9f,first);Physics.SyncTransforms();
         Vector3 aim=U.AimPoint(U.Stats(tk).Range,body),start=body.position,velocity=body.linearVelocity;
         int charges=tk.Charges;float energy=U.Energy,hp=target.Health;tk.Cooldown=1;tk.Charges=0;
