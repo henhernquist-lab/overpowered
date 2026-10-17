@@ -76,7 +76,7 @@ public sealed partial class GameHud : MonoBehaviour
         Root = Document.rootVisualElement; Root.name = "game-hud"; Root.pickingMode = PickingMode.Ignore;
         Root.style.position = Position.Absolute; Root.style.left = Root.style.right = Root.style.top = Root.style.bottom = 0;
         Root.style.unityFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"); Root.style.color = C(CityColor.UiInk);
-        Build(); BuildOverlay(); BuildFeedback();
+        Build(); BuildOverlay(); BuildFeedback(); BuildEnemyFeedback();
     }
 
     /// Shows or hides the whole HUD (the FPS A/B uses this to measure the legacy IMGUI-only frame).
@@ -319,6 +319,7 @@ public sealed partial class GameHud : MonoBehaviour
     {
         long started = System.Diagnostics.Stopwatch.GetTimestamp();
         Refresh();
+        TickEnemyFeedback();
         LastUpdateMs = (System.Diagnostics.Stopwatch.GetTimestamp() - started) * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
     }
     void Refresh()
@@ -466,7 +467,7 @@ public sealed partial class GameHud : MonoBehaviour
         Show(directorCaption, shown.Length > 0);
     }
 
-    void OnDestroy() { StopFeedbackTweens(); Bind(null); BindHero(null); if (Panel != null) Destroy(Panel); if (OverlayPanel != null) Destroy(OverlayPanel); if (overlayHost != null) Destroy(overlayHost); }
+    void OnDestroy() { CityNpc.DamageApplied -= OnNpcDamageApplied; StopFeedbackTweens(); Bind(null); BindHero(null); if (Panel != null) Destroy(Panel); if (OverlayPanel != null) Destroy(OverlayPanel); if (overlayHost != null) Destroy(overlayHost); }
 }
 
 /// One power-bar slot and the values it is currently drawing (verification reads these).
