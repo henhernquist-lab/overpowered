@@ -25,7 +25,7 @@ public sealed class GameTuning : ScriptableObject
     [Header("Combo string (tap E): punch -> Martelo kick finisher")]
     [Tooltip("Hits in one string; the last one is the kick finisher.")] public int ComboLength = 2;
     [Tooltip("Seconds after a string hit within which the next tap continues the string; later taps restart it.")] public float ComboWindow = .9f;
-    [Tooltip("Second E combo hit = Martelo kick with these extra multipliers on force and damage.")]
+    [Tooltip("Second E Martelo: force multiplier is additional to kick force; damage multiplier is relative to punch damage.")]
     public float FinisherForceMultiplier = 1.6f, FinisherDamageMultiplier = 1.19f;
     [Tooltip("Standalone RMB damage relative to punch; independent of the E combo finisher.")]
     public float HurricaneDamageMultiplier = .34f;

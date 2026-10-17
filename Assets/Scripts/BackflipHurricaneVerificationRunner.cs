@@ -84,7 +84,7 @@ public sealed class BackflipHurricaneVerificationRunner : MonoBehaviour
         W.MenuOpen=false; // Movement entry points obey the same input gates as live gameplay.
         Check(P.Animator!=null&&P.Animator.runtimeAnimatorController!=null,"CONTROL: shared humanoid Animator is live before the gestures.");
         Log($"CONFIG backflip: cooldown={HeroAbilityTuning.BackflipCooldown:F2}s dash={HeroAbilityTuning.BackflipSeconds:F2}s distance={HeroAbilityTuning.BackflipDistance:F1}m hop={HeroAbilityTuning.BackflipHopSpeed:F2}m/s; clip start={P.Tuning.BackflipStartSeconds:F3}s length={P.Tuning.Backflip.length:F4}s fitted playback={((P.Tuning.Backflip.length-P.Tuning.BackflipStartSeconds)/HeroAbilityTuning.BackflipSeconds):F2}x");
-        Log($"CONFIG hurricane kick: start={P.Tuning.KickStartSeconds:F3}s impact={P.Tuning.KickImpactSeconds:F3}s playback={P.Tuning.KickPlayback:F2}x -> configured windup={P.Tuning.KickWindup*1000:F1}ms; force x{HeroAbilityTuning.KickForceMultiplier:F2} damage x{HeroAbilityTuning.KickDamageMultiplier:F2} radius={HeroAbilityTuning.KickRadius:F2}m vs punch radius {W.Powers.Stats(W.Powers.Strength).Radius:F2}m");
+        Log($"CONFIG hurricane kick: start={P.Tuning.KickStartSeconds:F3}s impact={P.Tuning.KickImpactSeconds:F3}s playback={P.Tuning.KickPlayback:F2}x -> configured windup={P.Tuning.KickWindup*1000:F1}ms; force x{HeroAbilityTuning.KickForceMultiplier:F2} damage x{W.Tuning.Melee.HurricaneDamageMultiplier:F2} radius={HeroAbilityTuning.KickRadius:F2}m vs punch radius {W.Powers.Stats(W.Powers.Strength).Radius:F2}m");
         yield return Backflip();
         yield return ChargePool();
         yield return Melee();

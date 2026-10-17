@@ -16,7 +16,7 @@ public static class HeroAbilityTuning
     // These are multipliers on the strength power's already-tier-scaled stats, not absolutes,
     // so an upgraded strength power keeps improving the kick instead of the kick falling behind.
     public const float KickForceMultiplier = 1.5f;   // punch 1350 N.s -> 2025 N.s at tier 0
-    public const float KickDamageMultiplier = 1.7f;  // punch 35 -> 59.5 at tier 0
+    public const float KickDamageMultiplier = 1.7f;  // legacy value; current independent kick damage is authored in GameTuning.Melee
     public const float KickOriginHeight = 1f;        // matches the punch origin height
     public const float KickOriginOffset = 1.4f;      // centred on the sweep, slightly under the punch's 1.7
     public const float KickRadius = 4.6f;            // punch 3.3 m -> a visibly wider sweep

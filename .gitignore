@@ -161,3 +161,6 @@ InitTestScene*.unity*
 
 Verification/PhaseShift/saves/
 Verification/PhaseShift/save-path.txt
+
+# Isolated combat-balance verification profiles.
+/Verification/CombatBalance/saves/
