@@ -111,7 +111,7 @@ public sealed class CityNpc : MonoBehaviour
     EnemyRoster Roster => EnemyRoster.Current;
     public static CityNpc Spawn(WorldSession world, Vector3 position, NpcRole role) =>
         Spawn(world, position, role, role == NpcRole.Civilian || EnemyRoster.Current == null ? null : EnemyRoster.Current.For(role));
-    public static CityNpc Spawn(WorldSession world, Vector3 position, NpcRole role, EnemyArchetype archetype)
+    public static CityNpc Spawn(WorldSession world, Vector3 position, NpcRole role, EnemyArchetype archetype, float? healthMean = null, float? attackDamage = null)
     {
         var c = world.Tuning.Npcs;
         if (!NavMesh.SamplePosition(position, out var hit, c.NavSampleRadius, NavMesh.AllAreas)) return null;
@@ -121,7 +121,9 @@ public sealed class CityNpc : MonoBehaviour
         var npc = root.AddComponent<CityNpc>(); npc.world=world; npc.Role=role; npc.Archetype=archetype;
         float standard = c.CopHealth + world.Stars*c.HealthPerStar;
         npc.Health = role==NpcRole.Civilian ? c.CivilianHealth : archetype!=null ? standard*archetype.HealthMultiplier : role==NpcRole.PursuingHero ? c.HeroHealth : standard;
+        if (role != NpcRole.Civilian) npc.Health = Mathf.Max(1f, world.Rolls.Health(healthMean ?? npc.Health, world.Tuning.CombatRanges));
         npc.MaxHealth = npc.Health;
+        if (attackDamage.HasValue) npc.explicitDamage = Mathf.Max(0f, attackDamage.Value);
         npc.Agent=root.AddComponent<NavMeshAgent>(); npc.Agent.height=c.Height*scale; npc.Agent.radius=c.Radius*scale; npc.Agent.acceleration=c.Acceleration; npc.Agent.angularSpeed=c.AngularSpeed;
         npc.Agent.stoppingDistance=c.AttackRange*.5f;
         npc.circleSign=(npc.GetEntityId().GetHashCode()&1)==0?1:-1; npc.combatSpeed=archetype!=null?archetype.MoveSpeed:c.CopSpeed;

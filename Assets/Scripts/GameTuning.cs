@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Overpowered/Game Tuning")]
 public sealed class GameTuning : ScriptableObject
 {
+    public CombatRangeSettings CombatRanges = new CombatRangeSettings();
     public MovementSettings Movement = new MovementSettings();
     public CitySettings City = new CitySettings();
     public NpcSettings Npcs = new NpcSettings();

@@ -214,9 +214,8 @@ public sealed class EndlessWaveState : ModeDirectorState
             // Ground only: a rooftop NavMesh island would strand the enemy.
             if (!NavMesh.CalculatePath(hit.position, Arena, NavMesh.AllAreas, path) || path.status != NavMeshPathStatus.PathComplete) continue;
             var slot = EndlessWaveEvents.Slot.Regular; var spec = Spec(ref slot);
-            var npc = CityNpc.Spawn(World, hit.position, spec.Role, spec.Archetype);
+            var npc = CityNpc.Spawn(World, hit.position, spec.Role, spec.Archetype, spec.Health, spec.Damage);
             if (npc == null) continue;
-            npc.SetCombatStats(spec.Health, spec.Damage);
             npc.AlwaysAggro = true;
             npc.Damaged += dead => { if (dead) Defeated(npc); };
             Alive.Add(npc); AliveSlots.Add(slot); AliveCost += Tuning.Events != null ? Tuning.Events.CostOf(slot) : 1; Spawned++;

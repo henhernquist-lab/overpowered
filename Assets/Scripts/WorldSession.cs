@@ -6,6 +6,7 @@ public sealed class WorldSession : MonoBehaviour
     public static WorldSession Instance { get; private set; }
     public static string VerificationSavePath;
     public GameTuning Tuning { get; private set; }
+    public CombatRolls Rolls { get; private set; } = CombatRolls.Create();
     public CityDistrict City { get; private set; }
     public SuperHeroController Hero { get; private set; }
     public PlayerProgression Progression { get; private set; }

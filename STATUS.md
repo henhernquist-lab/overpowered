@@ -5375,3 +5375,14 @@ Six final captures and results are retained at the EnemyHealthFeedback root and 
 Remaining human acceptance: Henry must judge bar size/height, HP text readability, number size/lifetime, clutter, Laser update speed and hold duration in normal Editor play. Automated completion does not establish that it feels good, nor that the entire overnight game build is finished. No shipping mission pools were activated and no push was made. Pre-existing user changes remain outside these checkpoints.
 
 Final verified code checkpoint: **`d4c566e`**, committed unchanged after r6; earlier current-roster fixture checkpoint `3d05a6b`. Final SDK build **0 warnings / 0 errors** (`Verification/EnemyHealthFeedback/final-build.txt`). The following documentation/evidence checkpoint adds no gameplay code.
+
+
+## Combat balance ranges — authoritative BEFORE audit, 2026-10-17
+
+Requested branch `codex/combat-balance-ranges` starts at `905abdb`. Existing dirty user files and generated verification evidence are preserved. No push. Source/data audit before implementation (runtime baseline pending): zero-star Rusher/Gunner/Brute HP 39/65/195; pursuing-role Brute 195 at zero stars and 411 at four stars. Formula `(65 + stars*18) * archetype.HealthMultiplier`; civilian HP excluded. Endless uses `65*(1+.15*(wave-1))*archetype`, then optional event/modifier/elite/miniboss multipliers. HeatResponse can multiply spawned police again; outgoing enemy damage stays fixed.
+
+Actual tier-zero VECTOR means: Fire45; Punch35; E→E Martelo **83.3** (=35*1.4*1.7, not historical49); standalone Hurricane59.5 (=35*1.7); Telekinesis `35*clamp(sqrt(mass/45),.5,3)` =35 at45kg and104.34984 at400kg; Ice5 plus separate30 shatter; Laser42 DPS and32 gross energy/sec (12/sec baseline regen); Darkness4; Poison10 DPS*6s=60 in12 ticks; Lightning24 with0.85 falloff. Basic melee8, combo19.04 and Hurricane13.6 before changes. Force/velocity/mass/timing/resource properties are outside this balance change except Laser drain.
+
+Synergy audit: Sonic Slam40, Thermal Shock25 (+17.5 conditional bonus), Solar Flare60, Void Grasp45 and Eclipse Beam160 all read their own PowerSynergyDefinition damage, not the requested base-power fields. None dynamically inherits these damage means. Preserve their independently authored values and existing damage routing. Ice shatter remains fixed30 (with1800 impulse/28 particles), outside randomized base attack damage. Stats queries remain means; only actual attack/spawn boundaries may sample.
+
+Targets: Fire27; punch35; combo41.65; Hurricane11.9; TK45kg10/400kg29.81424; Ice10; Laser42 DPS/64 energy per second; Darkness12; Poison12.5 DPS/75 total; Lightning40.8. Central default variance ±10%, deterministic injectable session streams, unchanged health means. No implementation or new verification PASS is claimed at this audit checkpoint.
