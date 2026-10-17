@@ -313,7 +313,7 @@ public sealed class SuperHeroController : MonoBehaviour
         float force=stats.Force*HeroAbilityTuning.KickForceMultiplier;
         int bodies;
         using (powers.Credit(MeleeCredit)) bodies=CombatImpact.Blast(powers, transform.position + Vector3.up * HeroAbilityTuning.KickOriginHeight + transform.forward * HeroAbilityTuning.KickOriginOffset,
-            HeroAbilityTuning.KickRadius, force, powers.RollDamage(stats.Damage * HeroAbilityTuning.KickDamageMultiplier), HeroAbilityTuning.KickUpwardForce, melee:true);
+            HeroAbilityTuning.KickRadius, force, powers.RollDamage(stats.Damage * (combo ? 1f : Melee.HurricaneDamageMultiplier)), HeroAbilityTuning.KickUpwardForce, melee:true);
         if(combo)
         {
             LastComboKickForce=force;LastComboKickAffectedBodies=bodies;

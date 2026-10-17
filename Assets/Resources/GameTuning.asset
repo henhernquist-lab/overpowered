@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd1bde3a7662419dac17bd0c42249ce, type: 3}
   m_Name: GameTuning
   m_EditorClassIdentifier: Assembly-CSharp::GameTuning
+  Melee:
+    FinisherDamageMultiplier: 1.19
+    HurricaneDamageMultiplier: 0.34
   CombatRanges:
     EnemyHealthVariance: 0.1
     PlayerDamageVariance: 0.1

@@ -26,7 +26,9 @@ public sealed class GameTuning : ScriptableObject
     [Tooltip("Hits in one string; the last one is the kick finisher.")] public int ComboLength = 2;
     [Tooltip("Seconds after a string hit within which the next tap continues the string; later taps restart it.")] public float ComboWindow = .9f;
     [Tooltip("Second E combo hit = Martelo kick with these extra multipliers on force and damage.")]
-    public float FinisherForceMultiplier = 1.6f, FinisherDamageMultiplier = 1.4f;
+    public float FinisherForceMultiplier = 1.6f, FinisherDamageMultiplier = 1.19f;
+    [Tooltip("Standalone RMB damage relative to punch; independent of the E combo finisher.")]
+    public float HurricaneDamageMultiplier = .34f;
     [Tooltip("Real seconds of hit pause on a landed finisher (through TimeArbiter, same rate limit as Feel).")] public float FinisherHitPauseSeconds = .07f;
     [Header("Charged heavy (hold E, release)")]
     [Tooltip("A press shorter than this is a tap (combo); longer charges a heavy punch released on key-up.")] public float HeavyTapThreshold = .2f;
