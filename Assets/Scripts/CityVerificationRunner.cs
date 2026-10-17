@@ -87,12 +87,32 @@ public sealed class CityVerificationRunner : MonoBehaviour
             $"CONTROL: refused seventh power spawned no projectile ({shots} before/after) and the target did not move: displacement={Vector3.Distance(target.position,before):F4}m.");
         Destroy(target.gameObject);
 
+        float refusedFuel=w.Powers.Flight.Fuel;
+        Check(!w.Powers.IsEquipped(w.Powers.Flight.Definition) && !w.Powers.ConsumeFlight(.1f) && w.Powers.Flight.Fuel==refusedFuel,
+            "Shipping loadout CONTROL: unequipped legacy Flight refuses fuel consumption.");
+        var flightCatalog=Resources.Load<ForgeCatalog>("ForgeCatalog");
+        var shippingHero=flightCatalog.Heroes[0];
+        var attackA=w.Powers.EquippedA;var attackB=w.Powers.EquippedB;var shippingSecondary=w.Powers.EquippedSecondary;
+        var flightHero=TestHero(shippingHero,attackA,attackB,w.Powers.Flight.Definition);
+        Register(flightCatalog,flightHero);
+        try
+        {
+            var flightRun=Equip(flightHero,attackA,attackB,"legacy Flight resource fixture",w.Powers.Flight.Definition);
+            while(flightRun.MoveNext())yield return flightRun.Current;
+            camera=Prepare();
+            Check(w.Powers.IsEquipped(w.Powers.Flight.Definition) && !EditorUtility.IsDirty(flightCatalog) && !AssetDatabase.Contains(flightHero),
+                "Legacy fuel positive control uses an explicit in-memory test hero/secondary through normal save gates; shipping catalog is not dirty.");
         w.Powers.Flight.Fuel=w.Powers.Stats(w.Powers.Flight).Duration;
         w.Powers.ConsumeFlight(2); float after2=w.Powers.Flight.Fuel;
         w.Powers.ConsumeFlight(4); float empty=w.Powers.Flight.Fuel;
         Check(Mathf.Approximately(after2,6-2*w.Powers.Flight.Definition.ResourceCost)&&empty==0&&!w.Powers.ConsumeFlight(.1f),$"Real flight resource path: start=6, after 2s={after2}, after 6s={empty}; empty rejects.");
         w.Powers.Tick(1,false);Check(w.Powers.Flight.Fuel==0,"Airborne CONTROL cannot recharge empty flight fuel.");
         w.Powers.Tick(1,true); Check(w.Powers.Flight.Fuel==2.5f,"Ground recharge after 1s=2.5s.");
+            flightRun=Equip(shippingHero,attackA,attackB,"restore shipping secondary",shippingSecondary);
+            while(flightRun.MoveNext())yield return flightRun.Current;
+        }
+        finally {RestoreCatalog();Destroy(flightHero);}
+        camera=Prepare();
         w.Hero.DebugSetResources(6,3); Check(w.Hero.TryPunch(),"Charged punch normal CONTROL fires.");
         Check(!w.Hero.TryPunch(),"Punch cooldown rejects immediate retry.");
         yield return new WaitForSeconds(w.Hero.PunchWindupSeconds+.05f);
@@ -230,7 +250,7 @@ public sealed class CityVerificationRunner : MonoBehaviour
     }
     // Equips through the REAL pre-session API (Home profile -> PlayerProgression.SetLoadout), then boots a fresh sandbox session
     // from the same save, exactly as the editor entry starts this suite.
-    IEnumerator Equip(HeroDefinition hero,PowerDefinition a,PowerDefinition b,string label)
+    IEnumerator Equip(HeroDefinition hero,PowerDefinition a,PowerDefinition b,string label,PowerDefinition utility=null)
     {
         var old=w; float end=Time.realtimeSinceStartup+60; ModeScreens menu=null;
         Check(!w.Progression.SetLoadout(hero,a,b,CityColor.Blue,CityColor.Cyan),"CONTROL: live in-session loadout change refused ("+label+").");
@@ -241,7 +261,7 @@ public sealed class CityVerificationRunner : MonoBehaviour
         var loadout=menu.Profile.Data.Loadout; var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");
         var outsider=Array.Find(forge.Heroes,h=>!forge.Allowed(h,a)||!forge.Allowed(h,b));
         if(outsider!=null) Check(!menu.Profile.SetLoadout(outsider,a,b,loadout.Primary,loadout.Secondary),$"CONTROL: hero {outsider.Id} whose roster lacks the pair cannot equip {label}.");
-        Check(menu.Profile.Owns(a)&&menu.Profile.Owns(b)&&menu.Profile.SetLoadout(hero,a,b,loadout.Primary,loadout.Secondary),$"Equipped owned {label} on {hero.Id} through PlayerProgression.SetLoadout before the session.");
+        Check(menu.Profile.Owns(a)&&menu.Profile.Owns(b)&&menu.Profile.SetLoadout(hero,a,b,utility??menu.Profile.EquippedSecondary,loadout.Primary,loadout.Secondary),$"Equipped owned {label} on {hero.Id} through PlayerProgression.SetLoadout before the session.");
         SceneManager.LoadScene(GameFlow.CityScene);
         while(WorldSession.Instance==null||WorldSession.Instance==old||SceneManager.GetActiveScene().name!=GameFlow.CityScene)
         { if(Time.realtimeSinceStartup>end) throw new TimeoutException("City scene timeout"); yield return null; }
@@ -254,7 +274,7 @@ public sealed class CityVerificationRunner : MonoBehaviour
         var hero=ScriptableObject.CreateInstance<HeroDefinition>(); hero.hideFlags=HideFlags.DontSave; hero.name="verification-hero";
         hero.Id="verification-hero"; hero.DisplayName="VERIFICATION HERO";
         hero.AvailablePowers=new[]{a,b,secondary}; hero.DefaultA=a; hero.DefaultB=b;
-        hero.CharacterPrefab=look.CharacterPrefab; hero.Portrait=look.Portrait; hero.Primary=look.Primary; hero.Secondary=look.Secondary; hero.VisualScale=look.VisualScale; hero.Animation=look.Animation;
+        hero.Suit=look.Suit;hero.CharacterPrefab=look.CharacterPrefab; hero.Portrait=look.Portrait; hero.Primary=look.Primary; hero.Secondary=look.Secondary; hero.VisualScale=look.VisualScale; hero.Animation=look.Animation;
         return hero;
     }
     static void Register(ForgeCatalog forge,HeroDefinition hero)

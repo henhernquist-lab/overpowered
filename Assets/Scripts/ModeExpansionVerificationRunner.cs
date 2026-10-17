@@ -534,9 +534,11 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
             $"Legacy save loads: level {probe.Data.Level}, XP {probe.Data.Xp}, best {probe.Data.BestSessionScore}, side {probe.Data.Side}, ModeRecords empty list (not null).");
         probe.RecordSession("endless-fight",false,55,0,3);probe.Initialize(tuning.Progression,powers,legacy);
         Check(probe.BestScore("endless-fight")==55&&probe.Record("endless-fight").BestWave==3&&probe.Data.Level==2&&probe.Data.BestSessionScore==420&&probe.Data.SessionsPlayed==5,"Legacy save upgraded in place: new endless record 55 / wave 3; old fields intact (global best 420 unchanged).");
-        string invalid=Path.Combine(Folder,"save-invalid.json");File.WriteAllText(invalid,"{\"Version\":2,\"Level\":9}");
+        string invalid=Path.Combine(Folder,"save-invalid-"+Guid.NewGuid().ToString("N")+".json");File.WriteAllText(invalid,"{\"Version\":2,\"Level\":9}");
         probe.Initialize(tuning.Progression,powers,invalid);
-        Check(probe.LastError!=null&&probe.Data.Level==1,"Invalid-save CONTROL: version-2 file still rejected ("+probe.LastError+").");
+        Check(probe.Data.Version==1 && probe.Data.Level==1 && probe.RecoveredFrom==null &&
+            File.Exists(invalid+".corrupt") && File.ReadAllText(invalid+".corrupt")=="{\"Version\":2,\"Level\":9}",
+            "Invalid-save CONTROL: version-2 data rejected, fresh level-one state used, and exact invalid input preserved despite durable loadout repair clearing LastError.");
         probe.Initialize(tuning.Progression,powers,Path.Combine(Folder,"save-fresh-"+Guid.NewGuid().ToString("N")+".json"));
         Check(probe.Data.ModeRecords.Count==0&&probe.BestScore("endless-fight")==0,"Fresh-save CONTROL in second process: no mode records, best 0.");
         Destroy(probe.gameObject);

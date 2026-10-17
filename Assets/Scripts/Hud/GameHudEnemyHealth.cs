@@ -37,6 +37,10 @@ public sealed partial class GameHud
     public int DamageNumbersStarted { get; private set; }
     public int DamageNumbersMerged { get; private set; }
     public int DamageNumbersDropped { get; private set; }
+#if UNITY_EDITOR
+    /// Only the dedicated performance fixture suppresses presentation; damage/gameplay remain untouched.
+    public bool VerificationSuppressEnemyFeedback { get; set; }
+#endif
     VisualElement enemyBarLayer, enemyNumberLayer;
     float nextEnemyAim;
     static readonly RaycastHit[] enemySightHits = new RaycastHit[16];
@@ -81,6 +85,9 @@ public sealed partial class GameHud
     }
     void OnNpcDamageApplied(NpcDamageResult result)
     {
+#if UNITY_EDITOR
+        if(VerificationSuppressEnemyFeedback)return;
+#endif
         var world=WorldSession.Instance;
         if(world==null || result.Attacker!=world.Powers || result.Target==null || !result.Target.Hostile ||
             result.Target.Role==NpcRole.Civilian || result.HealthLost<=0f) return;
@@ -147,6 +154,9 @@ public sealed partial class GameHud
         var world=WorldSession.Instance;var camera=ViewCamera();
         bool running=world!=null && world.Powers!=null && (world.Mode==null || !world.Mode.Ended) &&
             camera!=null && OverlayRoot!=null && OverlayRoot.layout.width>1f && OverlayRoot.style.display!=DisplayStyle.None;
+#if UNITY_EDITOR
+        if(VerificationSuppressEnemyFeedback)running=false;
+#endif
         if(!running)
         {
             foreach(var bar in EnemyBars){bar.Visible=false;Show(bar.Element,false);}

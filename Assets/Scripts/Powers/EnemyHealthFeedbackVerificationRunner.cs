@@ -49,12 +49,12 @@ public sealed class EnemyHealthFeedbackVerificationRunner : SessionVerificationR
         foreach(var npc in W.Npcs.ToArray())if(npc!=null)Destroy(npc.gameObject);
         yield return new WaitForSecondsRealtime(GameHud.DamageNumberSeconds+.05f);
     }
-    IEnumerator Sample(string label,int frames)
+    IEnumerator Sample(string label,int frames,Action<int> workload=null)
     {
         var target=new RenderTexture(1280,720,24){name="Enemy feedback profile"};target.Create();
         var prior=Cam.targetTexture;Cam.targetTexture=target;
         var clock=System.Diagnostics.Stopwatch.StartNew();long bytes=GC.GetAllocatedBytesForCurrentThread();
-        for(int i=0;i<frames;i++){Cam.Render();yield return null;}
+        for(int i=0;i<frames;i++){workload?.Invoke(i);Cam.Render();yield return null;}
         clock.Stop();Cam.targetTexture=prior;target.Release();Destroy(target);
         Log($"MEASURED {label}: {frames} frames, {frames/clock.Elapsed.TotalSeconds:0.00} FPS, " +
             $"{clock.Elapsed.TotalMilliseconds/frames:0.000} ms/frame, " +
@@ -185,6 +185,25 @@ public sealed class EnemyHealthFeedbackVerificationRunner : SessionVerificationR
             FindObjectsByType<GameObject>(FindObjectsInactive.Include).Length==gameObjects &&
             Resources.FindObjectsOfTypeAll<Material>().Length==materialWarm && Hud.DamageNumbersDropped==0,
             "Sustained 12-target hits reuse the same UI slots without GameObject or material growth after warmup.");
+        // Same actors, camera, resolution and six 12-target damage bursts in each sample. Suppression is
+        // Editor-only and leaves CityNpc damage untouched; it excludes this HUD consumer, not gameplay.
+        Destroy(poison.GetComponent<Poisoned>());yield return new WaitForSecondsRealtime(GameHud.EnemyBarHoldSeconds+.2f);
+        Action<int> burst=frame=>{if(frame%20==0)using(W.Powers.Credit("verification-matched"))
+            foreach(var npc in crowd)npc.Damage(1,W.Powers,false);};
+        float healthBefore=crowd.Sum(n=>n.Health);
+        int startsBefore=Hud.DamageNumbersStarted;
+        try
+        {
+            Hud.VerificationSuppressEnemyFeedback=true;yield return Frames(2);
+            yield return Sample("MATCHED feedback disabled, same 12-target damage workload",120,burst);
+            Check(Mathf.Abs(healthBefore-crowd.Sum(n=>n.Health)-72f)<.01f && Hud.DamageNumbersStarted==startsBefore,
+                "Disabled-feedback baseline still applies all 72 authoritative damage points without starting UI numbers.");
+        }
+        finally {Hud.VerificationSuppressEnemyFeedback=false;}
+        healthBefore=crowd.Sum(n=>n.Health);startsBefore=Hud.DamageNumbersStarted;
+        yield return Sample("MATCHED feedback enabled, same 12-target damage workload",120,burst);
+        Check(Mathf.Abs(healthBefore-crowd.Sum(n=>n.Health)-72f)<.01f && Hud.DamageNumbersStarted-startsBefore==72 && Hud.DamageNumbersDropped==0,
+            "Enabled-feedback comparison applies the same 72 damage points and starts all 72 pooled numbers without drops.");
         yield return ClearActors();
 
         yield return Enter("lightning","poison");Isolate();Hud.DismissBriefing("verification setup");yield return new WaitForSecondsRealtime(.4f);
