@@ -1,0 +1,26 @@
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS HUD prebuilds exactly 20 reusable bars and 64 reusable number labels before any hit.
+PASS Actual spawned 0-star HP: Rusher 39, Gunner 65, Brute 195, pursuing-hero Brute 195.
+PASS Endless wave-1 composed Rusher HP 39; explicit spawn stats use this value (Heat excluded).
+PASS Undamaged unrelated enemies have no combat bars or damage records.
+PASS rusher bar reads actual CityNpc current/max and fill (34/39).
+PASS gunner bar reads actual CityNpc current/max and fill (60/65).
+PASS brute bar reads actual CityNpc current/max and fill (190/195).
+PASS Neutral pursuing-hero actor gets no player-hostile bar in Hero mode.
+PASS Fire Blast activates through the equipped PowerUser gate.
+PASS Fire AoE emits one real resolved result per damaged target; outside-radius control gets none.
+PASS Fire number belongs to the impact victim and equals its authoritative resolved damage.
+PASS Equipped Strength starts the real first E punch.
+PASS Punch number equals authoritative 35 damage after configured windup.
+PASS Second E in the combo window starts Martelo.
+PASS Martelo number uses its separate real impact damage, with no rapid-source merge.
+PASS Save VECTOR with laser-eyes + poison through the loadout API.
+PASS Session equips laser-eyes + poison.
+PASS laser-eyes selected for LMB (key 1).
+PASS Laser channel starts through the equipped gate.
+PASS Laser 5 real ticks aggregate into truthful displayed total 21.17 (resolved 21.17); adjacent control untouched.
+PASS Poison applies through its real equipped gate; damage begins on a later tick.
+PASS Poison application invents no immediate damage number.
+FAIL System.Exception: Rapid Poison real ticks aggregate exactly: 0 ticks, resolved 0, shown 0.

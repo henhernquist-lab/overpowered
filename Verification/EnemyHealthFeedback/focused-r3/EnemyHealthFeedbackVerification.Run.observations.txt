@@ -1,0 +1,2 @@
+MEASURED 12-enemy idle before feedback: 120 frames, 103.45 FPS, 9.666 ms/frame, 0 managed B/frame, GameObjects 5608, UI bars 20, number labels 64, materials 113, active bars 1.
+MEASURED 12-enemy active feedback: 120 frames, 95.59 FPS, 10.462 ms/frame, 0 managed B/frame, GameObjects 5608, UI bars 20, number labels 64, materials 113, active bars 12.

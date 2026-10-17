@@ -1,0 +1,40 @@
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS HUD prebuilds exactly 20 reusable bars and 64 reusable number labels before any hit.
+PASS Actual spawned 0-star HP: Rusher 39, Gunner 65, Brute 195, pursuing-hero Brute 195.
+PASS Endless wave-1 composed Rusher HP 39; explicit spawn stats use this value (Heat excluded).
+PASS Undamaged unrelated enemies have no combat bars or damage records.
+PASS rusher bar reads actual CityNpc current/max and fill (34/39).
+IMAGE Verification/EnemyHealthFeedback/rusher-health.png
+PASS gunner bar reads actual CityNpc current/max and fill (60/65).
+IMAGE Verification/EnemyHealthFeedback/gunner-health.png
+PASS brute bar reads actual CityNpc current/max and fill (190/195).
+IMAGE Verification/EnemyHealthFeedback/brute-health.png
+PASS Neutral pursuing-hero actor gets no player-hostile bar in Hero mode.
+PASS Fire Blast activates through the equipped PowerUser gate.
+PASS Fire AoE emits one real resolved result per damaged target; outside-radius control gets none.
+PASS Fire number belongs to the impact victim and equals its authoritative resolved damage.
+IMAGE Verification/EnemyHealthFeedback/fire-damage.png
+PASS Equipped Strength starts the real first E punch.
+PASS Punch number equals authoritative 35 damage after configured windup.
+PASS Second E in the combo window starts Martelo.
+PASS Martelo number uses its separate real impact damage, with no rapid-source merge.
+PASS Save VECTOR with laser-eyes + poison through the loadout API.
+PASS Session equips laser-eyes + poison.
+PASS laser-eyes selected for LMB (key 1).
+PASS Laser channel starts through the equipped gate.
+PASS Laser 5 real ticks aggregate into truthful displayed total 21.56 (resolved 21.56); adjacent control untouched.
+IMAGE Verification/EnemyHealthFeedback/laser-aggregated.png
+PASS Poison applies through its real equipped gate; damage begins on a later tick.
+PASS Poison application invents no immediate damage number.
+PASS Rapid Poison real ticks aggregate exactly: 4 ticks, resolved 4, shown 4.
+MEASURED 12-enemy idle before feedback: 120 frames, 103.45 FPS, 9.666 ms/frame, 0 managed B/frame, GameObjects 5608, UI bars 20, number labels 64, materials 113, active bars 1.
+PASS Twelve damaged enemies use prebuilt bounded bar/number pools.
+PASS Stress Laser channel starts with legal equip.
+PASS Stress melee starts with the real controller.
+MEASURED 12-enemy active feedback: 120 frames, 95.59 FPS, 10.462 ms/frame, 0 managed B/frame, GameObjects 5608, UI bars 20, number labels 64, materials 113, active bars 12.
+FAIL System.Exception: Sustained 12-target hits reuse the same UI slots without GameObject or material growth after warmup.
+  at SessionVerificationRunner.Check (System.Boolean ok, System.String line) [0x0001b] in /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/Powers/SessionVerificationRunner.cs:53 
+  at EnemyHealthFeedbackVerificationRunner+<Checks>d__20.MoveNext () [0x013b8] in /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/Powers/EnemyHealthFeedbackVerificationRunner.cs:177 
+  at SessionVerificationRunner+<Start>d__24.MoveNext () [0x00071] in /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/Powers/SessionVerificationRunner.cs:45 
