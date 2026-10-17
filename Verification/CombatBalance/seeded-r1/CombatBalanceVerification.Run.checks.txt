@@ -1,0 +1,406 @@
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Rusher spawn 0/0: actual HP 36.36185, mean 39; current=max and bounds.
+PASS Health bar reads this spawned rolled maximum, not archetype mean.
+PASS Rusher spawn 0/1: actual HP 41.52504, mean 39; current=max and bounds.
+PASS Rusher spawn 0/2: actual HP 39.91404, mean 39; current=max and bounds.
+PASS Rusher spawn 0/3: actual HP 42.68772, mean 39; current=max and bounds.
+PASS Rusher spawn 0/4: actual HP 37.28875, mean 39; current=max and bounds.
+PASS Rusher spawn 0/5: actual HP 42.61515, mean 39; current=max and bounds.
+PASS Rusher spawn 0/6: actual HP 38.14168, mean 39; current=max and bounds.
+PASS Rusher spawn 0/7: actual HP 41.98138, mean 39; current=max and bounds.
+PASS Rusher spawn 0/8: actual HP 37.01935, mean 39; current=max and bounds.
+PASS Rusher spawn 0/9: actual HP 41.46397, mean 39; current=max and bounds.
+PASS Rusher spawn 0/10: actual HP 39.80589, mean 39; current=max and bounds.
+PASS Rusher spawn 0/11: actual HP 36.32532, mean 39; current=max and bounds.
+PASS Rusher spawn 0/12: actual HP 36.01229, mean 39; current=max and bounds.
+PASS Rusher spawn 0/13: actual HP 41.89711, mean 39; current=max and bounds.
+PASS Rusher spawn 0/14: actual HP 36.50628, mean 39; current=max and bounds.
+PASS Rusher spawn 0/15: actual HP 40.57779, mean 39; current=max and bounds.
+PASS Rusher spawn 0/16: actual HP 35.87737, mean 39; current=max and bounds.
+PASS Rusher spawn 0/17: actual HP 39.93301, mean 39; current=max and bounds.
+PASS Rusher spawn 0/18: actual HP 38.76472, mean 39; current=max and bounds.
+PASS Rusher spawn 0/19: actual HP 37.10203, mean 39; current=max and bounds.
+PASS Rusher spawn 0/20: actual HP 38.59780, mean 39; current=max and bounds.
+PASS Rusher spawn 0/21: actual HP 38.08903, mean 39; current=max and bounds.
+PASS Rusher spawn 0/22: actual HP 42.52270, mean 39; current=max and bounds.
+PASS Rusher spawn 0/23: actual HP 39.39958, mean 39; current=max and bounds.
+PASS Rusher spawn 0/24: actual HP 40.77702, mean 39; current=max and bounds.
+PASS Rusher spawn 0/25: actual HP 41.28993, mean 39; current=max and bounds.
+PASS Rusher spawn 0/26: actual HP 41.90849, mean 39; current=max and bounds.
+PASS Rusher spawn 0/27: actual HP 39.41983, mean 39; current=max and bounds.
+PASS Rusher spawn 0/28: actual HP 37.10966, mean 39; current=max and bounds.
+PASS Rusher spawn 0/29: actual HP 41.40748, mean 39; current=max and bounds.
+PASS Rusher spawn 0/30: actual HP 37.16139, mean 39; current=max and bounds.
+PASS Rusher spawn 0/31: actual HP 37.72139, mean 39; current=max and bounds.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Rusher spawn 1/0: actual HP 36.36185, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/1: actual HP 41.52504, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/2: actual HP 39.91404, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/3: actual HP 42.68772, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/4: actual HP 37.28875, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/5: actual HP 42.61515, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/6: actual HP 38.14168, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/7: actual HP 41.98138, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/8: actual HP 37.01935, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/9: actual HP 41.46397, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/10: actual HP 39.80589, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/11: actual HP 36.32532, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/12: actual HP 36.01229, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/13: actual HP 41.89711, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/14: actual HP 36.50628, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/15: actual HP 40.57779, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/16: actual HP 35.87737, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/17: actual HP 39.93301, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/18: actual HP 38.76472, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/19: actual HP 37.10203, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/20: actual HP 38.59780, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/21: actual HP 38.08903, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/22: actual HP 42.52270, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/23: actual HP 39.39958, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/24: actual HP 40.77702, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/25: actual HP 41.28993, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/26: actual HP 41.90849, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/27: actual HP 39.41983, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/28: actual HP 37.10966, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/29: actual HP 41.40748, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/30: actual HP 37.16139, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/31: actual HP 37.72139, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Rusher spawn 2/0: actual HP 36.36139, mean 39; current=max and bounds.
+PASS Rusher spawn 2/1: actual HP 41.88977, mean 39; current=max and bounds.
+PASS Rusher spawn 2/2: actual HP 36.36966, mean 39; current=max and bounds.
+PASS Rusher spawn 2/3: actual HP 39.26723, mean 39; current=max and bounds.
+PASS Rusher spawn 2/4: actual HP 36.39835, mean 39; current=max and bounds.
+PASS Rusher spawn 2/5: actual HP 42.23273, mean 39; current=max and bounds.
+PASS Rusher spawn 2/6: actual HP 40.41155, mean 39; current=max and bounds.
+PASS Rusher spawn 2/7: actual HP 40.33108, mean 39; current=max and bounds.
+PASS Rusher spawn 2/8: actual HP 35.16085, mean 39; current=max and bounds.
+PASS Rusher spawn 2/9: actual HP 36.54869, mean 39; current=max and bounds.
+PASS Rusher spawn 2/10: actual HP 37.45041, mean 39; current=max and bounds.
+PASS Rusher spawn 2/11: actual HP 39.43473, mean 39; current=max and bounds.
+PASS Rusher spawn 2/12: actual HP 40.59807, mean 39; current=max and bounds.
+PASS Rusher spawn 2/13: actual HP 38.26186, mean 39; current=max and bounds.
+PASS Rusher spawn 2/14: actual HP 36.32533, mean 39; current=max and bounds.
+PASS Rusher spawn 2/15: actual HP 42.41825, mean 39; current=max and bounds.
+PASS Rusher spawn 2/16: actual HP 41.05906, mean 39; current=max and bounds.
+PASS Rusher spawn 2/17: actual HP 35.46258, mean 39; current=max and bounds.
+PASS Rusher spawn 2/18: actual HP 38.54675, mean 39; current=max and bounds.
+PASS Rusher spawn 2/19: actual HP 39.45604, mean 39; current=max and bounds.
+PASS Rusher spawn 2/20: actual HP 36.87268, mean 39; current=max and bounds.
+PASS Rusher spawn 2/21: actual HP 35.44120, mean 39; current=max and bounds.
+PASS Rusher spawn 2/22: actual HP 36.85566, mean 39; current=max and bounds.
+PASS Rusher spawn 2/23: actual HP 39.12574, mean 39; current=max and bounds.
+PASS Rusher spawn 2/24: actual HP 41.32707, mean 39; current=max and bounds.
+PASS Rusher spawn 2/25: actual HP 41.58530, mean 39; current=max and bounds.
+PASS Rusher spawn 2/26: actual HP 37.35101, mean 39; current=max and bounds.
+PASS Rusher spawn 2/27: actual HP 35.26483, mean 39; current=max and bounds.
+PASS Rusher spawn 2/28: actual HP 36.43532, mean 39; current=max and bounds.
+PASS Rusher spawn 2/29: actual HP 39.97047, mean 39; current=max and bounds.
+PASS Rusher spawn 2/30: actual HP 40.23726, mean 39; current=max and bounds.
+PASS Rusher spawn 2/31: actual HP 35.43167, mean 39; current=max and bounds.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Different seed changes actual spawn sequence.
+PASS Explicit scaled spawn rolls once in scaled range; updates do not reroll or randomize outgoing damage.
+PASS Gunner spawn 0/0: actual HP 60.60308, mean 65; current=max and bounds.
+PASS Health bar reads this spawned rolled maximum, not archetype mean.
+PASS Gunner spawn 0/1: actual HP 69.20840, mean 65; current=max and bounds.
+PASS Gunner spawn 0/2: actual HP 66.52339, mean 65; current=max and bounds.
+PASS Gunner spawn 0/3: actual HP 71.14619, mean 65; current=max and bounds.
+PASS Gunner spawn 0/4: actual HP 62.14791, mean 65; current=max and bounds.
+PASS Gunner spawn 0/5: actual HP 71.02525, mean 65; current=max and bounds.
+PASS Gunner spawn 0/6: actual HP 63.56947, mean 65; current=max and bounds.
+PASS Gunner spawn 0/7: actual HP 69.96896, mean 65; current=max and bounds.
+PASS Gunner spawn 0/8: actual HP 61.69892, mean 65; current=max and bounds.
+PASS Gunner spawn 0/9: actual HP 69.10661, mean 65; current=max and bounds.
+PASS Gunner spawn 0/10: actual HP 66.34315, mean 65; current=max and bounds.
+PASS Gunner spawn 0/11: actual HP 60.54220, mean 65; current=max and bounds.
+PASS Gunner spawn 0/12: actual HP 60.02048, mean 65; current=max and bounds.
+PASS Gunner spawn 0/13: actual HP 69.82851, mean 65; current=max and bounds.
+PASS Gunner spawn 0/14: actual HP 60.84381, mean 65; current=max and bounds.
+PASS Gunner spawn 0/15: actual HP 67.62965, mean 65; current=max and bounds.
+PASS Gunner spawn 0/16: actual HP 59.79561, mean 65; current=max and bounds.
+PASS Gunner spawn 0/17: actual HP 66.55502, mean 65; current=max and bounds.
+PASS Gunner spawn 0/18: actual HP 64.60787, mean 65; current=max and bounds.
+PASS Gunner spawn 0/19: actual HP 61.83672, mean 65; current=max and bounds.
+PASS Gunner spawn 0/20: actual HP 64.32967, mean 65; current=max and bounds.
+PASS Gunner spawn 0/21: actual HP 63.48172, mean 65; current=max and bounds.
+PASS Gunner spawn 0/22: actual HP 70.87117, mean 65; current=max and bounds.
+PASS Gunner spawn 0/23: actual HP 65.66597, mean 65; current=max and bounds.
+PASS Gunner spawn 0/24: actual HP 67.96170, mean 65; current=max and bounds.
+PASS Gunner spawn 0/25: actual HP 68.81655, mean 65; current=max and bounds.
+PASS Gunner spawn 0/26: actual HP 69.84748, mean 65; current=max and bounds.
+PASS Gunner spawn 0/27: actual HP 65.69971, mean 65; current=max and bounds.
+PASS Gunner spawn 0/28: actual HP 61.84943, mean 65; current=max and bounds.
+PASS Gunner spawn 0/29: actual HP 69.01247, mean 65; current=max and bounds.
+PASS Gunner spawn 0/30: actual HP 61.93565, mean 65; current=max and bounds.
+PASS Gunner spawn 0/31: actual HP 62.86897, mean 65; current=max and bounds.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Gunner spawn 1/0: actual HP 60.60308, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/1: actual HP 69.20840, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/2: actual HP 66.52339, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/3: actual HP 71.14619, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/4: actual HP 62.14791, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/5: actual HP 71.02525, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/6: actual HP 63.56947, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/7: actual HP 69.96896, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/8: actual HP 61.69892, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/9: actual HP 69.10661, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/10: actual HP 66.34315, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/11: actual HP 60.54220, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/12: actual HP 60.02048, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/13: actual HP 69.82851, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/14: actual HP 60.84381, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/15: actual HP 67.62965, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/16: actual HP 59.79561, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/17: actual HP 66.55502, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/18: actual HP 64.60787, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/19: actual HP 61.83672, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/20: actual HP 64.32967, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/21: actual HP 63.48172, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/22: actual HP 70.87117, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/23: actual HP 65.66597, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/24: actual HP 67.96170, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/25: actual HP 68.81655, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/26: actual HP 69.84748, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/27: actual HP 65.69971, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/28: actual HP 61.84943, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/29: actual HP 69.01247, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/30: actual HP 61.93565, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/31: actual HP 62.86897, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Gunner spawn 2/0: actual HP 60.60232, mean 65; current=max and bounds.
+PASS Gunner spawn 2/1: actual HP 69.81628, mean 65; current=max and bounds.
+PASS Gunner spawn 2/2: actual HP 60.61609, mean 65; current=max and bounds.
+PASS Gunner spawn 2/3: actual HP 65.44538, mean 65; current=max and bounds.
+PASS Gunner spawn 2/4: actual HP 60.66391, mean 65; current=max and bounds.
+PASS Gunner spawn 2/5: actual HP 70.38788, mean 65; current=max and bounds.
+PASS Gunner spawn 2/6: actual HP 67.35258, mean 65; current=max and bounds.
+PASS Gunner spawn 2/7: actual HP 67.21846, mean 65; current=max and bounds.
+PASS Gunner spawn 2/8: actual HP 58.60141, mean 65; current=max and bounds.
+PASS Gunner spawn 2/9: actual HP 60.91449, mean 65; current=max and bounds.
+PASS Gunner spawn 2/10: actual HP 62.41734, mean 65; current=max and bounds.
+PASS Gunner spawn 2/11: actual HP 65.72454, mean 65; current=max and bounds.
+PASS Gunner spawn 2/12: actual HP 67.66345, mean 65; current=max and bounds.
+PASS Gunner spawn 2/13: actual HP 63.76977, mean 65; current=max and bounds.
+PASS Gunner spawn 2/14: actual HP 60.54222, mean 65; current=max and bounds.
+PASS Gunner spawn 2/15: actual HP 70.69708, mean 65; current=max and bounds.
+PASS Gunner spawn 2/16: actual HP 68.43176, mean 65; current=max and bounds.
+PASS Gunner spawn 2/17: actual HP 59.10431, mean 65; current=max and bounds.
+PASS Gunner spawn 2/18: actual HP 64.24458, mean 65; current=max and bounds.
+PASS Gunner spawn 2/19: actual HP 65.76006, mean 65; current=max and bounds.
+PASS Gunner spawn 2/20: actual HP 61.45447, mean 65; current=max and bounds.
+PASS Gunner spawn 2/21: actual HP 59.06866, mean 65; current=max and bounds.
+PASS Gunner spawn 2/22: actual HP 61.42609, mean 65; current=max and bounds.
+PASS Gunner spawn 2/23: actual HP 65.20956, mean 65; current=max and bounds.
+PASS Gunner spawn 2/24: actual HP 68.87845, mean 65; current=max and bounds.
+PASS Gunner spawn 2/25: actual HP 69.30883, mean 65; current=max and bounds.
+PASS Gunner spawn 2/26: actual HP 62.25168, mean 65; current=max and bounds.
+PASS Gunner spawn 2/27: actual HP 58.77472, mean 65; current=max and bounds.
+PASS Gunner spawn 2/28: actual HP 60.72553, mean 65; current=max and bounds.
+PASS Gunner spawn 2/29: actual HP 66.61746, mean 65; current=max and bounds.
+PASS Gunner spawn 2/30: actual HP 67.06209, mean 65; current=max and bounds.
+PASS Gunner spawn 2/31: actual HP 59.05278, mean 65; current=max and bounds.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Different seed changes actual spawn sequence.
+PASS Explicit scaled spawn rolls once in scaled range; updates do not reroll or randomize outgoing damage.
+PASS Brute spawn 0/0: actual HP 181.80920, mean 195; current=max and bounds.
+PASS Health bar reads this spawned rolled maximum, not archetype mean.
+PASS Brute spawn 0/1: actual HP 207.62520, mean 195; current=max and bounds.
+PASS Brute spawn 0/2: actual HP 199.57020, mean 195; current=max and bounds.
+PASS Brute spawn 0/3: actual HP 213.43860, mean 195; current=max and bounds.
+PASS Brute spawn 0/4: actual HP 186.44380, mean 195; current=max and bounds.
+PASS Brute spawn 0/5: actual HP 213.07570, mean 195; current=max and bounds.
+PASS Brute spawn 0/6: actual HP 190.70840, mean 195; current=max and bounds.
+PASS Brute spawn 0/7: actual HP 209.90690, mean 195; current=max and bounds.
+PASS Brute spawn 0/8: actual HP 185.09680, mean 195; current=max and bounds.
+PASS Brute spawn 0/9: actual HP 207.31990, mean 195; current=max and bounds.
+PASS Brute spawn 0/10: actual HP 199.02950, mean 195; current=max and bounds.
+PASS Brute spawn 0/11: actual HP 181.62660, mean 195; current=max and bounds.
+PASS Brute spawn 0/12: actual HP 180.06140, mean 195; current=max and bounds.
+PASS Brute spawn 0/13: actual HP 209.48550, mean 195; current=max and bounds.
+PASS Brute spawn 0/14: actual HP 182.53140, mean 195; current=max and bounds.
+PASS Brute spawn 0/15: actual HP 202.88900, mean 195; current=max and bounds.
+PASS Brute spawn 0/16: actual HP 179.38680, mean 195; current=max and bounds.
+PASS Brute spawn 0/17: actual HP 199.66510, mean 195; current=max and bounds.
+PASS Brute spawn 0/18: actual HP 193.82360, mean 195; current=max and bounds.
+PASS Brute spawn 0/19: actual HP 185.51010, mean 195; current=max and bounds.
+PASS Brute spawn 0/20: actual HP 192.98900, mean 195; current=max and bounds.
+PASS Brute spawn 0/21: actual HP 190.44510, mean 195; current=max and bounds.
+PASS Brute spawn 0/22: actual HP 212.61350, mean 195; current=max and bounds.
+PASS Brute spawn 0/23: actual HP 196.99790, mean 195; current=max and bounds.
+PASS Brute spawn 0/24: actual HP 203.88510, mean 195; current=max and bounds.
+PASS Brute spawn 0/25: actual HP 206.44960, mean 195; current=max and bounds.
+PASS Brute spawn 0/26: actual HP 209.54240, mean 195; current=max and bounds.
+PASS Brute spawn 0/27: actual HP 197.09910, mean 195; current=max and bounds.
+PASS Brute spawn 0/28: actual HP 185.54830, mean 195; current=max and bounds.
+PASS Brute spawn 0/29: actual HP 207.03740, mean 195; current=max and bounds.
+PASS Brute spawn 0/30: actual HP 185.80690, mean 195; current=max and bounds.
+PASS Brute spawn 0/31: actual HP 188.60690, mean 195; current=max and bounds.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Brute spawn 1/0: actual HP 181.80920, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/1: actual HP 207.62520, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/2: actual HP 199.57020, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/3: actual HP 213.43860, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/4: actual HP 186.44380, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/5: actual HP 213.07570, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/6: actual HP 190.70840, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/7: actual HP 209.90690, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/8: actual HP 185.09680, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/9: actual HP 207.31990, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/10: actual HP 199.02950, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/11: actual HP 181.62660, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/12: actual HP 180.06140, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/13: actual HP 209.48550, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/14: actual HP 182.53140, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/15: actual HP 202.88900, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/16: actual HP 179.38680, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/17: actual HP 199.66510, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/18: actual HP 193.82360, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/19: actual HP 185.51010, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/20: actual HP 192.98900, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/21: actual HP 190.44510, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/22: actual HP 212.61350, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/23: actual HP 196.99790, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/24: actual HP 203.88510, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/25: actual HP 206.44960, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/26: actual HP 209.54240, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/27: actual HP 197.09910, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/28: actual HP 185.54830, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/29: actual HP 207.03740, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/30: actual HP 185.80690, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/31: actual HP 188.60690, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Brute spawn 2/0: actual HP 181.80690, mean 195; current=max and bounds.
+PASS Brute spawn 2/1: actual HP 209.44880, mean 195; current=max and bounds.
+PASS Brute spawn 2/2: actual HP 181.84830, mean 195; current=max and bounds.
+PASS Brute spawn 2/3: actual HP 196.33610, mean 195; current=max and bounds.
+PASS Brute spawn 2/4: actual HP 181.99170, mean 195; current=max and bounds.
+PASS Brute spawn 2/5: actual HP 211.16360, mean 195; current=max and bounds.
+PASS Brute spawn 2/6: actual HP 202.05780, mean 195; current=max and bounds.
+PASS Brute spawn 2/7: actual HP 201.65540, mean 195; current=max and bounds.
+PASS Brute spawn 2/8: actual HP 175.80420, mean 195; current=max and bounds.
+PASS Brute spawn 2/9: actual HP 182.74350, mean 195; current=max and bounds.
+PASS Brute spawn 2/10: actual HP 187.25200, mean 195; current=max and bounds.
+PASS Brute spawn 2/11: actual HP 197.17360, mean 195; current=max and bounds.
+PASS Brute spawn 2/12: actual HP 202.99030, mean 195; current=max and bounds.
+PASS Brute spawn 2/13: actual HP 191.30930, mean 195; current=max and bounds.
+PASS Brute spawn 2/14: actual HP 181.62670, mean 195; current=max and bounds.
+PASS Brute spawn 2/15: actual HP 212.09120, mean 195; current=max and bounds.
+PASS Brute spawn 2/16: actual HP 205.29530, mean 195; current=max and bounds.
+PASS Brute spawn 2/17: actual HP 177.31290, mean 195; current=max and bounds.
+PASS Brute spawn 2/18: actual HP 192.73380, mean 195; current=max and bounds.
+PASS Brute spawn 2/19: actual HP 197.28020, mean 195; current=max and bounds.
+PASS Brute spawn 2/20: actual HP 184.36340, mean 195; current=max and bounds.
+PASS Brute spawn 2/21: actual HP 177.20600, mean 195; current=max and bounds.
+PASS Brute spawn 2/22: actual HP 184.27830, mean 195; current=max and bounds.
+PASS Brute spawn 2/23: actual HP 195.62870, mean 195; current=max and bounds.
+PASS Brute spawn 2/24: actual HP 206.63530, mean 195; current=max and bounds.
+PASS Brute spawn 2/25: actual HP 207.92650, mean 195; current=max and bounds.
+PASS Brute spawn 2/26: actual HP 186.75500, mean 195; current=max and bounds.
+PASS Brute spawn 2/27: actual HP 176.32410, mean 195; current=max and bounds.
+PASS Brute spawn 2/28: actual HP 182.17660, mean 195; current=max and bounds.
+PASS Brute spawn 2/29: actual HP 199.85240, mean 195; current=max and bounds.
+PASS Brute spawn 2/30: actual HP 201.18630, mean 195; current=max and bounds.
+PASS Brute spawn 2/31: actual HP 177.15830, mean 195; current=max and bounds.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Different seed changes actual spawn sequence.
+PASS Explicit scaled spawn rolls once in scaled range; updates do not reroll or randomize outgoing damage.
+FAIL System.Exception: Audited Fire/punch/independent kick mean relationships.
