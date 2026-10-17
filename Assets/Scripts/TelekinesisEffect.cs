@@ -5,6 +5,8 @@ public sealed class TelekinesisEffect : PowerEffect
 {
     [Header("Directed throw")]
     public float MinimumThrowSpeed = 22f, MaximumThrowSpeed = 40f;
+    [Tooltip("Applied after existing mass scaling, before one impact variance roll.")]
+    public float ImpactDamageMultiplier = 2f / 7f;
     public float DamageReferenceMass = 45f, MinimumDamageScale = .5f, MaximumDamageScale = 3f;
     public float MomentumTransfer = .65f, MaxImpactImpulse = 2400f, ImpactLift = .3f;
     public float ImpactSeparationSeconds = .2f;
@@ -23,7 +25,7 @@ public sealed class TelekinesisEffect : PowerEffect
         body.AddForce(impulse,ForceMode.Impulse);
         var impact=body.GetComponent<ThrownProp>();if(impact==null)impact=body.gameObject.AddComponent<ThrownProp>();
         float scale=Mathf.Clamp(Mathf.Sqrt(body.mass/Mathf.Max(1,DamageReferenceMass)),MinimumDamageScale,MaximumDamageScale);
-        impact.Initialize(user,stats.Damage*scale,stats.Duration,this,impulse);
+        impact.Initialize(user,stats.Damage*scale*ImpactDamageMultiplier,stats.Duration,this,impulse);
     }
     public override bool Execute(PowerUser user, PowerRuntime power)
     {
