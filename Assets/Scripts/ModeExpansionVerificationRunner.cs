@@ -187,23 +187,25 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
 
     // ---------------------------------------------------------------- FREE PLAY POWERS (Phase 4 audit, 2026-09-27)
     /// Every power of the CURRENT catalog is equipped through the real save gates and used in a real Free Play session
-    /// launched from the Home button. Sessions cache their two equipped powers, so six sessions cover all eleven (the five
-    /// original powers keep their specific checks; the six roster powers get a real aimed cast at an NPC dummy).
+    /// launched from the Home button. Sessions cache their two equipped powers, so four sessions cover eight attacks and four shipping secondaries. Legacy Flight stays a refused-loadout control.
     IEnumerator FreePlayPowers()
     {
         var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");var all=Resources.LoadAll<PowerDefinition>("Powers");
         PowerDefinition P(string id)=>all.First(p=>p.Id==id);
         var ids=all.Select(p=>p.Id).OrderBy(i=>i).ToArray();
-        Check(ids.SequenceEqual(new[]{"darkness","fire","flight","force-field","ice","laser-eyes","lightning","poison","speed","strength","telekinesis"}),"Current power catalog = "+string.Join(", ",ids)+" ("+ids.Length+" powers).");
-        var original5=new HashSet<string>{"fire","flight","ice","strength","telekinesis"};
-        var original=ui.Profile.Data.Loadout;string heroId=original.HeroId,oa=original.PowerA,ob=original.PowerB;CityColor op=original.Primary,os=original.Secondary;
+        Check(ids.SequenceEqual(new[]{"darkness","fire","flight","force-field","ice","laser-eyes","lightning","phase-shift","poison","speed","strength","telekinesis","teleport"}),"Current power catalog = "+string.Join(", ",ids)+" ("+ids.Length+" powers).");
+        var original5=new HashSet<string>{"fire","ice","strength","telekinesis"};
+        var shipping=ids.Where(id=>id!="flight").ToArray();
+        Check(!ui.Profile.SetLoadout(forge.Heroes[0],P("flight"),P("strength"),P("speed"),CityColor.Blue,CityColor.Cyan),
+            "Legacy Flight CONTROL: cannot occupy an attack slot in the shipping two-attack/one-secondary loadout.");
+        var original=ui.Profile.Data.Loadout;string heroId=original.HeroId,oa=original.PowerA,ob=original.PowerB,ou=original.SecondaryPower;CityColor op=original.Primary,os=original.Secondary;
         var used=new HashSet<string>();float basic=-1,strong=-1;
-        foreach(var (a,b) in new[]{("fire","ice"),("flight","strength"),("telekinesis","fire"),("darkness","poison"),("lightning","laser-eyes"),("speed","force-field")})
+        foreach(var (a,b,utility) in new[]{("fire","ice","speed"),("strength","telekinesis","force-field"),("darkness","poison","teleport"),("lightning","laser-eyes","phase-shift")})
         {
-            Check(ui.Profile.SetLoadout(forge.Heroes[0],P(a),P(b),CityColor.Blue,CityColor.Cyan),$"Save {a} + {b} through PlayerProgression.SetLoadout (ownership/equip gates).");
+            Check(ui.Profile.SetLoadout(forge.Heroes[0],P(a),P(b),P(utility),CityColor.Blue,CityColor.Cyan),$"Save {a} + {b} through PlayerProgression.SetLoadout (ownership/equip gates).");
             Submit(ui.ModeButtons["free-play"]);yield return Scene(GameFlow.CityScene);
             var session=W.Mode;var U=W.Powers;
-            Check(session.Definition==freePlay&&U.EquippedA==P(a)&&U.EquippedB==P(b)&&PrototypeHUD.ObjectiveLines(W).Count==0&&FindObjectsByType<CrimeEncounter>().Length==0,$"Real Home button -> Free Play session equips {a} + {b}; 0 objective lines, 0 encounters.");
+            Check(session.Definition==freePlay&&U.EquippedA==P(a)&&U.EquippedB==P(b)&&U.EquippedSecondary==P(utility)&&PrototypeHUD.ObjectiveLines(W).Count==0&&FindObjectsByType<CrimeEncounter>().Length==0,$"Real Home button -> Free Play session equips {a} + {b}; 0 objective lines, 0 encounters.");
             // Isolated platform above the city: nothing else in the aim lines.
             var cam=Camera.main;cam.GetComponent<ThirdPersonCamera>().enabled=false;
             var floor=GameObject.CreatePrimitive(PrimitiveType.Cube);floor.transform.position=new Vector3(0,149.5f,0);floor.transform.localScale=new Vector3(30,1,30);
@@ -251,15 +253,28 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
                 else if(id=="fire"){float until=Time.time+2;while(crate!=null&&body.linearVelocity.sqrMagnitude<.01f&&Time.time<until)yield return null;Check(crate==null||body.linearVelocity.magnitude>.1f,"Fire projectile reached and pushed the crate: "+(crate==null?"destroyed":body.linearVelocity.magnitude.ToString("F2")+" m/s")+".");}
                 used.Add(id);if(crate!=null)Destroy(crate);yield return null;
             }
+            // Exercise the F-slot through its gameplay entry point, never as a selectable attack.
+            Move(new Vector3(0,150.05f,0));W.Hero.ResetMotion();W.Hero.enabled=true;W.Hero.transform.forward=Vector3.forward;
+            yield return new WaitForSeconds(.2f);
+            cam.transform.position=W.Hero.transform.position+new Vector3(0,1.7f,-1);cam.transform.forward=Vector3.forward;
+            U.Tick(100,true);var secondary=U.SecondaryRuntime;int secondaryCharges=secondary.Charges;
+            Check(!U.Select(secondary),$"Secondary {utility} CONTROL cannot replace the LMB attack.");
+            Check(U.UseSecondary() && secondary.Charges==secondaryCharges-1,$"Free Play F-slot {utility} activates through the real gate and pays exactly one charge.");
+            used.Add(utility);yield return new WaitForSeconds(.3f);W.Hero.enabled=false;
+            if(utility=="phase-shift")
+            {
+                yield return new WaitForSeconds(U.Stats(secondary).Duration+.1f);
+                Check(!U.Phase.Active,"Phase Shift naturally expires before testing the separate unequipped attack gate.");
+            }
             // Unequipped CONTROLs: one click-cast power and Flight's fuel gate.
             var other=all.First(p=>!U.IsEquipped(p)&&!p.Effect.IsFlight&&p.Id!="strength");
             Check(!U.Use(U.Powers.Find(r=>r.Definition==other))&&U.Message=="Power not equipped",$"Unequipped {other.Id} CONTROL refused: '{U.Message}'.");
             if(!U.IsEquipped(P("flight")))Check(!U.ConsumeFlight(.25f),"Unequipped Flight CONTROL: fuel gate refuses.");
             session.ReturnHome();yield return Scene(GameFlow.HomeScene);yield return Menu();
         }
-        Check(used.OrderBy(i=>i).SequenceEqual(ids),"All "+ids.Length+" current powers equipped and used in Free Play: "+string.Join(", ",used.OrderBy(i=>i))+".");
+        Check(used.OrderBy(i=>i).SequenceEqual(shipping),"All "+shipping.Length+" shipping powers equipped and used in Free Play: "+string.Join(", ",used.OrderBy(i=>i))+".");
         Check(strong>basic&&basic>0,$"Basic melee stays weaker without Strength: basic {basic:F1} vs Strength {strong:F1}.");
-        Check(ui.Profile.SetLoadout(forge.Hero(heroId),P(oa),P(ob),op,os),"Original loadout restored through the same save API ("+oa+" + "+ob+").");
+        Check(ui.Profile.SetLoadout(forge.Hero(heroId),P(oa),P(ob),P(ou),op,os),"Original loadout restored through the same save API ("+oa+" + "+ob+").");
     }
 
     // ---------------------------------------------------------------- ENDLESS
