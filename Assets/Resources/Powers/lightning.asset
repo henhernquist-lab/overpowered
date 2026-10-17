@@ -22,7 +22,7 @@ MonoBehaviour:
   Cooldown: 0.75
   ChargeRecharge: 2.5
   ResourceCost: 18
-  Damage: 24
+  Damage: 40.8
   Force: 300
   Radius: 3
   Range: 24

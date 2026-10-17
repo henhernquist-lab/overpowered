@@ -49,7 +49,7 @@ MonoBehaviour:
     Travel: 0
   MenuIcon: 6
   Activation: 1
-  DrainPerSecond: 32
+  DrainPerSecond: 64
   Upgrades:
   - Name: Upgrade
     PointCost: 1
