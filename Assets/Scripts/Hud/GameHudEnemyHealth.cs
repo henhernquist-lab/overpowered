@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 /// Screen-projected, pooled enemy feedback. The only health/damage input is CityNpc and its damage result.
 public sealed partial class GameHud
 {
-    public const int EnemyBarPoolSize = 20, DamageNumberPoolSize = 32;
+    public const int EnemyBarPoolSize = 20, DamageNumberPoolSize = 96;
     public const float EnemyBarRange = 38f, EnemyBarHoldSeconds = 3.5f, EnemyDeathHoldSeconds = .25f;
     public const float DamageNumberSeconds = .8f, RapidDamageWindow = .2f, EnemySightInterval = .12f;
     public sealed class EnemyBarDisplay
@@ -15,6 +15,7 @@ public sealed partial class GameHud
         public VisualElement Element, Fill;
         public Label Name, Value;
         public float ShowUntil, DeathUntil, NextSight;
+        public float ShownHealth=float.NaN, ShownMaxHealth=float.NaN;
         public bool Occluded, Visible;
     }
     public sealed class DamageNumberDisplay
@@ -23,9 +24,9 @@ public sealed partial class GameHud
         public string SourceId;
         public Label Element;
         public Vector3 Anchor;
-        public float Amount, StartedAt, LastHitAt;
+        public float Amount, StartedAt, LastHitAt, NextSight;
         public int Hits;
-        public bool Active, Visible;
+        public bool Active, Visible, Occluded;
     }
 
     public readonly List<EnemyBarDisplay> EnemyBars = new List<EnemyBarDisplay>(EnemyBarPoolSize);
@@ -35,6 +36,7 @@ public sealed partial class GameHud
     public int EnemyDamageEvents { get; private set; }
     public int DamageNumbersStarted { get; private set; }
     public int DamageNumbersMerged { get; private set; }
+    public int DamageNumbersDropped { get; private set; }
     VisualElement enemyBarLayer, enemyNumberLayer;
     float nextEnemyAim;
     static readonly RaycastHit[] enemySightHits = new RaycastHit[16];
@@ -43,7 +45,7 @@ public sealed partial class GameHud
     {
         float rounded = Mathf.Round(value);
         return Mathf.Abs(value-rounded)<.005f ? rounded.ToString("0",CultureInfo.InvariantCulture) :
-            value.ToString("0.##",CultureInfo.InvariantCulture);
+            value.ToString("0.#",CultureInfo.InvariantCulture);
     }
     void BuildEnemyFeedback()
     {
@@ -100,8 +102,9 @@ public sealed partial class GameHud
         DamageNumberDisplay free=null;
         foreach(var number in DamageNumbers)
             if(!number.Active || now-number.StartedAt>=DamageNumberSeconds){free=number;break;}
-        if(free==null) return; // bounded visual capacity; the authoritative event/history still records the hit.
+        if(free==null){DamageNumbersDropped++;return;} // never conceal saturation in the stress evidence
         free.Active=true;free.Visible=false;free.Target=result.Target;free.SourceId=result.SourceId;
+        free.NextSight=0f;free.Occluded=true;
         free.Anchor=result.WorldPosition;free.Amount=result.ResolvedDamage;free.Hits=1;
         free.StartedAt=free.LastHitAt=now;free.Element.text=CombatValue(free.Amount);
         DamageNumbersStarted++;
@@ -111,9 +114,11 @@ public sealed partial class GameHud
         if(target==null || target.Role==NpcRole.Civilian || !target.Hostile)return null;
         foreach(var bar in EnemyBars)if(bar.Target==target){bar.ShowUntil=Mathf.Max(bar.ShowUntil,until);return bar;}
         EnemyBarDisplay free=null;
-        foreach(var bar in EnemyBars)if(bar.Target==null || Time.unscaledTime>bar.ShowUntil && Time.unscaledTime>bar.DeathUntil){free=bar;break;}
+        foreach(var bar in EnemyBars)if(bar.Target==null ||
+            (bar.Target.Dead ? Time.unscaledTime>bar.DeathUntil : Time.unscaledTime>bar.ShowUntil)){free=bar;break;}
         if(free==null)return null;
         free.Target=target;free.ShowUntil=until;free.DeathUntil=0;free.NextSight=0;free.Occluded=true;free.Visible=false;
+        free.ShownHealth=free.ShownMaxHealth=float.NaN;
         free.Name.text=(target.Archetype!=null?target.Archetype.DisplayName:target.Role.ToString()).ToUpperInvariant();
         return free;
     }
@@ -139,7 +144,7 @@ public sealed partial class GameHud
     }
     void TickEnemyFeedback()
     {
-        var world=WorldSession.Instance;var camera=Camera.main;
+        var world=WorldSession.Instance;var camera=ViewCamera();
         bool running=world!=null && world.Powers!=null && (world.Mode==null || !world.Mode.Ended) &&
             camera!=null && OverlayRoot!=null && OverlayRoot.layout.width>1f && OverlayRoot.style.display!=DisplayStyle.None;
         if(!running)
@@ -161,13 +166,13 @@ public sealed partial class GameHud
                 if(npc!=null && !npc.Dead && npc.Hostile && npc.Role!=NpcRole.Civilian &&
                     (npc.Phase==AttackPhase.Engage || npc.Phase==AttackPhase.Windup) &&
                     (npc.transform.position-camera.transform.position).sqrMagnitude<EnemyBarRange*EnemyBarRange)
-                    ShowEnemyBar(npc,now+.3f);
+                    ShowEnemyBar(npc,now+EnemyBarHoldSeconds);
         }
         foreach(var bar in EnemyBars)
         {
             var target=bar.Target;
             if(target==null || !target.Hostile || target.Role==NpcRole.Civilian ||
-                now>bar.ShowUntil && (!target.Dead || now>bar.DeathUntil))
+                (target.Dead ? now>bar.DeathUntil : now>bar.ShowUntil))
             {
                 bar.Target=null;bar.Visible=false;Show(bar.Element,false);continue;
             }
@@ -183,9 +188,12 @@ public sealed partial class GameHud
             Show(bar.Element,bar.Visible);
             if(!bar.Visible)continue;
             bar.Element.style.left=view.x*width-70f;bar.Element.style.top=(1f-view.y)*height-50f;
-            bar.Fill.style.width=Length.Percent(target.HealthFraction*100f);
-            string hp=CombatValue(target.CurrentHealth)+" / "+CombatValue(target.MaxHealth);
-            if(bar.Value.text!=hp)bar.Value.text=hp;
+            if(bar.ShownHealth!=target.CurrentHealth || bar.ShownMaxHealth!=target.MaxHealth)
+            {
+                bar.Fill.style.width=Length.Percent(target.HealthFraction*100f);
+                bar.Value.text=CombatValue(target.CurrentHealth)+" / "+CombatValue(target.MaxHealth);
+                bar.ShownHealth=target.CurrentHealth;bar.ShownMaxHealth=target.MaxHealth;
+            }
         }
         foreach(var number in DamageNumbers)
         {
@@ -194,8 +202,13 @@ public sealed partial class GameHud
             if(age>=DamageNumberSeconds){number.Active=number.Visible=false;Show(number.Element,false);continue;}
             Vector3 view=camera.WorldToViewportPoint(number.Anchor+Vector3.up*.45f);
             bool inRange=(number.Anchor-camera.transform.position).sqrMagnitude<=EnemyBarRange*EnemyBarRange;
-            number.Visible=view.z>0f && inRange && view.x>.02f && view.x<.98f && view.y>.04f && view.y<.96f &&
-                (number.Target==null || EnemyClear(camera,number.Target,number.Anchor));
+            bool onScreen=view.z>0f && view.x>.02f && view.x<.98f && view.y>.04f && view.y<.96f;
+            if(inRange && onScreen && now>=number.NextSight)
+            {
+                number.Occluded=number.Target!=null && !EnemyClear(camera,number.Target,number.Anchor);
+                number.NextSight=now+EnemySightInterval;
+            }
+            number.Visible=inRange && onScreen && !number.Occluded;
             Show(number.Element,number.Visible);
             if(!number.Visible)continue;
             float x=view.x*width-38f,y=(1f-view.y)*height-20f-age/DamageNumberSeconds*32f;

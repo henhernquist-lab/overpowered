@@ -12,12 +12,16 @@ public readonly struct NpcDamageResult
     public readonly CityNpc Target;
     public readonly PowerUser Attacker;
     public readonly string SourceId;
+    public readonly string ArchetypeName;
+    public readonly NpcRole TargetRole;
     public readonly float ResolvedDamage, HealthLost, HealthBefore, HealthAfter, MaxHealth, Time;
     public readonly Vector3 WorldPosition;
     public NpcDamageResult(CityNpc target, PowerUser attacker, string sourceId, float resolvedDamage,
         float healthBefore, float healthAfter, Vector3 worldPosition)
     {
         Target=target; Attacker=attacker; SourceId=sourceId; ResolvedDamage=resolvedDamage;
+        ArchetypeName=target.Archetype!=null?target.Archetype.DisplayName:target.Role.ToString();
+        TargetRole=target.Role;
         HealthBefore=healthBefore; HealthAfter=healthAfter; HealthLost=healthBefore-healthAfter;
         MaxHealth=target.MaxHealth; WorldPosition=worldPosition; Time=UnityEngine.Time.time;
     }
