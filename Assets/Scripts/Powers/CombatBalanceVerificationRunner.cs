@@ -166,7 +166,7 @@ public sealed class CombatBalanceVerificationRunner : SessionVerificationRunner
     }
     IEnumerator Throws(float mass)
     {
-        Seed();float mean=35*Mathf.Clamp(Mathf.Sqrt(mass/45),.5f,3)*2/7;
+        Seed();float mean=35*Mathf.Clamp(Mathf.Sqrt(mass/45),.5f,3)*5/7;
         for(int i=0;i<20;i++)
         {
             Ready("telekinesis");var crate=GameObject.CreatePrimitive(PrimitiveType.Cube);crate.transform.position=new Vector3(1,151.5f,4);

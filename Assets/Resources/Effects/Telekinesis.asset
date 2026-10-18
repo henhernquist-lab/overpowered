@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TelekinesisEffect
   MinimumThrowSpeed: 22
   MaximumThrowSpeed: 40
-  ImpactDamageMultiplier: 0.2857143
+  ImpactDamageMultiplier: 0.71428573
   DamageReferenceMass: 45
   MinimumDamageScale: 0.5
   MaximumDamageScale: 3

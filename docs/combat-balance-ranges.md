@@ -12,8 +12,8 @@ Branch: `codex/combat-balance-ranges`, based on `905abdb`. Implementation and re
 | Punch | 35 | 35 | 31.5 | 38.5 |
 | E→E Martelo combo kick | 83.3 | 41.65 | 37.485 | 45.815 |
 | Standalone Hurricane | 59.5 | 11.9 | 10.71 | 13.09 |
-| Telekinesis 45 kg | 35 | 10 | 9 | 11 |
-| Telekinesis 400 kg | 104.35 | 29.814 | 26.833 | 32.796 |
+| Telekinesis 45 kg | 35 | 25 | 22.5 | 27.5 |
+| Telekinesis 400 kg | 104.35 | 74.536 | 67.082 | 81.989 |
 | Ice initial | 5 | 10 | 9 | 11 |
 | Ice shatter bonus | 30 | 30 | 30 | 30 |
 | Laser DPS | 42 | 42 | 37.8 | 46.2 |
@@ -32,7 +32,7 @@ The actual pre-change combo was 35 × 1.4 × 1.7 = 83.3. The new independent com
 
 CityNpc samples health once on spawn and stores MaxHealth/Health. Civilians retain fixed HP. Endless supplies its final mean (65 × (1 + .15 × (wave−1)) × archetype × optional event/elite/miniboss scaling) into the spawn call. Existing Heat/stage quality multipliers scale the stored roll without drawing again; tier removal retains its existing behavior. Enemy outgoing damage is not randomized. Explicit SetCombatStats remains an exact assignment for fixtures and existing scaling paths. No difficulty implementation.
 
-Fire caches its roll in the pooled projectile; Lightning derives all chain values from one cast roll and0.85 falloff. Melee rolls at impact after windup. TK retains mass scaling, then multiplies by2/7 and rolls on real NPC collision; launch speed, mass and momentum are unchanged. Ice and Darkness roll after finding a valid target. Laser stores one rolled DPS in BeamState. Poison stores one strength per application, retains existing strongest-reapplication semantics, and rolls spreads from the intended DPS rather than compounding parent variance. Ticks divide DPS×duration by tick count for exact total accounting. Ice shatter stays fixed30.
+Fire caches its roll in the pooled projectile; Lightning derives all chain values from one cast roll and0.85 falloff. Melee rolls at impact after windup. TK retains mass scaling, then multiplies by5/7 and rolls on real NPC collision; launch speed, mass and momentum are unchanged. Ice and Darkness roll after finding a valid target. Laser stores one rolled DPS in BeamState. Poison stores one strength per application, retains existing strongest-reapplication semantics, and rolls spreads from the intended DPS rather than compounding parent variance. Ticks divide DPS×duration by tick count for exact total accounting. Ice shatter stays fixed30.
 
 ## Synergy audit
 
@@ -132,8 +132,12 @@ The first three selected results are from `regression-r1`; the remaining sevente
 | EndlessEventsVerification.Run | 42 | 0 | 33.72 |
 | HeatResponseVerification.Run | 28 | 0 | 34.59 |
 
-Retained failures: `seeded-r1` reached 405/1 on an exact floating comparison (`45*.6`); a 0.001 arithmetic tolerance fixed the assertion without changing the target. `regression-r1` Roster reached 41/1 because its performance measurement continued an already-drained Laser channel beyond the new budget. It now normally regenerates to full before that separate measurement; depletion, refusal, cooldown and exact energy controls remain. Final Roster is 216/0 plus Reload 3/0. Melee expectations reflect the independent new multipliers. PowerPayoff's lethal heavy-throw fixture uses 10 HP because the new 400 kg mean is 29.814; nonlethal/full-health, physical impulse and off-axis controls remain.
+Retained failures: `seeded-r1` reached 405/1 on an exact floating comparison (`45*.6`); a 0.001 arithmetic tolerance fixed the assertion without changing the target. `regression-r1` Roster reached 41/1 because its performance measurement continued an already-drained Laser channel beyond the new budget. It now normally regenerates to full before that separate measurement; depletion, refusal, cooldown and exact energy controls remain. Final Roster is 216/0 plus Reload 3/0. Melee expectations reflect the independent new multipliers. PowerPayoff's lethal heavy-throw fixture uses 10 HP because the original pass's 400 kg mean was 29.814; nonlethal/full-health, physical impulse and off-axis controls remain.
 
 Implementation checkpoints: `94de986` health ranges; `1d6a2dd` damage boundaries; `9d69ac1` Fire/Strength; `374cb48` TK/Ice; `dfe3efb` Laser/Darkness/Poison/Lightning; `51dfb73` setup defaults and fixtures; `d96010f` seeded verification; `3b61e79` comments/status; `1d71109` initial evidence/report. Final regressions ran on `1d71109`; the completion checkpoint changes only documentation and evidence.
 
 Unverified: human feel and visual acceptance, sustained overlapping Poison balance, standalone/platform performance and long-duration production sessions. The matched Editor frame-time change is +0.061 ms (~0.62%), too small in these short noisy samples to establish a material regression or a speedup. No difficulty, enemy damage variance, shipping mission activation or push was performed. Existing unrelated user changes remain outside these checkpoints. This completes this balance task's automated work, not the entire overnight game build.
+
+Telekinesis correction requested after the first pass: 45 kg now averages25, and400 kg averages74.5356 (approximately75), retaining the original square-root mass curve. The multiplier is5/7. The original regression counts above precede this correction; fresh results are recorded below.
+
+Correction verification: SDK build0 warnings/errors; fresh runtime suites blocked before launch by the open Unity Editor. The earlier3704/0 results do not verify this correction.
