@@ -109,7 +109,7 @@ public sealed partial class ModeScreens : MonoBehaviour
         var button=new Button(()=>Launch(mode)){name="mode-"+mode.Id};ResetButton(button);button.style.flexGrow=1;button.style.flexBasis=0;button.style.height=Length.Percent(100);button.style.alignItems=Align.FlexStart;button.style.overflow=Overflow.Hidden;Round(button,18);Border(button,Alpha(accent,.65f),2);button.style.backgroundColor=Alpha(Color.Lerp(C(CityColor.UiPanel),accent,.13f),.96f);
         var ghost=new MenuIcon(glyph,Alpha(accent,.075f));ghost.style.position=Position.Absolute;ghost.style.width=360;ghost.style.height=360;ghost.style.right=-46;ghost.style.top=-38;button.Add(ghost);
         var tag=Text(mode.Side==PlayerSide.Hero?"01 / PROTECT":"02 / DISRUPT",12,accent,true);tag.style.position=Position.Absolute;tag.style.left=30;tag.style.top=23;button.Add(tag);
-        var icon=new MenuIcon(glyph,accent);icon.style.position=Position.Absolute;icon.style.width=142;icon.style.height=142;icon.style.left=23;icon.style.top=62;button.Add(icon);
+        var icon=new MenuIcon(glyph,accent);icon.style.position=Position.Absolute;icon.style.width=86;icon.style.height=86;icon.style.left=30;icon.style.top=50;button.Add(icon);
         var title=Text(mode.DisplayName.ToUpperInvariant(),36,C(CityColor.UiInk),true);title.style.position=Position.Absolute;title.style.left=32;title.style.bottom=65;button.Add(title);
         var tagline=Text(mode.Side==PlayerSide.Hero?"STOP CRIMES. SAVE CIVILIANS.":"CAUSE CHAOS. ESCAPE THE HEAT.",13,accent,true);tagline.style.position=Position.Absolute;tagline.style.left=34;tagline.style.bottom=37;button.Add(tagline);
         var play=Text("PLAY",12,accent,true);play.style.position=Position.Absolute;play.style.right=47;play.style.top=24;button.Add(play);

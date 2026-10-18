@@ -289,7 +289,7 @@ public sealed partial class GameHud : MonoBehaviour
         else if (slot.Synergy != null)
         {
             var runner = user.SynergyRunner;
-            fraction = runner.Cooldown / Mathf.Max(.001f, slot.Synergy.Cooldown);
+            fraction = runner.Cooldown / Mathf.Max(.001f, slot.Synergy.Cooldown*user.Difficulty.Cooldown);
             bool busy = runner.Busy; slot.Busy = busy;
             float pulse = busy ? .55f + .45f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 9f)) : .55f;
             Border(slot.Tile, Alpha(busy ? C(CityColor.UiInk) : slot.Color, pulse), 2);
