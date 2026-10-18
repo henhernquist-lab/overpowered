@@ -1,0 +1,16 @@
+MEASURED third-person target approach speed BEFORE=7.00 m/s at 8.3 m; control speed=7.00 m/s.
+MEASURED third-person damage dealt=10 (health 500 -> 490); Frozen flag=True; agent.isStopped=False.
+MEASURED third-person visible state during freeze: 2/2 body renderers use the shared Cyan palette material; Animator.speed=0.
+MEASURED third-person target speed DURING freeze=0.00 m/s; attack phase=Approach.
+MEASURED third-person freeze lasted 4.01s (configured 4s).
+MEASURED third-person target speed AFTER thaw=2.59 m/s; cyan renderers after thaw=0; Animator.speed=1.
+MEASURED third-person cast VFX bursts from the shared Feel pool: 2.
+MEASURED first-person target approach speed BEFORE=7.00 m/s at 8.2 m; control speed=7.00 m/s.
+MEASURED first-person damage dealt=10 (health 500 -> 490); Frozen flag=True; agent.isStopped=False.
+MEASURED first-person visible state during freeze: 2/2 body renderers use the shared Cyan palette material; Animator.speed=0.
+MEASURED first-person target speed DURING freeze=0.00 m/s; attack phase=Approach.
+MEASURED first-person freeze lasted 4.01s (configured 4s).
+MEASURED first-person target speed AFTER thaw=2.70 m/s; cyan renderers after thaw=0; Animator.speed=1.
+MEASURED first-person cast VFX bursts from the shared Feel pool: 2.
+MEASURED prop speed BEFORE=11.04 m/s, DURING=0.00 m/s (drift 0.000 m), freeze 4.01s, AFTER=7.20 m/s; control crate speed=0.00 m/s.
+MEASURED prop visible state: frozen crate shared Cyan material=True; restored to shared Wood after thaw=True; control crate Wood=True.

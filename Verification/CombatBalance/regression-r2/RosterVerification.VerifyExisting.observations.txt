@@ -1,0 +1,7 @@
+MEASURED before root: target 6.92 m/s, control 6.72 m/s (live AI approaching a hero-side player).
+MEASURED during root (2.7 s): target 0.000 m/s, control 1.72 m/s.
+MEASURED after root: target 0.93 m/s.
+MEASURED 1 s hold: 1.001 s held, damage 38.61 (expected ~42.0 at 42/s), energy drained 52.13 (expected ~52.1 = drain 64/s - regen 12/s), Heat +0.250.
+MEASURED laser 1280x720 active channel: FPS=162.83 mean=6.142ms whole-frame GC=2120B/frame frames=196 lineRenderers=15->15 particleSystems=8->8 materials=112->112 meshes=1019->1019 beamPool=16->16.
+MEASURED dash: 9.00 m horizontal (data 9 m in 0.18 s), 0.03 m vertical, direction z 9.00.
+MEASURED pull: distance to core 4.18, 5.52, 6.12 -> 0.48, 0.48, 0.32 m.

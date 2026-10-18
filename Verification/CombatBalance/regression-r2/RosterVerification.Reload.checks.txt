@@ -1,0 +1,3 @@
+PASS SECOND PROCESS restores the new-power loadout: nova laser-eyes + poison.
+PASS SECOND PROCESS: all six new powers owned (InitiallyUnlocked data).
+PASS SECOND PROCESS session caches the reloaded pair; Laser Eyes + Poison has no synergy (cap CONTROL).

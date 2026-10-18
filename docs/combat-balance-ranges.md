@@ -1,6 +1,6 @@
 # Combat balance and ranges
 
-Branch: `codex/combat-balance-ranges`, based on `905abdb`. Final regression verification is in progress; this report is not yet a completion claim. All means below are tier-zero VECTOR values. Hero/upgrade multipliers continue through existing stat resolution.
+Branch: `codex/combat-balance-ranges`, based on `905abdb`. Implementation and requested automated regressions are complete. Human balance acceptance remains pending. All means below are tier-zero VECTOR values. Hero/upgrade multipliers continue through existing stat resolution.
 
 | System | Old mean | New mean | Minimum | Maximum |
 |---|---:|---:|---:|---:|
@@ -48,7 +48,7 @@ The existing HUD consumes authoritative NpcDamageResult events and stored MaxHea
 
 ## Results and limitations
 
-Dedicated final seeded Run: **1,919 PASS / 0 FAIL**, exit0. Full-energy Laser uptime **1.9241s** vs predicted1.9231s. Two complete runs produced **220 byte-identical attack-sample lines** with seed101. 10,000 warmed seeded damage rolls allocated **0 managed bytes** on the measured thread. SDK build: **0 warnings / 0 errors**. Broad final regressions are pending. Before baseline: EnemyHealthFeedback69/0, exit0. Failed attempts remain in Verification/CombatBalance, never counted as passes.
+Dedicated final seeded Run: **1,919 PASS / 0 FAIL**, exit0. Full-energy Laser uptime **1.9241s** vs predicted1.9231s. Two complete runs produced **220 byte-identical attack-sample lines** with seed101. 10,000 warmed seeded damage rolls allocated **0 managed bytes** on the measured thread. SDK build: **0 warnings / 0 errors**. Selected final results total **3,704 PASS / 0 FAIL across 20 processes**, including the dedicated suite. All exited 0 and preserved personal-save and Sidekick database hashes. Before baseline: EnemyHealthFeedback69/0, exit0. Failed attempts remain in Verification/CombatBalance, never counted as passes.
 
 Before12-enemy active feedback109.56FPS/9.127ms versus first midpoint after109.52FPS/9.131ms. Matched enabled72-hit workload102.39FPS/9.767ms before versus101.75FPS/9.828ms after. Both held5608 GameObjects/113 materials/20 bars/96 labels, zero drops, and reported0 main-thread managed B/frame. Short sequential Editor samples are noisy and not standalone benchmarks; midpoint runs exercise the range plumbing but bypass PRNG draws. Dedicated allocation checks exercise seeded PRNG draws separately. No content cuts.
 
@@ -57,6 +57,8 @@ Before12-enemy active feedback109.56FPS/9.127ms versus first midpoint after109.5
 Fire's new maximum29.7 cannot one-shot a full zero-star Rusher (minimum35.1). Punch31.5–38.5 can sometimes defeat a low-HP Rusher. Combo37.485–45.815 remains stronger in mean than punch, though ranges overlap. Hurricane10.71–13.09 retains its larger force while dealing much less damage. Heavy TK remains about2.98 times light TK damage, with unchanged physical launch. Poison now totals67.5–82.5 against a surviving target; actual fights may end earlier or spread.
 
 Laser's gross drain doubles, but VECTOR net drain changes20→52/sec due to unchanged12/sec regen: ideal full-bar duration5→1.923s (about38.5% of old uptime). This follows the requested gross drain exactly; no regeneration change was made.
+
+Poison retains its existing strongest-reapplication rule. Repeated applications to an already-poisoned actor can retain a high roll, so the fresh-application sample mean is not a claim about sustained overlapping-cast DPS. This behavior needs playtesting alongside the requested buff.
 
 These are arithmetic observations and automated controls, not a claim that combat feels balanced. Henry must playtest before designing difficulty.
 
@@ -102,3 +104,36 @@ These are arithmetic observations and automated controls, not a claim that comba
 - `tools/verify-sequential.py`
 - `docs/combat-balance-ranges.md` (this report)
 - `Verification/CombatBalance/` (fresh manifests/checks/observations/build logs; isolated saves ignored)
+
+## Final regression evidence — 2026-10-18
+
+The first three selected results are from `regression-r1`; the remaining seventeen are from `regression-r2`. This excludes the baseline, repeated seeded passes, and failed attempts. Exact-value legacy regressions use the explicit midpoint override; the dedicated suite clears it and exercises seeded variation.
+
+| Entry | PASS | FAIL | Seconds |
+|---|---:|---:|---:|
+| EnemyHealthFeedbackVerification.Run | 69 | 0 | 78.14 |
+| CombatVerification.Run | 176 | 0 | 146.34 |
+| PowerPayoffVerification.Run | 99 | 0 | 48.66 |
+| CombatBalanceVerification.Run | 1919 | 0 | 138.54 |
+| RosterVerification.VerifyExisting | 216 | 0 | 83.63 |
+| RosterVerification.Reload | 3 | 0 | 24.87 |
+| MeleeVerification.Run | 42 | 0 | 39.16 |
+| IceVerification.After | 34 | 0 | 44.05 |
+| FirstPersonVerification.Run | 211 | 0 | 147.71 |
+| FirstPersonVerification.Reload | 5 | 0 | 25.49 |
+| FeelVerification.Run | 143 | 0 | 83.61 |
+| HeroForgeVerification.VerifyExisting | 136 | 0 | 61.57 |
+| HeroForgeVerification.Reload | 3 | 0 | 22.37 |
+| HudVerification.Run | 308 | 0 | 60.59 |
+| ModeVerification.VerifyExisting | 79 | 0 | 44.39 |
+| ModeVerification.Reload | 2 | 0 | 22.33 |
+| ModeExpansionVerification.Run | 179 | 0 | 92.15 |
+| ModeExpansionVerification.Reload | 10 | 0 | 23.84 |
+| EndlessEventsVerification.Run | 42 | 0 | 33.72 |
+| HeatResponseVerification.Run | 28 | 0 | 34.59 |
+
+Retained failures: `seeded-r1` reached 405/1 on an exact floating comparison (`45*.6`); a 0.001 arithmetic tolerance fixed the assertion without changing the target. `regression-r1` Roster reached 41/1 because its performance measurement continued an already-drained Laser channel beyond the new budget. It now normally regenerates to full before that separate measurement; depletion, refusal, cooldown and exact energy controls remain. Final Roster is 216/0 plus Reload 3/0. Melee expectations reflect the independent new multipliers. PowerPayoff's lethal heavy-throw fixture uses 10 HP because the new 400 kg mean is 29.814; nonlethal/full-health, physical impulse and off-axis controls remain.
+
+Implementation checkpoints: `94de986` health ranges; `1d6a2dd` damage boundaries; `9d69ac1` Fire/Strength; `374cb48` TK/Ice; `dfe3efb` Laser/Darkness/Poison/Lightning; `51dfb73` setup defaults and fixtures; `d96010f` seeded verification; `3b61e79` comments/status; `1d71109` initial evidence/report. Final regressions ran on `1d71109`; the completion checkpoint changes only documentation and evidence.
+
+Unverified: human feel and visual acceptance, sustained overlapping Poison balance, standalone/platform performance and long-duration production sessions. The matched Editor frame-time change is +0.061 ms (~0.62%), too small in these short noisy samples to establish a material regression or a speedup. No difficulty, enemy damage variance, shipping mission activation or push was performed. Existing unrelated user changes remain outside these checkpoints. This completes this balance task's automated work, not the entire overnight game build.
