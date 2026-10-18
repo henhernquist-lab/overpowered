@@ -1,0 +1,30 @@
+MEASURED normal/hero: encounter 50.00000s; police 2.00000s; legacy 12.00000s.
+MEASURED normal/villain: encounter 50.00000s; police 2.00000s; legacy 12.00000s.
+MEASURED normal actual police arrival 2.00078s, interval 2.00000s, spawned 4.
+MEASURED normal/free-play: encounter 50.00000s; police 2.00000s; legacy 12.00000s.
+MEASURED normal/endless-fight: encounter 50.00000s; police 2.00000s; legacy 12.00000s.
+MEASURED Endless reinforcement interval: 0 (immediate), unchanged for normal; cap 12
+MEASURED normal/vector: health 100.000; energy 100.000; regen 12.000; Ice cost 10.000, cooldown 0.600, recharge 1.500.
+MEASURED normal/titan: health 140.000; energy 80.000; regen 12.000; Ice cost 10.000, cooldown 0.600, recharge 1.500.
+MEASURED normal/nova: health 75.000; energy 140.000; regen 16.800; Ice cost 10.000, cooldown 0.480, recharge 1.500.
+MEASURED dense normal: 134.58 FPS / 7.430 ms; alive 12; peak active particle systems 1; bars 20, labels 96, peak active labels 48. 180-frame fixed12-target Editor workload; not standalone pressure benchmark.
+MEASURED hard/hero: encounter 43.47826s; police 1.73913s; legacy 10.43478s.
+MEASURED hard/villain: encounter 43.47826s; police 1.73913s; legacy 10.43478s.
+MEASURED hard actual police arrival 1.73954s, interval 1.73913s, spawned 4.
+MEASURED hard/free-play: encounter 43.47826s; police 1.73913s; legacy 10.43478s.
+MEASURED hard/endless-fight: encounter 43.47826s; police 1.73913s; legacy 10.43478s.
+MEASURED Endless reinforcement interval: 0 (immediate), unchanged for hard; cap 12
+MEASURED hard/vector: health 95.000; energy 100.000; regen 12.000; Ice cost 11.000, cooldown 0.660, recharge 1.650.
+MEASURED hard/titan: health 133.000; energy 80.000; regen 12.000; Ice cost 11.000, cooldown 0.660, recharge 1.650.
+MEASURED hard/nova: health 71.250; energy 140.000; regen 16.800; Ice cost 11.000, cooldown 0.528, recharge 1.650.
+MEASURED dense hard: 124.01 FPS / 8.064 ms; alive 12; peak active particle systems 1; bars 20, labels 96, peak active labels 48. 180-frame fixed12-target Editor workload; not standalone pressure benchmark.
+MEASURED extreme/hero: encounter 40.81633s; police 1.63265s; legacy 9.79592s.
+MEASURED extreme/villain: encounter 40.81633s; police 1.63265s; legacy 9.79592s.
+MEASURED extreme actual police arrival 1.63413s, interval 1.63265s, spawned 4.
+MEASURED extreme/free-play: encounter 40.81633s; police 1.63265s; legacy 9.79592s.
+MEASURED extreme/endless-fight: encounter 40.81633s; police 1.63265s; legacy 9.79592s.
+MEASURED Endless reinforcement interval: 0 (immediate), unchanged for extreme; cap 12
+MEASURED extreme/vector: health 92.500; energy 100.000; regen 12.000; Ice cost 11.500, cooldown 0.690, recharge 1.725.
+MEASURED extreme/titan: health 129.500; energy 80.000; regen 12.000; Ice cost 11.500, cooldown 0.690, recharge 1.725.
+MEASURED extreme/nova: health 69.375; energy 140.000; regen 16.800; Ice cost 11.500, cooldown 0.552, recharge 1.725.
+MEASURED dense extreme: 122.90 FPS / 8.137 ms; alive 12; peak active particle systems 1; bars 20, labels 96, peak active labels 48. 180-frame fixed12-target Editor workload; not standalone pressure benchmark.

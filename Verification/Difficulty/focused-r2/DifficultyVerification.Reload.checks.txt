@@ -1,0 +1,7 @@
+PASS Separate process retained Extreme.
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Reload starts Extreme session.
+PASS Reload player maximum: 92.50000, expected 92.50000.
+PASS Reload return Home keeps choice.

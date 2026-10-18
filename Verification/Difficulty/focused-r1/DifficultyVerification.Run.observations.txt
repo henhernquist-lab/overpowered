@@ -1,0 +1,2 @@
+MEASURED normal/hero: encounter 50.00000s; police 2.00000s; legacy 12.00000s.
+MEASURED normal/villain: encounter 50.00000s; police 2.00000s; legacy 12.00000s.

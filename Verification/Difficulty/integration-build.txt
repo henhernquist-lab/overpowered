@@ -1,0 +1,9 @@
+/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/PrototypeHUD.cs(116,199): error CS0103: The name 'current' does not exist in the current context [/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Overpowered.Build.csproj]
+
+Build FAILED.
+
+/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/PrototypeHUD.cs(116,199): error CS0103: The name 'current' does not exist in the current context [/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Overpowered.Build.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:05.56

@@ -1,0 +1,13 @@
+/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/DifficultyVerificationRunner.cs(116,43): error CS0272: The property or indexer 'CrimeEvent.Resolved' cannot be used in this context because the set accessor is inaccessible [/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Overpowered.Build.csproj]
+/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/DifficultyVerificationRunner.cs(177,101): warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.' [/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Overpowered.Build.csproj]
+/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/DifficultyVerificationRunner.cs(177,67): warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.' [/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Overpowered.Build.csproj]
+
+Build FAILED.
+
+/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/DifficultyVerificationRunner.cs(177,101): warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.' [/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Overpowered.Build.csproj]
+/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/DifficultyVerificationRunner.cs(177,67): warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.' [/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Overpowered.Build.csproj]
+/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/DifficultyVerificationRunner.cs(116,43): error CS0272: The property or indexer 'CrimeEvent.Resolved' cannot be used in this context because the set accessor is inaccessible [/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Overpowered.Build.csproj]
+    2 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:05.11

@@ -140,7 +140,7 @@ public sealed class DifficultyVerificationRunner : SessionVerificationRunner
         Isolate();Hud.DismissBriefing("difficulty verification");
         var rolled=CityNpc.Spawn(W,W.City.Sidewalks[0],W.Progression.Data.Side==PlayerSide.Villain?NpcRole.Cop:NpcRole.Criminal,Resources.Load<EnemyArchetype>("Enemies/Brute"));
         rolled.enabled=false;rolled.Agent.enabled=false;rolled.transform.position=new Vector3(4,150.05f,9);rolled.AlwaysAggro=true;Physics.SyncTransforms();
-        float rolledMax=rolled.MaxHealth;rolled.Damage(1,W.Powers);yield return Frames(2);
+        Aim(Chest(rolled));float rolledMax=rolled.MaxHealth;rolled.Damage(1,W.Powers);yield return Frames(2);
         Check(Hud.EnemyBars.Any(b=>b.Target==rolled&&Mathf.Abs(b.ShownMaxHealth-rolledMax)<.003f),"Bar displays actual spawned difficulty-scaled rolled maximum");Destroy(rolled.gameObject);
         var target=Actor(new Vector3(0,150.05f,9),W.Progression.Data.Side==PlayerSide.Villain?NpcRole.Cop:NpcRole.Criminal,1000);target.AlwaysAggro=true;Aim(Chest(target));hits.Clear();
         W.Rolls.Seed(101);var roll=new CombatRolls(101).Damage(27,W.Tuning.CombatRanges);
