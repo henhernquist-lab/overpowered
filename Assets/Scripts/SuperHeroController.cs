@@ -92,7 +92,7 @@ public sealed class SuperHeroController : MonoBehaviour
     bool BasicMelee(bool kick,bool combo=false)
     {
         if(powers.OffensiveActionsBlocked||Time.time<basicReadyAt||powers.SynergyRunner.Busy)return false;
-        basicReadyAt=Time.time+powers.Forge.BasicCooldown;
+        basicReadyAt=Time.time+powers.Forge.BasicCooldown*powers.Difficulty.Cooldown;
         var stats=BasicStats();
         // Authored ranges apply to ordinary punches and kicks; heavy/pound retain their existing tuning.
         if(kick || (!poundPending && pendingDamage==1f))

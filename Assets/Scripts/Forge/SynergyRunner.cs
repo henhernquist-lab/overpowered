@@ -57,7 +57,7 @@ public sealed class SynergyRunner : MonoBehaviour
         if(!Definition.Effect.CanBegin(this)){Feedback="No valid target";return false;}
         User.Release(false);
         affected.Clear();suspended.Clear();
-        Cooldown=Definition.Cooldown;Busy=true;deadline=Time.time+Mathf.Max(8,Definition.Duration+4);
+        Cooldown=Definition.Cooldown*User.Difficulty.Cooldown;Busy=true;deadline=Time.time+Mathf.Max(8,Definition.Duration+4);
         Feedback=Definition.DisplayName;
         action=StartCoroutine(Perform(Definition.Effect));
         User.RecordUse(CreditId);

@@ -6,6 +6,9 @@ public sealed class PowerUser : MonoBehaviour
     /// Resolve one logical attack; Stats remains the authored, upgraded mean. Never call from a tick loop.
     public float RollDamage(float mean, float? variance = null) => WorldSession.Instance.Rolls.Damage(mean, variance ?? WorldSession.Instance.Tuning.CombatRanges.PlayerDamageVariance);
     public SessionDifficulty Difficulty => WorldSession.Instance!=null?WorldSession.Instance.Difficulty:new SessionDifficulty(null);
+    public float EnergyCost(PowerRuntime power) => power.Definition.ResourceCost*Difficulty.EnergyUsage;
+    public float ChannelDrain(PowerRuntime power) => power.Definition.DrainPerSecond*Difficulty.EnergyUsage;
+    public float ChargeRecharge(PowerRuntime power) => power.Definition.ChargeRecharge*Difficulty.Cooldown;
     public float ResolveDamage(float damage) => damage * Difficulty.PlayerDamage;
     public readonly List<PowerRuntime> Powers = new List<PowerRuntime>();
     public SuperHeroController Hero { get; private set; }
@@ -124,6 +127,7 @@ public sealed class PowerUser : MonoBehaviour
         // Hero archetype: melee (Super Strength's punch/kick) scales damage and knockback; every other power scales damage and cooldown.
         if (power.Definition.Effect is PunchEffect) { s.Damage *= h.MeleeDamage; s.Force *= h.MeleeDamage; }
         else if (power.Definition.Effect == null || !power.Definition.Effect.IsFlight) { s.Damage *= h.PowerDamage; s.Cooldown *= h.CooldownMultiplier; }
+        s.Cooldown *= Difficulty.Cooldown;
         return s;
     }
     void Refresh()
@@ -172,8 +176,8 @@ public sealed class PowerUser : MonoBehaviour
             if (grounded && power.Definition.Effect.IsFlight) power.Fuel = Mathf.Min(s.Duration, power.Fuel + power.Definition.GroundRecharge * dt);
             if (power.Charges >= s.Charges) { power.ChargeTimer = 0f; continue; }
             power.ChargeTimer += dt;
-            while (power.ChargeTimer >= Mathf.Max(.001f, power.Definition.ChargeRecharge) && power.Charges < s.Charges)
-            { power.Charges++; power.ChargeTimer -= Mathf.Max(.001f, power.Definition.ChargeRecharge); }
+            while (power.ChargeTimer >= Mathf.Max(.001f, ChargeRecharge(power)) && power.Charges < s.Charges)
+            { power.Charges++; power.ChargeTimer -= Mathf.Max(.001f, ChargeRecharge(power)); }
         }
     }
     public bool ConsumeFlight(float dt)
@@ -194,13 +198,13 @@ public sealed class PowerUser : MonoBehaviour
         if (power.Cooldown > 0f) { Message = "Blocked: cooldown"; return false; }
         if (power.Definition.Activation == PowerActivation.Channeled) return BeginChannel(power);
         if (power.Charges <= 0) { Message = "Blocked: 0 charges"; return false; }
-        if (Energy < power.Definition.ResourceCost) { Message = "Blocked: energy"; return false; }
+        if (Energy < EnergyCost(power)) { Message = "Blocked: energy"; return false; }
         Message = "No valid target";
         bool executed; using (Credit(power.Definition.Id)) executed = power.Definition.Effect.Execute(this, power);
         if (!executed) return false;
         RecordUse(power.Definition.Id);
         power.Charges--; power.Cooldown = Stats(power).Cooldown; power.ChargeTimer = 0f;
-        Energy -= power.Definition.ResourceCost; Message = power.Definition.DisplayName + " activated";
+        Energy -= EnergyCost(power); Message = power.Definition.DisplayName + " activated";
         Activated?.Invoke(power.Definition);
         WorldLightingDirector.Instance?.FlashPower(power.Definition.Light,AimOrigin);
         WorldSession.Instance?.Alarm(transform.position);
@@ -211,7 +215,7 @@ public sealed class PowerUser : MonoBehaviour
         if (Channeling == power) return true;
         if (!(power.Definition.Effect is ChanneledEffect)) { Message = "Channel effect missing"; return false; }
         // Energy is drained while held; ResourceCost is only the minimum needed to start. No charge is spent.
-        if (Energy < power.Definition.ResourceCost) { Message = "Blocked: energy"; return false; }
+        if (Energy < EnergyCost(power)) { Message = "Blocked: energy"; return false; }
         EndChannel();
         bool executed; using (Credit(power.Definition.Id)) executed = power.Definition.Effect.Execute(this, power);
         if (!executed) return false;
@@ -229,7 +233,7 @@ public sealed class PowerUser : MonoBehaviour
         var power = Channeling;
         if (OffensiveActionsBlocked || !held || Selected != power || !IsEquipped(power.Definition) || (SynergyRunner != null && SynergyRunner.Busy)) { EndChannel(); return; }
         if (dt <= 0f) return;   // paused / hit-pause frame: nothing drains, nothing ticks
-        float cost = power.Definition.DrainPerSecond * dt;
+        float cost = ChannelDrain(power) * dt;
         if (Energy < cost) { Message = "Blocked: energy"; EndChannel(); return; }
         Energy -= cost;
         using (Credit(power.Definition.Id)) ((ChanneledEffect)power.Definition.Effect).Sustain(this, power, dt);
