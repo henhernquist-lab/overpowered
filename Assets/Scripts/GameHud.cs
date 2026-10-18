@@ -279,8 +279,8 @@ public sealed partial class GameHud : MonoBehaviour
                     for (int i = 0; i < slot.Pips.Count; i++) slot.Pips[i].style.backgroundColor = i < lit ? slot.Color : Alpha(C(CityColor.UiMuted), .25f);
                 }
                 if (p.Cooldown > 0f) fraction = p.Cooldown / Mathf.Max(.001f, s.Cooldown);
-                else if (p.Charges <= 0) fraction = 1f - p.ChargeTimer / Mathf.Max(.001f, p.Definition.ChargeRecharge);
-                dim = p.Charges <= 0 || user.Energy < p.Definition.ResourceCost;
+                else if (p.Charges <= 0) fraction = 1f - p.ChargeTimer / Mathf.Max(.001f, user.ChargeRecharge(p));
+                dim = p.Charges <= 0 || user.Energy < user.EnergyCost(p);
             }
             bool selected = !slot.Flight && user.Selected == p;
             slot.SelectedTag.style.display = selected && slot.KeyText != HudBindings.StrengthKey ? DisplayStyle.Flex : DisplayStyle.None;

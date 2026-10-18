@@ -27,6 +27,8 @@ public sealed class WorldSession : MonoBehaviour
     public CivilianLedger Civilians { get; private set; }
     public int Stars => Mathf.Clamp(Mathf.CeilToInt(Heat),0,Tuning.Heat.MaximumStars);
     public SessionDifficulty Difficulty { get; private set; } = new SessionDifficulty(null);
+    public float PoliceResponseInterval => Difficulty.Interval(Tuning.Heat.ResponseInterval*(Response!=null?Response.ArrivalMultiplier:1f));
+    public float CrimeSpawnInterval => Difficulty.Interval(Tuning.Crimes.SpawnInterval);
     public float Health { get; private set; }
     public bool PlayerDead => Health<=0;
     /// GameTuning.Movement.Health x the session hero's MaxHealth archetype multiplier.
@@ -92,10 +94,9 @@ public sealed class WorldSession : MonoBehaviour
         }
         TickHeat(Time.deltaTime);
         responseTimer+=Time.deltaTime; crimeTimer+=Time.deltaTime;
-        float arrival=Response!=null?Response.ArrivalMultiplier:1f;
-        if (responseTimer>=(arrival==1f?Tuning.Heat.ResponseInterval:Tuning.Heat.ResponseInterval*arrival)) { responseTimer=0; ReconcilePolice(); }
+        if (responseTimer>=PoliceResponseInterval) { responseTimer=0; ReconcilePolice(); }
         Crimes.RemoveAll(c=>c==null || c.Resolved);
-        if (Mode==null && crimeTimer>=Tuning.Crimes.SpawnInterval && Crimes.Count<Tuning.Crimes.MaximumActive)
+        if (Mode==null && crimeTimer>=CrimeSpawnInterval && Crimes.Count<Tuning.Crimes.MaximumActive)
         { crimeTimer=0; SpawnCrime((CrimeKind)Random.Range(0,3),City.Sidewalks[Random.Range(0,City.Sidewalks.Count)]); }
     }
     /// District civilian density (only with an active DistrictProfileSet): each district keeps the sidewalks it would have

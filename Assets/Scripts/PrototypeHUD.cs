@@ -70,6 +70,7 @@ public sealed class PrototypeHUD : MonoBehaviour
         var hud=w.Mode==null?ModeHud.All:w.Mode.Definition.Hud;
         GUILayout.BeginArea(new Rect(14,14,510,Mathf.Min(610,Screen.height-28)),GUI.skin.box);
         GUILayout.Label("OVERPOWERED / "+progress.Data.Side+((hud&ModeHud.Heat)!=0?"   HEAT "+new string('*',w.Stars)+new string('-',w.Tuning.Heat.MaximumStars-w.Stars):""));
+        GUILayout.Label("DIFFICULTY: "+w.Difficulty.DisplayName+"\n"+w.Difficulty.Details);
         var director=DirectorLine(w); if(!string.IsNullOrEmpty(director)) GUILayout.Label(director);
         if((hud&ModeHud.Health)!=0) GUILayout.Label($"Health {w.Health:F0}/{w.MaxHealth:F0} | Energy {p.Energy:F0}/{p.MaxEnergy:F0}");
         if((hud&ModeHud.Progression)!=0) {
@@ -112,7 +113,7 @@ public sealed class PrototypeHUD : MonoBehaviour
             var d=power.Definition; int tier=progress.Tier(d); var s=p.Stats(power);
             GUILayout.Label($"{p.Powers.IndexOf(power)+1}. {d.DisplayName} · {(tier<0?"LOCKED":"Tier "+tier)}");
             GUILayout.Label(d.Description);
-            GUILayout.Label($"Charges {s.Charges} · cooldown {s.Cooldown:F2}s · force {s.Force:F0} N·s\nDamage {s.Damage:F0} · duration {s.Duration:F1}s · range {s.Range:F1}m · energy {d.ResourceCost:F0}");
+            GUILayout.Label($"Charges {s.Charges} · cooldown {s.Cooldown:F2}s · force {s.Force:F0} N·s\nDamage {s.Damage:F0} · duration {s.Duration:F1}s · range {s.Range:F1}m · energy {p.EnergyCost(power):F1}");
             GUILayout.BeginHorizontal(); GUI.enabled=tier>=0&&p.IsEquipped(d)&&d.Role==PowerRole.Combat;
             if(GUILayout.Button(d.Role==PowerRole.Secondary?"F secondary":"Select")) p.Select(power);
             // Powers are owned from the start (InitiallyUnlocked data); points only buy upgrade tiers, never ownership.

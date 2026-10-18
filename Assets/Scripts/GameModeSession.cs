@@ -16,6 +16,7 @@ public sealed class GameModeSession : MonoBehaviour
     public int Successes { get; private set; }
     public int Failures { get; private set; }
     public int Defeats { get; private set; }
+    public float EncounterSpawnInterval => World.Difficulty.Interval(Definition.SpawnInterval);
     public float Elapsed { get; private set; }
     public bool Ended { get; private set; }
     public bool Paused { get; private set; }
@@ -78,7 +79,7 @@ public sealed class GameModeSession : MonoBehaviour
         if(Ended||Paused) return;
         Elapsed+=dt; spawnClock+=dt;
         if(Definition.SessionSeconds>0 && Elapsed>=Definition.SessionSeconds) { Finish(SessionOutcome.TimedOut,"Session time limit reached."); return; }
-        if(spawnClock>=Definition.SpawnInterval) { spawnClock=0; SpawnNext(); }
+        if(spawnClock>=EncounterSpawnInterval) { spawnClock=0; SpawnNext(); }
         if(Director!=null) Director.Tick(dt);
     }
     void Update() { Tick(Time.deltaTime); }
