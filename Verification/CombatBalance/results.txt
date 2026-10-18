@@ -1100,7 +1100,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 9.16371
+PASS TK 45 in range: 22.90926
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1108,7 +1108,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 9.38922
+PASS TK 45 in range: 23.47305
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1116,7 +1116,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 10.25130
+PASS TK 45 in range: 25.62824
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1124,7 +1124,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 9.62513
+PASS TK 45 in range: 24.06282
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1132,7 +1132,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 10.66487
+PASS TK 45 in range: 26.66217
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1140,7 +1140,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 10.27901
+PASS TK 45 in range: 25.69752
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1148,7 +1148,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 10.75523
+PASS TK 45 in range: 26.88808
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1156,7 +1156,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 9.76448
+PASS TK 45 in range: 24.41119
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1164,7 +1164,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 9.63855
+PASS TK 45 in range: 24.09637
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1172,7 +1172,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 10.74179
+PASS TK 45 in range: 26.85448
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1180,7 +1180,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 9.70563
+PASS TK 45 in range: 24.26407
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1188,7 +1188,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 10.52157
+PASS TK 45 in range: 26.30393
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1196,7 +1196,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 10.13026
+PASS TK 45 in range: 25.32565
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1204,7 +1204,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 9.81761
+PASS TK 45 in range: 24.54403
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1212,7 +1212,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 9.89296
+PASS TK 45 in range: 24.73239
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1220,7 +1220,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 9.15418
+PASS TK 45 in range: 22.88544
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1228,7 +1228,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 10.59694
+PASS TK 45 in range: 26.49235
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1236,7 +1236,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 9.52009
+PASS TK 45 in range: 23.80023
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1244,7 +1244,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 9.26995
+PASS TK 45 in range: 23.17488
 PASS Select equipped telekinesis
 PASS Paid real TK grab 45kg.
 PASS Real TK release.
@@ -1252,8 +1252,8 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 45 in range: 10.53825
-PASS TK 45: n=20, mean=9.97104, intended=10.00000, min=9.15418, max=10.75523; diversity and midpoint within 3.5%.
+PASS TK 45 in range: 26.34563
+PASS TK 45: n=20, mean=24.92759, intended=25.00000, min=22.88544, max=26.88808; diversity and midpoint within 3.5%.
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1261,7 +1261,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 27.32089
+PASS TK 400 in range: 68.30223
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1269,7 +1269,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 27.99324
+PASS TK 400 in range: 69.98311
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1277,7 +1277,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 30.56346
+PASS TK 400 in range: 76.40865
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1285,7 +1285,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 28.69659
+PASS TK 400 in range: 71.74149
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1293,7 +1293,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 31.79650
+PASS TK 400 in range: 79.49124
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1301,7 +1301,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 30.64608
+PASS TK 400 in range: 76.61520
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1309,7 +1309,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 32.06591
+PASS TK 400 in range: 80.16479
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1317,7 +1317,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 29.11204
+PASS TK 400 in range: 72.78011
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1325,7 +1325,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 28.73660
+PASS TK 400 in range: 71.84150
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1333,7 +1333,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 32.02584
+PASS TK 400 in range: 80.06460
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1341,7 +1341,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 28.93659
+PASS TK 400 in range: 72.34148
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1349,7 +1349,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 31.36926
+PASS TK 400 in range: 78.42316
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1357,7 +1357,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 30.20260
+PASS TK 400 in range: 75.50651
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1365,7 +1365,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 29.27046
+PASS TK 400 in range: 73.17616
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1373,7 +1373,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 29.49510
+PASS TK 400 in range: 73.73775
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1381,7 +1381,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 27.29248
+PASS TK 400 in range: 68.23121
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1389,7 +1389,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 31.59397
+PASS TK 400 in range: 78.98493
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1397,7 +1397,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 28.38343
+PASS TK 400 in range: 70.95858
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1405,7 +1405,7 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 27.63766
+PASS TK 400 in range: 69.09415
 PASS Select equipped telekinesis
 PASS Paid real TK grab 400kg.
 PASS Real TK release.
@@ -1413,8 +1413,8 @@ PASS Throw launch does not roll before impact.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
-PASS TK 400 in range: 31.41900
-PASS TK 400: n=20, mean=29.72789, intended=29.81424, min=27.29248, max=32.06591; diversity and midpoint within 3.5%.
+PASS TK 400 in range: 78.54751
+PASS TK 400: n=20, mean=74.31972, intended=74.53560, min=68.23121, max=80.16479; diversity and midpoint within 3.5%.
 PASS Save VECTOR with darkness + lightning through the loadout API.
 PASS Session equips darkness + lightning.
 PASS darkness selected for LMB (key 1).
@@ -1788,7 +1788,7 @@ PASS Laser DPS in range: 44.26066
 PASS Laser DPS: n=20, mean=41.87835, intended=42.00000, min=38.44754, max=45.17198; diversity and midpoint within 3.5%.
 PASS Select equipped laser-eyes
 PASS Full-energy uptime channel starts.
-PASS Full-energy Laser uptime 1.9241s vs 1.9231s from 64 drain minus real regen; depleted normally.
+PASS Full-energy Laser uptime 1.9220s vs 1.9231s from 64 drain minus real regen; depleted normally.
 PASS Select equipped poison
 PASS Poison application accepted.
 PASS Real gameplay damage arrived before timeout.

@@ -5418,3 +5418,8 @@ Human playtesting remains required; no claim that these values feel balanced. St
 ### Telekinesis requested correction — 2026-10-18
 
 User supersedes the original TK nerf: target25 for45kg and approximately75 for400kg. Changed TelekinesisEffect default and authored ImpactDamageMultiplier from2/7 to5/7; retained square-root mass scaling and all physical throw settings. Means25 and74.5356, ranges22.5–27.5 and67.082–81.989. Updated independent seeded verifier expectation and balance report. SDK build passed0 warnings/0 errors (7.28s; Verification/CombatBalance/tk-correction-build.txt). Fresh CombatBalance/PowerPayoff runtime attempt was refused before launch because Unity Editor PIDs10534/10652 were already running. No fresh runtime PASS claimed; previous3704/0 predates this correction. User Editor left untouched. Runtime recheck remains pending.
+
+
+### Telekinesis correction — runtime verification complete, 2026-10-18
+
+Unity became available. Fresh serial runs on `be70018`: CombatBalanceVerification.Run **1919 PASS/0 FAIL**, exit0,139.80s; PowerPayoffVerification.Run **99 PASS/0 FAIL**, exit0,44.96s. Total2018/0, both personal-save and Sidekick database hashes unchanged. Evidence: `Verification/CombatBalance/tk-correction-r2/`. Dedicated suite clears midpoint injection and verifies seeded real attacks, both TK masses, physical impacts, actual damage labels and distributions. 400kg sample n20 mean74.31972 versus intended74.53560, observed68.23121–80.16479, within configured67.082–81.989. Correction is now runtime-verified; preceding blocked status superseded. Original3704/0 broad sweep still belongs to the earlier tuning. No new gameplay edits in this continuation, no push, human feel remains unverified.

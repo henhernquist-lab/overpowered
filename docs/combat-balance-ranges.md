@@ -140,4 +140,4 @@ Unverified: human feel and visual acceptance, sustained overlapping Poison balan
 
 Telekinesis correction requested after the first pass: 45 kg now averages25, and400 kg averages74.5356 (approximately75), retaining the original square-root mass curve. The multiplier is5/7. The original regression counts above precede this correction; fresh results are recorded below.
 
-Correction verification: SDK build0 warnings/errors; fresh runtime suites blocked before launch by the open Unity Editor. The earlier3704/0 results do not verify this correction.
+Correction verification completed: SDK build0 warnings/errors; fresh CombatBalance1919/0 and PowerPayoff99/0, both exit0, on source checkpoint `be70018`. Evidence: `Verification/CombatBalance/tk-correction-r2/`. Both personal-save and Sidekick database hashes unchanged. The earlier3704/0 broad sweep predates this correction; the fresh focused total is2018/0.
