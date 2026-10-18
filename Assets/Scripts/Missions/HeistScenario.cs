@@ -98,7 +98,7 @@ public sealed class VaultTarget : MissionTarget
     public override void Hit(float damage, float impulse, PowerUser source)
     {
         if (Cracked || damage <= 0f) return;
-        Health = Mathf.Max(0f, Health - damage); Hits++;
+        Health = Mathf.Max(0f, Health - (source!=null?source.ResolveDamage(damage):damage)); Hits++;
         FeelDirector.Instance?.Particles.Burst(transform.position + Vector3.up * .5f, CityColor.Metal, Cracked ? 14 : 4);
         if (Cracked) GetComponent<Renderer>().sharedMaterial = CityMaterials.Get(CityColor.Amber);
     }

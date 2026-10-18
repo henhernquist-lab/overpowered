@@ -15,7 +15,7 @@ public sealed class BreakableProp : MonoBehaviour
     public void TakeDamage(float damage, PowerUser source)
     {
         if (broken) return;
-        health -= damage; hits++;
+        health -= source!=null?source.ResolveDamage(damage):damage; hits++;
         if (health <= 0 || hits >= hitsToBreak) Break();
     }
     public void HitByPunch()

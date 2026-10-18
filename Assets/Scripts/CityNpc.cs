@@ -121,7 +121,7 @@ public sealed class CityNpc : MonoBehaviour
         var npc = root.AddComponent<CityNpc>(); npc.world=world; npc.Role=role; npc.Archetype=archetype;
         float standard = c.CopHealth + world.Stars*c.HealthPerStar;
         npc.Health = role==NpcRole.Civilian ? c.CivilianHealth : archetype!=null ? standard*archetype.HealthMultiplier : role==NpcRole.PursuingHero ? c.HeroHealth : standard;
-        if (role != NpcRole.Civilian) npc.Health = Mathf.Max(1f, world.Rolls.Health(healthMean ?? npc.Health, world.Tuning.CombatRanges));
+        if (role != NpcRole.Civilian) npc.Health = Mathf.Max(1f, world.Rolls.Health((healthMean ?? npc.Health)*world.Difficulty.EnemyHealth, world.Tuning.CombatRanges));
         npc.MaxHealth = npc.Health;
         if (attackDamage.HasValue) npc.explicitDamage = Mathf.Max(0f, attackDamage.Value);
         npc.Agent=root.AddComponent<NavMeshAgent>(); npc.Agent.height=c.Height*scale; npc.Agent.radius=c.Radius*scale; npc.Agent.acceleration=c.Acceleration; npc.Agent.angularSpeed=c.AngularSpeed;
@@ -155,6 +155,7 @@ public sealed class CityNpc : MonoBehaviour
     public void Damage(float amount, PowerUser source, bool assault, float impactImpulse)
     {
         if (Dead || amount <= 0f) return;
+        if(source!=null)amount=source.ResolveDamage(amount);
         LastImpactImpulse=impactImpulse;
         float before = Health;
         Health = Mathf.Max(0f, Health-amount);

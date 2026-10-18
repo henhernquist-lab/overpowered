@@ -768,7 +768,7 @@ public sealed class DamageTarget : MissionTarget
     {
         if (Destroyed || damage <= 0f) return;
         if (!Armed) { IgnoredHits++; return; }
-        Hits++; Apply(damage, true);
+        Hits++; Apply(source!=null?source.ResolveDamage(damage):damage, true);
     }
     void Apply(float damage, bool hitFeel)
     {

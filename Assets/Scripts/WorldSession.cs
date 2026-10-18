@@ -30,7 +30,7 @@ public sealed class WorldSession : MonoBehaviour
     public float Health { get; private set; }
     public bool PlayerDead => Health<=0;
     /// GameTuning.Movement.Health x the session hero's MaxHealth archetype multiplier.
-    public float MaxHealth => Tuning.Movement.Health * (Powers != null ? Powers.HeroStats.MaxHealth : 1f);
+    public float MaxHealth => Tuning.Movement.Health * (Powers != null ? Powers.HeroStats.MaxHealth : 1f) * Difficulty.PlayerHealth;
     public event System.Action<bool> PlayerDamaged;
     public event System.Action PlayerRespawned;
     /// Raised after a mode encounter has been placed and initialised (HUD alerts listen; spawning is unchanged).

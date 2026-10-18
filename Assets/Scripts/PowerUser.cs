@@ -5,6 +5,8 @@ public sealed class PowerUser : MonoBehaviour
 {
     /// Resolve one logical attack; Stats remains the authored, upgraded mean. Never call from a tick loop.
     public float RollDamage(float mean, float? variance = null) => WorldSession.Instance.Rolls.Damage(mean, variance ?? WorldSession.Instance.Tuning.CombatRanges.PlayerDamageVariance);
+    public SessionDifficulty Difficulty => WorldSession.Instance!=null?WorldSession.Instance.Difficulty:new SessionDifficulty(null);
+    public float ResolveDamage(float damage) => damage * Difficulty.PlayerDamage;
     public readonly List<PowerRuntime> Powers = new List<PowerRuntime>();
     public SuperHeroController Hero { get; private set; }
     public PlayerProgression Progression { get; private set; }
