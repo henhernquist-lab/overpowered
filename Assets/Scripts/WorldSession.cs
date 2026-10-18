@@ -26,6 +26,7 @@ public sealed class WorldSession : MonoBehaviour
     /// Session civilian outcomes (rescued / harmed by whom / lost / escorted); transient, never saved.
     public CivilianLedger Civilians { get; private set; }
     public int Stars => Mathf.Clamp(Mathf.CeilToInt(Heat),0,Tuning.Heat.MaximumStars);
+    public SessionDifficulty Difficulty { get; private set; } = new SessionDifficulty(null);
     public float Health { get; private set; }
     public bool PlayerDead => Health<=0;
     /// GameTuning.Movement.Health x the session hero's MaxHealth archetype multiplier.
@@ -48,6 +49,7 @@ public sealed class WorldSession : MonoBehaviour
         System.Array.Sort(definitions,(a,b)=>string.CompareOrdinal(a.Id,b.Id));
         Progression=hero.gameObject.AddComponent<PlayerProgression>();
         Progression.Initialize(tuning.Progression,definitions,VerificationSavePath);
+        Difficulty=new SessionDifficulty(Progression.SelectedDifficulty);
         Powers=hero.gameObject.AddComponent<PowerUser>(); Powers.Initialize(hero,Progression,definitions,tuning.Movement);
         hero.Initialize(Powers,tuning.Movement);
         Health=MaxHealth;

@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 /// Presentation only: mode selection belongs to GameFlow; purchases belong to PlayerProgression.
-public sealed class ModeScreens : MonoBehaviour
+public sealed partial class ModeScreens : MonoBehaviour
 {
     public PanelSettings Panel {get;private set;}
     public VisualElement Root {get;private set;}
@@ -78,7 +78,8 @@ public sealed class ModeScreens : MonoBehaviour
         var eyebrow=Text("YOUR CITY. YOUR RULES.",13,C(CityColor.HeroAccent),true);Place(eyebrow,6,5,88,4);Root.Add(eyebrow);
         Headline=Text("OVERPOWERED",76,C(CityColor.UiInk),true);Headline.style.unityFontStyleAndWeight=FontStyle.BoldAndItalic;Place(Headline,5.6f,8,89,12);Root.Add(Headline);
         var choose=Text("CHOOSE YOUR SIDE",14,C(CityColor.UiMuted),true);Place(choose,6,21,88,4);Root.Add(choose);
-        var row=Row();Place(row,6,27,88,45);Root.Add(row);
+        var row=Row();Place(row,6,39,88,33);Root.Add(row);
+        BuildDifficulty();
         var primary=new[]{modes.FirstOrDefault(m=>m.Playable&&m.Side==PlayerSide.Hero),modes.FirstOrDefault(m=>m.Playable&&m.Side==PlayerSide.Villain)}.Where(m=>m!=null).ToArray();
         foreach(var mode in primary){var card=ModeCard(mode);if(row.childCount>0)card.style.marginLeft=26;row.Add(card);}
         // Additional data-defined playable modes retain a route without changing the menu code.

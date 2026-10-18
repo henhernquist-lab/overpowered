@@ -1,0 +1,11 @@
+.difficulty-panel { position: absolute; left: 6%; right: 6%; top: 25%; height: 13%; }
+.difficulty-row { flex-direction: row; flex-grow: 1; }
+.difficulty-button { flex-grow: 1; flex-basis: 0; margin: 0 10px 0 0; padding: 6px 10px; border-width: 1px; border-radius: 7px; color: rgb(238,246,255); background-color: rgb(15,28,48); border-color: rgb(48,135,162); }
+.difficulty-title { font-size: 17px; -unity-font-style: bold; }
+.difficulty-subtitle { font-size: 10px; white-space: normal; }
+.difficulty-hard { background-color: rgb(46,25,23); border-color: rgb(232,115,60); border-width: 2px; }
+.difficulty-extreme { background-color: rgb(45,15,42); border-color: rgb(222,67,104); border-width: 3px; }
+.difficulty-button:hover, .difficulty-button:focus { background-color: rgb(48,51,75); }
+.difficulty-selected { border-color: rgb(235,250,255); border-width: 3px; }
+.difficulty-selected .difficulty-title { color: rgb(255,255,255); }
+.difficulty-details { font-size: 11px; color: rgb(220,232,246); white-space: normal; margin-top: 5px; }

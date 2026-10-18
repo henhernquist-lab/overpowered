@@ -24,6 +24,7 @@ public enum PlayerSide { Hero, Villain }
     /// First-time control prompts the player has already acted on (HUD). Saves written before this field existed load with an empty list.
     public List<string> SeenHints = new List<string>();
     public bool FirstPerson;
+    public string DifficultyId = "normal";
     /// Additive Version 1 field: older saves deserialize as false and play the first-launch intro once.
     public bool IntroSeen;
     public List<PowerUsage> PowerStats = new List<PowerUsage>();
@@ -82,6 +83,12 @@ public sealed class PlayerProgression : MonoBehaviour
     /// Called for every power every frame (PowerUser.Stats): a plain loop, no per-call closure.
     public int Tier(PowerDefinition definition) { var powers = Data.Powers; string id = definition.Id; for (int i = 0; i < powers.Count; i++) if (powers[i].Id == id) return powers[i].Tier; return -1; }
     public bool Owns(PowerDefinition definition) => Tier(definition) >= 0;
+    public DifficultyDefinition SelectedDifficulty => DifficultyDefinition.Resolve(Data.DifficultyId);
+    public bool SetDifficulty(string id)
+    {
+        var definition=DifficultyDefinition.Find(id);if(definition==null)return false;
+        Data.DifficultyId=definition.Id;Save();Changed?.Invoke();return true;
+    }
     public void SetFirstPerson(bool enabled) { Data.FirstPerson = enabled; Save(); }
     public void MarkIntroSeen() { if(Data.IntroSeen)return;Data.IntroSeen=true;Save();Changed?.Invoke(); }
     public HeroDefinition SelectedHero => Resources.Load<ForgeCatalog>("ForgeCatalog")?.Hero(Data.Loadout?.HeroId);
@@ -262,6 +269,7 @@ public sealed class PlayerProgression : MonoBehaviour
             else if (RecoveredFrom != null) Debug.LogWarning("Progression recovered from " + RecoveredFrom + (error != null ? " (save unreadable: " + error + ")" : " (save missing)"));
         }
         if (loaded != null) Data = Repair(loaded);
+        Data.DifficultyId=DifficultyDefinition.Resolve(Data.DifficultyId)?.Id??"normal";
         foreach (var d in definitions)
             if (d.InitiallyUnlocked && !Owns(d)) Data.Powers.Add(new PowerOwnership { Id = d.Id });
         foreach (var p in Data.Powers)
