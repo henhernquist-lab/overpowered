@@ -65,6 +65,7 @@ public sealed class CombatBalanceVerificationRunner : SessionVerificationRunner
             yield return Instant("fire",27);
             foreach(string move in new[]{"punch","combo","hurricane"})yield return Melee(move);
             yield return Setup("ice","telekinesis");
+            foreach(string move in new[]{"punch","combo","hurricane"})yield return Melee(move,true);
             Check(Power("ice").Damage==10 && ((IceEffect)Power("ice").Effect).ShatterDamage==30 &&
                 ((IceEffect)Power("ice").Effect).ShatterImpulse==1800 && ((IceEffect)Power("ice").Effect).ShatterParticles==28,"Ice initial doubled; shatter damage/force/particles unchanged.");
             yield return Instant("ice",10);
@@ -143,26 +144,32 @@ public sealed class CombatBalanceVerificationRunner : SessionVerificationRunner
         }
         Distribution(mean,id);
     }
-    IEnumerator Melee(string move)
+    IEnumerator Melee(string move,bool basic=false)
     {
-        Seed();float mean=move=="punch"?35:move=="combo"?41.65f:11.9f;
+        Seed();float mean=basic?(move=="punch"?27.5f:move=="combo"?37.5f:50f):(move=="punch"?35:move=="combo"?41.65f:11.9f);
+        float variance=basic?(move=="punch"?2.5f/27.5f:move=="combo"?2.5f/37.5f:.1f):W.Tuning.CombatRanges.PlayerDamageVariance;
+        if(basic)Check(!W.Powers.IsEquipped(Power("strength")),"Basic damage test uses legal loadout without Strength.");
         for(int i=0;i<20;i++)
         {
+            if(basic)yield return new WaitForSeconds(F.BasicCooldown+.02f);
             Ready("strength");var target=Actor(new Vector3(0,150.05f,2.7f),NpcRole.Criminal,1000);hits.Clear();
             if(move=="combo")
             {
                 // Standalone RMB resets a pending E string, without changing the combo clock.
-                Check(W.Hero.TryHurricaneKick(),"Reset pending combo via real RMB action.");yield return WaitHit(target);Expected(11.9f);
-                W.Powers.Tick(100,true);Check(W.Hero.TryComboAttack(),"Start E combo.");yield return WaitHit(target,2);Expected(35);
+                Check(W.Hero.TryHurricaneKick(),"Reset pending combo via real RMB action.");yield return WaitHit(target);expected.Damage(basic?50f:11.9f,W.Tuning.CombatRanges);
+                if(basic)yield return new WaitForSeconds(F.BasicCooldown+.02f);
+                float punchStarted=Time.time;
+                W.Powers.Tick(100,true);Check(W.Hero.TryComboAttack(),"Start E combo.");yield return WaitHit(target,2);expected.Damage(basic?27.5f:35f,basic?2.5f/27.5f:W.Tuning.CombatRanges.PlayerDamageVariance);
+                if(basic)yield return new WaitForSeconds(Mathf.Max(0,F.BasicCooldown+.02f-(Time.time-punchStarted)));
                 W.Powers.Tick(100,true);
             }
-            float valueExpected=Expected(mean);int before=hits.Count;
+            float valueExpected=expected.Damage(mean,variance);int before=hits.Count;
             Check(move=="punch"?W.Hero.TryPunch():move=="combo"?W.Hero.TryComboAttack():W.Hero.TryHurricaneKick(),"Paid "+move+" accepted.");
             yield return WaitHit(target,before+1);float value=hits.Last().ResolvedDamage;
-            Check(Mathf.Abs(value-valueExpected)<.003f,"Melee impact matches seeded roll after windup.");Range(value,mean,move);
+            Check(Mathf.Abs(value-valueExpected)<.003f,"Melee impact matches seeded roll after windup.");Check(value>=mean*(1-variance)-.003f&&value<=mean*(1+variance)+.003f,(basic?"Basic ":"Strength ")+move+" inside exact authored range.");samples.Add(value);
             Destroy(target.gameObject);yield return null;
         }
-        Distribution(mean,move);
+        Distribution(mean,(basic?"Basic ":"Strength ")+move);
     }
     IEnumerator Throws(float mass)
     {

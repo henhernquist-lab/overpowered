@@ -46,7 +46,7 @@ public sealed class PowerDefinition : ScriptableObject
         return s;
     }
 }
-public struct PowerStats { public int Charges; public float Cooldown, Damage, Force, Range, Radius, Duration; }
+public struct PowerStats { public float? DamageVariance; public int Charges; public float Cooldown, Damage, Force, Range, Radius, Duration; }
 public abstract class PowerEffect : ScriptableObject
 {
     public virtual bool IsFlight => false;

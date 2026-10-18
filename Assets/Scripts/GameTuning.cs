@@ -22,6 +22,10 @@ public sealed class GameTuning : ScriptableObject
 }
 [Serializable] public sealed class MeleeSettings
 {
+    [Header("Without Super Strength: damage ranges before hero modifiers")]
+    public Vector2 BasicPunchDamage = new Vector2(25f, 30f);
+    public Vector2 BasicComboDamage = new Vector2(35f, 40f);
+    public Vector2 BasicHurricaneDamage = new Vector2(45f, 55f);
     [Header("Combo string (tap E): punch -> Martelo kick finisher")]
     [Tooltip("Hits in one string; the last one is the kick finisher.")] public int ComboLength = 2;
     [Tooltip("Seconds after a string hit within which the next tap continues the string; later taps restart it.")] public float ComboWindow = .9f;

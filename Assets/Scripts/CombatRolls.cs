@@ -36,7 +36,9 @@ public sealed class CombatRolls
     public float Health(float mean, CombatRangeSettings settings)
     { HealthSamples++; return CombatRangeSettings.Resolve(mean, settings.EnemyHealthVariance, FixedUnit ?? Next(ref healthState)); }
     public float Damage(float mean, CombatRangeSettings settings)
-    { DamageSamples++; return CombatRangeSettings.Resolve(mean, settings.PlayerDamageVariance, FixedUnit ?? Next(ref damageState)); }
+    => Damage(mean, settings.PlayerDamageVariance);
+    public float Damage(float mean, float variance)
+    { DamageSamples++; return CombatRangeSettings.Resolve(mean, variance, FixedUnit ?? Next(ref damageState)); }
     public static CombatRolls Create()
     {
         var rolls = new CombatRolls(Environment.TickCount);

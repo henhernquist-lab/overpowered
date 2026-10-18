@@ -114,7 +114,7 @@ public sealed class MeleeVerificationRunner : SessionVerificationRunner
         yield return EnterMelee("fire", "ice", "speed");
         Isolate(); hero = W.Hero; var basic = Actor(new Vector3(0, 150, 2.2f), NpcRole.Criminal, 1000);
         yield return new WaitForSeconds(.3f);
-        float bd = F.BasicDamage, bf = F.BasicForce;
+        float bd = (m.BasicPunchDamage.x+m.BasicPunchDamage.y)*.5f, bf = F.BasicForce;
         hp = basic.Health; pauses = TimeArbiter.HitPausesStarted;
         Check(hero.TryComboAttack() && hero.LastComboStage == 1, "Basic tap 1 = punch without Strength.");
         yield return new WaitForSeconds(.75f);
@@ -122,7 +122,7 @@ public sealed class MeleeVerificationRunner : SessionVerificationRunner
         hp = basic.Health; pauses = TimeArbiter.HitPausesStarted; int finisherPauses = hero.FinisherPauses;
         Check(hero.TryComboAttack() && hero.LastComboStage == 2, "Basic tap 2 = Martelo finisher.");
         yield return new WaitForSeconds(.9f);
-        float basicFinisher = bd * m.FinisherDamageMultiplier;
+        float basicFinisher = (m.BasicComboDamage.x+m.BasicComboDamage.y)*.5f;
         Check(Mathf.Abs(hp - basic.Health - basicFinisher) < .05f && hero.FinisherPauses == finisherPauses + 1 && TimeArbiter.HitPausesStarted == pauses + 1,
             $"Basic finisher: {hp - basic.Health:F2} dmg (expected {basicFinisher:F2}) and its own hit pause although the kick is light ({hero.LastComboKickForce:F0} N.s).");
         Check(hero.LastComboKickForce < s.Force, "CONTROL: basic-melee finisher stays weaker than a plain Strength punch.");

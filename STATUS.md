@@ -5423,3 +5423,10 @@ User supersedes the original TK nerf: target25 for45kg and approximately75 for40
 ### Telekinesis correction — runtime verification complete, 2026-10-18
 
 Unity became available. Fresh serial runs on `be70018`: CombatBalanceVerification.Run **1919 PASS/0 FAIL**, exit0,139.80s; PowerPayoffVerification.Run **99 PASS/0 FAIL**, exit0,44.96s. Total2018/0, both personal-save and Sidekick database hashes unchanged. Evidence: `Verification/CombatBalance/tk-correction-r2/`. Dedicated suite clears midpoint injection and verifies seeded real attacks, both TK masses, physical impacts, actual damage labels and distributions. 400kg sample n20 mean74.31972 versus intended74.53560, observed68.23121–80.16479, within configured67.082–81.989. Correction is now runtime-verified; preceding blocked status superseded. Original3704/0 broad sweep still belongs to the earlier tuning. No new gameplay edits in this continuation, no push, human feel remains unverified.
+
+
+### Basic melee requested correction — 2026-10-18
+
+User requests without Super Strength: punch25–30, E follow-up kick35–40, Hurricane45–55. Added independent GameTuning.Melee ranges; basic ordinary attacks carry their custom variance to the real windup impact using session RNG. Basic kicks bypass only Strength damage multipliers, retaining force modifiers, animation, timing, hit pause and basic cooldown. Equipped Strength remains unchanged, meaning requested basic Hurricane now exceeds the earlier nerfed Strength Hurricane in damage. This explicit request supersedes the prior lower basic-damage expectation. Legacy heavy/pound tuning remains. No other power changes.
+
+Fresh CombatBalanceVerification.Run2345 PASS/0 FAIL (224.08s), MeleeVerification.Run42/0 (37.62s), both exit0 and personal-save/Sidekick DB hashes unchanged. 20 samples per basic move verify exact ranges, deterministic real impacts and labels; observed means27.42759/37.71609/49.85518. Equipped Strength controls also pass. SDK build0 warnings/errors (7.04s). Evidence in Verification/CombatBalance/basic-melee-r1 and basic-melee-build.txt. Full report updated. No push; human playtesting still needed.

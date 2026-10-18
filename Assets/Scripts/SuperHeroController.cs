@@ -93,7 +93,16 @@ public sealed class SuperHeroController : MonoBehaviour
     {
         if(powers.OffensiveActionsBlocked||Time.time<basicReadyAt||powers.SynergyRunner.Busy)return false;
         basicReadyAt=Time.time+powers.Forge.BasicCooldown;
-        if(kick)PerformKick(BasicStats(),combo);else PerformPunch(powers.Strength.Definition,BasicStats());
+        var stats=BasicStats();
+        // Authored ranges apply to ordinary punches and kicks; heavy/pound retain their existing tuning.
+        if(kick || (!poundPending && pendingDamage==1f))
+        {
+            Vector2 range=kick?(combo?Melee.BasicComboDamage:Melee.BasicHurricaneDamage):Melee.BasicPunchDamage;
+            float min=Mathf.Max(0,range.x), max=Mathf.Max(min,range.y), mean=(min+max)*.5f;
+            stats.Damage=mean*powers.HeroStats.MeleeDamage;
+            stats.DamageVariance=mean>0?(max-min)/(2*mean):0;
+        }
+        if(kick)PerformKick(stats,combo);else PerformPunch(powers.Strength.Definition,stats);
         return true;
     }
 
@@ -229,7 +238,7 @@ public sealed class SuperHeroController : MonoBehaviour
     {
         LastForce = stats.Force;
         using (powers.Credit(MeleeCredit)) LastAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * definition.OriginHeight + transform.forward * definition.OriginOffset,
-            stats.Radius, stats.Force, powers.RollDamage(stats.Damage), definition.UpwardForce, melee:true);
+            stats.Radius, stats.Force, powers.RollDamage(stats.Damage,stats.DamageVariance), definition.UpwardForce, melee:true);
         LastPunchResult = $"PUNCH: {LastAffectedBodies} bodies hit @ {LastForce:0} N·s";
         LastImpactTime=Time.time;LastImpactFrame=Time.frameCount;PunchImpacted?.Invoke();
         if(pause)FinisherPause();
@@ -295,7 +304,10 @@ public sealed class SuperHeroController : MonoBehaviour
     }
     void PerformKick(PowerStats stats,bool combo)
     {
+        float authoredDamage=stats.Damage;
         stats = TakeModifiers(stats, out bool pause);
+        if(stats.DamageVariance.HasValue)stats.Damage=authoredDamage; // basic kicks own their damage; force modifiers remain
+
         if(combo)MarteloKickStarted?.Invoke();else HurricaneKickStarted?.Invoke();
         float windup=combo?ComboKickWindupSeconds:KickWindupSeconds;
         if (windup > 0) StartCoroutine(KickAfterWindup(stats, windup, pause,combo));
@@ -313,7 +325,7 @@ public sealed class SuperHeroController : MonoBehaviour
         float force=stats.Force*HeroAbilityTuning.KickForceMultiplier;
         int bodies;
         using (powers.Credit(MeleeCredit)) bodies=CombatImpact.Blast(powers, transform.position + Vector3.up * HeroAbilityTuning.KickOriginHeight + transform.forward * HeroAbilityTuning.KickOriginOffset,
-            HeroAbilityTuning.KickRadius, force, powers.RollDamage(stats.Damage * (combo ? 1f : Melee.HurricaneDamageMultiplier)), HeroAbilityTuning.KickUpwardForce, melee:true);
+            HeroAbilityTuning.KickRadius, force, powers.RollDamage(stats.Damage * (combo || stats.DamageVariance.HasValue ? 1f : Melee.HurricaneDamageMultiplier),stats.DamageVariance), HeroAbilityTuning.KickUpwardForce, melee:true);
         if(combo)
         {
             LastComboKickForce=force;LastComboKickAffectedBodies=bodies;

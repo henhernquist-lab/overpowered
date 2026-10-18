@@ -24,7 +24,7 @@ Branch: `codex/combat-balance-ranges`, based on `905abdb`. Implementation and re
 | Lightning first hit | 24 | 40.8 | 36.72 | 44.88 |
 | Speed pass damage (mean unchanged) | 8 | 8 | 7.2 | 8.8 |
 
-The actual pre-change combo was 35 × 1.4 × 1.7 = 83.3. The new independent combo multiplier is 1.19; Hurricane is 0.34. Basic melee therefore keeps mean8, with combo19.04→9.52 and Hurricane13.6→2.72. Heavy/pound means are unchanged and receive the same variance. Hurricane force remains ×1.5; combo force remains ×1.5×1.6.
+The actual pre-change combo was 35 × 1.4 × 1.7 = 83.3. The new independent combo multiplier is 1.19; Hurricane is 0.34. The initial pass kept basic mean8, combo9.52 and Hurricane2.72; the later user-requested basic-melee correction below supersedes those values. Heavy/pound means are unchanged and receive the same variance. Hurricane force remains ×1.5; combo force remains ×1.5×1.6.
 
 ## Architecture
 
@@ -88,6 +88,7 @@ These are arithmetic observations and automated controls, not a claim that comba
 - `Assets/Scripts/IceEffect.cs`
 - `Assets/Scripts/MeleeVerificationRunner.cs`
 - `Assets/Scripts/PowerPayoffVerificationRunner.cs`
+- `Assets/Scripts/PowerDefinition.cs`
 - `Assets/Scripts/PowerUser.cs`
 - `Assets/Scripts/Powers/CombatBalanceVerificationRunner.cs`
 - `Assets/Scripts/Powers/CombatBalanceVerificationRunner.cs.meta`
@@ -141,3 +142,10 @@ Unverified: human feel and visual acceptance, sustained overlapping Poison balan
 Telekinesis correction requested after the first pass: 45 kg now averages25, and400 kg averages74.5356 (approximately75), retaining the original square-root mass curve. The multiplier is5/7. The original regression counts above precede this correction; fresh results are recorded below.
 
 Correction verification completed: SDK build0 warnings/errors; fresh CombatBalance1919/0 and PowerPayoff99/0, both exit0, on source checkpoint `be70018`. Evidence: `Verification/CombatBalance/tk-correction-r2/`. Both personal-save and Sidekick database hashes unchanged. The earlier3704/0 broad sweep predates this correction; the fresh focused total is2018/0.
+
+
+## Basic melee correction — 2026-10-18
+
+Without Super Strength, ordinary punch is now25–30 (mean27.5), E follow-up kick35–40 (mean37.5), standalone Hurricane45–55 (mean50), before existing hero melee modifiers. GameTuning.Melee owns explicit independent min/max pairs. Per-attack variance travels with the pending impact and uses the same session damage RNG. Basic kicks no longer inherit Strength damage multipliers; force, animation, windup, hit pause and cooldown remain unchanged. Equipped Strength retains its prior values. This explicitly requested basic Hurricane therefore deals more damage than the currently nerfed Strength Hurricane; no unsolicited Strength rebalance was made. Legacy basic heavy/pound tuning stays in place.
+
+Fresh verification: CombatBalance2345/0 (224.08s) and Melee42/0 (37.62s), both exit0, saves/database unchanged. Twenty real no-Strength samples per move: punch mean27.42759, observed25.38544–29.38808; combo37.71609, observed35.09997–39.45132; Hurricane49.85518, observed45.77088–53.77617. Tests verify exact authored bounds, seeded damage, real cooldown/combination timing, HUD numbers and independent equipped-Strength controls. SDK build0 warnings/errors. Evidence `Verification/CombatBalance/basic-melee-r1/`. Human feel remains pending.

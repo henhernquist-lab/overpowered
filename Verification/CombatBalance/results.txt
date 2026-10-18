@@ -549,103 +549,103 @@ PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 32.07297
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 32.86226
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 35.87953
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 33.68795
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 37.32704
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 35.97652
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 37.64332
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 34.17566
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 33.73492
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 37.59628
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 33.96969
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 36.82550
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 35.45591
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 34.36164
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 34.62535
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 32.03962
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 37.08929
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 33.32032
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 32.44483
+PASS Strength punch inside exact authored range.
 PASS Paid punch accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS punch in range: 36.88389
-PASS punch: n=20, mean=34.89862, intended=35.00000, min=32.03962, max=37.64332; diversity and midpoint within 3.5%.
+PASS Strength punch inside exact authored range.
+PASS Strength punch: n=20, mean=34.89862, intended=35.00000, min=32.03962, max=37.64332; diversity and midpoint within 3.5%.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -656,7 +656,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 42.69664
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -667,7 +667,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 42.81207
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -678,7 +678,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 40.14455
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -689,7 +689,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 43.82234
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -700,7 +700,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 41.20417
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -711,7 +711,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 39.65118
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -722,7 +722,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 37.65155
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -733,7 +733,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 43.23826
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -744,7 +744,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 43.13430
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -755,7 +755,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 39.71279
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -766,7 +766,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 42.86235
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -777,7 +777,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 43.34217
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -788,7 +788,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 42.74012
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -799,7 +799,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 38.75407
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -810,7 +810,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 42.44132
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -821,7 +821,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 44.90091
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -832,7 +832,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 43.88642
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -843,7 +843,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 39.94436
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -854,7 +854,7 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 44.85628
+PASS Strength combo inside exact authored range.
 PASS Reset pending combo via real RMB action.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
@@ -865,112 +865,538 @@ PASS Paid combo accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS combo in range: 42.40422
-PASS combo: n=20, mean=42.01000, intended=41.65000, min=37.65155, max=44.90091; diversity and midpoint within 3.5%.
+PASS Strength combo inside exact authored range.
+PASS Strength combo: n=20, mean=42.01000, intended=41.65000, min=37.65155, max=44.90091; diversity and midpoint within 3.5%.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 10.90481
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 11.17317
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 12.19904
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 11.45391
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 12.69119
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 12.23202
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 12.79873
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 11.61973
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 11.46987
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 12.78273
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 11.54970
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 12.52067
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 12.05501
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 11.68296
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 11.77262
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 10.89347
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 12.61036
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 11.32891
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 11.03124
+PASS Strength hurricane inside exact authored range.
 PASS Paid hurricane accepted.
 PASS Real gameplay damage arrived before timeout.
 PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
 PASS Melee impact matches seeded roll after windup.
-PASS hurricane in range: 12.54052
-PASS hurricane: n=20, mean=11.86553, intended=11.90000, min=10.89347, max=12.79873; diversity and midpoint within 3.5%.
+PASS Strength hurricane inside exact authored range.
+PASS Strength hurricane: n=20, mean=11.86553, intended=11.90000, min=10.89347, max=12.79873; diversity and midpoint within 3.5%.
 PASS Save VECTOR with ice + telekinesis through the loadout API.
 PASS Session equips ice + telekinesis.
 PASS ice selected for LMB (key 1).
+PASS Basic damage test uses legal loadout without Strength.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Basic punch: n=20, mean=27.42759, intended=27.50000, min=25.38544, max=29.38808; diversity and midpoint within 3.5%.
+PASS Basic damage test uses legal loadout without Strength.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Basic combo: n=20, mean=37.71609, intended=37.50000, min=35.09997, max=39.45132; diversity and midpoint within 3.5%.
+PASS Basic damage test uses legal loadout without Strength.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Basic hurricane: n=20, mean=49.85518, intended=50.00000, min=45.77088, max=53.77617; diversity and midpoint within 3.5%.
 PASS Ice initial doubled; shatter damage/force/particles unchanged.
 PASS Select equipped ice
 PASS Accepted real ice cast.

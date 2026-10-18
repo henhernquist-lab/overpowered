@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: GameTuning
   m_EditorClassIdentifier: Assembly-CSharp::GameTuning
   Melee:
+    BasicPunchDamage: {x: 25, y: 30}
+    BasicComboDamage: {x: 35, y: 40}
+    BasicHurricaneDamage: {x: 45, y: 55}
     FinisherDamageMultiplier: 1.19
     HurricaneDamageMultiplier: 0.34
   CombatRanges:
