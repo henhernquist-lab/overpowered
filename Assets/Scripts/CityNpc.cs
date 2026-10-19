@@ -54,6 +54,16 @@ public sealed class CityNpc : MonoBehaviour
     /// shoots and a rooted melee enemy only hits what is inside its reach.
     public bool Rooted=>Time.time<rootedUntil;
     float rootedUntil;
+    float slowedUntil, slowSpeedFactor=1f;
+    public bool Slowed=>Time.time<slowedUntil;
+    public float MovementSpeedFactor=>Slowed?slowSpeedFactor:1f;
+    public void Slow(float speedFactor,float duration)
+    {
+        if(duration<=0f||Dead)return;
+        slowSpeedFactor=Slowed?Mathf.Min(slowSpeedFactor,Mathf.Clamp01(speedFactor)):Mathf.Clamp01(speedFactor);
+        slowedUntil=Mathf.Max(slowedUntil,Time.time+duration);
+    }
+    void MoveSpeed(float speed){Agent.speed=speed*MovementSpeedFactor;}
     public void Root(float duration)
     {
         if(duration<=0f||Dead)return;
@@ -187,7 +197,7 @@ public sealed class CityNpc : MonoBehaviour
         bool combatant=Archetype!=null && Hostile;
         if (!combatant) CancelAttack();
         if (Phase==AttackPhase.Windup) { TickWindup(); return; }
-        Agent.speed=combatant ? combatSpeed : Role==NpcRole.Civilian ? (Fleeing ? c.FleeSpeed : c.CivilianSpeed) : Role==NpcRole.PursuingHero ? c.HeroSpeed : c.CopSpeed;
+        MoveSpeed(combatant ? combatSpeed : Role==NpcRole.Civilian ? (Fleeing ? c.FleeSpeed : c.CivilianSpeed) : Role==NpcRole.PursuingHero ? c.HeroSpeed : c.CopSpeed);
         float distance=Vector3.Distance(transform.position,world.Hero.transform.position);
         bool aggro=combatant && (AlwaysAggro || distance<c.DetectionRange);
         // Phase 8 routes: any response (flee, hostility, combat, encounter) takes the body off its route on this tick; re-path now.
@@ -218,7 +228,7 @@ public sealed class CityNpc : MonoBehaviour
         {
             if (distance<=a.TriggerDistance) { StartWindup(); return true; }
             if (Time.time>engageUntil) { tokens.Release(this); Phase=AttackPhase.Approach; nextAttack=Time.time+Roster.RetrySeconds; return false; }
-            Agent.speed=combatSpeed=a.MoveSpeed;
+            MoveSpeed(combatSpeed=a.MoveSpeed);
             if (Time.time>=nextPath) { nextPath=Time.time+world.Tuning.Npcs.RepathSeconds; Go(world.Hero.transform.position); }
             return true;
         }
@@ -232,7 +242,7 @@ public sealed class CityNpc : MonoBehaviour
         queued=false;
         if (a.Kind==AttackKind.Ranged || distance<=a.TriggerDistance) { StartWindup(); return true; }
         Phase=AttackPhase.Engage; engageUntil=Time.time+Roster.EngageTimeoutSeconds; nextPath=Time.time+world.Tuning.Npcs.RepathSeconds;
-        Agent.speed=combatSpeed=a.MoveSpeed; Go(world.Hero.transform.position);
+        MoveSpeed(combatSpeed=a.MoveSpeed); Go(world.Hero.transform.position);
         return true;
     }
     void StartWindup()
@@ -338,7 +348,7 @@ public sealed class CityNpc : MonoBehaviour
         float angle=Separation(bearing, ring, ranged, player);
         bool holding=d>=ring-slack && d<=ring+slack;
         if (holding) angle+=circleSign*r.CircleLeadDegrees;
-        Agent.speed=combatSpeed=holding ? Mathf.Min(r.CircleSpeed, a.MoveSpeed) : a.MoveSpeed;
+        MoveSpeed(combatSpeed=holding ? Mathf.Min(r.CircleSpeed, a.MoveSpeed) : a.MoveSpeed);
         Go(player+Quaternion.AngleAxis(angle, Vector3.up)*bearing*ring);
     }
     float Separation(Vector3 bearing, float ring, bool ranged, Vector3 player)
@@ -408,7 +418,7 @@ public sealed class CityNpc : MonoBehaviour
     public void DirectTo(Vector3 destination,float speed)
     {
         if(Role==NpcRole.Civilian&&Fleeing)destination=PanicDestination(destination);
-        Agent.speed=speed;
+        MoveSpeed(speed);
         if(Time.time<nextPath) return;
         nextPath=Time.time+world.Tuning.Npcs.RepathSeconds;
         if(NavMesh.SamplePosition(destination,out var hit,world.Tuning.Npcs.NavSampleRadius,NavMesh.AllAreas)) Agent.SetDestination(hit.position);

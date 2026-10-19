@@ -6,6 +6,9 @@ public sealed class DarknessEffect : PowerEffect
 {
     [Header("Targeting")]
     public float SecondaryRadius = 7f;
+    [Header("Movement control")]
+    public float InitialRootSeconds = 1.1f;
+    [Range(0f,1f)] public float SlowSpeedFactor = .4f;
     static readonly Collider[] nearby = new Collider[64];
     static readonly RaycastHit[] sight = new RaycastHit[32];
     public static CityNpc LastPrimary { get; private set; }
@@ -60,7 +63,8 @@ public sealed class DarknessEffect : PowerEffect
     }
     void Apply(PowerUser user,PowerRuntime power,CityNpc npc,PowerStats stats)
     {
-        npc.Root(stats.Duration);
+        npc.Root(Mathf.Min(InitialRootSeconds,stats.Duration));
+        npc.Slow(SlowSpeedFactor,stats.Duration);
         npc.Damage(user.RollDamage(stats.Damage),user);
         var color = power.Definition.PaletteColor;
         if (!npc.Dead)
