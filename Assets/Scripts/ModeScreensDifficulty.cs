@@ -22,6 +22,8 @@ public sealed partial class ModeScreens
             button.RegisterCallback<FocusInEvent>(_=>ShowDifficulty(d));
             button.RegisterCallback<PointerLeaveEvent>(_=>ShowDifficulty(Profile.SelectedDifficulty));
             button.RegisterCallback<FocusOutEvent>(_=>ShowDifficulty(Profile.SelectedDifficulty));
+            if(d.PulseSelection)button.schedule.Execute(()=>button.EnableInClassList("difficulty-pulse",
+                button.ClassListContains("difficulty-selected")&&!button.ClassListContains("difficulty-pulse"))).Every(750);
             row.Add(button);DifficultyButtons.Add(d.Id,button);
         }
         DifficultyDetails=new Label();DifficultyDetails.AddToClassList("difficulty-details");panel.Add(DifficultyDetails);
@@ -32,7 +34,7 @@ public sealed partial class ModeScreens
     void RefreshDifficulty()
     {
         foreach(var pair in DifficultyButtons)
-        { bool selected=pair.Key==Profile.SelectedDifficulty.Id;pair.Value.EnableInClassList("difficulty-selected",selected);pair.Value.tooltip=(selected?"SELECTED · ":"")+new SessionDifficulty(DifficultyDefinition.Resolve(pair.Key)).Details; }
+        { bool selected=pair.Key==Profile.SelectedDifficulty.Id;pair.Value.EnableInClassList("difficulty-selected",selected);if(!selected)pair.Value.RemoveFromClassList("difficulty-pulse");pair.Value.tooltip=(selected?"SELECTED · ":"")+new SessionDifficulty(DifficultyDefinition.Resolve(pair.Key)).Details; }
         ShowDifficulty(Profile.SelectedDifficulty);
     }
     void ShowDifficulty(DifficultyDefinition definition)

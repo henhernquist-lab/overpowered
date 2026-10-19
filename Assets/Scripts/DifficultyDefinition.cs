@@ -4,6 +4,7 @@ using UnityEngine;
 public sealed class DifficultyDefinition : ScriptableObject
 {
     public string Id, DisplayName, Subtitle;
+    public bool PulseSelection;
     public float PlayerDamageMultiplier=1, EnemyHealthMultiplier=1, PlayerHealthMultiplier=1;
     public float EnemySpawnRateMultiplier=1, EnergyUsageMultiplier=1, CooldownDurationMultiplier=1;
     public static DifficultyDefinition Find(string id) => string.IsNullOrEmpty(id)?null:Resources.Load<DifficultyDefinition>("Difficulties/"+id);

@@ -4,8 +4,10 @@
 .difficulty-title { font-size: 17px; -unity-font-style: bold; }
 .difficulty-subtitle { font-size: 10px; white-space: normal; }
 .difficulty-hard { background-color: rgb(46,25,23); border-color: rgb(232,115,60); border-width: 2px; }
-.difficulty-extreme { background-color: rgb(45,15,42); border-color: rgb(222,67,104); border-width: 3px; }
+.difficulty-extreme { background-color: rgb(45,15,42); border-color: rgb(222,67,104); border-width: 3px; transition-duration: .6s; }
 .difficulty-button:hover, .difficulty-button:focus { background-color: rgb(48,51,75); }
 .difficulty-selected { border-color: rgb(235,250,255); border-width: 3px; }
 .difficulty-selected .difficulty-title { color: rgb(255,255,255); }
 .difficulty-details { font-size: 13px; color: rgb(220,232,246); white-space: normal; margin-top: 5px; }
+
+.difficulty-extreme.difficulty-selected.difficulty-pulse { border-color: rgb(255,180,210); }

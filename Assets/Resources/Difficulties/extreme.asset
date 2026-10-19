@@ -5,6 +5,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_Script: {fileID: 11500000, guid: 42cb9537e769483296f5b85001268212, type: 3}
   m_Name: extreme
+  PulseSelection: 1
   Id: extreme
   DisplayName: EXTREME
   Subtitle: MAXIMUM PRESSURE

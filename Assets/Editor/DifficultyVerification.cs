@@ -11,6 +11,7 @@ public static class DifficultyVerification
     static DifficultyVerification(){EditorApplication.update+=()=>{if(deadline>0&&EditorApplication.timeSinceStartup>deadline)Finish(1);};}
     public static void Run(){Begin("run");}
     public static void Reload(){Begin("reload");}
+    public static void Menu(){Begin("menu");}
     static void Begin(string task)
     {Directory.CreateDirectory("Verification/Difficulty/saves");SessionState.SetString(Key,task);EditorSceneManager.OpenScene("Assets/Scenes/Home.unity");EditorApplication.isPlaying=true;}
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -28,7 +29,7 @@ public static class DifficultyVerification
     {
         if(SessionState.GetString(Key,"")=="")return;
         var go=new GameObject("Difficulty verifier");UnityEngine.Object.DontDestroyOnLoad(go);
-        var runner=go.AddComponent<DifficultyVerificationRunner>();runner.Reload=SessionState.GetString(Key,"")=="reload";runner.Finished=Finish;
+        var runner=go.AddComponent<DifficultyVerificationRunner>();runner.Reload=SessionState.GetString(Key,"")=="reload";runner.MenuOnly=SessionState.GetString(Key,"")=="menu";runner.Finished=Finish;
     }
     static void Finish(int result){SessionState.EraseString(Key);deadline=0;EditorApplication.UnlockReloadAssemblies();EditorApplication.Exit(result);}
 }

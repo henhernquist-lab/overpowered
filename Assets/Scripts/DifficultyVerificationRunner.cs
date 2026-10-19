@@ -10,8 +10,8 @@ using UnityEngine.UIElements;
 public sealed class DifficultyVerificationRunner : SessionVerificationRunner
 {
     protected override string Folder=>"Verification/Difficulty/";
-    protected override string ResultFile=>Reload?"reload.txt":"results.txt";
-    public bool Reload;
+    protected override string ResultFile=>MenuOnly?"menu.txt":Reload?"reload.txt":"results.txt";
+    public bool Reload,MenuOnly;
     GameHud Hud=>FindAnyObjectByType<GameHud>();
     readonly List<NpcDamageResult> hits=new List<NpcDamageResult>();
     void Hit(NpcDamageResult h){if(W!=null&&h.Attacker==W.Powers)hits.Add(h);}
@@ -40,6 +40,15 @@ public sealed class DifficultyVerificationRunner : SessionVerificationRunner
             Check(m.DifficultyButtons.Count==3&&m.DifficultyButtons[id].ClassListContains("difficulty-selected"),"Three buttons; selected class for "+id);
             Check(m.Profile.Data.DifficultyId==id&&m.DifficultyDetails.text.Contains(new SessionDifficulty(m.Profile.SelectedDifficulty).Details),"Button saves choice and shows actual percentages "+id);
             yield return MenuCapture(m,id);
+        }
+        if(MenuOnly)
+        {
+            var menu=FindAnyObjectByType<ModeScreens>();var button=menu.DifficultyButtons["extreme"];
+            bool state=button.ClassListContains("difficulty-pulse"), changed=false;
+            for(int i=0;i<12;i++){yield return new WaitForSecondsRealtime(.1f);changed|=state!=button.ClassListContains("difficulty-pulse");}
+            Check(changed,"Selected Extreme pulses via low-frequency UI schedule");
+            menu.SelectDifficulty("normal");Check(!button.ClassListContains("difficulty-pulse"),"Deselection stops pulse immediately");
+            yield return MenuCapture(menu,"normal-wide",2560,1080);yield break;
         }
         var hard=new SessionDifficulty(DifficultyDefinition.Resolve("hard"));var extreme=new SessionDifficulty(DifficultyDefinition.Resolve("extreme"));
         var hv=new[]{hard.PlayerDamage,hard.EnemyHealth,hard.PlayerHealth,hard.SpawnRate,hard.EnergyUsage,hard.Cooldown};
@@ -211,12 +220,18 @@ public sealed class DifficultyVerificationRunner : SessionVerificationRunner
         Log($"MEASURED dense {id}: {180/elapsed:F2} FPS / {elapsed/180*1000:F3} ms; alive {crowd.Count(n=>n!=null&&!n.Dead)}; peak active particle systems {peakVfx}; bars {Hud.EnemyBars.Count}, labels {Hud.DamageNumbers.Count}, peak active labels {peakLabels}. 180-frame fixed12-target Editor workload; not standalone pressure benchmark.");
         Check(crowd.Count==12&&Hud.EnemyBars.Count==20&&Hud.DamageNumbers.Count==96,"Dense workload keeps fixed enemy/UI budgets");
     }
-    IEnumerator MenuCapture(ModeScreens menu,string id)
+    IEnumerator MenuCapture(ModeScreens menu,string id,int width=1280,int height=720)
     {
-        var rt=new RenderTexture(1280,720,24);rt.Create();menu.Panel.targetTexture=rt;
+        var rt=new RenderTexture(width,height,24);rt.Create();menu.Panel.targetTexture=rt;
         yield return Frames(5);menu.Root.MarkDirtyRepaint();yield return Frames(2);
-        var old=RenderTexture.active;RenderTexture.active=rt;var image=new Texture2D(1280,720,TextureFormat.RGB24,false);
-        image.ReadPixels(new Rect(0,0,1280,720),0,0);image.Apply();File.WriteAllBytes(Folder+id+".png",image.EncodeToPNG());RenderTexture.active=old;
+        var old=RenderTexture.active;RenderTexture.active=rt;var image=new Texture2D(width,height,TextureFormat.RGB24,false);
+        foreach(string mode in new[]{"hero","villain"})
+        {
+            var glyph=menu.Root.Q<VisualElement>("mode-glyph-"+mode);var title=menu.Root.Q<Label>("mode-title-"+mode);
+            Check(glyph.worldBound.yMax<title.worldBound.yMin,$"Mode icon/title do not overlap at {width}x{height}: "+mode);
+        }
+        Check(menu.DifficultyDetails.worldBound.yMax<menu.ModeButtons["hero"].worldBound.yMin,"Difficulty details clear mode cards at "+width+"x"+height);
+        image.ReadPixels(new Rect(0,0,width,height),0,0);image.Apply();File.WriteAllBytes(Folder+id+".png",image.EncodeToPNG());RenderTexture.active=old;
         menu.Panel.targetTexture=null;Destroy(image);rt.Release();Destroy(rt);
     }
 }
