@@ -14,19 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerDefinition
   Id: darkness
   DisplayName: Darkness
-  Description: 'Shadow Tendrils: root the aimed enemy in place. It cannot move, but can still attack what is in reach.'
+  Description: 'Curse up to two nearby enemies: briefly root, then slow them; their shadow auras punish clustered hostiles.'
   Effect: {fileID: 11400000, guid: f70c52d69c2aa4cfcbfc66590c33d8bd, type: 2}
   InitiallyUnlocked: 1
   UnlockCost: 1
-  Charges: 2
+  Charges: 1
   Cooldown: 0.6
-  ChargeRecharge: 5
+  ChargeRecharge: 9
   ResourceCost: 15
-  Damage: 12
+  Damage: 6.5
   Force: 0
   Radius: 3
   Range: 22
-  Duration: 3.5
+  Duration: 4
   GroundRecharge: 2.5
   OriginOffset: 1.7
   OriginHeight: 1
@@ -53,17 +53,17 @@ MonoBehaviour:
   Upgrades:
   - Name: Upgrade
     PointCost: 1
-    ExtraCharges: 1
+    ExtraCharges: 0
     ForceMultiplier: 1.4
-    DamageMultiplier: 1.4
-    DurationMultiplier: 1.3
+    DamageMultiplier: 1.15
+    DurationMultiplier: 1
     RangeMultiplier: 1.15
     CooldownMultiplier: 0.9
   - Name: Upgrade
     PointCost: 1
-    ExtraCharges: 1
+    ExtraCharges: 0
     ForceMultiplier: 1.4
-    DamageMultiplier: 1.4
-    DurationMultiplier: 1.3
+    DamageMultiplier: 1.15
+    DurationMultiplier: 1
     RangeMultiplier: 1.15
     CooldownMultiplier: 0.9
