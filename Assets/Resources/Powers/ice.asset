@@ -18,7 +18,7 @@ MonoBehaviour:
   Effect: {fileID: 11400000, guid: a7ac3168994994021893c08061345801, type: 2}
   InitiallyUnlocked: 1
   UnlockCost: 1
-  Charges: 2
+  Charges: 3
   Cooldown: 0.6
   ChargeRecharge: 1.5
   ResourceCost: 10
@@ -44,7 +44,7 @@ MonoBehaviour:
   Upgrades:
   - Name: Upgrade
     PointCost: 1
-    ExtraCharges: 1
+    ExtraCharges: 0
     ForceMultiplier: 1.4
     DamageMultiplier: 1.4
     DurationMultiplier: 1.3
@@ -52,7 +52,7 @@ MonoBehaviour:
     CooldownMultiplier: 0.9
   - Name: Upgrade
     PointCost: 1
-    ExtraCharges: 1
+    ExtraCharges: 0
     ForceMultiplier: 1.4
     DamageMultiplier: 1.4
     DurationMultiplier: 1.3
