@@ -1,0 +1,24 @@
+PASS Fresh profile defaults Normal.
+PASS Invalid selection rejected.
+PASS Legacy fixture genuinely lacks field.
+PASS Old save defaults Normal.
+PASS Three buttons; selected class for normal
+PASS Button saves choice and shows actual percentages normal
+PASS Mode icon/title do not overlap at 1280x720: hero
+PASS Mode icon/title do not overlap at 1280x720: villain
+PASS Difficulty details clear mode cards at 1280x720
+PASS Three buttons; selected class for hard
+PASS Button saves choice and shows actual percentages hard
+PASS Mode icon/title do not overlap at 1280x720: hero
+PASS Mode icon/title do not overlap at 1280x720: villain
+PASS Difficulty details clear mode cards at 1280x720
+PASS Three buttons; selected class for extreme
+PASS Button saves choice and shows actual percentages extreme
+PASS Mode icon/title do not overlap at 1280x720: hero
+PASS Mode icon/title do not overlap at 1280x720: villain
+PASS Difficulty details clear mode cards at 1280x720
+PASS Selected Extreme pulses via low-frequency UI schedule
+PASS Deselection stops pulse immediately
+PASS Mode icon/title do not overlap at 2560x1080: hero
+PASS Mode icon/title do not overlap at 2560x1080: villain
+PASS Difficulty details clear mode cards at 2560x1080

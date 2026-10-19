@@ -1,0 +1,176 @@
+[COMBAT] PASS Roster asset maps Criminal->Robber, Cop->Gunner, PursuingHero->Brute; token budget 2, ring 4.5m.
+[COMBAT] PASS ShootImpactSeconds lies inside the played Shoot window.
+[COMBAT] PASS Sandbox: runtime COPY of the free-play definition (0 civilians, no police, no encounters) selected through GameFlow.
+[COMBAT] PASS Sandbox city: 0 NPCs, Hero side (Criminals hostile), 0 Heat stars.
+[COMBAT] PASS Found a straight, unobstructed test lane through a street crossing.
+[COMBAT] PASS Gunner HOLDS its band while the player stands still (min 9.78 / max 12.00 m, never inside the 4.5m melee ring) and still attacks (3 shots).
+[COMBAT] PASS Approach speed measured: Rusher 6.99 > Gunner 5.50 > Brute 3.00 m/s.
+[COMBAT] PASS Rusher measured speed 6.99 m/s within 10% of its asset value 7.
+[COMBAT] PASS Gunner measured speed 5.50 m/s within 10% of its asset value 5.5.
+[COMBAT] PASS Brute measured speed 3.00 m/s within 10% of its asset value 3.
+[COMBAT] PASS Spawned max health (Criminal role, 0 stars): Rusher 39.0 : Gunner 65.0 : Brute 195.0 = 0.60 : 1 : 3.00 (standard enemy 65).
+[COMBAT] PASS Rusher HIT: windup started at 1.59m holding an attack token (pool 1/2).
+[COMBAT] PASS Rusher HIT: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS Rusher HIT: 'Punch' clip playing from windup start at fitted rate 1.037 (impact marker scheduled for release).
+[COMBAT] PASS Rusher HIT: telegraph still visible at 60 % of the windup (scale (1.50, 0.05, 1.50)).
+[COMBAT] PASS Rusher HIT: telegraph renderer hidden and token returned at release.
+[COMBAT] PASS Rusher HIT: measured windup (release - windup start) = 450.5 ms vs asset 450 ms.
+[COMBAT] PASS Rusher HIT: 'Punch' cue playing at the enemy on the release frame (hit): Attacked fires at release, hit or miss.
+[COMBAT] PASS Rusher HIT: player standing still inside the attack took EXACTLY 6.00 (= Rusher damage 6.00) at release; horizontal distance from disc centre 0.59m vs radius 1.1+player 0.38 (margin -0.89m).
+[COMBAT] PASS Rusher HIT: clip impact marker lands within 2 rendered frames of the damage.
+[COMBAT] PASS Rusher HIT: no knockback CONTROL (moved 0.00m).
+[COMBAT] PASS Rusher BACKFLIP: windup started at 1.59m holding an attack token (pool 1/2).
+[COMBAT] PASS Rusher BACKFLIP: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS CONTROL menu-open backflip is refused before the gameplay attempt.
+[COMBAT] PASS Rusher BACKFLIP: hero facing the enemy backflips at windup start ('BACKFLIP: 4.2 m backward in 0.90s').
+[COMBAT] PASS Rusher BACKFLIP: 'Punch' clip playing from windup start at fitted rate 1.037 (impact marker scheduled for release).
+[COMBAT] PASS Rusher BACKFLIP: telegraph renderer hidden and token returned at release.
+[COMBAT] PASS Rusher BACKFLIP: measured windup (release - windup start) = 451.4 ms vs asset 450 ms.
+[COMBAT] PASS Rusher BACKFLIP: 'Punch' cue playing at the enemy on the release frame (miss): Attacked fires at release, hit or miss.
+[COMBAT] PASS Rusher BACKFLIP DODGE: backflip at windup start -> NO damage; player travelled 2.12m; at release horizontal distance from disc centre 2.71m vs radius 1.1+player 0.38 (margin 1.22m).
+[COMBAT] PASS Rusher LATE: windup started at 1.59m holding an attack token (pool 1/2).
+[COMBAT] PASS Rusher LATE: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS Rusher LATE: 'Punch' clip playing from windup start at fitted rate 1.037 (impact marker scheduled for release).
+[COMBAT] PASS Rusher LATE: telegraph renderer hidden and token returned at release.
+[COMBAT] PASS Rusher LATE: measured windup (release - windup start) = 450.1 ms vs asset 450 ms.
+[COMBAT] PASS Rusher LATE: 'Punch' cue playing at the enemy on the release frame (hit): Attacked fires at release, hit or miss.
+[COMBAT] PASS Rusher LATE: player standing still inside the attack took EXACTLY 6.00 (= Rusher damage 6.00) at release; horizontal distance from disc centre 0.59m vs radius 1.1+player 0.38 (margin -0.89m).
+[COMBAT] PASS CONTROL menu-open backflip is refused before the gameplay attempt.
+[COMBAT] PASS Rusher LATE CONTROL: backflip only AFTER release (the 6.00 hit already landed at release).
+[COMBAT] PASS Rusher LATE CONTROL: late backflip cannot undo it: health 100 -> 94 (the timing window is real).
+[COMBAT] PASS Rusher DEATH: windup started at 1.59m holding an attack token (pool 1/2).
+[COMBAT] PASS Rusher DEATH: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS Rusher DEATH: 'Punch' clip playing from windup start at fitted rate 1.037 (impact marker scheduled for release).
+[COMBAT] PASS Rusher DEATH: killed at 50 % of the windup -> telegraph hidden, token released (pool 0), windup cancelled.
+[COMBAT] PASS Rusher DEATH: NO damage at its would-be release (+0.3s): health 100 -> 100, releases 0; Death clip played.
+[COMBAT] PASS Brute HIT: windup started at 2.80m holding an attack token (pool 1/2).
+[COMBAT] PASS Brute HIT: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS Brute HIT: 'Hurricane Kick' clip playing from windup start at fitted rate 0.667 (impact marker scheduled for release).
+[COMBAT] PASS Brute HIT: telegraph still visible at 60 % of the windup (scale (4.36, 0.05, 4.36)).
+[COMBAT] PASS Brute HIT: telegraph renderer hidden and token returned at release.
+[COMBAT] PASS Brute HIT: measured windup (release - windup start) = 901.1 ms vs asset 900 ms.
+[COMBAT] PASS Brute HIT: 'Punch' cue playing at the enemy on the release frame (hit): Attacked fires at release, hit or miss.
+[COMBAT] PASS Brute HIT: player standing still inside the attack took EXACTLY 18.00 (= Brute damage 18.00) at release; horizontal distance from disc centre 1.01m vs radius 3.2+player 0.38 (margin -2.58m).
+[COMBAT] PASS Brute HIT: clip impact marker lands within 2 rendered frames of the damage.
+[COMBAT] PASS Brute HIT: knockback moved the player 2.49m (asset 2.5m).
+[COMBAT] PASS Brute BACKFLIP: windup started at 2.80m holding an attack token (pool 1/2).
+[COMBAT] PASS Brute BACKFLIP: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS CONTROL menu-open backflip is refused before the gameplay attempt.
+[COMBAT] PASS Brute BACKFLIP: hero facing the enemy backflips at windup start ('BACKFLIP: 4.2 m backward in 0.90s').
+[COMBAT] PASS Brute BACKFLIP: 'Hurricane Kick' clip playing from windup start at fitted rate 0.667 (impact marker scheduled for release).
+[COMBAT] PASS Brute BACKFLIP: telegraph renderer hidden and token returned at release.
+[COMBAT] PASS Brute BACKFLIP: measured windup (release - windup start) = 900.9 ms vs asset 900 ms.
+[COMBAT] PASS Brute BACKFLIP: 'Punch' cue playing at the enemy on the release frame (miss): Attacked fires at release, hit or miss.
+[COMBAT] PASS Brute BACKFLIP DODGE: backflip at windup start -> NO damage; player travelled 4.20m; at release horizontal distance from disc centre 5.20m vs radius 3.2+player 0.38 (margin 1.62m).
+[COMBAT] PASS Brute LATE: windup started at 2.80m holding an attack token (pool 1/2).
+[COMBAT] PASS Brute LATE: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS Brute LATE: 'Hurricane Kick' clip playing from windup start at fitted rate 0.667 (impact marker scheduled for release).
+[COMBAT] PASS Brute LATE: telegraph renderer hidden and token returned at release.
+[COMBAT] PASS Brute LATE: measured windup (release - windup start) = 901.3 ms vs asset 900 ms.
+[COMBAT] PASS Brute LATE: 'Punch' cue playing at the enemy on the release frame (hit): Attacked fires at release, hit or miss.
+[COMBAT] PASS Brute LATE: player standing still inside the attack took EXACTLY 18.00 (= Brute damage 18.00) at release; horizontal distance from disc centre 1.01m vs radius 3.2+player 0.38 (margin -2.58m).
+[COMBAT] PASS CONTROL menu-open backflip is refused before the gameplay attempt.
+[COMBAT] PASS Brute LATE CONTROL: backflip only AFTER release (the 18.00 hit already landed at release).
+[COMBAT] PASS Brute LATE CONTROL: late backflip cannot undo it: health 100 -> 82 (the timing window is real).
+[COMBAT] PASS Brute DEATH: windup started at 2.80m holding an attack token (pool 1/2).
+[COMBAT] PASS Brute DEATH: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS Brute DEATH: 'Hurricane Kick' clip playing from windup start at fitted rate 0.667 (impact marker scheduled for release).
+[COMBAT] PASS Brute DEATH: killed at 50 % of the windup -> telegraph hidden, token released (pool 0), windup cancelled.
+[COMBAT] PASS Brute DEATH: NO damage at its would-be release (+0.3s): health 100 -> 100, releases 0; Death clip played.
+[COMBAT] PASS Gunner HIT: windup started at 10.00m holding an attack token (pool 1/2).
+[COMBAT] PASS Gunner HIT: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS Gunner HIT: 'Shoot' clip playing from windup start at fitted rate 0.786 (impact marker scheduled for release).
+[COMBAT] PASS Gunner HIT: telegraph still visible at 60 % of the windup (scale (0.09, 0.09, 22.00)).
+[COMBAT] PASS Gunner HIT: telegraph renderer hidden and token returned at release.
+[COMBAT] PASS Gunner HIT: measured windup (release - windup start) = 701.4 ms vs asset 700 ms.
+[COMBAT] PASS Gunner HIT: 'Gunshot' cue playing at the enemy on the release frame (hit): Attacked fires at release, hit or miss.
+[COMBAT] PASS Gunner HIT: player standing still inside the attack took EXACTLY 8.00 (= Gunner damage 8.00) at release; capsule distance outside the 0.6m line half-width = -0.98m.
+[COMBAT] PASS Gunner HIT: clip impact marker lands within 2 rendered frames of the damage.
+[COMBAT] PASS Gunner HIT: no knockback CONTROL (moved 0.00m).
+[COMBAT] PASS Gunner STRAFE: windup started at 10.00m holding an attack token (pool 1/2).
+[COMBAT] PASS Gunner STRAFE: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS Gunner STRAFE: 'Shoot' clip playing from windup start at fitted rate 0.786 (impact marker scheduled for release).
+[COMBAT] PASS Gunner STRAFE: telegraph renderer hidden and token returned at release.
+[COMBAT] PASS Gunner STRAFE: measured windup (release - windup start) = 700.8 ms vs asset 700 ms.
+[COMBAT] PASS Gunner STRAFE: 'Gunshot' cue playing at the enemy on the release frame (miss): Attacked fires at release, hit or miss.
+[COMBAT] PASS Gunner STRAFE DODGE: strafing 3.64m perpendicular to the locked aim line during the windup -> NO damage; at release capsule distance outside the 0.6m line half-width = 2.66m.
+[COMBAT] PASS Gunner BACKFLIP: windup started at 10.00m holding an attack token (pool 1/2).
+[COMBAT] PASS Gunner BACKFLIP: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS CONTROL menu-open backflip is refused before the gameplay attempt.
+[COMBAT] PASS Gunner BACKFLIP: hero facing the enemy backflips at windup start ('BACKFLIP: 4.2 m backward in 0.90s').
+[COMBAT] PASS Gunner BACKFLIP: 'Shoot' clip playing from windup start at fitted rate 0.786 (impact marker scheduled for release).
+[COMBAT] PASS Gunner BACKFLIP: telegraph renderer hidden and token returned at release.
+[COMBAT] PASS Gunner BACKFLIP: measured windup (release - windup start) = 700.1 ms vs asset 700 ms.
+[COMBAT] PASS Gunner BACKFLIP: 'Gunshot' cue playing at the enemy on the release frame (hit): Attacked fires at release, hit or miss.
+[COMBAT] PASS Gunner BACKFLIP ASYMMETRY CONTROL: backflipping straight away along the locked aim line (3.28m travelled) is STILL HIT for 8.00; capsule distance outside the 0.6m line half-width = -0.98m.
+[COMBAT] PASS Gunner LATE: windup started at 10.87m holding an attack token (pool 1/2).
+[COMBAT] PASS Gunner LATE: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS Gunner LATE: 'Shoot' clip playing from windup start at fitted rate 0.786 (impact marker scheduled for release).
+[COMBAT] PASS Gunner LATE: telegraph renderer hidden and token returned at release.
+[COMBAT] PASS Gunner LATE: measured windup (release - windup start) = 700.2 ms vs asset 700 ms.
+[COMBAT] PASS Gunner LATE: 'Gunshot' cue playing at the enemy on the release frame (hit): Attacked fires at release, hit or miss.
+[COMBAT] PASS Gunner LATE: player standing still inside the attack took EXACTLY 8.00 (= Gunner damage 8.00) at release; capsule distance outside the 0.6m line half-width = -0.98m.
+[COMBAT] PASS CONTROL menu-open backflip is refused before the gameplay attempt.
+[COMBAT] PASS Gunner LATE CONTROL: backflip only AFTER release (the 8.00 hit already landed at release).
+[COMBAT] PASS Gunner LATE CONTROL: late backflip cannot undo it: health 100 -> 92 (the timing window is real).
+[COMBAT] PASS Gunner DEATH: windup started at 10.00m holding an attack token (pool 1/2).
+[COMBAT] PASS Gunner DEATH: telegraph renderer active at windup start, shared palette material 'Palette/Fire', no collider.
+[COMBAT] PASS Gunner DEATH: 'Shoot' clip playing from windup start at fitted rate 0.786 (impact marker scheduled for release).
+[COMBAT] PASS Gunner DEATH: killed at 50 % of the windup -> telegraph hidden, token released (pool 0), windup cancelled.
+[COMBAT] PASS Gunner DEATH: NO damage at its would-be release (+0.3s): health 100 -> 100, releases 0; Death clip played.
+[COMBAT] PASS Rusher: silhouette x0.90 on the visual root only (physics root scale (1.00, 1.00, 1.00)).
+[COMBAT] PASS Rusher: body matches size: capsule 1.62x0.315m, NavMeshAgent radius 0.315m.
+[COMBAT] PASS Rusher: joints accent 'Palette/Amber', body 'Palette/Red' (role colour) - shared palette materials.
+[COMBAT] PASS Gunner: silhouette x1.00 on the visual root only (physics root scale (1.00, 1.00, 1.00)).
+[COMBAT] PASS Gunner: body matches size: capsule 1.80x0.350m, NavMeshAgent radius 0.350m.
+[COMBAT] PASS Gunner: joints accent 'Palette/Cyan', body 'Palette/Red' (role colour) - shared palette materials.
+[COMBAT] PASS Brute: silhouette x1.30 on the visual root only (physics root scale (1.00, 1.00, 1.00)).
+[COMBAT] PASS Brute: body matches size: capsule 2.34x0.455m, NavMeshAgent radius 0.455m.
+[COMBAT] PASS Brute: joints accent 'Palette/UiPurple', body 'Palette/Red' (role colour) - shared palette materials.
+[COMBAT] PASS Three distinct joint accents across the archetypes.
+[COMBAT] PASS Engage-timeout CONTROL: Rusher engaged the unreachable hovering hero, never wound up, and returned its token after 2.50 s (EngageTimeoutSeconds 2.5).
+[COMBAT] PASS Budget 2: observed max simultaneous windups = 2 (tokens held never above 2).
+[COMBAT] PASS Waiting enemies hold the ring: mean 4.59 m vs radius 4.5 +/- 1 m.
+[COMBAT] PASS The budget rotates through the crowd: 9 different enemies attacked in 10 s.
+[COMBAT] PASS Killed token holder Rusher mid-windup: its token is back in the pool (held 1/2).
+[COMBAT] PASS Leaked-token CONTROL: Gunner got a token 8 ms after the kill (one Rusher cooldown = 800 ms).
+[COMBAT] PASS Freeze CONTROL: frozen Gunner cancels its windup, hides the telegraph, releases its token.
+[COMBAT] PASS Pause CONTROL: 0 windups, 0 tokens held, every telegraph hidden while paused (timeScale 0).
+[COMBAT] PASS Budget CONTROL: with the budget raised to 99 the observed max simultaneous windups rises to 7 (budget 2: 2).
+[COMBAT] PASS Real Hero mode selected.
+[COMBAT] PASS HERO session roles map to roster archetypes: 3 Criminal (Robber, hostile 3); 8 Cop (Gunner, hostile 0); 1 PursuingHero (Brute, hostile 0); 26 Civilian (-, hostile 0).
+[COMBAT] PASS HERO: role still decides hostility (Criminals hostile=True, Cops/PursuingHero hostile=False).
+[COMBAT] PASS Real Villain mode selected.
+[COMBAT] PASS VILLAIN session roles map to roster archetypes: 3 Criminal (Robber, hostile 0); 8 Cop (Gunner, hostile 8); 1 PursuingHero (Brute, hostile 1); 26 Civilian (-, hostile 0).
+[COMBAT] PASS VILLAIN: role still decides hostility (Criminals hostile=False, Cops/PursuingHero hostile=True).
+[COMBAT] PASS Villain mode: hostile Cop (Gunner) commits a telegraphed windup; no damage yet.
+[COMBAT] PASS Villain mode: the Cop's release hit the standing player: health 100 -> 92.
+[COMBAT] PASS Cop gunshot cue is playing AT the releasing cop on its release frame (real hostile attack; AudioDirector subscribes to CityNpc.Attacked).
+[COMBAT] PASS Real Endless Fight (Hero) selected.
+[COMBAT] PASS Wave 1 started.
+[COMBAT] PASS ENDLESS WAVE 1: spawned archetypes in spawn order = the asset's composition (R,R,R).
+[COMBAT] PASS ENDLESS WAVE 1: Rusher x3 = weight 3/3 of 3 (ideal 3.00).
+[COMBAT] PASS ENDLESS WAVE 1: no archetype before its FromWave; mix Rusher 3.
+[COMBAT] PASS Wave 1 is all Rushers (Criminal role).
+[COMBAT] PASS Wave 2 started.
+[COMBAT] PASS Wave 3 started.
+[COMBAT] PASS Wave 4 started.
+[COMBAT] PASS Wave 5 started.
+[COMBAT] PASS ENDLESS WAVE 5: spawned archetypes in spawn order = the asset's composition (R,G,R,B,G,R,R,G,R,B,G).
+[COMBAT] PASS ENDLESS WAVE 5: Rusher x5 = weight 3/6 of 11 (ideal 5.50).
+[COMBAT] PASS ENDLESS WAVE 5: Gunner x4 = weight 2/6 of 11 (ideal 3.67).
+[COMBAT] PASS ENDLESS WAVE 5: Brute x2 = weight 1/6 of 11 (ideal 1.83).
+[COMBAT] PASS ENDLESS WAVE 5: no archetype before its FromWave; mix Rusher 5, Gunner 4, Brute 2.
+[COMBAT] PASS Wave 5 mixes all three archetypes, all hostile Criminals (role decides hostility/colour).
+[COMBAT] PASS Real Endless wave 5: 16 telegraphed attacks during the FPS sample, never more than 2 winding up at once.
+[COMBAT] PASS Session end CONTROL: 2 tokens held at the defeat -> 0 held, no windups, telegraphs hidden on the next frame.
+[COMBAT] PASS Real Endless Fight (Villain) selected.
+[COMBAT] PASS Wave 1 started.
+[COMBAT] PASS Wave 2 started.
+[COMBAT] PASS Wave 3 started.
+[COMBAT] PASS VILLAIN ENDLESS WAVE 3: spawned archetypes in spawn order = the asset's composition (R,G,R,B,G,R,R).
+[COMBAT] PASS VILLAIN ENDLESS WAVE 3: Rusher x4 = weight 3/6 of 7 (ideal 3.50).
+[COMBAT] PASS VILLAIN ENDLESS WAVE 3: Gunner x2 = weight 2/6 of 7 (ideal 2.33).
+[COMBAT] PASS VILLAIN ENDLESS WAVE 3: Brute x1 = weight 1/6 of 7 (ideal 1.17).
+[COMBAT] PASS VILLAIN ENDLESS WAVE 3: no archetype before its FromWave; mix Rusher 4, Gunner 2, Brute 1.
+[COMBAT] PASS Villain Endless wave 3: hostile Cops in all three archetypes.

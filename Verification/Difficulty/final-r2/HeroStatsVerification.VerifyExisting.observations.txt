@@ -1,0 +1,5 @@
+MEASURED VECTOR: health 100, energy 100, regen 12.00/s, run 9.00 m/s, punch 35.00 dmg @ 1350 N.s, Ice 10.00 dmg / 0.600 s cooldown, survives 90: True.
+MEASURED TITAN: health 140, energy 80, regen 12.00/s, run 7.65 m/s, punch 43.75 dmg @ 1688 N.s, Ice 10.00 dmg / 0.600 s cooldown, survives 90: True.
+MEASURED NOVA: health 75, energy 140, regen 16.80/s, run 9.90 m/s, punch 35.00 dmg @ 1350 N.s, Ice 10.00 dmg / 0.480 s cooldown, survives 90: False.
+MEASURED VECTOR knockback: 2.50 m (data 2.5 m x (1 - 0)).
+MEASURED TITAN knockback: 1.00 m (data 2.5 m x (1 - 0.6)).

@@ -1,0 +1,1 @@
+MEASURED populated events: civilians=28, cops=9, events=2; 1280x720 rendered Editor Play Mode; frames=506, seconds=5.010, FPS=100.99, p95=11.63ms; Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz; AMD Radeon Pro 5300.

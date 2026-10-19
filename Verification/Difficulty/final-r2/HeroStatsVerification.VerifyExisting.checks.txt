@@ -1,0 +1,90 @@
+PASS VECTOR is the baseline (all multipliers 1, no resistance).
+PASS TITAN data: health x1.4, melee x1.25, speed x0.85, energy x0.8, knockback resist 0.6.
+PASS NOVA data: energy x1.4, regen x1.4, cooldowns x0.8, speed x1.1, health x0.75.
+PASS Hero Forge shows an archetype stats panel beside the preview.
+PASS Select VECTOR
+PASS VECTOR health: "100 HP" bar 71%.
+PASS VECTOR energy: "100" bar 71%.
+PASS VECTOR regen: "12/S" bar 71%.
+PASS VECTOR speed: "9 M/S" bar 91%.
+PASS VECTOR melee: "x1.00" bar 80%.
+PASS VECTOR power: "x1.00" bar 100%.
+PASS VECTOR cooldown: "x1.00" bar 80%.
+PASS VECTOR knockback: "0%" bar 0%.
+PASS Select TITAN
+PASS TITAN health: "140 HP" bar 100%.
+PASS TITAN energy: "80" bar 57%.
+PASS TITAN regen: "12/S" bar 71%.
+PASS TITAN speed: "7.7 M/S" bar 77%.
+PASS TITAN melee: "x1.25" bar 100%.
+PASS TITAN power: "x1.00" bar 100%.
+PASS TITAN cooldown: "x1.00" bar 80%.
+PASS TITAN knockback: "60%" bar 60%.
+PASS Select NOVA
+PASS NOVA health: "75 HP" bar 54%.
+PASS NOVA energy: "140" bar 100%.
+PASS NOVA regen: "16.8/S" bar 100%.
+PASS NOVA speed: "9.9 M/S" bar 100%.
+PASS NOVA melee: "x1.00" bar 80%.
+PASS NOVA power: "x1.00" bar 100%.
+PASS NOVA cooldown: "x0.80" bar 100%.
+PASS NOVA knockback: "0%" bar 0%.
+PASS TITAN health bar reads 140 HP (1.4 x 100).
+PASS NOVA cooldown bar reads x0.80.
+PASS Save VECTOR with strength + ice through the loadout API.
+PASS Session equips strength + ice.
+PASS Session hero is VECTOR
+PASS Starts at its own maxima: 100 HP / 100 energy.
+PASS Punch.
+PASS Select Ice.
+PASS Crosshair line reaches the far actor (no occluder).
+PASS Ice cast.
+PASS Measured Ice damage 10.00 == data 10.00 (damage x PowerDamage 1).
+PASS Second Ice cast (energy for the regen sample).
+PASS Regen sample never touched the cap (87.9 -> 93.9 of 100).
+PASS Save TITAN with strength + ice through the loadout API.
+PASS Session equips strength + ice.
+PASS Session hero is TITAN
+PASS Starts at its own maxima: 140 HP / 80 energy.
+PASS Punch.
+PASS Select Ice.
+PASS Crosshair line reaches the far actor (no occluder).
+PASS Ice cast.
+PASS Measured Ice damage 10.00 == data 10.00 (damage x PowerDamage 1).
+PASS Second Ice cast (energy for the regen sample).
+PASS Regen sample never touched the cap (67.8 -> 73.9 of 80).
+PASS Save NOVA with strength + ice through the loadout API.
+PASS Session equips strength + ice.
+PASS Session hero is NOVA
+PASS Starts at its own maxima: 75 HP / 140 energy.
+PASS Punch.
+PASS Select Ice.
+PASS Crosshair line reaches the far actor (no occluder).
+PASS Ice cast.
+PASS Measured Ice damage 10.00 == data 10.00 (damage x PowerDamage 1).
+PASS Second Ice cast (energy for the regen sample).
+PASS Regen sample never touched the cap (129.0 -> 137.4 of 140).
+PASS Save VECTOR with strength + ice through the loadout API.
+PASS Session equips strength + ice.
+PASS Live Brute (knockback 2.5 m) placed next to the hero on the NavMesh.
+PASS The Brute's slam landed on the player.
+PASS Save TITAN with strength + ice through the loadout API.
+PASS Session equips strength + ice.
+PASS Live Brute (knockback 2.5 m) placed next to the hero on the NavMesh.
+PASS The Brute's slam landed on the player.
+PASS Save STATS TEST with strength + ice through the loadout API.
+PASS Session equips strength + ice.
+PASS Test hero drives the session; catalog already restored (in memory only, never saved).
+PASS Ice cast by the x1.5 PowerDamage hero.
+PASS x1.5 hero's measured Ice damage 15.00 == data x1.5 = 15.00.
+PASS MaxHealth: 100 / 140 / 75 (VECTOR / TITAN / NOVA).
+PASS MaxHealth in play: a 90-damage hit leaves TITAN and VECTOR alive and defeats NOVA.
+PASS MaxEnergy: 100 / 80 / 140.
+PASS EnergyRegen measured: 12.00 / 12.00 / 16.80 per s.
+PASS MoveSpeed measured: 9.00 / 7.65 / 9.90 m/s.
+PASS MeleeDamage on a real actor: 35.00 / 43.75 / 35.00.
+PASS Melee knockback force dealt: 1350 / 1688 N.s.
+PASS Ice cooldown after a cast: 0.600 / 0.600 / 0.480 s.
+PASS CONTROL: shipping PowerDamage is 1 for all three (same, non-zero Ice damage 10.00).
+PASS Incoming knockback from a live Brute slam: VECTOR 2.50 m, TITAN 1.00 m (resist 0.6).
+PASS PowerDamage x1.5 (in-memory hero): Ice 15.00 vs VECTOR 10.00.

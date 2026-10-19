@@ -1,6 +1,6 @@
 # Difficulty implementation audit
 
-Work in progress. Branch `codex/difficulty-modes`, baseline `1b0d6f9`. No completion claim.
+Implemented and automated regression complete on `codex/difficulty-modes`, baseline `1b0d6f9`. Human balance acceptance and sustained standalone pressure testing remain open. This does not complete the broader overnight queue.
 
 | Multiplier | Normal | Hard | Extreme |
 |---|---:|---:|---:|
@@ -29,7 +29,7 @@ Recurring Heat police and mode encounter intervals divide by spawn rate. Endless
 
 ## Measured focused results
 
-First complete run:1370 PASS/0 FAIL plus separate-process Reload7/0. Later strengthened/final results are pending below. The initial failed attempt reached204/1 on a fixture expecting hostile feedback from friendly criminals in Villain mode; the corrected fixture uses hostile police. Gameplay hostility was preserved. Build iteration failures (HUD variable name, private fixture setter, obsolete search overload) are retained; the corrected SDK build passed0 warnings/errors.
+First complete run:1370 PASS/0 FAIL plus separate-process Reload7/0. The final strengthened run and broad results are recorded below. The initial failed attempt reached204/1 on a fixture expecting hostile feedback from friendly criminals in Villain mode; the corrected fixture uses hostile police. Gameplay hostility was preserved. Build iteration failures (HUD variable name, private fixture setter, obsolete search overload) are retained; the corrected SDK build passed0 warnings/errors.
 
 | Actual player MaxHealth | Normal | Hard | Extreme |
 |---|---:|---:|---:|
@@ -64,7 +64,7 @@ Real button submission persists selection; tests cover fresh save, an actual old
 
 ## Performance and limits
 
-Focused-r2 matched fixed12-target/180-frame Editor workload: Normal134.58FPS/7.430ms, Hard124.01/8.064, Extreme122.90/8.137. All retained12 living fixture enemies,20 bar slots,96 number slots, peak48 active labels and1 active particle system. Short sequential samples are noisy; these are not proof of equal performance or standalone/long-duration pressure acceptance. The final sample adds real Fire casts and will be recorded separately rather than replacing this measurement silently. No caps or detail were reduced.
+Focused-r2 matched fixed12-target/180-frame Editor workload: Normal134.58FPS/7.430ms, Hard124.01/8.064, Extreme122.90/8.137. All retained12 living fixture enemies,20 bar slots,96 number slots, peak48 active labels and1 active particle system. Short sequential samples are noisy; these are not proof of equal performance or standalone/long-duration pressure acceptance. The final sample below adds real Fire casts and is retained separately from this measurement. No caps or detail were reduced.
 
 Human playtesting remains required for Normal feel, Hard/Extreme intensity, energy and cooldown pressure, survivability, individual power utility and any future change to spawn pressure. No claim that these difficulties feel balanced. No push or shipping mission activation.
 
@@ -108,3 +108,86 @@ Human playtesting remains required for Normal feel, Hard/Extreme intensity, ener
 - `STATUS.md`
 - `docs/difficulty-modes.md`
 - `Verification/Difficulty/`: retained manifests, checks, observations, screenshots and builds (isolated saves ignored).
+
+
+## Resolved range examples (tier-zero VECTOR, zero Heat)
+
+| Range | Normal | Hard | Extreme |
+|---|---|---|---|
+| Rusher HP |35.1–42.9|36.855–45.045|37.7325–46.1175|
+| Gunner HP |58.5–71.5|61.425–75.075|62.8875–76.8625|
+| Brute HP |175.5–214.5|184.275–225.225|188.6625–230.5875|
+| Fire damage |24.3–29.7|23.571–28.809|23.2065–28.3635|
+| Basic punch |25–30|24.25–29.1|23.875–28.65|
+| Basic combo kick |35–40|33.95–38.8|33.425–38.2|
+| Basic Hurricane |45–55|43.65–53.35|42.975–52.525|
+
+These are configured bounds, not rounded gameplay replacements. Gameplay retains float precision; HUD formatting reads the final values. Hero/upgrade/Heat/wave modifiers compose with these ranges. Strongest Poison refresh semantics remain unchanged.
+
+Final strengthened focused run:1406/0, Reload7/0, both exit0, unchanged personal-save/database hashes. Real-Fire 12-target Editor samples: Normal132.19FPS/7.565ms, Hard132.46/7.550, Extreme130.65/7.654. All had8 peak active particle systems,12 living fixture targets,20 bars/96 label slots,72 peak active labels. The failed final-r1 rolled-health check (104/1) was a camera fixture aimed below its isolated floor; fixed by aiming at the enemy without relaxing visibility checks. Final SDK build0 warnings/errors (8.43s). The completed Normal replay and broad results follow.
+
+
+## Final verification — 2026-10-19
+
+Selected final evidence: **5,593 PASS / 0 FAIL across 25 separate Unity processes**, all exit0, all personal-save and Sidekick database hashes unchanged. This excludes the before baseline, repeated runs and retained failed attempts. Evidence comes from `Verification/Difficulty/final-r2/manifest.json` and `menu-final-r1/manifest.json`; each suite has retained checks and observations. Legacy exact-value suites explicitly run at Normal with midpoint injection; the dedicated seeded combat suite clears that injection.
+
+| Entry point | PASS | FAIL | Seconds |
+|---|---:|---:|---:|
+| DifficultyVerification.Run | 1406 | 0 | 115.31 |
+| DifficultyVerification.Reload | 7 | 0 | 27.44 |
+| CombatBalanceVerification.Run | 2345 | 0 | 219.96 |
+| EnemyHealthFeedbackVerification.Run | 69 | 0 | 71.47 |
+| CombatVerification.Run | 176 | 0 | 133.85 |
+| RosterVerification.VerifyExisting | 216 | 0 | 77.93 |
+| RosterVerification.Reload | 3 | 0 | 25.29 |
+| PowerPayoffVerification.Run | 99 | 0 | 44.30 |
+| MeleeVerification.Run | 42 | 0 | 38.72 |
+| HeroStatsVerification.VerifyExisting | 90 | 0 | 49.45 |
+| HeroForgeVerification.VerifyExisting | 136 | 0 | 62.05 |
+| HeroForgeVerification.Reload | 3 | 0 | 26.20 |
+| HudVerification.Run | 308 | 0 | 64.26 |
+| FirstPersonVerification.Run | 211 | 0 | 148.52 |
+| FirstPersonVerification.Reload | 5 | 0 | 22.91 |
+| CameraVerification.Verify | 45 | 0 | 23.96 |
+| ModeVerification.VerifyExisting | 79 | 0 | 42.85 |
+| ModeVerification.Reload | 2 | 0 | 21.97 |
+| ModeExpansionVerification.Run | 179 | 0 | 91.55 |
+| ModeExpansionVerification.Reload | 10 | 0 | 22.62 |
+| EndlessEventsVerification.Run | 42 | 0 | 30.78 |
+| HeatResponseVerification.Run | 28 | 0 | 31.79 |
+| CityVerification.Run | 63 | 0 | 39.73 |
+| CityVerification.Reload | 5 | 0 | 21.52 |
+| DifficultyVerification.Menu | 24 | 0 | 36.35 |
+
+The before and final Normal CombatBalance runs each passed2,345 checks. **564 seeded health, attack and distribution lines match byte-for-byte** (`normal-replay.txt`). The before run used1b0d6f9, before gameplay integration. Normal health/damage RNG remains identical. Player health, energy, cooldown and spawn interval baseline values are checked in the focused suite; the interval comparison uses audited pre-change source values, not a separate before timed-police experiment.
+
+Gameplay tested by final-r2 was checkpointed at `2667a74` (the first process records6c4b3ea plus the visible camera-fixture correction in its dirty state). `74a46ae` finishes only presentation and its verifier: data-driven selected Extreme pulse, stopping on deselection, responsive card spacing, and24 menu checks at1280×720 and2560×1080. The UI run recorded2667a74 with these source changes present. Consolidating the identical USS selector afterward changes no style value. Final SDK build after that consolidation: **0 warnings / 0 errors,6.71s**, `final-build-r2.txt`.
+
+Screenshots of final menu:
+
+- [Normal](../Verification/Difficulty/normal.png)
+- [Hard](../Verification/Difficulty/hard.png)
+- [Extreme](../Verification/Difficulty/extreme.png)
+- [Ultrawide](../Verification/Difficulty/normal-wide.png)
+
+Both resolutions pass non-overlap controls for details/cards and card glyph/title; selected state and actual percentage details pass. Extreme uses a750ms scheduled class toggle with a600ms border transition, only while selected. No custom artwork or gameplay HUD clutter was added.
+
+Final comparable workload (180frames,12 living fixture targets, real Fire casts):
+
+| Difficulty | FPS | Frame ms | Peak active VFX | Bar slots | Number slots | Peak active numbers |
+|---|---:|---:|---:|---:|---:|---:|
+| Normal |132.19|7.565|8|20|96|72|
+| Hard |132.46|7.550|8|20|96|72|
+| Extreme |130.65|7.654|8|20|96|72|
+
+These short sequential Editor measurements use matched fixed workloads. They do **not** establish sustained performance under increased dynamic spawn pressure or standalone performance. Enemy caps remain enforced; no performance safeguards were reduced.
+
+## Remaining acceptance and scope limits
+
+- Henry must judge Normal feel, Hard pressure without annoyance, Extreme intensity, energy/cooldown pressure, enemy durability, survivability, whether individual powers remain useful, and whether future Extreme spawn pressure should increase. No claim that any difficulty feels balanced.
+- Every mode/difficulty combination is exercised; not every animated synergy is individually replayed on every difficulty. The focused synergy check exercises the final damage recipient with synergy credit; the broad Normal Forge/Roster suites exercise actual synergy behavior. Shared final-target scaling is the implementation coverage for all difficulties.
+- Endless already refills immediately, so its spawn interval remains0 in all difficulties. Existing wave health/damage formulas and cap12 are preserved. Timed Heat/police, recurring encounters and legacy crime clocks accelerate. Individual enemy outgoing damage, accuracy and attack speed do not change.
+- Flight fuel, traversal backflip cooldown, effect durations and windups remain unchanged. Energy regeneration/maxima remain unchanged. Per-mode records remain shared across difficulties, as in the existing save architecture.
+- Failed204/1 and104/1 fixtures and initial compiler errors remain in evidence; final passing totals do not include or conceal them. No shipping mission pools enabled, no push, unrelated local edits preserved.
+
+The file inventory above lists source/configuration files. The complete individual evidence and file list relative to1b0d6f9 is retained in `Verification/Difficulty/changed-files.txt`.

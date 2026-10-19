@@ -1,0 +1,2 @@
+Before commit 1b0d6f9 vs Normal difficulty: 564 seeded health/attack/distribution lines; exact match=True.
+Before checks=2345; Normal checks=2345.

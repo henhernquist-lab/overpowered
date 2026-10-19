@@ -1,0 +1,28 @@
+PASS Save VECTOR with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+PASS no profile: Heat police counts equal PatrolCount + stars x CopsPerStar at every star level (0*:2 1*:3 2*:4 3*:5 4*:6 5*:7).
+PASS no profile: arrival, count and decay multipliers are exactly 1; no archetype override.
+PASS no profile: Heat decays 0.1400 over 2 s = DecayPerSecond x 2.
+PASS neutral profile: Heat police counts equal PatrolCount + stars x CopsPerStar at every star level (0*:2 1*:3 2*:4 3*:5 4*:6 5*:7).
+PASS neutral profile: arrival, count and decay multipliers are exactly 1; no archetype override.
+PASS neutral profile: Heat decays 0.1400 over 2 s = DecayPerSecond x 2.
+PASS 1 star: below every tier - the old count.
+PASS 2 stars (threshold): RESPONSE tier, count x1.5, arrival x0.75.
+PASS 3 stars: still RESPONSE (MANHUNT starts at 4).
+PASS 4 stars: MANHUNT, count x2 (12), roadblock hook raised once.
+PASS Police spawned at MANHUNT: all persistent, 3 of 6 are Brute (share 0.5), elite health 411.
+PASS Pursued at MANHUNT: Heat decay x0.5.
+PASS Heat back to 1 star: no tier, decay and count back to the old values.
+PASS Tier modifiers removed from the 6 MANHUNT police still alive (persistence off).
+PASS Elite health reverted (411 -> 137).
+PASS Save VECTOR with fire + ice through the loadout API.
+PASS Session equips fire + ice.
+PASS fire selected for LMB (key 1).
+PASS At 5 stars with MANHUNT active, Endless wave 1 enemies keep their explicit health (39.0) and no tier tag.
+PASS Endless spawns no Heat police at all (SpawnPolice off).
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS ApplyToHero off: no tier for the hero, the old count.
+PASS ApplyToHero on: MANHUNT changes the hero's patrol count (12) but every one of them stays non-hostile (persistent ones included).
