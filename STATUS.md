@@ -5466,3 +5466,57 @@ Normal versus pre-difficulty1b0d6f9:564 seeded health/attack/distribution lines 
 Final fixed12-target/180-frame Editor workload: Normal132.19FPS/7.565ms, Hard132.46/7.550, Extreme130.65/7.654; each8 peak active particle systems,20 bar/96 number slots,72 peak active numbers. These are short matched-workload samples, not sustained dynamic spawn-pressure or standalone acceptance. Existing caps and detail retained. Endless refill is already immediate and stays0; timed police/encounter/crime cadence accelerates, wave formulas/composition/cap12 remain unchanged. Enemy outgoing damage/accuracy/attack speed unchanged. Flight fuel/traversal timing unchanged, energy regeneration preserved, records shared per mode.
 
 Implementation and automated regression are complete for this difficulty request. Human Normal/Hard/Extreme feel, power usefulness, pressure and long-running standalone performance remain unverified. Not every animated synergy was individually run under every difficulty; shared recipient scaling plus focused credit checks and broad Normal synergy suites cover the implementation. No balance-feel claim, shipping mission activation or push. Broader overnight queue remains unfinished. Pre-existing user/vendor/generated changes remain unstaged.
+
+
+## Power mechanics tuning pass — 2026-10-19 (branch `gemini/power-mechanics-tuning-2`)
+
+### Phase 0: Ground Truth Inspection and Authoritative Baseline
+
+Direct inspection of serialized assets and source code:
+
+1. **Telekinesis (`Assets/Resources/Powers/telekinesis.asset`, `Assets/Resources/Effects/Telekinesis.asset`, `TelekinesisEffect.cs`, `PowerUser.cs`)**:
+   - Base damage: `35.0` in `telekinesis.asset`.
+   - Mass-based formula: `damage = stats.Damage * scale * ImpactDamageMultiplier`, where `scale = Mathf.Clamp(Mathf.Sqrt(body.mass / DamageReferenceMass), MinimumDamageScale, MaximumDamageScale)`.
+   - Variance system: `PowerUser.RollDamage` -> `CombatRolls.Damage` with `PlayerDamageVariance = 0.1` (symmetric $\pm 10\%$).
+   - Mass parameters: `DamageReferenceMass = 45f`, `MinimumDamageScale = 0.5f`, `MaximumDamageScale = 3.0f`, `ImpactDamageMultiplier = 5f / 7f` ($\approx 0.7142857$).
+   - Charges: `2` base charges (`Charges: 2`), `Upgrades` add `+1` per tier.
+   - Recharge time: `ChargeRecharge = 1.5s` per charge.
+   - Activation cooldown: `Cooldown = 0.6s`.
+   - Throw velocity: `speed = Mathf.Clamp(stats.Force / body.mass, MinimumThrowSpeed, MaximumThrowSpeed)` with `Force = 1800`, `MinimumThrowSpeed = 22f`, `MaximumThrowSpeed = 40f`.
+   - Force / Momentum handling: `MomentumTransfer = 0.65f`, `MaxImpactImpulse = 2400f`, `ImpactLift = 0.3f`, `ImpactSeparationSeconds = 0.2f`.
+   - Measured representative damage before rebalance:
+     - Light (~45 kg, e.g. standard crate): `scale = 1.0`, mean = $35 \times 1.0 \times \frac{5}{7} = 25.0\text{ HP}$, range $[22.5, 27.5]\text{ HP}$ (only $34.6\% - 42.3\%$ of Gunner 65 HP).
+     - Medium (~80–100 kg, e.g. furniture/barrel): 80 kg mean = $33.33\text{ HP}$, range $[30.0, 36.7]\text{ HP}$; 100 kg mean = $37.27\text{ HP}$, range $[33.54, 41.00]\text{ HP}$ ($51.6\% - 63.1\%$ of Gunner HP).
+     - Heavy (~400 kg, e.g. car): `scale = 2.9814`, mean = $74.54\text{ HP}$, range $[67.08, 81.99]\text{ HP}$.
+
+2. **Enemies (Normal difficulty, 0 Heat stars: `GameTuning.asset`, `CombatRanges.EnemyHealthVariance = 0.1`, `CopHealth = 65`)**:
+   - Gunner (`HealthMultiplier: 1.0`): Mean = $65.0\text{ HP}$, range $[58.5, 71.5]\text{ HP}$.
+   - Rusher (`HealthMultiplier: 0.6`): Mean = $39.0\text{ HP}$, range $[35.1, 42.9]\text{ HP}$.
+   - Brute (`HealthMultiplier: 3.0`): Mean = $195.0\text{ HP}$, range $[175.5, 214.5]\text{ HP}$.
+
+3. **Poison (`Assets/Resources/Powers/poison.asset`, `PoisonEffect.cs`, `StatusPowerVfx.cs`)**:
+   - Current activation: Instantaneous raycast (`user.FindTarget(stats.Range, out hit)`).
+   - Current range: `20.0m`.
+   - Targeting: Direct crosshair hitscan raycast to `CityNpc`.
+   - Projectile status: None (instantaneous raycast, no physical traveling entity).
+   - Damage / tick: `stats.Damage = 12.5` DPS, `TickSeconds = 0.5s`, `Duration = 6.0s` ($12$ ticks, $6.25\text{ HP}$ per tick).
+   - Duration: `6.0s`.
+   - Spread behavior: On death while poisoned, spreads to up to `MaxSpreadTargets = 3` within `SpreadRadius = 6.0m`, bounded by `MaxGenerations = 3`.
+   - Charges / recharge: `2` charges, `ChargeRecharge = 3.0s`.
+   - VFX: Initial burst on apply ($10$ particles), tick burst ($3$ particles), pooled `StatusPowerVfx` toxic rings and spread arcs.
+
+4. **Fire Blast (`Assets/Resources/Powers/fire.asset`, `FireBlastEffect.cs`, `FireProjectilePool.cs`)**:
+   - Current charges: Base `3` in `fire.asset`. Each of the two upgrade tiers specifies `ExtraCharges: 1`. In an upgraded/late-game profile this evaluated to $3 + 1 + 1 = 5$ charges as observed.
+   - Recharge: `1.5s`.
+   - Damage: `27.0` base damage mean ($\pm 10\%$ variance).
+
+5. **Ice (`Assets/Resources/Powers/ice.asset`, `IceEffect.cs`)**:
+   - Current charges: Base `2` in `ice.asset`. Each of the two upgrade tiers specifies `ExtraCharges: 1`. In an upgraded/late-game profile this evaluated to $2 + 1 + 1 = 4$ charges as observed.
+   - Recharge: `1.5s`.
+   - Initial damage: `10.0` base damage mean ($\pm 10\%$ variance).
+   - Freeze / shatter: `4.0s` freeze duration; shatter adds $30.0\text{ HP}$ damage, $1800\text{ N}\cdot\text{s}$ impulse, $28$ particles.
+
+6. **Lightning (`Assets/Resources/Powers/lightning.asset`, `LightningEffect.cs`)**:
+   - Base damage: `40.8` base damage mean, range $[36.72, 44.88]\text{ HP}$ ($\pm 10\%$ variance).
+   - Chain falloff: `0.85` ($85\%$ of previous hit per arc).
+   - Target count: `MaxArcs = 5` (up to $6$ enemies struck).

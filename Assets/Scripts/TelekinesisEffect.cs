@@ -6,8 +6,8 @@ public sealed class TelekinesisEffect : PowerEffect
     [Header("Directed throw")]
     public float MinimumThrowSpeed = 22f, MaximumThrowSpeed = 40f;
     [Tooltip("Applied after existing mass scaling, before one impact variance roll.")]
-    public float ImpactDamageMultiplier = 5f / 7f;
-    public float DamageReferenceMass = 45f, MinimumDamageScale = .5f, MaximumDamageScale = 3f;
+    public float ImpactDamageMultiplier = 1f;
+    public float DamageReferenceMass = 45f, MinimumDamageScale = .5f, MaximumDamageScale = 1.75f;
     public float MomentumTransfer = .65f, MaxImpactImpulse = 2400f, ImpactLift = .3f;
     public float ImpactSeparationSeconds = .2f;
     public void Throw(PowerUser user, PowerRuntime power, Rigidbody body)
