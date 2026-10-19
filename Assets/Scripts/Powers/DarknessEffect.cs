@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /// DARKNESS — one aimed hostile, plus the nearest visible hostile near it. The status owns control and aura pulses.
 [CreateAssetMenu(menuName = "Overpowered/Effects/Shadow tendrils")]
@@ -9,6 +10,8 @@ public sealed class DarknessEffect : PowerEffect
     [Header("Movement control")]
     public float InitialRootSeconds = 1.1f;
     [Range(0f,1f)] public float SlowSpeedFactor = .4f;
+    [Header("Shadow aura")]
+    public float AuraRadius = 4.5f, AuraTickSeconds = .75f, AuraTickDamage = 5f;
     static readonly Collider[] nearby = new Collider[64];
     static readonly RaycastHit[] sight = new RaycastHit[32];
     public static CityNpc LastPrimary { get; private set; }
@@ -69,6 +72,7 @@ public sealed class DarknessEffect : PowerEffect
         var color = power.Definition.PaletteColor;
         if (!npc.Dead)
         {
+            ShadowCursed.Apply(npc,user,this,stats.Duration,stats.Damage/Mathf.Max(.01f,power.Definition.Damage),user.Crediting);
             RootedLook.Show(npc, this, color);
             // A brief aimed snap establishes the target; the leased body bands carry the held state.
             var camera=Camera.main;var rig=camera!=null?camera.GetComponent<ThirdPersonCamera>():null;
@@ -83,12 +87,55 @@ public sealed class DarknessEffect : PowerEffect
         FeelDirector.Instance?.Particles.Burst(npc.transform.position + Vector3.up * .15f, color, CastParticles);
     }
 }
-/// Visible root: four closely wrapped, leased tendril bands. The gameplay root is unchanged.
+/// One timed aura per cursed NPC. Every pulse queries only the nearby hostile bodies, then uses the normal damage pipeline.
+public sealed class ShadowCursed : MonoBehaviour
+{
+    CityNpc npc;PowerUser source;DarknessEffect settings;string credit;
+    float endsAt,nextTick,damageScale;
+    readonly HashSet<CityNpc> hitThisTick=new HashSet<CityNpc>();
+    readonly Collider[] nearby=new Collider[128];
+    public bool Active=>enabled&&npc!=null&&!npc.Dead&&Time.time<endsAt;
+    public int Pulses { get; private set; }
+    public int DamageEvents { get; private set; }
+    public static ShadowCursed Apply(CityNpc target,PowerUser user,DarknessEffect effect,float duration,float scale,string sourceId)
+    {
+        var curse=target.GetComponent<ShadowCursed>();
+        if(curse==null)curse=target.gameObject.AddComponent<ShadowCursed>();
+        curse.npc=target;curse.source=user;curse.settings=effect;curse.credit=sourceId;
+        curse.endsAt=Time.time+duration;curse.nextTick=Time.time+effect.AuraTickSeconds;
+        curse.damageScale=scale;curse.enabled=true;
+        return curse;
+    }
+    void Update()
+    {
+        if(!Active){enabled=false;return;}
+        var world=WorldSession.Instance;
+        if(world!=null&&world.Mode!=null&&world.Mode.Ended)return;
+        if(Time.time<nextTick)return;
+        nextTick=Time.time+Mathf.Max(.05f,settings.AuraTickSeconds);
+        Pulses++;hitThisTick.Clear();
+        StatusPowerVfx.Existing?.PulseShadow(npc,settings.AuraRadius);
+        int count=Physics.OverlapSphereNonAlloc(npc.transform.position,settings.AuraRadius,nearby,~0,QueryTriggerInteraction.Ignore);
+        for(int i=0;i<count;i++)
+        {
+            var other=nearby[i].GetComponentInParent<CityNpc>();
+            if(other==null||other==npc||other.Dead||!other.Hostile||!hitThisTick.Add(other))continue;
+            // Damage is credited to Darkness; CityNpc applies the global difficulty multiplier once.
+            float amount=source!=null?source.RollDamage(settings.AuraTickDamage*damageScale):settings.AuraTickDamage*damageScale;
+            using(source!=null?source.Credit(credit):default)other.Damage(amount,source,false);
+            DamageEvents++;
+            Vector3 from=npc.transform.position+Vector3.up*.8f,to=other.transform.position+Vector3.up*.8f;
+            PowerVfx.Get().Arc(from,to,2,.025f,CityColor.UiMuted,.025f,.15f);
+        }
+    }
+    void OnDisable(){if(npc!=null&&StatusPowerVfx.Existing!=null)StatusPowerVfx.Existing.ReleaseRoot(npc);}
+}
+/// Visible curse: four closely wrapped, leased tendril bands continue through the slow portion.
 public sealed class RootedLook : MonoBehaviour
 {
     CityNpc npc; int slot=-1;
     public int Draws { get; private set; }
-    public bool Showing => enabled && npc != null && !npc.Dead && npc.Rooted && slot>=0;
+    public bool Showing => enabled && npc != null && !npc.Dead && (npc.GetComponent<ShadowCursed>()?.Active==true||npc.Rooted) && slot>=0;
     public static RootedLook Show(CityNpc target, DarknessEffect settings, CityColor color)
     {
         var look=target.GetComponent<RootedLook>();if(look==null)look=target.gameObject.AddComponent<RootedLook>();
@@ -98,7 +145,7 @@ public sealed class RootedLook : MonoBehaviour
     }
     void Update()
     {
-        if(npc==null||npc.Dead||!npc.Rooted){enabled=false;return;}
+        if(npc==null||npc.Dead||npc.GetComponent<ShadowCursed>()?.Active!=true){enabled=false;return;}
         if(slot<0){slot=StatusPowerVfx.Get().AcquireRoot(npc);if(slot>=0)Draws++;}
     }
     void OnDisable()

@@ -15,6 +15,9 @@ MonoBehaviour:
   SecondaryRadius: 7
   InitialRootSeconds: 1.1
   SlowSpeedFactor: 0.4
+  AuraRadius: 4.5
+  AuraTickSeconds: 0.75
+  AuraTickDamage: 5
   Tendrils: 4
   TendrilHeight: 1.3
   TendrilSpread: 0.75

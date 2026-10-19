@@ -11,6 +11,8 @@ public sealed class StatusPowerVfx : MonoBehaviour
         public CityNpc Owner;
         public Transform Pivot;
         public readonly LineRenderer[] Bands = new LineRenderer[RootLinesPerSlot];
+        public LineRenderer AuraRing;
+        public float PulseUntil,AuraRadius;
     }
     sealed class PoisonSlot
     {
@@ -23,6 +25,7 @@ public sealed class StatusPowerVfx : MonoBehaviour
     readonly RootSlot[] roots = new RootSlot[RootCapacity];
     readonly PoisonSlot[] poisons = new PoisonSlot[PoisonCapacity];
     public int RootLeases { get; private set; }
+    public int ShadowPulses { get; private set; }
     public int PoisonLeases { get; private set; }
     public int PoisonPulses { get; private set; }
     public int PoolMisses { get; private set; }
@@ -54,6 +57,7 @@ public sealed class StatusPowerVfx : MonoBehaviour
         {
             var pivot=new GameObject("Shadow restraint "+i).transform;pivot.SetParent(transform,false);
             var slot=roots[i]=new RootSlot{Pivot=pivot};
+            slot.AuraRing=Create("Shadow aura "+i,pivot,CityColor.UiMuted,24,true,.035f);
             for(int b=0;b<RootLinesPerSlot;b++)
             {
                 bool accent=b>=2;
@@ -90,6 +94,19 @@ public sealed class StatusPowerVfx : MonoBehaviour
         if(slot<0||slot>=RootCapacity||roots[slot].Owner!=npc)return;
         var s=roots[slot];s.Owner=null;
         foreach(var line in s.Bands)line.gameObject.SetActive(false);
+        s.AuraRing.gameObject.SetActive(false);
+    }
+    public void ReleaseRoot(CityNpc npc)
+    {
+        for(int i=0;i<RootCapacity;i++)if(roots[i].Owner==npc){ReleaseRoot(npc,i);return;}
+    }
+    public void PulseShadow(CityNpc npc,float radius)
+    {
+        for(int i=0;i<RootCapacity;i++)if(roots[i].Owner==npc)
+        {
+            roots[i].AuraRadius=radius;roots[i].PulseUntil=Time.time+.27f;
+            roots[i].AuraRing.gameObject.SetActive(true);ShadowPulses++;return;
+        }
     }
     public int AcquirePoison(Poisoned status)
     {
@@ -116,9 +133,23 @@ public sealed class StatusPowerVfx : MonoBehaviour
         for(int i=0;i<RootCapacity;i++)
         {
             var s=roots[i];if(s.Owner==null)continue;
-            if(s.Owner.Dead||!s.Owner.Rooted){ReleaseRoot(s.Owner,i);continue;}
+            if(s.Owner.Dead||(s.Owner.GetComponent<ShadowCursed>()?.Active!=true&& !s.Owner.Rooted)){ReleaseRoot(s.Owner,i);continue;}
             s.Pivot.position=s.Owner.transform.position;
             s.Pivot.rotation=Quaternion.Euler(0,Time.time*40f,0);
+            if(s.AuraRing.gameObject.activeSelf)
+            {
+                if(Time.time>=s.PulseUntil)s.AuraRing.gameObject.SetActive(false);
+                else
+                {
+                    float fraction=Mathf.Clamp01((s.PulseUntil-Time.time)/.27f);
+                    s.AuraRing.widthMultiplier=.015f+.035f*fraction;
+                    for(int p=0;p<24;p++)
+                    {
+                        float a=p*Mathf.PI*2/24f;
+                        s.AuraRing.SetPosition(p,new Vector3(Mathf.Cos(a)*s.AuraRadius,.025f,Mathf.Sin(a)*s.AuraRadius));
+                    }
+                }
+            }
         }
         for(int i=0;i<PoisonCapacity;i++)
         {
