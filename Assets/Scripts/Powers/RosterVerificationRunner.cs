@@ -347,7 +347,7 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         Log("---- POISON (damage over time, spreads on death)");
         yield return Enter("poison", "strength");
         Isolate(); var rt = Runtime("poison"); var stats = W.Powers.Stats(rt); var effect = (PoisonEffect)rt.Definition.Effect;
-        var p = Actor(new Vector3(-6, 150, 10), NpcRole.Criminal, 1000); var cop = Actor(new Vector3(-10, 150, 10), NpcRole.Cop, 1000);
+        var p = Actor(new Vector3(-4, 150, 7), NpcRole.Criminal, 1000); var cop = Actor(new Vector3(-5, 150, 8), NpcRole.Cop, 1000);
         yield return new WaitForSeconds(.3f);
         int pulsesBefore=StatusPowerVfx.Get().PoisonPulses;
         Aim(Chest(p)); Check(W.Powers.Use(rt), "Poison the criminal.");

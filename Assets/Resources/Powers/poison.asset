@@ -25,14 +25,14 @@ MonoBehaviour:
   Damage: 12.5
   Force: 0
   Radius: 3
-  Range: 20
+  Range: 12
   Duration: 6
   GroundRecharge: 2.5
   OriginOffset: 1.7
   OriginHeight: 1
   UpwardForce: 0.28
-  ProjectileSpeed: 28
-  ProjectileSize: 0.35
+  ProjectileSpeed: 30
+  ProjectileSize: 0.18
   HoldDistance: 3
   HoldSpring: 35
   HoldDamping: 10

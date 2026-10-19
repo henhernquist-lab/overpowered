@@ -20,13 +20,16 @@ public sealed class PoisonEffect : PowerEffect
     public float SpreadArcSeconds = .35f, SpreadArcWidth = .06f;
     public override bool Execute(PowerUser user, PowerRuntime power)
     {
-        var stats = user.Stats(power);
-        if (!user.FindTarget(stats.Range, out RaycastHit hit)) return false;
-        var npc = hit.collider.GetComponentInParent<CityNpc>();
-        if (npc == null || npc.Dead) { user.Message = "Aim at a person to poison."; return false; }
-        Poisoned.Apply(npc, user, this, stats.Damage, stats.Duration, 0, power.Definition.PaletteColor);
-        FeelDirector.Instance?.Particles.Burst(npc.transform.position + Vector3.up, power.Definition.PaletteColor, ApplyParticles);
-        return true;
+        var d = power.Definition;
+        Vector3 direction = user.AimDirection, origin = user.AimOrigin;
+        float radius = d.ProjectileSize * .5f;
+        foreach (var hit in Physics.OverlapSphere(origin, radius, ~0, QueryTriggerInteraction.Ignore))
+            if (hit.transform.root != user.transform) return false;
+        float offset = d.OriginOffset;
+        foreach (var hit in Physics.SphereCastAll(origin, radius, direction, offset, ~0, QueryTriggerInteraction.Ignore))
+            if (hit.transform.root != user.transform) offset = Mathf.Min(offset, Mathf.Max(0, hit.distance - .01f));
+        var pool = PoisonProjectilePool.Instance ?? PoisonProjectilePool.Create(WorldSession.Instance);
+        return pool.Launch(user, power, this, origin + direction * offset, direction);
     }
 }
 /// Live poison on one NPC. Added once per NPC and reused; listens to CityNpc.Damaged so any killing blow spreads it.

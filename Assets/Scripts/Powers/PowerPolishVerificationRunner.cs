@@ -63,12 +63,17 @@ public sealed class PowerPolishVerificationRunner:SessionVerificationRunner
             else Aim(Chest(target));
             power.Cooldown=0;power.Charges=Mathf.Max(power.Charges,1);
             Check(W.Powers.Use(power),id+" real equipped cast in "+(first?"first":"third")+" person, "+(night?"night":"day")+".");
+            if(id=="poison")
+            {
+                float wait=Time.time+.45f;
+                while(target!=null&&target.GetComponent<Poisoned>()==null&&Time.time<wait)yield return null;
+            }
             if(id=="lightning")Check(LightningEffect.LastVisualStrikes.Count>0&&
                 LightningEffect.LastVisualStrikes[0].Target==target,
                 "Lightning primary visual points at the actual first recipient.");
             if(id=="darkness")Check(target.Rooted&&status.ActiveRoots>0,
                 "Darkness restrained target has a live pooled body cue.");
-            if(id=="poison")Check(target.GetComponent<Poisoned>().VisualActive,
+            if(id=="poison")Check(target.GetComponent<Poisoned>()!=null&&target.GetComponent<Poisoned>().VisualActive,
                 "Poisoned target has a live pooled contamination cue.");
             yield return null;
             Capture(id+"-"+(night?"night":"day")+"-"+(first?"first":"third")+".png");
