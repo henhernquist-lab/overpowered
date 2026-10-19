@@ -144,8 +144,9 @@ public sealed class EnemyHealthFeedbackVerificationRunner : SessionVerificationR
         {
             poisonSettings.TickSeconds=.1f; // verifier-only rapid-tick stress; restored before leaving this method
             W.Powers.Select(poisonPower);Aim(Chest(poison));
-            Check(W.Powers.Use(poisonPower),"Poison applies through its real equipped gate; damage begins on a later tick.");
-            Check(Hits(poison,"poison").Length==0,"Poison application invents no immediate damage number.");
+            Check(W.Powers.Use(poisonPower),"Poison projectile launches through its real equipped gate; damage begins after impact and a later tick.");
+            Check(Hits(poison,"poison").Length==0,"Projectile launch invents no immediate damage number.");
+            yield return Until(()=>poison.GetComponent<Poisoned>()?.Active==true,2,"physical Poison impact before rapid ticks");
             yield return new WaitForSeconds(.48f);
             var poisonHits=Hits(poison,"poison");
             float actual=poisonHits.Sum(x=>x.ResolvedDamage);
@@ -268,6 +269,7 @@ public sealed class EnemyHealthFeedbackVerificationRunner : SessionVerificationR
         var dotControl=Actor(Gunner,new Vector3(12,150,10),health:1000);
         var defaultPoison=Runtime("poison");var stats=W.Powers.Stats(defaultPoison);
         Aim(Chest(dot));Check(W.Powers.Use(defaultPoison),"Default Poison applies through real equip with unmodified tick settings.");
+        yield return Until(()=>dot.GetComponent<Poisoned>()!=null,2f,"default Poison projectile impact");
         var status=dot.GetComponent<Poisoned>();
         yield return Until(()=>!status.Active,stats.Duration+2f,"default Poison duration");
         var dotHits=Hits(dot,"poison");

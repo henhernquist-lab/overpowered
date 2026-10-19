@@ -20,7 +20,13 @@ public sealed class StatusEffectVerificationRunner : SessionVerificationRunner
         yield return DeathCleanup();
         yield return Despawn();
         yield return Pause();
-        yield return Enter(F.Heroes[0], "speed", "lightning", "hero");
+        yield return Home();
+        var hero=F.Heroes[0];
+        Check(Profile.SetLoadout(hero,Power("lightning"),Power("ice"),Power("speed"),hero.Primary,hero.Secondary),
+            "Save Lightning + Ice attacks with Speed in its legal secondary slot.");
+        GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);
+        Check(W.Powers.EquippedSecondary==Power("speed")&&W.Powers.IsEquipped(Power("lightning")),
+            "Live session equips Speed on F and Lightning as an attack.");
         Isolate();
         yield return DashShatter();
         yield return LightningStacking();
@@ -101,7 +107,7 @@ public sealed class StatusEffectVerificationRunner : SessionVerificationRunner
     {
         Log("---- BASE INTERACTION: A DASH SHATTERS A FREEZE");
         var speed = Runtime("speed"); var stats = W.Powers.Stats(speed); var ice = (IceEffect)Power("ice").Effect;
-        W.Powers.Select(speed);
+        Check(W.Powers.IsEquipped(Power("speed")),"Speed remains legal to activate from the secondary slot.");
         var frozen = Actor(new Vector3(0, 150, 2.5f), NpcRole.Criminal, 1000f); var plain = Actor(new Vector3(.2f, 150, 4.2f), NpcRole.Criminal, 1000f);
         yield return new WaitForSeconds(.3f);
         frozen.Freeze(5f); yield return null;

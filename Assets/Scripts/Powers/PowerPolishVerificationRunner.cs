@@ -168,8 +168,9 @@ public sealed class PowerPolishVerificationRunner:SessionVerificationRunner
         Check(StatusPowerVfx.Get().ActiveRoots==1,"City-night target owns the close restraint in real street lighting.");
         Capture("darkness-night-city-third.png");
         yield return ProfileFrames("same city night with Darkness root active",texture,1.5f);
-        Check(target.Rooted&&StatusPowerVfx.Get().ActiveRoots==1,
-            "Active city profile retained the real rooted status through its sample.");
+        Check(!target.Rooted&&target.Slowed&&target.GetComponent<ShadowCursed>()?.Active==true&&
+            StatusPowerVfx.Get().ActiveRoots==1,
+            "City-night sample crossed the brief root into the visible slowed aura state.");
         texture.Release();Destroy(texture);
     }
     IEnumerator ProfileFrames(string label,RenderTexture texture,float seconds)

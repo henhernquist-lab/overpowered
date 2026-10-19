@@ -142,6 +142,9 @@ public sealed class DarknessVerificationRunner : SessionVerificationRunner
             "First-person crosshair gameplay ray reaches the primary target.");
         Check(W.Powers.Use(RuntimePower)&&DarknessEffect.LastPrimary==a&&DarknessEffect.LastSecondary==b,
             "First-person cast keeps the crosshair primary and finds its gameplay-space secondary.");
+        Check(DarknessEffect.LastPrimaryWasFirstPerson&&
+            Vector3.Distance(DarknessEffect.LastPrimaryVisualOrigin,Chest(a))<1.1f,
+            "First-person activation snap starts next to the victim instead of crossing the camera.");
         Capture("first-person.png");
         Check(PowerVfx.Get().ActiveLines<=PowerVfx.PoolSize,"First-person tendrils stay in the fixed line pool.");
         if(rig.FirstPerson)rig.ToggleView();rig.enabled=false;
@@ -179,6 +182,13 @@ public sealed class DarknessVerificationRunner : SessionVerificationRunner
         yield return new WaitForSeconds(.85f);
         Check(Mathf.Abs(1000-a.Health-11.5f*factor)<.03f&&Mathf.Abs(1000-b.Health-11.5f*factor)<.03f,
             id+" mutual aura tick uses the same damage multiplier once.");
+        RuntimePower.ChargeTimer=0f;
+        W.Powers.Tick(9f*cooldown-.02f,true);
+        Check(RuntimePower.Charges==0,id+" charge remains empty just below its resolved recharge time.");
+        W.Powers.Tick(.04f,true);
+        Check(RuntimePower.Charges==1,id+" charge restores just above its resolved recharge time.");
+        W.Powers.Tick(25f,true);
+        Check(RuntimePower.Charges==1,id+" charge remains capped at exactly one.");
         Destroy(a.gameObject);Destroy(b.gameObject);yield return null;
     }
 }

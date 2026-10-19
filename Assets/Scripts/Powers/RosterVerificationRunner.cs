@@ -88,66 +88,78 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
     }
     IEnumerator Darkness()
     {
-        Log("---- DARKNESS (Shadow Tendrils)");
+        Log("---- DARKNESS (two-target curse, root/slow and aura)");
         yield return Enter("darkness", "strength");
-        var rt = Runtime("darkness"); var stats = W.Powers.Stats(rt);
-        PlaceHero(W.City.Spawn + Vector3.up * .05f); Cam.GetComponent<ThirdPersonCamera>().enabled = false;
-        var points = NavPoints(12, 17).ToList();
-        Check(points.Count >= 2, "Two clear NavMesh points 12-17 m from the hero for live criminals.");
-        Vector3 pa = points[0]; Vector3 pb = points.FirstOrDefault(p => Vector3.Angle(p - W.Hero.transform.position, pa - W.Hero.transform.position) > 60);
-        Check(pb != Vector3.zero, "CONTROL criminal placed >60 deg from the target's bearing.");
-        var target = CityNpc.Spawn(W, pa, NpcRole.Criminal); var control = CityNpc.Spawn(W, pb, NpcRole.Criminal);
-        target.SetCombatStats(1000, target.ContactDamage); control.SetCombatStats(1000, control.ContactDamage);
+        var rt=Runtime("darkness");var stats=W.Powers.Stats(rt);var effect=(DarknessEffect)rt.Definition.Effect;
+        Check(stats.Charges==1&&rt.Definition.ChargeRecharge==9f&&effect.InitialRootSeconds>1f&&effect.SlowSpeedFactor==.4f,
+            "Darkness has one charge, 9 s base recharge, brief root and 60% movement slow.");
+        W.enabled=false;
+        foreach(var existing in W.Npcs.ToArray())if(existing!=null)Destroy(existing.gameObject);
+        yield return null;
+        PlaceHero(W.City.Spawn+Vector3.up*.05f);Cam.GetComponent<ThirdPersonCamera>().enabled=false;
+        var points=NavPoints(12,17).ToList();var controlPoints=NavPoints(25,30).ToList();
+        Check(points.Count>=1&&controlPoints.Count>=1,"Clear live NavMesh points for target and distant movement control.");
+        Vector3 pa=points[0],pb=controlPoints.FirstOrDefault(p=>Vector3.Distance(p,pa)>effect.SecondaryRadius+18f&&
+            Vector3.Angle(p-W.Hero.transform.position,pa-W.Hero.transform.position)>60);
+        Check(pb!=Vector3.zero,"Uncursed control is outside the secondary-search radius and aim.");
+        var target=CityNpc.Spawn(W,pa,NpcRole.Criminal);var control=CityNpc.Spawn(W,pb,NpcRole.Criminal);
+        control.AlwaysAggro=true;
+        target.SetCombatStats(1000,target.ContactDamage);control.SetCombatStats(1000,control.ContactDamage);
         yield return new WaitForSeconds(1f);
-        var v = new float[2]; yield return Speeds(new[] { target, control }, .6f, v);
-        Log($"MEASURED before root: target {v[0]:F2} m/s, control {v[1]:F2} m/s (live AI approaching a hero-side player).");
-        Check(v[0] > .3f, "Target criminal is really moving before the root.");
-        Aim(Chest(target)); int charges = rt.Charges; float hp = target.Health;
-        Check(W.Powers.Use(rt), "Shadow Tendrils cast on the aimed live criminal: " + W.Powers.Message);
-        Check(target.Rooted && !target.Frozen && rt.Charges == charges - 1, $"Target rooted (not frozen); charge spent {charges}->{rt.Charges}.");
-        Check(Mathf.Abs(hp - target.Health - stats.Damage) < .01f, $"Root damage == data: {hp - target.Health:F2} vs {stats.Damage}.");
-        Check(PowerVfx.Get().ActiveLines>0,"Real target cast emits a brief aimed activation snap.");
+        var speed=new float[2];yield return Speeds(new[]{target,control},.6f,speed);
+        float ordinary=speed[0];Log($"MEASURED Darkness before: target {ordinary:F3} m/s, control {speed[1]:F3} m/s.");
+        Check(ordinary>.3f&&speed[1]>.3f,"Both real agents move before the curse.");
+        Aim(Chest(target));float health=target.Health;
+        bool aimed=W.Powers.FindTarget(stats.Range,out var darkHit);
+        bool cast=W.Powers.Use(rt);
+        Check(cast&&DarknessEffect.LastPrimary==target&&DarknessEffect.LastSecondary==null,
+            $"Crosshair target alone receives the curse: aimed={aimed} hit={darkHit.collider?.name} target={target.name} primary={DarknessEffect.LastPrimary?.name} secondary={DarknessEffect.LastSecondary?.name} secondaryPosition={DarknessEffect.LastSecondary?.transform.position} targetPosition={target.transform.position} controlPosition={control.transform.position} activeNpcs={W.Npcs.Count(n=>n!=null&&!n.Dead)} message={W.Powers.Message}.");
+        Check(target.Rooted&&target.Slowed&&!target.Frozen&&rt.Charges==0,
+            "Initial root and slow coexist without a freeze; one charge spent.");
+        float direct=health-target.Health;
+        Check(direct>=stats.Damage*.9f-.001f&&direct<=stats.Damage*1.1f+.001f,
+            $"Direct damage {direct:F3} is the low rolled Darkness hit around {stats.Damage:F2}.");
+        Check(PowerVfx.Get().ActiveLines>0,"Aimed activation snap uses the pooled line effect.");
         yield return null;
-        Check(target.GetComponent<RootedLook>() != null && target.GetComponent<RootedLook>().Showing &&
-            StatusPowerVfx.Get().ActiveRoots==1,
-            "One real rooted target owns a pooled restraint.");
+        var curse=target.GetComponent<ShadowCursed>();var look=target.GetComponent<RootedLook>();
+        Check(curse!=null&&curse.Active&&look!=null&&look.Showing&&StatusPowerVfx.Get().ActiveRoots==1,
+            "The live curse holds one pooled visible restraint.");
         Capture("darkness-rooted.png");
-        yield return Speeds(new[] { target, control }, stats.Duration - .8f, v);
-        Log($"MEASURED during root ({stats.Duration - .8f:F1} s): target {v[0]:F3} m/s, control {v[1]:F2} m/s.");
-        Check(v[0] < .05f, "Rooted criminal does not move.");
-        Check(v[1] > .3f && !control.Rooted, "CONTROL: the un-rooted criminal keeps moving.");
-        yield return new WaitForSeconds(1.2f);
-        Check(!target.Rooted, "Root expires after its Duration.");
-        yield return null;
-        Check(StatusPowerVfx.Get().ActiveRoots==0,"Root expiry releases the restraint pool lease.");
-        yield return Speeds(new[] { target }, 1f, v);
-        Log($"MEASURED after root: target {v[0]:F2} m/s.");
-        Check(v[0] > .3f, "Target moves again after the root ends.");
-        // Root is crowd control, not a stun: a rooted enemy in reach still attacks; a frozen one does not.
-        var rooted = target; var frozen = control; rooted.Root(4f);
-        int rootedWindups = rooted.Windups;
-        PlaceHero(rooted.transform.position + rooted.transform.forward * 1.5f);
-        float until = Time.time + 3.5f; while (rooted.Windups == rootedWindups && Time.time < until) yield return null;
-        Check(rooted.Windups > rootedWindups, "A rooted enemy with the player in reach still starts its attack (root is not a stun).");
-        frozen.Freeze(3f); int frozenWindups = frozen.Windups;
-        PlaceHero(frozen.transform.position + frozen.transform.forward * 1.5f);
+        yield return Speeds(new[]{target,control},.75f,speed);
+        Check(speed[0]<.08f&&speed[1]>.3f,"Rooted target has near-zero real displacement; uncursed control still moves.");
+        yield return new WaitForSeconds(.5f);
+        Check(!target.Rooted&&target.Slowed&&curse.Active&&look.Showing,
+            "Hard root expires while heavy slow and visible curse continue.");
+        yield return Speeds(new[]{target,control},.8f,speed);
+        Log($"MEASURED Darkness slowed: target {speed[0]:F3} m/s, control {speed[1]:F3} m/s; agent speed {target.Agent.speed:F3}.");
+        Check(speed[0]>.05f&&target.Agent.speed<=target.Archetype.MoveSpeed*.41f,
+            "Real movement resumes at no more than 40% configured enemy speed.");
+        Check(speed[1]>.3f&&!control.Slowed,"Uncursed movement control remains ordinary.");
+        yield return new WaitForSeconds(stats.Duration);
+        Check(!curse.Active&&!target.Slowed&&StatusPowerVfx.Get().ActiveRoots==0,
+            "Curse, slow and pooled tendrils all end.");
+        yield return Speeds(new[]{target},.6f,speed);
+        Check(speed[0]>.3f,"Real movement returns after the curse.");
+        // A root restricts movement but never silences the existing attack cycle.
+        int windups=target.Windups;target.Root(4f);PlaceHero(target.transform.position+target.transform.forward*1.5f);
+        float until=Time.time+3.5f;while(target.Windups==windups&&Time.time<until)yield return null;
+        Check(target.Windups>windups,"A rooted enemy in reach can still start an attack.");
+        control.Freeze(3f);windups=control.Windups;PlaceHero(control.transform.position+control.transform.forward*1.5f);
         yield return new WaitForSeconds(1.5f);
-        Check(frozen.Windups == frozenWindups, "CONTROL: a frozen enemy in reach starts no attack.");
-        // The AI attack controls above deliberately move the hero into melee range and let both actors roam.
-        // Reset to a clear, measured aim fixture for the independent charge/empty-target controls below.
+        Check(control.Windups==windups,"Frozen control cannot attack in reach.");
+        Check(rt.Charges==1&&rt.Charges<=stats.Charges,"Real charge clock restored exactly one charge after 9 s.");
         target.Agent.enabled=false;control.Agent.enabled=false;
         target.transform.position=new Vector3(5,150.05f,6);control.transform.position=new Vector3(0,150.05f,6);
         PlaceHero(new Vector3(0,150.05f,0));Physics.SyncTransforms();
-        // Charges CONTROL: 2 charges, 5 s recharge; the second cast is allowed, the third refused.
-        rt.Cooldown = 0; rt.Charges = 1; Aim(Chest(control));
-        Check(W.Powers.FindTarget(stats.Range,out var lastTarget)&&lastTarget.collider.GetComponentInParent<CityNpc>()==control,
-            "Charge fixture's real aim ray hits the intended criminal before payment.");
-        bool lastCharge=W.Powers.Use(rt);
-        Check(lastCharge,$"Last charge casts: {W.Powers.Message}; energy={W.Powers.Energy:F1}, targetDistance={Vector3.Distance(W.Hero.transform.position,control.transform.position):F2}m.");
-        rt.Cooldown = 0; hp = target.Health; Aim(Chest(target)); bool third = W.Powers.Use(rt);
-        Check(!third && W.Powers.Message == "Blocked: 0 charges" && target.Health == hp, "CONTROL: zero charges refused, target untouched.");
-        rt.Charges = 1; rt.Cooldown = 0; Aim(W.Hero.transform.position + Vector3.up * 60 + Vector3.forward * 5); int before = rt.Charges;
-        Check(!W.Powers.Use(rt) && rt.Charges == before, "CONTROL: aiming at empty sky refuses and spends nothing.");
+        Aim(Chest(control));Check(W.Powers.Use(rt)&&rt.Charges==0,"Recharged Darkness casts once more.");
+        Aim(Chest(target));health=target.Health;
+        Check(!W.Powers.Use(rt)&&W.Powers.Message=="Blocked: cooldown"&&target.Health==health,
+            "Immediate second cast is refused by its independent activation cooldown.");
+        yield return new WaitForSeconds(stats.Cooldown+.05f);health=target.Health;
+        Check(!W.Powers.Use(rt)&&W.Powers.Message=="Blocked: 0 charges"&&target.Health==health,
+            "After activation cooldown, empty single-charge gate still refuses without damage.");
+        rt.Charges=1;rt.Cooldown=0;Aim(W.Hero.transform.position+Vector3.up*60+Vector3.forward*5);
+        Check(!W.Powers.Use(rt)&&rt.Charges==1,"Empty aim refuses and preserves the sole charge.");
     }
     // ---------------------------------------------------------------- LASER EYES: channeled
     IEnumerator Hold(float seconds)
@@ -347,11 +359,15 @@ public sealed class RosterVerificationRunner : SessionVerificationRunner
         Log("---- POISON (damage over time, spreads on death)");
         yield return Enter("poison", "strength");
         Isolate(); var rt = Runtime("poison"); var stats = W.Powers.Stats(rt); var effect = (PoisonEffect)rt.Definition.Effect;
-        var p = Actor(new Vector3(-4, 150, 7), NpcRole.Criminal, 1000); var cop = Actor(new Vector3(-5, 150, 8), NpcRole.Cop, 1000);
+        var p = Actor(new Vector3(-4, 150, 7), NpcRole.Criminal, 1000); var cop = Actor(new Vector3(4, 150, 8), NpcRole.Cop, 1000);
         yield return new WaitForSeconds(.3f);
         int pulsesBefore=StatusPowerVfx.Get().PoisonPulses;
-        Aim(Chest(p)); Check(W.Powers.Use(rt), "Poison the criminal.");
-        rt.Cooldown = 0; float heat = W.Heat; Aim(Chest(cop)); Check(W.Powers.Use(rt), "Poison the cop.");
+        Aim(Chest(p)); Check(W.Powers.Use(rt), "Launch Poison at the criminal.");
+        float arrival=Time.time+2f;while(p.GetComponent<Poisoned>()==null&&Time.time<arrival)yield return null;
+        Check(p.GetComponent<Poisoned>()?.Active==true,"Physical Poison projectile actually hit the criminal before checking ticks.");
+        rt.Cooldown = 0; float heat = W.Heat; Aim(Chest(cop)); Check(W.Powers.Use(rt), "Launch Poison at the cop.");
+        arrival=Time.time+2f;while(cop.GetComponent<Poisoned>()==null&&Time.time<arrival)yield return null;
+        Check(cop.GetComponent<Poisoned>()?.Active==true,"Physical Poison projectile actually hit the cop before checking ticks.");
         var statusPool=StatusPowerVfx.Get();
         yield return new WaitForSeconds(stats.Duration + .6f);
         int actualTicks=p.GetComponent<Poisoned>().Ticks+cop.GetComponent<Poisoned>().Ticks;

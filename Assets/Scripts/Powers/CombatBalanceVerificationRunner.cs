@@ -71,9 +71,10 @@ public sealed class CombatBalanceVerificationRunner : SessionVerificationRunner
             yield return Instant("ice",10);
             foreach(float mass in new[]{45f,400f})yield return Throws(mass);
             yield return Setup("darkness","lightning");
-            Check(Power("darkness").Damage==4*3 && Mathf.Abs(Power("lightning").Damage-24*1.7f)<.001f &&
-                ((LightningEffect)Power("lightning").Effect).Falloff==.85f,"Darkness/Lightning mean multipliers and chain falloff unchanged.");
-            yield return Instant("darkness",12);yield return Instant("lightning",40.8f);
+            Check(Power("darkness").Damage==6.5f && Power("darkness").Charges==1 && Power("darkness").ChargeRecharge==9f &&
+                Mathf.Abs(Power("lightning").Damage-24*1.7f*1.08f)<.001f &&
+                ((LightningEffect)Power("lightning").Effect).Falloff==.85f,"New low-direct-damage Darkness identity and current Lightning chain baseline.");
+            yield return Instant("darkness",6.5f);yield return Instant("lightning",44.064f);
             yield return Setup("laser-eyes","poison");
             Check(Power("laser-eyes").Damage==42 && Power("laser-eyes").DrainPerSecond==64 && Power("poison").Damage==12.5f,"Laser mean unchanged, drain doubled, Poison mean +25%.");
             yield return Channels(); yield return Poison();
@@ -173,7 +174,7 @@ public sealed class CombatBalanceVerificationRunner : SessionVerificationRunner
     }
     IEnumerator Throws(float mass)
     {
-        Seed();float mean=35*Mathf.Clamp(Mathf.Sqrt(mass/45),.5f,3)*5/7;
+        Seed();float mean=42*Mathf.Clamp(Mathf.Sqrt(mass/45),.5f,1.75f)*1;
         for(int i=0;i<20;i++)
         {
             Ready("telekinesis");var crate=GameObject.CreatePrimitive(PrimitiveType.Cube);crate.transform.position=new Vector3(1,151.5f,4);
@@ -218,8 +219,8 @@ public sealed class CombatBalanceVerificationRunner : SessionVerificationRunner
         for(int i=0;i<20;i++)
         {
             Ready("poison");var target=Actor(new Vector3(0,150.05f,10),NpcRole.Criminal,1000);Aim(Chest(target));hits.Clear();
-            float rate=Expected(12.5f);Check(W.Powers.Use(Runtime("poison")),"Poison application accepted.");int draws=W.Rolls.DamageSamples;
-            yield return WaitHit(target);var status=target.GetComponent<Poisoned>();
+            float rate=Expected(12.5f);Check(W.Powers.Use(Runtime("poison")),"Poison projectile launched.");
+            yield return WaitHit(target);var status=target.GetComponent<Poisoned>();int draws=W.Rolls.DamageSamples;
             Check(Mathf.Abs(status.DamagePerSecond-rate)<.003f&&Mathf.Abs(status.DamagePerTick-rate*.5f)<.003f,"Application caches its seeded DPS and tick value.");
             if(i<3)
             {
@@ -234,8 +235,12 @@ public sealed class CombatBalanceVerificationRunner : SessionVerificationRunner
         var origin=Actor(new Vector3(0,150.05f,10),NpcRole.Criminal,1000);
         var recipient=Actor(new Vector3(3,150.05f,10),NpcRole.Criminal,1000);
         var outside=Actor(new Vector3(9,150.05f,10),NpcRole.Criminal,1000);
-        Aim(Chest(origin));Check(W.Powers.Use(Runtime("poison")),"Seeded poison spread source applied.");Expected(12.5f);
-        float next=Expected(12.5f);origin.Damage(1000,W.Powers);
+        float first=Expected(12.5f),next=Expected(12.5f);
+        Aim(Chest(origin));Check(W.Powers.Use(Runtime("poison")),"Seeded poison spread projectile launched.");
+        float arrival=Time.time+2;while(origin.GetComponent<Poisoned>()==null&&Time.time<arrival)yield return null;
+        Check(origin.GetComponent<Poisoned>()!=null&&Mathf.Abs(origin.GetComponent<Poisoned>().DamagePerSecond-first)<.003f,
+            "Physical projectile reached the source and used the first seeded DPS roll.");
+        origin.Damage(1000,W.Powers);
         var spread=recipient.GetComponent<Poisoned>();
         Check(spread!=null&&spread.Generation==1&&Mathf.Abs(spread.DamagePerSecond-next)<.003f&&outside.GetComponent<Poisoned>()==null,
             "Spread independently rolls original intended DPS, never compounds parent variance; outside control untouched.");

@@ -16,6 +16,8 @@ public sealed class DarknessEffect : PowerEffect
     static readonly RaycastHit[] sight = new RaycastHit[32];
     public static CityNpc LastPrimary { get; private set; }
     public static CityNpc LastSecondary { get; private set; }
+    public static Vector3 LastPrimaryVisualOrigin { get; private set; }
+    public static bool LastPrimaryWasFirstPerson { get; private set; }
     [Header("Shadow tendrils (presentation)")]
     public int Tendrils = 4;
     public float TendrilHeight = 1.3f, TendrilSpread = .75f, TendrilWidth = .07f, TendrilJitter = .12f;
@@ -77,9 +79,10 @@ public sealed class DarknessEffect : PowerEffect
             // A brief aimed snap establishes the target; the leased body bands carry the held state.
             var camera=Camera.main;var rig=camera!=null?camera.GetComponent<ThirdPersonCamera>():null;
             bool first=rig!=null&&rig.isActiveAndEnabled&&rig.FirstPerson;
-            Vector3 origin=first?camera.transform.position+camera.transform.forward*2f+
-                camera.transform.right*.2f-camera.transform.up*.2f:user.AimOrigin;
+            // In first person, keep the activation snap local to the victim instead of drawing across the view.
+            Vector3 origin=first?npc.transform.position+Vector3.up*.65f+camera.transform.right*.7f:user.AimOrigin;
             if(npc==LastSecondary&&LastPrimary!=null)origin=LastPrimary.transform.position+Vector3.up;
+            if(npc==LastPrimary){LastPrimaryVisualOrigin=origin;LastPrimaryWasFirstPerson=first;}
             var snap=PowerVfx.Get().Arc(origin,npc.transform.position+Vector3.up,
                 first?2:4,first?.015f:.045f,CityColor.UiMuted,first?.012f:.035f,.12f);
             if(snap!=null)snap.sharedMaterial=CityMaterials.GetVfx(CityColor.UiMuted);

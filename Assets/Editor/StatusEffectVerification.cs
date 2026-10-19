@@ -12,7 +12,8 @@ public static class StatusEffectVerification
 {
     const string Key = "Overpowered.StatusEffectVerification"; const string Folder = "Verification/StatusEffects/"; static double deadline;
     static StatusEffectVerification() { EditorApplication.update += () => { if (deadline > 0 && EditorApplication.timeSinceStartup > deadline) { Debug.LogError("Status effect verification timeout"); Finish(1); } }; }
-    public static void Run() { RosterSetup.Create(); Directory.CreateDirectory(Folder + "saves"); SessionState.SetString(Key, "run"); EditorSceneManager.OpenScene("Assets/Scenes/Home.unity"); EditorApplication.isPlaying = true; }
+    public static void Run() { RosterSetup.Create(); VerifyExisting(); }
+    public static void VerifyExisting() { Directory.CreateDirectory(Folder + "saves"); SessionState.SetString(Key, "run"); EditorSceneManager.OpenScene("Assets/Scenes/Home.unity"); EditorApplication.isPlaying = true; }
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void Configure()
     {
