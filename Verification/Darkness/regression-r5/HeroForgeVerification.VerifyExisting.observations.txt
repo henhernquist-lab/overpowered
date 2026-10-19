@@ -1,0 +1,5 @@
+MEASURED Sonic peak=154.290m, force=2600.0 N.s, bodies=1, near velocity=34.052m/s, displacement=0.672m; cooldown=34.597s.
+MEASURED Forge idle phase=0: FPS=68.51, draws=307.2, pool=6.
+MEASURED Forge FX stress phase=1: FPS=68.55, draws=314.9, pool=6.
+MEASURED Forge FX stress phase=2: FPS=68.50, draws=313.6, pool=6.
+MEASURED Forge idle phase=3: FPS=71.04, draws=304.2, pool=6.

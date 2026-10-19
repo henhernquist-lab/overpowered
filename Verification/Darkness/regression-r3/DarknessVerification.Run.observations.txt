@@ -1,0 +1,2 @@
+MEASURED Normal Gunner mean65/range58.5–71.5: direct6.5 (10% of mean), one aura25 (38.46%); mutual aura25 per cursed enemy. Direct+mutual31.5 cannot kill a fresh Gunner by itself.
+MEASURED Darkness dense12 real cast 180 frames: FPS=173.49 mean=5.764ms whole-frame GC=2341B/frame, materials=113->113, lines=121->121, particleSystems=22->22, root leases=2, peak aura sources<=2.

@@ -1,0 +1,42 @@
+PASS Wave-events recipe built in memory (5 modifiers).
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Shipping EndlessWaves has no Events assigned.
+PASS Wave 1 started.
+PASS Wave 1 plan-free, size 3 = WaveSize(1).
+PASS Wave 1 cleared.
+PASS Original scoring: 3 kills x 10, clear 50.
+PASS CONTROL: no elite / miniboss / flawless events without Events.
+PASS Score delta 80 = sum of score events.
+PASS Loadout saved.
+PASS Wave 1 started.
+PASS Wave 1 plan: 3 enemies, 1 elites, miniboss False, modifiers [], x1 hp x1 dmg x1 score.
+PASS Wave 1 cleared (3 enemies seen, peak alive 2, peak cost 3).
+PASS Alive budget held every frame: <= 4 alive, cost <= target (or a lone heavy enemy).
+PASS Every enemy's health matches its slot formula (1 elites, 0 miniboss).
+PASS 3 kill events of 10 (KillScore x wave x modifier score).
+PASS 1 elite-kill events of 25.
+PASS Miniboss-kill events: 0.
+PASS No damage taken -> one flawless bonus of 40.
+PASS Score delta 145 = sum of this wave's score events.
+PASS Wave 2 started.
+PASS Wave 2 plan: 9 enemies, 3 elites, miniboss True, modifiers [SWARM], x0.75 hp x1 dmg x1.2 score.
+PASS Wave 2 cleared (9 enemies seen, peak alive 3, peak cost 4).
+PASS Alive budget held every frame: <= 4 alive, cost <= target (or a lone heavy enemy).
+PASS Every enemy's health matches its slot formula (3 elites, 1 miniboss).
+PASS 9 kill events of 24 (KillScore x wave x modifier score).
+PASS 3 elite-kill events of 50.
+PASS Miniboss-kill events: 1.
+PASS CONTROL: a hit during the wave -> no flawless bonus.
+PASS Score delta 766 = sum of this wave's score events.
+PASS Wave 3 started.
+PASS Wave 3 plan: 7 enemies, 2 elites, miniboss False, modifiers [GLASS CANNONS], x0.6 hp x1.6 dmg x1.2 score.
+PASS Wave 3 cleared (7 enemies seen, peak alive 3, peak cost 4).
+PASS Alive budget held every frame: <= 4 alive, cost <= target (or a lone heavy enemy).
+PASS Every enemy's health matches its slot formula (2 elites, 0 miniboss).
+PASS 7 kill events of 36 (KillScore x wave x modifier score).
+PASS 2 elite-kill events of 75.
+PASS Miniboss-kill events: 0.
+PASS No damage taken -> one flawless bonus of 120.
+PASS Score delta 672 = sum of this wave's score events.

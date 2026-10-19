@@ -1,0 +1,9 @@
+MEASURED normal/hero: encounter 50.00000s; police 2.00000s; legacy 12.00000s.
+MEASURED normal/villain: encounter 50.00000s; police 2.00000s; legacy 12.00000s.
+MEASURED normal actual police arrival 2.00132s, interval 2.00000s, spawned 4.
+MEASURED normal/free-play: encounter 50.00000s; police 2.00000s; legacy 12.00000s.
+MEASURED normal/endless-fight: encounter 50.00000s; police 2.00000s; legacy 12.00000s.
+MEASURED Endless reinforcement interval: 0 (immediate), unchanged for normal; cap 12
+MEASURED normal/vector: health 100.000; energy 100.000; regen 12.000; Ice cost 10.000, cooldown 0.600, recharge 1.500.
+MEASURED normal/titan: health 140.000; energy 80.000; regen 12.000; Ice cost 10.000, cooldown 0.600, recharge 1.500.
+MEASURED normal/nova: health 75.000; energy 140.000; regen 16.800; Ice cost 10.000, cooldown 0.480, recharge 1.500.

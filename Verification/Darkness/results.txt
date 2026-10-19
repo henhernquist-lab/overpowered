@@ -1,0 +1,59 @@
+PASS One charge at all tiers; nine-second reload; authored targeting, aura and low direct damage.
+PASS Save normal for next real session.
+PASS Save VECTOR with darkness + fire through the loadout API.
+PASS Session equips darkness + fire.
+PASS darkness selected for LMB (key 1).
+PASS Session captures normal centrally.
+PASS One hostile on crosshair yields exactly one curse.
+PASS One charge paid; brief root, heavy slow and low actual initial damage; civilian unharmed.
+PASS Alone: one timed pulse, no self damage and no damage outside aura or to civilians.
+PASS Pulse has a pooled visible radius cue and the curse retains its body bands.
+IMAGE Verification/Darkness/one-target.png
+PASS Aura, slow and visual lease end with the four-second curse; no later tick.
+PASS Three eligible hostiles: crosshair primary plus nearest secondary, capped at two curses.
+PASS Only two hosts receive initial damage/control; third remains uncursed.
+PASS Each cursed enemy takes one five-point tick from the OTHER cursed enemy, never its own aura.
+PASS Third clustered hostile takes one tick from EACH distinct aura; distant/civilian controls untouched.
+PASS Authoritative damage events credit two distinct aura hits on the third enemy and direct plus mutual aura on a host.
+IMAGE Verification/Darkness/two-targets.png
+PASS Full exposure: 25 aura damage per host, 50 on shared third; five bounded pulses each.
+MEASURED Normal Gunner mean65/range58.5–71.5: direct6.5 (10% of mean), one aura25 (38.46%); mutual aura25 per cursed enemy. Direct+mutual31.5 cannot kill a fresh Gunner by itself.
+PASS Building wall blocks the in-radius secondary; crosshair primary remains valid.
+PASS Civilian under crosshair is refused without charge, energy or health loss.
+PASS Empty aim refuses without paying the sole charge or energy.
+PASS Toggle actual game camera to first person.
+PASS First-person crosshair gameplay ray reaches the primary target.
+PASS First-person cast keeps the crosshair primary and finds its gameplay-space secondary.
+PASS First-person activation snap starts next to the victim instead of crossing the camera.
+IMAGE Verification/Darkness/first-person.png
+PASS First-person tendrils stay in the fixed line pool.
+PASS Real Darkness cast starts in a 12-hostile cluster.
+MEASURED Darkness dense12 real cast 180 frames: FPS=173.49 mean=5.764ms whole-frame GC=2341B/frame, materials=113->113, lines=121->121, particleSystems=22->22, root leases=2, peak aura sources<=2.
+PASS Dense casts keep at most two active curses and create no per-tick lines or particle systems.
+PASS Save hard for next real session.
+PASS Save VECTOR with darkness + fire through the loadout API.
+PASS Session equips darkness + fire.
+PASS darkness selected for LMB (key 1).
+PASS Session captures hard centrally.
+PASS hard applies centralized cooldown modifier exactly once to nine-second charge recharge.
+PASS hard real Darkness cast accepted.
+PASS hard actual direct hits use the centralized damage multiplier once.
+PASS hard mutual aura tick uses the same damage multiplier once.
+PASS hard charge remains empty just below its resolved recharge time.
+PASS hard charge restores just above its resolved recharge time.
+PASS hard charge remains capped at exactly one.
+PASS Save extreme for next real session.
+PASS Save VECTOR with darkness + fire through the loadout API.
+PASS Session equips darkness + fire.
+PASS darkness selected for LMB (key 1).
+PASS Session captures extreme centrally.
+PASS extreme applies centralized cooldown modifier exactly once to nine-second charge recharge.
+PASS extreme real Darkness cast accepted.
+PASS extreme actual direct hits use the centralized damage multiplier once.
+PASS extreme mutual aura tick uses the same damage multiplier once.
+PASS extreme charge remains empty just below its resolved recharge time.
+PASS extreme charge restores just above its resolved recharge time.
+PASS extreme charge remains capped at exactly one.
+PASS Save Extreme for the separate-process reload.
+PASS Save Darkness + Fire through progression for reload.
+LIMIT: matched baseline FPS before the redesign and standalone long-duration pressure need separate measurement; this is a short Editor sample.

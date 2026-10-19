@@ -1,0 +1,2346 @@
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Rusher spawn 0/0: actual HP 36.36185, mean 39; current=max and bounds.
+PASS Health bar reads this spawned rolled maximum, not archetype mean.
+PASS Rusher spawn 0/1: actual HP 41.52504, mean 39; current=max and bounds.
+PASS Rusher spawn 0/2: actual HP 39.91404, mean 39; current=max and bounds.
+PASS Rusher spawn 0/3: actual HP 42.68772, mean 39; current=max and bounds.
+PASS Rusher spawn 0/4: actual HP 37.28875, mean 39; current=max and bounds.
+PASS Rusher spawn 0/5: actual HP 42.61515, mean 39; current=max and bounds.
+PASS Rusher spawn 0/6: actual HP 38.14168, mean 39; current=max and bounds.
+PASS Rusher spawn 0/7: actual HP 41.98138, mean 39; current=max and bounds.
+PASS Rusher spawn 0/8: actual HP 37.01935, mean 39; current=max and bounds.
+PASS Rusher spawn 0/9: actual HP 41.46397, mean 39; current=max and bounds.
+PASS Rusher spawn 0/10: actual HP 39.80589, mean 39; current=max and bounds.
+PASS Rusher spawn 0/11: actual HP 36.32532, mean 39; current=max and bounds.
+PASS Rusher spawn 0/12: actual HP 36.01229, mean 39; current=max and bounds.
+PASS Rusher spawn 0/13: actual HP 41.89711, mean 39; current=max and bounds.
+PASS Rusher spawn 0/14: actual HP 36.50628, mean 39; current=max and bounds.
+PASS Rusher spawn 0/15: actual HP 40.57779, mean 39; current=max and bounds.
+PASS Rusher spawn 0/16: actual HP 35.87737, mean 39; current=max and bounds.
+PASS Rusher spawn 0/17: actual HP 39.93301, mean 39; current=max and bounds.
+PASS Rusher spawn 0/18: actual HP 38.76472, mean 39; current=max and bounds.
+PASS Rusher spawn 0/19: actual HP 37.10203, mean 39; current=max and bounds.
+PASS Rusher spawn 0/20: actual HP 38.59780, mean 39; current=max and bounds.
+PASS Rusher spawn 0/21: actual HP 38.08903, mean 39; current=max and bounds.
+PASS Rusher spawn 0/22: actual HP 42.52270, mean 39; current=max and bounds.
+PASS Rusher spawn 0/23: actual HP 39.39958, mean 39; current=max and bounds.
+PASS Rusher spawn 0/24: actual HP 40.77702, mean 39; current=max and bounds.
+PASS Rusher spawn 0/25: actual HP 41.28993, mean 39; current=max and bounds.
+PASS Rusher spawn 0/26: actual HP 41.90849, mean 39; current=max and bounds.
+PASS Rusher spawn 0/27: actual HP 39.41983, mean 39; current=max and bounds.
+PASS Rusher spawn 0/28: actual HP 37.10966, mean 39; current=max and bounds.
+PASS Rusher spawn 0/29: actual HP 41.40748, mean 39; current=max and bounds.
+PASS Rusher spawn 0/30: actual HP 37.16139, mean 39; current=max and bounds.
+PASS Rusher spawn 0/31: actual HP 37.72139, mean 39; current=max and bounds.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Rusher spawn 1/0: actual HP 36.36185, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/1: actual HP 41.52504, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/2: actual HP 39.91404, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/3: actual HP 42.68772, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/4: actual HP 37.28875, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/5: actual HP 42.61515, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/6: actual HP 38.14168, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/7: actual HP 41.98138, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/8: actual HP 37.01935, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/9: actual HP 41.46397, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/10: actual HP 39.80589, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/11: actual HP 36.32532, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/12: actual HP 36.01229, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/13: actual HP 41.89711, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/14: actual HP 36.50628, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/15: actual HP 40.57779, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/16: actual HP 35.87737, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/17: actual HP 39.93301, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/18: actual HP 38.76472, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/19: actual HP 37.10203, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/20: actual HP 38.59780, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/21: actual HP 38.08903, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/22: actual HP 42.52270, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/23: actual HP 39.39958, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/24: actual HP 40.77702, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/25: actual HP 41.28993, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/26: actual HP 41.90849, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/27: actual HP 39.41983, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/28: actual HP 37.10966, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/29: actual HP 41.40748, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/30: actual HP 37.16139, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Rusher spawn 1/31: actual HP 37.72139, mean 39; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Rusher spawn 2/0: actual HP 36.36139, mean 39; current=max and bounds.
+PASS Rusher spawn 2/1: actual HP 41.88977, mean 39; current=max and bounds.
+PASS Rusher spawn 2/2: actual HP 36.36966, mean 39; current=max and bounds.
+PASS Rusher spawn 2/3: actual HP 39.26723, mean 39; current=max and bounds.
+PASS Rusher spawn 2/4: actual HP 36.39835, mean 39; current=max and bounds.
+PASS Rusher spawn 2/5: actual HP 42.23273, mean 39; current=max and bounds.
+PASS Rusher spawn 2/6: actual HP 40.41155, mean 39; current=max and bounds.
+PASS Rusher spawn 2/7: actual HP 40.33108, mean 39; current=max and bounds.
+PASS Rusher spawn 2/8: actual HP 35.16085, mean 39; current=max and bounds.
+PASS Rusher spawn 2/9: actual HP 36.54869, mean 39; current=max and bounds.
+PASS Rusher spawn 2/10: actual HP 37.45041, mean 39; current=max and bounds.
+PASS Rusher spawn 2/11: actual HP 39.43473, mean 39; current=max and bounds.
+PASS Rusher spawn 2/12: actual HP 40.59807, mean 39; current=max and bounds.
+PASS Rusher spawn 2/13: actual HP 38.26186, mean 39; current=max and bounds.
+PASS Rusher spawn 2/14: actual HP 36.32533, mean 39; current=max and bounds.
+PASS Rusher spawn 2/15: actual HP 42.41825, mean 39; current=max and bounds.
+PASS Rusher spawn 2/16: actual HP 41.05906, mean 39; current=max and bounds.
+PASS Rusher spawn 2/17: actual HP 35.46258, mean 39; current=max and bounds.
+PASS Rusher spawn 2/18: actual HP 38.54675, mean 39; current=max and bounds.
+PASS Rusher spawn 2/19: actual HP 39.45604, mean 39; current=max and bounds.
+PASS Rusher spawn 2/20: actual HP 36.87268, mean 39; current=max and bounds.
+PASS Rusher spawn 2/21: actual HP 35.44120, mean 39; current=max and bounds.
+PASS Rusher spawn 2/22: actual HP 36.85566, mean 39; current=max and bounds.
+PASS Rusher spawn 2/23: actual HP 39.12574, mean 39; current=max and bounds.
+PASS Rusher spawn 2/24: actual HP 41.32707, mean 39; current=max and bounds.
+PASS Rusher spawn 2/25: actual HP 41.58530, mean 39; current=max and bounds.
+PASS Rusher spawn 2/26: actual HP 37.35101, mean 39; current=max and bounds.
+PASS Rusher spawn 2/27: actual HP 35.26483, mean 39; current=max and bounds.
+PASS Rusher spawn 2/28: actual HP 36.43532, mean 39; current=max and bounds.
+PASS Rusher spawn 2/29: actual HP 39.97047, mean 39; current=max and bounds.
+PASS Rusher spawn 2/30: actual HP 40.23726, mean 39; current=max and bounds.
+PASS Rusher spawn 2/31: actual HP 35.43167, mean 39; current=max and bounds.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Different seed changes actual spawn sequence.
+PASS Explicit scaled spawn rolls once in scaled range; updates do not reroll or randomize outgoing damage.
+PASS Gunner spawn 0/0: actual HP 60.60308, mean 65; current=max and bounds.
+PASS Health bar reads this spawned rolled maximum, not archetype mean.
+PASS Gunner spawn 0/1: actual HP 69.20840, mean 65; current=max and bounds.
+PASS Gunner spawn 0/2: actual HP 66.52339, mean 65; current=max and bounds.
+PASS Gunner spawn 0/3: actual HP 71.14619, mean 65; current=max and bounds.
+PASS Gunner spawn 0/4: actual HP 62.14791, mean 65; current=max and bounds.
+PASS Gunner spawn 0/5: actual HP 71.02525, mean 65; current=max and bounds.
+PASS Gunner spawn 0/6: actual HP 63.56947, mean 65; current=max and bounds.
+PASS Gunner spawn 0/7: actual HP 69.96896, mean 65; current=max and bounds.
+PASS Gunner spawn 0/8: actual HP 61.69892, mean 65; current=max and bounds.
+PASS Gunner spawn 0/9: actual HP 69.10661, mean 65; current=max and bounds.
+PASS Gunner spawn 0/10: actual HP 66.34315, mean 65; current=max and bounds.
+PASS Gunner spawn 0/11: actual HP 60.54220, mean 65; current=max and bounds.
+PASS Gunner spawn 0/12: actual HP 60.02048, mean 65; current=max and bounds.
+PASS Gunner spawn 0/13: actual HP 69.82851, mean 65; current=max and bounds.
+PASS Gunner spawn 0/14: actual HP 60.84381, mean 65; current=max and bounds.
+PASS Gunner spawn 0/15: actual HP 67.62965, mean 65; current=max and bounds.
+PASS Gunner spawn 0/16: actual HP 59.79561, mean 65; current=max and bounds.
+PASS Gunner spawn 0/17: actual HP 66.55502, mean 65; current=max and bounds.
+PASS Gunner spawn 0/18: actual HP 64.60787, mean 65; current=max and bounds.
+PASS Gunner spawn 0/19: actual HP 61.83672, mean 65; current=max and bounds.
+PASS Gunner spawn 0/20: actual HP 64.32967, mean 65; current=max and bounds.
+PASS Gunner spawn 0/21: actual HP 63.48172, mean 65; current=max and bounds.
+PASS Gunner spawn 0/22: actual HP 70.87117, mean 65; current=max and bounds.
+PASS Gunner spawn 0/23: actual HP 65.66597, mean 65; current=max and bounds.
+PASS Gunner spawn 0/24: actual HP 67.96170, mean 65; current=max and bounds.
+PASS Gunner spawn 0/25: actual HP 68.81655, mean 65; current=max and bounds.
+PASS Gunner spawn 0/26: actual HP 69.84748, mean 65; current=max and bounds.
+PASS Gunner spawn 0/27: actual HP 65.69971, mean 65; current=max and bounds.
+PASS Gunner spawn 0/28: actual HP 61.84943, mean 65; current=max and bounds.
+PASS Gunner spawn 0/29: actual HP 69.01247, mean 65; current=max and bounds.
+PASS Gunner spawn 0/30: actual HP 61.93565, mean 65; current=max and bounds.
+PASS Gunner spawn 0/31: actual HP 62.86897, mean 65; current=max and bounds.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Gunner spawn 1/0: actual HP 60.60308, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/1: actual HP 69.20840, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/2: actual HP 66.52339, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/3: actual HP 71.14619, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/4: actual HP 62.14791, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/5: actual HP 71.02525, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/6: actual HP 63.56947, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/7: actual HP 69.96896, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/8: actual HP 61.69892, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/9: actual HP 69.10661, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/10: actual HP 66.34315, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/11: actual HP 60.54220, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/12: actual HP 60.02048, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/13: actual HP 69.82851, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/14: actual HP 60.84381, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/15: actual HP 67.62965, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/16: actual HP 59.79561, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/17: actual HP 66.55502, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/18: actual HP 64.60787, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/19: actual HP 61.83672, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/20: actual HP 64.32967, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/21: actual HP 63.48172, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/22: actual HP 70.87117, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/23: actual HP 65.66597, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/24: actual HP 67.96170, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/25: actual HP 68.81655, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/26: actual HP 69.84748, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/27: actual HP 65.69971, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/28: actual HP 61.84943, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/29: actual HP 69.01247, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/30: actual HP 61.93565, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Gunner spawn 1/31: actual HP 62.86897, mean 65; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Gunner spawn 2/0: actual HP 60.60232, mean 65; current=max and bounds.
+PASS Gunner spawn 2/1: actual HP 69.81628, mean 65; current=max and bounds.
+PASS Gunner spawn 2/2: actual HP 60.61609, mean 65; current=max and bounds.
+PASS Gunner spawn 2/3: actual HP 65.44538, mean 65; current=max and bounds.
+PASS Gunner spawn 2/4: actual HP 60.66391, mean 65; current=max and bounds.
+PASS Gunner spawn 2/5: actual HP 70.38788, mean 65; current=max and bounds.
+PASS Gunner spawn 2/6: actual HP 67.35258, mean 65; current=max and bounds.
+PASS Gunner spawn 2/7: actual HP 67.21846, mean 65; current=max and bounds.
+PASS Gunner spawn 2/8: actual HP 58.60141, mean 65; current=max and bounds.
+PASS Gunner spawn 2/9: actual HP 60.91449, mean 65; current=max and bounds.
+PASS Gunner spawn 2/10: actual HP 62.41734, mean 65; current=max and bounds.
+PASS Gunner spawn 2/11: actual HP 65.72454, mean 65; current=max and bounds.
+PASS Gunner spawn 2/12: actual HP 67.66345, mean 65; current=max and bounds.
+PASS Gunner spawn 2/13: actual HP 63.76977, mean 65; current=max and bounds.
+PASS Gunner spawn 2/14: actual HP 60.54222, mean 65; current=max and bounds.
+PASS Gunner spawn 2/15: actual HP 70.69708, mean 65; current=max and bounds.
+PASS Gunner spawn 2/16: actual HP 68.43176, mean 65; current=max and bounds.
+PASS Gunner spawn 2/17: actual HP 59.10431, mean 65; current=max and bounds.
+PASS Gunner spawn 2/18: actual HP 64.24458, mean 65; current=max and bounds.
+PASS Gunner spawn 2/19: actual HP 65.76006, mean 65; current=max and bounds.
+PASS Gunner spawn 2/20: actual HP 61.45447, mean 65; current=max and bounds.
+PASS Gunner spawn 2/21: actual HP 59.06866, mean 65; current=max and bounds.
+PASS Gunner spawn 2/22: actual HP 61.42609, mean 65; current=max and bounds.
+PASS Gunner spawn 2/23: actual HP 65.20956, mean 65; current=max and bounds.
+PASS Gunner spawn 2/24: actual HP 68.87845, mean 65; current=max and bounds.
+PASS Gunner spawn 2/25: actual HP 69.30883, mean 65; current=max and bounds.
+PASS Gunner spawn 2/26: actual HP 62.25168, mean 65; current=max and bounds.
+PASS Gunner spawn 2/27: actual HP 58.77472, mean 65; current=max and bounds.
+PASS Gunner spawn 2/28: actual HP 60.72553, mean 65; current=max and bounds.
+PASS Gunner spawn 2/29: actual HP 66.61746, mean 65; current=max and bounds.
+PASS Gunner spawn 2/30: actual HP 67.06209, mean 65; current=max and bounds.
+PASS Gunner spawn 2/31: actual HP 59.05278, mean 65; current=max and bounds.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Different seed changes actual spawn sequence.
+PASS Explicit scaled spawn rolls once in scaled range; updates do not reroll or randomize outgoing damage.
+PASS Brute spawn 0/0: actual HP 181.80920, mean 195; current=max and bounds.
+PASS Health bar reads this spawned rolled maximum, not archetype mean.
+PASS Brute spawn 0/1: actual HP 207.62520, mean 195; current=max and bounds.
+PASS Brute spawn 0/2: actual HP 199.57020, mean 195; current=max and bounds.
+PASS Brute spawn 0/3: actual HP 213.43860, mean 195; current=max and bounds.
+PASS Brute spawn 0/4: actual HP 186.44380, mean 195; current=max and bounds.
+PASS Brute spawn 0/5: actual HP 213.07570, mean 195; current=max and bounds.
+PASS Brute spawn 0/6: actual HP 190.70840, mean 195; current=max and bounds.
+PASS Brute spawn 0/7: actual HP 209.90690, mean 195; current=max and bounds.
+PASS Brute spawn 0/8: actual HP 185.09680, mean 195; current=max and bounds.
+PASS Brute spawn 0/9: actual HP 207.31990, mean 195; current=max and bounds.
+PASS Brute spawn 0/10: actual HP 199.02950, mean 195; current=max and bounds.
+PASS Brute spawn 0/11: actual HP 181.62660, mean 195; current=max and bounds.
+PASS Brute spawn 0/12: actual HP 180.06140, mean 195; current=max and bounds.
+PASS Brute spawn 0/13: actual HP 209.48550, mean 195; current=max and bounds.
+PASS Brute spawn 0/14: actual HP 182.53140, mean 195; current=max and bounds.
+PASS Brute spawn 0/15: actual HP 202.88900, mean 195; current=max and bounds.
+PASS Brute spawn 0/16: actual HP 179.38680, mean 195; current=max and bounds.
+PASS Brute spawn 0/17: actual HP 199.66510, mean 195; current=max and bounds.
+PASS Brute spawn 0/18: actual HP 193.82360, mean 195; current=max and bounds.
+PASS Brute spawn 0/19: actual HP 185.51010, mean 195; current=max and bounds.
+PASS Brute spawn 0/20: actual HP 192.98900, mean 195; current=max and bounds.
+PASS Brute spawn 0/21: actual HP 190.44510, mean 195; current=max and bounds.
+PASS Brute spawn 0/22: actual HP 212.61350, mean 195; current=max and bounds.
+PASS Brute spawn 0/23: actual HP 196.99790, mean 195; current=max and bounds.
+PASS Brute spawn 0/24: actual HP 203.88510, mean 195; current=max and bounds.
+PASS Brute spawn 0/25: actual HP 206.44960, mean 195; current=max and bounds.
+PASS Brute spawn 0/26: actual HP 209.54240, mean 195; current=max and bounds.
+PASS Brute spawn 0/27: actual HP 197.09910, mean 195; current=max and bounds.
+PASS Brute spawn 0/28: actual HP 185.54830, mean 195; current=max and bounds.
+PASS Brute spawn 0/29: actual HP 207.03740, mean 195; current=max and bounds.
+PASS Brute spawn 0/30: actual HP 185.80690, mean 195; current=max and bounds.
+PASS Brute spawn 0/31: actual HP 188.60690, mean 195; current=max and bounds.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Brute spawn 1/0: actual HP 181.80920, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/1: actual HP 207.62520, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/2: actual HP 199.57020, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/3: actual HP 213.43860, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/4: actual HP 186.44380, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/5: actual HP 213.07570, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/6: actual HP 190.70840, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/7: actual HP 209.90690, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/8: actual HP 185.09680, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/9: actual HP 207.31990, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/10: actual HP 199.02950, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/11: actual HP 181.62660, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/12: actual HP 180.06140, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/13: actual HP 209.48550, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/14: actual HP 182.53140, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/15: actual HP 202.88900, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/16: actual HP 179.38680, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/17: actual HP 199.66510, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/18: actual HP 193.82360, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/19: actual HP 185.51010, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/20: actual HP 192.98900, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/21: actual HP 190.44510, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/22: actual HP 212.61350, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/23: actual HP 196.99790, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/24: actual HP 203.88510, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/25: actual HP 206.44960, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/26: actual HP 209.54240, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/27: actual HP 197.09910, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/28: actual HP 185.54830, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/29: actual HP 207.03740, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/30: actual HP 185.80690, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Brute spawn 1/31: actual HP 188.60690, mean 195; current=max and bounds.
+PASS Same seed reproduces actual spawn HP.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Brute spawn 2/0: actual HP 181.80690, mean 195; current=max and bounds.
+PASS Brute spawn 2/1: actual HP 209.44880, mean 195; current=max and bounds.
+PASS Brute spawn 2/2: actual HP 181.84830, mean 195; current=max and bounds.
+PASS Brute spawn 2/3: actual HP 196.33610, mean 195; current=max and bounds.
+PASS Brute spawn 2/4: actual HP 181.99170, mean 195; current=max and bounds.
+PASS Brute spawn 2/5: actual HP 211.16360, mean 195; current=max and bounds.
+PASS Brute spawn 2/6: actual HP 202.05780, mean 195; current=max and bounds.
+PASS Brute spawn 2/7: actual HP 201.65540, mean 195; current=max and bounds.
+PASS Brute spawn 2/8: actual HP 175.80420, mean 195; current=max and bounds.
+PASS Brute spawn 2/9: actual HP 182.74350, mean 195; current=max and bounds.
+PASS Brute spawn 2/10: actual HP 187.25200, mean 195; current=max and bounds.
+PASS Brute spawn 2/11: actual HP 197.17360, mean 195; current=max and bounds.
+PASS Brute spawn 2/12: actual HP 202.99030, mean 195; current=max and bounds.
+PASS Brute spawn 2/13: actual HP 191.30930, mean 195; current=max and bounds.
+PASS Brute spawn 2/14: actual HP 181.62670, mean 195; current=max and bounds.
+PASS Brute spawn 2/15: actual HP 212.09120, mean 195; current=max and bounds.
+PASS Brute spawn 2/16: actual HP 205.29530, mean 195; current=max and bounds.
+PASS Brute spawn 2/17: actual HP 177.31290, mean 195; current=max and bounds.
+PASS Brute spawn 2/18: actual HP 192.73380, mean 195; current=max and bounds.
+PASS Brute spawn 2/19: actual HP 197.28020, mean 195; current=max and bounds.
+PASS Brute spawn 2/20: actual HP 184.36340, mean 195; current=max and bounds.
+PASS Brute spawn 2/21: actual HP 177.20600, mean 195; current=max and bounds.
+PASS Brute spawn 2/22: actual HP 184.27830, mean 195; current=max and bounds.
+PASS Brute spawn 2/23: actual HP 195.62870, mean 195; current=max and bounds.
+PASS Brute spawn 2/24: actual HP 206.63530, mean 195; current=max and bounds.
+PASS Brute spawn 2/25: actual HP 207.92650, mean 195; current=max and bounds.
+PASS Brute spawn 2/26: actual HP 186.75500, mean 195; current=max and bounds.
+PASS Brute spawn 2/27: actual HP 176.32410, mean 195; current=max and bounds.
+PASS Brute spawn 2/28: actual HP 182.17660, mean 195; current=max and bounds.
+PASS Brute spawn 2/29: actual HP 199.85240, mean 195; current=max and bounds.
+PASS Brute spawn 2/30: actual HP 201.18630, mean 195; current=max and bounds.
+PASS Brute spawn 2/31: actual HP 177.15830, mean 195; current=max and bounds.
+PASS Spawn sample diverse and mean within 3.5% of authored midpoint.
+PASS Different seed changes actual spawn sequence.
+PASS Explicit scaled spawn rolls once in scaled range; updates do not reroll or randomize outgoing damage.
+PASS Audited Fire/punch/independent kick mean relationships.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 24.74200
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 25.35089
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 27.67850
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 25.98785
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 28.79514
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 27.75332
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 29.03913
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 26.36408
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 26.02408
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 29.00284
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 26.20519
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 28.40824
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 27.35170
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 26.50755
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 26.71098
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 24.71627
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 28.61174
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 25.70425
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 25.02887
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped fire
+PASS Accepted real fire cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS fire in range: 28.45328
+PASS Blast/chain victims derive from shared cast roll.
+PASS fire: n=20, mean=26.92179, intended=27.00000, min=24.71627, max=29.03913; diversity and midpoint within 3.5%.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength punch inside exact authored range.
+PASS Strength punch: n=20, mean=34.89862, intended=35.00000, min=32.03962, max=37.64332; diversity and midpoint within 3.5%.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength combo inside exact authored range.
+PASS Strength combo: n=20, mean=42.01000, intended=41.65000, min=37.65155, max=44.90091; diversity and midpoint within 3.5%.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Strength hurricane inside exact authored range.
+PASS Strength hurricane: n=20, mean=11.86553, intended=11.90000, min=10.89347, max=12.79873; diversity and midpoint within 3.5%.
+PASS Save VECTOR with ice + telekinesis through the loadout API.
+PASS Session equips ice + telekinesis.
+PASS ice selected for LMB (key 1).
+PASS Basic damage test uses legal loadout without Strength.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Paid punch accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic punch inside exact authored range.
+PASS Basic punch: n=20, mean=27.42759, intended=27.50000, min=25.38544, max=29.38808; diversity and midpoint within 3.5%.
+PASS Basic damage test uses legal loadout without Strength.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Reset pending combo via real RMB action.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Start E combo.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Paid combo accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic combo inside exact authored range.
+PASS Basic combo: n=20, mean=37.71609, intended=37.50000, min=35.09997, max=39.45132; diversity and midpoint within 3.5%.
+PASS Basic damage test uses legal loadout without Strength.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Paid hurricane accepted.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Melee impact matches seeded roll after windup.
+PASS Basic hurricane inside exact authored range.
+PASS Basic hurricane: n=20, mean=49.85518, intended=50.00000, min=45.77088, max=53.77617; diversity and midpoint within 3.5%.
+PASS Ice initial doubled; shatter damage/force/particles unchanged.
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 9.16371
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 9.38922
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 10.25130
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 9.62513
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 10.66487
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 10.27901
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 10.75523
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 9.76448
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 9.63855
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 10.74179
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 9.70563
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 10.52157
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 10.13026
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 9.81761
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 9.89296
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 9.15418
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 10.59694
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 9.52009
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 9.26995
+PASS Select equipped ice
+PASS Accepted real ice cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS ice in range: 10.53825
+PASS ice: n=20, mean=9.97104, intended=10.00000, min=9.15418, max=10.75523; diversity and midpoint within 3.5%.
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 38.48756
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 39.43472
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 43.05544
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 40.42554
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 44.79245
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 43.17183
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 45.17198
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 41.01080
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 40.48190
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 45.11553
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 40.76363
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 44.19060
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 42.54709
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 41.23397
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 41.55042
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 38.44754
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 44.50714
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 39.98439
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 38.93380
+PASS Select equipped telekinesis
+PASS Paid real TK grab 45kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 45 in range: 44.26066
+PASS TK 45: n=20, mean=41.87835, intended=42.00000, min=38.44754, max=45.17198; diversity and midpoint within 3.5%.
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 67.35323
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 69.01075
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 75.34702
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 70.74471
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 78.38678
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 75.55070
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 79.05096
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 71.76889
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 70.84333
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 78.95217
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 71.33636
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 77.33354
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 74.45741
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 72.15944
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 72.71323
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 67.28320
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 77.88750
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 69.97267
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 68.13414
+PASS Select equipped telekinesis
+PASS Paid real TK grab 400kg.
+PASS Real TK release.
+PASS Throw launch does not roll before impact.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Mass-derived nerf then one seeded physical impact roll; momentum retained.
+PASS TK 400 in range: 77.45616
+PASS TK 400: n=20, mean=73.28711, intended=73.50000, min=67.28320, max=79.05096; diversity and midpoint within 3.5%.
+PASS Save VECTOR with darkness + lightning through the loadout API.
+PASS Session equips darkness + lightning.
+PASS darkness selected for LMB (key 1).
+PASS New low-direct-damage Darkness identity and current Lightning chain baseline.
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 5.95641
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.10299
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.66334
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.25633
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.93216
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.68136
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.99090
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.34691
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.26506
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.98217
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.30866
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.83902
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.58467
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.38145
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.43042
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 5.95021
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.88801
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.18806
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.02547
+PASS Select equipped darkness
+PASS Accepted real darkness cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS darkness in range: 6.84986
+PASS darkness: n=20, mean=6.48117, intended=6.50000, min=5.95021, max=6.99090; diversity and midpoint within 3.5%.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 40.37895
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 41.37265
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 45.17131
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 42.41217
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 46.99368
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 45.29342
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 47.39186
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 43.02618
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 42.47130
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 47.33263
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 42.76687
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 46.36225
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 44.63797
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 43.26032
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 43.59232
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 40.33696
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 46.69436
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 41.94933
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 40.84711
+PASS Blast/chain victims derive from shared cast roll.
+PASS Select equipped lightning
+PASS Accepted real lightning cast.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS One seeded damage roll at accepted attack boundary.
+PASS lightning in range: 46.43576
+PASS Blast/chain victims derive from shared cast roll.
+PASS lightning: n=20, mean=43.93637, intended=44.06400, min=40.33696, max=47.39186; diversity and midpoint within 3.5%.
+PASS Save VECTOR with laser-eyes + poison through the loadout API.
+PASS Session equips laser-eyes + poison.
+PASS laser-eyes selected for LMB (key 1).
+PASS Laser mean unchanged, drain doubled, Poison mean +25%.
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 38.48756
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 39.43472
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 43.05544
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 40.42554
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 44.79245
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 43.17183
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 45.17198
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 41.01080
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 40.48190
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 45.11553
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 40.76363
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 44.19060
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 42.54709
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 41.23397
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 41.55042
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 38.44754
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 44.50714
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 39.98439
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 38.93380
+PASS Select equipped laser-eyes
+PASS Channel begins.
+PASS Four channel ticks retain the single seeded DPS roll.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Laser DPS in range: 44.26066
+PASS Laser DPS: n=20, mean=41.87835, intended=42.00000, min=38.44754, max=45.17198; diversity and midpoint within 3.5%.
+PASS Select equipped laser-eyes
+PASS Full-energy uptime channel starts.
+PASS Full-energy Laser uptime 1.9225s vs 1.9231s from 64 drain minus real regen; depleted normally.
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Twelve stable ticks total exactly rolled DPS × six seconds, with no rerolls.
+PASS Poison DPS in range: 11.45463
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Twelve stable ticks total exactly rolled DPS × six seconds, with no rerolls.
+PASS Poison DPS in range: 11.73652
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Twelve stable ticks total exactly rolled DPS × six seconds, with no rerolls.
+PASS Poison DPS in range: 12.81412
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 12.03141
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 13.33109
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 12.84876
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 13.44404
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 12.20559
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 12.04819
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 13.42724
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 12.13203
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 13.15196
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 12.66282
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 12.27201
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 12.36620
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 11.44272
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 13.24617
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 11.90012
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 11.58744
+PASS Select equipped poison
+PASS Poison projectile launched.
+PASS Real gameplay damage arrived before timeout.
+PASS Floating label uses actual resolved/aggregated amount and one-decimal formatting.
+PASS Application caches its seeded DPS and tick value.
+PASS Poison DPS in range: 13.17282
+PASS Poison DPS: n=20, mean=12.46379, intended=12.50000, min=11.44272, max=13.44404; diversity and midpoint within 3.5%.
+PASS Select equipped poison
+PASS Seeded poison spread projectile launched.
+PASS Physical projectile reached the source and used the first seeded DPS roll.
+PASS Spread independently rolls original intended DPS, never compounds parent variance; outside control untouched.
+PASS 10000 warmed damage resolutions allocate 0 managed bytes; no helper objects.

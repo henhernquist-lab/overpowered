@@ -1,0 +1,5 @@
+PASS Separate process restores Extreme and the legal Darkness loadout.
+PASS Save VECTOR with darkness + fire through the loadout API.
+PASS Session equips darkness + fire.
+PASS darkness selected for LMB (key 1).
+PASS Reloaded selection launches the actual Extreme Darkness session.

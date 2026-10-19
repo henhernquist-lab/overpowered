@@ -1,0 +1,134 @@
+PASS Save legal darkness loadout through progression.
+PASS Session equips requested primary and secondary.
+PASS Scene lighting director exists for paired day/night captures.
+PASS darkness real equipped cast in third person, day.
+PASS Darkness restrained target has a live pooled body cue.
+PASS Destroyed rooted target returns its restraint lease.
+PASS Previous short-lived power lines clear before the next camera/lighting capture.
+PASS darkness real equipped cast in third person, night.
+PASS Darkness restrained target has a live pooled body cue.
+PASS Destroyed rooted target returns its restraint lease.
+PASS Previous short-lived power lines clear before the next camera/lighting capture.
+PASS Enter first person.
+PASS darkness real equipped cast in first person, day.
+PASS Darkness restrained target has a live pooled body cue.
+PASS Destroyed rooted target returns its restraint lease.
+PASS Previous short-lived power lines clear before the next camera/lighting capture.
+PASS darkness real equipped cast in first person, night.
+PASS Darkness restrained target has a live pooled body cue.
+PASS Destroyed rooted target returns its restraint lease.
+PASS Previous short-lived power lines clear before the next camera/lighting capture.
+PASS Return to third person.
+PASS darkness repeated equipped cast 0 (Darkness activated).
+PASS darkness repeated equipped cast 1 (Darkness activated).
+PASS darkness repeated equipped cast 2 (Darkness activated).
+PASS darkness repeated equipped cast 3 (Darkness activated).
+PASS darkness repeated equipped cast 4 (Darkness activated).
+PASS darkness repeated equipped cast 5 (Darkness activated).
+PASS darkness repeated equipped cast 6 (Darkness activated).
+PASS darkness repeated equipped cast 7 (Darkness activated).
+PASS darkness repeated equipped cast 8 (Darkness activated).
+PASS darkness repeated equipped cast 9 (Darkness activated).
+PASS darkness repeated equipped cast 10 (Darkness activated).
+PASS darkness repeated equipped cast 11 (Darkness activated).
+PASS darkness repeated casts release leases and leave shared resources and fixed pool counts stable.
+PASS Save legal lightning loadout through progression.
+PASS Session equips requested primary and secondary.
+PASS Scene lighting director exists for paired day/night captures.
+PASS lightning real equipped cast in third person, day.
+PASS Lightning primary visual points at the actual first recipient.
+PASS Previous short-lived power lines clear before the next camera/lighting capture.
+PASS lightning real equipped cast in third person, night.
+PASS Lightning primary visual points at the actual first recipient.
+PASS Previous short-lived power lines clear before the next camera/lighting capture.
+PASS Enter first person.
+PASS lightning real equipped cast in first person, day.
+PASS Lightning primary visual points at the actual first recipient.
+PASS Previous short-lived power lines clear before the next camera/lighting capture.
+PASS lightning real equipped cast in first person, night.
+PASS Lightning primary visual points at the actual first recipient.
+PASS Previous short-lived power lines clear before the next camera/lighting capture.
+PASS Return to third person.
+PASS lightning repeated equipped cast 0 (Lightning activated).
+PASS lightning repeated equipped cast 1 (Lightning activated).
+PASS lightning repeated equipped cast 2 (Lightning activated).
+PASS lightning repeated equipped cast 3 (Lightning activated).
+PASS lightning repeated equipped cast 4 (Lightning activated).
+PASS lightning repeated equipped cast 5 (Lightning activated).
+PASS lightning repeated equipped cast 6 (Lightning activated).
+PASS lightning repeated equipped cast 7 (Lightning activated).
+PASS lightning repeated equipped cast 8 (Lightning activated).
+PASS lightning repeated equipped cast 9 (Lightning activated).
+PASS lightning repeated equipped cast 10 (Lightning activated).
+PASS lightning repeated equipped cast 11 (Lightning activated).
+PASS lightning repeated casts release leases and leave shared resources and fixed pool counts stable.
+PASS Save legal poison loadout through progression.
+PASS Session equips requested primary and secondary.
+PASS Scene lighting director exists for paired day/night captures.
+PASS poison real equipped cast in third person, day.
+PASS Poisoned target has a live pooled contamination cue.
+PASS Destroyed poisoned target returns its contamination lease.
+PASS Previous short-lived power lines clear before the next camera/lighting capture.
+PASS poison real equipped cast in third person, night.
+PASS Poisoned target has a live pooled contamination cue.
+PASS Destroyed poisoned target returns its contamination lease.
+PASS Previous short-lived power lines clear before the next camera/lighting capture.
+PASS Enter first person.
+PASS poison real equipped cast in first person, day.
+PASS Poisoned target has a live pooled contamination cue.
+PASS Destroyed poisoned target returns its contamination lease.
+PASS Previous short-lived power lines clear before the next camera/lighting capture.
+PASS poison real equipped cast in first person, night.
+PASS Poisoned target has a live pooled contamination cue.
+PASS Destroyed poisoned target returns its contamination lease.
+PASS Previous short-lived power lines clear before the next camera/lighting capture.
+PASS Return to third person.
+PASS poison repeated equipped cast 0 (Poison activated).
+PASS poison repeated equipped cast 1 (Poison activated).
+PASS poison repeated equipped cast 2 (Poison activated).
+PASS poison repeated equipped cast 3 (Poison activated).
+PASS poison repeated equipped cast 4 (Poison activated).
+PASS poison repeated equipped cast 5 (Poison activated).
+PASS poison repeated equipped cast 6 (Poison activated).
+PASS poison repeated equipped cast 7 (Poison activated).
+PASS poison repeated equipped cast 8 (Poison activated).
+PASS poison repeated equipped cast 9 (Poison activated).
+PASS poison repeated equipped cast 10 (Poison activated).
+PASS poison repeated equipped cast 11 (Poison activated).
+PASS poison repeated casts release leases and leave shared resources and fixed pool counts stable.
+PASS Save legal fire loadout through progression.
+PASS Session equips requested primary and secondary.
+PASS Scene lighting director exists for paired day/night captures.
+PASS Force Field real secondary activation, third person, day.
+PASS Barrier uses the intended view-specific shape.
+PASS Real absorbed damage causes one local hit response.
+PASS Force Field real secondary activation, third person, night.
+PASS Barrier uses the intended view-specific shape.
+PASS Real absorbed damage causes one local hit response.
+PASS Enter first person.
+PASS Force Field real secondary activation, first person, day.
+PASS Barrier uses the intended view-specific shape.
+PASS Real absorbed damage causes one local hit response.
+PASS Force Field real secondary activation, first person, night.
+PASS Barrier uses the intended view-specific shape.
+PASS Real absorbed damage causes one local hit response.
+PASS Return to third person.
+PASS Repeated Force Field activation 0 (Force Field activated).
+PASS Repeated Force Field activation 1 (Force Field activated).
+PASS Repeated Force Field activation 2 (Force Field activated).
+PASS Repeated Force Field activation 3 (Force Field activated).
+PASS Repeated Force Field activation 4 (Force Field activated).
+PASS Repeated Force Field activation 5 (Force Field activated).
+PASS Repeated Force Field activation 6 (Force Field activated).
+PASS Repeated Force Field activation 7 (Force Field activated).
+PASS Repeated Force Field activation 8 (Force Field activated).
+PASS Repeated Force Field activation 9 (Force Field activated).
+PASS Repeated Force Field activation 10 (Force Field activated).
+PASS Repeated Force Field activation 11 (Force Field activated).
+PASS Repeated Force Field hits and raises reuse one shell and shared resources.
+PASS Save legal darkness loadout through progression.
+PASS Session equips requested primary and secondary.
+PASS Scene lighting director exists for paired day/night captures.
+PASS Real city-night Darkness cast roots its aimed target.
+PASS City-night target owns the close restraint in real street lighting.
+PASS City-night sample crossed the brief root into the visible slowed aura state.

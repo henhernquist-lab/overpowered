@@ -1,0 +1,27 @@
+PASS Save VECTOR with ice + darkness through the loadout API.
+PASS Session equips ice + darkness.
+PASS ice selected for LMB (key 1).
+PASS Freeze and root applied.
+PASS Both expire after their 1 s duration (timestamps, nothing to clean up).
+PASS Overlap: the shorter freeze ends, the longer root still holds.
+PASS CONTROL: a second, longer freeze extends (never shortens) the first.
+PASS Real Ice cast freezes a criminal.
+PASS Frozen look shown.
+PASS Killed while frozen: the frozen look restores the original materials.
+PASS Real Darkness cast roots a criminal.
+PASS Root tendrils showing.
+PASS Killed while rooted: the tendril look switches itself off.
+PASS Poison ticking.
+PASS Killed while poisoned: poison stops and spreads once (2 neighbour(s)); a hit on the corpse spreads nothing more.
+PASS The neighbour received a generation-1 poison.
+PASS A poisoned + frozen + rooted NPC despawned (destroyed without dying): no spread, no errors, nothing left behind.
+PASS Paused 1.5 s (real time): no poison ticks (1), no damage, the freeze does not run out.
+PASS CONTROL: resumed, the poison ticks again.
+PASS Save Lightning + Ice attacks with Speed in its legal secondary slot.
+PASS Live session equips Speed on F and Lightning as an attack.
+PASS Speed remains legal to activate from the secondary slot.
+PASS Dash through a frozen and an unfrozen criminal.
+PASS The frozen criminal takes dash + shatter damage and is thawed (freeze consumed).
+PASS CONTROL: the unfrozen criminal takes the plain dash damage.
+PASS Lightning at a frozen, rooted, poisoned criminal.
+PASS Lightning deals its first-arc damage and leaves freeze, root and poison in place (statuses stack independently).

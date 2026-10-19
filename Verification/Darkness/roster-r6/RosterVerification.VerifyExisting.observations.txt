@@ -1,0 +1,6 @@
+MEASURED Darkness before: target 7.000 m/s, control 7.000 m/s.
+MEASURED Darkness slowed: target 1.542 m/s, control 6.960 m/s; agent speed 2.800.
+MEASURED 1 s hold: 1.001 s held, damage 38.14 (expected ~42.0 at 42/s), energy drained 52.12 (expected ~52.1 = drain 64/s - regen 12/s), Heat +0.250.
+MEASURED laser 1280x720 active channel: FPS=210.36 mean=4.754ms whole-frame GC=1998B/frame frames=253 lineRenderers=15->15 particleSystems=8->8 materials=112->112 meshes=1019->1019 beamPool=16->16.
+MEASURED dash: 9.00 m horizontal (data 9 m in 0.18 s), 0.03 m vertical, direction z 9.00.
+MEASURED pull: distance to core 4.18, 5.52, 6.12 -> 0.48, 0.48, 0.32 m.

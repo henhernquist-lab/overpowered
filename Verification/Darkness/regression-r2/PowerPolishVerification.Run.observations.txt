@@ -1,0 +1,6 @@
+MEASURED darkness warm->stress resources: materials 113->113, meshes 1018->1018, objects 4198->4198, renderers 1978->1978, particles 22, pool misses +0, transient line capacity 16.
+MEASURED lightning warm->stress resources: materials 113->113, meshes 1018->1018, objects 4198->4198, renderers 1978->1978, particles 22, pool misses +0, transient line capacity 16.
+MEASURED poison warm->stress resources: materials 113->113, meshes 1020->1020, objects 4259->4259, renderers 2014->2014, particles 22, pool misses +0, transient line capacity 16.
+MEASURED shield warm->stress resources: materials 111->111, meshes 1018->1018, objects 4102->4102, renderers 1891->1891.
+MEASURED city night idle before Darkness: 81.99 FPS, 12.197 ms/frame, 124 frames, 1752 active renderers, 8 particle systems, 109 loaded materials.
+MEASURED same city night with Darkness root active: 72.94 FPS, 13.709 ms/frame, 110 frames, 1757 active renderers, 8 particle systems, 112 loaded materials.

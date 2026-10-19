@@ -1,0 +1,143 @@
+[FEEL] PASS Feel sandbox: runtime COPY of the free-play definition (0 civilians, no police) selected through GameFlow.
+[FEEL] PASS Feel sandbox: session with FeelDirector and the ThirdPersonCamera as the active feel camera.
+[FEEL] PASS Real jump dismisses the mission briefing (the card covers the crosshair).
+[FEEL] PASS FeelDirector reads GameTuning.Feel (the single source of feel values).
+[FEEL] PASS Configured hit pause 60 ms lies in the 50-80 ms band.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (hit pause ON).
+[FEEL] PASS Hit pause started at the impact.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+[FEEL] PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (hit pause ON).
+[FEEL] PASS Hit pause started at the impact.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+[FEEL] PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (hit pause ON).
+[FEEL] PASS Hit pause started at the impact.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+[FEEL] PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (hit pause ON).
+[FEEL] PASS Hit pause started at the impact.
+[FEEL] PASS Crate at rest before the punch (0.003 m/s).
+[FEEL] PASS Real punch (CONTROL: hit pause 0 s on a CLONE of Feel).
+[FEEL] PASS CONTROL: no hit pause (HitPauseSeconds 0 on the clone).
+[FEEL] PASS The first physics step after the impact waited out the pause (75.2, 74.5, 75.9, 74.7 ms) vs the control (14.6, 15.6, 14.3, 14.2 ms).
+[FEEL] PASS Pair 1 (same geometry, |Δrel| 0.00 mm): velocity after the pause == no-pause control (v1 |Δ| 0.0000 m/s of 20.386; v10 |Δ| 0.0000; ratio 1.0000 -> impulse applied once, not lost, not doubled).
+[FEEL] PASS Pair 2 (same geometry, |Δrel| 0.00 mm): velocity after the pause == no-pause control (v1 |Δ| 0.0000 m/s of 20.386; v10 |Δ| 0.0000; ratio 1.0000 -> impulse applied once, not lost, not doubled).
+[FEEL] PASS Pair 3 (same geometry, |Δrel| 0.00 mm): velocity after the pause == no-pause control (v1 |Δ| 0.0000 m/s of 20.386; v10 |Δ| 0.0000; ratio 1.0000 -> impulse applied once, not lost, not doubled).
+[FEEL] PASS Pair 4 (same geometry, |Δrel| 0.00 mm): velocity after the pause == no-pause control (v1 |Δ| 0.0000 m/s of 20.386; v10 |Δ| 0.0000; ratio 1.0000 -> impulse applied once, not lost, not doubled).
+[FEEL] PASS 4 pause/control pairs with identical geometry compared (of 4 pause trials).
+[FEEL] PASS Every trial's crate was really launched (impulse applied).
+[FEEL] PASS Real Super Strength punch accepted (windup 125 ms; force follows the windup).
+[FEEL] PASS Impact classified HEAVY from data: 1350 N·s >= Feel.HeavyImpulse 1000 (HEAVY impact 1350 N·s).
+[FEEL] PASS timeScale 0 at the impact callback (hit pause started in the impact frame 8011).
+[FEEL] PASS Impact cue: exactly one AudioSource plays the punch cue (1).
+[FEEL] PASS Breaking the crate added Heat (Hero side: destruction = Heat, no XP) -> the HUD Heat flash tween started ('+0.35') while still inside the pause.
+[FEEL] PASS Hit pause lasted 60.8 ms real time (configured 60 ms, frame-granular; last frame dt 1.4 ms).
+[FEEL] PASS Measured hit pause 60.8 ms is inside 50-80 ms (+5 ms frame tolerance).
+[FEEL] PASS timeScale restored to its previous value (1).
+[FEEL] PASS FixedUpdate during the pause: 0 steps counted up to restore (the impact frame's own steps may precede the callback).
+[FEEL] PASS Game time frozen through the pause (Time.time advanced 0.000 ms over 36 frames).
+[FEEL] PASS FixedUpdate resumes after the pause (5 steps in 0.1 s).
+[FEEL] PASS HUD Heat-delta tween advances DURING the pause (unscaled): translate y 0.00 -> -0.13 -> -0.23 -> -0.26 -> -0.29 -> -0.32 -> -0.35 -> -0.38 -> -0.41 -> -0.44 -> -0.46 -> -0.49 -> -0.52 -> -0.55 -> -0.57 -> -0.60 -> -0.63 -> -0.65 -> -0.68 -> -0.71 -> -0.73 -> -0.76 -> -0.79 -> -0.82 -> -0.84 -> -0.87 -> -0.89 -> -0.92 -> -0.94 -> -0.97 -> -1.00 -> -1.02 -> -1.05 -> -1.07 -> -1.10 -> -1.12 -> -1.15 px while timeScale was 0.
+[FEEL] PASS Camera FOV kick animates during the pause (unscaled): [2.22,2.18,2.14,2.11,2.07,2.04,2.00,1.97,1.94,1.91,1.87,1.84,1.81,1.78,1.75,1.72,1.69,1.66,1.63,1.60,1.57,1.55,1.52,1.49,1.46,1.44,1.41,1.38,1.35,1.33,1.30,1.28,1.25,1.22,1.20,1.18] deg.
+[FEEL] PASS The punch cue's AudioSource keeps playing through the pause (timeSamples +2805; AudioSources are not timeScale-bound; AudioDirector ties nothing to timeScale).
+[FEEL] PASS The cue fired during the pause is not re-triggered on resume (1 voice).
+[FEEL] PASS Particles: heavy-hit burst + prop-break burst emitted from the pool (bursts 8 -> 10).
+[FEEL] PASS BreakableProp shard logic unchanged: rigidbodies 517 -> 521 (crate removed, 5 shards).
+[FEEL] PASS Heavy hit sent one camera impulse.
+[FEEL] PASS At rest the camera FOV equals Camera.FieldOfView 65.
+[FEEL] PASS Mid-kick render used position rest+offset (0.00,-0.12,-0.09) (|0.145| m) and FOV 67.42 = 65 + 2.42.
+[FEEL] PASS After the render the camera transform and FOV are back at the follow pose (the aim ray and physics never see the kick).
+[FEEL] PASS Crosshair (aim) ray during an active kick is identical before and after the kicked render — gameplay aiming never sees the shake.
+[FEEL] PASS Back to rest after the window: zero offset, FOV exactly Camera.FieldOfView, camera-to-hero offset unchanged (no drift).
+[FEEL] PASS Real heavy punch for the pause-menu CONTROL.
+[FEEL] PASS Inside the hit pause (timeScale 0, TimeArbiter.HitPaused).
+[FEEL] PASS Pause menu opened DURING the hit pause: the hit pause is dropped, the menu holds timeScale 0.
+[FEEL] PASS Still paused 301 ms later (236 frames all timeScale 0): the expired hit pause did NOT unpause the game.
+[FEEL] PASS CONTROL: a heavy impact while paused is refused by the arbiter (timeScale stays 0).
+[FEEL] PASS Unpaused -> timeScale 1 on all 136 frames for 0.2 s (no stale hit-pause restore).
+[FEEL] PASS Real CombatImpact.Blast #1 with Super Strength stats (1350 N·s) hit crate 0 at 0 ms.
+[FEEL] PASS Real CombatImpact.Blast #2 with Super Strength stats (1350 N·s) hit crate 1 at 41 ms.
+[FEEL] PASS Real CombatImpact.Blast #3 with Super Strength stats (1350 N·s) hit crate 2 at 82 ms.
+[FEEL] PASS Real CombatImpact.Blast #4 with Super Strength stats (1350 N·s) hit crate 3 at 124 ms.
+[FEEL] PASS Real CombatImpact.Blast #5 with Super Strength stats (1350 N·s) hit crate 4 at 165 ms.
+[FEEL] PASS 5 heavy hits in 165 ms (< 200 ms): [0, 41, 82, 124, 165] ms.
+[FEEL] PASS Rate limit: ONE hit pause started, 4 refused (Feel.HitPauseMinInterval 0.4 s).
+[FEEL] PASS timeScale restored after the single pause.
+[FEEL] PASS CONTROL: after the min interval a new heavy hit pauses again (the limit is a rate, not a block).
+[FEEL] PASS Rusher contact damage 9 < Feel.HeavyIncomingDamage 15 -> light by data.
+[FEEL] PASS CONTROL light hit (Rusher): no hit pause, no camera impulse; timeScale 1 on all 466 sampled frames.
+[FEEL] PASS Brute contact damage 27 >= Feel.HeavyIncomingDamage 15 -> HEAVY by data.
+[FEEL] PASS Brute slam landing on the player: hit pause + camera impulse (HEAVY incoming 27).
+[FEEL] PASS Inside the hit pause (knockback + idle frames frozen) the hero keeps ground contact [True,True,True] and a backflip input is ACCEPTED (BACKFLIP: 4.2 m backward in 0.90s) — the combat contract 'a shoved player can still backflip' holds through the freeze.
+[FEEL] PASS Real jump (soft landing CONTROL).
+[FEEL] PASS CONTROL soft landing 10.0 m/s < Feel.HardLandingSpeed 14: no impulse, no FOV kick.
+[FEEL] PASS Hard landing 24.1 m/s >= 14: one impulse + FOV kick (scaled x0.7).
+[FEEL] PASS Kick present and bounded: max offset 0.112 m (<= 0.112), max FOV kick 1.75 deg (<= 1.75).
+[FEEL] PASS Back to rest within 220 ms (impulse 220 ms, FOV 200 ms).
+[FEEL] PASS Rest FOV exactly Camera.FieldOfView after the kick.
+[FEEL] PASS 12 bursts from real hits (6) + real breaks (6) (12).
+[FEEL] PASS Pool size constant (8 = Feel.ParticlePoolSize) and no ParticleSystem instantiated per hit (22 -> 22).
+[FEEL] PASS Cartoon FX heavy-impact positive control bursts from a bounded fixed pool.
+[FEEL] PASS Cartoon FX CONTROL creates no active point lights or second camera impulses.
+[FEEL] PASS 0 new Material objects created by the hits/breaks/particles (110 -> 110).
+[FEEL] PASS Slot 0: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Pavement' is a CityMaterials palette instance (reference-equal).
+[FEEL] PASS Slot 1: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Wood' is a CityMaterials palette instance (reference-equal).
+[FEEL] PASS Slot 2: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Wood' is a CityMaterials palette instance (reference-equal).
+[FEEL] PASS Slot 3: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Wood' is a CityMaterials palette instance (reference-equal).
+[FEEL] PASS Slot 4: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Pavement' is a CityMaterials palette instance (reference-equal).
+[FEEL] PASS Slot 5: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Wood' is a CityMaterials palette instance (reference-equal).
+[FEEL] PASS Slot 6: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Amber' is a CityMaterials palette instance (reference-equal).
+[FEEL] PASS Slot 7: Mesh mode, SHARED built-in cube mesh (reference-equal), material 'Palette/Wood' is a CityMaterials palette instance (reference-equal).
+[FEEL] PASS Debris particles alive right after the bursts: 104.
+[FEEL] PASS Cartoon impact capture positive control has a live slot.
+[FEEL] PASS FX FPS positive/negative controls include Cartoon pool ON/OFF.
+[FEEL] PASS FPS A/B really toggled the debris (ON had live particles, OFF had none).
+[FEEL] PASS PlayerProgression.SetLoadout -> fire + ice before the session.
+[FEEL] PASS fire+ice sandbox: runtime COPY of the free-play definition (0 civilians, no police) selected through GameFlow.
+[FEEL] PASS fire+ice sandbox: session with FeelDirector and the ThirdPersonCamera as the active feel camera.
+[FEEL] PASS Real jump dismisses the mission briefing (the card covers the crosshair).
+[FEEL] PASS Session equips fire + ice.
+[FEEL] PASS Crosshair no longer on the hero: the top of the hero's head projects at viewport y 0.428, below the crosshair (0.5).
+[FEEL] PASS Fire Blast selected.
+[FEEL] PASS 5m-yaw0: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+[FEEL] PASS Fire Blast selected.
+[FEEL] PASS 15m-yaw0: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+[FEEL] PASS Fire Blast selected.
+[FEEL] PASS 30m-yaw0: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+[FEEL] PASS Fire Blast selected.
+[FEEL] PASS 15m-yaw30: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+[FEEL] PASS Fire Blast selected.
+[FEEL] PASS 15m-yaw-30: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+[FEEL] PASS Fire Blast selected.
+[FEEL] PASS 15m-yaw20: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+[FEEL] PASS Fire Blast selected.
+[FEEL] PASS 8m-yaw20: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+[FEEL] PASS Fire Blast selected.
+[FEEL] PASS 22m-yaw0: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+[FEEL] PASS Parallax setup: crosshair on a pillar 15 m ahead.
+[FEEL] PASS Parallax case built: the crosshair shows the pillar, the shoulder's line is blocked.
+[FEEL] PASS Fire Blast selected.
+[FEEL] PASS parallax-15m: real Fire Blast cast (PowerUser.Use): Fire Blast activated
+[FEEL] PASS Crosshair meets the street.
+[FEEL] PASS Crosshair now on 'Ice target crate (under crosshair)'.
+[FEEL] PASS Real Ice cast: Ice activated
+[FEEL] PASS Ice froze the crate under the crosshair and not the decoy 2.6 m beside it.
+[FEEL] PASS PlayerProgression.SetLoadout -> telekinesis + fire before the session.
+[FEEL] PASS telekinesis+fire sandbox: runtime COPY of the free-play definition (0 civilians, no police) selected through GameFlow.
+[FEEL] PASS telekinesis+fire sandbox: session with FeelDirector and the ThirdPersonCamera as the active feel camera.
+[FEEL] PASS Real jump dismisses the mission briefing (the card covers the crosshair).
+[FEEL] PASS Session equips telekinesis + fire.
+[FEEL] PASS Crosshair brought onto 'TK crate A' (3 m from 'TK crate B').
+[FEEL] PASS Real Telekinesis cast: Telekinesis activated
+[FEEL] PASS Telekinesis grabbed 'TK crate A' — the crate under the crosshair, not 'TK crate B'.
+[FEEL] PASS Crosshair brought onto 'TK crate B' (3 m from 'TK crate A').
+[FEEL] PASS Real Telekinesis cast: Telekinesis activated
+[FEEL] PASS Telekinesis grabbed 'TK crate B' — the crate under the crosshair, not 'TK crate A' (CONTROL: aim moved to the other crate, selection followed).
