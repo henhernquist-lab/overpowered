@@ -1,0 +1,1 @@
+MEASURED Thermal Shock became ready again 30.00s (game time) after activation; configured 30s.

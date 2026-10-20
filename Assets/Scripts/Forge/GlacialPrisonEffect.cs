@@ -154,6 +154,7 @@ public sealed class GlacialPrisonEffect : SynergyEffect
                 if (npc == null || npc.Dead) continue;
                 LastShatterHits++;
                 npc.Thaw();
+                npc.Unroot();
                 npc.Damage(shatterDamage, r.User, false, d.Force);
                 FeelDirector.Instance?.Particles.Burst(npc.transform.position + Vector3.up * .9f, CityColor.Blue, 8);
             }
@@ -176,6 +177,10 @@ public sealed class GlacialPrisonEffect : SynergyEffect
             npc.transform.position = navHit.position;
             if (npc.Agent != null && npc.Agent.enabled && npc.Agent.isOnNavMesh)
                 npc.Agent.Warp(navHit.position);
+        }
+        else if (npc.Agent == null || !npc.Agent.enabled)
+        {
+            npc.transform.position = desired;
         }
     }
 

@@ -1,0 +1,4 @@
+PASS Separate-process Reload parsed saved progression without error.
+PASS SECOND PROCESS: saved signature selection 'thunderstorm' persisted and resolved for Lightning + Fire.
+PASS Enter Hero mode in second process.
+PASS SECOND PROCESS: gameplay session caches 'thunderstorm' signature from reloaded save.

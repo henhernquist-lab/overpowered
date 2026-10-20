@@ -8,9 +8,11 @@ public sealed class SignatureCatalog : ScriptableObject
     public PowerSynergyDefinition[] Abilities=Array.Empty<PowerSynergyDefinition>();
     [Tooltip("Opt-in only in Editor/development builds. Normal gameplay keeps the existing synergies.")]
     public bool DeveloperPreview;
+    /// Runtime-only flag for automated Play Mode verification so tests never dirty the asset on disk.
+    public static bool VerificationPreview;
     [Tooltip("Shipping activation additionally requires a complete, unique mapping for every primary.")]
     public bool EnableWhenComplete=true;
-    public bool Enabled => (DeveloperPreview&&(Application.isEditor||Debug.isDebugBuild))||(EnableWhenComplete&&Complete);
+    public bool Enabled => ((DeveloperPreview||VerificationPreview)&&(Application.isEditor||Debug.isDebugBuild))||(EnableWhenComplete&&Complete);
     public bool Complete
     {
         get

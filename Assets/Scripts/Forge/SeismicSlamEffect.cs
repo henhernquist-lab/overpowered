@@ -147,6 +147,11 @@ public sealed class SeismicSlamEffect : SynergyEffect
                         if (npc.Agent != null && npc.Agent.enabled && npc.Agent.isOnNavMesh)
                             npc.Agent.Warp(navHit.position);
                     }
+                    else if ((npc.Agent == null || !npc.Agent.enabled) &&
+                             Physics.Raycast(desired + Vector3.up * 1.5f, Vector3.down, out var groundHit, 4f, ~0, QueryTriggerInteraction.Ignore))
+                    {
+                        npc.transform.position = new Vector3(desired.x, groundHit.point.y, desired.z);
+                    }
                 }
                 else
                 {
