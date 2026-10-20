@@ -250,6 +250,11 @@ public sealed partial class GameHud : MonoBehaviour
         slot.SelectedTag.style.color = C(CityColor.UiNavy); slot.SelectedTag.style.backgroundColor = slot.Color; slot.SelectedTag.style.display = DisplayStyle.None; tile.Add(slot.SelectedTag);
         var name = Text(slot.Name.ToUpperInvariant(), 11, C(CityColor.UiMuted)); name.name = "slot-name"; name.style.marginTop = 5; name.style.maxWidth = 118;
         name.style.overflow = Overflow.Hidden; name.style.textOverflow = TextOverflow.Ellipsis; name.style.unityTextAlign = TextAnchor.MiddleCenter; slot.NameLabel = name; container.Add(name);
+        if(slot.Synergy!=null&&slot.Synergy.IsSignature)
+        {
+            slot.StatusLabel=Text("READY",10,C(CityColor.UiInk));slot.StatusLabel.style.whiteSpace=WhiteSpace.Normal;
+            slot.StatusLabel.style.maxWidth=118;slot.StatusLabel.style.unityTextAlign=TextAnchor.MiddleCenter;container.Add(slot.StatusLabel);
+        }
         Slots.Add(slot); return container;
     }
     void SetPips(HudSlot slot, int count)
@@ -291,6 +296,9 @@ public sealed partial class GameHud : MonoBehaviour
             var runner = user.SynergyRunner;
             fraction = runner.Cooldown / Mathf.Max(.001f, slot.Synergy.Cooldown*user.Difficulty.Cooldown);
             bool busy = runner.Busy; slot.Busy = busy;
+            dim=user.Energy<runner.EnergyCost;
+            slot.Tile.tooltip=runner.ReadyState+" — "+runner.Feedback;
+            if(slot.StatusLabel!=null)slot.StatusLabel.text=runner.StatusText;
             float pulse = busy ? .55f + .45f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 9f)) : .55f;
             Border(slot.Tile, Alpha(busy ? C(CityColor.UiInk) : slot.Color, pulse), 2);
         }
@@ -475,7 +483,7 @@ public sealed class HudSlot
 {
     public string Id, Name, KeyText; public PowerRuntime Power; public PowerSynergyDefinition Synergy;
     public MenuGlyph Glyph; public Color Color; public bool Flight;
-    public VisualElement Container, Tile, PipRow, FuelFill; public MenuIcon Icon; public HudRadial Radial; public Label Key, SelectedTag, NameLabel;
+    public VisualElement Container, Tile, PipRow, FuelFill; public MenuIcon Icon; public HudRadial Radial; public Label Key, SelectedTag, NameLabel, StatusLabel;
     public readonly List<VisualElement> Pips = new List<VisualElement>();
     public int LitPips = -1; public float CooldownFraction, FuelFraction; public bool Selected, Dim, Busy;
 }

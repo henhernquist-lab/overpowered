@@ -12,7 +12,12 @@ public sealed class SynergyRunner : MonoBehaviour
     public bool Busy {get;private set;}
     public bool DrivesMotion {get;set;}
     public float Cooldown {get;private set;}
-    public string Feedback {get;private set;}="Ready";
+    string feedback="Ready";float feedbackUntil;
+    public string Feedback {get=>feedback;private set{feedback=value;feedbackUntil=Time.time+2f;}}
+    public string StatusText=>Time.time<feedbackUntil?Feedback:ReadyState;
+    public float EnergyCost=>Definition!=null?Definition.EnergyCost*User.Difficulty.EnergyUsage:0;
+    public float ActivationDamage {get;private set;}
+    public string ReadyState=>Definition==null?"UNAVAILABLE":Busy?"ACTIVE":Cooldown>0?$"COOLDOWN {Cooldown:0.0}s":User.Energy<EnergyCost?"INSUFFICIENT ENERGY":"READY";
     public Vector3 Target;
     public int Impacts {get;private set;}
     public int AffectedBodies {get;private set;}
@@ -48,14 +53,23 @@ public sealed class SynergyRunner : MonoBehaviour
     {
         if(User.OffensiveActionsBlocked){Feedback="Cannot attack while phased";return false;}
         if(!Live){Feedback="Unavailable while paused, in menu or defeated";return false;}
-        if(Busy&&Definition.Effect.Repeat(this))return false;
+        if(Busy&&Definition!=null&&Definition.Effect!=null&&Definition.Effect.Repeat(this))return false;
         if(Busy||User.Hero.BackflipActive){Feedback="Finish the current move";return false;}
         if(Cooldown>0){Feedback="Synergy cooling down";return false;}
         if(Definition==null||Definition.Effect==null){Feedback="No synergy for this pair";return false;}
-        if(!User.IsEquipped(Definition.PowerA)||!User.IsEquipped(Definition.PowerB)){Feedback="Equip both powers";return false;}
+        if(Definition.IsSignature)
+        {
+            var registry=Resources.Load<SignatureCatalog>("SignatureCatalog");
+            if(registry==null||!registry.Eligible(Definition,User.EquippedA,User.EquippedB)||!User.Progression.Owns(Definition.OwnerPrimary))
+            {Feedback="Signature unavailable for this loadout";return false;}
+        }
+        else if(!User.IsEquipped(Definition.PowerA)||!User.IsEquipped(Definition.PowerB)){Feedback="Equip both powers";return false;}
+        if(User.Energy<EnergyCost){Feedback="Insufficient energy";return false;}
         Captive=null;
         if(!Definition.Effect.CanBegin(this)){Feedback="No valid target";return false;}
-        User.Release(false);
+        if(!User.TrySpendEnergy(EnergyCost)){Feedback="Insufficient energy";return false;}
+        User.EndChannel();User.Release(false);
+        ActivationDamage=Definition.IsSignature?User.RollDamage(Definition.Damage*User.HeroStats.PowerDamage):Definition.Damage;
         affected.Clear();suspended.Clear();
         Cooldown=Definition.Cooldown*User.Difficulty.Cooldown;Busy=true;deadline=Time.time+Mathf.Max(8,Definition.Duration+4);
         Feedback=Definition.DisplayName;
@@ -116,7 +130,8 @@ public sealed class SynergyRunner : MonoBehaviour
     public void Impact(Vector3 position,float multiplier=1)
     {
         var d=Definition;LastForce=d.Force*multiplier;
-        AffectedBodies=CombatImpact.Blast(User,position,d.Radius,LastForce,d.Damage*multiplier,.65f,d.BurnSeconds,true);
+        float damage=(d.IsSignature?ActivationDamage:d.Damage)*multiplier;
+        AffectedBodies=CombatImpact.Blast(User,position,d.Radius,LastForce,damage,.65f,d.BurnSeconds,true);
         if(d.BurnSeconds>0)
         {
             int count=Physics.OverlapSphereNonAlloc(position,d.Radius,Hits);

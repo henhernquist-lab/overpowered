@@ -4,6 +4,7 @@ using UnityEngine;
 [Serializable] public sealed class HeroLoadout
 {
     public string HeroId, PowerA, PowerB, SecondaryPower;
+    public string SignatureId, UnresolvedSignatureId;
     public CityColor Primary, Secondary;
 }
 [CreateAssetMenu(menuName="Overpowered/Forge/Catalog and Tuning")]

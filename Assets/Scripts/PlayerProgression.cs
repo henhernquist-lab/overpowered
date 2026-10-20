@@ -104,9 +104,27 @@ public sealed class PlayerProgression : MonoBehaviour
             !forge.AllowedSecondary(hero,utility)||!Owns(a)||!Owns(b)||!Owns(utility))return false;
         // Loadouts are chosen before play; changing a live loadout would reset ongoing resource/ability state.
         if(WorldSession.Instance!=null&&WorldSession.Instance.Progression==this)return false;
-        Data.Loadout=new HeroLoadout{HeroId=hero.Id,PowerA=a.Id,PowerB=b.Id,SecondaryPower=utility.Id,
+        Data.Loadout=new HeroLoadout{SignatureId=Data.Loadout?.SignatureId,UnresolvedSignatureId=Data.Loadout?.UnresolvedSignatureId,HeroId=hero.Id,PowerA=a.Id,PowerB=b.Id,SecondaryPower=utility.Id,
             Primary=forge.ColorOrDefault(primary,hero.Primary),Secondary=forge.ColorOrDefault(secondary,hero.Secondary)};
-        Save();Changed?.Invoke();return true;
+        ValidateSignature();Save();Changed?.Invoke();return true;
+    }
+    public PowerSynergyDefinition EquippedSignature=>Resources.Load<SignatureCatalog>("SignatureCatalog")?.Resolve(Data.Loadout?.SignatureId,EquippedA,EquippedB);
+    public bool SetSignature(string id)
+    {
+        var registry=Resources.Load<SignatureCatalog>("SignatureCatalog");
+        if(registry==null||!registry.Enabled||!Owns(EquippedA)||!Owns(EquippedB)||registry.Resolve(id,EquippedA,EquippedB)==null)return false;
+        if(WorldSession.Instance!=null&&WorldSession.Instance.Progression==this)return false;
+        Data.Loadout.SignatureId=id;Save();Changed?.Invoke();return true;
+    }
+    void ValidateSignature()
+    {
+        var registry=Resources.Load<SignatureCatalog>("SignatureCatalog");
+        if(registry==null||Data.Loadout==null)return;
+        var selected=registry.Resolve(Data.Loadout.SignatureId,EquippedA,EquippedB);
+        if(selected!=null)return;
+        if(!string.IsNullOrEmpty(Data.Loadout.SignatureId))Data.Loadout.UnresolvedSignatureId=Data.Loadout.SignatureId;
+        var restored=registry.Resolve(Data.Loadout.UnresolvedSignatureId,EquippedA,EquippedB);
+        Data.Loadout.SignatureId=(restored??registry.First(EquippedA,EquippedB))?.Id;
     }
     void ValidateLoadout()
     {
@@ -123,9 +141,10 @@ public sealed class PlayerProgression : MonoBehaviour
         var utility=Array.Find(utilities,p=>p.Id==old?.SecondaryPower)??
             Array.Find(utilities,p=>p.Id==old?.PowerA||p.Id==old?.PowerB)??
             Array.Find(utilities,p=>p.Effect is PhaseShiftEffect)??utilities[0];
-        Data.Loadout=new HeroLoadout{HeroId=hero.Id,PowerA=a.Id,PowerB=b.Id,SecondaryPower=utility.Id,
+        Data.Loadout=new HeroLoadout{SignatureId=Data.Loadout?.SignatureId,UnresolvedSignatureId=Data.Loadout?.UnresolvedSignatureId,HeroId=hero.Id,PowerA=a.Id,PowerB=b.Id,SecondaryPower=utility.Id,
             Primary=forge.ColorOrDefault(Data.Loadout?.Primary??hero.Primary,hero.Primary),
             Secondary=forge.ColorOrDefault(Data.Loadout?.Secondary??hero.Secondary,hero.Secondary)};
+        ValidateSignature();
     }
     public void AddXp(int amount) { Grant(amount, false, default, null); }
     /// Same grant as AddXp(amount), additionally telling listeners where it happened and why (HUD "+XP" popups).

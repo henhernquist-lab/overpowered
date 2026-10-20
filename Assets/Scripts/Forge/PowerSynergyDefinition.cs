@@ -6,6 +6,9 @@ public sealed class PowerSynergyDefinition : ScriptableObject
     public string Id, DisplayName;
     [TextArea] public string Description;
     public PowerDefinition PowerA, PowerB;
+    public PowerDefinition OwnerPrimary;
+    public float EnergyCost;
+    public bool IsSignature=>OwnerPrimary!=null;
     public MenuGlyph Icon=MenuGlyph.Star;
     public SynergyEffect Effect;
     public float Cooldown=10, Duration=3, Damage=40, Force=2600, Radius=7, Range=24;

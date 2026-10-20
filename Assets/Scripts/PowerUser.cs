@@ -17,6 +17,11 @@ public sealed class PowerUser : MonoBehaviour
     public PowerRuntime Strength { get; private set; }
     public PowerRuntime Selected { get; private set; }
     public float Energy { get; private set; }
+    public bool TrySpendEnergy(float amount)
+    {
+        if(float.IsNaN(amount)||float.IsInfinity(amount)||amount<0||Energy<amount)return false;
+        Energy-=amount;return true;
+    }
     public string Message = "Ready";
     public event System.Action<PowerDefinition> Activated;
     public Rigidbody HeldBody { get; private set; }
@@ -111,7 +116,7 @@ public sealed class PowerUser : MonoBehaviour
         Forge=Resources.Load<ForgeCatalog>("ForgeCatalog");
         EquippedA=progression.EquippedA;EquippedB=progression.EquippedB;EquippedSecondary=progression.EquippedSecondary;HeroDefinition=progression.SelectedHero;
         Energy = MaxEnergy;
-        Synergy=Forge?.Resolve(EquippedA,EquippedB,EquippedSecondary);
+        ResolveSynergy();
         Selected = Powers.Find(p=>p.Definition==EquippedA)??Strength; progression.Changed += Refresh;
         Refresh();
         var phaseDefinition=System.Array.Find(definitions,d=>d.Effect is PhaseShiftEffect);
@@ -129,6 +134,11 @@ public sealed class PowerUser : MonoBehaviour
         else if (power.Definition.Effect == null || !power.Definition.Effect.IsFlight) { s.Damage *= h.PowerDamage; s.Cooldown *= h.CooldownMultiplier; }
         s.Cooldown *= Difficulty.Cooldown;
         return s;
+    }
+    public void ResolveSynergy()
+    {
+        var signatures=Resources.Load<SignatureCatalog>("SignatureCatalog");
+        Synergy=signatures!=null&&signatures.Enabled?Progression.EquippedSignature:Forge?.Resolve(EquippedA,EquippedB,EquippedSecondary);
     }
     void Refresh()
     {
