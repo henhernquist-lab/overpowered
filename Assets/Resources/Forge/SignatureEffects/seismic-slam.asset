@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a147b0589c124d96857f013904c2e102, type: 3}
+  m_Name: seismic-slam
+  m_EditorClassIdentifier: Assembly-CSharp::SeismicSlamEffect
+  MaxStartHeight: 2.2
+  WaveSeconds: 0.38
+  InnerFullDamageFraction: 0.5
+  OuterDamageFraction: 0.68
+  MaxVerticalOffset: 3
+  StandardStaggerSeconds: 1.15
+  BruteStaggerSeconds: 0.55
+  StandardPushDistance: 2.6
+  BrutePushDistance: 1.05

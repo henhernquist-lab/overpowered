@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6439bcadf27604138888fd7ef6af365c, type: 3}
+  m_Name: seismic-slam
+  m_EditorClassIdentifier: Assembly-CSharp::PowerSynergyDefinition
+  Id: seismic-slam
+  DisplayName: Seismic Slam
+  Description: Smash the ground to unleash an expanding seismic shockwave that damages and staggers nearby enemies.
+  PowerA: {fileID: 0}
+  PowerB: {fileID: 0}
+  OwnerPrimary: {fileID: 11400000, guid: cf8bf79c81570416f835a3043495579d, type: 2}
+  EnergyCost: 25
+  Icon: 3
+  Effect: {fileID: 11400000, guid: a147b0589c124d96857f013904c2e201, type: 2}
+  Cooldown: 22
+  Duration: 0.4
+  Damage: 52
+  Force: 1500
+  Radius: 8.5
+  Range: 8.5
+  LiftSpeed: 14
+  LiftSeconds: 0.2
+  DiveSpeed: 38
+  FreezeSeconds: 1.15
+  MaxMass: 500
+  OrbitRadius: 2.8
+  Spring: 35
+  Damping: 10
+  LaunchInterval: 0.15
+  BonusMultiplier: 1.7
+  MeleeMultiplier: 1.65
+  BurnSeconds: 0
+  MaxTargets: 6
+  Primary: 9
+  Secondary: 2

@@ -5,6 +5,8 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_Script: {fileID: 11500000, guid: 639afffe7173475990152343a9d0de2c, type: 3}
   m_Name: SignatureCatalog
-  Abilities: []
+  Abilities:
+  - {fileID: 11400000, guid: a147b0589c124d96857f013904c2e301, type: 2}
+  - {fileID: 11400000, guid: a147b0589c124d96857f013904c2e302, type: 2}
   DeveloperPreview: 0
   EnableWhenComplete: 1

@@ -184,6 +184,7 @@ public sealed class SynergyRunner : MonoBehaviour
         if(User!=null)User.Hero.ResetMotion();
         if(view!=null&&fovUntil>0)view.fieldOfView=baseFov;
         PowerVfx.Instance?.HideBeam();   // a beam synergy (Solar Flare / Eclipse Beam) cut short must not leave its beam drawn
+        SignatureVfx.Existing?.HideAll();
         fovUntil=0;
     }
     void OnDisable(){Cancel();}
