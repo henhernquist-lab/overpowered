@@ -8,5 +8,7 @@ MonoBehaviour:
   Abilities:
   - {fileID: 11400000, guid: a147b0589c124d96857f013904c2e301, type: 2}
   - {fileID: 11400000, guid: a147b0589c124d96857f013904c2e302, type: 2}
+  - {fileID: 11400000, guid: a147b0589c124d96857f013904c2e303, type: 2}
+  - {fileID: 11400000, guid: a147b0589c124d96857f013904c2e304, type: 2}
   DeveloperPreview: 0
   EnableWhenComplete: 1
