@@ -224,6 +224,7 @@ public sealed partial class GameHud
         bool free = !w.MenuOpen && !w.PlayerDead && (w.Mode == null || !w.Mode.Paused);
         UpdateAlert(w, accent, now, free && !briefingActive && BannerIdle);   // never over a banner; queued banners go first
         UpdateFeedback(now, accent, free);
+        UpdateParkourHud(w, now, free && !briefingActive && !GameHud.Shown(Briefing));
         UpdateWaypoint(w, accent, objectives && free && !briefingActive && !GameHud.Shown(Briefing));
         UpdatePrompts(w, accent, now, free && !briefingActive && !GameHud.Shown(Briefing));
     }
@@ -406,7 +407,7 @@ public sealed partial class GameHud
         }
         return point;
     }
-    IEnumerable<VisualElement> AvoidList() { yield return LevelGroup; yield return HeatGroup; yield return TopCentre; yield return VitalsGroup; yield return BottomStack; yield return AlertCard; yield return PromptCard; yield return Banner; }
+    IEnumerable<VisualElement> AvoidList() { yield return LevelGroup; yield return HeatGroup; yield return TopCentre; yield return VitalsGroup; yield return BottomStack; yield return AlertCard; yield return PromptCard; yield return Banner; if (ParkourCard != null) yield return ParkourCard; }
     /// Horizontal direction to a world point relative to the camera heading (degrees clockwise, 0 = ahead).
     public static float HeadingBearing(Camera cam, Vector3 from, Vector3 world)
     {
