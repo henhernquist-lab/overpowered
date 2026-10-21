@@ -37,3 +37,9 @@ Defense is opt-in EnemyArchetype.Guard data. The central CityNpc.Damage operatio
 Damage accepts an optional world hit origin; the shared CombatImpact area path supplies its blast origin. Existing direct/deferred callers fall back to the attacker's current capsule centre. This deliberately avoids changing each power. Poison/beam ticks still do damage, spend guard integrity and use normal resolved events; no categorical immunity. Indirect callers without an explicit origin use the fallback (not a full ballistic hit-normal model). NpcDamageResult adds DamageBeforeGuard and GuardAbsorbed; ResolvedDamage/HealthLost, usage, health bars and floating numbers share the final reduced value.
 
 Guard runtime controls cover front/side/rear, resolved-event count, heavy impulse, finite rearm, root/freeze, telegraphed bash, recovery and death. Static runtime/Editor assembly compilation passes; Unity execution is pending the exclusive slot.
+
+## Waves
+
+Only Endless Fight Hero and Endless Fight Villain have a round director. Both share EndlessWaves. Their smooth weighted round-robin table is Rusher from 1 (weight 3), Gunner from 2 (2), Brute from 3 (1), Skirmisher from 3 (2), Bulwark from 5 (1). Existing size, 12-alive cap, reinforcement, spawn validity, faction selection, kill accounting and health/damage escalation formulas are unchanged. The new definitions participate in the existing data table; no new round code, mode switches or miniboss/event enabling.
+
+Hero/Villain campaign modes remain encounter-based. Free Play still has a null director, no automatic waves, and unchanged manual/debug spawning. CombatLabVerification checks eligibility, both side roles, once-only stat composition, unchanged non-round modes and capped targets. ModeExpansionVerification's live-wave roster assertion now expects five definitions; its existing real kill/reinforcement/wave advancement controls remain in place.

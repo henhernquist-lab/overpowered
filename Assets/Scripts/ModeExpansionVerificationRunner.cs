@@ -385,7 +385,7 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         Check(waves!=null&&endless.Director==waves&&endlessVillain.Director==waves,"endless-fight and endless-fight-villain reference the ONE Resources/ModeDirectors/EndlessWaves asset.");
         Check(endless.Side==PlayerSide.Hero&&endlessVillain.Side==PlayerSide.Villain&&endless.Results==ResultsLayout.Survival&&endless.DefeatLimit==1&&endless.Civilians==0&&!endless.SpawnPolice,"Endless definitions are pure data: Survival layout, DefeatLimit 1, 0 civilians, no police.");
         var roster=Resources.LoadAll<EnemyArchetype>("Enemies");
-        Check(waves.Composition.Length==3&&waves.Composition.All(c=>c.Archetype!=null&&roster.Contains(c.Archetype))&&waves.Composition.Select(c=>c.Archetype.name).SequenceEqual(new[]{"Rusher","Gunner","Brute"}),
+        Check(waves.Composition.Length==5&&waves.Composition.All(c=>c.Archetype!=null&&roster.Contains(c.Archetype))&&waves.Composition.Select(c=>c.Archetype.name).SequenceEqual(new[]{"Rusher","Gunner","Brute","Skirmisher","Bulwark"}),
             "EndlessWaves composition references current roster assets: "+string.Join(", ",waves.Composition.Select(c=>$"{c.Archetype.name} from wave {c.FromWave} weight {c.Weight}"))+"; roster: "+string.Join(", ",roster.Select(r=>r.name))+".");
         Submit(ui.ModeButtons["endless-fight"]);yield return Scene(GameFlow.CityScene);
         var session=W.Mode;var s=State;
@@ -431,7 +431,7 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         yield return ContactHit("Wave 5 contact damage (3 Heat stars active)");
         yield return ClearWave();yield return StartNextWave();
         // Phase 4 audit: late representative wave. From wave 6 on every wave is held at MaxAlive, so this is the steady
-        // late-game crowd (full Rusher/Gunner/Brute mix); only per-enemy health/damage keep scaling.
+        // late-game crowd (full five-archetype mix); only per-enemy health/damage keep scaling.
         Sample("WAVE 6");var t6=new Timing();yield return MeasureFps("Endless wave 6 MaxAlive",t6);
         Log($"FPS LATE WAVE gameplay camera: wave 6 ({t6.Humanoids} humanoids, {State.Alive.Count} alive = MaxAlive {waves.MaxAlive}) {t6.Fps:F2} FPS, mean {t6.Mean:F2}ms, p95 {t6.P95:F2}ms, skinning {t6.Skinning:F3}ms.");
         Check(!W.PlayerDead&&!session.Ended,"Late-wave FPS sample leaves the run alive (heal fixture).");

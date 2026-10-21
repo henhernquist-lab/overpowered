@@ -59,6 +59,7 @@ public sealed partial class CombatLabVerificationRunner : MonoBehaviour
         W.Powers.TrySpendEnergy(10);Check(W.Powers.RestorePracticeEnergy()&&Mathf.Approximately(W.Powers.Energy,W.Powers.MaxEnergy),"Restore energy");
         W.AddHeat(5);W.Progression.AddXp(100);W.Progression.MarkHintSeen("lab-only");W.Progression.SetFirstPerson(true);W.Progression.Save();
         Check(W.Heat==0&&File.ReadAllText(source)==before,"Practice actions cannot write snapshot source or Heat");
+        VerifyWaveData();
         yield return VerifySkirmisher();
         Lab.Clear();yield return null;
         yield return VerifyBulwark();
