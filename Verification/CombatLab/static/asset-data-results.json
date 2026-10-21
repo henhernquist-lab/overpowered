@@ -1,0 +1,6 @@
+{
+  "passes": 80,
+  "failures": 0,
+  "scope": "static data/topology and baseline byte comparisons only",
+  "unity_import_verified": false
+}

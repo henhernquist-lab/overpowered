@@ -40,11 +40,11 @@ public sealed partial class CityNpc
         if(!GuardRaised||!origin.HasValue)return damage;
         var c=GetComponent<CapsuleCollider>();Vector3 from=origin.Value-(transform.position+Vector3.up*c.height*.5f);
         // Include elevation: the shield is a forward surface, not an overhead dome.
-        if(from.sqrMagnitude<.001f||Vector3.Dot(transform.forward,from.normalized)<Mathf.Cos(Mathf.Clamp(g.ArcDegrees,20,160)*.5f*Mathf.Deg2Rad))return damage;
+        if(from.sqrMagnitude<.001f||!EnemyGuardMath.InArc(Vector3.Dot(transform.forward,from.normalized),g.ArcDegrees))return damage;
         if(guardRefillPending){guardIntegrity=Mathf.Max(1,g.Capacity);guardRefillPending=false;}
-        float absorbed=damage*Mathf.Clamp(g.DamageReduction,.05f,.9f);
-        guardIntegrity-=absorbed;GuardHits++;GuardHitAt=Time.time;
-        if(guardIntegrity<=0){DisruptGuard(Mathf.Max(.25f,g.BreakSeconds));return damage;}
-        return damage-absorbed;
+        float resolved=EnemyGuardMath.Block(damage,g.DamageReduction,ref guardIntegrity,out bool broken);
+        GuardHits++;GuardHitAt=Time.time;
+        if(broken)DisruptGuard(Mathf.Max(.25f,g.BreakSeconds));
+        return resolved;
     }
 }

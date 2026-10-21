@@ -169,3 +169,10 @@ Verification/PhaseShift/save-path.txt
 
 # Final signature verification uses isolated process-local saves.
 /Verification/FinalSignatures/saves/
+
+# Combat Lab verification: isolated snapshots and compiler intermediates.
+/Verification/CombatLab/saves/
+/Verification/CombatLab/static/*.rsp
+/Verification/CombatLab/static/*.dll
+/Verification/CombatLab/static/*.pdb
+/Verification/CombatLab/static/*.runtimeconfig.json

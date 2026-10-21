@@ -100,7 +100,7 @@ public sealed class CombatLab : MonoBehaviour
     {
         Owned.RemoveAll(n=>n==null);
         // Bound corpses as well as living actors; clearing never awards a defeat.
-        for(int i=Owned.Count-1;i>=0;i--)if(Owned[i].Dead){Destroy(Owned[i].gameObject);Owned.RemoveAt(i);}
+        for(int i=Owned.Count-1;i>=0;i--)if(Owned[i].Dead){Owned[i].gameObject.SetActive(false);Destroy(Owned[i].gameObject);Owned.RemoveAt(i);}
         if(Owned.Count>=Mathf.Clamp(Settings.MaxEnemies,1,24)){Feedback="Enemy cap reached. Clear or defeat an enemy.";return null;}
         if(Settings.Archetypes.Length==0)return null;
         for(int i=0;i<24;i++)

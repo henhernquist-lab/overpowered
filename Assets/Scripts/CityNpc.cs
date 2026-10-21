@@ -174,8 +174,11 @@ public sealed partial class CityNpc : MonoBehaviour
         if (Dead || amount <= 0f) return;
         if(source!=null)amount=source.ResolveDamage(amount);
         float beforeGuard=amount;
-        Vector3? origin=hitOrigin??(source!=null?(Vector3?)(source.transform.position+Vector3.up*world.Tuning.Movement.Height*.5f):null);
-        amount=ResolveGuardDamage(amount,origin,impactImpulse);
+        if(HasGuard)
+        {
+            Vector3? origin=hitOrigin??(source!=null?(Vector3?)(source.transform.position+Vector3.up*world.Tuning.Movement.Height*.5f):null);
+            amount=ResolveGuardDamage(amount,origin,impactImpulse);
+        }
         LastImpactImpulse=impactImpulse;
         float before = Health;
         Health = Mathf.Max(0f, Health-amount);

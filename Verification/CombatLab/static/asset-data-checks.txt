@@ -1,0 +1,80 @@
+PASS authored wave unlocks and weights match requested progression
+PASS Skirmisher present only from wave 3: 1
+PASS Bulwark present only from wave 5: 1
+PASS bounded initial mix keeps every eligible type: wave 1
+PASS Skirmisher present only from wave 3: 2
+PASS Bulwark present only from wave 5: 2
+PASS bounded initial mix keeps every eligible type: wave 2
+PASS Skirmisher present only from wave 3: 3
+PASS Bulwark present only from wave 5: 3
+PASS bounded initial mix keeps every eligible type: wave 3
+PASS Skirmisher present only from wave 3: 4
+PASS Bulwark present only from wave 5: 4
+PASS bounded initial mix keeps every eligible type: wave 4
+PASS Skirmisher present only from wave 3: 5
+PASS Bulwark present only from wave 5: 5
+PASS bounded initial mix keeps every eligible type: wave 5
+PASS Skirmisher present only from wave 3: 6
+PASS Bulwark present only from wave 5: 6
+PASS bounded initial mix keeps every eligible type: wave 6
+PASS Skirmisher present only from wave 3: 7
+PASS Bulwark present only from wave 5: 7
+PASS bounded initial mix keeps every eligible type: wave 7
+PASS Skirmisher present only from wave 3: 8
+PASS Bulwark present only from wave 5: 8
+PASS bounded initial mix keeps every eligible type: wave 8
+PASS Skirmisher present only from wave 3: 9
+PASS Bulwark present only from wave 5: 9
+PASS bounded initial mix keeps every eligible type: wave 9
+PASS Skirmisher present only from wave 3: 10
+PASS Bulwark present only from wave 5: 10
+PASS bounded initial mix keeps every eligible type: wave 10
+PASS Skirmisher present only from wave 3: 11
+PASS Bulwark present only from wave 5: 11
+PASS bounded initial mix keeps every eligible type: wave 11
+PASS Skirmisher present only from wave 3: 12
+PASS Bulwark present only from wave 5: 12
+PASS bounded initial mix keeps every eligible type: wave 12
+PASS lab registers Rusher
+PASS lab registers Gunner
+PASS lab registers Brute
+PASS lab registers Skirmisher
+PASS lab registers Bulwark
+PASS no round director added to hero
+PASS no round director added to villain
+PASS no round director added to free-play
+PASS shared expanded director in endless-fight
+PASS shared expanded director in endless-fight-villain
+PASS 12-alive cap and disabled milestone/miniboss events preserved
+PASS Skirmisher asset references authoritative archetype script
+PASS Bulwark asset references authoritative archetype script
+PASS lab settings reference correct script
+PASS lab scene GUID registered for reliable reset
+PASS lab UXML is well-formed with unique control names (not a Unity import test)
+PASS lab control authored: toggle
+PASS lab control authored: enemy
+PASS lab control authored: one
+PASS lab control authored: group
+PASS lab control authored: clear
+PASS lab control authored: health
+PASS lab control authored: energy
+PASS lab control authored: difficulty
+PASS lab control authored: reset
+PASS lab control authored: exit
+PASS lab control authored: status
+PASS lab control authored: feedback
+PASS unsupported web CSS absent: gap:
+PASS unsupported web CSS absent: box-shadow:
+PASS unsupported web CSS absent: z-index:
+PASS unsupported web CSS absent: linear-gradient(
+PASS unsupported web CSS absent: style=
+PASS baseline preserved byte-for-byte: Assets/Resources/Powers
+PASS baseline preserved byte-for-byte: Assets/Resources/Forge/Signatures
+PASS baseline preserved byte-for-byte: Assets/Scripts/Forge
+PASS baseline preserved byte-for-byte: Assets/Scripts/SuperHeroController.cs
+PASS baseline preserved byte-for-byte: Assets/Scripts/CityDistrict.cs
+PASS baseline preserved byte-for-byte: Assets/Scripts/EndlessWaveDirector.cs
+PASS baseline preserved byte-for-byte: Assets/Resources/HumanoidAnimationTuning.asset
+PASS no new enemy mesh/material allocation: Assets/Scripts/CombatLab/EnemyEquipment.cs
+PASS no new enemy mesh/material allocation: Assets/Scripts/CombatLab/CityNpc.Evasion.cs
+PASS no new enemy mesh/material allocation: Assets/Scripts/CombatLab/CityNpc.Guard.cs

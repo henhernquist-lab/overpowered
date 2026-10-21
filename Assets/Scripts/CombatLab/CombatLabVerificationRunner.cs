@@ -7,7 +7,10 @@ using UnityEngine;
 
 public sealed partial class CombatLabVerificationRunner : MonoBehaviour
 {
-    public Action<int> Finished;
+    public Action<int> Finished;public bool Matrix,Reload;string runtimeError;
+    void OnEnable(){Application.logMessageReceived+=Logged;}
+    void OnDisable(){Application.logMessageReceived-=Logged;}
+    void Logged(string text,string trace,LogType type){if(type==LogType.Exception||type==LogType.Error)runtimeError=text+"\n"+trace;}
     readonly List<string> lines=new List<string>();int failures;
     CombatLab Lab=>CombatLab.Active;
     WorldSession W=>Lab.World;
@@ -15,14 +18,29 @@ public sealed partial class CombatLabVerificationRunner : MonoBehaviour
     IEnumerator Start()
     {
         yield return null;yield return null;
-        var routine=Run();
-        while(true)
+        var stack=new Stack<IEnumerator>();stack.Push(Matrix?PowerMatrix():Reload?ReloadChecks():Run());
+        while(stack.Count>0)
         {
-            bool next;try{next=routine.MoveNext();}catch(Exception e){Check(false,e.ToString());break;}
-            if(!next)break;yield return routine.Current;
+            bool next=false;object yielded=null;
+            try{if(runtimeError!=null)throw new Exception(runtimeError);next=stack.Peek().MoveNext();if(next)yielded=stack.Peek().Current;}
+            catch(Exception e){Check(false,e.ToString());break;}
+            if(!next){(stack.Pop() as IDisposable)?.Dispose();continue;}
+            if(yielded is IEnumerator nested)stack.Push(nested);else yield return yielded;
         }
-        Directory.CreateDirectory("Verification/CombatLab");File.WriteAllLines("Verification/CombatLab/combat-lab.txt",lines);
+        while(stack.Count>0)(stack.Pop() as IDisposable)?.Dispose();
+        Directory.CreateDirectory("Verification/CombatLab");File.WriteAllLines("Verification/CombatLab/"+(Matrix?"power-matrix.txt":Reload?"reload.txt":"combat-lab.txt"),lines);
         Debug.Log($"Combat Lab verification: {lines.Count-failures} PASS, {failures} FAIL");Finished?.Invoke(failures==0?0:1);
+    }
+    IEnumerator ReloadChecks()
+    {
+        string source=WorldSession.VerificationSavePath;string before=File.ReadAllText(source);
+        var saved=JsonUtility.FromJson<ProgressSave>(before);
+        Check(W.IsPractice&&W.Progression.SavePath==null,"Separate-process reload remains transient");
+        Check(W.Progression.Data.Level==saved.Level&&W.Progression.Data.Xp==saved.Xp&&!W.Progression.HintSeen("lab-only")&&W.Progression.Data.FirstPerson==saved.FirstPerson,"Practice XP/hints/view do not survive process reload");
+        W.Progression.AddXp(500);W.Progression.Save();
+        Check(File.ReadAllText(source)==before,"Separate-process practice actions still cannot write source");
+        Check(W.Mode==null&&W.Npcs.Count==0&&W.Heat==0,"Reload starts clean without mode, automatic spawns or Heat");
+        yield return null;
     }
     IEnumerator Run()
     {

@@ -1,4 +1,4 @@
-.lab-root { position: absolute; left: 0; right: 0; top: 0; bottom: 0; -unity-font: resource("LegacyRuntime.ttf"); color: rgb(245,245,232); }
+.lab-root { position: absolute; left: 0; right: 0; top: 0; bottom: 0; color: rgb(245,245,232); }
 .lab-toggle { position: absolute; right: 28px; top: 28px; height: 36px; background-color: rgb(24,27,59); color: rgb(245,245,232); }
 .lab-controls { position: absolute; right: 28px; top: 74px; width: 410px; max-height: 720px; padding: 18px; background-color: rgba(11,14,36,0.97); border-width: 2px; border-color: rgb(31,199,255); border-radius: 12px; }
 .lab-heading { font-size: 18px; -unity-font-style: bold; white-space: normal; margin-bottom: 8px; }
