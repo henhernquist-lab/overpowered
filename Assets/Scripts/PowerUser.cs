@@ -22,6 +22,12 @@ public sealed class PowerUser : MonoBehaviour
         if(float.IsNaN(amount)||float.IsInfinity(amount)||amount<0||Energy<amount)return false;
         Energy-=amount;return true;
     }
+    public bool RestorePracticeEnergy()
+    {
+        var world=WorldSession.Instance;
+        if(world==null||!world.IsPractice||world.Powers!=this)return false;
+        Energy=MaxEnergy; return true;
+    }
     public string Message = "Ready";
     public event System.Action<PowerDefinition> Activated;
     public Rigidbody HeldBody { get; private set; }

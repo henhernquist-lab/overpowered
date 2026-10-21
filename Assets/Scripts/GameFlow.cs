@@ -35,6 +35,7 @@ public sealed class GameFlow : MonoBehaviour
     void SceneReady(Scene scene,LoadSceneMode mode)
     {
         Loading=false; Time.timeScale=1f;
+        if(scene.name==CombatLab.SceneName) { CombatLab.Build(); return; }
         if(scene.name==CityScene)
         {
             if(ActiveMode==null&&!VerificationSandbox) { Home(); return; }

@@ -80,6 +80,14 @@ public sealed class PlayerProgression : MonoBehaviour
         SavePath = path ?? Path.Combine(Application.persistentDataPath, settings.SaveFilename);
         Load();
     }
+    /// Practice uses a deep copy and no save path. Reading a snapshot never repairs or writes the source file.
+    public void InitializeTransient(ProgressionSettings settings, PowerDefinition[] powers, ProgressSave snapshot = null, string snapshotPath = null)
+    {
+        config = settings; definitions = powers; SavePath = null;
+        var loaded = snapshot ?? Read(snapshotPath, out _);
+        Data = Repair(loaded != null ? JsonUtility.FromJson<ProgressSave>(JsonUtility.ToJson(loaded)) : new ProgressSave());
+        NormalizeLoadedData();
+    }
     /// Called for every power every frame (PowerUser.Stats): a plain loop, no per-call closure.
     public int Tier(PowerDefinition definition) { var powers = Data.Powers; string id = definition.Id; for (int i = 0; i < powers.Count; i++) if (powers[i].Id == id) return powers[i].Tier; return -1; }
     public bool Owns(PowerDefinition definition) => Tier(definition) >= 0;
@@ -288,6 +296,10 @@ public sealed class PlayerProgression : MonoBehaviour
             else if (RecoveredFrom != null) Debug.LogWarning("Progression recovered from " + RecoveredFrom + (error != null ? " (save unreadable: " + error + ")" : " (save missing)"));
         }
         if (loaded != null) Data = Repair(loaded);
+        NormalizeLoadedData();
+    }
+    void NormalizeLoadedData()
+    {
         Data.DifficultyId=DifficultyDefinition.Resolve(Data.DifficultyId)?.Id??"normal";
         foreach (var d in definitions)
             if (d.InitiallyUnlocked && !Owns(d)) Data.Powers.Add(new PowerOwnership { Id = d.Id });
