@@ -36,6 +36,9 @@ public sealed class EnemyArchetype : ScriptableObject
     [Tooltip("Uniform scale of the VISUAL root only; collider and NavMeshAgent dimensions follow it. Never the physics root.")] public float VisualScale=1f;
     [Tooltip("Palette colour of the joints mesh (body colour still comes from the role).")] public CityColor Accent=CityColor.Metal;
 
+    [Header("Optional evasive melee (disabled preserves the original attack cycle)")]
+    public EnemyEvasionSettings Evasion = new EnemyEvasionSettings();
+
     void OnValidate()
     {
         MoveSpeed=Mathf.Max(.1f,MoveSpeed);HealthMultiplier=Mathf.Max(.01f,HealthMultiplier);DamageMultiplier=Mathf.Max(0,DamageMultiplier);

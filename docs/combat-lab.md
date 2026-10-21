@@ -19,3 +19,11 @@ Tuning: Resources/CombatLabSettings.asset; 72 m arena, 13 m spawn ring, 6 m mini
 ## Verification log
 
 Foundation: both runtime and Editor C# assemblies compiled with the installed Unity Roslyn compiler, using references from the original checkout's existing Library. No Editor process was launched for this check. Three existing serialization/API analyzer warnings remain. Import, UI rendering, gameplay and human feel are not established by a static compilation. Unity slot coordination is pending.
+
+## Skirmisher
+
+Evasive melee is opt-in data on EnemyArchetype, not a role or power-ID switch. Skirmisher uses 7.8 m/s approach, 0.75x base health, 0.6x attack damage, 0.38 s first windup, two strikes with 0.26 s followup windup, 1.4 s final recovery. The existing token stays held across the bounded burst.
+
+Dodge/dash: 4.5 s cooldown, 0.22 s visor tell, at most 2.2 m lateral / 3 m forward, 0.32 s travel and 0.6 s stationary recovery; 1.8 m post-burst retreat. Destination, straight NavMesh lane, capsule clearance and complete path are checked before moving and again after the tell. NavMeshAgent owns movement; no warp, invulnerability or disabled colliders. Ice/death/pause/suspension cancel movement and pending burst; Darkness root cancels movement while preserving the existing rooted-attack contract. A shared mannequin rig plus shared helmet/visor/shoulder pieces supplies the silhouette.
+
+`CombatLabVerification.Run` now contains runtime controls for original/new spawns, resolved event/death cardinality, spawn cap, clear ownership, transient saves, restoration, reset and finite vulnerable evasion. These controls are prepared and compile; they have not yet been executed in Unity.

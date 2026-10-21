@@ -26,7 +26,7 @@ public readonly struct NpcDamageResult
         MaxHealth=target.MaxHealth; WorldPosition=worldPosition; Time=UnityEngine.Time.time;
     }
 }
-public sealed class CityNpc : MonoBehaviour
+public sealed partial class CityNpc : MonoBehaviour
 {
     public NpcRole Role { get; private set; }
     /// Behaviour data (null for civilians). Role decides hostility/colour; the archetype decides movement and attack.
@@ -95,7 +95,7 @@ public sealed class CityNpc : MonoBehaviour
     /// Raised once a new NPC and its presentation are in the world, so listeners (audio) can track it immediately.
     public static event System.Action<CityNpc> Spawned;
     public AttackPhase Phase { get; private set; }
-    public float WindupSeconds => Archetype != null ? Archetype.WindupSeconds : 0f;
+    public float WindupSeconds => Archetype != null ? (burstIndex>0&&Evasive ? Archetype.Evasion.BurstWindup : Archetype.WindupSeconds) : 0f;
     public float WindupStartTime { get; private set; } = -1f;
     public int WindupStartFrame { get; private set; } = -1;
     public float LastReleaseTime { get; private set; } = -1f;
@@ -140,6 +140,7 @@ public sealed class CityNpc : MonoBehaviour
         npc.circleSign=(npc.GetEntityId().GetHashCode()&1)==0?1:-1; npc.combatSpeed=archetype!=null?archetype.MoveSpeed:c.CopSpeed;
         npc.animationTuning=HumanoidPresentation.Create(root,c.Height,null,npc).Tuning;
         npc.Walker=RouteWalker.For(npc, world, role);   // Phase 8 routes
+        npc.InitializeTactics();
         world.Npcs.Add(npc); Spawned?.Invoke(npc); return npc;
     }
     public void Alarm(Vector3 position) { alarm=position; fleeUntil=Time.time+world.Tuning.Npcs.FleeSeconds; nextPath=0; }
@@ -194,7 +195,7 @@ public sealed class CityNpc : MonoBehaviour
         var c=world.Tuning.Npcs;
         Agent.isStopped=Time.time<frozenUntil || world.PlayerDead;
         if (Agent.isStopped) { CancelAttack(); return; }
-        if (Rooted) { Agent.isStopped=true; Agent.velocity=Vector3.zero; }
+        if (Rooted) { CancelEvasion(); Agent.isStopped=true; Agent.velocity=Vector3.zero; }
         bool combatant=Archetype!=null && Hostile;
         if (!combatant) CancelAttack();
         if (Phase==AttackPhase.Windup) { TickWindup(); return; }
@@ -203,7 +204,8 @@ public sealed class CityNpc : MonoBehaviour
         bool aggro=combatant && (AlwaysAggro || distance<c.DetectionRange);
         // Phase 8 routes: any response (flee, hostility, combat, encounter) takes the body off its route on this tick; re-path now.
         if (Walker!=null && Walker.Override(aggro || Fleeing || Encounter!=null || (Hostile && (AlwaysAggro || distance<c.DetectionRange)))) nextPath=0f;
-        if (aggro) { if (TickAttack(distance, Encounter!=null)) return; }
+        if (!aggro) CancelEvasion();
+        if (aggro) { if (TickEvasion(distance)) return; if (TickAttack(distance, Encounter!=null)) return; }
         else Withdraw();
         if(Encounter!=null&&Encounter.Drive(this)) return;
         if (Walker!=null && Walker.WalkRoute()) return;   // Phase 8 routes: ordinary movement walks a route (false = old wander)
@@ -252,7 +254,7 @@ public sealed class CityNpc : MonoBehaviour
         Vector3 facing=player-transform.position; facing.y=0f;
         facing=facing.sqrMagnitude>.0001f ? facing.normalized : transform.forward;
         Phase=AttackPhase.Windup; Windups++;
-        WindupStartTime=Time.time; WindupStartFrame=Time.frameCount; releaseAt=Time.time+a.WindupSeconds;
+        WindupStartTime=Time.time; WindupStartFrame=Time.frameCount; releaseAt=Time.time+WindupSeconds;
         Agent.isStopped=true; Agent.velocity=Vector3.zero;
         transform.rotation=Quaternion.LookRotation(facing); // facing is set once and then held; never animated
         if (Telegraph==null) Telegraph=new AttackTelegraph(transform, a.Kind==AttackKind.Ranged);
@@ -273,14 +275,15 @@ public sealed class CityNpc : MonoBehaviour
     void TickWindup()
     {
         Agent.isStopped=true;
-        if (Time.time<releaseAt) { Telegraph.Tick(Archetype.WindupSeconds>0f ? 1f-(releaseAt-Time.time)/Archetype.WindupSeconds : 1f); return; }
+        if (Time.time<releaseAt) { Telegraph.Tick(WindupSeconds>0f ? 1f-(releaseAt-Time.time)/WindupSeconds : 1f); return; }
         Release();
     }
     void Release()
     {
         var a=Archetype;
         Phase=AttackPhase.Recover; nextAttack=Time.time+a.CooldownSeconds;
-        world.AttackTokens.Release(this); queued=false; Telegraph.Hide();
+        bool followup=Evasive&&burstIndex<Mathf.Clamp(a.Evasion.BurstCount,1,3)-1&&Hostile&&!world.PlayerDead;
+        if(!followup)world.AttackTokens.Release(this); queued=false; Telegraph.Hide();
         LastReleaseTime=Time.time; LastReleaseFrame=Time.frameCount; LastMeasuredWindup=Time.time-WindupStartTime; Releases++;
         LastReleaseMargin=ShapeMargin(); LastReleaseHit=LastReleaseMargin<=0f;
         Attacked?.Invoke();
@@ -296,6 +299,8 @@ public sealed class CityNpc : MonoBehaviour
             if (knockback>0f && world.Health<before && !world.PlayerDead) StartCoroutine(Knockback(CommittedDirection, knockback, a.KnockbackSeconds));
         }
         Agent.isStopped=Rooted;
+        if(followup) { burstIndex++; StartWindup(); return; }
+        burstIndex=0; BeginRetreat();
     }
     /// Distance of the player's CURRENT body outside the COMMITTED shape (<= 0 means hit).
     float ShapeMargin()
@@ -329,6 +334,7 @@ public sealed class CityNpc : MonoBehaviour
     }
     void CancelAttack()
     {
+        burstIndex=0; CancelEvasion();
         if (Phase!=AttackPhase.Windup && Phase!=AttackPhase.Engage) { Withdraw(); return; }
         bool windup=Phase==AttackPhase.Windup;
         Phase=AttackPhase.Approach; nextAttack=Mathf.Max(nextAttack, Time.time);

@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f015f545089243d6a30ca23a272a1bc3, type: 3}
+  m_Name: Skirmisher
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyArchetype
+  DisplayName: Skirmisher
+  MoveSpeed: 7.8
+  HealthMultiplier: 0.75
+  DamageMultiplier: 0.6
+  Kind: 0
+  TriggerDistance: 1.6
+  Reach: 1
+  Radius: 1.1
+  Range: 22
+  MuzzleHeight: 1.35
+  MaxHitHeight: 1.2
+  WindupSeconds: 0.38
+  CooldownSeconds: 1.4
+  Knockback: 0
+  KnockbackSeconds: 0.25
+  PreferredDistance: 10
+  PreferredBand: 2
+  TelegraphWidth: 0.12
+  TelegraphStartFraction: 0.2
+  VisualScale: 0.9
+  Accent: 15
+  Evasion:
+    Enabled: 1
+    Cooldown: 4.5
+    Telegraph: 0.22
+    TravelSeconds: 0.32
+    Recovery: 0.6
+    LateralDistance: 2.2
+    DashDistance: 3
+    RetreatDistance: 1.8
+    MinimumDistance: 2.4
+    MaximumDistance: 10
+    BurstCount: 2
+    BurstWindup: 0.26
