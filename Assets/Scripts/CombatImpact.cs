@@ -27,7 +27,7 @@ public static class CombatImpact
                     var displaced=suspension.Begin(npc);displaced.useGravity=true;suspension.Release();
                 }
                 float bonus=melee?IceEffect.Shatter(source,npc,origin,radius):0;
-                if(burnSeconds>0)npc.MarkBurn(burnSeconds);npc.Damage(damage+bonus, source, true, impulse);
+                if(burnSeconds>0)npc.MarkBurn(burnSeconds);npc.Damage(damage+bonus, source, true, impulse, origin);
                 if(bonus>0)PreserveDeathLaunch(npc);
             }
             Rigidbody body = hit.attachedRigidbody;

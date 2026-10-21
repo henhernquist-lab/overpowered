@@ -61,6 +61,8 @@ public sealed partial class CombatLabVerificationRunner : MonoBehaviour
         Check(W.Heat==0&&File.ReadAllText(source)==before,"Practice actions cannot write snapshot source or Heat");
         yield return VerifySkirmisher();
         Lab.Clear();yield return null;
+        yield return VerifyBulwark();
+        Lab.Clear();yield return null;
         Lab.ResetArena();yield return null;yield return null;yield return null;
         Check(Lab!=null&&W.Npcs.Count==0&&W.Progression.Data.Xp==0,"Reset rebuilds scene and drops practice rewards");
         Check(File.ReadAllText(source)==before,"Reset leaves read-only snapshot source byte-identical");

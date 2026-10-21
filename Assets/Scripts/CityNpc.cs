@@ -14,13 +14,14 @@ public readonly struct NpcDamageResult
     public readonly string SourceId;
     public readonly string ArchetypeName;
     public readonly NpcRole TargetRole;
-    public readonly float ResolvedDamage, HealthLost, HealthBefore, HealthAfter, MaxHealth, Time;
+    public readonly float ResolvedDamage, HealthLost, HealthBefore, HealthAfter, MaxHealth, Time, DamageBeforeGuard, GuardAbsorbed;
     public readonly Vector3 WorldPosition;
     public NpcDamageResult(CityNpc target, PowerUser attacker, string sourceId, float resolvedDamage,
-        float healthBefore, float healthAfter, Vector3 worldPosition)
+        float healthBefore, float healthAfter, Vector3 worldPosition, float damageBeforeGuard = -1f)
     {
         Target=target; Attacker=attacker; SourceId=sourceId; ResolvedDamage=resolvedDamage;
         ArchetypeName=target.Archetype!=null?target.Archetype.DisplayName:target.Role.ToString();
+        DamageBeforeGuard=damageBeforeGuard>=0?damageBeforeGuard:resolvedDamage;GuardAbsorbed=Mathf.Max(0,DamageBeforeGuard-resolvedDamage);
         TargetRole=target.Role;
         HealthBefore=healthBefore; HealthAfter=healthAfter; HealthLost=healthBefore-healthAfter;
         MaxHealth=target.MaxHealth; WorldPosition=worldPosition; Time=UnityEngine.Time.time;
@@ -67,6 +68,7 @@ public sealed partial class CityNpc : MonoBehaviour
     public void Root(float duration)
     {
         if(duration<=0f||Dead)return;
+        DisruptGuard(Mathf.Max(duration,HasGuard?Archetype.Guard.BreakSeconds:0));
         rootedUntil=Mathf.Max(rootedUntil,Time.time+duration);
         if(Agent!=null&&Agent.enabled&&Agent.isOnNavMesh){Agent.isStopped=true;Agent.velocity=Vector3.zero;}
     }
@@ -155,7 +157,7 @@ public sealed partial class CityNpc : MonoBehaviour
     {
         if(!Frozen&&duration>0)FreezeStartedFrame=Time.frameCount; frozenUntil=Mathf.Max(frozenUntil,Time.time+duration);
         if(duration<=0f)return;
-        CancelAttack();
+        CancelAttack(); DisruptGuard(Mathf.Max(duration,HasGuard?Archetype.Guard.BreakSeconds:0));
         if(ice&&!Dead){iceUntil=Mathf.Max(iceUntil,Time.time+duration);FrozenLook.Show(gameObject,CityColor.Cyan,()=>this!=null&&!Dead&&IceFrozen);}
     }
     public void Thaw() { frozenUntil=iceUntil=Time.time;GetComponent<FrozenLook>()?.Clear(); }
@@ -163,17 +165,23 @@ public sealed partial class CityNpc : MonoBehaviour
     /// assault=false: a continuing tick of an effect whose first hit already counted as the assault (poison, a held beam), so
     /// it does not add Heat every tick. A kill still counts as a defeat for XP/Heat.
     public void Damage(float amount, PowerUser source, bool assault) { Damage(amount, source, assault, 0f); }
-    /// The impulse only selects presentation intensity. Damage, navigation and physics are unchanged.
-    public void Damage(float amount, PowerUser source, bool assault, float impactImpulse)
+    /// Impact magnitude also drives generic guard stagger. Existing callers default to the attacker's current centre.
+    public void Damage(float amount, PowerUser source, bool assault, float impactImpulse) => Damage(amount,source,assault,impactImpulse,null);
+    /// Optional hit origin supports area/indirect attacks at the shared damage boundary. Difficulty resolves once, then
+    /// defense, health, stats and the single DamageApplied event all consume the same final value.
+    public void Damage(float amount, PowerUser source, bool assault, float impactImpulse, Vector3? hitOrigin)
     {
         if (Dead || amount <= 0f) return;
         if(source!=null)amount=source.ResolveDamage(amount);
+        float beforeGuard=amount;
+        Vector3? origin=hitOrigin??(source!=null?(Vector3?)(source.transform.position+Vector3.up*world.Tuning.Movement.Height*.5f):null);
+        amount=ResolveGuardDamage(amount,origin,impactImpulse);
         LastImpactImpulse=impactImpulse;
         float before = Health;
         Health = Mathf.Max(0f, Health-amount);
         var body=GetComponent<Collider>();
         Vector3 point=body!=null ? body.bounds.center : transform.position+Vector3.up;
-        var result=new NpcDamageResult(this,source,source!=null?source.Crediting:null,amount,before,Health,point);
+        var result=new NpcDamageResult(this,source,source!=null?source.Crediting:null,amount,before,Health,point,beforeGuard);
         if (source != null) source.ReportDamage(this, before - Health, Dead, assault);   // per-power stats / style / challenges (no gameplay effect)
         if (Role == NpcRole.Civilian) world.Civilians?.Harmed(this, before - Health, source, Dead);   // civilian ledger (no gameplay effect)
         if (Dead) CancelAttack(); // a killed NPC mid-windup never deals its damage
@@ -204,6 +212,7 @@ public sealed partial class CityNpc : MonoBehaviour
         bool aggro=combatant && (AlwaysAggro || distance<c.DetectionRange);
         // Phase 8 routes: any response (flee, hostility, combat, encounter) takes the body off its route on this tick; re-path now.
         if (Walker!=null && Walker.Override(aggro || Fleeing || Encounter!=null || (Hostile && (AlwaysAggro || distance<c.DetectionRange)))) nextPath=0f;
+        TurnGuard(aggro);
         if (!aggro) CancelEvasion();
         if (aggro) { if (TickEvasion(distance)) return; if (TickAttack(distance, Encounter!=null)) return; }
         else Withdraw();

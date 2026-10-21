@@ -39,6 +39,9 @@ public sealed class EnemyArchetype : ScriptableObject
     [Header("Optional evasive melee (disabled preserves the original attack cycle)")]
     public EnemyEvasionSettings Evasion = new EnemyEvasionSettings();
 
+    [Header("Optional directional defense")]
+    public EnemyGuardSettings Guard = new EnemyGuardSettings();
+
     void OnValidate()
     {
         MoveSpeed=Mathf.Max(.1f,MoveSpeed);HealthMultiplier=Mathf.Max(.01f,HealthMultiplier);DamageMultiplier=Mathf.Max(0,DamageMultiplier);

@@ -13,11 +13,13 @@ public sealed partial class CityNpc
     public Vector3 EvasionDestination {get;private set;}
     public bool Evasive=>Archetype!=null&&Archetype.Evasion!=null&&Archetype.Evasion.Enabled;
     float nextEvasion, evasionUntil;int burstIndex, evasionSerial;bool evasionRotated;bool savedRotation;
-    readonly NavMeshPath evasionPath=new NavMeshPath();
+    NavMeshPath evasionPath;
     static readonly RaycastHit[] evasionHits=new RaycastHit[24];
     void InitializeTactics()
     {
+        InitializeDefense();
         if(!Evasive)return;
+        evasionPath=new NavMeshPath();
         nextEvasion=Time.time+1.5f+(Mathf.Abs(GetEntityId().GetHashCode()%100)*.012f);
         EnemyEquipment.Attach(this);
     }
