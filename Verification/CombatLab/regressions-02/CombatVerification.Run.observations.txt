@@ -1,0 +1,9 @@
+[COMBAT] MEASURED Rusher approach: 18.99m -> 13.00m in 0.858s = 6.99 m/s (mean NavMeshAgent speed 6.99 m/s over 364 frames; configured 7); spawned max health 39.00.
+[COMBAT] MEASURED Gunner approach: 19.00m -> 12.99m in 1.092s = 5.50 m/s (mean NavMeshAgent speed 5.50 m/s over 474 frames; configured 5.5); spawned max health 65.00.
+[COMBAT] MEASURED Gunner held distance over 6.0s (2667 frames, player stationary): min 9.78m, max 12.00m, mean 10.33m (band 8-12m); it fired 3 telegraphed shots from there, player health 92 -> 68.
+[COMBAT] MEASURED Brute approach: 19.00m -> 13.00m in 2.001s = 3.00 m/s (mean NavMeshAgent speed 3.00 m/s over 911 frames; configured 3); spawned max health 195.00.
+[COMBAT] MEASURED budget 2: 1496 frames over 10 s: max simultaneous windups 2, max tokens held 2, releases 19 (19 would-be hits) by 9 different enemies; waiting melee enemies (no token): mean 4.62 m from the player (min 3.87, max 10.63, 5775 samples), ring 4.5 m.
+[COMBAT] MEASURED managed allocation (profiler 'GC Allocated In Frame', valid=True): crowd ACTIVE 1441.1 B/frame over 3 s / 457 frames (432 frames with a windup, 4 releases) vs same crowd FROZEN 1458.7 B/frame over 568 frames; difference -17.6 B/frame.
+[COMBAT] MEASURED budget 99 CONTROL: max simultaneous windups 7, max tokens held 8, releases 38 by 9 enemies; waiting mean 7.70 m (312 samples).
+[COMBAT] CONFIG bounded render sample: 120 warm, 240 measured, 180 profiled frames; same gameplay camera and scene.
+[COMBAT] MEASURED Endless wave 5: single-render FPS=92.68, frames=240; humanoids=12; camera (-28.00, 4.85, -30.53) fwd (0.00, -0.33, 0.94); hero (-28.00, 0.07, -24.00); Intel(R) Core(TM) i9-10910 CPU @ 3.60GHz, AMD Radeon Pro 5300. CAPTURE endless-wave-5-gameplay-camera.png. TEST HARNESS: player health restored by reflection every frame so the crowd keeps attacking.

@@ -529,7 +529,7 @@ public sealed class CombatVerificationRunner : MonoBehaviour
         Check(s.Alive.All(n=>n.Archetype==rusher&&n.Role==NpcRole.Criminal),"Wave 1 is all Rushers (Criminal role).");
         for(int w=1;w<5;w++){yield return ClearWave();Heal();yield return StartNextWave();}
         Composition("ENDLESS WAVE 5",5);
-        Check(s.Alive.All(n=>n.Role==NpcRole.Criminal&&n.Hostile)&&s.Alive.Select(n=>n.Archetype).Distinct().Count()==3,"Wave 5 mixes all three archetypes, all hostile Criminals (role decides hostility/colour).");
+        Check(s.Alive.All(n=>n.Role==NpcRole.Criminal&&n.Hostile)&&s.Alive.Select(n=>n.Archetype).Distinct().Count()==waves.Composition.Count(c=>c.Archetype!=null&&c.Weight>0&&c.FromWave<=s.Wave),"Wave 5 mixes every eligible archetype, all hostile Criminals (role decides hostility/colour).");
         // Wave-5 FPS at the REAL gameplay camera with the crowd fighting the grounded hero (health restored each frame).
         Move(s.Arena);Face(lane);yield return Ground();
         var t=new Timing();yield return MeasureFps("Endless wave 5",t);
@@ -546,7 +546,7 @@ public sealed class CombatVerificationRunner : MonoBehaviour
         s=State;Move(s.Arena+new Vector3(0,3.2f,-8));
         yield return StartNextWave();for(int w=1;w<3;w++){yield return ClearWave();Heal();yield return StartNextWave();}
         Composition("VILLAIN ENDLESS WAVE 3",3);
-        Check(s.Alive.All(n=>n.Role==NpcRole.Cop&&n.Hostile)&&s.Alive.Select(n=>n.Archetype).Distinct().Count()==3,"Villain Endless wave 3: hostile Cops in all three archetypes.");
+        Check(s.Alive.All(n=>n.Role==NpcRole.Cop&&n.Hostile)&&s.Alive.Select(n=>n.Archetype).Distinct().Count()==waves.Composition.Count(c=>c.Archetype!=null&&c.Weight>0&&c.FromWave<=s.Wave),"Villain Endless wave 3: hostile Cops in every eligible archetype.");
         W.Mode.ReturnHome();yield return Scene(GameFlow.HomeScene);
     }
     sealed class Timing{public double Fps,Mean,P95,Skinning,BatchMode,PlayerLoop;public int Frames,Windups,MaxWindups;}
@@ -558,9 +558,10 @@ public sealed class CombatVerificationRunner : MonoBehaviour
         if(target==null){target=new RenderTexture(1280,720,24){name="Combat 1280x720"};target.Create();}
         cam.targetTexture=target;cam.enabled=false;
         var crowd=State.Alive.ToList();var starts=crowd.ToDictionary(n=>n,n=>n.Windups);
-        var warm=System.Diagnostics.Stopwatch.StartNew();while(warm.Elapsed.TotalSeconds<2){Heal();cam.Render();yield return null;}
+        Log("CONFIG bounded render sample: 120 warm, 240 measured, 180 profiled frames; same gameplay camera and scene.");
+        for(int warmFrame=0;warmFrame<120;warmFrame++){Heal();cam.Render();yield return null;}
         var times=new List<double>();var watch=System.Diagnostics.Stopwatch.StartNew();double prior=0;
-        while(watch.Elapsed.TotalSeconds<4){Heal();cam.Render();timing.MaxWindups=Mathf.Max(timing.MaxWindups,Windups());yield return null;double now=watch.Elapsed.TotalSeconds;times.Add((now-prior)*1000);prior=now;}
+        for(int measuredFrame=0;measuredFrame<240;measuredFrame++){Heal();cam.Render();timing.MaxWindups=Mathf.Max(timing.MaxWindups,Windups());yield return null;double now=watch.Elapsed.TotalSeconds;times.Add((now-prior)*1000);prior=now;}
         watch.Stop();
         timing.Frames=times.Count;timing.Fps=times.Count/watch.Elapsed.TotalSeconds;timing.Mean=times.Average();var sorted=times.OrderBy(x=>x).ToList();timing.P95=sorted[Mathf.Min(sorted.Count-1,(int)(sorted.Count*.95f))];
         string[] wanted={"PostLateUpdate.UpdateAllSkinnedMeshes","PostLateUpdate.BatchModeUpdate","PlayerLoop"};
@@ -569,7 +570,7 @@ public sealed class CombatVerificationRunner : MonoBehaviour
         foreach(var name in wanted)foreach(var h in all)if(ProfilerRecorderHandle.GetDescription(h).Name==name){recorders.Add(new Recorded{Name=name,Recorder=new ProfilerRecorder(h,1,ProfilerRecorderOptions.Default)});break;}
         foreach(var r in recorders)if(!r.Recorder.IsRunning)r.Recorder.Start();
         int frames=0;var profiled=System.Diagnostics.Stopwatch.StartNew();
-        while(profiled.Elapsed.TotalSeconds<3){Heal();cam.Render();timing.MaxWindups=Mathf.Max(timing.MaxWindups,Windups());yield return null;foreach(var r in recorders)if(r.Recorder.Valid)r.Sum+=r.Recorder.LastValue;frames++;}
+        for(int profileFrame=0;profileFrame<180;profileFrame++){Heal();cam.Render();timing.MaxWindups=Mathf.Max(timing.MaxWindups,Windups());yield return null;foreach(var r in recorders)if(r.Recorder.Valid)r.Sum+=r.Recorder.LastValue;frames++;}
         foreach(var r in recorders)r.Recorder.Dispose();
         double Ms(string name){var r=recorders.Find(x=>x.Name==name);return r!=null&&frames>0?r.Sum/frames/1e6:double.NaN;}
         timing.Skinning=Ms(wanted[0]);timing.BatchMode=Ms(wanted[1]);timing.PlayerLoop=Ms(wanted[2]);

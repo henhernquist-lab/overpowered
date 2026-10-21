@@ -97,7 +97,7 @@ public sealed partial class CombatLabVerificationRunner : MonoBehaviour
     }
     IEnumerator VerifySkirmisher()
     {
-        PlaceHero(Vector3.zero);var npc=At("Skirmisher",new Vector3(0,0,6));
+        PlaceHero(Vector3.zero);var npc=At("Skirmisher",new Vector3(0,0,6),1000,5);float playerBefore=W.Health;
         Check(npc!=null&&npc.Evasive,"Skirmisher registered with evasive behavior");if(npc==null)yield break;
         float end=Time.time+18;bool hitWhileMoving=false,recovered=false;int maximum=0;float hp=npc.Health;
         while(Time.time<end&&npc!=null&&!npc.Dead)
@@ -110,11 +110,12 @@ public sealed partial class CombatLabVerificationRunner : MonoBehaviour
         Check(maximum>0,"Skirmisher performs a dodge/dash");Check(maximum<=5,"Evasion cooldown bounds frequency");
         Check(hitWhileMoving,"Skirmisher remains hittable during travel");Check(recovered,"Evasion exposes finite recovery");
         Check(npc.Releases>=2&&npc.Retreats>0,"Rapid melee releases and retreat occur");
+        Check(npc.Hits>0&&W.Health<playerBefore,"Skirmisher burst removes real player health through the shared damage path");
         npc.Root(.5f);Vector3 at=npc.transform.position;yield return new WaitForSeconds(.25f);
         Check(Vector3.Distance(at,npc.transform.position)<.15f&&npc.EvasionState==EvasionPhase.None,"Darkness-style root prevents evasion");
         npc.Freeze(.4f);yield return null;Check(npc.Frozen&&npc.EvasionState==EvasionPhase.None,"Ice interrupts evasion/burst");
         yield return new WaitForSeconds(.65f);Check(!npc.Frozen&&!npc.Rooted&&npc.Agent.enabled&&npc.Agent.isOnNavMesh,"Control expires without navigation corruption");
-        npc.Damage(100000,W.Powers);Check(npc.Dead,"Skirmisher can die normally");
+        npc.Damage(100000,W.Powers);Check(npc.Dead,"Skirmisher can die normally");W.RestorePracticeHealth();
     }
 }
 #endif

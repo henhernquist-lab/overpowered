@@ -1,0 +1,2 @@
+MEASURED lab idle: one explicit 1280x720 camera render per frame, 180 frames; render CPU median/p95 0.716/0.764 ms; whole-Editor frame median/p95 2.672/3.078 ms; whole-frame GC median 1338 B; live NPCs 0. Not standalone FPS or a sustained combat benchmark.
+MEASURED lab 12 mixed enemies: one explicit 1280x720 camera render per frame, 180 frames; render CPU median/p95 1.271/1.439 ms; whole-Editor frame median/p95 8.718/10.252 ms; whole-frame GC median 1355 B; live NPCs 12. Not standalone FPS or a sustained combat benchmark.

@@ -354,9 +354,10 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         cam.targetTexture=gameTarget;cam.enabled=false;
         // Step 4: Gunners reach the hovering hero; keep it alive (reflection) so DefeatLimit 1 cannot end the run mid-sample.
         void Heal()=>typeof(WorldSession).GetProperty("Health").SetValue(W,W.Tuning.Movement.Health);
-        var warm=System.Diagnostics.Stopwatch.StartNew();while(warm.Elapsed.TotalSeconds<2){Heal();cam.Render();yield return null;}
+        Log("CONFIG bounded render sample: 120 warm, 240 measured, 180 profiled frames; same gameplay camera and scene.");
+        for(int warmFrame=0;warmFrame<120;warmFrame++){Heal();cam.Render();yield return null;}
         var times=new List<double>();var watch=System.Diagnostics.Stopwatch.StartNew();double prior=0;
-        while(watch.Elapsed.TotalSeconds<4){Heal();cam.Render();yield return null;double now=watch.Elapsed.TotalSeconds;times.Add((now-prior)*1000);prior=now;}
+        for(int measuredFrame=0;measuredFrame<240;measuredFrame++){Heal();cam.Render();yield return null;double now=watch.Elapsed.TotalSeconds;times.Add((now-prior)*1000);prior=now;}
         watch.Stop();
         timing.Frames=times.Count;timing.Fps=times.Count/watch.Elapsed.TotalSeconds;timing.Mean=times.Average();var sorted=times.OrderBy(t=>t).ToList();timing.P95=sorted[Mathf.Min(sorted.Count-1,(int)(sorted.Count*.95f))];
         timing.Humanoids=FindObjectsByType<HumanoidPresentation>().Length;timing.Visible=FindObjectsByType<Renderer>().Count(r=>r.isVisible);
@@ -371,7 +372,7 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         var recorders=handles.Select(h=>new Recorded{Name=ProfilerRecorderHandle.GetDescription(h).Name,Recorder=new ProfilerRecorder(h,1,ProfilerRecorderOptions.Default)}).ToList();
         foreach(var r in recorders)if(!r.Recorder.IsRunning)r.Recorder.Start();
         int frames=0;var profiled=System.Diagnostics.Stopwatch.StartNew();
-        while(profiled.Elapsed.TotalSeconds<3){Heal();cam.Render();yield return null;foreach(var r in recorders)if(r.Recorder.Valid)r.Sum+=r.Recorder.LastValue;frames++;}
+        for(int profileFrame=0;profileFrame<180;profileFrame++){Heal();cam.Render();yield return null;foreach(var r in recorders)if(r.Recorder.Valid)r.Sum+=r.Recorder.LastValue;frames++;}
         foreach(var r in recorders)r.Recorder.Dispose();
         double Ms(string name){var r=recorders.Find(x=>x.Name==name);return r!=null&&frames>0?r.Sum/frames/1e6:double.NaN;}
         timing.Skinning=Ms("PostLateUpdate.UpdateAllSkinnedMeshes");timing.BatchMode=Ms("PostLateUpdate.BatchModeUpdate");timing.PlayerLoop=Ms("PlayerLoop");

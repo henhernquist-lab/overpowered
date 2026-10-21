@@ -1,0 +1,38 @@
+[
+  {
+    "entry": "CombatLabVerification.Run",
+    "commit": "d31ad6ce46a8337f56bbba9481e94fcaf51d94ef",
+    "status_before": "M Assets/Scripts/CombatLab/CityNpc.Evasion.cs\n M Assets/Scripts/CombatLab/CombatLab.cs\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/CombatLab/combat-lab.txt\n?? Verification/CombatLab/unity-attempt-01/\n?? Verification/CombatLab/unity-attempt-02/",
+    "started_utc": "2026-10-21T12:10:03.524769+00:00",
+    "save_before": "3711a792632f352260a9c80d2decc0bba8c48a397e0aa993466b343e543303aa",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/CombatLab/unity-attempt-03/CombatLabVerification.Run.log",
+    "combat_roll": 0.5,
+    "pid": 33737,
+    "exit": 0,
+    "seconds": 66.17,
+    "pass": 368,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Scripts/CombatLab/CityNpc.Evasion.cs\n M Assets/Scripts/CombatLab/CombatLab.cs\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/CombatLab/combat-lab.txt\n?? Verification/CombatLab/unity-attempt-01/\n?? Verification/CombatLab/unity-attempt-02/"
+  },
+  {
+    "entry": "CombatLabVerification.Reload",
+    "commit": "d31ad6ce46a8337f56bbba9481e94fcaf51d94ef",
+    "status_before": "M Assets/Scripts/CombatLab/CityNpc.Evasion.cs\n M Assets/Scripts/CombatLab/CombatLab.cs\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/CombatLab/combat-lab.txt\n?? Verification/CombatLab/unity-attempt-01/\n?? Verification/CombatLab/unity-attempt-02/\n?? Verification/CombatLab/unity-attempt-03/",
+    "started_utc": "2026-10-21T12:11:09.948138+00:00",
+    "save_before": "3711a792632f352260a9c80d2decc0bba8c48a397e0aa993466b343e543303aa",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/CombatLab/unity-attempt-03/CombatLabVerification.Reload.log",
+    "combat_roll": 0.5,
+    "pid": 33814,
+    "exit": 0,
+    "seconds": 39.74,
+    "pass": 4,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Scripts/CombatLab/CityNpc.Evasion.cs\n M Assets/Scripts/CombatLab/CombatLab.cs\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/CombatLab/combat-lab.txt\n?? Verification/CombatLab/reload.txt\n?? Verification/CombatLab/unity-attempt-01/\n?? Verification/CombatLab/unity-attempt-02/\n?? Verification/CombatLab/unity-attempt-03/"
+  }
+]

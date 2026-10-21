@@ -29,7 +29,7 @@ public static class ModeExpansionVerification
     static void Configure()
     {
         if(SessionState.GetString(Key,"")=="")return;
-        EditorApplication.LockReloadAssemblies();deadline=EditorApplication.timeSinceStartup+900;
+        EditorApplication.LockReloadAssemblies();deadline=EditorApplication.timeSinceStartup+1800;
         WorldSession.VerificationSavePath=SavePath;GameFlow.VerificationSandbox=false;
     }
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]

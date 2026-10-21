@@ -18,7 +18,7 @@ Tuning: Resources/CombatLabSettings.asset; 72 m arena, 13 m spawn ring, 6 m mini
 
 ## Verification log
 
-Foundation: both runtime and Editor C# assemblies compiled with the installed Unity Roslyn compiler, using references from the original checkout's existing Library. No Editor process was launched for this check. Three existing serialization/API analyzer warnings remain. Import, UI rendering, gameplay and human feel are not established by a static compilation. Unity execution was deferred because the shared slot with Gemini was not confirmed.
+The initial handoff used static compilation while the exclusive Unity slot was unavailable. The developer subsequently reserved Unity for Codex combat. This worktree has now been imported and verified with strictly serial Unity 6000.6.0f1 batch processes. Current results and retained failed attempts appear below; human feel and standalone performance remain unverified.
 
 ## Skirmisher
 
@@ -26,7 +26,7 @@ Evasive melee is opt-in data on EnemyArchetype, not a role or power-ID switch. S
 
 Dodge/dash: 4.5 s cooldown, 0.22 s visor tell, at most 2.2 m lateral / 3 m forward, 0.32 s travel and 0.6 s stationary recovery; 1.8 m post-burst retreat. Destination, straight NavMesh lane, capsule clearance and complete path are checked before moving and again after the tell. NavMeshAgent owns movement; no warp, invulnerability or disabled colliders. Ice/death/pause/suspension cancel movement and pending burst; Darkness root cancels movement while preserving the existing rooted-attack contract. A shared mannequin rig plus shared helmet/visor/shoulder pieces supplies the silhouette.
 
-`CombatLabVerification.Run` now contains runtime controls for original/new spawns, resolved event/death cardinality, spawn cap, clear ownership, transient saves, restoration, reset and finite vulnerable evasion. These controls are prepared and compile; they have not been executed in Unity.
+`CombatLabVerification.Run` now contains runtime controls for original/new spawns, resolved event/death cardinality, spawn cap, clear ownership, transient saves, restoration, reset and finite vulnerable evasion. These controls executed successfully; the selected Run has 369 passing checks, including actual Skirmisher damage to player health.
 
 ## Bulwark
 
@@ -36,7 +36,7 @@ Defense is opt-in EnemyArchetype.Guard data. The central CityNpc.Damage operatio
 
 Damage accepts an optional world hit origin; the shared CombatImpact area path supplies its blast origin. Existing direct/deferred callers fall back to the attacker's current capsule centre. This deliberately avoids changing each power. Poison/beam ticks still do damage, spend guard integrity and use normal resolved events; no categorical immunity. Indirect callers without an explicit origin use the fallback (not a full ballistic hit-normal model). NpcDamageResult adds DamageBeforeGuard and GuardAbsorbed; ResolvedDamage/HealthLost, usage, health bars and floating numbers share the final reduced value.
 
-Guard runtime controls cover front/side/rear, resolved-event count, heavy impulse, finite rearm, root/freeze, telegraphed bash, recovery and death. Static runtime/Editor assembly compilation passes; Unity execution is UNVERIFIED; the shared exclusive slot was not confirmed.
+Guard runtime controls cover front/side/rear, resolved-event count, heavy impulse, finite rearm, root/freeze, telegraphed bash, recovery and death. Native guard controls pass, including real health loss and once-only difficulty composition in Normal, Hard and Extreme.
 
 ## Waves
 
@@ -48,37 +48,78 @@ Hero/Villain campaign modes remain encounter-based. Free Play still has a null d
 
 - Branch: `codex/combat-lab-enemy-expansion`.
 - Worktree: `/Users/melaniehernquist/.codex/worktrees/combat-lab-enemy-expansion/op-overnight-recovery`.
-- Baseline: `2ed79a9`; phases: `c03745b` lab foundation, `39666d2` Skirmisher, `a6bb246` Bulwark, `2bc60ef` Endless integration. The final delivery commit contains the static checks, hardening and this handoff; use `git log -1` for its hash.
+- Baseline: `2ed79a9`; phases: `c03745b` lab foundation, `39666d2` Skirmisher, `a6bb246` Bulwark, `2bc60ef` Endless integration. `d31ad6c` records the initial static handoff, `d0e9cca` fixes native initialization/evasion, and `948a695` fixes native UI layout and matrix fixtures. The final verification commit records the stronger controls and completed native evidence; use `git log -1` for its hash.
 - No merge, push, rooftop feature changes, main-city generation changes, universal movement changes, power/signature retuning or vendor material edits.
 - Full created/modified file inventory: `Verification/CombatLab/delivery-files.txt` (including metadata). Production input hashes and baseline comparisons: `Verification/CombatLab/delivery-evidence.json`.
 
-Executed checks: **2 successful C# assembly compilations, 31 executable guard-policy checks, 80 static asset/data/baseline checks; 0 failures**. Three pre-existing analyzer warnings concern RobberyState.Car serialization, nullable HeroPresentationState verification serialization and AppDomain.GetAssemblies in AudioSetup. C# compilation used the installed Unity compiler plus imported references from the original checkout. This did **not** launch a Unity Editor or import this worktree.
+<!-- NATIVE-EVIDENCE-START -->
+Selected native evidence: **6,161 PASS / 0 FAIL across 12 serial Unity 6000.6.0f1 processes**, all exit 0, all personal-save and Sidekick database hashes unchanged. No merge or push. Selection and exact source hashes: `Verification/CombatLab/selected-evidence.json`; full process records, checks and observations remain in the named attempt folders. Raw `.log` files remain local and ignored.
 
-Evidence: `Verification/CombatLab/static/results.json`, both `*.compile.txt` outputs, `guard-policy.txt`, `asset-data-checks.txt`, and `asset-data-results.json`. No old gameplay screenshots or logs are presented as results for this branch.
+| Entry | PASS / FAIL | Seconds | Evidence folder |
+| --- | ---: | ---: | --- |
+| `CombatLabVerification.Run` | 369 / 0 | 82.97 | `final-gates-01` |
+| `CombatLabVerification.Reload` | 4 / 0 | 41.25 | `final-gates-01` |
+| `CombatLabVerification.Matrix` | 747 / 0 | 255.45 | `presentation-attempt-02` |
+| `CombatLabPresentationVerification.Run` | 65 / 0 | 54.0 | `presentation-final` |
+| `ModeExpansionVerification.Run` | 179 / 0 | 108.62 | `final-gates-01` |
+| `ModeExpansionVerification.Reload` | 10 / 0 | 47.42 | `final-gates-01` |
+| `CombatVerification.Run` | 179 / 0 | 168.51 | `regressions-02` |
+| `CombatBalanceVerification.Run` | 2346 / 0 | 247.46 | `regressions-02` |
+| `HeroForgeVerification.Run` | 136 / 0 | 96.66 | `regressions-02` |
+| `HeroForgeVerification.Reload` | 3 / 0 | 43.21 | `regressions-02` |
+| `FinalSignaturesVerification.Matrix` | 708 / 0 | 346.09 | `regressions-02` |
+| `DifficultyVerification.Run` | 1415 / 0 | 134.72 | `regressions-02` |
 
-**Unity import, Play Mode, rendered UI, live AI/navigation, actual damage numbers/bars, wave clear/reinforcement, power/signature/secondary interactions, separate-process reload, standalone build and performance are UNVERIFIED.** No new Unity process was started: the current brief requires a single coordinated slot across Codex/Gemini/user and no reply reserved it. Process checks found no Editor, but do not establish that the other agent will refrain from launching one. Do not open this worktree while Gemini or the developer is using Unity.
+Static recheck: **2 successful assemblies, 31 executable guard-policy checks, 80 asset/data/baseline checks; 0 failures**. The three existing analyzer warnings are RobberyState.Car serialization, nullable HeroPresentationState verification serialization, and AudioSetup AppDomain.GetAssemblies. Compiler/reference and topology outputs are under `Verification/CombatLab/static`.
 
-### Prepared Unity controls (not executed)
+Run verifies real attack/death, finite hittable evasion and recovery, flank/rear/front guard, finite break/rearm, ordinary root/freeze, single resolved events, actual HP/difficulty, cap/owned clear, source isolation and reset. Reload uses a fresh process. Presentation submits the actual UI buttons/dropdowns, renders 720p/1080p, checks live front-guard damage in all three difficulties, shared attachment mesh and ten clean arena resets. Captures are in `Verification/CombatLab/captures`.
 
-`CombatLabVerification.Run`: all five spawns, real health variance/difficulty formula, shared Animator, single damage/death result, clear ownership, cap, restoration, source-save isolation, faction policy, evasion/burst/retreat/control, frontal/flank/rear guard, heavy impact break/rearm, bash windup/recovery/death, wave eligibility and clean arena reset.
+Matrix: eight primaries and eight selected signatures x two new enemies x three difficulties (48 sessions), plus **four currently selectable Forge secondaries**: Phase Shift, Speed, Force Field and Teleport. The legacy Flight asset still exists but no current hero permits it; its equip refusal is verified. No ownership/loadout gate was bypassed. Matrix targets are stationary, non-guarding compatibility fixtures; active evasion/guard are checked by Run. This does not establish equal power effectiveness or balance.
 
-`CombatLabVerification.Reload`: fresh-process reload of Run's isolated source snapshot, proving practice XP/hints/view do not persist and the source remains unchanged. Must follow a successful Run in the same serial driver invocation.
+Mode/Combat verify real round clear/reinforcement, both factions, the full eligible mix, kill progression and unchanged Free Play. Balance verifies actual damage/health rolls, impacts, bars/numbers and DoT spread. Forge Run/Reload, final signatures and difficulty are fresh branch regressions. Fresh output from 29 generated historical verification paths is archived separately under `Verification/CombatLab/regression-artifacts`; the historical files were then restored byte-for-byte, indexed with hashes.
 
-`CombatLabVerification.Matrix`: eight equipped primaries and eight selected signatures x both new enemies x Normal/Hard/Extreme (48 sessions), plus every secondary defined in the repository. Repository truth is **five** secondaries (Flight, Speed, Force Field, Phase Shift, Teleport), although the brief says four. Ownership/loadout/signature choices use the actual Forge APIs on a temporary profile. Matrix targets are stationary, non-guarding vulnerability fixtures for deterministic compatibility; movement and active defense are tested separately by Run. The matrix checks primary damage or Ice control, resolved metadata/HUD path, signature completion/cancellation and navigation, then scene/pool cleanup. It is not evidence that every power is equally effective against an actively guarding Bulwark.
+### Retained failures and fixes
 
-Once the human reserves the Unity slot, from this worktree run serially:
+- Initial Run failed in the NavMeshPath field initializer; creation now occurs in arena initialization. Native testing also found post-burst retreats could keep postponing the independent dodge cooldown; retreat now holds only its own movement/recovery lease.
+- The fresh-worktree Editor Search exception was addressed with the local preference described below.
+- Initial matrix failed three fixture assertions (unselectable legacy Flight and blocked/ungrounded Teleport); corrected through real Forge eligibility and a grounded clear lane. All 48 primary/signature sessions had passed in that failed attempt.
+- Initial presentation failed 16 layout checks; corrected full-screen root anchoring, button/dropdown styling and practice HUD flags. The actual controls and reset path already worked.
+- Legacy Mode/Combat benchmarks hit wall-clock/watchdog failures; frame loops now use 120 warm / 240 measured / 180 profiled frames with the same scene, camera and elapsed-time measurements. Combat's watchdog now uses a monotonic 900-second clock; Mode's allowance is 1800 Editor seconds.
+- The old combat fixture expected three archetypes; it now derives the eligible count from wave data. Failed process manifests/checks and original failed UI captures are retained; none are counted in selected passing evidence.
 
-```sh
-python3 tools/verify-sequential.py --out Verification/CombatLab/unity-gates --combat-roll 0.5 \
-  CombatLabVerification.Run CombatLabVerification.Reload CombatLabVerification.Matrix \
-  ModeExpansionVerification.Run CombatVerification.Run CombatBalanceVerification.Run \
-  HeroForgeVerification.Run HeroForgeVerification.Reload \
-  FinalSignaturesVerification.Matrix
+### Measured performance and limits
+
+Single explicit 1280x720 camera render per Editor frame, 180 measured lab frames, Intel i9-10910 / Radeon Pro 5300. Accepted lab sample (final-gates-01), idle render CPU median/p95 **0.716/0.764 ms**, whole frame **2.672/3.078 ms**, GC median **1338 B/frame**. Twelve live mixed enemies: render **1.271/1.439 ms**, whole frame **8.718/10.252 ms**, GC **1355 B/frame**. Earlier successful sample: idle **2.479/3.194 ms**, mixed **9.964/22.436 ms** whole-frame median/p95. Earlier pilot idle **2.441/2.771**, mixed **9.577/13.237 ms** is retained. These short runs show variability; they do not establish sustained FPS, first-use cost, a like-for-like prefeature delta or standalone performance.
+
+City wave sample (240 measured frames, hovering hero kept alive): wave 1 / 3 enemies **181.22 FPS**, mean/p95 **5.52/5.87 ms**; wave 5 / 11 enemies **83.10 FPS**, **12.03/16.29 ms**; wave 6 / 12 enemies **78.27 FPS**, **12.78/16.78 ms**. Skinning **0.201/0.557/0.602 ms**; batch-mode overhead **0.994/3.124/3.548 ms**. Separate grounded wave-five combat sample: **92.68 FPS**, mean/p95 **10.79/14.80 ms**, 10 telegraphed attacks, max two simultaneous windups, skinning **0.545 ms**. Existing Forge benchmark idle/FX1/FX2/idle reported **50.96/50.37/45.16/40.65 FPS**, draws **307.1/314.3/315.0/306.0**, pool 6. All observations remain visible; these different fixtures cannot be compared as a controlled feature regression. Historical STATUS performance data is preserved.
+<!-- NATIVE-EVIDENCE-END -->
+
+Latest presentation observations (`Verification/CombatLab/presentation-final`):
+
+```text
+MEASURED lab idle: one explicit 1280x720 camera render per frame, 180 frames; render CPU median/p95 0.587/0.653 ms; whole-Editor frame median/p95 2.279/2.563 ms; whole-frame GC median 1338 B; live NPCs 0. Not standalone FPS or a sustained combat benchmark.
+MEASURED lab 12 mixed enemies: one explicit 1280x720 camera render per frame, 180 frames; render CPU median/p95 1.111/1.471 ms; whole-Editor frame median/p95 7.424/9.656 ms; whole-frame GC median 1355 B; live NPCs 12. Not standalone FPS or a sustained combat benchmark.
 ```
 
-The driver refuses an already-running Editor, stops on first failed process/check, records fresh output and guards personal-save/Sidekick database hashes. Keep other agents out of Unity throughout the whole sequence. Restore `Side_Kick_Data.db` in this worktree after any Play Mode run if Sidekick modifies it, as AGENTS requires. Do not import an old Library by copying it into this worktree; the static compiler only reads its references.
 
-Reproduce the checks already executed without Unity:
+### Reproduce verification
+
+Reserve the single Unity slot across all worktrees first. From this branch run:
+
+```sh
+python3 tools/verify-sequential.py --out Verification/CombatLab/new-run --combat-roll 0.5 \
+  CombatLabVerification.Run CombatLabVerification.Reload CombatLabVerification.Matrix \
+  CombatLabPresentationVerification.Run ModeExpansionVerification.Run ModeExpansionVerification.Reload \
+  CombatVerification.Run CombatBalanceVerification.Run \
+  HeroForgeVerification.Run HeroForgeVerification.Reload \
+  FinalSignaturesVerification.Matrix DifficultyVerification.Run
+```
+
+The driver refuses an already-running Editor, stops on the first failed process/check, records fresh output and guards personal-save/Sidekick database hashes. A Reload requires its matching Run in the same invocation. Keep other agents out of Unity for the whole sequence. Restore Side_Kick_Data.db if Play Mode changes it; no completed process in this delivery changed its hash.
+
+The fresh worktree exposed an Editor Search startup indexation exception before gameplay. Only this worktree's ignored `UserSettings/Search.settings` now has `indexOnEditorStartup = false` and `version = 1`; the prior `{}` is backed up at `/private/tmp/op-combat-search-settings-before`. No global or original-project preference changed, and no runtime error was filtered to pass a check. The workaround is local and uncommitted.
+
+Static checks (do not launch Unity):
 
 ```sh
 python3 tools/verify-combat-static.py --reference-project /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery
@@ -87,13 +128,13 @@ python3 tools/verify-combat-data.py
 
 ### Known limits and remaining work
 
-The requested four features are implemented and statically compile. Unity verification and human playtesting remain before treating them as ready to integrate. There is no claim of balance/polish or measured performance. The dedicated scene is intentionally minimal: arena geometry, lighting, NavMesh and actors are constructed by CombatLab at runtime, with no main-city generator. Entry is via the scene/Editor menu, not a new Home button. A separate instant per-ability cooldown button is omitted; Reset Arena uses existing initialization to refresh every cooldown safely.
+The requested four features are implemented and native automated verification passes as recorded above. Human playtesting and standalone performance acceptance remain before integration; no balance or polish claim is made. The dedicated scene is intentionally minimal: arena geometry, lighting, NavMesh and actors are constructed by CombatLab at runtime, with no main-city generator. Entry is via the scene/Editor menu, not a new Home button. A separate instant per-ability cooldown button is omitted; Reset Arena uses existing initialization to refresh every cooldown safely.
 
 Hit origins: CombatImpact area attacks provide their true origin. Other existing callers use the attacker's current centre unless they supply the new optional origin. A moving attacker can therefore change the guard relation of an old DoT/indirect hit; this is an explicit limitation of the existing metadata, not a new per-power exception. Continuous damage still spends finite guard integrity. Unknown/environmental hits without a source or origin bypass the directional reduction.
 
 Navigation/evasion destinations are validated against both the NavMesh and a bounded capsule sweep before travel, including a second check after the tell. Dynamic obstacles can still move into the route during travel; the existing NavMeshAgent owns avoidance. Human testing must check fast movement near throwable props and tight cover. No enemy collider is disabled to dodge, and no navigation Warp/physics handoff was added for evasion.
 
-Performance has **not been measured**. New attachments reuse Unity's shared cube mesh and palette materials; no new mesh/material per enemy or hit, and no new VFX pool is required for guard feedback. Evasion holds one NavMeshPath only on evasive actors, uses a fixed 24-hit buffer and a finite cooldown. Lab enemies cap at 12 (configurable 1–24); each burst caps at 3 via data (shipping 2). Existing humanoid skinning/fitting, damage queries and signatures retain their costs; all historical STATUS measurements remain intact. Profile 12 live mixed enemies and repeated spawn/reset cycles in a single rendered view before accepting performance.
+Short rendered Editor samples are recorded below; sustained standalone performance has **not** been measured. New attachments reuse Unity's shared cube mesh and palette materials; no new mesh/material per enemy or hit, and no new VFX pool is required for guard feedback. Evasion holds one NavMeshPath only on evasive actors, uses a fixed 24-hit buffer and a finite cooldown. Lab enemies cap at 12 (configurable 1–24); each burst caps at 3 via data (shipping 2). Existing humanoid skinning/fitting, damage queries and signatures retain their costs; all historical STATUS measurements remain intact. The native presentation suite samples 12 live mixed enemies and verifies ten clean resets. Longer combat with varied powers and a standalone profile still require human acceptance.
 
 ### Exact human playtest checklist
 
@@ -102,11 +143,11 @@ Performance has **not been measured**. New attachments reuse Unity's shared cube
 3. Take damage/spend energy; restore each separately. Reset during a DoT/signature, then during a channel and held prop. Confirm clean arena, fresh vitals/charges/cooldowns, no old attacks, status markers, projectiles, held objects or pooled effects. Fall/fly beyond the arena; confirm normal respawn to the floor.
 4. Fight one Skirmisher at normal speed. Observe a visible tell, short lateral dodge/occasional approach dash, two readable strikes, retreat and recovery. Land precise shots and timed melee during travel/recovery. Freeze/root it and ensure movement stops, expires and resumes without sliding through cover. No permanent dodge/invulnerability loop.
 5. Fight one Bulwark. Compare repeated equal hits from front, flank and rear using actual numbers and HP. Bait its slow bash, leave the committed disc, then punish unguarded recovery. Watch cream shield hits, red break and finite rearm. Break it with heavy impact, Ice and Darkness. Try sustained Laser/Poison and overhead/nearby AoE; none should be categorically ineffective.
-6. Repeat with eight primaries, all five available secondaries and all eight signatures using valid saved Forge builds. Test first- and third-person view. Check health bars, resolved damage numbers, death, collision, status cleanup and no duplicated hits. Do not judge effectiveness from the stationary matrix alone.
+6. Repeat with eight primaries, all four currently selectable secondaries and all eight signatures using valid saved Forge builds. Test first- and third-person view. Check health bars, resolved damage numbers, death, collision, status cleanup and no duplicated hits. Do not judge effectiveness from the stationary matrix alone.
 7. Select Hard and Extreme in the lab; confirm a full arena restart, the new label, expected max health/enemy HP/resource/cooldown changes and unchanged faction relations. Return Home/restart the application; personal XP, points, records, hints, difficulty, side, view and Forge loadout must match the pre-lab save.
 8. Play both Endless sides through rounds 1–6. Originals only before 3; Skirmisher appears from 3, Bulwark from 5; later mix includes originals. Kill both new types and confirm LEFT/score/next wave/reinforcements and cap. Check Hero police remain friendly and Villain responders hostile. Check campaign encounters and Free Play manual spawning; Free Play must never auto-start waves.
 9. Profile 12 mixed live enemies, movement around cover, repeated guard hits, continuous beams/DoT, multiple signatures and 10 arena resets. Compare CPU, allocation, renderers/materials/meshes and pools before/after. Check a standalone build separately. The human developer decides actual feel and tuning changes.
 
 ### Merge notes
 
-Integrate the combat branch after reviewing the Unity gates; it has not been merged or pushed. Preserve the standalone CombatLab scene GUID/build-settings entry and all new metadata. The small shared integration points are CityNpc, EnemyArchetype, CombatImpact, PlayerProgression, PowerUser, WorldSession and a one-line GameFlow.SceneReady dispatch. Reconcile GameFlow/build-settings additions if Gemini also registers an entry, and append/reconcile both STATUS sections. CityDistrict, CityLayout, universal movement and rooftop systems are unchanged. Do not copy the original checkout's unrelated verification output, untracked PowerMechanics scripts or vendor metadata changes into this feature. The PoisonProjectilePool metadata here is the exact pre-existing GUID from the original checkout.
+Integrate the combat branch after reviewing the Unity gates; it has not been merged or pushed. Preserve the standalone CombatLab scene GUID/build-settings entry and all new metadata. The shared integration points are CityNpc, EnemyArchetype, CombatImpact, PlayerProgression, PowerUser, WorldSession, a one-line GameFlow.SceneReady dispatch, and GameHud choosing Health/Powers flags in practice. Practice hides Heat/XP HUD elements; other modes retain their flags. The two legacy render benchmark fixtures use bounded frame samples, and combat/mode verification expectations now derive from the expanded roster. Reconcile GameFlow/build-settings additions if Gemini also registers an entry, and append/reconcile both STATUS sections. CityDistrict, CityLayout, universal movement and rooftop systems are unchanged. Do not copy the original checkout's unrelated verification output, untracked PowerMechanics scripts or vendor metadata changes into this feature. The PoisonProjectilePool metadata here is the exact pre-existing GUID from the original checkout.

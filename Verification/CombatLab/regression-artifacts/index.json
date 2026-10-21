@@ -1,0 +1,205 @@
+[
+  {
+    "path": "Verification/Combat/archetypes-side-by-side.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Combat/archetypes-side-by-side.png",
+    "sha256": "f807e3712724c30cdd8691df643f3a3a0f7c09cab92af65a452344616140486a",
+    "new_file": false,
+    "historical_restored_sha256": "c9bb9c98b77ea4d71970b50ccba0f9d559689c0fb73f1c08e4f59e68ce573eb1"
+  },
+  {
+    "path": "Verification/Combat/crowd-budget-2.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Combat/crowd-budget-2.png",
+    "sha256": "ea7e3dcc3cbc9a6b830c9b454dca28cb09b7b97e982a92a23a8b26dc1efac534",
+    "new_file": false,
+    "historical_restored_sha256": "e026b14c60271414eff23f2f8cc56ed91bb8e80ede516fc84a3718d529982f3d"
+  },
+  {
+    "path": "Verification/Combat/crowd-budget-99.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Combat/crowd-budget-99.png",
+    "sha256": "ae721d7bb4f13f28e726f7edab7301fe8f5dadd9199083fa09dd0ecb7c9296ab",
+    "new_file": false,
+    "historical_restored_sha256": "889a11ceabd436e5da448a0730664fefe9031da74db962493041d46587af2cb0"
+  },
+  {
+    "path": "Verification/Combat/endless-wave-5-gameplay-camera.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Combat/endless-wave-5-gameplay-camera.png",
+    "sha256": "094b9bc5717deb70f90734b5bd1116cdfe947db9798914b1f6cd4b99b386c4b0",
+    "new_file": false,
+    "historical_restored_sha256": "d089dffc0ad000fff3e3cc099de732ef8e39c239ff9217159e83b940a1c707b2"
+  },
+  {
+    "path": "Verification/Combat/results.txt",
+    "archive": "Verification/CombatLab/regression-artifacts/Combat/results.txt",
+    "sha256": "59c95df1af9a594aae9338674ecc4f7edefd2875e27bbe604ac4d495d104cbfc",
+    "new_file": false,
+    "historical_restored_sha256": "fda352a54be0fac17a0d55c00be6f345309dd150f27b1ecd2f67ea4764ced6ab"
+  },
+  {
+    "path": "Verification/Combat/windup-brute.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Combat/windup-brute.png",
+    "sha256": "f7d0983f7ff4789ce33b930a499147070ef14f850c83df07620236e20ff66590",
+    "new_file": false,
+    "historical_restored_sha256": "2f66a9f357945baf53eb0bdfecedef1c00984ba43cd6759477ceb9505aa68b6d"
+  },
+  {
+    "path": "Verification/Combat/windup-gunner.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Combat/windup-gunner.png",
+    "sha256": "13b32fb2d63833afd45a7a7a528d200ae1b68cdd95442dd2ffc4c94d0719aaa2",
+    "new_file": false,
+    "historical_restored_sha256": "2e1a2a623850e102b14753d4361dd69f6a6511545b145654bddb3fde45d3ec74"
+  },
+  {
+    "path": "Verification/Combat/windup-rusher.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Combat/windup-rusher.png",
+    "sha256": "2f6ed9eacaedea2b7327b13ab41c2ac7d8e57821cae495563579f40a7350d56b",
+    "new_file": false,
+    "historical_restored_sha256": "7e951c3cf6dbf066a2d990fa8e0c1695b303732374de76fa10a380f8c7cbfe98"
+  },
+  {
+    "path": "Verification/CombatBalance/results.txt",
+    "archive": "Verification/CombatLab/regression-artifacts/CombatBalance/results.txt",
+    "sha256": "d3b71092ba3b0074614959b862eec637fcf25a8a408a647ef8f179d2654a7ee1",
+    "new_file": false,
+    "historical_restored_sha256": "bb06df639d72411cb31cf60b62ee5c60143d4037663cc8b64a15224c039aae68"
+  },
+  {
+    "path": "Verification/Difficulty/extreme.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Difficulty/extreme.png",
+    "sha256": "2448f9685727bbf49344dff42f7e3cfb1e6116561a5f230468bd191bb24ed239",
+    "new_file": false,
+    "historical_restored_sha256": "5275441b17a0b8bc9217673e0a149a9ffe7c87fad2a242d7287f68c636548824"
+  },
+  {
+    "path": "Verification/Difficulty/hard.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Difficulty/hard.png",
+    "sha256": "cb09c666eb1efc6f140d34f773f4293204170b26afe95d706cca871c9fb85be3",
+    "new_file": false,
+    "historical_restored_sha256": "1bb98f63e908c37bd74f72f8c8392cecc858c7dbd86abe66867721aafad5ed70"
+  },
+  {
+    "path": "Verification/Difficulty/normal.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Difficulty/normal.png",
+    "sha256": "9f7742d85912a72ab2fb92b9b389bf17238d4ccad16a900f343c1aaf8c321329",
+    "new_file": false,
+    "historical_restored_sha256": "f8203c76220a79e924e1435dba4e4cee3920eb14e184e5de0f71af8921deefc3"
+  },
+  {
+    "path": "Verification/Difficulty/results.txt",
+    "archive": "Verification/CombatLab/regression-artifacts/Difficulty/results.txt",
+    "sha256": "c4c28cd0d60f27f56d99a4f4065c41aaf016023d1bddabaf5e7101dd1b19b3a7",
+    "new_file": false,
+    "historical_restored_sha256": "2b8f2e4ee4c5afc3943e6b43bf8e9ffa92611010f9d27720ed4099abe9eea71f"
+  },
+  {
+    "path": "Verification/FinalSignatures/matrix.txt",
+    "archive": "Verification/CombatLab/regression-artifacts/FinalSignatures/matrix.txt",
+    "sha256": "3c687cf5dc43ba4d406eb45edc23e876e622c115b1c88323102f68d62479188b",
+    "new_file": false,
+    "historical_restored_sha256": "537025d4d1198a0df0c9cb7ffa56f1bb479c431608f1ba0f8b5533760a29ffb8"
+  },
+  {
+    "path": "Verification/Forge/forge-menu.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Forge/forge-menu.png",
+    "sha256": "3b2a6f717e341d74065d3faedd471cd54fa60758777872cfe823bda7b9ffea8f",
+    "new_file": false,
+    "historical_restored_sha256": "08e60cff5fd11420b134ba03010de6d35aaf9a737f69644215ce45a8fb1c823d"
+  },
+  {
+    "path": "Verification/Forge/forge-preview.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Forge/forge-preview.png",
+    "sha256": "3096d56c1e7573d7782b8894ea4ff60cff2f99894178905d051a706b6d34522b",
+    "new_file": false,
+    "historical_restored_sha256": "749cfc8e2c096c909be5079b455dc5e24bf07493d5a043f220a8dfe69ae2514b"
+  },
+  {
+    "path": "Verification/Forge/forge-reveal-peak.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Forge/forge-reveal-peak.png",
+    "sha256": "eb76b36ac63745702c38e117877905e94c164cc234e0b063ea07b6c387b0bd82",
+    "new_file": false,
+    "historical_restored_sha256": "e07762ba6c9ab8cd3c64014b469e8533f38d3a9de34193d6d3f7f47ba470a9c3"
+  },
+  {
+    "path": "Verification/Forge/reload.txt",
+    "archive": "Verification/CombatLab/regression-artifacts/Forge/reload.txt",
+    "sha256": "601d82c4d9976da9ccb00f5212992ab54ef56c1da030b4ffb12bd3be6028a919",
+    "new_file": false,
+    "historical_restored_sha256": "f42af9e6ef265e3d4b15635bb16a9839ddcc84f7752ce3d0fbe537394ae7943f"
+  },
+  {
+    "path": "Verification/Forge/results.txt",
+    "archive": "Verification/CombatLab/regression-artifacts/Forge/results.txt",
+    "sha256": "f926898aa723d27061d0e787124a077ca0809b431efbd9051d1a9bbe349d2c1b",
+    "new_file": false,
+    "historical_restored_sha256": "0bc3c6100f253cbf7e28e8b46ea50f40fa5c2ee63551e1d349d0a45a113eee7a"
+  },
+  {
+    "path": "Verification/Forge/sonic-impact.png",
+    "archive": "Verification/CombatLab/regression-artifacts/Forge/sonic-impact.png",
+    "sha256": "cf213c8d977b70c160b400579cdb4c43ffc106669ee148a697d000f31d6911de",
+    "new_file": false,
+    "historical_restored_sha256": "cb131377dfd39d602020ebbd747e9d41c4cd833b938305838173304e760b17c0"
+  },
+  {
+    "path": "Verification/ModeExpansion/endless-results-lower-score.png",
+    "archive": "Verification/CombatLab/regression-artifacts/ModeExpansion/endless-results-lower-score.png",
+    "sha256": "f0e6880bff66d71e8e59d9e368d4fcfca4f40be0727c77de01980eca1b52700e",
+    "new_file": false,
+    "historical_restored_sha256": "46c5a53f13b941487f5422c19afdabaa7b607ffebf66d29fe7b1dd90bb5f1c88"
+  },
+  {
+    "path": "Verification/ModeExpansion/endless-results-new-best.png",
+    "archive": "Verification/CombatLab/regression-artifacts/ModeExpansion/endless-results-new-best.png",
+    "sha256": "0864b12e1cc158c2eb58848b6781c3d487b00ee536d19511ba67194e83c7ded8",
+    "new_file": false,
+    "historical_restored_sha256": "2c0c23d76a563b2f5a54f9b57a058fabaca2ed6f6f8bc8eb813a8b57bbaad8d4"
+  },
+  {
+    "path": "Verification/ModeExpansion/endless-villain-results.png",
+    "archive": "Verification/CombatLab/regression-artifacts/ModeExpansion/endless-villain-results.png",
+    "sha256": "bf06182e9175b0715189445b61c2bae2b070dc90cceb79bf59ccc6892d5f08ff",
+    "new_file": false,
+    "historical_restored_sha256": "cf0178ee7b3766e175050a581e2ee7afed6646144c7e8682895594da7f1874f3"
+  },
+  {
+    "path": "Verification/ModeExpansion/endless-wave-1-gameplay-camera.png",
+    "archive": "Verification/CombatLab/regression-artifacts/ModeExpansion/endless-wave-1-gameplay-camera.png",
+    "sha256": "6e4cb4d8c635a6588b5cb1d25fbccf34592407cc2f70630e99316864d6ac5900",
+    "new_file": false,
+    "historical_restored_sha256": "f73ae8894711c4e63a9ac371bd80e1692fd2528c9a5f1f8762e4d3933ef589be"
+  },
+  {
+    "path": "Verification/ModeExpansion/endless-wave-5-gameplay-camera.png",
+    "archive": "Verification/CombatLab/regression-artifacts/ModeExpansion/endless-wave-5-gameplay-camera.png",
+    "sha256": "08ab81188fe9f60188c3dac3ac537500e34fa19a39d495c769d6c1a210871111",
+    "new_file": false,
+    "historical_restored_sha256": "62c03fc3fef7ac91a833ba77473b30166bc3de41326527da1348355870bfd341"
+  },
+  {
+    "path": "Verification/ModeExpansion/endless-wave-6-maxalive-gameplay-camera.png",
+    "archive": "Verification/CombatLab/regression-artifacts/ModeExpansion/endless-wave-6-maxalive-gameplay-camera.png",
+    "sha256": "f2f6cede6f1e04e4f771de2fa8a50b33b826152ab604cf3862ae1ecea1113cb1",
+    "new_file": false,
+    "historical_restored_sha256": "08f5fdb5caf3099ddec414dddab66f0191f5ed78b01d773871c3df480a7377d5"
+  },
+  {
+    "path": "Verification/ModeExpansion/home-extras.png",
+    "archive": "Verification/CombatLab/regression-artifacts/ModeExpansion/home-extras.png",
+    "sha256": "2d98e32b88bfd67f4a0ca7697dbb68289eceaa7ab84cff0b258f8f176e1297f6",
+    "new_file": false,
+    "historical_restored_sha256": "3beaba90b0217a5630146e2f13aa300e4e5bf253e23d106783d20c9e550212c3"
+  },
+  {
+    "path": "Verification/ModeExpansion/reload.txt",
+    "archive": "Verification/CombatLab/regression-artifacts/ModeExpansion/reload.txt",
+    "sha256": "1a65fdb4bd683df07b32c8db5bc663854dc1b8811e5de72d793bef7e2cbf6d86",
+    "new_file": false,
+    "historical_restored_sha256": "c3c523e653e6c2252b5948dd930502991484ee2620aaa4ff60ab10deeed70322"
+  },
+  {
+    "path": "Verification/ModeExpansion/results.txt",
+    "archive": "Verification/CombatLab/regression-artifacts/ModeExpansion/results.txt",
+    "sha256": "6a33ce507e8018f187921350d757caab1b066a7ad7f1aa05e2d8d5cea6bd42f7",
+    "new_file": false,
+    "historical_restored_sha256": "70834c09694d91c2c2481e50efbaa0abc05c04c135ea730aa8674f09c3abb038"
+  }
+]

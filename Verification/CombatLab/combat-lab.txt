@@ -1,0 +1,369 @@
+PASS Dedicated practice session has no mode/director
+PASS Practice profile has no filesystem save target
+PASS No procedural city or automatic enemies
+PASS Lab keeps current equipped pair
+PASS Lab keeps current signature
+PASS Select Rusher
+PASS Spawn Rusher
+PASS Faction and valid navigation: Rusher
+PASS Central health + difficulty applied once: Rusher
+PASS Existing rigged Animator: Rusher
+PASS One resolved damage result: Rusher
+PASS Death is terminal without duplicate events: Rusher
+PASS Select Gunner
+PASS Spawn Gunner
+PASS Faction and valid navigation: Gunner
+PASS Central health + difficulty applied once: Gunner
+PASS Existing rigged Animator: Gunner
+PASS One resolved damage result: Gunner
+PASS Death is terminal without duplicate events: Gunner
+PASS Select Brute
+PASS Spawn Brute
+PASS Faction and valid navigation: Brute
+PASS Central health + difficulty applied once: Brute
+PASS Existing rigged Animator: Brute
+PASS One resolved damage result: Brute
+PASS Death is terminal without duplicate events: Brute
+PASS Select Skirmisher
+PASS Spawn Skirmisher
+PASS Faction and valid navigation: Skirmisher
+PASS Central health + difficulty applied once: Skirmisher
+PASS Existing rigged Animator: Skirmisher
+PASS One resolved damage result: Skirmisher
+PASS Death is terminal without duplicate events: Skirmisher
+PASS Select Bulwark
+PASS Spawn Bulwark
+PASS Faction and valid navigation: Bulwark
+PASS Central health + difficulty applied once: Bulwark
+PASS Existing rigged Animator: Bulwark
+PASS One resolved damage result: Bulwark
+PASS Death is terminal without duplicate events: Bulwark
+PASS Clear all lab-owned enemies
+PASS Clear leaves non-owned actors alone
+PASS Spawn count remains capped
+PASS Restore health
+PASS Restore energy
+PASS Practice actions cannot write snapshot source or Heat
+PASS endless-fight shares the expanded wave table
+PASS endless-fight-villain shares the expanded wave table
+PASS hero receives no invented rounds or automatic director
+PASS villain receives no invented rounds or automatic director
+PASS free-play receives no invented rounds or automatic director
+PASS No miniboss/events enabled by combat expansion
+PASS Wave 1 composition preserves side-specific roles at index 0
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 1 composition preserves side-specific roles at index 1
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 1 composition preserves side-specific roles at index 2
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Skirmisher eligibility wave 1
+PASS Bulwark eligibility wave 1
+PASS Original types remain in wave 1
+PASS Alive cap preserved in wave 1
+PASS Wave 2 composition preserves side-specific roles at index 0
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 2 composition preserves side-specific roles at index 1
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 2 composition preserves side-specific roles at index 2
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 2 composition preserves side-specific roles at index 3
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 2 composition preserves side-specific roles at index 4
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Skirmisher eligibility wave 2
+PASS Bulwark eligibility wave 2
+PASS Original types remain in wave 2
+PASS Alive cap preserved in wave 2
+PASS Wave 3 composition preserves side-specific roles at index 0
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 3 composition preserves side-specific roles at index 1
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 3 composition preserves side-specific roles at index 2
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 3 composition preserves side-specific roles at index 3
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 3 composition preserves side-specific roles at index 4
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 3 composition preserves side-specific roles at index 5
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 3 composition preserves side-specific roles at index 6
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Skirmisher eligibility wave 3
+PASS Bulwark eligibility wave 3
+PASS Original types remain in wave 3
+PASS Alive cap preserved in wave 3
+PASS Wave 4 composition preserves side-specific roles at index 0
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 4 composition preserves side-specific roles at index 1
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 4 composition preserves side-specific roles at index 2
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 4 composition preserves side-specific roles at index 3
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 4 composition preserves side-specific roles at index 4
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 4 composition preserves side-specific roles at index 5
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 4 composition preserves side-specific roles at index 6
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 4 composition preserves side-specific roles at index 7
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 4 composition preserves side-specific roles at index 8
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Skirmisher eligibility wave 4
+PASS Bulwark eligibility wave 4
+PASS Original types remain in wave 4
+PASS Alive cap preserved in wave 4
+PASS Wave 5 composition preserves side-specific roles at index 0
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 5 composition preserves side-specific roles at index 1
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 5 composition preserves side-specific roles at index 2
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 5 composition preserves side-specific roles at index 3
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 5 composition preserves side-specific roles at index 4
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 5 composition preserves side-specific roles at index 5
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 5 composition preserves side-specific roles at index 6
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 5 composition preserves side-specific roles at index 7
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 5 composition preserves side-specific roles at index 8
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 5 composition preserves side-specific roles at index 9
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 5 composition preserves side-specific roles at index 10
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Skirmisher eligibility wave 5
+PASS Bulwark eligibility wave 5
+PASS Original types remain in wave 5
+PASS Alive cap preserved in wave 5
+PASS Wave 6 composition preserves side-specific roles at index 0
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 6 composition preserves side-specific roles at index 1
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 6 composition preserves side-specific roles at index 2
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 6 composition preserves side-specific roles at index 3
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 6 composition preserves side-specific roles at index 4
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 6 composition preserves side-specific roles at index 5
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 6 composition preserves side-specific roles at index 6
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 6 composition preserves side-specific roles at index 7
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 6 composition preserves side-specific roles at index 8
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 6 composition preserves side-specific roles at index 9
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 6 composition preserves side-specific roles at index 10
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 6 composition preserves side-specific roles at index 11
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Skirmisher eligibility wave 6
+PASS Bulwark eligibility wave 6
+PASS Original types remain in wave 6
+PASS Alive cap preserved in wave 6
+PASS Wave 7 composition preserves side-specific roles at index 0
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 7 composition preserves side-specific roles at index 1
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 7 composition preserves side-specific roles at index 2
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 7 composition preserves side-specific roles at index 3
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 7 composition preserves side-specific roles at index 4
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 7 composition preserves side-specific roles at index 5
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 7 composition preserves side-specific roles at index 6
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 7 composition preserves side-specific roles at index 7
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 7 composition preserves side-specific roles at index 8
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 7 composition preserves side-specific roles at index 9
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 7 composition preserves side-specific roles at index 10
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 7 composition preserves side-specific roles at index 11
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Skirmisher eligibility wave 7
+PASS Bulwark eligibility wave 7
+PASS Original types remain in wave 7
+PASS Alive cap preserved in wave 7
+PASS Wave 8 composition preserves side-specific roles at index 0
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 8 composition preserves side-specific roles at index 1
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 8 composition preserves side-specific roles at index 2
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 8 composition preserves side-specific roles at index 3
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 8 composition preserves side-specific roles at index 4
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 8 composition preserves side-specific roles at index 5
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 8 composition preserves side-specific roles at index 6
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 8 composition preserves side-specific roles at index 7
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 8 composition preserves side-specific roles at index 8
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 8 composition preserves side-specific roles at index 9
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 8 composition preserves side-specific roles at index 10
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 8 composition preserves side-specific roles at index 11
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Skirmisher eligibility wave 8
+PASS Bulwark eligibility wave 8
+PASS Original types remain in wave 8
+PASS Alive cap preserved in wave 8
+PASS Wave 9 composition preserves side-specific roles at index 0
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 9 composition preserves side-specific roles at index 1
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 9 composition preserves side-specific roles at index 2
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 9 composition preserves side-specific roles at index 3
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 9 composition preserves side-specific roles at index 4
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 9 composition preserves side-specific roles at index 5
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 9 composition preserves side-specific roles at index 6
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 9 composition preserves side-specific roles at index 7
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 9 composition preserves side-specific roles at index 8
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 9 composition preserves side-specific roles at index 9
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 9 composition preserves side-specific roles at index 10
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 9 composition preserves side-specific roles at index 11
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Skirmisher eligibility wave 9
+PASS Bulwark eligibility wave 9
+PASS Original types remain in wave 9
+PASS Alive cap preserved in wave 9
+PASS Wave 10 composition preserves side-specific roles at index 0
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 10 composition preserves side-specific roles at index 1
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 10 composition preserves side-specific roles at index 2
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 10 composition preserves side-specific roles at index 3
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 10 composition preserves side-specific roles at index 4
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 10 composition preserves side-specific roles at index 5
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 10 composition preserves side-specific roles at index 6
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 10 composition preserves side-specific roles at index 7
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 10 composition preserves side-specific roles at index 8
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 10 composition preserves side-specific roles at index 9
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 10 composition preserves side-specific roles at index 10
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 10 composition preserves side-specific roles at index 11
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Skirmisher eligibility wave 10
+PASS Bulwark eligibility wave 10
+PASS Original types remain in wave 10
+PASS Alive cap preserved in wave 10
+PASS Wave 11 composition preserves side-specific roles at index 0
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 11 composition preserves side-specific roles at index 1
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 11 composition preserves side-specific roles at index 2
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 11 composition preserves side-specific roles at index 3
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 11 composition preserves side-specific roles at index 4
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 11 composition preserves side-specific roles at index 5
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 11 composition preserves side-specific roles at index 6
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 11 composition preserves side-specific roles at index 7
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 11 composition preserves side-specific roles at index 8
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 11 composition preserves side-specific roles at index 9
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 11 composition preserves side-specific roles at index 10
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 11 composition preserves side-specific roles at index 11
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Skirmisher eligibility wave 11
+PASS Bulwark eligibility wave 11
+PASS Original types remain in wave 11
+PASS Alive cap preserved in wave 11
+PASS Wave 12 composition preserves side-specific roles at index 0
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 12 composition preserves side-specific roles at index 1
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 12 composition preserves side-specific roles at index 2
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 12 composition preserves side-specific roles at index 3
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 12 composition preserves side-specific roles at index 4
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 12 composition preserves side-specific roles at index 5
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 12 composition preserves side-specific roles at index 6
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 12 composition preserves side-specific roles at index 7
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 12 composition preserves side-specific roles at index 8
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 12 composition preserves side-specific roles at index 9
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 12 composition preserves side-specific roles at index 10
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Wave 12 composition preserves side-specific roles at index 11
+PASS Wave stats contain archetype factor once (difficulty remains at spawn)
+PASS Skirmisher eligibility wave 12
+PASS Bulwark eligibility wave 12
+PASS Original types remain in wave 12
+PASS Alive cap preserved in wave 12
+PASS Villain responder is hostile
+PASS Hero responder preserves friendly faction policy
+PASS Skirmisher registered with evasive behavior
+PASS Skirmisher performs a dodge/dash
+PASS Evasion cooldown bounds frequency
+PASS Skirmisher remains hittable during travel
+PASS Evasion exposes finite recovery
+PASS Rapid melee releases and retreat occur
+PASS Skirmisher burst removes real player health through the shared damage path
+PASS Darkness-style root prevents evasion
+PASS Ice interrupts evasion/burst
+PASS Control expires without navigation corruption
+PASS Skirmisher can die normally
+PASS Bulwark registered with directional defense
+PASS Frontal guard reduces damage without immunity
+PASS Single authoritative result reports reduced damage
+PASS Flank bypasses guard
+PASS Rear bypasses guard
+PASS Strong generic impact disrupts guard before damage
+PASS Broken guard remains fully vulnerable
+PASS Guard break expires and integrity recharges
+PASS Generic Darkness-style root disrupts guard
+PASS Generic Ice freeze lowers shield
+PASS Control and guard disruption are finite
+PASS Shield drops during committed bash windup
+PASS Heavy bash waits for the configured readable windup
+PASS Bash exposes an unguarded recovery window
+PASS Bulwark bash damages through the existing player-health path
+PASS Bulwark can die and never guards while dead
+PASS Reset rebuilds scene and drops practice rewards
+PASS Reset leaves read-only snapshot source byte-identical

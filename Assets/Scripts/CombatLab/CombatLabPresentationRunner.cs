@@ -48,6 +48,15 @@ public sealed class CombatLabPresentationRunner : MonoBehaviour
             UI.Q<DropdownField>("lab-difficulty").value=difficulty;yield return Frames(3);
             Check(W.Difficulty.Id==difficulty&&Lab.ActiveCount==0,"Actual difficulty control rebuilds session: "+difficulty);
             Check(File.ReadAllText(WorldSession.VerificationSavePath)==before,"Difficulty UI never writes source snapshot");
+            W.Rolls.FixedUnit=.5f;Lab.Select(4);var guard=Lab.SpawnOne();
+            Check(guard!=null&&Mathf.Abs(guard.MaxHealth-W.Tuning.Npcs.CopHealth*guard.Archetype.HealthMultiplier*W.Difficulty.EnemyHealth)<.01f,"Live lab enemy HP scales once: "+difficulty);
+            if(guard!=null)
+            {
+                guard.transform.forward=Vector3.back;float hp=guard.Health;
+                guard.Damage(10,W.Powers,true,0,guard.GetComponent<Collider>().bounds.center+Vector3.back*5);
+                Check(Mathf.Abs(hp-guard.Health-3.5f*W.Difficulty.PlayerDamage)<.01f,"Active guard damage scales once: "+difficulty);
+            }
+            Lab.Clear();yield return null;
         }
         var camera=Camera.main;camera.GetComponent<ThirdPersonCamera>().enabled=false;camera.transform.position=new Vector3(6,3,-5);camera.transform.LookAt(new Vector3(0,1,4));
         foreach(var pair in new[]{new KeyValuePair<string,float>("Skirmisher",2),new KeyValuePair<string,float>("Bulwark",-2)})
@@ -69,7 +78,7 @@ public sealed class CombatLabPresentationRunner : MonoBehaviour
         for(int i=0;i<10;i++)
         {
             if(!W.MenuOpen)Click("lab-toggle");Click("lab-reset");yield return Frames(3);
-            Check(W.Npcs.Count==0&&FindObjectsByType<WorldSession>(FindObjectsSortMode.None).Length==1&&FindObjectsByType<SuperHeroController>(FindObjectsSortMode.None).Length==1,"Reset "+(i+1)+" leaves one clean session/hero");
+            Check(W.Npcs.Count==0&&FindObjectsByType<WorldSession>().Length==1&&FindObjectsByType<SuperHeroController>().Length==1,"Reset "+(i+1)+" leaves one clean session/hero");
             Check(NavMesh.SamplePosition(Vector3.zero,out _,1,NavMesh.AllAreas),"Reset "+(i+1)+" has valid arena navigation");
         }
         Check(Resources.FindObjectsOfTypeAll<NavMeshData>().Length<=dataCount,"Repeated resets do not retain old arena NavMeshData");

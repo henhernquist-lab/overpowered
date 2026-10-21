@@ -1,0 +1,20 @@
+[
+  {
+    "entry": "CombatVerification.Run",
+    "commit": "948a695f481202e8a6de1c111210aeca7acfc86c",
+    "status_before": "M Verification/ModeExpansion/home-extras.png\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/CombatLab/captures/\n?? Verification/CombatLab/combat-lab.txt\n?? Verification/CombatLab/matrix-attempt-01/\n?? Verification/CombatLab/power-matrix.txt\n?? Verification/CombatLab/presentation-attempt-01/\n?? Verification/CombatLab/presentation-attempt-02/\n?? Verification/CombatLab/presentation.txt\n?? Verification/CombatLab/reload.txt\n?? Verification/CombatLab/unity-attempt-01/\n?? Verification/CombatLab/unity-attempt-02/\n?? Verification/CombatLab/unity-attempt-03/",
+    "started_utc": "2026-10-21T15:04:01.135427+00:00",
+    "save_before": "3711a792632f352260a9c80d2decc0bba8c48a397e0aa993466b343e543303aa",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/CombatLab/regressions-01/CombatVerification.Run.log",
+    "combat_roll": 0.5,
+    "pid": 34908,
+    "exit": 1,
+    "seconds": 160.01,
+    "pass": 165,
+    "fail": 1,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Verification/Combat/archetypes-side-by-side.png\n M Verification/Combat/crowd-budget-2.png\n M Verification/Combat/crowd-budget-99.png\n M Verification/Combat/results.txt\n M Verification/Combat/windup-brute.png\n M Verification/Combat/windup-gunner.png\n M Verification/Combat/windup-rusher.png\n M Verification/ModeExpansion/home-extras.png\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/CombatLab/captures/\n?? Verification/CombatLab/combat-lab.txt\n?? Verification/CombatLab/matrix-attempt-01/\n?? Verification/CombatLab/power-matrix.txt\n?? Verification/CombatLab/presentation-attempt-01/\n?? Verification/CombatLab/presentation-attempt-02/\n?? Verification/CombatLab/presentation.txt\n?? Verification/CombatLab/reload.txt\n?? Verification/CombatLab/unity-attempt-01/\n?? Verification/CombatLab/unity-attempt-02/\n?? Verification/CombatLab/unity-attempt-03/"
+  }
+]

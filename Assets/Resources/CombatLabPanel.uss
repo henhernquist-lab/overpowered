@@ -4,12 +4,11 @@
 .lab-heading { font-size: 18px; -unity-font-style: bold; white-space: normal; margin-bottom: 8px; }
 .lab-note { font-size: 15px; white-space: normal; margin-top: 6px; margin-bottom: 8px; }
 .lab-row { flex-direction: row; }
-.lab-controls Button { height: 36px; margin: 3px; flex-grow: 1; background-color: rgb(24,27,59); color: rgb(245,245,232); }
+.lab-controls Button { height: 36px; margin: 3px; flex-grow: 1; background-color: rgb(24,27,59); color: rgb(245,245,232); -unity-text-align: middle-center; font-size: 15px; border-width: 1px; border-color: rgb(56,83,112); border-radius: 5px; }
 .lab-controls Button:hover { background-color: rgb(49,73,104); }
 .lab-controls DropdownField { margin-top: 8px; margin-bottom: 8px; }
 .lab-hidden { display: none; }
 
-.lab-controls Button { -unity-text-align: middle-center; font-size: 15px; border-width: 1px; border-color: rgb(56,83,112); border-radius: 5px; }
 .lab-controls .unity-base-field { flex-direction: row; align-items: center; }
 .lab-controls .unity-base-field__label { min-width: 90px; width: 90px; margin-right: 8px; }
 .lab-controls .unity-base-field__input { flex-grow: 1; padding: 10px; background-color: rgb(24,27,59); border-width: 1px; border-color: rgb(56,83,112); border-radius: 5px; }

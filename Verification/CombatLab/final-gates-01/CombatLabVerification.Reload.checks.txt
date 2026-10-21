@@ -1,0 +1,4 @@
+PASS Separate-process reload remains transient
+PASS Practice XP/hints/view do not survive process reload
+PASS Separate-process practice actions still cannot write source
+PASS Reload starts clean without mode, automatic spawns or Heat

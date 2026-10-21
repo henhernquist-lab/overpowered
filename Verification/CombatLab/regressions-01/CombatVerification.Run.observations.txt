@@ -1,0 +1,7 @@
+[COMBAT] MEASURED Rusher approach: 18.99m -> 12.99m in 0.859s = 6.99 m/s (mean NavMeshAgent speed 6.99 m/s over 336 frames; configured 7); spawned max health 39.00.
+[COMBAT] MEASURED Gunner approach: 18.99m -> 12.99m in 1.091s = 5.50 m/s (mean NavMeshAgent speed 5.50 m/s over 462 frames; configured 5.5); spawned max health 65.00.
+[COMBAT] MEASURED Gunner held distance over 6.0s (2631 frames, player stationary): min 9.78m, max 12.00m, mean 10.33m (band 8-12m); it fired 3 telegraphed shots from there, player health 92 -> 68.
+[COMBAT] MEASURED Brute approach: 19.00m -> 13.00m in 2.000s = 3.00 m/s (mean NavMeshAgent speed 3.00 m/s over 919 frames; configured 3); spawned max health 195.00.
+[COMBAT] MEASURED budget 2: 1456 frames over 10 s: max simultaneous windups 2, max tokens held 2, releases 18 (18 would-be hits) by 9 different enemies; waiting melee enemies (no token): mean 4.57 m from the player (min 3.50, max 10.60, 5663 samples), ring 4.5 m.
+[COMBAT] MEASURED managed allocation (profiler 'GC Allocated In Frame', valid=True): crowd ACTIVE 1494.9 B/frame over 3 s / 450 frames (312 frames with a windup, 3 releases) vs same crowd FROZEN 1421.2 B/frame over 565 frames; difference 73.7 B/frame.
+[COMBAT] MEASURED budget 99 CONTROL: max simultaneous windups 7, max tokens held 8, releases 38 by 9 enemies; waiting mean 7.70 m (311 samples).

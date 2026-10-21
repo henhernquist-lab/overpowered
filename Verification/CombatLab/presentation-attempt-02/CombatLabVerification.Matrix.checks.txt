@@ -1,0 +1,747 @@
+PASS Real Forge gates equip strength / speed
+PASS Real signature gate selects seismic-slam
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / strength
+PASS Equipped primary selected strength
+PASS Primary activation strength vs Skirmisher / normal
+PASS Primary damage reaches authoritative health: strength / Skirmisher / normal
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation seismic-slam / Skirmisher / normal
+PASS Signature lifetime bounded: seismic-slam
+PASS Signature damage reaches Skirmisher: seismic-slam / normal
+PASS Signature leaves valid navigation: seismic-slam
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip fire / speed
+PASS Real signature gate selects solar-flare
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / fire
+PASS Equipped primary selected fire
+PASS Primary activation fire vs Skirmisher / normal
+PASS Primary damage reaches authoritative health: fire / Skirmisher / normal
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation solar-flare / Skirmisher / normal
+PASS Signature lifetime bounded: solar-flare
+PASS Signature damage reaches Skirmisher: solar-flare / normal
+PASS Signature leaves valid navigation: solar-flare
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip ice / speed
+PASS Real signature gate selects glacial-prison
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / ice
+PASS Equipped primary selected ice
+PASS Primary activation ice vs Skirmisher / normal
+PASS Ice controls Skirmisher
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation glacial-prison / Skirmisher / normal
+PASS Signature lifetime bounded: glacial-prison
+PASS Signature damage reaches Skirmisher: glacial-prison / normal
+PASS Signature leaves valid navigation: glacial-prison
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip lightning / speed
+PASS Real signature gate selects thunderstorm
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / lightning
+PASS Equipped primary selected lightning
+PASS Primary activation lightning vs Skirmisher / normal
+PASS Primary damage reaches authoritative health: lightning / Skirmisher / normal
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation thunderstorm / Skirmisher / normal
+PASS Signature lifetime bounded: thunderstorm
+PASS Signature damage reaches Skirmisher: thunderstorm / normal
+PASS Signature leaves valid navigation: thunderstorm
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip laser-eyes / speed
+PASS Real signature gate selects prism-barrage
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / laser-eyes
+PASS Equipped primary selected laser-eyes
+PASS Primary activation laser-eyes vs Skirmisher / normal
+PASS Primary damage reaches authoritative health: laser-eyes / Skirmisher / normal
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation prism-barrage / Skirmisher / normal
+PASS Signature lifetime bounded: prism-barrage
+PASS Signature damage reaches Skirmisher: prism-barrage / normal
+PASS Signature leaves valid navigation: prism-barrage
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip poison / speed
+PASS Real signature gate selects plague-bloom
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / poison
+PASS Equipped primary selected poison
+PASS Primary activation poison vs Skirmisher / normal
+PASS Primary damage reaches authoritative health: poison / Skirmisher / normal
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation plague-bloom / Skirmisher / normal
+PASS Signature lifetime bounded: plague-bloom
+PASS Signature damage reaches Skirmisher: plague-bloom / normal
+PASS Signature leaves valid navigation: plague-bloom
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip telekinesis / speed
+PASS Real signature gate selects meteor-crush
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / telekinesis
+PASS Equipped primary selected telekinesis
+PASS Telekinesis grabs through ownership gates
+PASS Primary damage reaches authoritative health: telekinesis / Skirmisher / normal
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation meteor-crush / Skirmisher / normal
+PASS Signature lifetime bounded: meteor-crush
+PASS Signature damage reaches Skirmisher: meteor-crush / normal
+PASS Signature leaves valid navigation: meteor-crush
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip darkness / speed
+PASS Real signature gate selects abyssal-grasp
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / darkness
+PASS Equipped primary selected darkness
+PASS Primary activation darkness vs Skirmisher / normal
+PASS Primary damage reaches authoritative health: darkness / Skirmisher / normal
+PASS Resolved damage metadata stays consistent
+PASS Darkness controls Skirmisher
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation abyssal-grasp / Skirmisher / normal
+PASS Signature lifetime bounded: abyssal-grasp
+PASS Signature damage reaches Skirmisher: abyssal-grasp / normal
+PASS Signature leaves valid navigation: abyssal-grasp
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip strength / speed
+PASS Real signature gate selects seismic-slam
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / strength
+PASS Equipped primary selected strength
+PASS Primary activation strength vs Bulwark / normal
+PASS Primary damage reaches authoritative health: strength / Bulwark / normal
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation seismic-slam / Bulwark / normal
+PASS Signature lifetime bounded: seismic-slam
+PASS Signature damage reaches Bulwark: seismic-slam / normal
+PASS Signature leaves valid navigation: seismic-slam
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip fire / speed
+PASS Real signature gate selects solar-flare
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / fire
+PASS Equipped primary selected fire
+PASS Primary activation fire vs Bulwark / normal
+PASS Primary damage reaches authoritative health: fire / Bulwark / normal
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation solar-flare / Bulwark / normal
+PASS Signature lifetime bounded: solar-flare
+PASS Signature damage reaches Bulwark: solar-flare / normal
+PASS Signature leaves valid navigation: solar-flare
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip ice / speed
+PASS Real signature gate selects glacial-prison
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / ice
+PASS Equipped primary selected ice
+PASS Primary activation ice vs Bulwark / normal
+PASS Ice controls Bulwark
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation glacial-prison / Bulwark / normal
+PASS Signature lifetime bounded: glacial-prison
+PASS Signature damage reaches Bulwark: glacial-prison / normal
+PASS Signature leaves valid navigation: glacial-prison
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip lightning / speed
+PASS Real signature gate selects thunderstorm
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / lightning
+PASS Equipped primary selected lightning
+PASS Primary activation lightning vs Bulwark / normal
+PASS Primary damage reaches authoritative health: lightning / Bulwark / normal
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation thunderstorm / Bulwark / normal
+PASS Signature lifetime bounded: thunderstorm
+PASS Signature damage reaches Bulwark: thunderstorm / normal
+PASS Signature leaves valid navigation: thunderstorm
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip laser-eyes / speed
+PASS Real signature gate selects prism-barrage
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / laser-eyes
+PASS Equipped primary selected laser-eyes
+PASS Primary activation laser-eyes vs Bulwark / normal
+PASS Primary damage reaches authoritative health: laser-eyes / Bulwark / normal
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation prism-barrage / Bulwark / normal
+PASS Signature lifetime bounded: prism-barrage
+PASS Signature damage reaches Bulwark: prism-barrage / normal
+PASS Signature leaves valid navigation: prism-barrage
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip poison / speed
+PASS Real signature gate selects plague-bloom
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / poison
+PASS Equipped primary selected poison
+PASS Primary activation poison vs Bulwark / normal
+PASS Primary damage reaches authoritative health: poison / Bulwark / normal
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation plague-bloom / Bulwark / normal
+PASS Signature lifetime bounded: plague-bloom
+PASS Signature damage reaches Bulwark: plague-bloom / normal
+PASS Signature leaves valid navigation: plague-bloom
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip telekinesis / speed
+PASS Real signature gate selects meteor-crush
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / telekinesis
+PASS Equipped primary selected telekinesis
+PASS Telekinesis grabs through ownership gates
+PASS Primary damage reaches authoritative health: telekinesis / Bulwark / normal
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation meteor-crush / Bulwark / normal
+PASS Signature lifetime bounded: meteor-crush
+PASS Signature damage reaches Bulwark: meteor-crush / normal
+PASS Signature leaves valid navigation: meteor-crush
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip darkness / speed
+PASS Real signature gate selects abyssal-grasp
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / darkness
+PASS Equipped primary selected darkness
+PASS Primary activation darkness vs Bulwark / normal
+PASS Primary damage reaches authoritative health: darkness / Bulwark / normal
+PASS Resolved damage metadata stays consistent
+PASS Darkness controls Bulwark
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation abyssal-grasp / Bulwark / normal
+PASS Signature lifetime bounded: abyssal-grasp
+PASS Signature damage reaches Bulwark: abyssal-grasp / normal
+PASS Signature leaves valid navigation: abyssal-grasp
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip strength / speed
+PASS Real signature gate selects seismic-slam
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / strength
+PASS Equipped primary selected strength
+PASS Primary activation strength vs Skirmisher / hard
+PASS Primary damage reaches authoritative health: strength / Skirmisher / hard
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation seismic-slam / Skirmisher / hard
+PASS Signature lifetime bounded: seismic-slam
+PASS Signature damage reaches Skirmisher: seismic-slam / hard
+PASS Signature leaves valid navigation: seismic-slam
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip fire / speed
+PASS Real signature gate selects solar-flare
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / fire
+PASS Equipped primary selected fire
+PASS Primary activation fire vs Skirmisher / hard
+PASS Primary damage reaches authoritative health: fire / Skirmisher / hard
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation solar-flare / Skirmisher / hard
+PASS Signature lifetime bounded: solar-flare
+PASS Signature damage reaches Skirmisher: solar-flare / hard
+PASS Signature leaves valid navigation: solar-flare
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip ice / speed
+PASS Real signature gate selects glacial-prison
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / ice
+PASS Equipped primary selected ice
+PASS Primary activation ice vs Skirmisher / hard
+PASS Ice controls Skirmisher
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation glacial-prison / Skirmisher / hard
+PASS Signature lifetime bounded: glacial-prison
+PASS Signature damage reaches Skirmisher: glacial-prison / hard
+PASS Signature leaves valid navigation: glacial-prison
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip lightning / speed
+PASS Real signature gate selects thunderstorm
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / lightning
+PASS Equipped primary selected lightning
+PASS Primary activation lightning vs Skirmisher / hard
+PASS Primary damage reaches authoritative health: lightning / Skirmisher / hard
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation thunderstorm / Skirmisher / hard
+PASS Signature lifetime bounded: thunderstorm
+PASS Signature damage reaches Skirmisher: thunderstorm / hard
+PASS Signature leaves valid navigation: thunderstorm
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip laser-eyes / speed
+PASS Real signature gate selects prism-barrage
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / laser-eyes
+PASS Equipped primary selected laser-eyes
+PASS Primary activation laser-eyes vs Skirmisher / hard
+PASS Primary damage reaches authoritative health: laser-eyes / Skirmisher / hard
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation prism-barrage / Skirmisher / hard
+PASS Signature lifetime bounded: prism-barrage
+PASS Signature damage reaches Skirmisher: prism-barrage / hard
+PASS Signature leaves valid navigation: prism-barrage
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip poison / speed
+PASS Real signature gate selects plague-bloom
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / poison
+PASS Equipped primary selected poison
+PASS Primary activation poison vs Skirmisher / hard
+PASS Primary damage reaches authoritative health: poison / Skirmisher / hard
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation plague-bloom / Skirmisher / hard
+PASS Signature lifetime bounded: plague-bloom
+PASS Signature damage reaches Skirmisher: plague-bloom / hard
+PASS Signature leaves valid navigation: plague-bloom
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip telekinesis / speed
+PASS Real signature gate selects meteor-crush
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / telekinesis
+PASS Equipped primary selected telekinesis
+PASS Telekinesis grabs through ownership gates
+PASS Primary damage reaches authoritative health: telekinesis / Skirmisher / hard
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation meteor-crush / Skirmisher / hard
+PASS Signature lifetime bounded: meteor-crush
+PASS Signature damage reaches Skirmisher: meteor-crush / hard
+PASS Signature leaves valid navigation: meteor-crush
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip darkness / speed
+PASS Real signature gate selects abyssal-grasp
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / darkness
+PASS Equipped primary selected darkness
+PASS Primary activation darkness vs Skirmisher / hard
+PASS Primary damage reaches authoritative health: darkness / Skirmisher / hard
+PASS Resolved damage metadata stays consistent
+PASS Darkness controls Skirmisher
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation abyssal-grasp / Skirmisher / hard
+PASS Signature lifetime bounded: abyssal-grasp
+PASS Signature damage reaches Skirmisher: abyssal-grasp / hard
+PASS Signature leaves valid navigation: abyssal-grasp
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip strength / speed
+PASS Real signature gate selects seismic-slam
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / strength
+PASS Equipped primary selected strength
+PASS Primary activation strength vs Bulwark / hard
+PASS Primary damage reaches authoritative health: strength / Bulwark / hard
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation seismic-slam / Bulwark / hard
+PASS Signature lifetime bounded: seismic-slam
+PASS Signature damage reaches Bulwark: seismic-slam / hard
+PASS Signature leaves valid navigation: seismic-slam
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip fire / speed
+PASS Real signature gate selects solar-flare
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / fire
+PASS Equipped primary selected fire
+PASS Primary activation fire vs Bulwark / hard
+PASS Primary damage reaches authoritative health: fire / Bulwark / hard
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation solar-flare / Bulwark / hard
+PASS Signature lifetime bounded: solar-flare
+PASS Signature damage reaches Bulwark: solar-flare / hard
+PASS Signature leaves valid navigation: solar-flare
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip ice / speed
+PASS Real signature gate selects glacial-prison
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / ice
+PASS Equipped primary selected ice
+PASS Primary activation ice vs Bulwark / hard
+PASS Ice controls Bulwark
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation glacial-prison / Bulwark / hard
+PASS Signature lifetime bounded: glacial-prison
+PASS Signature damage reaches Bulwark: glacial-prison / hard
+PASS Signature leaves valid navigation: glacial-prison
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip lightning / speed
+PASS Real signature gate selects thunderstorm
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / lightning
+PASS Equipped primary selected lightning
+PASS Primary activation lightning vs Bulwark / hard
+PASS Primary damage reaches authoritative health: lightning / Bulwark / hard
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation thunderstorm / Bulwark / hard
+PASS Signature lifetime bounded: thunderstorm
+PASS Signature damage reaches Bulwark: thunderstorm / hard
+PASS Signature leaves valid navigation: thunderstorm
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip laser-eyes / speed
+PASS Real signature gate selects prism-barrage
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / laser-eyes
+PASS Equipped primary selected laser-eyes
+PASS Primary activation laser-eyes vs Bulwark / hard
+PASS Primary damage reaches authoritative health: laser-eyes / Bulwark / hard
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation prism-barrage / Bulwark / hard
+PASS Signature lifetime bounded: prism-barrage
+PASS Signature damage reaches Bulwark: prism-barrage / hard
+PASS Signature leaves valid navigation: prism-barrage
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip poison / speed
+PASS Real signature gate selects plague-bloom
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / poison
+PASS Equipped primary selected poison
+PASS Primary activation poison vs Bulwark / hard
+PASS Primary damage reaches authoritative health: poison / Bulwark / hard
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation plague-bloom / Bulwark / hard
+PASS Signature lifetime bounded: plague-bloom
+PASS Signature damage reaches Bulwark: plague-bloom / hard
+PASS Signature leaves valid navigation: plague-bloom
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip telekinesis / speed
+PASS Real signature gate selects meteor-crush
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / telekinesis
+PASS Equipped primary selected telekinesis
+PASS Telekinesis grabs through ownership gates
+PASS Primary damage reaches authoritative health: telekinesis / Bulwark / hard
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation meteor-crush / Bulwark / hard
+PASS Signature lifetime bounded: meteor-crush
+PASS Signature damage reaches Bulwark: meteor-crush / hard
+PASS Signature leaves valid navigation: meteor-crush
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip darkness / speed
+PASS Real signature gate selects abyssal-grasp
+PASS Select fixture difficulty hard
+PASS Fresh immutable lab snapshot hard / darkness
+PASS Equipped primary selected darkness
+PASS Primary activation darkness vs Bulwark / hard
+PASS Primary damage reaches authoritative health: darkness / Bulwark / hard
+PASS Resolved damage metadata stays consistent
+PASS Darkness controls Bulwark
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation abyssal-grasp / Bulwark / hard
+PASS Signature lifetime bounded: abyssal-grasp
+PASS Signature damage reaches Bulwark: abyssal-grasp / hard
+PASS Signature leaves valid navigation: abyssal-grasp
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip strength / speed
+PASS Real signature gate selects seismic-slam
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / strength
+PASS Equipped primary selected strength
+PASS Primary activation strength vs Skirmisher / extreme
+PASS Primary damage reaches authoritative health: strength / Skirmisher / extreme
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation seismic-slam / Skirmisher / extreme
+PASS Signature lifetime bounded: seismic-slam
+PASS Signature damage reaches Skirmisher: seismic-slam / extreme
+PASS Signature leaves valid navigation: seismic-slam
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip fire / speed
+PASS Real signature gate selects solar-flare
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / fire
+PASS Equipped primary selected fire
+PASS Primary activation fire vs Skirmisher / extreme
+PASS Primary damage reaches authoritative health: fire / Skirmisher / extreme
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation solar-flare / Skirmisher / extreme
+PASS Signature lifetime bounded: solar-flare
+PASS Signature damage reaches Skirmisher: solar-flare / extreme
+PASS Signature leaves valid navigation: solar-flare
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip ice / speed
+PASS Real signature gate selects glacial-prison
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / ice
+PASS Equipped primary selected ice
+PASS Primary activation ice vs Skirmisher / extreme
+PASS Ice controls Skirmisher
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation glacial-prison / Skirmisher / extreme
+PASS Signature lifetime bounded: glacial-prison
+PASS Signature damage reaches Skirmisher: glacial-prison / extreme
+PASS Signature leaves valid navigation: glacial-prison
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip lightning / speed
+PASS Real signature gate selects thunderstorm
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / lightning
+PASS Equipped primary selected lightning
+PASS Primary activation lightning vs Skirmisher / extreme
+PASS Primary damage reaches authoritative health: lightning / Skirmisher / extreme
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation thunderstorm / Skirmisher / extreme
+PASS Signature lifetime bounded: thunderstorm
+PASS Signature damage reaches Skirmisher: thunderstorm / extreme
+PASS Signature leaves valid navigation: thunderstorm
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip laser-eyes / speed
+PASS Real signature gate selects prism-barrage
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / laser-eyes
+PASS Equipped primary selected laser-eyes
+PASS Primary activation laser-eyes vs Skirmisher / extreme
+PASS Primary damage reaches authoritative health: laser-eyes / Skirmisher / extreme
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation prism-barrage / Skirmisher / extreme
+PASS Signature lifetime bounded: prism-barrage
+PASS Signature damage reaches Skirmisher: prism-barrage / extreme
+PASS Signature leaves valid navigation: prism-barrage
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip poison / speed
+PASS Real signature gate selects plague-bloom
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / poison
+PASS Equipped primary selected poison
+PASS Primary activation poison vs Skirmisher / extreme
+PASS Primary damage reaches authoritative health: poison / Skirmisher / extreme
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation plague-bloom / Skirmisher / extreme
+PASS Signature lifetime bounded: plague-bloom
+PASS Signature damage reaches Skirmisher: plague-bloom / extreme
+PASS Signature leaves valid navigation: plague-bloom
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip telekinesis / speed
+PASS Real signature gate selects meteor-crush
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / telekinesis
+PASS Equipped primary selected telekinesis
+PASS Telekinesis grabs through ownership gates
+PASS Primary damage reaches authoritative health: telekinesis / Skirmisher / extreme
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation meteor-crush / Skirmisher / extreme
+PASS Signature lifetime bounded: meteor-crush
+PASS Signature damage reaches Skirmisher: meteor-crush / extreme
+PASS Signature leaves valid navigation: meteor-crush
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip darkness / speed
+PASS Real signature gate selects abyssal-grasp
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / darkness
+PASS Equipped primary selected darkness
+PASS Primary activation darkness vs Skirmisher / extreme
+PASS Primary damage reaches authoritative health: darkness / Skirmisher / extreme
+PASS Resolved damage metadata stays consistent
+PASS Darkness controls Skirmisher
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation abyssal-grasp / Skirmisher / extreme
+PASS Signature lifetime bounded: abyssal-grasp
+PASS Signature damage reaches Skirmisher: abyssal-grasp / extreme
+PASS Signature leaves valid navigation: abyssal-grasp
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip strength / speed
+PASS Real signature gate selects seismic-slam
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / strength
+PASS Equipped primary selected strength
+PASS Primary activation strength vs Bulwark / extreme
+PASS Primary damage reaches authoritative health: strength / Bulwark / extreme
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation seismic-slam / Bulwark / extreme
+PASS Signature lifetime bounded: seismic-slam
+PASS Signature damage reaches Bulwark: seismic-slam / extreme
+PASS Signature leaves valid navigation: seismic-slam
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip fire / speed
+PASS Real signature gate selects solar-flare
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / fire
+PASS Equipped primary selected fire
+PASS Primary activation fire vs Bulwark / extreme
+PASS Primary damage reaches authoritative health: fire / Bulwark / extreme
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation solar-flare / Bulwark / extreme
+PASS Signature lifetime bounded: solar-flare
+PASS Signature damage reaches Bulwark: solar-flare / extreme
+PASS Signature leaves valid navigation: solar-flare
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip ice / speed
+PASS Real signature gate selects glacial-prison
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / ice
+PASS Equipped primary selected ice
+PASS Primary activation ice vs Bulwark / extreme
+PASS Ice controls Bulwark
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation glacial-prison / Bulwark / extreme
+PASS Signature lifetime bounded: glacial-prison
+PASS Signature damage reaches Bulwark: glacial-prison / extreme
+PASS Signature leaves valid navigation: glacial-prison
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip lightning / speed
+PASS Real signature gate selects thunderstorm
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / lightning
+PASS Equipped primary selected lightning
+PASS Primary activation lightning vs Bulwark / extreme
+PASS Primary damage reaches authoritative health: lightning / Bulwark / extreme
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation thunderstorm / Bulwark / extreme
+PASS Signature lifetime bounded: thunderstorm
+PASS Signature damage reaches Bulwark: thunderstorm / extreme
+PASS Signature leaves valid navigation: thunderstorm
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip laser-eyes / speed
+PASS Real signature gate selects prism-barrage
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / laser-eyes
+PASS Equipped primary selected laser-eyes
+PASS Primary activation laser-eyes vs Bulwark / extreme
+PASS Primary damage reaches authoritative health: laser-eyes / Bulwark / extreme
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation prism-barrage / Bulwark / extreme
+PASS Signature lifetime bounded: prism-barrage
+PASS Signature damage reaches Bulwark: prism-barrage / extreme
+PASS Signature leaves valid navigation: prism-barrage
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip poison / speed
+PASS Real signature gate selects plague-bloom
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / poison
+PASS Equipped primary selected poison
+PASS Primary activation poison vs Bulwark / extreme
+PASS Primary damage reaches authoritative health: poison / Bulwark / extreme
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation plague-bloom / Bulwark / extreme
+PASS Signature lifetime bounded: plague-bloom
+PASS Signature damage reaches Bulwark: plague-bloom / extreme
+PASS Signature leaves valid navigation: plague-bloom
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip telekinesis / speed
+PASS Real signature gate selects meteor-crush
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / telekinesis
+PASS Equipped primary selected telekinesis
+PASS Telekinesis grabs through ownership gates
+PASS Primary damage reaches authoritative health: telekinesis / Bulwark / extreme
+PASS Resolved damage metadata stays consistent
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation meteor-crush / Bulwark / extreme
+PASS Signature lifetime bounded: meteor-crush
+PASS Signature damage reaches Bulwark: meteor-crush / extreme
+PASS Signature leaves valid navigation: meteor-crush
+PASS Signature cancellation releases persistent presentation
+PASS Real Forge gates equip darkness / speed
+PASS Real signature gate selects abyssal-grasp
+PASS Select fixture difficulty extreme
+PASS Fresh immutable lab snapshot extreme / darkness
+PASS Equipped primary selected darkness
+PASS Primary activation darkness vs Bulwark / extreme
+PASS Primary damage reaches authoritative health: darkness / Bulwark / extreme
+PASS Resolved damage metadata stays consistent
+PASS Darkness controls Bulwark
+PASS Existing floating-number path receives damage
+PASS Existing health bar reads real HP
+PASS Signature activation abyssal-grasp / Bulwark / extreme
+PASS Signature lifetime bounded: abyssal-grasp
+PASS Signature damage reaches Bulwark: abyssal-grasp / extreme
+PASS Signature leaves valid navigation: abyssal-grasp
+PASS Signature cancellation releases persistent presentation
+PASS Only the four current Forge secondary choices are tested; legacy Flight remains unavailable
+PASS Legacy Flight is refused by the same equipment gate in practice
+PASS Real Forge gates equip fire / force-field
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / fire
+PASS Equipped secondary activates: force-field (Force Field activated)
+PASS Force Field absorbs through authoritative health path
+PASS Real Forge gates equip fire / phase-shift
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / fire
+PASS Equipped secondary activates: phase-shift (Phase Shift activated)
+PASS Phase remains active
+PASS Real Forge gates equip fire / speed
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / fire
+PASS Equipped secondary activates: speed (Speed activated)
+PASS Real Forge gates equip fire / teleport
+PASS Select fixture difficulty normal
+PASS Fresh immutable lab snapshot normal / fire
+PASS Equipped secondary activates: teleport (Teleport activated)
+PASS Scene reset removes test NPCs and signature pool

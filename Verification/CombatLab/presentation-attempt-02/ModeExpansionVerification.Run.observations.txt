@@ -1,0 +1,4 @@
+[MODE-EXPANSION] MEASURED darkness in Free Play: dummy health 100000 -> 99994, rooted True.
+[MODE-EXPANSION] MEASURED poison in Free Play: dummy health 100000 -> 100000, rooted False.
+[MODE-EXPANSION] MEASURED lightning in Free Play: dummy health 100000 -> 99956, rooted False.
+[MODE-EXPANSION] MEASURED laser-eyes in Free Play: dummy health 100000 -> 99987, rooted False.

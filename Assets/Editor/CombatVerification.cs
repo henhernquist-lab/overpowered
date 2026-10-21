@@ -10,10 +10,10 @@ using UnityEngine;
 public static class CombatVerification
 {
     const string Key="Overpowered.CombatVerification";
-    static double deadline;
+    static System.Diagnostics.Stopwatch runClock;
     public static string Folder=>Path.GetFullPath("Verification/Combat");
     public static string SavePath=>Path.Combine(Folder,"save-run.json");
-    static CombatVerification(){EditorApplication.update+=()=>{if(deadline>0&&EditorApplication.timeSinceStartup>deadline){Debug.LogError("Combat verification timeout");Finish(1);}};}
+    static CombatVerification(){EditorApplication.update+=()=>{if(runClock!=null&&runClock.Elapsed.TotalSeconds>900){Debug.LogError("FAIL Combat verification exceeded 900 monotonic seconds");Finish(1);}};}
     public static void Run()
     {
         Directory.CreateDirectory(Folder);
@@ -24,7 +24,7 @@ public static class CombatVerification
     static void Configure()
     {
         if(SessionState.GetString(Key,"")=="")return;
-        EditorApplication.LockReloadAssemblies();deadline=EditorApplication.timeSinceStartup+900;
+        EditorApplication.LockReloadAssemblies();runClock=System.Diagnostics.Stopwatch.StartNew();
         WorldSession.VerificationSavePath=SavePath;GameFlow.VerificationSandbox=false;
     }
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -34,5 +34,5 @@ public static class CombatVerification
         var go=new GameObject("Combat verification");Object.DontDestroyOnLoad(go);
         var runner=go.AddComponent<CombatVerificationRunner>();runner.Folder=Folder;runner.Finished=Finish;
     }
-    static void Finish(int code){SessionState.EraseString(Key);deadline=0;EditorApplication.UnlockReloadAssemblies();EditorApplication.Exit(code);}
+    static void Finish(int code){SessionState.EraseString(Key);runClock=null;EditorApplication.UnlockReloadAssemblies();EditorApplication.Exit(code);}
 }

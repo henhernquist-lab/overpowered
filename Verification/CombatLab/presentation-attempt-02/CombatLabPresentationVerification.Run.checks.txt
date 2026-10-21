@@ -1,0 +1,59 @@
+PASS All five archetypes appear in the native dropdown
+PASS Actual panel button pauses practice
+PASS controls-1080: expected control visibility
+PASS controls-1080: native root has a valid rendered layout
+PASS controls-1080: button fits native panel: lab-one
+PASS controls-1080: button fits native panel: lab-group
+PASS controls-1080: button fits native panel: lab-clear
+PASS controls-1080: button fits native panel: lab-health
+PASS controls-1080: button fits native panel: lab-energy
+PASS controls-1080: button fits native panel: lab-reset
+PASS controls-1080: button fits native panel: lab-exit
+PASS controls-720: expected control visibility
+PASS controls-720: native root has a valid rendered layout
+PASS controls-720: button fits native panel: lab-one
+PASS controls-720: button fits native panel: lab-group
+PASS controls-720: button fits native panel: lab-clear
+PASS controls-720: button fits native panel: lab-health
+PASS controls-720: button fits native panel: lab-energy
+PASS controls-720: button fits native panel: lab-reset
+PASS controls-720: button fits native panel: lab-exit
+PASS Actual dropdown/spawn-one button creates Skirmisher
+PASS Actual group button adds three
+PASS Actual clear button removes owned actors
+PASS Actual restore-health button works
+PASS Actual restore-energy button works
+PASS Actual difficulty control rebuilds session: hard
+PASS Difficulty UI never writes source snapshot
+PASS Actual difficulty control rebuilds session: extreme
+PASS Difficulty UI never writes source snapshot
+PASS Actual difficulty control rebuilds session: normal
+PASS Difficulty UI never writes source snapshot
+PASS enemy-silhouettes: expected control visibility
+PASS Captured Bulwark is actually guarding
+PASS Captured shield break matches gameplay state
+PASS guard-break: expected control visibility
+PASS All new armor/visor/shield attachments share one cube mesh
+PASS Performance sample retains exactly twelve live enemies
+PASS Reset 1 leaves one clean session/hero
+PASS Reset 1 has valid arena navigation
+PASS Reset 2 leaves one clean session/hero
+PASS Reset 2 has valid arena navigation
+PASS Reset 3 leaves one clean session/hero
+PASS Reset 3 has valid arena navigation
+PASS Reset 4 leaves one clean session/hero
+PASS Reset 4 has valid arena navigation
+PASS Reset 5 leaves one clean session/hero
+PASS Reset 5 has valid arena navigation
+PASS Reset 6 leaves one clean session/hero
+PASS Reset 6 has valid arena navigation
+PASS Reset 7 leaves one clean session/hero
+PASS Reset 7 has valid arena navigation
+PASS Reset 8 leaves one clean session/hero
+PASS Reset 8 has valid arena navigation
+PASS Reset 9 leaves one clean session/hero
+PASS Reset 9 has valid arena navigation
+PASS Reset 10 leaves one clean session/hero
+PASS Reset 10 has valid arena navigation
+PASS Repeated resets do not retain old arena NavMeshData
+PASS Controls, combat and ten resets preserve source snapshot bytes

@@ -1,0 +1,708 @@
+PASS Matrix uses default roster gate
+PASS Select difficulty normal
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter hero
+PASS Session caches meteor-crush
+PASS Difficulty energy once
+PASS meteor-crush activates normal/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 210 expected 210
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter villain
+PASS Session caches meteor-crush
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS meteor-crush activates normal/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 210 expected 210
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter free-play
+PASS Session caches meteor-crush
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS meteor-crush activates normal/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 210 expected 210
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter endless-fight
+PASS Session caches meteor-crush
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS meteor-crush activates normal/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 210 expected 210
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter hero
+PASS Session caches abyssal-grasp
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS abyssal-grasp activates normal/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 70 expected 70
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter villain
+PASS Session caches abyssal-grasp
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS abyssal-grasp activates normal/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 70 expected 70
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter free-play
+PASS Session caches abyssal-grasp
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS abyssal-grasp activates normal/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 70 expected 70
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter endless-fight
+PASS Session caches abyssal-grasp
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS abyssal-grasp activates normal/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 70 expected 70
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter hero
+PASS Session caches prism-barrage
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS prism-barrage activates normal/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 115 expected 115
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter villain
+PASS Session caches prism-barrage
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS prism-barrage activates normal/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 115 expected 115
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter free-play
+PASS Session caches prism-barrage
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS prism-barrage activates normal/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 115 expected 115
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter endless-fight
+PASS Session caches prism-barrage
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS prism-barrage activates normal/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 115 expected 115
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter hero
+PASS Session caches plague-bloom
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS plague-bloom activates normal/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 179.9871 expected 180
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter villain
+PASS Session caches plague-bloom
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS plague-bloom activates normal/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 179.9172 expected 180
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter free-play
+PASS Session caches plague-bloom
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS plague-bloom activates normal/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 179.8833 expected 180
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter endless-fight
+PASS Session caches plague-bloom
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS plague-bloom activates normal/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 179.9979 expected 180
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter hero
+PASS Session caches meteor-crush
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS meteor-crush activates hard/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 203.7 expected 203.7
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter villain
+PASS Session caches meteor-crush
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS meteor-crush activates hard/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 203.7 expected 203.7
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter free-play
+PASS Session caches meteor-crush
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS meteor-crush activates hard/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 203.7 expected 203.7
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter endless-fight
+PASS Session caches meteor-crush
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS meteor-crush activates hard/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 203.7 expected 203.7
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter hero
+PASS Session caches abyssal-grasp
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS abyssal-grasp activates hard/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 67.90002 expected 67.9
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter villain
+PASS Session caches abyssal-grasp
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS abyssal-grasp activates hard/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 67.90002 expected 67.9
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter free-play
+PASS Session caches abyssal-grasp
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS abyssal-grasp activates hard/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 67.90002 expected 67.9
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter endless-fight
+PASS Session caches abyssal-grasp
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS abyssal-grasp activates hard/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 67.90002 expected 67.9
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter hero
+PASS Session caches prism-barrage
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS prism-barrage activates hard/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 111.55 expected 111.55
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter villain
+PASS Session caches prism-barrage
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS prism-barrage activates hard/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 111.55 expected 111.55
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter free-play
+PASS Session caches prism-barrage
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS prism-barrage activates hard/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 111.55 expected 111.55
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter endless-fight
+PASS Session caches prism-barrage
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS prism-barrage activates hard/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 111.55 expected 111.55
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter hero
+PASS Session caches plague-bloom
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS plague-bloom activates hard/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 174.5928 expected 174.6
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter villain
+PASS Session caches plague-bloom
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS plague-bloom activates hard/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 174.561 expected 174.6
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter free-play
+PASS Session caches plague-bloom
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS plague-bloom activates hard/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 174.515 expected 174.6
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter endless-fight
+PASS Session caches plague-bloom
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS plague-bloom activates hard/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 174.5593 expected 174.6
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter hero
+PASS Session caches meteor-crush
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS meteor-crush activates extreme/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 200.55 expected 200.55
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter villain
+PASS Session caches meteor-crush
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS meteor-crush activates extreme/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 200.55 expected 200.55
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter free-play
+PASS Session caches meteor-crush
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS meteor-crush activates extreme/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 200.55 expected 200.55
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter endless-fight
+PASS Session caches meteor-crush
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS meteor-crush activates extreme/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 200.55 expected 200.55
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter hero
+PASS Session caches abyssal-grasp
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS abyssal-grasp activates extreme/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 66.84998 expected 66.85
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter villain
+PASS Session caches abyssal-grasp
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS abyssal-grasp activates extreme/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 66.84998 expected 66.85
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter free-play
+PASS Session caches abyssal-grasp
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS abyssal-grasp activates extreme/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 66.84998 expected 66.85
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter endless-fight
+PASS Session caches abyssal-grasp
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS abyssal-grasp activates extreme/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 66.84998 expected 66.85
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter hero
+PASS Session caches prism-barrage
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS prism-barrage activates extreme/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 109.825 expected 109.825
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter villain
+PASS Session caches prism-barrage
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS prism-barrage activates extreme/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 109.825 expected 109.825
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter free-play
+PASS Session caches prism-barrage
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS prism-barrage activates extreme/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 109.825 expected 109.825
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter endless-fight
+PASS Session caches prism-barrage
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS prism-barrage activates extreme/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 109.825 expected 109.825
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter hero
+PASS Session caches plague-bloom
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS plague-bloom activates extreme/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 171.8898 expected 171.9
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter villain
+PASS Session caches plague-bloom
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS plague-bloom activates extreme/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 171.7932 expected 171.9
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter free-play
+PASS Session caches plague-bloom
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS plague-bloom activates extreme/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 171.8827 expected 171.9
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter endless-fight
+PASS Session caches plague-bloom
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS plague-bloom activates extreme/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 171.8519 expected 171.9
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
