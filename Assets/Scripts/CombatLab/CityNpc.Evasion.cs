@@ -91,7 +91,10 @@ public sealed partial class CityNpc
         Vector3 away=transform.position-world.Hero.transform.position;away.y=0;
         if(away.sqrMagnitude<.01f)away=-transform.forward;
         if(BeginEvasion(transform.position+away.normalized*Archetype.Evasion.RetreatDistance))Retreats++;
-        nextEvasion=Mathf.Max(nextEvasion,Time.time+Mathf.Max(1f,Archetype.Evasion.Cooldown));
+        // Retreat has its own tell/travel/recovery. Do not restart the independent dodge cooldown on every burst:
+        // a fast attack cycle would otherwise postpone dodging forever.
+        var e=Archetype.Evasion;
+        nextEvasion=Mathf.Max(nextEvasion,Time.time+Mathf.Max(.1f,e.Telegraph)+Mathf.Max(.1f,e.TravelSeconds)+Mathf.Max(.1f,e.Recovery));
     }
     void CancelEvasion()
     {

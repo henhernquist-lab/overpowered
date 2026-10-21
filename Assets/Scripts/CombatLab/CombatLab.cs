@@ -18,7 +18,7 @@ public sealed class CombatLab : MonoBehaviour
     public string Feedback {get;private set;}="F2 opens controls. Your equipped loadout is copied; progress is discarded.";
     public ProgressSave StartingSnapshot {get;private set;}
     NavMeshData data; NavMeshDataInstance nav;
-    readonly NavMeshPath spawnPath=new NavMeshPath();
+    NavMeshPath spawnPath;
     readonly List<GameObject> props=new List<GameObject>();
     int spawnSerial;
     public static void Build()
@@ -28,6 +28,7 @@ public sealed class CombatLab : MonoBehaviour
     }
     void Initialize()
     {
+        spawnPath=new NavMeshPath();
         Active=this; Settings=Resources.Load<CombatLabSettings>("CombatLabSettings");
         var tuning=Resources.Load<GameTuning>("GameTuning");
         Physics.gravity=Vector3.down*tuning.Movement.Gravity;
