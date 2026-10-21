@@ -336,7 +336,7 @@ public sealed partial class GameHud : MonoBehaviour
         if (w == null || w.Tuning == null || w.Powers == null || (w.Mode != null && w.Mode.Ended)) { Show(Root, false); HideGuidance(); if (w != null && w.Mode != null && w.Mode.Ended) DismissBriefing("session ended"); return; }
         Show(Root, true);
         var definition = w.Mode != null ? w.Mode.Definition : null;
-        var hud = definition != null ? definition.Hud : ModeHud.All;
+        var hud = w.IsPractice ? (ModeHud.Health | ModeHud.Powers) : definition != null ? definition.Hud : ModeHud.All;
         var progress = w.Progression; var user = w.Powers; float now = Time.unscaledTime;
         var side = progress.Data.Side;
         if (shownSide != side)

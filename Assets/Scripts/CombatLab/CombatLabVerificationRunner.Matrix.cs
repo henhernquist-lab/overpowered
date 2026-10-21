@@ -91,10 +91,16 @@ public sealed partial class CombatLabVerificationRunner
             var pool=SignatureVfx.Existing;
             Check(pool==null||pool.ActiveBlooms==0&&!pool.PrisonVisible&&!pool.StormVisible&&!pool.SolarWakeVisible,"Signature cancellation releases persistent presentation");
         }
-        foreach(var utility in Resources.LoadAll<PowerDefinition>("Powers").Where(d=>d.Role==PowerRole.Secondary))
+        var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");var hero=forge.Hero("vector");
+        var utilities=Resources.LoadAll<PowerDefinition>("Powers").Where(d=>forge.AllowedSecondary(hero,d)).ToArray();
+        Check(utilities.Length==4,"Only the four current Forge secondary choices are tested; legacy Flight remains unavailable");
+        Check(!forge.AllowedSecondary(hero,Definition("flight")),"Legacy Flight is refused by the same equipment gate in practice");
+        foreach(var utility in utilities)
         {
             yield return LoadProfile("fire",utility.Id,"normal",null);
             var runtime=W.Powers.SecondaryRuntime;var npc=Fixture("Bulwark",6);
+            // Teleport needs a clear grounded route. The old forward fixture intentionally blocked that route.
+            yield return new WaitForSeconds(.15f);
             if(utility.Effect.IsFlight)
             {
                 PlaceHero(Vector3.up*5);float fuel=runtime.Fuel;W.Hero.ScriptedFlight=true;yield return new WaitForSeconds(.35f);W.Hero.ScriptedFlight=false;
@@ -102,7 +108,7 @@ public sealed partial class CombatLabVerificationRunner
             }
             else
             {
-                AimAt(new Vector3(0,.15f,12));Check(W.Powers.UseSecondary(),"Equipped secondary activates: "+utility.Id);
+                AimAt(new Vector3(12,1.3f,0));Check(W.Powers.UseSecondary(),"Equipped secondary activates: "+utility.Id+" ("+W.Powers.Message+")");
                 yield return new WaitForSeconds(.25f);
                 if(utility.Effect is PhaseShiftEffect){Check(W.Powers.Phase.Active,"Phase remains active");W.Powers.Phase.End();}
                 if(utility.Effect is ForceFieldEffect){float hp=W.Health;W.DamagePlayer(5);Check(W.Health==hp,"Force Field absorbs through authoritative health path");}

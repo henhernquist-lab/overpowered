@@ -11,6 +11,7 @@ public sealed class CombatLabPanel : MonoBehaviour
         panel.scaleMode=PanelScaleMode.ScaleWithScreenSize;panel.referenceResolution=new Vector2Int(1600,900);panel.screenMatchMode=PanelScreenMatchMode.Expand;
         var doc=gameObject.AddComponent<UIDocument>();doc.panelSettings=panel;doc.sortingOrder=30;
         var root=doc.rootVisualElement;Resources.Load<VisualTreeAsset>("CombatLabPanel").CloneTree(root);
+        root.style.position=Position.Absolute;root.style.left=root.style.right=root.style.top=root.style.bottom=0;
         root.pickingMode=PickingMode.Ignore;root.style.unityFont=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         controls=root.Q("lab-controls");status=root.Q<Label>("lab-status");feedback=root.Q<Label>("lab-feedback");
         toggle=root.Q<Button>("lab-toggle");toggle.clicked+=()=>Show(!open);
