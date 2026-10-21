@@ -1,0 +1,12 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c792d1ca221483fb2a17416e807671e, type: 3}
+  m_Name: abyssal-grasp
+  PullSeconds: 2
+  PullSpeed: 4.5
+  HoldRadius: 1.25
+  BrutePullScale: 0.4
+  BruteHoldSeconds: 0.5

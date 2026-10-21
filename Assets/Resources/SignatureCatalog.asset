@@ -12,5 +12,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a147b0589c124d96857f013904c2e304, type: 2}
   - {fileID: 11400000, guid: c684b6714aee47d5a0a309c185b5cfa7, type: 2}
   - {fileID: 11400000, guid: 63d770febde542df851f1f3722a4a8fb, type: 2}
+  - {fileID: 11400000, guid: 354d6dccc8be4e14b01e5d42e6e49bca, type: 2}
+  - {fileID: 11400000, guid: 171ca0b253ea43d6b7be103e93bbeb01, type: 2}
   DeveloperPreview: 0
-  EnableWhenComplete: 1
+  EnableWhenComplete: 0

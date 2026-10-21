@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6439bcadf27604138888fd7ef6af365c, type: 3}
+  m_Name: meteor-crush
+  Id: meteor-crush
+  DisplayName: Meteor Crush
+  Description: Assemble a colossal psychic debris mass overhead, then crush the target area with a heavy core hit and lesser shockwave.
+  PowerA: {fileID: 0}
+  PowerB: {fileID: 0}
+  OwnerPrimary: {fileID: 11400000, guid: 8dbf8910c4e3b45fda1e445661b0290c, type: 2}
+  EnergyCost: 35
+  Icon: 7
+  Effect: {fileID: 11400000, guid: b1a4c8cf8d274bb7b62f4d390516ba3f, type: 2}
+  Cooldown: 28
+  Duration: 1.92
+  Damage: 210
+  Force: 2600
+  Radius: 6
+  Range: 24
+  MaxTargets: 8
+  Primary: 23
+  Secondary: 4

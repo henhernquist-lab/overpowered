@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb9628eb82e748388aebf00babdd26a0, type: 3}
+  m_Name: meteor-crush
+  Height: 8
+  AssembleSeconds: 1.05
+  FallSeconds: 0.22
+  DustSeconds: 0.65
+  DirectRadius: 2.6
+  ShockDamageFraction: 0.28
+  StaggerSeconds: 0.75
+  BruteStaggerSeconds: 0.3

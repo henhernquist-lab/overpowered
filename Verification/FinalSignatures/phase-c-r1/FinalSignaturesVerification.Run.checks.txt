@@ -1,0 +1,40 @@
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter hero
+PASS Session caches meteor-crush
+PASS Meteor refuses obstructed overhead space without cooldown
+PASS Meteor assembles without throwable props
+PASS Meteor anticipation precedes damage
+PASS Effect completes within bounded lifetime
+PASS Meteor direct 210 / shock 58.8 authoritative damage, no double hit
+PASS Meteor range/friendly/cleanup controls
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter hero
+PASS Session caches abyssal-grasp
+PASS Abyss activates on ground group
+PASS Abyss groups with Brute pull resistance
+PASS Effect completes within bounded lifetime
+PASS Abyss collapse authoritative damage once per hostile
+PASS Abyss movement leases expire, no curse or friendly damage remains
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter hero
+PASS Session caches prism-barrage
+PASS Prism activates on precise hostile target
+PASS Energy paid once; duplicate activation refused
+PASS Effect completes within bounded lifetime
+PASS Prism initial authoritative damage
+PASS Prism branch falloff authoritative damage
+PASS Prism deduplicates colliders and bounds branch fan
+PASS Prism friendly/range/cleanup/cooldown controls
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter hero
+PASS Session caches plague-bloom
+PASS Plague activates on ground without requiring physical props
+PASS Effect completes within bounded lifetime
+PASS Plague sustained authoritative poison budget: 179.9528
+PASS Plague faction/range/finite VFX controls
+PASS One poison component, finite ticks
+PASS Save equipped final signature

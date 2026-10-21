@@ -79,6 +79,34 @@ public sealed class FinalSignaturesVerificationRunner : MonoBehaviour
     IEnumerator Checks()
     {
         yield return Scene(GameFlow.HomeScene); SignatureCatalog.VerificationPreview = true;
+        yield return Equip("telekinesis", "meteor-crush");
+        var direct = Spawn(0, 10, "Brute"); var shock = Spawn(4, 10); var outside = Spawn(10, 10);
+        var safe = Spawn(-2, 10, "Gunner", NpcRole.Civilian);
+        Aim(new Vector3(0, 150, 10)); var meteor = W.Powers.SynergyRunner;
+        var roof = GameObject.CreatePrimitive(PrimitiveType.Cube); roof.transform.position = new Vector3(0, 158, 10); roof.transform.localScale = new Vector3(8, .5f, 8); Physics.SyncTransforms();
+        Check(!meteor.TryActivate() && meteor.Cooldown == 0, "Meteor refuses obstructed overhead space without cooldown");
+        Destroy(roof); yield return null;
+        Check(meteor.TryActivate(), "Meteor assembles without throwable props");
+        Check(direct.Health == 1000 && SignatureVfx.Get().MeteorVisible, "Meteor anticipation precedes damage");
+        yield return Complete(meteor);
+        Check(Mathf.Abs(1000 - direct.Health - meteor.ActivationDamage) < .1f && Mathf.Abs(1000 - shock.Health - meteor.ActivationDamage * .28f) < .1f,
+            "Meteor direct 210 / shock 58.8 authoritative damage, no double hit");
+        Check(outside.Health == 1000 && safe.Health == 1000 && !SignatureVfx.Get().MeteorVisible, "Meteor range/friendly/cleanup controls");
+        GameFlow.Instance.Home(); yield return Scene(GameFlow.HomeScene);
+        yield return Equip("darkness", "abyssal-grasp");
+        var rusher = Spawn(-5, 10, "Rusher"); var brute = Spawn(5, 10, "Brute"); safe = Spawn(0, 12, "Gunner", NpcRole.Civilian);
+        Aim(new Vector3(0, 150, 10)); var abyss = W.Powers.SynergyRunner;
+        Vector3 rusherStart = rusher.transform.position, bruteStart = brute.transform.position;
+        Check(abyss.TryActivate(), "Abyss activates on ground group");
+        yield return new WaitForSeconds(.7f);
+        Check(Vector3.Distance(rusherStart, rusher.transform.position) > Vector3.Distance(bruteStart, brute.transform.position) + .5f,
+            "Abyss groups with Brute pull resistance");
+        yield return Complete(abyss); yield return new WaitForSeconds(.25f);
+        Check(Mathf.Abs(1000 - rusher.Health - abyss.ActivationDamage) < .1f && Mathf.Abs(1000 - brute.Health - abyss.ActivationDamage) < .1f,
+            "Abyss collapse authoritative damage once per hostile");
+        Check(!rusher.Frozen && !brute.Frozen && !rusher.Rooted && safe.Health == 1000 && !SignatureVfx.Get().AbyssVisible,
+            "Abyss movement leases expire, no curse or friendly damage remains");
+        GameFlow.Instance.Home(); yield return Scene(GameFlow.HomeScene);
         yield return Equip("laser-eyes", "prism-barrage");
         var first = Spawn(0, 10); var branch = Spawn(3, 11); var duplicate = first.gameObject.AddComponent<SphereCollider>(); duplicate.radius = .2f;
         var civilian = Spawn(-2, 10, "Gunner", NpcRole.Civilian); var far = Spawn(20, 10);
