@@ -15,3 +15,4 @@ MonoBehaviour:
   Enabled: 1
   Courses:
   - {fileID: 11400000, guid: 53783429f6aca238914056d7081b14c1, type: 2}
+  - {fileID: 11400000, guid: bea1e6bc556fc9fcf4f45a9a534a4388, type: 2}
