@@ -41,10 +41,25 @@ public sealed class PrismBarrageEffect : SynergyEffect
                 Vector3 from = i == 0 ? r.User.AimOrigin : hub;
                 if (i == 0)
                 {
-                    // Keep all near-eye geometry beyond the camera near plane, even at point blank range.
                     var camera = Camera.main;
-                    float inset = camera != null ? Mathf.Max(.35f, camera.nearClipPlane + .15f) : .35f;
-                    from += (chest - from).normalized * Mathf.Min(inset, Vector3.Distance(from, chest) * .5f);
+                    var rig = camera != null ? camera.GetComponent<ThirdPersonCamera>() : null;
+                    bool firstPerson = rig != null && rig.isActiveAndEnabled && rig.FirstPerson;
+                    Vector3 direction = (chest - from).normalized;
+                    if (firstPerson)
+                    {
+                        // Presentation offsets preserve the authoritative center-screen hit and stay outside the near plane.
+                        float inset = Mathf.Min(Mathf.Max(.45f, camera.nearClipPlane + .2f), Vector3.Distance(from, chest) * .4f);
+                        from += direction * inset + camera.transform.right * .12f - camera.transform.up * .12f;
+                    }
+                    else
+                    {
+                        // Match the ordinary eye laser's existing head-bone presentation; never animate the camera/root.
+                        var presentation = r.User.GetComponent<HumanoidPresentation>();
+                        var head = presentation != null && presentation.Animator != null ? presentation.Animator.GetBoneTransform(HumanBodyBones.Head) : null;
+                        from = (head != null ? head.position : r.transform.position + Vector3.up * 1.62f) + Vector3.up * .08f + direction * .18f;
+                    }
+                    // A cosmetic muzzle offset must not draw a beam through nearby cover.
+                    if (!SignatureTargeting.Clear(from, chest, r.transform, true)) yield break;
                 }
                 fx.ShowPrism(i, from, chest, i == 0, AfterglowSeconds + BranchInterval * (limit - i));
                 LastTargets.Add(npc);

@@ -9,6 +9,8 @@ Synergies 2.0 replaces pair-specific combination synergies with **primary-owned 
 - The two equipped primaries determine which **two signature abilities** are available in Hero Forge; the player selects **one** of those two.
 - Signature abilities do **not** require a specific second primary power.
 
+The final-four implementation, current tuning, acceptance evidence and human checklist are in [synergies-2-final-four.md](synergies-2-final-four.md). The extension guide below remains as architecture reference.
+
 ### Roster Status
 
 | Primary Power (`Id`) | Signature Ability (`Id`) | Status | Effect Class |
@@ -17,10 +19,10 @@ Synergies 2.0 replaces pair-specific combination synergies with **primary-owned 
 | `fire` | `solar-flare` (Solar Flare) | Implemented (Phase 1) | `SolarFlareSignatureEffect` |
 | `ice` | `glacial-prison` (Glacial Prison) | Implemented (Phase 1) | `GlacialPrisonEffect` |
 | `lightning` | `thunderstorm` (Thunderstorm) | Implemented (Phase 1) | `ThunderstormEffect` |
-| `telekinesis` | `meteor-crush` (Meteor Crush) | Reserved for Phase 2 | — |
-| `darkness` | `abyssal-grasp` (Abyssal Grasp) | Reserved for Phase 2 | — |
-| `laser-eyes` | `prism-barrage` (Prism Barrage) | Reserved for Phase 2 | — |
-| `poison` | `plague-bloom` (Plague Bloom) | Reserved for Phase 2 | — |
+| `telekinesis` | `meteor-crush` (Meteor Crush) | Implemented (Phase 2) | `MeteorCrushEffect` |
+| `darkness` | `abyssal-grasp` (Abyssal Grasp) | Implemented (Phase 2) | `AbyssalGraspEffect` |
+| `laser-eyes` | `prism-barrage` (Prism Barrage) | Implemented (Phase 2) | `PrismBarrageEffect` |
+| `poison` | `plague-bloom` (Plague Bloom) | Implemented (Phase 2) | `PlagueBloomEffect` |
 
 ---
 
@@ -30,7 +32,7 @@ Synergies 2.0 replaces pair-specific combination synergies with **primary-owned 
 
 - `DeveloperPreview` (`false` on disk): when enabled in the Inspector or by tests in Editor/dev builds, enables the signature system immediately for implemented primaries.
 - `EnableWhenComplete` (`true` on disk): automatically enables the signature system for all builds as soon as `SignatureCatalog.Complete` is `true` (all 8 `PowerRole.Combat` powers in `Resources/Powers` have a unique implemented `PowerSynergyDefinition` in `SignatureCatalog.Abilities`).
-- While only 4 of 8 signatures exist and `DeveloperPreview` is `false`, `SignatureCatalog.Enabled` is `false` and normal gameplay uses `ForgeCatalog.Resolve(EquippedA, EquippedB, EquippedSecondary)` so no player build is left without a working synergy.
+- All eight mappings now exist. With the authored `EnableWhenComplete` gate enabled after integration verification, normal gameplay uses signatures without DeveloperPreview. If the gate is explicitly off or a registry is incomplete, the existing legacy resolution remains available as a safe fallback.
 
 ---
 

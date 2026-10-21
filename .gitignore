@@ -166,3 +166,6 @@ Verification/PhaseShift/save-path.txt
 /Verification/CombatBalance/saves/
 
 /Verification/Difficulty/saves/
+
+# Final signature verification uses isolated process-local saves.
+/Verification/FinalSignatures/saves/

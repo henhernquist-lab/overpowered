@@ -1,0 +1,2 @@
+PASS Separate process restores signature selection
+PASS Separate process preserves primary and secondary

@@ -20,8 +20,9 @@ public sealed class SynergyAvailabilityVerificationRunner : MonoBehaviour
     WorldSession W=>WorldSession.Instance;
     ForgeCatalog F=>Resources.Load<ForgeCatalog>("ForgeCatalog");
     PowerDefinition Power(string id)=>Resources.Load<PowerDefinition>("Powers/"+id);
-    void Awake(){Application.logMessageReceived+=ObserveLog;}
-    void OnDestroy(){Application.logMessageReceived-=ObserveLog;RestoreCatalog();}
+    LegacySignatureVerificationScope legacySignatures;
+    void Awake(){legacySignatures=new LegacySignatureVerificationScope();Application.logMessageReceived+=ObserveLog;}
+    void OnDestroy(){Application.logMessageReceived-=ObserveLog;legacySignatures?.Dispose();RestoreCatalog();}
     void ObserveLog(string message,string trace,LogType type)
     {if((type==LogType.Exception||type==LogType.Error||type==LogType.Assert)&&(trace.Contains("Assets/Scripts/")||trace.Contains("Synergy")))runtimeFailure=message;}
     IEnumerator Start()

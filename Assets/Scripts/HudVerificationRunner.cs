@@ -267,7 +267,7 @@ public sealed class HudVerificationRunner : MonoBehaviour
 
     IEnumerator DefaultLoadout(PowerDefinition a, PowerDefinition b)
     {
-        var p = W.Powers;var resolved=forge.Resolve(a,b,p.EquippedSecondary);
+        var p = W.Powers;var resolved=Resources.Load<SignatureCatalog>("SignatureCatalog").Enabled?W.Progression.EquippedSignature:forge.Resolve(a,b,p.EquippedSecondary);
         Check(hud.Slots.Count == (resolved==null?3:4) && hud.Slots[0].Id == a.Id && hud.Slots[1].Id == b.Id &&
               hud.Slots[2].Id == p.EquippedSecondary?.Id && hud.Slots[2].KeyText == "F" &&
               p.Synergy == resolved && (resolved==null||hud.Slots[3].Synergy == resolved),
@@ -359,7 +359,7 @@ public sealed class HudVerificationRunner : MonoBehaviour
         Check(ui.Profile.SetLoadout(heroDefinition, fire, ice, loadout.Primary, loadout.Secondary), $"PlayerProgression.SetLoadout -> {heroDefinition.Id} / Fire + Ice.");
         var mode = Resources.LoadAll<GameModeDefinition>("Modes").First(m => m.Id == "hero");
         yield return Launch(mode);
-        var p = W.Powers; var synergy = forge.Resolve(fire, ice, p.EquippedSecondary);
+        var p = W.Powers; var synergy = Resources.Load<SignatureCatalog>("SignatureCatalog").Enabled?W.Progression.EquippedSignature:forge.Resolve(fire, ice, p.EquippedSecondary);
         Check(p.EquippedA == fire && p.EquippedB == ice && p.Synergy == synergy, $"New session equips Fire + Ice; synergy {synergy?.DisplayName}.");
         Check(hud.Slots.Count == 4 && hud.Slots[0].Id == fire.Id && hud.Slots[1].Id == ice.Id &&
               hud.Slots[2].Id == p.EquippedSecondary?.Id && hud.Slots[2].KeyText == "F" && hud.Slots[3].Synergy == synergy,

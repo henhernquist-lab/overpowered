@@ -14,8 +14,9 @@ public sealed class HeroForgeVerificationRunner : MonoBehaviour
     public Action<int> Finished;public bool Reload;
     readonly List<string> output=new List<string>();
     string runtimeFailure;
-    void Awake(){Application.logMessageReceived+=ObserveLog;}
-    void OnDestroy(){Application.logMessageReceived-=ObserveLog;}
+    LegacySignatureVerificationScope legacySignatures;
+    void Awake(){legacySignatures=new LegacySignatureVerificationScope();Application.logMessageReceived+=ObserveLog;}
+    void OnDestroy(){Application.logMessageReceived-=ObserveLog;legacySignatures?.Dispose();}
     void ObserveLog(string message,string trace,LogType type)
     {
         if((type==LogType.Exception||type==LogType.Error||type==LogType.Assert)&&

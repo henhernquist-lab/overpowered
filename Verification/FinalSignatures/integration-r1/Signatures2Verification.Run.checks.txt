@@ -1,0 +1,70 @@
+PASS Complete eight-signature gate resolves without developer preview.
+PASS Exactly eight unique implemented signatures.
+PASS Primary maps strength -> seismic-slam
+PASS Primary maps telekinesis -> meteor-crush
+PASS Primary maps fire -> solar-flare
+PASS Primary maps ice -> glacial-prison
+PASS Primary maps darkness -> abyssal-grasp
+PASS Primary maps laser-eyes -> prism-barrage
+PASS Primary maps lightning -> thunderstorm
+PASS Primary maps poison -> plague-bloom
+PASS Set Fire + Ice loadout with preview off.
+PASS Enter Hero mode with preview off.
+PASS Normal gameplay (preview off) preserves legacy pair synergy Thermal Shock for Fire + Ice.
+PASS DeveloperPreview=true enables SignatureCatalog in Editor/dev builds.
+PASS Equip Fire + Ice in Hero Forge with signature preview active.
+PASS Two implemented primaries (Fire + Ice) expose exactly two signature choices: Solar Flare and Glacial Prison.
+PASS Only one signature is equipped initially (Solar Flare), reflected in Hero Forge label.
+PASS Hero Forge renders both signature choice buttons with owner primary, cooldown, energy cost, and selected state.
+PASS Selecting Glacial Prison replaces Solar Flare as the single equipped signature.
+PASS Change Slot 2 from Ice to Lightning.
+PASS Changing primaries invalidates Glacial Prison, preserves it in UnresolvedSignatureId, and selects Solar Flare.
+PASS Equip Strength (implemented) + Telekinesis (unimplemented).
+PASS Strength + Telekinesis exposes Seismic Slam and Meteor Crush.
+PASS Equip Darkness + Telekinesis (both unimplemented).
+PASS Darkness + Telekinesis exposes two signatures and refuses invalid selection IDs.
+PASS Save referencing legacy pair ID 'thermal-shock' preserves progression, stores UnresolvedSignatureId, and resolves 'solar-flare'.
+PASS Equip Strength + Fire with Seismic Slam selected.
+PASS Enter Hero mode for Seismic Slam.
+PASS HUD displays Seismic Slam slot in READY state.
+PASS CONTROL: Seismic Slam refused high in midair without spending energy or cooldown.
+PASS CONTROL: Seismic Slam refused on insufficient energy and HUD reports INSUFFICIENT ENERGY.
+PASS Seismic Slam activates on grounded hero.
+PASS Seismic Slam spent 25 energy and started 22s cooldown.
+PASS CONTROL: duplicate press during active/cooldown Seismic Slam is refused.
+PASS Seismic Slam inner target took full 150 dmg, outer ring took falloff 132.49 dmg.
+PASS Brute resisted push (1.05m) more than Rusher (2.60m).
+PASS CONTROL: out-of-range enemy, civilian, and friendly 0-Heat cop took 0 damage from Seismic Slam.
+PASS Normal E melee punch remains functional alongside signatures.
+PASS RMB Hurricane Kick remains functional.
+PASS F secondary power (Speed) remains functional.
+PASS Equip Fire + Ice with Solar Flare signature.
+PASS Enter Hero mode for Solar Flare.
+PASS Switch to First-Person view for Solar Flare test.
+PASS Solar Flare activates in first-person view.
+PASS Solar Flare wave struck both frontal targets once (100 dmg, burning) and ignored enemy behind player.
+PASS Solar Flare residual heat wake is active after the wave sweep.
+PASS Solar Flare residual wake dealt additional DoT (100 -> 148) across 4 ticks and cleaned up.
+PASS First-person camera stayed capsule-relative during Solar Flare animation.
+PASS Equip Ice + Strength with Glacial Prison signature.
+PASS Enter Hero mode for Glacial Prison.
+PASS CONTROL: Glacial Prison with no hostiles in target area refuses activation without cooldown.
+PASS Glacial Prison activates on targeted enemy cluster.
+PASS Glacial Prison erected pillar ring, rooted 2 hostiles inside (29.7 eruption dmg), and left distant enemy untouched.
+PASS Imprisoned enemies remain damageable while contained in Glacial Prison.
+PASS Glacial Prison shattered on expiration (total 66 == ActivationDamage 66), hid pillars, and released survivors.
+PASS Equip Lightning + Fire with Thunderstorm signature (saved for separate-process Reload).
+PASS Enter Villain mode for Thunderstorm.
+PASS Villain mode police are hostile at >=1 Heat star.
+PASS Thunderstorm activates over targeted combat area.
+PASS Thunderstorm overhead cloud and ground danger ring active; Pulse 1 struck.
+PASS Both enemies inside Thunderstorm radius took Pulse 1 damage.
+PASS Thunderstorm completed 4 pulses (stationary took 150 == 150; escaped target took 0 after leaving zone) and cleaned up.
+PASS Switch difficulty to Hard.
+PASS Enter Hero mode on Hard.
+PASS Hard difficulty scales signature energy cost once (38.5 == 35 * 1.1).
+PASS Thunderstorm activates on Hard difficulty.
+PASS Hard difficulty scales signature cooldown once (28.6s == 26 * 1.1).
+PASS Cancel() immediately stops Thunderstorm and hides storm VFX.
+PASS Pooled SignatureVfx stability: materials=114, meshes=1020, LineRenderers=87 unchanged across repeated shows.
+PASS Persist Lightning + Fire with Thunderstorm signature to disk for separate-process Reload.

@@ -6,7 +6,7 @@ public sealed partial class SignatureVfx
 {
     readonly LineRenderer[] prismCore = new LineRenderer[8], prismGlow = new LineRenderer[8];
     float prismUntil;
-    Transform meteorRoot, abyssRoot;
+    Transform meteorRoot, abyssRoot, prismFocus;
     readonly Transform[] meteorChunks = new Transform[9];
     readonly Transform[,] tendrils = new Transform[8, 3];
     LineRenderer psychicRing, meteorShock, abyssRim, abyssCore;
@@ -30,6 +30,9 @@ public sealed partial class SignatureVfx
     }
     void BuildFinalFour(Mesh cube)
     {
+        prismFocus = Solid("Prism refracting focus", transform, cube, CityColor.Cream);
+        prismFocus.GetComponent<MeshRenderer>().sharedMaterial = CityMaterials.GetVfx(CityColor.Cream);
+        prismFocus.gameObject.SetActive(false);
         meteorRoot = new GameObject("Meteor bounded debris").transform; meteorRoot.SetParent(transform, false);
         for (int i = 0; i < meteorChunks.Length; i++) meteorChunks[i] = Solid("Meteor chunk " + i, meteorRoot, cube, i % 3 == 0 ? CityColor.Metal : CityColor.Slate);
         meteorRoot.gameObject.SetActive(false);
@@ -49,12 +52,14 @@ public sealed partial class SignatureVfx
         {
             var root = new GameObject("Plague bloom " + b).transform; root.SetParent(transform, false); bloomRoots[b] = root;
             for (int p = 0; p < 7; p++) petals[b, p] = Solid(p == 6 ? "Toxic glowing heart" : "Toxic petal " + p, root, cube, p == 6 ? CityColor.Leaf : CityColor.Lawn);
+            petals[b, 6].GetComponent<MeshRenderer>().sharedMaterial = CityMaterials.GetVfx(CityColor.Leaf);
             sporeRings[b] = MakeLine("Plague spore radius " + b, CityColor.Leaf, RingSegments, true, .1f);
             root.gameObject.SetActive(false);
         }
     }
     public void ShowPrism(int index, Vector3 from, Vector3 to, bool main, float seconds)
     {
+        if (main) { prismFocus.position = to; prismFocus.localRotation = Quaternion.Euler(45, Time.time * 60, 45); prismFocus.localScale = Vector3.one * .28f; prismFocus.gameObject.SetActive(true); }
         index = Mathf.Clamp(index, 0, 7); prismUntil = Mathf.Max(prismUntil, Time.time + seconds);
         prismCore[index].SetPosition(0, from); prismCore[index].SetPosition(1, to);
         prismGlow[index].SetPosition(0, from); prismGlow[index].SetPosition(1, to);
@@ -62,6 +67,7 @@ public sealed partial class SignatureVfx
     }
     public void HidePrism()
     {
+        if (prismFocus != null) prismFocus.gameObject.SetActive(false);
         for (int i = 0; i < prismCore.Length; i++)
         {
             if (prismCore[i] != null) prismCore[i].gameObject.SetActive(false);

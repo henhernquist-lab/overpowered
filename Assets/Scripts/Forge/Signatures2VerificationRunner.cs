@@ -164,19 +164,15 @@ public sealed class Signatures2VerificationRunner : MonoBehaviour
         var menu = FindAnyObjectByType<ModeScreens>();
         var profile = menu.Profile;
 
-        // 1. Default transition gate: DeveloperPreview is off on disk, Complete is false (4/8), legacy synergies remain active.
-        Check(S != null && !S.DeveloperPreview && S.EnableWhenComplete && !S.Complete && !S.Enabled,
-            "Transition gate default: SignatureCatalog has 4/8 abilities, Complete=false, DeveloperPreview=false, Enabled=false.");
-        Check(S.Abilities.Length == 4 && S.Abilities.All(a => S.Implemented(a)),
-            "Exactly four implemented signature abilities registered: " + string.Join(", ", S.Abilities.Select(a => a.Id)));
-        Check(S.ForPrimary(Power("strength"))?.Id == "seismic-slam" &&
-              S.ForPrimary(Power("fire"))?.Id == "solar-flare" &&
-              S.ForPrimary(Power("ice"))?.Id == "glacial-prison" &&
-              S.ForPrimary(Power("lightning"))?.Id == "thunderstorm",
-            "Primary ownership maps Strength->seismic-slam, Fire->solar-flare, Ice->glacial-prison, Lightning->thunderstorm.");
-        foreach (var unimpl in new[] { "telekinesis", "darkness", "laser-eyes", "poison" })
-            Check(S.ForPrimary(Power(unimpl)) == null, $"Unimplemented primary '{unimpl}' has no placeholder marked implemented.");
-
+        // Verify the authored complete gate before explicitly testing the retained fallback.
+        Check(S != null && !S.DeveloperPreview && S.EnableWhenComplete && S.Complete && S.Enabled,
+            "Complete eight-signature roster enabled by default without developer preview.");
+        Check(S.Abilities.Length == 8 && S.Abilities.All(a => S.Implemented(a)), "Exactly eight unique implemented signatures.");
+        string[] owners = {"strength", "telekinesis", "fire", "ice", "darkness", "laser-eyes", "lightning", "poison"};
+        string[] ids = {"seismic-slam", "meteor-crush", "solar-flare", "glacial-prison", "abyssal-grasp", "prism-barrage", "thunderstorm", "plague-bloom"};
+        for (int i = 0; i < owners.Length; i++) Check(S.ForPrimary(Power(owners[i]))?.Id == ids[i], "Primary maps " + owners[i] + " -> " + ids[i]);
+        // Explicit transition fallback control, preserving the original legacy activation test.
+        S.EnableWhenComplete = false;
         Check(profile.SetLoadout(F.Hero("vector"), Power("fire"), Power("ice"), Power("speed"), CityColor.Blue, CityColor.Cyan),
             "Set Fire + Ice loadout with preview off.");
         Check(GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero")), "Enter Hero mode with preview off.");
@@ -186,6 +182,7 @@ public sealed class Signatures2VerificationRunner : MonoBehaviour
         GameFlow.Instance.Home();
         yield return Scene(GameFlow.HomeScene);
 
+        S.EnableWhenComplete = true;
         // 2. Enable DeveloperPreview: Hero Forge selection, switching, invalidation, and unimplemented primary handling.
         SignatureCatalog.VerificationPreview = true;
         S.DeveloperPreview = true;
@@ -219,20 +216,20 @@ public sealed class Signatures2VerificationRunner : MonoBehaviour
               profile.Data.Loadout.UnresolvedSignatureId == "glacial-prison",
             "Changing primaries invalidates Glacial Prison, preserves it in UnresolvedSignatureId, and selects Solar Flare.");
 
-        // 1 implemented + 1 unimplemented primary (Strength + Telekinesis) -> 1 choice (Seismic Slam).
+        // Both primaries are now implemented: two choices, existing Seismic selection retained.
         Check(screen.SelectPower(0, Power("strength")) && screen.SelectPower(1, Power("telekinesis")),
-            "Equip Strength (implemented) + Telekinesis (unimplemented).");
-        Check(S.Choices(Power("strength"), Power("telekinesis")).Count == 1 &&
+            "Equip Strength + Telekinesis.");
+        Check(S.Choices(Power("strength"), Power("telekinesis")).Count == 2 &&
               profile.EquippedSignature?.Id == "seismic-slam" &&
               screen.Root.Q<Button>("signature-seismic-slam") != null,
-            "One implemented + one unimplemented primary exposes only Seismic Slam.");
+            "Strength + Telekinesis exposes Seismic Slam and Meteor Crush.");
 
-        // 2 unimplemented primaries (Darkness + Telekinesis) -> 0 choices, null EquippedSignature, cannot activate.
+        // The formerly missing pair now exposes two valid choices and still rejects invalid IDs.
         Check(screen.SelectPower(0, Power("darkness")) && screen.SelectPower(1, Power("telekinesis")),
-            "Equip Darkness + Telekinesis (both unimplemented).");
-        Check(S.Choices(Power("darkness"), Power("telekinesis")).Count == 0 && profile.EquippedSignature == null &&
+            "Equip Darkness + Telekinesis.");
+        Check(S.Choices(Power("darkness"), Power("telekinesis")).Count == 2 && profile.EquippedSignature != null &&
               !profile.SetSignature("bogus-signature"),
-            "Two unimplemented primaries expose zero selectable signatures and refuse invalid signature IDs.");
+            "Darkness + Telekinesis exposes two signatures and refuses invalid selection IDs.");
         screen.Close();
 
         // 3. Save migration & corrupted/legacy signature IDs.

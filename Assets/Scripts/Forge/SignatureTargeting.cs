@@ -80,6 +80,21 @@ public static class SignatureTargeting
     {
         Vector3 from = npc.transform.position;
         if (!Clear(from + Vector3.up * .6f, desired + Vector3.up * .6f, owner, true)) return false;
+        Vector3 step = desired - from;
+        if (step.sqrMagnitude > .000001f)
+        {
+            var collider = npc.GetComponent<Collider>();
+            float radius = collider != null ? Mathf.Clamp(Mathf.Min(collider.bounds.extents.x, collider.bounds.extents.z), .2f, .6f) : .35f;
+            float height = collider != null ? Mathf.Max(radius * 2 + .1f, collider.bounds.size.y) : 1.8f;
+            int count = Physics.CapsuleCastNonAlloc(from + Vector3.up * (radius + .08f), from + Vector3.up * (height - radius),
+                radius * .95f, step.normalized, sight, step.magnitude, ~0, QueryTriggerInteraction.Ignore);
+            if (count == sight.Length) return false;
+            for (int i = 0; i < count; i++)
+            {
+                var obstacle = sight[i].collider;
+                if (obstacle.transform.root != owner && obstacle.GetComponentInParent<CityNpc>() == null) return false;
+            }
+        }
         var agent = npc.Agent;
         if (agent != null && agent.enabled)
         {

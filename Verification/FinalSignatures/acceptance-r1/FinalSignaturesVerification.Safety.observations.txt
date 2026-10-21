@@ -1,0 +1,3 @@
+MEASURED fixed signature pool transforms=116 total meshes=1018 total materials=115
+MEASURED idle fixed-pool whole-frame median_ms=1.877119 p95_ms=2.074235 GC_B_per_frame=1546
+MEASURED active fixed-pool whole-frame median_ms=1.859056 p95_ms=2.116525 GC_B_per_frame=1583

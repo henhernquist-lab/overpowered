@@ -1,0 +1,43 @@
+PASS Authored full roster enabled without preview
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter hero
+PASS Session caches prism-barrage
+PASS Unowned signature refuses without resource cost
+PASS New signature insufficient-energy control
+PASS Prism wall control activates initial target
+PASS Effect completes within bounded lifetime
+PASS Prism refraction blocked by solid wall
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter hero
+PASS Session caches prism-barrage
+PASS Prism startup-death control starts
+PASS Effect completes within bounded lifetime
+PASS Dead initial target cannot silently redirect Prism
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter hero
+PASS Session caches meteor-crush
+PASS Meteor startup-death and wall controls start
+PASS Effect completes within bounded lifetime
+PASS Meteor survives startup death and respects impact obstacle
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter hero
+PASS Session caches abyssal-grasp
+PASS Abyss wall/cancel control starts
+PASS Abyss never pulls through wall and cancel expires restraint
+PASS Abyss displacement refuses solid crossing
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter hero
+PASS Session caches plague-bloom
+PASS Bloom propagation/cap control starts
+PASS Main plus secondary blooms capped at four for six exposed deaths
+PASS Bloom cancel cleans event-driven secondary effects and protects civilian
+PASS Real city actor starts on NavMesh
+PASS Abyss real-agent movement preserves navigation ownership
+PASS Abyss refuses inaccessible navigation height
+PASS Ordinary poison rolls once on application; changing RNG afterward never rerolls its ticks
+PASS 20 repeated presentations preserve mesh/material/VFX-object counts

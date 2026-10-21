@@ -57,7 +57,7 @@ public sealed class SecondaryVerificationRunner : SessionVerificationRunner
             var user=W.Powers;var ability=user.SecondaryRuntime;
             Check(user.EquippedA==Power("fire")&&user.EquippedB==Power("ice")&&user.EquippedSecondary==Power(id)&&ability!=null,
                 "Session receives two attacks plus "+id);
-            Check(user.Synergy==F.Resolve(Power("fire"),Power("ice"))&&user.PowerForSlot(1).Definition==Power("fire")&&
+            Check(user.Synergy==(Resources.Load<SignatureCatalog>("SignatureCatalog").Enabled?W.Progression.EquippedSignature:F.Resolve(Power("fire"),Power("ice")))&&user.PowerForSlot(1).Definition==Power("fire")&&
                 user.PowerForSlot(2).Definition==Power("ice")&&user.SlotNumber(ability)==0,
                 "Fire + Ice synergy takes priority; attacks use keys 1/2 and secondary uses F.");
             var hud=FindAnyObjectByType<GameHud>();

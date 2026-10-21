@@ -1,0 +1,25 @@
+PASS Select difficulty normal
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter hero
+PASS Session caches meteor-crush
+PASS Difficulty energy once
+PASS meteor-crush activates normal/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 210 expected 210
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter villain
+PASS Session caches meteor-crush
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS meteor-crush activates normal/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+FAIL System.Exception: Authoritative difficulty damage 0 expected 210
