@@ -1,0 +1,3 @@
+PASS Authored full roster enabled without preview
+PASS Separate process restores signature selection
+PASS Separate process preserves primary and secondary

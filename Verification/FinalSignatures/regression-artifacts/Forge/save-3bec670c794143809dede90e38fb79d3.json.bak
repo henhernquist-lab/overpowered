@@ -1,0 +1,145 @@
+{
+    "Version": 1,
+    "Level": 7,
+    "Xp": 557,
+    "Points": 6,
+    "Side": 0,
+    "Powers": [
+        {
+            "Id": "darkness",
+            "Tier": 0
+        },
+        {
+            "Id": "flight",
+            "Tier": 0
+        },
+        {
+            "Id": "force-field",
+            "Tier": 0
+        },
+        {
+            "Id": "ice",
+            "Tier": 0
+        },
+        {
+            "Id": "laser-eyes",
+            "Tier": 0
+        },
+        {
+            "Id": "lightning",
+            "Tier": 0
+        },
+        {
+            "Id": "phase-shift",
+            "Tier": 0
+        },
+        {
+            "Id": "poison",
+            "Tier": 0
+        },
+        {
+            "Id": "speed",
+            "Tier": 0
+        },
+        {
+            "Id": "strength",
+            "Tier": 0
+        },
+        {
+            "Id": "telekinesis",
+            "Tier": 0
+        },
+        {
+            "Id": "teleport",
+            "Tier": 0
+        },
+        {
+            "Id": "fire",
+            "Tier": 0
+        }
+    ],
+    "Rooftops": [],
+    "SessionsPlayed": 0,
+    "SessionsWon": 0,
+    "BestSessionScore": 0,
+    "LastSessionXp": 0,
+    "LastModeId": "",
+    "ModeRecords": [],
+    "Loadout": {
+        "HeroId": "vector",
+        "PowerA": "fire",
+        "PowerB": "ice",
+        "SecondaryPower": "speed",
+        "SignatureId": "solar-flare",
+        "UnresolvedSignatureId": "seismic-slam",
+        "Primary": 14,
+        "Secondary": 15
+    },
+    "SeenHints": [
+        "punch",
+        "move",
+        "dodge"
+    ],
+    "FirstPerson": false,
+    "DifficultyId": "normal",
+    "IntroSeen": false,
+    "PowerStats": [
+        {
+            "Id": "fire",
+            "Uses": 0,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 4,
+            "Damage": 0.0
+        },
+        {
+            "Id": "ice",
+            "Uses": 0,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 4,
+            "Damage": 0.0
+        },
+        {
+            "Id": "speed",
+            "Uses": 0,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 4,
+            "Damage": 0.0
+        },
+        {
+            "Id": "flight",
+            "Uses": 0,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 1,
+            "Damage": 0.0
+        },
+        {
+            "Id": "strength",
+            "Uses": 1,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 1,
+            "Damage": 0.0
+        },
+        {
+            "Id": "telekinesis",
+            "Uses": 0,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 1,
+            "Damage": 0.0
+        },
+        {
+            "Id": "synergy:sonic-slam",
+            "Uses": 1,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 0,
+            "Damage": 0.0
+        }
+    ],
+    "Challenges": []
+}

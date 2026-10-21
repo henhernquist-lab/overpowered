@@ -29,7 +29,7 @@ public sealed class PrismBarrageEffect : SynergyEffect
             Vector3 hub = first.transform.position + Vector3.up * 1.1f;
             if (Vector3.Distance(r.User.AimOrigin, hub) > d.Range || !SignatureTargeting.Clear(r.User.AimOrigin, hub, r.transform, true)) yield break;
             // Optical refraction is a fan anchored at the first impact, not an electrical chain.
-            SignatureTargeting.Gather(r, first.transform.position, d.Radius, targets, 16);
+            SignatureTargeting.Gather(r, first.transform.position, d.Radius, targets, 16, true);
             targets.Remove(first); targets.Insert(0, first);
             int limit = Mathf.Min(Mathf.Clamp(d.MaxTargets, 1, 8), targets.Count);
             for (int i = 0; i < limit; i++)
@@ -37,7 +37,7 @@ public sealed class PrismBarrageEffect : SynergyEffect
                 var npc = targets[i];
                 if (npc == null || npc.Dead || !npc.Hostile) continue;
                 Vector3 chest = npc.transform.position + Vector3.up * 1.1f;
-                if (i > 0 && (Vector3.Distance(chest, hub) > d.Radius || !SignatureTargeting.Clear(hub, chest, r.transform))) continue;
+                if (i > 0 && (Vector3.Distance(chest, hub) > d.Radius || !SignatureTargeting.Clear(hub, chest, r.transform, true))) continue;
                 Vector3 from = i == 0 ? r.User.AimOrigin : hub;
                 if (i == 0)
                 {

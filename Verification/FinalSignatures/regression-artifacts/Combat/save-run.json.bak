@@ -1,0 +1,119 @@
+{
+    "Version": 1,
+    "Level": 6,
+    "Xp": 125,
+    "Points": 5,
+    "Side": 1,
+    "Powers": [
+        {
+            "Id": "darkness",
+            "Tier": 0
+        },
+        {
+            "Id": "fire",
+            "Tier": 0
+        },
+        {
+            "Id": "flight",
+            "Tier": 0
+        },
+        {
+            "Id": "force-field",
+            "Tier": 0
+        },
+        {
+            "Id": "ice",
+            "Tier": 0
+        },
+        {
+            "Id": "laser-eyes",
+            "Tier": 0
+        },
+        {
+            "Id": "lightning",
+            "Tier": 0
+        },
+        {
+            "Id": "phase-shift",
+            "Tier": 0
+        },
+        {
+            "Id": "poison",
+            "Tier": 0
+        },
+        {
+            "Id": "speed",
+            "Tier": 0
+        },
+        {
+            "Id": "strength",
+            "Tier": 0
+        },
+        {
+            "Id": "telekinesis",
+            "Tier": 0
+        },
+        {
+            "Id": "teleport",
+            "Tier": 0
+        }
+    ],
+    "Rooftops": [],
+    "SessionsPlayed": 1,
+    "SessionsWon": 0,
+    "BestSessionScore": 1200,
+    "LastSessionXp": 840,
+    "LastModeId": "endless-fight",
+    "ModeRecords": [
+        {
+            "Id": "endless-fight",
+            "BestScore": 1200,
+            "BestWave": 5,
+            "Runs": 1,
+            "BestStyle": 464
+        }
+    ],
+    "Loadout": {
+        "HeroId": "vector",
+        "PowerA": "fire",
+        "PowerB": "strength",
+        "SecondaryPower": "phase-shift",
+        "SignatureId": "solar-flare",
+        "UnresolvedSignatureId": "",
+        "Primary": 14,
+        "Secondary": 15
+    },
+    "SeenHints": [
+        "dodge"
+    ],
+    "FirstPerson": false,
+    "DifficultyId": "normal",
+    "IntroSeen": false,
+    "PowerStats": [
+        {
+            "Id": "fire",
+            "Uses": 0,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 5,
+            "Damage": 0.0
+        },
+        {
+            "Id": "phase-shift",
+            "Uses": 0,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 5,
+            "Damage": 0.0
+        },
+        {
+            "Id": "strength",
+            "Uses": 0,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 5,
+            "Damage": 0.0
+        }
+    ],
+    "Challenges": []
+}

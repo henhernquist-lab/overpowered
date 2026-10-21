@@ -16,6 +16,7 @@ public static class FinalSignaturesVerification
     public static void Reload() => Begin("reload");
     public static void Matrix() => Begin("matrix");
     public static void Safety() => Begin("safety");
+    public static void PrismMatrix() => Begin("prism-matrix");
     static void Begin(string mode)
     {
         Directory.CreateDirectory("Verification/FinalSignatures/saves");
@@ -31,7 +32,7 @@ public static class FinalSignaturesVerification
         string pointer = "Verification/FinalSignatures/saves/reload-path.txt";
         WorldSession.VerificationSavePath = mode == "reload" ? File.ReadAllText(pointer).Trim() : Path.GetFullPath("Verification/FinalSignatures/saves/" + Guid.NewGuid().ToString("N") + ".json");
         var go = new GameObject("Final signature verifier"); UnityEngine.Object.DontDestroyOnLoad(go);
-        var runner = go.AddComponent<FinalSignaturesVerificationRunner>(); runner.Reload = mode == "reload"; runner.Matrix = mode == "matrix"; runner.Safety = mode == "safety"; runner.Finished = Finish;
+        var runner = go.AddComponent<FinalSignaturesVerificationRunner>(); runner.Reload = mode == "reload"; runner.Matrix = mode == "matrix" || mode == "prism-matrix"; runner.PrismOnly = mode == "prism-matrix"; runner.Safety = mode == "safety"; runner.Finished = Finish;
     }
     static void Finish(int code)
     {

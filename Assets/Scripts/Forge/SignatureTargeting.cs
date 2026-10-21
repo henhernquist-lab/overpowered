@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-/// Bounded queries shared by the final four signatures. Saturated queries fail closed.
+/// Bounded queries shared by the final four signatures. Saturated visibility queries fail closed.
 public static class SignatureTargeting
 {
     static readonly RaycastHit[] sight = new RaycastHit[64];
@@ -53,7 +53,7 @@ public static class SignatureTargeting
         r.Target = point;
         return true;
     }
-    public static int Gather(SynergyRunner r, Vector3 center, float radius, List<CityNpc> into, int limit)
+    public static int Gather(SynergyRunner r, Vector3 center, float radius, List<CityNpc> into, int limit, bool propsBlock = false)
     {
         into.Clear(); limit = Mathf.Clamp(limit, 1, 16);
         int count = Physics.OverlapSphereNonAlloc(center + Vector3.up, radius + 1f, r.Hits, ~0, QueryTriggerInteraction.Ignore);
@@ -63,7 +63,7 @@ public static class SignatureTargeting
             if (npc == null || npc.Dead || !npc.Hostile || into.Contains(npc)) continue;
             Vector3 delta = npc.transform.position - center;
             if (Mathf.Abs(delta.y) > 2.5f || new Vector2(delta.x, delta.z).sqrMagnitude > radius * radius ||
-                !Clear(center + Vector3.up, npc.transform.position + Vector3.up, r.transform)) continue;
+                !Clear(center + Vector3.up, npc.transform.position + Vector3.up, r.transform, propsBlock)) continue;
             float distance = delta.sqrMagnitude; int at = into.Count;
             while (at > 0 && (into[at - 1].transform.position - center).sqrMagnitude > distance) at--;
             if (at >= limit) continue;

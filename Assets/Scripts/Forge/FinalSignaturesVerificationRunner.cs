@@ -11,7 +11,7 @@ using Unity.Profiling;
 
 public sealed class FinalSignaturesVerificationRunner : MonoBehaviour
 {
-    public bool Reload, Matrix, Safety;
+    public bool Reload, Matrix, Safety, PrismOnly;
     string runtimeError;
     void Awake() { Application.logMessageReceived += Observe; }
     void OnDestroy() { Application.logMessageReceived -= Observe; }
@@ -36,7 +36,7 @@ public sealed class FinalSignaturesVerificationRunner : MonoBehaviour
         }
         Write(); Finished(0);
     }
-    void Write() => File.WriteAllLines("Verification/FinalSignatures/" + (Safety ? "safety.txt" : Matrix ? "matrix.txt" : Reload ? "reload.txt" : "results.txt"), output);
+    void Write() => File.WriteAllLines("Verification/FinalSignatures/" + (Safety ? "safety.txt" : Matrix ? (PrismOnly ? "prism-matrix.txt" : "matrix.txt") : Reload ? "reload.txt" : "results.txt"), output);
     IEnumerator Scene(string name)
     {
         float until = Time.realtimeSinceStartup + 45;
@@ -114,6 +114,17 @@ public sealed class FinalSignaturesVerificationRunner : MonoBehaviour
             }
         }
         screen.Close();
+        foreach (string stale in new[] { "bogus-saved-signature", "" })
+        {
+            string path = Path.GetFullPath("Verification/FinalSignatures/saves/compat-" + Guid.NewGuid().ToString("N") + ".json");
+            string signature = stale.Length == 0 ? "" : ",\"SignatureId\":\"" + stale + "\"";
+            File.WriteAllText(path, "{\"Version\":1,\"Level\":4,\"Xp\":25,\"Points\":3,\"FirstPerson\":true,\"Powers\":[{\"Id\":\"fire\",\"Tier\":1}],\"Loadout\":{\"HeroId\":\"vector\",\"PowerA\":\"telekinesis\",\"PowerB\":\"poison\",\"SecondaryPower\":\"speed\",\"Primary\":14,\"Secondary\":15" + signature + "}}");
+            var probe = new GameObject("Saved signature compatibility control").AddComponent<PlayerProgression>();
+            probe.Initialize(Resources.Load<GameTuning>("GameTuning").Progression, Resources.LoadAll<PowerDefinition>("Powers"), path);
+            Check(probe.LastError == null && probe.EquippedSignature?.Id == "meteor-crush" && (stale.Length == 0 || probe.Data.Loadout.UnresolvedSignatureId == stale), "Invalid/missing saved signature repairs safely and retains stale ID: " + stale);
+            Check(probe.Data.Level == 4 && probe.Data.Xp == 25 && probe.Data.Points == 3 && probe.Tier(P("fire")) == 1 && probe.SelectedHero.Id == "vector" && probe.Data.FirstPerson && probe.Data.Loadout.Primary == CityColor.Blue && probe.Data.Loadout.Secondary == CityColor.Cyan && probe.EquippedSecondary == P("speed"), "Signature repair preserves XP/level/points/upgrades/hero/suit/view/secondary");
+            Destroy(probe.gameObject);
+        }
         yield return Equip("telekinesis", "meteor-crush");
         var direct = Spawn(0, 10, "Brute"); var shock = Spawn(4, 10); var outside = Spawn(10, 10);
         var safe = Spawn(-2, 10, "Gunner", NpcRole.Civilian);
@@ -145,6 +156,7 @@ public sealed class FinalSignaturesVerificationRunner : MonoBehaviour
         yield return Equip("laser-eyes", "prism-barrage");
         var first = Spawn(0, 10); var branch = Spawn(3, 11); var duplicate = first.gameObject.AddComponent<SphereCollider>(); duplicate.radius = .2f;
         var civilian = Spawn(-2, 10, "Gunner", NpcRole.Civilian); var far = Spawn(20, 10);
+        Spawn(-4, 10); Spawn(4, 13); Spawn(-5, 12); var capped = Spawn(6, 13);
         Aim(first.transform.position + Vector3.up);
         var r = W.Powers.SynergyRunner; float energy = W.Powers.Energy;
         Check(r.TryActivate(), "Prism activates on precise hostile target");
@@ -152,7 +164,7 @@ public sealed class FinalSignaturesVerificationRunner : MonoBehaviour
         yield return Complete(r);
         Check(Mathf.Abs(1000 - first.Health - r.ActivationDamage) < .05f, "Prism initial authoritative damage");
         Check(Mathf.Abs(1000 - branch.Health - r.ActivationDamage * .78f) < .05f, "Prism branch falloff authoritative damage");
-        Check(PrismBarrageEffect.LastTargets.Count == 2 && PrismBarrageEffect.LastTargets.Distinct().Count() == 2, "Prism deduplicates colliders and bounds branch fan");
+        Check(PrismBarrageEffect.LastTargets.Count == 5 && PrismBarrageEffect.LastTargets.Distinct().Count() == 5 && capped.Health == 1000, "Prism deduplicates colliders and enforces five-target cap with an eligible sixth untouched");
         Check(civilian.Health == 1000 && far.Health == 1000 && !SignatureVfx.Get().PrismVisible && !r.TryActivate(), "Prism friendly/range/cleanup/cooldown controls");
         GameFlow.Instance.Home(); yield return Scene(GameFlow.HomeScene);
         yield return Equip("poison", "plague-bloom");
@@ -177,15 +189,38 @@ public sealed class FinalSignaturesVerificationRunner : MonoBehaviour
         string[] ids = {"meteor-crush", "abyssal-grasp", "prism-barrage", "plague-bloom"};
         string[] modes = {"hero", "villain", "free-play", "endless-fight"};
         foreach (string difficulty in new[] {"normal", "hard", "extreme"})
-        for (int ability = 0; ability < 4; ability++)
+        for (int ability = PrismOnly ? 2 : 0; ability < (PrismOnly ? 3 : 4); ability++)
         for (int mode = 0; mode < modes.Length; mode++)
         {
             var profile = FindAnyObjectByType<ModeScreens>().Profile;
             Check(profile.SetDifficulty(difficulty), "Select difficulty " + difficulty);
+            if (PrismOnly)
+            {
+                Check(profile.SetLoadout(F.Hero("vector"), P("laser-eyes"), P("ice"), P("speed"), CityColor.Blue, CityColor.Cyan) && profile.SetSignature("prism-barrage"), "Prepare Prism Forge difficulty display");
+                var menu = FindAnyObjectByType<ModeScreens>();
+                using (var submit = NavigationSubmitEvent.GetPooled()) { submit.target = menu.ForgeButton; menu.ForgeButton.SendEvent(submit); }
+                yield return null;
+                string expectedCooldown = difficulty == "hard" ? "26.4" : difficulty == "extreme" ? "27.6" : "24";
+                string expectedEnergy = difficulty == "hard" ? "33" : difficulty == "extreme" ? "34.5" : "30";
+                var button = menu.ForgeScreen.Root.Q<Button>("signature-prism-barrage");
+                Check(button != null && button.text.Contains(expectedCooldown + "s cooldown") && button.text.Contains(expectedEnergy + " energy") && menu.ForgeScreen.SynergyStatus.text.Contains(expectedEnergy + " ENERGY"),
+                    "Forge displays actual " + difficulty + " cooldown and energy requirements");
+                string iceCooldown = difficulty == "hard" ? "27.5" : difficulty == "extreme" ? "28.75" : "25";
+                var iceButton = menu.ForgeScreen.Root.Q<Button>("signature-glacial-prison");
+                Check(iceButton != null && iceButton.text.Contains(iceCooldown + "s cooldown") && iceButton.text.Contains(expectedEnergy + " energy"), "Forge preserves fractional first-four cooldown requirement");
+                menu.ForgeScreen.Close();
+            }
             yield return Equip(owners[ability], ids[ability], modes[mode]);
             bool villain = W.Progression.Data.Side == PlayerSide.Villain;
             var enemy = Spawn(0, 10, "Brute", villain ? NpcRole.Cop : NpcRole.Criminal);
             enemy.AlwaysAggro = true; // Villain cop fixture represents an active responder, not a neutral zero-Heat patrol.
+            CityNpc opticalVisible = null, opticalHidden = null; Rigidbody opticalCover = null;
+            if (ability == 2)
+            {
+                opticalVisible = Spawn(-3, 11, "Gunner", villain ? NpcRole.Cop : NpcRole.Criminal); opticalVisible.AlwaysAggro = true;
+                opticalHidden = Spawn(4, 10, "Gunner", villain ? NpcRole.Cop : NpcRole.Criminal); opticalHidden.AlwaysAggro = true;
+                var cover = Wall(new Vector3(2, 151.5f, 10), new Vector3(.4f, 3, 5)); opticalCover = cover.AddComponent<Rigidbody>(); opticalCover.useGravity = false; opticalCover.mass = 45;
+            }
             var friendly = Spawn(3, 10, "Gunner", villain ? NpcRole.Criminal : NpcRole.Cop);
             var civilian = Spawn(-3, 10, "Gunner", NpcRole.Civilian);
             bool firstPerson = mode % 2 == 1;
@@ -213,6 +248,8 @@ public sealed class FinalSignaturesVerificationRunner : MonoBehaviour
             float damage = 1000 - enemy.Health;
             float expected = r.ActivationDamage * W.Powers.Difficulty.PlayerDamage;
             Check(damage > expected * .89f && damage <= expected + .2f, "Authoritative difficulty damage " + damage + " expected " + expected);
+            if (ability == 2) Check(opticalVisible.Health < 1000 && opticalHidden.Health == 1000 && !opticalCover.isKinematic && !opticalCover.gameObject.isStatic,
+                "Optical branches stop at movable cover and preserve dynamic props");
             Check(friendly.Health == 1000 && civilian.Health == 1000, "Hero/Villain hostility protects friendly and civilian");
             Check(!enemy.Frozen && !enemy.Rooted && !SignatureVfx.Get().MeteorVisible && !SignatureVfx.Get().AbyssVisible && SignatureVfx.Get().ActiveBlooms == 0,
                 "Finite effect and movement recovery in " + modes[mode]);

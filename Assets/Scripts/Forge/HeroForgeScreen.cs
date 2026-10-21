@@ -99,6 +99,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
         SecondarySlot=Dropdown("SECONDARY POWER / F",secondaries.Select(p=>p.DisplayName).ToArray(),Array.IndexOf(secondaries,utility),i=>SelectPower(2,secondaries[i]));
         var signatures=Resources.Load<SignatureCatalog>("SignatureCatalog");
         bool preview=signatures!=null&&signatures.Enabled;
+        var difficulty=new SessionDifficulty(menu.Profile.SelectedDifficulty);
         var synergy=preview?menu.Profile.EquippedSignature:catalog.Resolve(a,b,utility);
         if(preview)
         {
@@ -110,7 +111,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
             {
                 var captured=option;bool chosen=option==synergy;
                 var choice=new Button(()=>{if(menu.Profile.SetSignature(captured.Id))Rebuild();}){name="signature-"+option.Id,
-                    text=$"{(chosen?"SELECTED · ":"")}{option.DisplayName} / {option.OwnerPrimary.DisplayName}\n{option.Description}\n{option.Cooldown:0}s cooldown · {option.EnergyCost:0} energy"};
+                    text=$"{(chosen?"SELECTED · ":"")}{option.DisplayName} / {option.OwnerPrimary.DisplayName}\n{option.Description}\n{option.Cooldown*difficulty.Cooldown:0.##}s cooldown · {option.EnergyCost*difficulty.EnergyUsage:0.##} energy"};
                 choice.style.whiteSpace=WhiteSpace.Normal;choice.style.minHeight=78;choice.style.marginBottom=6;
                 choice.style.backgroundColor=C(chosen?accent:CityColor.UiPanel);
                 choice.style.color=C(chosen?CityColor.UiNavy:CityColor.UiInk);form.Add(choice);
@@ -119,8 +120,8 @@ public sealed class HeroForgeScreen : MonoBehaviour
         }
         SynergyLabel=new Label("SYNERGY / "+(synergy?.DisplayName??"No synergy")){name="forge-synergy"};
         SynergyLabel.style.fontSize=24;SynergyLabel.style.whiteSpace=WhiteSpace.Normal;SynergyLabel.style.color=C(CityColor.HeroAccent);form.Add(SynergyLabel);
-        // Synergies have no unlock step: the equipped pair's synergy is available at once, gated only by its cooldown.
-        SynergyStatus=new Label(synergy!=null?$"READY WHEN EQUIPPED  ·  {synergy.Cooldown:0} S COOLDOWN{(synergy.EnergyCost>0?$"  ·  {synergy.EnergyCost:0} ENERGY":"")}  ·  {HudBindings.KeyName(catalog.SynergyKey)} TO USE":""){name="forge-synergy-status"};
+        // Show the same selected-difficulty resource/cooldown requirements used by the session runner.
+        SynergyStatus=new Label(synergy!=null?$"READY WHEN EQUIPPED  ·  {synergy.Cooldown*difficulty.Cooldown:0.##} S COOLDOWN{(synergy.EnergyCost>0?$"  ·  {synergy.EnergyCost*difficulty.EnergyUsage:0.##} ENERGY":"")}  ·  {HudBindings.KeyName(catalog.SynergyKey)} TO USE":""){name="forge-synergy-status"};
         SynergyStatus.style.fontSize=13;SynergyStatus.style.unityFontStyleAndWeight=FontStyle.Bold;SynergyStatus.style.color=C(CityColor.UiMuted);SynergyStatus.style.marginBottom=4;form.Add(SynergyStatus);
         var detail=new Label(synergy?.Description??"");detail.style.whiteSpace=WhiteSpace.Normal;detail.style.marginBottom=12;form.Add(detail);
         BuildStats();

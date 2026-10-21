@@ -67,6 +67,10 @@ PASS Forge description/cost/cooldown abyssal-grasp
 PASS Forge equips exactly one abyssal-grasp
 PASS Forge description/cost/cooldown prism-barrage
 PASS Forge equips exactly one prism-barrage
+PASS Invalid/missing saved signature repairs safely and retains stale ID: bogus-saved-signature
+PASS Signature repair preserves XP/level/points/upgrades/hero/suit/view/secondary
+PASS Invalid/missing saved signature repairs safely and retains stale ID: 
+PASS Signature repair preserves XP/level/points/upgrades/hero/suit/view/secondary
 PASS Loadout telekinesis
 PASS Select meteor-crush
 PASS Enter hero
@@ -95,7 +99,7 @@ PASS Energy paid once; duplicate activation refused
 PASS Effect completes within bounded lifetime
 PASS Prism initial authoritative damage
 PASS Prism branch falloff authoritative damage
-PASS Prism deduplicates colliders and bounds branch fan
+PASS Prism deduplicates colliders and enforces five-target cap with an eligible sixth untouched
 PASS Prism friendly/range/cleanup/cooldown controls
 PASS Loadout poison
 PASS Select plague-bloom
@@ -103,7 +107,7 @@ PASS Enter hero
 PASS Session caches plague-bloom
 PASS Plague activates on ground without requiring physical props
 PASS Effect completes within bounded lifetime
-PASS Plague sustained authoritative poison budget: 179.9349
+PASS Plague sustained authoritative poison budget: 179.975
 PASS Plague faction/range/finite VFX controls
 PASS Bloom rolls signature variance once, never per application or tick
 PASS One poison component, finite ticks

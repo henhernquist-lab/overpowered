@@ -23,7 +23,7 @@ MonoBehaviour:
   Effect: {fileID: 11400000, guid: a147b0589c124d96857f013904c2e201, type: 2}
   Cooldown: 22
   Duration: 0.4
-  Damage: 52
+  Damage: 150
   Force: 1500
   Radius: 8.5
   Range: 8.5

@@ -1,0 +1,114 @@
+PASS Authored full roster enabled without preview
+PASS Complete roster has eight valid described mappings
+PASS Pair choices darkness/fire
+PASS One selectable signature for pair 1
+PASS Pair choices darkness/ice
+PASS One selectable signature for pair 2
+PASS Pair choices darkness/laser-eyes
+PASS One selectable signature for pair 3
+PASS Pair choices darkness/lightning
+PASS One selectable signature for pair 4
+PASS Pair choices darkness/poison
+PASS One selectable signature for pair 5
+PASS Pair choices darkness/strength
+PASS One selectable signature for pair 6
+PASS Pair choices darkness/telekinesis
+PASS One selectable signature for pair 7
+PASS Pair choices fire/ice
+PASS One selectable signature for pair 8
+PASS Pair choices fire/laser-eyes
+PASS One selectable signature for pair 9
+PASS Pair choices fire/lightning
+PASS One selectable signature for pair 10
+PASS Pair choices fire/poison
+PASS One selectable signature for pair 11
+PASS Pair choices fire/strength
+PASS One selectable signature for pair 12
+PASS Pair choices fire/telekinesis
+PASS One selectable signature for pair 13
+PASS Pair choices ice/laser-eyes
+PASS One selectable signature for pair 14
+PASS Pair choices ice/lightning
+PASS One selectable signature for pair 15
+PASS Pair choices ice/poison
+PASS One selectable signature for pair 16
+PASS Pair choices ice/strength
+PASS One selectable signature for pair 17
+PASS Pair choices ice/telekinesis
+PASS One selectable signature for pair 18
+PASS Pair choices laser-eyes/lightning
+PASS One selectable signature for pair 19
+PASS Pair choices laser-eyes/poison
+PASS One selectable signature for pair 20
+PASS Pair choices laser-eyes/strength
+PASS One selectable signature for pair 21
+PASS Pair choices laser-eyes/telekinesis
+PASS One selectable signature for pair 22
+PASS Pair choices lightning/poison
+PASS One selectable signature for pair 23
+PASS Pair choices lightning/strength
+PASS One selectable signature for pair 24
+PASS Pair choices lightning/telekinesis
+PASS One selectable signature for pair 25
+PASS Pair choices poison/strength
+PASS One selectable signature for pair 26
+PASS Pair choices poison/telekinesis
+PASS One selectable signature for pair 27
+PASS Pair choices strength/telekinesis
+PASS One selectable signature for pair 28
+PASS 28 unique pairs, invalid ID and duplicate-power controls
+PASS Forge new primary pair telekinesis/poison
+PASS Forge description/cost/cooldown meteor-crush
+PASS Forge equips exactly one meteor-crush
+PASS Forge description/cost/cooldown plague-bloom
+PASS Forge equips exactly one plague-bloom
+PASS Forge new primary pair darkness/laser-eyes
+PASS Forge description/cost/cooldown abyssal-grasp
+PASS Forge equips exactly one abyssal-grasp
+PASS Forge description/cost/cooldown prism-barrage
+PASS Forge equips exactly one prism-barrage
+PASS Invalid/missing saved signature repairs safely and retains stale ID: bogus-saved-signature
+PASS Signature repair preserves XP/level/points/upgrades/hero/suit/view/secondary
+PASS Invalid/missing saved signature repairs safely and retains stale ID: 
+PASS Signature repair preserves XP/level/points/upgrades/hero/suit/view/secondary
+PASS Loadout telekinesis
+PASS Select meteor-crush
+PASS Enter hero
+PASS Session caches meteor-crush
+PASS Meteor refuses obstructed overhead space without cooldown
+PASS Meteor assembles without throwable props
+PASS Meteor anticipation precedes damage
+PASS Effect completes within bounded lifetime
+PASS Meteor direct 210 / shock 58.8 authoritative damage, no double hit
+PASS Meteor range/friendly/cleanup controls
+PASS Loadout darkness
+PASS Select abyssal-grasp
+PASS Enter hero
+PASS Session caches abyssal-grasp
+PASS Abyss activates on ground group
+PASS Abyss groups with Brute pull resistance
+PASS Effect completes within bounded lifetime
+PASS Abyss collapse authoritative damage once per hostile
+PASS Abyss movement leases expire, no curse or friendly damage remains
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter hero
+PASS Session caches prism-barrage
+PASS Prism activates on precise hostile target
+PASS Energy paid once; duplicate activation refused
+PASS Effect completes within bounded lifetime
+PASS Prism initial authoritative damage
+PASS Prism branch falloff authoritative damage
+PASS Prism deduplicates colliders and enforces five-target cap with an eligible sixth untouched
+PASS Prism friendly/range/cleanup/cooldown controls
+PASS Loadout poison
+PASS Select plague-bloom
+PASS Enter hero
+PASS Session caches plague-bloom
+PASS Plague activates on ground without requiring physical props
+PASS Effect completes within bounded lifetime
+PASS Plague sustained authoritative poison budget: 179.975
+PASS Plague faction/range/finite VFX controls
+PASS Bloom rolls signature variance once, never per application or tick
+PASS One poison component, finite ticks
+PASS Save equipped final signature

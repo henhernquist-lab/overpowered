@@ -1,0 +1,222 @@
+PASS Matrix uses default roster gate
+PASS Select difficulty normal
+PASS Prepare Prism Forge difficulty display
+PASS Forge displays actual normal cooldown and energy requirements
+PASS Forge preserves fractional first-four cooldown requirement
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter hero
+PASS Session caches prism-barrage
+PASS Difficulty energy once
+PASS prism-barrage activates normal/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 115 expected 115
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Prepare Prism Forge difficulty display
+PASS Forge displays actual normal cooldown and energy requirements
+PASS Forge preserves fractional first-four cooldown requirement
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter villain
+PASS Session caches prism-barrage
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS prism-barrage activates normal/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 115 expected 115
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Prepare Prism Forge difficulty display
+PASS Forge displays actual normal cooldown and energy requirements
+PASS Forge preserves fractional first-four cooldown requirement
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter free-play
+PASS Session caches prism-barrage
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS prism-barrage activates normal/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 115 expected 115
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty normal
+PASS Prepare Prism Forge difficulty display
+PASS Forge displays actual normal cooldown and energy requirements
+PASS Forge preserves fractional first-four cooldown requirement
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter endless-fight
+PASS Session caches prism-barrage
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS prism-barrage activates normal/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 115 expected 115
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Prepare Prism Forge difficulty display
+PASS Forge displays actual hard cooldown and energy requirements
+PASS Forge preserves fractional first-four cooldown requirement
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter hero
+PASS Session caches prism-barrage
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS prism-barrage activates hard/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 111.55 expected 111.55
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Prepare Prism Forge difficulty display
+PASS Forge displays actual hard cooldown and energy requirements
+PASS Forge preserves fractional first-four cooldown requirement
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter villain
+PASS Session caches prism-barrage
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS prism-barrage activates hard/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 111.55 expected 111.55
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Prepare Prism Forge difficulty display
+PASS Forge displays actual hard cooldown and energy requirements
+PASS Forge preserves fractional first-four cooldown requirement
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter free-play
+PASS Session caches prism-barrage
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS prism-barrage activates hard/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 111.55 expected 111.55
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty hard
+PASS Prepare Prism Forge difficulty display
+PASS Forge displays actual hard cooldown and energy requirements
+PASS Forge preserves fractional first-four cooldown requirement
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter endless-fight
+PASS Session caches prism-barrage
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS prism-barrage activates hard/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 111.55 expected 111.55
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Prepare Prism Forge difficulty display
+PASS Forge displays actual extreme cooldown and energy requirements
+PASS Forge preserves fractional first-four cooldown requirement
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter hero
+PASS Session caches prism-barrage
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS prism-barrage activates extreme/hero/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 109.825 expected 109.825
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in hero
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Prepare Prism Forge difficulty display
+PASS Forge displays actual extreme cooldown and energy requirements
+PASS Forge preserves fractional first-four cooldown requirement
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter villain
+PASS Session caches prism-barrage
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS prism-barrage activates extreme/villain/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 109.825 expected 109.825
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in villain
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Prepare Prism Forge difficulty display
+PASS Forge displays actual extreme cooldown and energy requirements
+PASS Forge preserves fractional first-four cooldown requirement
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter free-play
+PASS Session caches prism-barrage
+PASS Restore actual third-person view
+PASS Difficulty energy once
+PASS prism-barrage activates extreme/free-play/third
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 109.825 expected 109.825
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in free-play
+PASS Cooldown remains enforced after effect
+PASS Select difficulty extreme
+PASS Prepare Prism Forge difficulty display
+PASS Forge displays actual extreme cooldown and energy requirements
+PASS Forge preserves fractional first-four cooldown requirement
+PASS Loadout laser-eyes
+PASS Select prism-barrage
+PASS Enter endless-fight
+PASS Session caches prism-barrage
+PASS Enable first-person camera
+PASS True first-person aim origin
+PASS Difficulty energy once
+PASS prism-barrage activates extreme/endless-fight/first
+PASS Difficulty cooldown once
+PASS Effect completes within bounded lifetime
+PASS Authoritative difficulty damage 109.825 expected 109.825
+PASS Optical branches stop at movable cover and preserve dynamic props
+PASS Hero/Villain hostility protects friendly and civilian
+PASS Finite effect and movement recovery in endless-fight
+PASS Cooldown remains enforced after effect

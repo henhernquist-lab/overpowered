@@ -1,0 +1,133 @@
+{
+    "Version": 1,
+    "Level": 7,
+    "Xp": 257,
+    "Points": 5,
+    "Side": 0,
+    "Powers": [
+        {
+            "Id": "darkness",
+            "Tier": 0
+        },
+        {
+            "Id": "fire",
+            "Tier": 0
+        },
+        {
+            "Id": "flight",
+            "Tier": 0
+        },
+        {
+            "Id": "force-field",
+            "Tier": 0
+        },
+        {
+            "Id": "ice",
+            "Tier": 0
+        },
+        {
+            "Id": "laser-eyes",
+            "Tier": 0
+        },
+        {
+            "Id": "lightning",
+            "Tier": 0
+        },
+        {
+            "Id": "phase-shift",
+            "Tier": 0
+        },
+        {
+            "Id": "poison",
+            "Tier": 0
+        },
+        {
+            "Id": "speed",
+            "Tier": 0
+        },
+        {
+            "Id": "strength",
+            "Tier": 1
+        },
+        {
+            "Id": "telekinesis",
+            "Tier": 0
+        },
+        {
+            "Id": "teleport",
+            "Tier": 0
+        }
+    ],
+    "Rooftops": [],
+    "SessionsPlayed": 6,
+    "SessionsWon": 3,
+    "BestSessionScore": 700,
+    "LastSessionXp": 0,
+    "LastModeId": "hero",
+    "ModeRecords": [
+        {
+            "Id": "hero",
+            "BestScore": 700,
+            "BestWave": 0,
+            "Runs": 3,
+            "BestStyle": 527
+        },
+        {
+            "Id": "villain",
+            "BestScore": 700,
+            "BestWave": 0,
+            "Runs": 2,
+            "BestStyle": 0
+        },
+        {
+            "Id": "verification-third",
+            "BestScore": 140,
+            "BestWave": 0,
+            "Runs": 1,
+            "BestStyle": 182
+        }
+    ],
+    "Loadout": {
+        "HeroId": "vector",
+        "PowerA": "fire",
+        "PowerB": "strength",
+        "SecondaryPower": "phase-shift",
+        "SignatureId": "solar-flare",
+        "UnresolvedSignatureId": "",
+        "Primary": 14,
+        "Secondary": 15
+    },
+    "SeenHints": [
+        "punch"
+    ],
+    "FirstPerson": false,
+    "DifficultyId": "normal",
+    "IntroSeen": false,
+    "PowerStats": [
+        {
+            "Id": "fire",
+            "Uses": 0,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 6,
+            "Damage": 0.0
+        },
+        {
+            "Id": "phase-shift",
+            "Uses": 0,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 6,
+            "Damage": 0.0
+        },
+        {
+            "Id": "strength",
+            "Uses": 1,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 6,
+            "Damage": 0.0
+        }
+    ],
+    "Challenges": []
+}

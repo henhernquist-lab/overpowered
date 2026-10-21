@@ -1,0 +1,135 @@
+{
+    "Version": 1,
+    "Level": 1,
+    "Xp": 0,
+    "Points": 20,
+    "Side": 1,
+    "Powers": [
+        {
+            "Id": "darkness",
+            "Tier": 0
+        },
+        {
+            "Id": "fire",
+            "Tier": 0
+        },
+        {
+            "Id": "flight",
+            "Tier": 0
+        },
+        {
+            "Id": "force-field",
+            "Tier": 0
+        },
+        {
+            "Id": "ice",
+            "Tier": 0
+        },
+        {
+            "Id": "laser-eyes",
+            "Tier": 0
+        },
+        {
+            "Id": "lightning",
+            "Tier": 0
+        },
+        {
+            "Id": "phase-shift",
+            "Tier": 0
+        },
+        {
+            "Id": "poison",
+            "Tier": 0
+        },
+        {
+            "Id": "speed",
+            "Tier": 0
+        },
+        {
+            "Id": "strength",
+            "Tier": 0
+        },
+        {
+            "Id": "telekinesis",
+            "Tier": 0
+        },
+        {
+            "Id": "teleport",
+            "Tier": 0
+        }
+    ],
+    "Rooftops": [],
+    "SessionsPlayed": 0,
+    "SessionsWon": 0,
+    "BestSessionScore": 0,
+    "LastSessionXp": 0,
+    "LastModeId": "",
+    "ModeRecords": [],
+    "Loadout": {
+        "HeroId": "vector",
+        "PowerA": "fire",
+        "PowerB": "strength",
+        "SecondaryPower": "phase-shift",
+        "SignatureId": "solar-flare",
+        "UnresolvedSignatureId": "",
+        "Primary": 14,
+        "Secondary": 15
+    },
+    "SeenHints": [
+        "move"
+    ],
+    "FirstPerson": true,
+    "DifficultyId": "normal",
+    "IntroSeen": false,
+    "PowerStats": [
+        {
+            "Id": "fire",
+            "Uses": 12,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 6,
+            "Damage": 0.0
+        },
+        {
+            "Id": "ice",
+            "Uses": 4,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 2,
+            "Damage": 0.0
+        },
+        {
+            "Id": "phase-shift",
+            "Uses": 0,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 5,
+            "Damage": 0.0
+        },
+        {
+            "Id": "telekinesis",
+            "Uses": 4,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 2,
+            "Damage": 0.0
+        },
+        {
+            "Id": "flight",
+            "Uses": 0,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 1,
+            "Damage": 0.0
+        },
+        {
+            "Id": "strength",
+            "Uses": 0,
+            "Hits": 0,
+            "Kills": 0,
+            "Sessions": 2,
+            "Damage": 0.0
+        }
+    ],
+    "Challenges": []
+}

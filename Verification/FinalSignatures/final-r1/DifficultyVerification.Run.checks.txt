@@ -1,0 +1,1415 @@
+PASS Fresh profile defaults Normal.
+PASS Invalid selection rejected.
+PASS Legacy fixture genuinely lacks field.
+PASS Old save defaults Normal.
+PASS Three buttons; selected class for normal
+PASS Button saves choice and shows actual percentages normal
+PASS Mode icon/title do not overlap at 1280x720: hero
+PASS Mode icon/title do not overlap at 1280x720: villain
+PASS Difficulty details clear mode cards at 1280x720
+PASS Three buttons; selected class for hard
+PASS Button saves choice and shows actual percentages hard
+PASS Mode icon/title do not overlap at 1280x720: hero
+PASS Mode icon/title do not overlap at 1280x720: villain
+PASS Difficulty details clear mode cards at 1280x720
+PASS Three buttons; selected class for extreme
+PASS Button saves choice and shows actual percentages extreme
+PASS Mode icon/title do not overlap at 1280x720: hero
+PASS Mode icon/title do not overlap at 1280x720: villain
+PASS Difficulty details clear mode cards at 1280x720
+PASS Extreme deviation 0: -0.04500, expected -0.04500.
+PASS Extreme deviation 1: 0.07500, expected 0.07500.
+PASS Extreme deviation 2: -0.07500, expected -0.07500.
+PASS Extreme deviation 3: 0.22500, expected 0.22500.
+PASS Extreme deviation 4: 0.15000, expected 0.15000.
+PASS Extreme deviation 5: 0.15000, expected 0.15000.
+PASS Choose normal for next hero
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Difficulty preserves mode identity normal / hero
+PASS Authored player damage: 1.00000, expected 1.00000.
+PASS Authored enemy health: 1.00000, expected 1.00000.
+PASS Enemy outgoing unchanged: 1.00000, expected 1.00000.
+PASS Saving next selection cannot mutate live session
+PASS Encounter interval: 50.00000, expected 50.00000.
+PASS Police response interval: 2.00000, expected 2.00000.
+PASS Archetype asset rusher
+PASS Seeded actual spawn rusher: 46.43129, expected 46.43129.
+PASS Current starts at rolled max: 46.43129, expected 46.43129.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 53.02428, expected 53.02428.
+PASS Current starts at rolled max: 53.02428, expected 53.02428.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 50.96716, expected 50.96716.
+PASS Current starts at rolled max: 50.96716, expected 50.96716.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 54.50893, expected 54.50893.
+PASS Current starts at rolled max: 54.50893, expected 54.50893.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 47.61487, expected 47.61487.
+PASS Current starts at rolled max: 47.61487, expected 47.61487.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 54.41627, expected 54.41627.
+PASS Current starts at rolled max: 54.41627, expected 54.41627.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 48.70399, expected 48.70399.
+PASS Current starts at rolled max: 48.70399, expected 48.70399.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 53.60699, expected 53.60699.
+PASS Current starts at rolled max: 53.60699, expected 53.60699.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Archetype asset gunner
+PASS Seeded actual spawn gunner: 78.78477, expected 78.78477.
+PASS Current starts at rolled max: 78.78477, expected 78.78477.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 88.24384, expected 88.24384.
+PASS Current starts at rolled max: 88.24384, expected 88.24384.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 84.71510, expected 84.71510.
+PASS Current starts at rolled max: 84.71510, expected 84.71510.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 77.30773, expected 77.30773.
+PASS Current starts at rolled max: 77.30773, expected 77.30773.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 76.64153, expected 76.64153.
+PASS Current starts at rolled max: 76.64153, expected 76.64153.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 89.16564, expected 89.16564.
+PASS Current starts at rolled max: 89.16564, expected 89.16564.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 77.69286, expected 77.69286.
+PASS Current starts at rolled max: 77.69286, expected 77.69286.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 86.35786, expected 86.35786.
+PASS Current starts at rolled max: 86.35786, expected 86.35786.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Archetype asset brute
+PASS Seeded actual spawn brute: 229.06320, expected 229.06320.
+PASS Current starts at rolled max: 229.06320, expected 229.06320.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 254.95690, expected 254.95690.
+PASS Current starts at rolled max: 254.95690, expected 254.95690.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 247.49790, expected 247.49790.
+PASS Current starts at rolled max: 247.49790, expected 247.49790.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 236.88220, expected 236.88220.
+PASS Current starts at rolled max: 236.88220, expected 236.88220.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 246.43210, expected 246.43210.
+PASS Current starts at rolled max: 246.43210, expected 246.43210.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 243.18380, expected 243.18380.
+PASS Current starts at rolled max: 243.18380, expected 243.18380.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 271.49110, expected 271.49110.
+PASS Current starts at rolled max: 271.49110, expected 271.49110.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 251.55120, expected 251.55120.
+PASS Current starts at rolled max: 251.55120, expected 251.55120.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS No early recurring encounter
+PASS Exactly one encounter at resolved cadence
+PASS Bar displays actual spawned difficulty-scaled rolled maximum
+PASS Paid Fire cast normal
+PASS Actual final Fire hit: 24.74200, expected 24.74200.
+PASS Health loss matches final damage: 24.74200, expected 24.74200.
+PASS Floating number reads final difficulty damage
+PASS Bar reads stored max
+PASS HUD health fraction uses difficulty denominator: 95.00000, expected 95.00000.
+PASS Independent authored synergy damage scales once: 40.00000, expected 40.00000.
+PASS Incoming enemy damage not multiplied: 5.00000, expected 5.00000.
+PASS Results retains difficulty
+PASS Return Home retains difficulty
+PASS Choose normal for next villain
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Difficulty preserves mode identity normal / villain
+PASS Authored player damage: 1.00000, expected 1.00000.
+PASS Authored enemy health: 1.00000, expected 1.00000.
+PASS Enemy outgoing unchanged: 1.00000, expected 1.00000.
+PASS Saving next selection cannot mutate live session
+PASS Encounter interval: 50.00000, expected 50.00000.
+PASS Police response interval: 2.00000, expected 2.00000.
+PASS Archetype asset rusher
+PASS Seeded actual spawn rusher: 36.36185, expected 36.36185.
+PASS Current starts at rolled max: 36.36185, expected 36.36185.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 41.52504, expected 41.52504.
+PASS Current starts at rolled max: 41.52504, expected 41.52504.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 39.91404, expected 39.91404.
+PASS Current starts at rolled max: 39.91404, expected 39.91404.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 42.68772, expected 42.68772.
+PASS Current starts at rolled max: 42.68772, expected 42.68772.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 37.28875, expected 37.28875.
+PASS Current starts at rolled max: 37.28875, expected 37.28875.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 42.61515, expected 42.61515.
+PASS Current starts at rolled max: 42.61515, expected 42.61515.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 38.14168, expected 38.14168.
+PASS Current starts at rolled max: 38.14168, expected 38.14168.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 41.98138, expected 41.98138.
+PASS Current starts at rolled max: 41.98138, expected 41.98138.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Archetype asset gunner
+PASS Seeded actual spawn gunner: 61.69892, expected 61.69892.
+PASS Current starts at rolled max: 61.69892, expected 61.69892.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 69.10661, expected 69.10661.
+PASS Current starts at rolled max: 69.10661, expected 69.10661.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 66.34315, expected 66.34315.
+PASS Current starts at rolled max: 66.34315, expected 66.34315.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 60.54220, expected 60.54220.
+PASS Current starts at rolled max: 60.54220, expected 60.54220.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 60.02048, expected 60.02048.
+PASS Current starts at rolled max: 60.02048, expected 60.02048.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 69.82851, expected 69.82851.
+PASS Current starts at rolled max: 69.82851, expected 69.82851.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 60.84381, expected 60.84381.
+PASS Current starts at rolled max: 60.84381, expected 60.84381.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 67.62965, expected 67.62965.
+PASS Current starts at rolled max: 67.62965, expected 67.62965.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Archetype asset brute
+PASS Seeded actual spawn brute: 179.38680, expected 179.38680.
+PASS Current starts at rolled max: 179.38680, expected 179.38680.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 199.66510, expected 199.66510.
+PASS Current starts at rolled max: 199.66510, expected 199.66510.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 193.82360, expected 193.82360.
+PASS Current starts at rolled max: 193.82360, expected 193.82360.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 185.51010, expected 185.51010.
+PASS Current starts at rolled max: 185.51010, expected 185.51010.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 192.98900, expected 192.98900.
+PASS Current starts at rolled max: 192.98900, expected 192.98900.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 190.44510, expected 190.44510.
+PASS Current starts at rolled max: 190.44510, expected 190.44510.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 212.61350, expected 212.61350.
+PASS Current starts at rolled max: 212.61350, expected 212.61350.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 196.99790, expected 196.99790.
+PASS Current starts at rolled max: 196.99790, expected 196.99790.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS No early recurring encounter
+PASS Exactly one encounter at resolved cadence
+PASS No early police reinforcement
+PASS Real police arrival obeys adjusted timer
+PASS Bar displays actual spawned difficulty-scaled rolled maximum
+PASS Paid Fire cast normal
+PASS Actual final Fire hit: 24.74200, expected 24.74200.
+PASS Health loss matches final damage: 24.74200, expected 24.74200.
+PASS Floating number reads final difficulty damage
+PASS Bar reads stored max
+PASS HUD health fraction uses difficulty denominator: 95.00000, expected 95.00000.
+PASS Independent authored synergy damage scales once: 40.00000, expected 40.00000.
+PASS Incoming enemy damage not multiplied: 5.00000, expected 5.00000.
+PASS Results retains difficulty
+PASS Return Home retains difficulty
+PASS Choose normal for next free-play
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Difficulty preserves mode identity normal / free-play
+PASS Authored player damage: 1.00000, expected 1.00000.
+PASS Authored enemy health: 1.00000, expected 1.00000.
+PASS Enemy outgoing unchanged: 1.00000, expected 1.00000.
+PASS Saving next selection cannot mutate live session
+PASS Encounter interval: 50.00000, expected 50.00000.
+PASS Police response interval: 2.00000, expected 2.00000.
+PASS Free Play keeps no automatic failure/win limits.
+PASS Archetype asset rusher
+PASS Seeded actual spawn rusher: 36.36185, expected 36.36185.
+PASS Current starts at rolled max: 36.36185, expected 36.36185.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 41.52504, expected 41.52504.
+PASS Current starts at rolled max: 41.52504, expected 41.52504.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 39.91404, expected 39.91404.
+PASS Current starts at rolled max: 39.91404, expected 39.91404.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 42.68772, expected 42.68772.
+PASS Current starts at rolled max: 42.68772, expected 42.68772.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 37.28875, expected 37.28875.
+PASS Current starts at rolled max: 37.28875, expected 37.28875.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 42.61515, expected 42.61515.
+PASS Current starts at rolled max: 42.61515, expected 42.61515.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 38.14168, expected 38.14168.
+PASS Current starts at rolled max: 38.14168, expected 38.14168.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 41.98138, expected 41.98138.
+PASS Current starts at rolled max: 41.98138, expected 41.98138.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Archetype asset gunner
+PASS Seeded actual spawn gunner: 61.69892, expected 61.69892.
+PASS Current starts at rolled max: 61.69892, expected 61.69892.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 69.10661, expected 69.10661.
+PASS Current starts at rolled max: 69.10661, expected 69.10661.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 66.34315, expected 66.34315.
+PASS Current starts at rolled max: 66.34315, expected 66.34315.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 60.54220, expected 60.54220.
+PASS Current starts at rolled max: 60.54220, expected 60.54220.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 60.02048, expected 60.02048.
+PASS Current starts at rolled max: 60.02048, expected 60.02048.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 69.82851, expected 69.82851.
+PASS Current starts at rolled max: 69.82851, expected 69.82851.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 60.84381, expected 60.84381.
+PASS Current starts at rolled max: 60.84381, expected 60.84381.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 67.62965, expected 67.62965.
+PASS Current starts at rolled max: 67.62965, expected 67.62965.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Archetype asset brute
+PASS Seeded actual spawn brute: 179.38680, expected 179.38680.
+PASS Current starts at rolled max: 179.38680, expected 179.38680.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 199.66510, expected 199.66510.
+PASS Current starts at rolled max: 199.66510, expected 199.66510.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 193.82360, expected 193.82360.
+PASS Current starts at rolled max: 193.82360, expected 193.82360.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 185.51010, expected 185.51010.
+PASS Current starts at rolled max: 185.51010, expected 185.51010.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 192.98900, expected 192.98900.
+PASS Current starts at rolled max: 192.98900, expected 192.98900.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 190.44510, expected 190.44510.
+PASS Current starts at rolled max: 190.44510, expected 190.44510.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 212.61350, expected 212.61350.
+PASS Current starts at rolled max: 212.61350, expected 212.61350.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 196.99790, expected 196.99790.
+PASS Current starts at rolled max: 196.99790, expected 196.99790.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Bar displays actual spawned difficulty-scaled rolled maximum
+PASS Paid Fire cast normal
+PASS Actual final Fire hit: 24.74200, expected 24.74200.
+PASS Health loss matches final damage: 24.74200, expected 24.74200.
+PASS Floating number reads final difficulty damage
+PASS Bar reads stored max
+PASS HUD health fraction uses difficulty denominator: 95.00000, expected 95.00000.
+PASS Independent authored synergy damage scales once: 40.00000, expected 40.00000.
+PASS Incoming enemy damage not multiplied: 5.00000, expected 5.00000.
+PASS Respawn restores difficulty-adjusted max: 100.00000, expected 100.00000.
+PASS Return Home retains difficulty
+PASS Choose normal for next endless-fight
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Difficulty preserves mode identity normal / endless-fight
+PASS Authored player damage: 1.00000, expected 1.00000.
+PASS Authored enemy health: 1.00000, expected 1.00000.
+PASS Enemy outgoing unchanged: 1.00000, expected 1.00000.
+PASS Saving next selection cannot mutate live session
+PASS Encounter interval: 50.00000, expected 50.00000.
+PASS Police response interval: 2.00000, expected 2.00000.
+PASS Archetype asset rusher
+PASS Seeded actual spawn rusher: 36.36185, expected 36.36185.
+PASS Current starts at rolled max: 36.36185, expected 36.36185.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 41.52504, expected 41.52504.
+PASS Current starts at rolled max: 41.52504, expected 41.52504.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 39.91404, expected 39.91404.
+PASS Current starts at rolled max: 39.91404, expected 39.91404.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 42.68772, expected 42.68772.
+PASS Current starts at rolled max: 42.68772, expected 42.68772.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 37.28875, expected 37.28875.
+PASS Current starts at rolled max: 37.28875, expected 37.28875.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 42.61515, expected 42.61515.
+PASS Current starts at rolled max: 42.61515, expected 42.61515.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 38.14168, expected 38.14168.
+PASS Current starts at rolled max: 38.14168, expected 38.14168.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 41.98138, expected 41.98138.
+PASS Current starts at rolled max: 41.98138, expected 41.98138.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Archetype asset gunner
+PASS Seeded actual spawn gunner: 61.69892, expected 61.69892.
+PASS Current starts at rolled max: 61.69892, expected 61.69892.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 69.10661, expected 69.10661.
+PASS Current starts at rolled max: 69.10661, expected 69.10661.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 66.34315, expected 66.34315.
+PASS Current starts at rolled max: 66.34315, expected 66.34315.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 60.54220, expected 60.54220.
+PASS Current starts at rolled max: 60.54220, expected 60.54220.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 60.02048, expected 60.02048.
+PASS Current starts at rolled max: 60.02048, expected 60.02048.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 69.82851, expected 69.82851.
+PASS Current starts at rolled max: 69.82851, expected 69.82851.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 60.84381, expected 60.84381.
+PASS Current starts at rolled max: 60.84381, expected 60.84381.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 67.62965, expected 67.62965.
+PASS Current starts at rolled max: 67.62965, expected 67.62965.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Archetype asset brute
+PASS Seeded actual spawn brute: 179.38680, expected 179.38680.
+PASS Current starts at rolled max: 179.38680, expected 179.38680.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 199.66510, expected 199.66510.
+PASS Current starts at rolled max: 199.66510, expected 199.66510.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 193.82360, expected 193.82360.
+PASS Current starts at rolled max: 193.82360, expected 193.82360.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 185.51010, expected 185.51010.
+PASS Current starts at rolled max: 185.51010, expected 185.51010.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 192.98900, expected 192.98900.
+PASS Current starts at rolled max: 192.98900, expected 192.98900.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 190.44510, expected 190.44510.
+PASS Current starts at rolled max: 190.44510, expected 190.44510.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 212.61350, expected 212.61350.
+PASS Current starts at rolled max: 212.61350, expected 212.61350.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 196.99790, expected 196.99790.
+PASS Current starts at rolled max: 196.99790, expected 196.99790.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Actual Endless wave spawns and respects cap.
+PASS Wave health and difficulty applied once.
+PASS Wave health and difficulty applied once.
+PASS Wave health and difficulty applied once.
+PASS Wave-five final mean passes through difficulty exactly once
+PASS Wave-five enemy damage scaling unchanged: 8.40000, expected 8.40000.
+PASS Full budget cannot double-spawn.
+PASS Bar displays actual spawned difficulty-scaled rolled maximum
+PASS Paid Fire cast normal
+PASS Actual final Fire hit: 24.74200, expected 24.74200.
+PASS Health loss matches final damage: 24.74200, expected 24.74200.
+PASS Floating number reads final difficulty damage
+PASS Bar reads stored max
+PASS HUD health fraction uses difficulty denominator: 95.00000, expected 95.00000.
+PASS Independent authored synergy damage scales once: 40.00000, expected 40.00000.
+PASS Incoming enemy damage not multiplied: 5.00000, expected 5.00000.
+PASS Results retains difficulty
+PASS Return Home retains difficulty
+PASS Choose normal for next free-play
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Difficulty preserves mode identity normal / free-play
+PASS normal vector actual max health: 100.00000, expected 100.00000.
+PASS Hero energy maximum preserved: 100.00000, expected 100.00000.
+PASS Hero regen preserved: 12.00000, expected 12.00000.
+PASS Real Ice activation vector
+PASS Instant energy paid once: 10.00000, expected 10.00000.
+PASS Actual cooldown assigned once: 0.60000, expected 0.60000.
+PASS Charge not recharged early
+PASS Charge recharges at adjusted threshold
+PASS Real hero punch
+PASS Hero melee identity preserved: 35.00000, expected 35.00000.
+PASS Choose normal for next free-play
+PASS Save TITAN with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Difficulty preserves mode identity normal / free-play
+PASS normal titan actual max health: 140.00000, expected 140.00000.
+PASS Hero energy maximum preserved: 80.00000, expected 80.00000.
+PASS Hero regen preserved: 12.00000, expected 12.00000.
+PASS Real Ice activation titan
+PASS Instant energy paid once: 10.00000, expected 10.00000.
+PASS Actual cooldown assigned once: 0.60000, expected 0.60000.
+PASS Charge not recharged early
+PASS Charge recharges at adjusted threshold
+PASS Real hero punch
+PASS Hero melee identity preserved: 43.75000, expected 43.75000.
+PASS Choose normal for next free-play
+PASS Save NOVA with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Difficulty preserves mode identity normal / free-play
+PASS normal nova actual max health: 75.00000, expected 75.00000.
+PASS Hero energy maximum preserved: 140.00000, expected 140.00000.
+PASS Hero regen preserved: 16.80000, expected 16.80000.
+PASS Real Ice activation nova
+PASS Instant energy paid once: 10.00000, expected 10.00000.
+PASS Actual cooldown assigned once: 0.48000, expected 0.48000.
+PASS Charge not recharged early
+PASS Charge recharges at adjusted threshold
+PASS Real hero punch
+PASS Hero melee identity preserved: 35.00000, expected 35.00000.
+PASS Choose normal for next free-play
+PASS Save VECTOR with laser-eyes + fire through the loadout API.
+PASS Session equips laser-eyes + fire.
+PASS laser-eyes selected for LMB (key 1).
+PASS Difficulty preserves mode identity normal / free-play
+PASS Real Laser channel begins
+PASS Laser actual gross drain: 16.00000, expected 16.00000.
+PASS Stable channel DPS difficulty once: 10.50000, expected 10.50000.
+PASS Laser stop cooldown: 0.80000, expected 0.80000.
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense workload keeps fixed enemy/UI budgets
+PASS Choose hard for next hero
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Difficulty preserves mode identity hard / hero
+PASS Authored player damage: 0.97000, expected 0.97000.
+PASS Authored enemy health: 1.05000, expected 1.05000.
+PASS Enemy outgoing unchanged: 1.00000, expected 1.00000.
+PASS Saving next selection cannot mutate live session
+PASS Encounter interval: 43.47826, expected 43.47826.
+PASS Police response interval: 1.73913, expected 1.73913.
+PASS Archetype asset rusher
+PASS Seeded actual spawn rusher: 48.75285, expected 48.75285.
+PASS Current starts at rolled max: 48.75285, expected 48.75285.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 55.67549, expected 55.67549.
+PASS Current starts at rolled max: 55.67549, expected 55.67549.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 53.51551, expected 53.51551.
+PASS Current starts at rolled max: 53.51551, expected 53.51551.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 57.23438, expected 57.23438.
+PASS Current starts at rolled max: 57.23438, expected 57.23438.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 49.99561, expected 49.99561.
+PASS Current starts at rolled max: 49.99561, expected 49.99561.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 57.13708, expected 57.13708.
+PASS Current starts at rolled max: 57.13708, expected 57.13708.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 51.13919, expected 51.13919.
+PASS Current starts at rolled max: 51.13919, expected 51.13919.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 56.28734, expected 56.28734.
+PASS Current starts at rolled max: 56.28734, expected 56.28734.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Archetype asset gunner
+PASS Seeded actual spawn gunner: 82.72401, expected 82.72401.
+PASS Current starts at rolled max: 82.72401, expected 82.72401.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 92.65602, expected 92.65602.
+PASS Current starts at rolled max: 92.65602, expected 92.65602.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 88.95085, expected 88.95085.
+PASS Current starts at rolled max: 88.95085, expected 88.95085.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 81.17311, expected 81.17311.
+PASS Current starts at rolled max: 81.17311, expected 81.17311.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 80.47361, expected 80.47361.
+PASS Current starts at rolled max: 80.47361, expected 80.47361.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 93.62392, expected 93.62392.
+PASS Current starts at rolled max: 93.62392, expected 93.62392.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 81.57750, expected 81.57750.
+PASS Current starts at rolled max: 81.57750, expected 81.57750.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 90.67575, expected 90.67575.
+PASS Current starts at rolled max: 90.67575, expected 90.67575.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Archetype asset brute
+PASS Seeded actual spawn brute: 240.51630, expected 240.51630.
+PASS Current starts at rolled max: 240.51630, expected 240.51630.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 267.70470, expected 267.70470.
+PASS Current starts at rolled max: 267.70470, expected 267.70470.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 259.87270, expected 259.87270.
+PASS Current starts at rolled max: 259.87270, expected 259.87270.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 248.72630, expected 248.72630.
+PASS Current starts at rolled max: 248.72630, expected 248.72630.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 258.75370, expected 258.75370.
+PASS Current starts at rolled max: 258.75370, expected 258.75370.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 255.34300, expected 255.34300.
+PASS Current starts at rolled max: 255.34300, expected 255.34300.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 285.06560, expected 285.06560.
+PASS Current starts at rolled max: 285.06560, expected 285.06560.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 264.12870, expected 264.12870.
+PASS Current starts at rolled max: 264.12870, expected 264.12870.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS No early recurring encounter
+PASS Exactly one encounter at resolved cadence
+PASS Bar displays actual spawned difficulty-scaled rolled maximum
+PASS Paid Fire cast hard
+PASS Actual final Fire hit: 23.99974, expected 23.99974.
+PASS Health loss matches final damage: 23.99976, expected 23.99974.
+PASS Floating number reads final difficulty damage
+PASS Bar reads stored max
+PASS HUD health fraction uses difficulty denominator: 94.73685, expected 94.73684.
+PASS Independent authored synergy damage scales once: 38.79999, expected 38.80000.
+PASS Incoming enemy damage not multiplied: 5.00000, expected 5.00000.
+PASS Results retains difficulty
+PASS Return Home retains difficulty
+PASS Choose hard for next villain
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Difficulty preserves mode identity hard / villain
+PASS Authored player damage: 0.97000, expected 0.97000.
+PASS Authored enemy health: 1.05000, expected 1.05000.
+PASS Enemy outgoing unchanged: 1.00000, expected 1.00000.
+PASS Saving next selection cannot mutate live session
+PASS Encounter interval: 43.47826, expected 43.47826.
+PASS Police response interval: 1.73913, expected 1.73913.
+PASS Archetype asset rusher
+PASS Seeded actual spawn rusher: 38.17994, expected 38.17994.
+PASS Current starts at rolled max: 38.17994, expected 38.17994.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 43.60128, expected 43.60128.
+PASS Current starts at rolled max: 43.60128, expected 43.60128.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 41.90974, expected 41.90974.
+PASS Current starts at rolled max: 41.90974, expected 41.90974.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 44.82210, expected 44.82210.
+PASS Current starts at rolled max: 44.82210, expected 44.82210.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 39.15318, expected 39.15318.
+PASS Current starts at rolled max: 39.15318, expected 39.15318.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 44.74590, expected 44.74590.
+PASS Current starts at rolled max: 44.74590, expected 44.74590.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 40.04876, expected 40.04876.
+PASS Current starts at rolled max: 40.04876, expected 40.04876.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 44.08044, expected 44.08044.
+PASS Current starts at rolled max: 44.08044, expected 44.08044.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Archetype asset gunner
+PASS Seeded actual spawn gunner: 64.78387, expected 64.78387.
+PASS Current starts at rolled max: 64.78387, expected 64.78387.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 72.56195, expected 72.56195.
+PASS Current starts at rolled max: 72.56195, expected 72.56195.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 69.66031, expected 69.66031.
+PASS Current starts at rolled max: 69.66031, expected 69.66031.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 63.56931, expected 63.56931.
+PASS Current starts at rolled max: 63.56931, expected 63.56931.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 63.02150, expected 63.02150.
+PASS Current starts at rolled max: 63.02150, expected 63.02150.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 73.31994, expected 73.31994.
+PASS Current starts at rolled max: 73.31994, expected 73.31994.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 63.88600, expected 63.88600.
+PASS Current starts at rolled max: 63.88600, expected 63.88600.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 71.01114, expected 71.01114.
+PASS Current starts at rolled max: 71.01114, expected 71.01114.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Archetype asset brute
+PASS Seeded actual spawn brute: 188.35620, expected 188.35620.
+PASS Current starts at rolled max: 188.35620, expected 188.35620.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 209.64830, expected 209.64830.
+PASS Current starts at rolled max: 209.64830, expected 209.64830.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 203.51480, expected 203.51480.
+PASS Current starts at rolled max: 203.51480, expected 203.51480.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 194.78560, expected 194.78560.
+PASS Current starts at rolled max: 194.78560, expected 194.78560.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 202.63840, expected 202.63840.
+PASS Current starts at rolled max: 202.63840, expected 202.63840.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 199.96740, expected 199.96740.
+PASS Current starts at rolled max: 199.96740, expected 199.96740.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 223.24420, expected 223.24420.
+PASS Current starts at rolled max: 223.24420, expected 223.24420.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 206.84780, expected 206.84780.
+PASS Current starts at rolled max: 206.84780, expected 206.84780.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS No early recurring encounter
+PASS Exactly one encounter at resolved cadence
+PASS No early police reinforcement
+PASS Real police arrival obeys adjusted timer
+PASS Bar displays actual spawned difficulty-scaled rolled maximum
+PASS Paid Fire cast hard
+PASS Actual final Fire hit: 23.99974, expected 23.99974.
+PASS Health loss matches final damage: 23.99976, expected 23.99974.
+PASS Floating number reads final difficulty damage
+PASS Bar reads stored max
+PASS HUD health fraction uses difficulty denominator: 94.73685, expected 94.73684.
+PASS Independent authored synergy damage scales once: 38.79999, expected 38.80000.
+PASS Incoming enemy damage not multiplied: 5.00000, expected 5.00000.
+PASS Results retains difficulty
+PASS Return Home retains difficulty
+PASS Choose hard for next free-play
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Difficulty preserves mode identity hard / free-play
+PASS Authored player damage: 0.97000, expected 0.97000.
+PASS Authored enemy health: 1.05000, expected 1.05000.
+PASS Enemy outgoing unchanged: 1.00000, expected 1.00000.
+PASS Saving next selection cannot mutate live session
+PASS Encounter interval: 43.47826, expected 43.47826.
+PASS Police response interval: 1.73913, expected 1.73913.
+PASS Free Play keeps no automatic failure/win limits.
+PASS Archetype asset rusher
+PASS Seeded actual spawn rusher: 38.17994, expected 38.17994.
+PASS Current starts at rolled max: 38.17994, expected 38.17994.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 43.60128, expected 43.60128.
+PASS Current starts at rolled max: 43.60128, expected 43.60128.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 41.90974, expected 41.90974.
+PASS Current starts at rolled max: 41.90974, expected 41.90974.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 44.82210, expected 44.82210.
+PASS Current starts at rolled max: 44.82210, expected 44.82210.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 39.15318, expected 39.15318.
+PASS Current starts at rolled max: 39.15318, expected 39.15318.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 44.74590, expected 44.74590.
+PASS Current starts at rolled max: 44.74590, expected 44.74590.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 40.04876, expected 40.04876.
+PASS Current starts at rolled max: 40.04876, expected 40.04876.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 44.08044, expected 44.08044.
+PASS Current starts at rolled max: 44.08044, expected 44.08044.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Archetype asset gunner
+PASS Seeded actual spawn gunner: 64.78387, expected 64.78387.
+PASS Current starts at rolled max: 64.78387, expected 64.78387.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 72.56195, expected 72.56195.
+PASS Current starts at rolled max: 72.56195, expected 72.56195.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 69.66031, expected 69.66031.
+PASS Current starts at rolled max: 69.66031, expected 69.66031.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 63.56931, expected 63.56931.
+PASS Current starts at rolled max: 63.56931, expected 63.56931.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 63.02150, expected 63.02150.
+PASS Current starts at rolled max: 63.02150, expected 63.02150.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 73.31994, expected 73.31994.
+PASS Current starts at rolled max: 73.31994, expected 73.31994.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 63.88600, expected 63.88600.
+PASS Current starts at rolled max: 63.88600, expected 63.88600.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 71.01114, expected 71.01114.
+PASS Current starts at rolled max: 71.01114, expected 71.01114.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Archetype asset brute
+PASS Seeded actual spawn brute: 188.35620, expected 188.35620.
+PASS Current starts at rolled max: 188.35620, expected 188.35620.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 209.64830, expected 209.64830.
+PASS Current starts at rolled max: 209.64830, expected 209.64830.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 203.51480, expected 203.51480.
+PASS Current starts at rolled max: 203.51480, expected 203.51480.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 194.78560, expected 194.78560.
+PASS Current starts at rolled max: 194.78560, expected 194.78560.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 202.63840, expected 202.63840.
+PASS Current starts at rolled max: 202.63840, expected 202.63840.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 199.96740, expected 199.96740.
+PASS Current starts at rolled max: 199.96740, expected 199.96740.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 223.24420, expected 223.24420.
+PASS Current starts at rolled max: 223.24420, expected 223.24420.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 206.84780, expected 206.84780.
+PASS Current starts at rolled max: 206.84780, expected 206.84780.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Bar displays actual spawned difficulty-scaled rolled maximum
+PASS Paid Fire cast hard
+PASS Actual final Fire hit: 23.99974, expected 23.99974.
+PASS Health loss matches final damage: 23.99976, expected 23.99974.
+PASS Floating number reads final difficulty damage
+PASS Bar reads stored max
+PASS HUD health fraction uses difficulty denominator: 94.73685, expected 94.73684.
+PASS Independent authored synergy damage scales once: 38.79999, expected 38.80000.
+PASS Incoming enemy damage not multiplied: 5.00000, expected 5.00000.
+PASS Respawn restores difficulty-adjusted max: 95.00000, expected 95.00000.
+PASS Return Home retains difficulty
+PASS Choose hard for next endless-fight
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Difficulty preserves mode identity hard / endless-fight
+PASS Authored player damage: 0.97000, expected 0.97000.
+PASS Authored enemy health: 1.05000, expected 1.05000.
+PASS Enemy outgoing unchanged: 1.00000, expected 1.00000.
+PASS Saving next selection cannot mutate live session
+PASS Encounter interval: 43.47826, expected 43.47826.
+PASS Police response interval: 1.73913, expected 1.73913.
+PASS Archetype asset rusher
+PASS Seeded actual spawn rusher: 38.17994, expected 38.17994.
+PASS Current starts at rolled max: 38.17994, expected 38.17994.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 43.60128, expected 43.60128.
+PASS Current starts at rolled max: 43.60128, expected 43.60128.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 41.90974, expected 41.90974.
+PASS Current starts at rolled max: 41.90974, expected 41.90974.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 44.82210, expected 44.82210.
+PASS Current starts at rolled max: 44.82210, expected 44.82210.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 39.15318, expected 39.15318.
+PASS Current starts at rolled max: 39.15318, expected 39.15318.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 44.74590, expected 44.74590.
+PASS Current starts at rolled max: 44.74590, expected 44.74590.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 40.04876, expected 40.04876.
+PASS Current starts at rolled max: 40.04876, expected 40.04876.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 44.08044, expected 44.08044.
+PASS Current starts at rolled max: 44.08044, expected 44.08044.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Archetype asset gunner
+PASS Seeded actual spawn gunner: 64.78387, expected 64.78387.
+PASS Current starts at rolled max: 64.78387, expected 64.78387.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 72.56195, expected 72.56195.
+PASS Current starts at rolled max: 72.56195, expected 72.56195.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 69.66031, expected 69.66031.
+PASS Current starts at rolled max: 69.66031, expected 69.66031.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 63.56931, expected 63.56931.
+PASS Current starts at rolled max: 63.56931, expected 63.56931.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 63.02150, expected 63.02150.
+PASS Current starts at rolled max: 63.02150, expected 63.02150.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 73.31994, expected 73.31994.
+PASS Current starts at rolled max: 73.31994, expected 73.31994.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 63.88600, expected 63.88600.
+PASS Current starts at rolled max: 63.88600, expected 63.88600.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 71.01114, expected 71.01114.
+PASS Current starts at rolled max: 71.01114, expected 71.01114.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Archetype asset brute
+PASS Seeded actual spawn brute: 188.35620, expected 188.35620.
+PASS Current starts at rolled max: 188.35620, expected 188.35620.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 209.64830, expected 209.64830.
+PASS Current starts at rolled max: 209.64830, expected 209.64830.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 203.51480, expected 203.51480.
+PASS Current starts at rolled max: 203.51480, expected 203.51480.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 194.78560, expected 194.78560.
+PASS Current starts at rolled max: 194.78560, expected 194.78560.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 202.63840, expected 202.63840.
+PASS Current starts at rolled max: 202.63840, expected 202.63840.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 199.96740, expected 199.96740.
+PASS Current starts at rolled max: 199.96740, expected 199.96740.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 223.24420, expected 223.24420.
+PASS Current starts at rolled max: 223.24420, expected 223.24420.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 206.84780, expected 206.84780.
+PASS Current starts at rolled max: 206.84780, expected 206.84780.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Actual Endless wave spawns and respects cap.
+PASS Wave health and difficulty applied once.
+PASS Wave health and difficulty applied once.
+PASS Wave health and difficulty applied once.
+PASS Wave-five final mean passes through difficulty exactly once
+PASS Wave-five enemy damage scaling unchanged: 8.40000, expected 8.40000.
+PASS Full budget cannot double-spawn.
+PASS Bar displays actual spawned difficulty-scaled rolled maximum
+PASS Paid Fire cast hard
+PASS Actual final Fire hit: 23.99974, expected 23.99974.
+PASS Health loss matches final damage: 23.99976, expected 23.99974.
+PASS Floating number reads final difficulty damage
+PASS Bar reads stored max
+PASS HUD health fraction uses difficulty denominator: 94.73685, expected 94.73684.
+PASS Independent authored synergy damage scales once: 38.79999, expected 38.80000.
+PASS Incoming enemy damage not multiplied: 5.00000, expected 5.00000.
+PASS Results retains difficulty
+PASS Return Home retains difficulty
+PASS Choose hard for next free-play
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Difficulty preserves mode identity hard / free-play
+PASS hard vector actual max health: 95.00000, expected 95.00000.
+PASS Hero energy maximum preserved: 100.00000, expected 100.00000.
+PASS Hero regen preserved: 12.00000, expected 12.00000.
+PASS Real Ice activation vector
+PASS Instant energy paid once: 11.00000, expected 11.00000.
+PASS Actual cooldown assigned once: 0.66000, expected 0.66000.
+PASS Charge not recharged early
+PASS Charge recharges at adjusted threshold
+PASS Real hero punch
+PASS Hero melee identity preserved: 33.95000, expected 33.95000.
+PASS Choose hard for next free-play
+PASS Save TITAN with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Difficulty preserves mode identity hard / free-play
+PASS hard titan actual max health: 133.00000, expected 133.00000.
+PASS Hero energy maximum preserved: 80.00000, expected 80.00000.
+PASS Hero regen preserved: 12.00000, expected 12.00000.
+PASS Real Ice activation titan
+PASS Instant energy paid once: 11.00000, expected 11.00000.
+PASS Actual cooldown assigned once: 0.66000, expected 0.66000.
+PASS Charge not recharged early
+PASS Charge recharges at adjusted threshold
+PASS Real hero punch
+PASS Hero melee identity preserved: 42.43750, expected 42.43750.
+PASS Choose hard for next free-play
+PASS Save NOVA with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Difficulty preserves mode identity hard / free-play
+PASS hard nova actual max health: 71.25000, expected 71.25000.
+PASS Hero energy maximum preserved: 140.00000, expected 140.00000.
+PASS Hero regen preserved: 16.80000, expected 16.80000.
+PASS Real Ice activation nova
+PASS Instant energy paid once: 11.00000, expected 11.00000.
+PASS Actual cooldown assigned once: 0.52800, expected 0.52800.
+PASS Charge not recharged early
+PASS Charge recharges at adjusted threshold
+PASS Real hero punch
+PASS Hero melee identity preserved: 33.95000, expected 33.95000.
+PASS Choose hard for next free-play
+PASS Save VECTOR with laser-eyes + fire through the loadout API.
+PASS Session equips laser-eyes + fire.
+PASS laser-eyes selected for LMB (key 1).
+PASS Difficulty preserves mode identity hard / free-play
+PASS Real Laser channel begins
+PASS Laser actual gross drain: 17.60000, expected 17.60000.
+PASS Stable channel DPS difficulty once: 10.18500, expected 10.18500.
+PASS Laser stop cooldown: 0.88000, expected 0.88000.
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense workload keeps fixed enemy/UI budgets
+PASS Choose extreme for next hero
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Difficulty preserves mode identity extreme / hero
+PASS Authored player damage: 0.95500, expected 0.95500.
+PASS Authored enemy health: 1.07500, expected 1.07500.
+PASS Enemy outgoing unchanged: 1.00000, expected 1.00000.
+PASS Saving next selection cannot mutate live session
+PASS Encounter interval: 40.81633, expected 40.81633.
+PASS Police response interval: 1.63265, expected 1.63265.
+PASS Archetype asset rusher
+PASS Seeded actual spawn rusher: 49.91364, expected 49.91364.
+PASS Current starts at rolled max: 49.91364, expected 49.91364.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 57.00111, expected 57.00111.
+PASS Current starts at rolled max: 57.00111, expected 57.00111.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 54.78970, expected 54.78970.
+PASS Current starts at rolled max: 54.78970, expected 54.78970.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 58.59711, expected 58.59711.
+PASS Current starts at rolled max: 58.59711, expected 58.59711.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 51.18599, expected 51.18599.
+PASS Current starts at rolled max: 51.18599, expected 51.18599.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 58.49749, expected 58.49749.
+PASS Current starts at rolled max: 58.49749, expected 58.49749.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 52.35680, expected 52.35680.
+PASS Current starts at rolled max: 52.35680, expected 52.35680.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Seeded actual spawn rusher: 57.62753, expected 57.62753.
+PASS Current starts at rolled max: 57.62753, expected 57.62753.
+PASS Enemy per-hit damage unchanged: 7.50000, expected 7.50000.
+PASS Archetype asset gunner
+PASS Seeded actual spawn gunner: 84.69364, expected 84.69364.
+PASS Current starts at rolled max: 84.69364, expected 84.69364.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 94.86213, expected 94.86213.
+PASS Current starts at rolled max: 94.86213, expected 94.86213.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 91.06874, expected 91.06874.
+PASS Current starts at rolled max: 91.06874, expected 91.06874.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 83.10582, expected 83.10582.
+PASS Current starts at rolled max: 83.10582, expected 83.10582.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 82.38966, expected 82.38966.
+PASS Current starts at rolled max: 82.38966, expected 82.38966.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 95.85307, expected 95.85307.
+PASS Current starts at rolled max: 95.85307, expected 95.85307.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 83.51983, expected 83.51983.
+PASS Current starts at rolled max: 83.51983, expected 83.51983.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Seeded actual spawn gunner: 92.83471, expected 92.83471.
+PASS Current starts at rolled max: 92.83471, expected 92.83471.
+PASS Enemy per-hit damage unchanged: 10.00000, expected 10.00000.
+PASS Archetype asset brute
+PASS Seeded actual spawn brute: 246.24290, expected 246.24290.
+PASS Current starts at rolled max: 246.24290, expected 246.24290.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 274.07870, expected 274.07870.
+PASS Current starts at rolled max: 274.07870, expected 274.07870.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 266.06020, expected 266.06020.
+PASS Current starts at rolled max: 266.06020, expected 266.06020.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 254.64840, expected 254.64840.
+PASS Current starts at rolled max: 254.64840, expected 254.64840.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 264.91460, expected 264.91460.
+PASS Current starts at rolled max: 264.91460, expected 264.91460.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 261.42260, expected 261.42260.
+PASS Current starts at rolled max: 261.42260, expected 261.42260.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 291.85290, expected 291.85290.
+PASS Current starts at rolled max: 291.85290, expected 291.85290.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS Seeded actual spawn brute: 270.41750, expected 270.41750.
+PASS Current starts at rolled max: 270.41750, expected 270.41750.
+PASS Enemy per-hit damage unchanged: 22.50000, expected 22.50000.
+PASS No early recurring encounter
+PASS Exactly one encounter at resolved cadence
+PASS Bar displays actual spawned difficulty-scaled rolled maximum
+PASS Paid Fire cast extreme
+PASS Actual final Fire hit: 23.62861, expected 23.62861.
+PASS Health loss matches final damage: 23.62860, expected 23.62861.
+PASS Floating number reads final difficulty damage
+PASS Bar reads stored max
+PASS HUD health fraction uses difficulty denominator: 94.59459, expected 94.59460.
+PASS Independent authored synergy damage scales once: 38.20001, expected 38.20000.
+PASS Incoming enemy damage not multiplied: 5.00000, expected 5.00000.
+PASS Results retains difficulty
+PASS Return Home retains difficulty
+PASS Choose extreme for next villain
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Difficulty preserves mode identity extreme / villain
+PASS Authored player damage: 0.95500, expected 0.95500.
+PASS Authored enemy health: 1.07500, expected 1.07500.
+PASS Enemy outgoing unchanged: 1.00000, expected 1.00000.
+PASS Saving next selection cannot mutate live session
+PASS Encounter interval: 40.81633, expected 40.81633.
+PASS Police response interval: 1.63265, expected 1.63265.
+PASS Archetype asset rusher
+PASS Seeded actual spawn rusher: 39.08899, expected 39.08899.
+PASS Current starts at rolled max: 39.08899, expected 39.08899.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 44.63942, expected 44.63942.
+PASS Current starts at rolled max: 44.63942, expected 44.63942.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 42.90759, expected 42.90759.
+PASS Current starts at rolled max: 42.90759, expected 42.90759.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 45.88930, expected 45.88930.
+PASS Current starts at rolled max: 45.88930, expected 45.88930.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 40.08541, expected 40.08541.
+PASS Current starts at rolled max: 40.08541, expected 40.08541.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 45.81129, expected 45.81129.
+PASS Current starts at rolled max: 45.81129, expected 45.81129.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 41.00231, expected 41.00231.
+PASS Current starts at rolled max: 41.00231, expected 41.00231.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 45.12999, expected 45.12999.
+PASS Current starts at rolled max: 45.12999, expected 45.12999.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Archetype asset gunner
+PASS Seeded actual spawn gunner: 66.32634, expected 66.32634.
+PASS Current starts at rolled max: 66.32634, expected 66.32634.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 74.28961, expected 74.28961.
+PASS Current starts at rolled max: 74.28961, expected 74.28961.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 71.31889, expected 71.31889.
+PASS Current starts at rolled max: 71.31889, expected 71.31889.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 65.08286, expected 65.08286.
+PASS Current starts at rolled max: 65.08286, expected 65.08286.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 64.52202, expected 64.52202.
+PASS Current starts at rolled max: 64.52202, expected 64.52202.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 75.06565, expected 75.06565.
+PASS Current starts at rolled max: 75.06565, expected 75.06565.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 65.40709, expected 65.40709.
+PASS Current starts at rolled max: 65.40709, expected 65.40709.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 72.70188, expected 72.70188.
+PASS Current starts at rolled max: 72.70188, expected 72.70188.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Archetype asset brute
+PASS Seeded actual spawn brute: 192.84090, expected 192.84090.
+PASS Current starts at rolled max: 192.84090, expected 192.84090.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 214.64000, expected 214.64000.
+PASS Current starts at rolled max: 214.64000, expected 214.64000.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 208.36040, expected 208.36040.
+PASS Current starts at rolled max: 208.36040, expected 208.36040.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 199.42340, expected 199.42340.
+PASS Current starts at rolled max: 199.42340, expected 199.42340.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 207.46320, expected 207.46320.
+PASS Current starts at rolled max: 207.46320, expected 207.46320.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 204.72850, expected 204.72850.
+PASS Current starts at rolled max: 204.72850, expected 204.72850.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 228.55950, expected 228.55950.
+PASS Current starts at rolled max: 228.55950, expected 228.55950.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 211.77280, expected 211.77280.
+PASS Current starts at rolled max: 211.77280, expected 211.77280.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS No early recurring encounter
+PASS Exactly one encounter at resolved cadence
+PASS No early police reinforcement
+PASS Real police arrival obeys adjusted timer
+PASS Bar displays actual spawned difficulty-scaled rolled maximum
+PASS Paid Fire cast extreme
+PASS Actual final Fire hit: 23.62861, expected 23.62861.
+PASS Health loss matches final damage: 23.62860, expected 23.62861.
+PASS Floating number reads final difficulty damage
+PASS Bar reads stored max
+PASS HUD health fraction uses difficulty denominator: 94.59459, expected 94.59460.
+PASS Independent authored synergy damage scales once: 38.20001, expected 38.20000.
+PASS Incoming enemy damage not multiplied: 5.00000, expected 5.00000.
+PASS Results retains difficulty
+PASS Return Home retains difficulty
+PASS Choose extreme for next free-play
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Difficulty preserves mode identity extreme / free-play
+PASS Authored player damage: 0.95500, expected 0.95500.
+PASS Authored enemy health: 1.07500, expected 1.07500.
+PASS Enemy outgoing unchanged: 1.00000, expected 1.00000.
+PASS Saving next selection cannot mutate live session
+PASS Encounter interval: 40.81633, expected 40.81633.
+PASS Police response interval: 1.63265, expected 1.63265.
+PASS Free Play keeps no automatic failure/win limits.
+PASS Archetype asset rusher
+PASS Seeded actual spawn rusher: 39.08899, expected 39.08899.
+PASS Current starts at rolled max: 39.08899, expected 39.08899.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 44.63942, expected 44.63942.
+PASS Current starts at rolled max: 44.63942, expected 44.63942.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 42.90759, expected 42.90759.
+PASS Current starts at rolled max: 42.90759, expected 42.90759.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 45.88930, expected 45.88930.
+PASS Current starts at rolled max: 45.88930, expected 45.88930.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 40.08541, expected 40.08541.
+PASS Current starts at rolled max: 40.08541, expected 40.08541.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 45.81129, expected 45.81129.
+PASS Current starts at rolled max: 45.81129, expected 45.81129.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 41.00231, expected 41.00231.
+PASS Current starts at rolled max: 41.00231, expected 41.00231.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 45.12999, expected 45.12999.
+PASS Current starts at rolled max: 45.12999, expected 45.12999.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Archetype asset gunner
+PASS Seeded actual spawn gunner: 66.32634, expected 66.32634.
+PASS Current starts at rolled max: 66.32634, expected 66.32634.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 74.28961, expected 74.28961.
+PASS Current starts at rolled max: 74.28961, expected 74.28961.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 71.31889, expected 71.31889.
+PASS Current starts at rolled max: 71.31889, expected 71.31889.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 65.08286, expected 65.08286.
+PASS Current starts at rolled max: 65.08286, expected 65.08286.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 64.52202, expected 64.52202.
+PASS Current starts at rolled max: 64.52202, expected 64.52202.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 75.06565, expected 75.06565.
+PASS Current starts at rolled max: 75.06565, expected 75.06565.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 65.40709, expected 65.40709.
+PASS Current starts at rolled max: 65.40709, expected 65.40709.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 72.70188, expected 72.70188.
+PASS Current starts at rolled max: 72.70188, expected 72.70188.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Archetype asset brute
+PASS Seeded actual spawn brute: 192.84090, expected 192.84090.
+PASS Current starts at rolled max: 192.84090, expected 192.84090.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 214.64000, expected 214.64000.
+PASS Current starts at rolled max: 214.64000, expected 214.64000.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 208.36040, expected 208.36040.
+PASS Current starts at rolled max: 208.36040, expected 208.36040.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 199.42340, expected 199.42340.
+PASS Current starts at rolled max: 199.42340, expected 199.42340.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 207.46320, expected 207.46320.
+PASS Current starts at rolled max: 207.46320, expected 207.46320.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 204.72850, expected 204.72850.
+PASS Current starts at rolled max: 204.72850, expected 204.72850.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 228.55950, expected 228.55950.
+PASS Current starts at rolled max: 228.55950, expected 228.55950.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 211.77280, expected 211.77280.
+PASS Current starts at rolled max: 211.77280, expected 211.77280.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Bar displays actual spawned difficulty-scaled rolled maximum
+PASS Paid Fire cast extreme
+PASS Actual final Fire hit: 23.62861, expected 23.62861.
+PASS Health loss matches final damage: 23.62860, expected 23.62861.
+PASS Floating number reads final difficulty damage
+PASS Bar reads stored max
+PASS HUD health fraction uses difficulty denominator: 94.59459, expected 94.59460.
+PASS Independent authored synergy damage scales once: 38.20001, expected 38.20000.
+PASS Incoming enemy damage not multiplied: 5.00000, expected 5.00000.
+PASS Respawn restores difficulty-adjusted max: 92.50000, expected 92.50000.
+PASS Return Home retains difficulty
+PASS Choose extreme for next endless-fight
+PASS Save VECTOR with fire + strength through the loadout API.
+PASS Session equips fire + strength.
+PASS fire selected for LMB (key 1).
+PASS Difficulty preserves mode identity extreme / endless-fight
+PASS Authored player damage: 0.95500, expected 0.95500.
+PASS Authored enemy health: 1.07500, expected 1.07500.
+PASS Enemy outgoing unchanged: 1.00000, expected 1.00000.
+PASS Saving next selection cannot mutate live session
+PASS Encounter interval: 40.81633, expected 40.81633.
+PASS Police response interval: 1.63265, expected 1.63265.
+PASS Archetype asset rusher
+PASS Seeded actual spawn rusher: 39.08899, expected 39.08899.
+PASS Current starts at rolled max: 39.08899, expected 39.08899.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 44.63942, expected 44.63942.
+PASS Current starts at rolled max: 44.63942, expected 44.63942.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 42.90759, expected 42.90759.
+PASS Current starts at rolled max: 42.90759, expected 42.90759.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 45.88930, expected 45.88930.
+PASS Current starts at rolled max: 45.88930, expected 45.88930.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 40.08541, expected 40.08541.
+PASS Current starts at rolled max: 40.08541, expected 40.08541.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 45.81129, expected 45.81129.
+PASS Current starts at rolled max: 45.81129, expected 45.81129.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 41.00231, expected 41.00231.
+PASS Current starts at rolled max: 41.00231, expected 41.00231.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Seeded actual spawn rusher: 45.12999, expected 45.12999.
+PASS Current starts at rolled max: 45.12999, expected 45.12999.
+PASS Enemy per-hit damage unchanged: 6.00000, expected 6.00000.
+PASS Archetype asset gunner
+PASS Seeded actual spawn gunner: 66.32634, expected 66.32634.
+PASS Current starts at rolled max: 66.32634, expected 66.32634.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 74.28961, expected 74.28961.
+PASS Current starts at rolled max: 74.28961, expected 74.28961.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 71.31889, expected 71.31889.
+PASS Current starts at rolled max: 71.31889, expected 71.31889.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 65.08286, expected 65.08286.
+PASS Current starts at rolled max: 65.08286, expected 65.08286.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 64.52202, expected 64.52202.
+PASS Current starts at rolled max: 64.52202, expected 64.52202.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 75.06565, expected 75.06565.
+PASS Current starts at rolled max: 75.06565, expected 75.06565.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 65.40709, expected 65.40709.
+PASS Current starts at rolled max: 65.40709, expected 65.40709.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Seeded actual spawn gunner: 72.70188, expected 72.70188.
+PASS Current starts at rolled max: 72.70188, expected 72.70188.
+PASS Enemy per-hit damage unchanged: 8.00000, expected 8.00000.
+PASS Archetype asset brute
+PASS Seeded actual spawn brute: 192.84090, expected 192.84090.
+PASS Current starts at rolled max: 192.84090, expected 192.84090.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 214.64000, expected 214.64000.
+PASS Current starts at rolled max: 214.64000, expected 214.64000.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 208.36040, expected 208.36040.
+PASS Current starts at rolled max: 208.36040, expected 208.36040.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 199.42340, expected 199.42340.
+PASS Current starts at rolled max: 199.42340, expected 199.42340.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 207.46320, expected 207.46320.
+PASS Current starts at rolled max: 207.46320, expected 207.46320.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 204.72850, expected 204.72850.
+PASS Current starts at rolled max: 204.72850, expected 204.72850.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 228.55950, expected 228.55950.
+PASS Current starts at rolled max: 228.55950, expected 228.55950.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Seeded actual spawn brute: 211.77280, expected 211.77280.
+PASS Current starts at rolled max: 211.77280, expected 211.77280.
+PASS Enemy per-hit damage unchanged: 18.00000, expected 18.00000.
+PASS Actual Endless wave spawns and respects cap.
+PASS Wave health and difficulty applied once.
+PASS Wave health and difficulty applied once.
+PASS Wave health and difficulty applied once.
+PASS Wave-five final mean passes through difficulty exactly once
+PASS Wave-five enemy damage scaling unchanged: 8.40000, expected 8.40000.
+PASS Full budget cannot double-spawn.
+PASS Bar displays actual spawned difficulty-scaled rolled maximum
+PASS Paid Fire cast extreme
+PASS Actual final Fire hit: 23.62861, expected 23.62861.
+PASS Health loss matches final damage: 23.62860, expected 23.62861.
+PASS Floating number reads final difficulty damage
+PASS Bar reads stored max
+PASS HUD health fraction uses difficulty denominator: 94.59459, expected 94.59460.
+PASS Independent authored synergy damage scales once: 38.20001, expected 38.20000.
+PASS Incoming enemy damage not multiplied: 5.00000, expected 5.00000.
+PASS Results retains difficulty
+PASS Return Home retains difficulty
+PASS Choose extreme for next free-play
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Difficulty preserves mode identity extreme / free-play
+PASS extreme vector actual max health: 92.50000, expected 92.50000.
+PASS Hero energy maximum preserved: 100.00000, expected 100.00000.
+PASS Hero regen preserved: 12.00000, expected 12.00000.
+PASS Real Ice activation vector
+PASS Instant energy paid once: 11.50000, expected 11.50000.
+PASS Actual cooldown assigned once: 0.69000, expected 0.69000.
+PASS Charge not recharged early
+PASS Charge recharges at adjusted threshold
+PASS Real hero punch
+PASS Hero melee identity preserved: 33.42500, expected 33.42500.
+PASS Choose extreme for next free-play
+PASS Save TITAN with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Difficulty preserves mode identity extreme / free-play
+PASS extreme titan actual max health: 129.50000, expected 129.50000.
+PASS Hero energy maximum preserved: 80.00000, expected 80.00000.
+PASS Hero regen preserved: 12.00000, expected 12.00000.
+PASS Real Ice activation titan
+PASS Instant energy paid once: 11.50000, expected 11.50000.
+PASS Actual cooldown assigned once: 0.69000, expected 0.69000.
+PASS Charge not recharged early
+PASS Charge recharges at adjusted threshold
+PASS Real hero punch
+PASS Hero melee identity preserved: 41.78125, expected 41.78125.
+PASS Choose extreme for next free-play
+PASS Save NOVA with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Difficulty preserves mode identity extreme / free-play
+PASS extreme nova actual max health: 69.37500, expected 69.37500.
+PASS Hero energy maximum preserved: 140.00000, expected 140.00000.
+PASS Hero regen preserved: 16.80000, expected 16.80000.
+PASS Real Ice activation nova
+PASS Instant energy paid once: 11.50000, expected 11.50000.
+PASS Actual cooldown assigned once: 0.55200, expected 0.55200.
+PASS Charge not recharged early
+PASS Charge recharges at adjusted threshold
+PASS Real hero punch
+PASS Hero melee identity preserved: 33.42500, expected 33.42500.
+PASS Choose extreme for next free-play
+PASS Save VECTOR with laser-eyes + fire through the loadout API.
+PASS Session equips laser-eyes + fire.
+PASS laser-eyes selected for LMB (key 1).
+PASS Difficulty preserves mode identity extreme / free-play
+PASS Real Laser channel begins
+PASS Laser actual gross drain: 18.40000, expected 18.40000.
+PASS Stable channel DPS difficulty once: 10.02750, expected 10.02750.
+PASS Laser stop cooldown: 0.92000, expected 0.92000.
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense sample real Fire cast
+PASS Dense workload keeps fixed enemy/UI budgets
+PASS Save Extreme for separate-process reload.

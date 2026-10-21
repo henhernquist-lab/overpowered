@@ -1,0 +1,44 @@
+PASS Exactly the requested eight combat and four secondary powers have their assigned roles.
+PASS Teleport is available in every hero roster.
+PASS Fresh or migrated profile has two attacks and one secondary.
+PASS Old Flight + Strength save migrates to two combat attacks and Phase Shift secondary without losing ownership.
+PASS CONTROL category crossing is refused in both directions.
+PASS Legacy Strength + Flight synergy remains available across attack and secondary slots.
+PASS Hero Forge displays a third secondary-power choice.
+PASS Hero Forge saves the independently selected secondary.
+PASS Save Fire + Ice + phase-shift
+PASS Session receives two attacks plus phase-shift
+PASS Fire + Ice synergy takes priority; attacks use keys 1/2 and secondary uses F.
+PASS Gameplay HUD shows two attack powers and the separate F secondary slot.
+PASS CONTROL secondary cannot replace the selected LMB combat power.
+PASS CONTROL other secondary powers are unequipped.
+PASS F Phase Shift activates and spends one charge.
+PASS Retained Flight cannot spend fuel when removed from the loadout.
+PASS Save Fire + Ice + speed
+PASS Session receives two attacks plus speed
+PASS Fire + Ice synergy takes priority; attacks use keys 1/2 and secondary uses F.
+PASS Gameplay HUD shows two attack powers and the separate F secondary slot.
+PASS CONTROL secondary cannot replace the selected LMB combat power.
+PASS CONTROL other secondary powers are unequipped.
+PASS F Speed starts its existing paid dash.
+PASS Speed dash finishes through CharacterController movement.
+PASS Save Fire + Ice + force-field
+PASS Session receives two attacks plus force-field
+PASS Fire + Ice synergy takes priority; attacks use keys 1/2 and secondary uses F.
+PASS Gameplay HUD shows two attack powers and the separate F secondary slot.
+PASS CONTROL secondary cannot replace the selected LMB combat power.
+PASS CONTROL other secondary powers are unequipped.
+PASS CONTROL secondary F input is refused while the menu is open.
+PASS F Force Field raises the existing paid shield.
+PASS CONTROL raised shield refuses duplicate activation.
+PASS Save Fire + Ice + teleport
+PASS Session receives two attacks plus teleport
+PASS Fire + Ice synergy takes priority; attacks use keys 1/2 and secondary uses F.
+PASS Gameplay HUD shows two attack powers and the separate F secondary slot.
+PASS CONTROL secondary cannot replace the selected LMB combat power.
+PASS CONTROL other secondary powers are unequipped.
+PASS F Teleport moves to clear supported ground and pays one charge.
+PASS Teleport draws one bounded departure pop and one arrival pop, without a connecting trail.
+IMAGE Verification/Secondary/teleport-departure-arrival.png
+PASS CONTROL Teleport cannot pass a wall or spend a charge on blocked travel.
+PASS Blocked Teleport shows no misleading departure or arrival pop.

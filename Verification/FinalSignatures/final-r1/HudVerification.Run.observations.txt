@@ -1,0 +1,6 @@
+[HUD] MEASURED A old IMGUI debug HUD (GameHud hidden): frames=356, FPS=89.0, mean=11.24ms, p95=12.03ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
+[HUD] MEASURED B new GameHud (IMGUI debug hidden): frames=345, FPS=86.1, mean=11.62ms, p95=12.45ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
+[HUD] MEASURED A old IMGUI debug HUD (GameHud hidden): frames=350, FPS=87.5, mean=11.43ms, p95=12.24ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
+[HUD] MEASURED B new GameHud (IMGUI debug hidden): frames=346, FPS=86.3, mean=11.59ms, p95=12.32ms, IMGUI repaints=0 (gameplay camera single render 1920x1080 + HUD panel into the same target).
+[HUD] MEASURED GameHud.LateUpdate CPU per frame (B phases): 0.062 ms / 0.087 ms.
+[HUD] MEASURED A/B summary: old IMGUI mean 88.2 FPS, new GameHud mean 86.2 FPS (-2.3%).
