@@ -1,0 +1,13 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 928a08495c79444bbddef3eb98e00aa3, type: 3}
+  m_Name: plague-bloom
+  Poison: {fileID: 11400000, guid: 4cd7c2e827c8d47ddb330fe813e809a8, type: 2}
+  PulseCount: 6
+  MaxBlooms: 4
+  SecondaryRadius: 2.5
+  SecondarySeconds: 2
+  SecondaryDamageScale: 0.5

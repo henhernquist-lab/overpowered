@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6439bcadf27604138888fd7ef6af365c, type: 3}
+  m_Name: prism-barrage
+  Id: prism-barrage
+  DisplayName: Prism Barrage
+  Description: Charge a precise optical strike, then refract diminishing beams from its impact into visible hostiles.
+  PowerA: {fileID: 0}
+  PowerB: {fileID: 0}
+  OwnerPrimary: {fileID: 11400000, guid: b8962978f66214724a59b4accc7d1e55, type: 2}
+  EnergyCost: 30
+  Icon: 7
+  Effect: {fileID: 11400000, guid: 4a38d1b954294717a57d27f46581792c, type: 2}
+  Cooldown: 24
+  Duration: 1.2
+  Damage: 115
+  Force: 600
+  Radius: 8
+  Range: 32
+  MaxTargets: 5
+  Primary: 15
+  Secondary: 2

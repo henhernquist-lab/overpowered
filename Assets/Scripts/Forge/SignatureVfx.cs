@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 /// arc + residual heat wake, Glacial Prison 3D ice pillars + frost ring, Thunderstorm overhead cloud + danger ring).
 /// Built once per session with shared primitive mesh and shared CityMaterials palette swatches — zero per-cast
 /// GameObject, Mesh, or Material allocations.
-public sealed class SignatureVfx : MonoBehaviour
+public sealed partial class SignatureVfx : MonoBehaviour
 {
     public const int CrackCount = 6, PillarCount = 8, RingSegments = 28, WaveSegments = 16;
     static SignatureVfx instance;
@@ -105,6 +105,8 @@ public sealed class SignatureVfx : MonoBehaviour
         }
         prisonRoot.gameObject.SetActive(false);
         prisonRing = MakeLine("Glacial prison ring", CityColor.Cyan, RingSegments, true, .14f);
+
+        BuildFinalFour(sharedCube);
 
         stormCloudOuter = MakeLine("Thunderstorm cloud outer", CityColor.UiNavy, RingSegments, true, .45f);
         stormCloudInner = MakeLine("Thunderstorm cloud inner", CityColor.Cyan, RingSegments, true, .22f);
@@ -278,10 +280,12 @@ public sealed class SignatureVfx : MonoBehaviour
         HideSolarWake();
         HideGlacialPrison();
         HideThunderstorm();
+        HideFinalFour();
     }
 
     void LateUpdate()
     {
+        UpdateFinalFour();
         float now = Time.time;
         if (seismicWave != null && seismicWave.gameObject.activeSelf && now >= seismicUntil) HideSeismicSlam();
         if (solarLead != null && solarLead.gameObject.activeSelf && now >= solarWaveUntil) HideSolarWave();

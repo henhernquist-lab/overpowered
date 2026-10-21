@@ -26,6 +26,7 @@ public sealed class SynergyRunner : MonoBehaviour
     public readonly Collider[] Hits=new Collider[128];
     readonly RaycastHit[] rays=new RaycastHit[64];
     Coroutine action;
+    readonly Stack<IEnumerator> steps = new Stack<IEnumerator>();
     public static readonly WaitForFixedUpdate FixedStep=new WaitForFixedUpdate();
     float deadline,fovUntil,baseFov;
     Camera view;
@@ -82,7 +83,7 @@ public sealed class SynergyRunner : MonoBehaviour
     PowerSynergyDefinition creditFor;string creditId;
     IEnumerator Perform(SynergyEffect effect)
     {
-        var steps=new Stack<IEnumerator>();steps.Push(effect.Execute(this));
+        steps.Push(effect.Execute(this));
         while(steps.Count>0)
         {
             if(Time.timeScale==0){yield return null;continue;}
@@ -179,6 +180,7 @@ public sealed class SynergyRunner : MonoBehaviour
     {
         if(action!=null)StopCoroutine(action);
         action=null;Busy=false;DrivesMotion=false;
+        while(steps.Count>0)(steps.Pop() as IDisposable)?.Dispose();
         foreach(var hold in suspended)if(hold!=null&&hold.enabled)hold.Finish();
         suspended.Clear();Captive=null;
         if(User!=null)User.Hero.ResetMotion();

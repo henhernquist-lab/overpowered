@@ -51,13 +51,13 @@ public sealed class Poisoned : MonoBehaviour
     /// (from, to) each time poison jumps from a dying NPC to a new one.
     public static event System.Action<CityNpc, CityNpc> Spreading;
     static readonly Collider[] nearby = new Collider[64];
-    public static Poisoned Apply(CityNpc target, PowerUser user, PoisonEffect settings, float dps, float seconds, int generation, CityColor color)
+    public static Poisoned Apply(CityNpc target, PowerUser user, PoisonEffect settings, float dps, float seconds, int generation, CityColor color, float? rolledDamagePerSecond = null)
     {
         var p = target.GetComponent<Poisoned>();
         if (p == null) { p = target.gameObject.AddComponent<Poisoned>(); p.npc = target; target.Damaged += p.OnDamaged; }
         bool wasActive = p.Active;
         p.source = user; p.settings = settings; p.color = color; p.baseSeconds = seconds; p.credit = user != null ? user.Crediting : null;
-        float rolled = user != null ? user.RollDamage(dps) : dps;
+        float rolled = rolledDamagePerSecond ?? (user != null ? user.RollDamage(dps) : dps);
         if (!wasActive || rolled >= p.dps) { p.dps = rolled; p.intendedDps = dps; }
         int ticks = Mathf.Max(1, Mathf.RoundToInt(seconds / Mathf.Max(.01f, settings.TickSeconds)));
         p.tickDamage = p.dps * seconds / ticks; // exact full-duration damage, including non-integral tick durations

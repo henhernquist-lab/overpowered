@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6439bcadf27604138888fd7ef6af365c, type: 3}
+  m_Name: plague-bloom
+  Id: plague-bloom
+  DisplayName: Plague Bloom
+  Description: Raise a toxic growth with six poison pulses. Defeated exposed enemies seed up to three short-lived lesser blooms.
+  PowerA: {fileID: 0}
+  PowerB: {fileID: 0}
+  OwnerPrimary: {fileID: 11400000, guid: 0935459d3cd244a91afb0ba18ac05072, type: 2}
+  EnergyCost: 35
+  Icon: 7
+  Effect: {fileID: 11400000, guid: e4ae62c24e5e44638dce66d7e7edd01b, type: 2}
+  Cooldown: 28
+  Duration: 6.3
+  Damage: 180
+  Force: 600
+  Radius: 6
+  Range: 24
+  MaxTargets: 8
+  Primary: 12
+  Secondary: 26
