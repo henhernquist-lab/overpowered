@@ -1,0 +1,26 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+  <ui:Style src="CombatLabPanel.uss" />
+  <ui:VisualElement name="lab-root" class="lab-root" picking-mode="Ignore">
+    <ui:Button name="lab-toggle" text="COMBAT LAB · F2 CONTROLS" class="lab-toggle" />
+    <ui:VisualElement name="lab-controls" class="lab-controls">
+      <ui:Label name="lab-status" class="lab-heading" />
+      <ui:Label text="Practice progress is discarded. Controls pause combat." class="lab-note" />
+      <ui:DropdownField name="lab-enemy" label="Enemy" />
+      <ui:VisualElement class="lab-row">
+        <ui:Button name="lab-one" text="Spawn one" />
+        <ui:Button name="lab-group" text="Spawn group (3)" />
+      </ui:VisualElement>
+      <ui:Button name="lab-clear" text="Clear lab enemies" />
+      <ui:VisualElement class="lab-row">
+        <ui:Button name="lab-health" text="Restore health" />
+        <ui:Button name="lab-energy" text="Restore energy" />
+      </ui:VisualElement>
+      <ui:DropdownField name="lab-difficulty" label="Difficulty" />
+      <ui:Label text="Changing difficulty restarts the arena. Reset clears effects and refreshes cooldowns." class="lab-note" />
+      <ui:Button name="lab-reset" text="Reset arena + cooldowns" />
+      <ui:Button name="lab-exit" text="Return Home" />
+      <ui:Label name="lab-feedback" class="lab-note" />
+      <ui:Label text="F2 / Esc: resume · Standard movement and equipped power bindings. Choose another build in Hero Forge, then reopen the lab." class="lab-note" />
+    </ui:VisualElement>
+  </ui:VisualElement>
+</ui:UXML>

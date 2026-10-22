@@ -5609,3 +5609,19 @@ Branch `feature/rooftop-parkour-trials` in isolated worktree `../op-argon-roofto
 - **UNVERIFIED (human playtest)**:
   - Hands-on traversal feel, target-time tuning (48 s Downtown Dash / 80 s Vertical Ascent), marker readability in day/night lighting, and sustained standalone FPS. Batch Play Mode measures logic and layout, not frame pacing on the target machine; a human must run the courses to judge whether the target times are fair.
 
+
+## Battle Lab on the Home screen — 2026-10-21 (`codex/synergies-2-final-four`)
+
+The Combat Lab from `codex/combat-lab-enemy-expansion` is now reachable from the Home menu in this checkout as a **BATTLE LAB** chip, using the branch's own lab runtime (no Skirmisher/Bulwark or Endless-wave changes were taken).
+
+- **Route**: `ModeScreens.BuildHome` adds the chip to the same extras row as FREE PLAY / ENDLESS FIGHT, gated on `Resources.CombatLabSettings` existing, so the route appears only where the lab data is present. The chip calls `GameFlow.OpenCombatLab()`, which loads `Assets/Scenes/CombatLab.unity`; `GameFlow.SceneReady` dispatches `CombatLab.Build()` for that scene name (the branch's single hook). The scene is also in `EditorBuildSettings`, and `Overpowered > Combat > Open Combat Lab` still opens it directly.
+- **Practice isolation**: `WorldSession` is a partial class with `IsPractice`; the lab session skips Heat, police, crimes, modes and XP, `PlayerProgression.InitializeTransient` copies a snapshot with a null save path, and `PowerUser.RestorePracticeEnergy` / `WorldSession.RestorePracticeHealth` only act in practice. `CityNpc` holds position in a practice arena instead of querying the generated sidewalk graph.
+- **Deliberately not merged**: Skirmisher/Bulwark archetypes, their guard/evasion code, and the Endless wave-table integration stay on the source branch, so this checkout's combat balance and enemy roster are unchanged. `CombatLabSettings.asset` therefore lists the three existing archetypes (Rusher, Gunner, Brute).
+
+### Verification
+
+`Unity -batchmode -executeMethod BattleLabVerification.Run` → **32/32 PASS, 0 FAIL, exit 0** (`Verification/BattleLab/results.txt`); no `error CS`; the personal save (`~/Library/Application Support/Hen Hernquist Lab/Overpowered Prototype/overpowered-progression.json`) is byte-identical after the run.
+
+- Positive: chip present, labelled, enabled, same 31.5 px chip row as FREE PLAY, does not overlap the HERO MODE card; the chip's own Clickable handler loads the lab through GameFlow; practice session is the active `WorldSession` with a `CharacterController` hero and 3 configured archetypes; spawn one/group/repeated spawns stay within the 12 cap; shared damage path defeats them; clear empties the arena; health and energy restore; leaving returns Home with the lab destroyed and the chip still there.
+- Negative: no `GameModeSession`, one metadata sidewalk instead of a generated city, no district context, no save path on the practice profile, lab defeats pay 0 XP and raise 0 Heat.
+- **Limits**: batch mode proves the route and the isolation logic, not how the arena feels. The panel's F2/Esc flow, camera framing and performance need a human in Play Mode; also unverified is the `CombatLabVerification` suite from the source branch (it depends on the Skirmisher/Bulwark code that was not taken).

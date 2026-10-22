@@ -35,6 +35,7 @@ public sealed class GameFlow : MonoBehaviour
     void SceneReady(Scene scene,LoadSceneMode mode)
     {
         Loading=false; Time.timeScale=1f;
+        if(scene.name==CombatLab.SceneName) { CombatLab.Build(); return; }
         if(scene.name==CityScene)
         {
             if(ActiveMode==null&&!VerificationSandbox) { Home(); return; }
@@ -53,6 +54,12 @@ public sealed class GameFlow : MonoBehaviour
         bool spawnsEncounters=definition.InitialEncounters>0||definition.MaximumEncounters>0;
         if(spawnsEncounters&&(definition.Rules==null||definition.Encounters==null||definition.Encounters.Length==0)) return false;
         ActiveMode=definition; Result=null; Load(CityScene); return true;
+    }
+    /// Home's BATTLE LAB route: the lab is a standalone developer scene, so it is loaded directly instead of through a mode.
+    public bool OpenCombatLab()
+    {
+        if(Loading) return false;
+        ActiveMode=null; Result=null; Load(CombatLab.SceneName); return true;
     }
     public void Results(SessionResult result,bool home=false) { if(Loading) return; Result=result; if(home) ActiveMode=null; Load(home?HomeScene:ResultsScene); }
     public void Home() { if(Loading) return; ActiveMode=null; Load(HomeScene); }

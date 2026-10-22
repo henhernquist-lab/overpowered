@@ -216,7 +216,8 @@ public sealed class CityNpc : MonoBehaviour
         else
         {
             // Wander to a sidewalk near here (CityLayout.NpcLod.WanderRadius), not across the whole island.
-            if (!Agent.hasPath || Agent.remainingDistance<c.MinimumWanderDistance) wander=world.City.RandomSidewalkNear(transform.position,world.City.Layout.NpcLod.WanderRadius);
+            // Practice arenas have no generated sidewalk graph: hold position instead of querying the city layout.
+            if (!Agent.hasPath || Agent.remainingDistance<c.MinimumWanderDistance) wander=world.IsPractice ? transform.position : world.City.RandomSidewalkNear(transform.position,world.City.Layout.NpcLod.WanderRadius);
             destination=wander;
         }
         if (NavMesh.SamplePosition(destination,out var hit,c.NavSampleRadius,NavMesh.AllAreas)) Agent.SetDestination(hit.position);

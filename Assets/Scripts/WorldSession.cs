@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class WorldSession : MonoBehaviour
+public sealed partial class WorldSession : MonoBehaviour
 {
     public static WorldSession Instance { get; private set; }
     public static string VerificationSavePath;
@@ -75,6 +75,7 @@ public sealed class WorldSession : MonoBehaviour
     void Update()
     {
         if (Tuning==null) return;
+        if (IsPractice) { TickPractice(); return; }
         if(Mode!=null)
         {
             if(Mode.Ended) return;
@@ -126,13 +127,14 @@ public sealed class WorldSession : MonoBehaviour
         float decay=Response!=null?Response.DecayMultiplier:1f;
         Heat=Mathf.Max(0,Heat-decayTime*(decay==1f?Tuning.Heat.DecayPerSecond:Tuning.Heat.DecayPerSecond*decay));
     }
-    public void AddHeat(float amount) { float before=Heat; Heat=Mathf.Clamp(Heat+amount,0,Tuning.Heat.MaximumStars); Mode?.ObserveHeat(Heat); if (amount>0) troubleAgo=0; if (Heat!=before) HeatAdded?.Invoke(Heat-before); }
+    public void AddHeat(float amount) { if(IsPractice)return; float before=Heat; Heat=Mathf.Clamp(Heat+amount,0,Tuning.Heat.MaximumStars); Mode?.ObserveHeat(Heat); if (amount>0) troubleAgo=0; if (Heat!=before) HeatAdded?.Invoke(Heat-before); }
     public void Alarm(Vector3 position)
     {
         foreach (var npc in Npcs) if (npc!=null && npc.Role==NpcRole.Civilian && Vector3.Distance(position,npc.transform.position)<Tuning.Npcs.AlarmRadius) npc.Alarm(position);
     }
     public void OnDestruction(Vector3 position)
     {
+        if (IsPractice) return;
         if(Mode!=null&&Mode.Ended) return;
         Alarm(position); AddHeat(Tuning.Heat.DestructionHeat*Districts.HeatFactorAt(position));
         if (Progression.Data.Side!=PlayerSide.Villain) return;
@@ -142,11 +144,13 @@ public sealed class WorldSession : MonoBehaviour
     }
     public void OnAssault(CityNpc npc)
     {
+        if (IsPractice) return;
         Alarm(npc.transform.position);
         if (npc.Role!=NpcRole.Criminal || Progression.Data.Side==PlayerSide.Villain) AddHeat(Tuning.Heat.AssaultHeat*Districts.HeatFactorAt(npc.transform.position));
     }
     public void OnDefeat(CityNpc npc)
     {
+        if (IsPractice) return;
         if(Mode!=null&&Mode.Ended) return;
         if ((Progression.Data.Side==PlayerSide.Hero && npc.Role==NpcRole.Criminal) ||
             (Progression.Data.Side==PlayerSide.Villain && npc.Role!=NpcRole.Criminal))
@@ -198,6 +202,7 @@ public sealed class WorldSession : MonoBehaviour
     }
     public void ReconcilePolice()
     {
+        if (IsPractice) return;
         if(Mode!=null&&!Mode.Definition.SpawnPolice) return;
         int count=0; CityNpc hunter=null;
         foreach(var npc in Npcs) if(npc!=null&&!npc.Dead) { if(npc.Role==NpcRole.Cop&&npc.Encounter==null) count++; if(npc.Role==NpcRole.PursuingHero) hunter=npc; }
