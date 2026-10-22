@@ -1,0 +1,4 @@
+level=2 xp=110 points=51
+downtown-dash:True:True:3:38.50
+vertical-ascent:True:True:1:74.20
+unknown-legacy-course-id:True:True:1:99.50

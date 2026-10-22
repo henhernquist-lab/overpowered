@@ -1,0 +1,88 @@
+---- CATALOG & COURSE DEFINITIONS
+PASS ParkourCatalog asset exists in Resources and is enabled.
+PASS ParkourCatalog registers 2 valid courses.
+PASS Course 1 'downtown-dash' (DOWNTOWN DASH) is registered and valid.
+PASS Course 2 'vertical-ascent' (VERTICAL ASCENT) is registered and valid.
+PASS Downtown Dash has 7 ordered checkpoints (target 6-8).
+PASS Vertical Ascent has 9 ordered checkpoints (target 7-10).
+PASS Downtown Dash uses Cyan and Blue theme accents.
+PASS Vertical Ascent uses Purple and Gold/Amber theme accents.
+PASS Both courses configure positive first-completion XP rewards.
+---- RUNTIME PLACEMENT, ORDER ENFORCEMENT, REWARDS & NEGATIVE CONTROLS
+PASS Configured non-Flight loadout (Strength + Fire + Speed) for parkour verification.
+PASS free-play mission briefing is up on session entry.
+PASS Mission briefing card has faded out before HUD visibility checks.
+PASS ParkourCourseManager resolved 2 courses in generated city.
+PASS Downtown Dash resolved all checkpoints onto valid city structures.
+PASS Vertical Ascent resolved all checkpoints onto valid city structures.
+PASS downtown-dash: start has verified physical support at (-66.52, 26.30, 11.51).
+PASS downtown-dash CP#1 (Teal North Setback Ledge) valid at (-53.49, 22.81, 15.24).
+PASS downtown-dash CP#2 (Teal South Setback Ledge) valid at (-53.87, 22.57, -2.18).
+PASS downtown-dash CP#3 (Teal South Roof Deck) valid at (-46.12, 45.35, -4.15).
+PASS downtown-dash CP#4 (Teal North Roof Deck) valid at (-46.18, 45.85, 15.17).
+PASS downtown-dash CP#5 (Midtown Warehouse Roof) valid at (-45.76, 35.25, 48.38).
+PASS downtown-dash CP#6 (Slate Tower Roof) valid at (-64.23, 48.15, 51.69).
+PASS downtown-dash CP#7 (North Glass Finish Leap) valid at (-65.00, 30.55, 105.47).
+PASS vertical-ascent: start has verified physical support at (-17.05, 0.12, 11.23).
+PASS vertical-ascent CP#1 (North Tower Lower Ledge) valid at (-15.87, 26.75, 13.07).
+PASS vertical-ascent CP#2 (North Tower Roof Deck) valid at (-10.18, 54.05, 10.91).
+PASS vertical-ascent CP#3 (Apex Tower Setback Ledge) valid at (-8.87, 52.48, 1.76).
+PASS vertical-ascent CP#4 (West Teal Roof Transfer) valid at (-44.94, 45.35, -4.43).
+PASS vertical-ascent CP#5 (West Brick Tower Ledge) valid at (-63.15, 70.55, -6.46).
+PASS vertical-ascent CP#6 (Southwest High-Rise Setback) valid at (-54.38, 36.40, -40.47).
+PASS vertical-ascent CP#7 (Southwest High-Rise Roof) valid at (-45.78, 49.95, -44.68).
+PASS vertical-ascent CP#8 (South Spire Roof) valid at (-9.00, 80.65, -40.80).
+PASS vertical-ascent CP#9 (Apex Skyline Summit Finish) valid at (-9.00, 107.80, -5.00).
+PASS Vertical Ascent achieves +106.2m net vertical elevation gain to skyline summit.
+PASS CONTROL: unreachable course start without physical support is rejected.
+PASS CONTROL: ParkourVfx markers have zero Colliders (cannot cause camera or movement collision glitches).
+PASS ParkourVfx uses one shared cube mesh across all gate segments, pylons, chevrons, and crowns.
+PASS Approaching Downtown Dash start detects NearbyStartCourse without auto-starting.
+PASS HUD displays nearby parkour start prompt.
+PASS Pressing R at start activates Downtown Dash at Checkpoint 0.
+PASS CONTROL: starting a second challenge while one is active is refused.
+PASS Active course timer advances (0.000s -> 0.153s).
+PASS CONTROL: touching the Finish checkpoint out of order does not complete or advance the course.
+PASS CONTROL: touching Checkpoint 2 before Checkpoint 1 is ignored.
+PASS Reaching Checkpoint 1 in order advances CurrentCheckpointIndex to 1.
+PASS Checkpoint 1 visual state transitions to Completed and Checkpoint 2 becomes Next.
+PASS CONTROL: re-entering an already completed checkpoint does not increment progress.
+PASS CONTROL: leaving course area does not corrupt active challenge state.
+PASS RetryCourse resets active run.
+PASS Retry resets checkpoint index to 0, resets timer, and repositions hero to start.
+PASS CancelCourse ends active challenge.
+PASS Cancel clears active course and hides all checkpoint gates cleanly.
+PASS Restarted Downtown Dash for full ordered completion.
+PASS Reaching final checkpoint in order completes Downtown Dash and stops timer.
+PASS First completion recorded time=45.00s, best=45.00s.
+PASS First completion awarded +75 XP once.
+PASS HUD displays COURSE COMPLETE summary with Your Time and Best Time.
+PASS Started second run of Downtown Dash (slower time control).
+PASS CONTROL: slower run (52.00s) preserves 45.00s personal best and grants 0 XP (prevents repeat XP farming).
+PASS Started third run of Downtown Dash (faster personal best control).
+PASS Beating personal best (38.50s < 45.00s) updates BestSeconds to 38.50s and awards +25 record bonus XP.
+PASS Started Vertical Ascent for full ordered completion.
+PASS Vertical Ascent completed in 74.20s, awarded +110 XP.
+PASS CONTROL: 20+ checkpoint activations and bursts created 0 new renderers (209 pooled).
+---- UNIVERSAL TRAVERSAL, CAMERAS & EXISTING POWERS
+PASS Started Downtown Dash at West Glass Roof Start.
+PASS Hero stands grounded on real Downtown Dash start rooftop.
+PASS Parkour HUD card visible in FirstPerson=False.
+PASS Parkour HUD card ((x:27.50, y:120.00, width:247.50, height:142.50)) never overlaps crosshair ((x:787.50, y:587.50, width:25.00, height:25.00)) in FirstPerson=False.
+PASS Camera collision volume stays clear during active parkour markers (FirstPerson=False).
+PASS Toggled camera view to FirstPerson=True during active parkour course.
+PASS Parkour HUD card visible in FirstPerson=True.
+PASS Parkour HUD card ((x:27.50, y:120.00, width:247.50, height:142.50)) never overlaps crosshair ((x:787.50, y:587.50, width:25.00, height:25.00)) in FirstPerson=True.
+PASS Camera collision volume stays clear during active parkour markers (FirstPerson=True).
+PASS Toggled camera view to FirstPerson=False during active parkour course.
+PASS Parkour HUD card visible in FirstPerson=False.
+PASS Parkour HUD card ((x:27.50, y:120.00, width:247.50, height:142.50)) never overlaps crosshair ((x:787.50, y:587.50, width:25.00, height:25.00)) in FirstPerson=False.
+PASS Camera collision volume stays clear during active parkour markers (FirstPerson=False).
+PASS Universal ground jump works during active parkour trial.
+PASS Universal double jump works during active parkour trial.
+PASS Equipped Speed secondary power activates normally during parkour trial.
+PASS Equipped Fire primary power activates normally during parkour trial.
+---- SAVE ROBUSTNESS & SEPARATE-PROCESS RELOAD PREPARATION
+PASS Progression saved cleanly with parkour records.
+PASS Downtown Dash record ready for reload verification.
+PASS Vertical Ascent record ready for reload verification.

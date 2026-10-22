@@ -60,6 +60,13 @@ public sealed class ParkourVerificationRunner : SessionVerificationRunner
         Check(dash.FirstCompletionXp > 0 && ascent.FirstCompletionXp > dash.FirstCompletionXp, "Both courses configure positive first-completion XP rewards.");
     }
 
+    IEnumerator BriefingGone()
+    {
+        float until = Time.realtimeSinceStartup + 3f;
+        while (Time.realtimeSinceStartup < until && GameHud.Shown(Hud.Briefing)) yield return null;
+        Check(!GameHud.Shown(Hud.Briefing), "Mission briefing card has faded out before HUD visibility checks.");
+    }
+
     IEnumerator RuntimeCourseAndNegativeControls()
     {
         Log("---- RUNTIME PLACEMENT, ORDER ENFORCEMENT, REWARDS & NEGATIVE CONTROLS");
@@ -72,6 +79,13 @@ public sealed class ParkourVerificationRunner : SessionVerificationRunner
             "Configured non-Flight loadout (Strength + Fire + Speed) for parkour verification.");
         GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/free-play"));
         yield return Scene(GameFlow.CityScene);
+
+        // Free-play opens its 7 s mission briefing, which deliberately suppresses every guidance card (parkour, alert,
+        // waypoint, prompt). Dismiss it the way a player's first input would, then wait out the BriefingFadeSeconds fade:
+        // the card only reports hidden once the fade completes, so a single frame would still read as covering the HUD.
+        Check(Hud != null && Hud.BriefingActive, "free-play mission briefing is up on session entry.");
+        Hud.DismissBriefing("parkour verification");
+        yield return BriefingGone();
 
         var pm = W.Parkour;
         Check(pm != null && pm.Courses.Count >= 2, $"ParkourCourseManager resolved {pm?.Courses.Count ?? 0} courses in generated city.");
