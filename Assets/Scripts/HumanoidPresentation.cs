@@ -81,8 +81,15 @@ public sealed class HumanoidPresentation : MonoBehaviour
         var accent=npc!=null&&npc.Archetype!=null?npc.Archetype.Accent:CityColor.Metal;
         var body=npc==null?CityColor.Blue:npc.Role==NpcRole.Civilian?CityColor.Amber:npc.Role==NpcRole.Cop?CityColor.Teal:CityColor.Red;
         var primary=loadout!=null?loadout.Primary:body;var secondary=loadout!=null?loadout.Secondary:accent;
+        // Fit the canonical legacy body above; outfit bounds cannot change capsule, height or eye position.
+        if(definition!=null&&suit!=null)
+        {
+            var assembler=HeroAppearanceRenderer.Install(model,definition,CityMaterials.Current,false);
+            assembler.Apply(WorldSession.Instance.Progression.Appearance(definition));
+        }
         foreach(var r in renderers)
         {
+            if(definition!=null&&suit!=null){r.updateWhenOffscreen=true;continue;}
             var mats=r.sharedMaterials;
             for(int i=0;i<mats.Length;i++)
             {

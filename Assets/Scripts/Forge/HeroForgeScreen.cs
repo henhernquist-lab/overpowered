@@ -19,6 +19,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
     /// The character instance of the last captured preview (verification reads its recoloured material).
     public GameObject PreviewModel {get;private set;}
     ModeScreens menu;ForgeCatalog catalog;HeroDefinition hero;PowerDefinition a,b,utility;
+    HeroAppearanceSave appearance;HeroDefinition previewHero;HeroAppearanceRenderer appearanceRenderer;
     CityColor primary,secondary;CityPalette palette;GameObject previewRoot;bool rebuilding;
     Camera previewCamera;CinemachineBrain revealBrain;Transform orbitPivot;float revealStarted;bool revealActive;
     public bool RevealActive=>revealActive;
@@ -50,14 +51,15 @@ public sealed class HeroForgeScreen : MonoBehaviour
     }
     public void Open()
     {
-        var saved=menu.Profile.Data.Loadout;hero=catalog.Hero(saved.HeroId);a=menu.Profile.EquippedA;b=menu.Profile.EquippedB;utility=menu.Profile.EquippedSecondary;primary=saved.Primary;secondary=saved.Secondary;
+        var saved=menu.Profile.Data.Loadout;hero=catalog.Hero(saved.HeroId);a=menu.Profile.EquippedA;b=menu.Profile.EquippedB;utility=menu.Profile.EquippedSecondary;appearance=menu.Profile.Appearance(hero);primary=appearance.Primary;secondary=appearance.Secondary;
         Root.style.display=DisplayStyle.Flex;Rebuild();Capture();
     }
     public void Close(){Root.style.display=DisplayStyle.None;revealActive=false;}
     public bool SelectHero(HeroDefinition value)
     {
         if(Array.IndexOf(catalog.Heroes,value)<0)return false;
-        hero=value;primary=hero.Primary;secondary=hero.Secondary;
+        if(hero!=null)menu.Profile.SetAppearance(appearance);
+        hero=value;appearance=menu.Profile.Appearance(hero);primary=appearance.Primary;secondary=appearance.Secondary;
         var owned=hero.AvailablePowers.Where(p=>menu.Profile.Owns(p)&&p.Role==PowerRole.Combat).ToArray();
         a=owned.Contains(hero.DefaultA)?hero.DefaultA:owned[0];
         b=owned.Contains(hero.DefaultB)&&hero.DefaultB!=a?hero.DefaultB:owned.First(p=>p!=a);
@@ -73,7 +75,27 @@ public sealed class HeroForgeScreen : MonoBehaviour
         else if(slot==1){if(power==a)return false;b=power;}else return false;
         return Save();
     }
-    public bool SetColors(CityColor first,CityColor second){primary=first;secondary=second;return Save();}
+    public bool SetColors(CityColor first,CityColor second)=>SetColors(first,second,appearance.Accent);
+    public bool SetColors(CityColor first,CityColor second,CityColor accent)
+    {
+        var next=appearance.Copy();next.Primary=first;next.Secondary=second;next.Accent=accent;return SaveAppearance(next);
+    }
+    public bool SelectCosmetic(CosmeticSlot slot,string id)
+    {
+        var cosmetics=Resources.Load<CosmeticCatalog>("CosmeticCatalog");
+        var suit=cosmetics?.Resolve(hero,appearance.SuitId,CosmeticSlot.Suit);
+        var item=cosmetics?.Find(id,slot);
+        if(item==null||!item.Available||!item.Compatible(hero,suit?.Id))return false;
+        var next=appearance.Copy();
+        if(slot==CosmeticSlot.Suit)next.SuitId=id;else if(slot==CosmeticSlot.Mask)next.MaskId=id;else next.EmblemId=id;
+        return SaveAppearance(next);
+    }
+    bool SaveAppearance(HeroAppearanceSave next)
+    {
+        if(!menu.Profile.SetAppearance(next))return false;
+        appearance=menu.Profile.Appearance(hero);primary=appearance.Primary;secondary=appearance.Secondary;
+        feedback.text="APPEARANCE SAVED";Rebuild();Capture();return true;
+    }
     bool Save()
     {
         bool ok=menu.Profile.SetLoadout(hero,a,b,utility,primary,secondary);
@@ -89,8 +111,11 @@ public sealed class HeroForgeScreen : MonoBehaviour
     {
         rebuilding=true;form.Clear();
         Dropdown("HERO",catalog.Heroes.Select(h=>h.DisplayName).ToArray(),Array.IndexOf(catalog.Heroes,hero),i=>SelectHero(catalog.Heroes[i]));
+        var appearanceHeading=new Label("APPEARANCE"){name="forge-appearance-heading"};appearanceHeading.style.fontSize=22;appearanceHeading.style.color=C(CityColor.HeroAccent);form.Add(appearanceHeading);
+        BuildCosmetics();
         Dropdown("PRIMARY SUIT",catalog.SuitColors.Select(c=>c.ToString()).ToArray(),Array.IndexOf(catalog.SuitColors,primary),i=>SetColors(catalog.SuitColors[i],secondary));
         Dropdown("SECONDARY SUIT",catalog.SuitColors.Select(c=>c.ToString()).ToArray(),Array.IndexOf(catalog.SuitColors,secondary),i=>SetColors(primary,catalog.SuitColors[i]));
+        Dropdown("ACCENT",catalog.SuitColors.Select(c=>c.ToString()).ToArray(),Array.IndexOf(catalog.SuitColors,appearance.Accent),i=>SetColors(primary,secondary,catalog.SuitColors[i]));
         var first=hero.AvailablePowers.Where(p=>menu.Profile.Owns(p)&&p.Role==PowerRole.Combat).ToArray();
         SlotA=Dropdown("ATTACK POWER 1",first.Select(p=>p.DisplayName).ToArray(),Array.IndexOf(first,a),i=>SelectPower(0,first[i]));
         var second=first.Where(p=>p!=a).ToArray();
@@ -126,6 +151,30 @@ public sealed class HeroForgeScreen : MonoBehaviour
         var detail=new Label(synergy?.Description??"");detail.style.whiteSpace=WhiteSpace.Normal;detail.style.marginBottom=12;form.Add(detail);
         BuildStats();
         rebuilding=false;
+    }
+    void BuildCosmetics()
+    {
+        var cosmetics=Resources.Load<CosmeticCatalog>("CosmeticCatalog");if(cosmetics==null)return;
+        var suit=cosmetics.Resolve(hero,appearance.SuitId,CosmeticSlot.Suit);
+        foreach(CosmeticSlot slot in Enum.GetValues(typeof(CosmeticSlot)))
+        {
+            var available=cosmetics.Items.Where(x=>x!=null&&x.Slot==slot&&x.Available&&x.Compatible(hero,suit?.Id)).ToArray();
+            string saved=slot==CosmeticSlot.Suit?appearance.SuitId:slot==CosmeticSlot.Mask?appearance.MaskId:appearance.EmblemId;
+            var resolved=cosmetics.Resolve(hero,saved,slot,suit?.Id);
+            if(available.Length>0)
+            {
+                var field=Dropdown(slot.ToString().ToUpperInvariant(),available.Select(x=>x.DisplayName).ToArray(),Array.IndexOf(available,resolved),i=>SelectCosmetic(slot,available[i].Id));
+                field.name="forge-cosmetic-"+slot.ToString().ToLowerInvariant();
+            }
+            if(saved!=null&&saved!=resolved?.Id)
+            {
+                var fallback=new Label("Saved "+slot.ToString().ToLowerInvariant()+" unavailable; showing "+(resolved?.DisplayName??"legacy appearance")+". Selection retained.");fallback.style.whiteSpace=WhiteSpace.Normal;fallback.style.fontSize=12;form.Add(fallback);
+            }
+            foreach(var missing in cosmetics.Items.Where(x=>x!=null&&x.HeroId==hero.Id&&x.Slot==slot&&!x.Available))
+            {
+                var unavailable=new Button{text=missing.DisplayName+" · ART NEEDED",name="cosmetic-unavailable-"+missing.Id,tooltip=missing.UnavailableReason};unavailable.SetEnabled(false);unavailable.style.whiteSpace=WhiteSpace.Normal;unavailable.style.minHeight=30;form.Add(unavailable);
+            }
+        }
     }
     /// One row per archetype stat: the selected hero's real value and a bar filled relative to the best value across the
     /// roster (for cooldown, lower is better), so heroes compare at a glance. Values come from HeroDefinition.Stats x the
@@ -187,12 +236,16 @@ public sealed class HeroForgeScreen : MonoBehaviour
     }
     void Capture()
     {
+        if(PreviewModel!=null&&previewHero==hero&&appearanceRenderer!=null)
+        {
+            appearanceRenderer.Apply(appearance);previewCamera.targetTexture=Preview;previewCamera.Render();previewCamera.targetTexture=null;return;
+        }
         if(previewRoot!=null){previewRoot.SetActive(false);Destroy(previewRoot);}
         previewRoot=new GameObject("Forge preview only");previewRoot.transform.SetParent(transform,false);previewRoot.transform.position=new Vector3(10000,-1000,10000);
         // Preview owns one palette cache, since the skyline's transient cache is disposed after capture.
         var materials=previewRoot.AddComponent<CityMaterials>();materials.Initialize(palette);
         var tuning=hero.Animation!=null?hero.Animation:Resources.Load<HumanoidAnimationTuning>("HumanoidAnimationTuning");
-        var model=Instantiate(hero.CharacterPrefab!=null?hero.CharacterPrefab:tuning.Model,previewRoot.transform);PreviewModel=model;
+        var model=Instantiate(hero.CharacterPrefab!=null?hero.CharacterPrefab:tuning.Model,previewRoot.transform);PreviewModel=model;previewHero=hero;
         var animator=model.GetComponent<Animator>();animator.runtimeAnimatorController=tuning.Controller;animator.applyRootMotion=false;animator.cullingMode=AnimatorCullingMode.AlwaysAnimate;
         animator.Play("Locomotion");animator.Update(0);
         var renderers=model.GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -207,19 +260,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
         }
         Bounds bounds=Posed();
         float fit=1.8f/Mathf.Max(.01f,bounds.size.y);model.transform.localScale=Vector3.Scale(model.transform.localScale*fit,hero.VisualScale);
-        foreach(var renderer in renderers)
-        {
-            var mats=renderer.sharedMaterials;
-            for(int i=0;i<mats.Length;i++)
-            {
-                if(hero.Suit!=null)
-                {
-                    if(mats[i]==hero.Suit.Source)mats[i]=materials.SuitMaterial(hero.Suit,primary,secondary);
-                }
-                else mats[i]=CityMaterials.Get(renderer.name.Contains("Joints")?secondary:primary);
-            }
-            renderer.sharedMaterials=mats;
-        }
+        appearanceRenderer=HeroAppearanceRenderer.Install(model,hero,materials,true);appearanceRenderer.Apply(appearance);
         foreach(var node in previewRoot.GetComponentsInChildren<Transform>())node.gameObject.layer=30;
         var camera=new GameObject("Forge preview camera").AddComponent<Camera>();camera.transform.SetParent(previewRoot.transform,false);camera.enabled=false;camera.cullingMask=1<<30;
         camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=C(CityColor.UiPanel);camera.fieldOfView=32;camera.targetTexture=Preview;previewCamera=camera;
