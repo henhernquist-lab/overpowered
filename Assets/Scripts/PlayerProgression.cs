@@ -21,6 +21,7 @@ public enum PlayerSide { Hero, Villain }
     public string LastModeId;
     public List<ModeRecord> ModeRecords = new List<ModeRecord>();
     public HeroLoadout Loadout;
+    public List<HeroAppearanceSave> HeroAppearances = new List<HeroAppearanceSave>();
     /// First-time control prompts the player has already acted on (HUD). Saves written before this field existed load with an empty list.
     public List<string> SeenHints = new List<string>();
     public bool FirstPerson;
@@ -117,7 +118,31 @@ public sealed class PlayerProgression : MonoBehaviour
         if(WorldSession.Instance!=null&&WorldSession.Instance.Progression==this)return false;
         Data.Loadout=new HeroLoadout{SignatureId=Data.Loadout?.SignatureId,UnresolvedSignatureId=Data.Loadout?.UnresolvedSignatureId,HeroId=hero.Id,PowerA=a.Id,PowerB=b.Id,SecondaryPower=utility.Id,
             Primary=forge.ColorOrDefault(primary,hero.Primary),Secondary=forge.ColorOrDefault(secondary,hero.Secondary)};
+        var appearance=Data.HeroAppearances?.Find(x=>x!=null&&x.HeroId==hero.Id);
+        if(appearance!=null){appearance.Primary=Data.Loadout.Primary;appearance.Secondary=Data.Loadout.Secondary;}
         ValidateSignature();Save();Changed?.Invoke();return true;
+    }
+    /// Returns a detached selection. Unknown IDs survive load/save; only rendering resolves fallbacks.
+    public HeroAppearanceSave Appearance(HeroDefinition hero)
+    {
+        var saved=Data.HeroAppearances?.Find(x=>x!=null&&x.HeroId==hero.Id);
+        if(saved!=null)return saved.Copy();
+        var catalog=Resources.Load<CosmeticCatalog>("CosmeticCatalog");
+        return catalog!=null?catalog.Legacy(hero,Data.Loadout):new HeroAppearanceSave{HeroId=hero.Id,Primary=Data.Loadout?.HeroId==hero.Id?Data.Loadout.Primary:hero.Primary,Secondary=Data.Loadout?.HeroId==hero.Id?Data.Loadout.Secondary:hero.Secondary,Accent=hero.Suit.Trim};
+    }
+    public bool SetAppearance(HeroAppearanceSave value)
+    {
+        var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");
+        if(value==null||value.Version!=1||forge==null||!Array.Exists(forge.Heroes,h=>h!=null&&h.Id==value.HeroId))return false;
+        if(WorldSession.Instance!=null&&WorldSession.Instance.Progression==this)return false;
+        // This API persists selection, including unresolved IDs imported from a newer catalog. UI selection gates actual options.
+        var copy=value.Copy();var hero=forge.Hero(copy.HeroId);
+        copy.Primary=forge.ColorOrDefault(copy.Primary,hero.Primary);copy.Secondary=forge.ColorOrDefault(copy.Secondary,hero.Secondary);copy.Accent=forge.ColorOrDefault(copy.Accent,hero.Suit.Trim);
+        if(Data.HeroAppearances==null)Data.HeroAppearances=new List<HeroAppearanceSave>();
+        int index=Data.HeroAppearances.FindIndex(x=>x!=null&&x.HeroId==copy.HeroId);
+        if(index<0)Data.HeroAppearances.Add(copy);else Data.HeroAppearances[index]=copy;
+        if(Data.Loadout!=null&&Data.Loadout.HeroId==copy.HeroId){Data.Loadout.Primary=copy.Primary;Data.Loadout.Secondary=copy.Secondary;}
+        Save();Changed?.Invoke();return true;
     }
     public PowerSynergyDefinition EquippedSignature=>Resources.Load<SignatureCatalog>("SignatureCatalog")?.Resolve(Data.Loadout?.SignatureId,EquippedA,EquippedB);
     public bool SetSignature(string id)

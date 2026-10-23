@@ -1,0 +1,228 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 596cd5a56e56c4be8993e547f01772c9, type: 3}
+  m_Name: CosmeticCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::CosmeticCatalog
+  Items:
+  - Id: vector-legacy
+    DisplayName: Original VECTOR suit
+    HeroId: vector
+    Slot: 0
+    Suits: []
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 0}
+    Bones: []
+  - Id: vector-integrated
+    DisplayName: Original headgear
+    HeroId: vector
+    Slot: 1
+    Suits:
+    - vector-legacy
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 0}
+    Bones: []
+  - Id: vector-no-emblem
+    DisplayName: None
+    HeroId: vector
+    Slot: 2
+    Suits: []
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 0}
+    Bones: []
+  - Id: titan-legacy
+    DisplayName: Original TITAN suit
+    HeroId: titan
+    Slot: 0
+    Suits: []
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 0}
+    Bones: []
+  - Id: titan-integrated
+    DisplayName: Original headgear
+    HeroId: titan
+    Slot: 1
+    Suits:
+    - titan-legacy
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 0}
+    Bones: []
+  - Id: titan-no-emblem
+    DisplayName: None
+    HeroId: titan
+    Slot: 2
+    Suits: []
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 0}
+    Bones: []
+  - Id: nova-legacy
+    DisplayName: Original NOVA suit
+    HeroId: nova
+    Slot: 0
+    Suits: []
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 0}
+    Bones: []
+  - Id: nova-integrated
+    DisplayName: Original headgear
+    HeroId: nova
+    Slot: 1
+    Suits:
+    - nova-legacy
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 0}
+    Bones: []
+  - Id: nova-no-emblem
+    DisplayName: None
+    HeroId: nova
+    Slot: 2
+    Suits: []
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 0}
+    Bones: []
+  - Id: vector-starter-modular
+    DisplayName: "Starter armor \xB7 light fittings"
+    HeroId: vector
+    Slot: 0
+    Suits: []
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 4300000, guid: e9647e5ac6a8e4252a9f2bae005209f5, type: 2}
+    Bones:
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01/head
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01
+    - root/pelvis
+    - root/pelvis/spine_01
+    - root/pelvis/spine_01/spine_02
+    - root/pelvis/spine_01/spine_02/spine_03
+    - root/pelvis/thigh_l
+    - root/pelvis/thigh_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/upperarm_twist_01_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/upperarm_twist_01_r
+    - root/pelvis/thigh_l/calf_l/foot_l/ball_l
+    - root/pelvis/thigh_r/calf_r/foot_r/ball_r
+    - root/pelvis/thigh_l/calf_l
+    - root/pelvis/thigh_r/calf_r
+    - root/pelvis/thigh_l/calf_l/calf_twist_01_l
+    - root/pelvis/thigh_r/calf_r/calf_twist_01_r
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01/head/eyeLight_l
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01/head/eyeLight_r
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01/head/eye_l
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01/head/eye_r
+    - root/pelvis/thigh_l/calf_l/foot_l
+    - root/pelvis/thigh_r/calf_r/foot_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/index_01_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/index_01_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/index_01_l/index_02_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/index_01_r/index_02_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/index_01_l/index_02_l/index_03_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/index_01_r/index_02_r/index_03_r
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01/head/jaw
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/lowerarm_twist_01_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/lowerarm_twist_01_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/middle_01_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/middle_01_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/middle_01_l/middle_02_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/middle_01_r/middle_02_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/middle_01_l/middle_02_l/middle_03_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/middle_01_r/middle_02_r/middle_03_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/pinky_01_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/pinky_01_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/pinky_01_l/pinky_02_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/pinky_01_r/pinky_02_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/pinky_01_l/pinky_02_l/pinky_03_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/pinky_01_r/pinky_02_r/pinky_03_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/ring_01_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/ring_01_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/ring_01_l/ring_02_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/ring_01_r/ring_02_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/ring_01_l/ring_02_l/ring_03_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/ring_01_r/ring_02_r/ring_03_r
+    - root/pelvis/thigh_l/thigh_twist_01_l
+    - root/pelvis/thigh_r/thigh_twist_01_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/thumb_01_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/thumb_01_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/thumb_01_l/thumb_02_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/thumb_01_r/thumb_02_r
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/thumb_01_l/thumb_02_l/thumb_03_l
+    - root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/thumb_01_r/thumb_02_r/thumb_03_r
+  - Id: vector-hood
+    DisplayName: Hood
+    HeroId: vector
+    Slot: 1
+    Suits:
+    - vector-starter-modular
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 4300000, guid: 988711fc3f2b14f5182de4152faef0ff, type: 2}
+    Bones:
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01/head/headAttach
+  - Id: vector-hood-respirator
+    DisplayName: Hood + face cover
+    HeroId: vector
+    Slot: 1
+    Suits:
+    - vector-starter-modular
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 4300000, guid: ecf65b4a181ad4ed98f92f709f2e81c5, type: 2}
+    Bones:
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01/head/faceAttach
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01/head/headAttach
+  - Id: vector-emblem-chevron
+    DisplayName: Chevron emblem
+    HeroId: vector
+    Slot: 2
+    Suits: []
+    Available: 0
+    UnavailableReason: No authored chest-emblem mesh is included in the installed Sidekick Starter art. Requires an artist-fitted chest mesh with UVs and binding to VECTOR spine_03; no placeholder is rendered.
+    Mesh: {fileID: 0}
+    Bones: []
+  - Id: vector-emblem-bolt
+    DisplayName: Bolt emblem
+    HeroId: vector
+    Slot: 2
+    Suits: []
+    Available: 0
+    UnavailableReason: No authored chest-emblem mesh is included in the installed Sidekick Starter art. Requires an artist-fitted chest mesh with UVs and binding to VECTOR spine_03; no placeholder is rendered.
+    Mesh: {fileID: 0}
+    Bones: []
+  Defaults:
+  - HeroId: vector
+    SuitId: vector-legacy
+    MaskId: vector-integrated
+    EmblemId: vector-no-emblem
+  - HeroId: titan
+    SuitId: titan-legacy
+    MaskId: titan-integrated
+    EmblemId: titan-no-emblem
+  - HeroId: nova
+    SuitId: nova-legacy
+    MaskId: nova-integrated
+    EmblemId: nova-no-emblem
