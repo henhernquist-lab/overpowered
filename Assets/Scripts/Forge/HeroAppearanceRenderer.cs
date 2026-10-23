@@ -46,7 +46,7 @@ public sealed class HeroAppearanceRenderer : MonoBehaviour
         string resolvedSuit=suit?.Id;
         if(SuitId!=resolvedSuit||body.sharedMesh==null)
         {
-            body.sharedMesh=suit?.Mesh!=null?suit.Mesh:legacyMesh;body.bones=suit?.Mesh!=null?Bind(suit):legacyBones;
+            body.sharedMesh=null;body.bones=suit?.Mesh!=null?Bind(suit):legacyBones;body.sharedMesh=suit?.Mesh!=null?suit.Mesh:legacyMesh;
         }
         SuitId=resolvedSuit;
         var mats=(Material[])legacyMaterials.Clone();for(int i=0;i<mats.Length;i++)if(mats[i]==hero.Suit.Source)mats[i]=ColorMaterial;
@@ -67,7 +67,7 @@ public sealed class HeroAppearanceRenderer : MonoBehaviour
             renderer.localBounds=body.localBounds;renderer.updateWhenOffscreen=body.updateWhenOffscreen;
         }
         renderer.gameObject.SetActive(true);
-        if(item.Id!=previous){renderer.sharedMesh=item.Mesh;renderer.bones=Bind(item);}
+        if(item.Id!=previous){renderer.sharedMesh=null;renderer.bones=Bind(item);renderer.sharedMesh=item.Mesh;}
         renderer.sharedMaterial=ColorMaterial;
     }
     void OnDestroy(){if(previewMaterial!=null)Destroy(previewMaterial);if(map!=null)Destroy(map);}

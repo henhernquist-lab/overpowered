@@ -119,6 +119,8 @@ public sealed class SidekickVerificationRunner : MonoBehaviour
                     var cam=screen.PreviewModel.transform.parent.GetComponentInChildren<Camera>(true);
                     Log($"PREVIEW fit {hero.DisplayName}: posed skinned height={hi-lo:F3}m (target 1.8 x VisualScale.y {hero.VisualScale.y}), model scale={screen.PreviewModel.transform.localScale:F3}, renderer bounds={skinned[0].bounds.size:F2}, camera distance={Vector3.Distance(cam.transform.position,skinned[0].bounds.center):F2} fov={cam.fieldOfView}");
                 }
+                // Cosmetic geometry changes render after Unity refreshes skinning buffers on the next frame.
+                yield return null;yield return null;
                 cells[i,j]=Read(screen.Preview);
             }
             Check(skin[0].Equals(skin[1])&&skin[0].Equals(SidekickSuit.Pixel(hero.Suit.BaseColorMap,new Vector2Int(0,5))),$"CONTROL: {hero.DisplayName} skin swatch identical for both colour pairs and equal to the authored map: {skin[0]}.");

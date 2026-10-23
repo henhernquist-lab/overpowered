@@ -21,6 +21,8 @@ public sealed class HeroForgeScreen : MonoBehaviour
     ModeScreens menu;ForgeCatalog catalog;HeroDefinition hero;PowerDefinition a,b,utility;
     HeroAppearanceSave appearance;HeroDefinition previewHero;HeroAppearanceRenderer appearanceRenderer;
     CityColor primary,secondary;CityPalette palette;GameObject previewRoot;bool rebuilding;
+    int previewRenderAfterFrame=-1;
+    public bool PreviewPending=>previewRenderAfterFrame>=0;
     Camera previewCamera;CinemachineBrain revealBrain;Transform orbitPivot;float revealStarted;bool revealActive;
     public bool RevealActive=>revealActive;
     public int RevealFrames {get;private set;}
@@ -54,7 +56,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
         var saved=menu.Profile.Data.Loadout;hero=catalog.Hero(saved.HeroId);a=menu.Profile.EquippedA;b=menu.Profile.EquippedB;utility=menu.Profile.EquippedSecondary;appearance=menu.Profile.Appearance(hero);primary=appearance.Primary;secondary=appearance.Secondary;
         Root.style.display=DisplayStyle.Flex;Rebuild();Capture();
     }
-    public void Close(){Root.style.display=DisplayStyle.None;revealActive=false;}
+    public void Close(){Root.style.display=DisplayStyle.None;revealActive=false;previewRenderAfterFrame=-1;}
     public bool SelectHero(HeroDefinition value)
     {
         if(Array.IndexOf(catalog.Heroes,value)<0)return false;
@@ -238,7 +240,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
     {
         if(PreviewModel!=null&&previewHero==hero&&appearanceRenderer!=null)
         {
-            appearanceRenderer.Apply(appearance);previewCamera.targetTexture=Preview;previewCamera.Render();previewCamera.targetTexture=null;return;
+            appearanceRenderer.Apply(appearance);PreviewModel.GetComponent<Animator>().Update(0);previewRenderAfterFrame=Time.frameCount+1;return;
         }
         if(previewRoot!=null){previewRoot.SetActive(false);Destroy(previewRoot);}
         previewRoot=new GameObject("Forge preview only");previewRoot.transform.SetParent(transform,false);previewRoot.transform.position=new Vector3(10000,-1000,10000);
@@ -260,7 +262,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
         }
         Bounds bounds=Posed();
         float fit=1.8f/Mathf.Max(.01f,bounds.size.y);model.transform.localScale=Vector3.Scale(model.transform.localScale*fit,hero.VisualScale);
-        appearanceRenderer=HeroAppearanceRenderer.Install(model,hero,materials,true);appearanceRenderer.Apply(appearance);
+        appearanceRenderer=HeroAppearanceRenderer.Install(model,hero,materials,true);appearanceRenderer.Apply(appearance);animator.Update(0);
         foreach(var node in previewRoot.GetComponentsInChildren<Transform>())node.gameObject.layer=30;
         var camera=new GameObject("Forge preview camera").AddComponent<Camera>();camera.transform.SetParent(previewRoot.transform,false);camera.enabled=false;camera.cullingMask=1<<30;
         camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=C(CityColor.UiPanel);camera.fieldOfView=32;camera.targetTexture=Preview;previewCamera=camera;
@@ -276,13 +278,20 @@ public sealed class HeroForgeScreen : MonoBehaviour
         var aim=virtualCamera.gameObject.AddComponent<CinemachineRotationComposer>();aim.Damping=Vector2.zero;
         revealBrain=camera.gameObject.AddComponent<CinemachineBrain>();revealBrain.UpdateMethod=CinemachineBrain.UpdateMethods.ManualUpdate;revealBrain.IgnoreTimeScale=true;
         var sun=new GameObject("Forge preview light").AddComponent<Light>();sun.transform.SetParent(previewRoot.transform,false);sun.type=LightType.Directional;sun.cullingMask=1<<30;sun.intensity=1.4f;sun.color=C(CityColor.Cream);sun.transform.rotation=Quaternion.Euler(35,150,0);
-        camera.Render();camera.targetTexture=null;
+        camera.targetTexture=null;previewRenderAfterFrame=Time.frameCount+1;
         // No preview animation/camera work per frame while home gameplay cards are shown.
         animator.enabled=false;
     }
-    void BeginReveal(){revealStarted=Time.unscaledTime;revealActive=true;RevealFrames=0;}
+    void BeginReveal(){revealStarted=Time.unscaledTime;revealActive=true;RevealFrames=0;RevealHeading=-28;if(orbitPivot!=null)orbitPivot.rotation=Quaternion.Euler(0,-28,0);}
     void LateUpdate()
     {
+        // Unity refreshes skinning buffers after mesh/bone reassignment. Keep the last complete image until the next
+        // frame, coalescing rapid controls into one render instead of capturing partially updated geometry.
+        if(previewRenderAfterFrame>=0)
+        {
+            if(Time.frameCount<previewRenderAfterFrame)return;
+            if(previewCamera!=null&&Root.style.display!=DisplayStyle.None){previewCamera.targetTexture=Preview;previewCamera.Render();previewCamera.targetTexture=null;previewRenderAfterFrame=-1;}
+        }
         if(!revealActive||previewCamera==null||revealBrain==null||Root.style.display==DisplayStyle.None)return;
         float t=Mathf.Clamp01((Time.unscaledTime-revealStarted)/.85f);
         // Quick orbit and settle. The Forge form stays interactive throughout; no gameplay camera is touched.
