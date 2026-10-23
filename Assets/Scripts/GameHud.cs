@@ -76,7 +76,7 @@ public sealed partial class GameHud : MonoBehaviour
         Root = Document.rootVisualElement; Root.name = "game-hud"; Root.pickingMode = PickingMode.Ignore;
         Root.style.position = Position.Absolute; Root.style.left = Root.style.right = Root.style.top = Root.style.bottom = 0;
         Root.style.unityFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"); Root.style.color = C(CityColor.UiInk);
-        Build(); BuildOverlay(); BuildFeedback(); BuildEnemyFeedback();
+        Build(); BuildOverlay(); BuildFeedback(); BuildEnemyFeedback(); BuildParkourHud();
     }
 
     /// Shows or hides the whole HUD (the FPS A/B uses this to measure the legacy IMGUI-only frame).

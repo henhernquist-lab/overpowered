@@ -85,6 +85,12 @@ public sealed partial class ModeScreens : MonoBehaviour
         // Additional data-defined playable modes retain a route without changing the menu code.
         var extras=Row();Place(extras,6,74,88,4);Root.Add(extras);
         foreach(var mode in modes.Where(m=>m.Playable&&!primary.Contains(m))){var button=ActionButton(mode.DisplayName.ToUpperInvariant(),()=>Launch(mode),ColorFor(mode.Side));button.style.height=30;button.style.marginRight=12;extras.Add(button);ModeButtons.Add(mode.Id,button);}
+        // The Combat Lab is a standalone developer scene, not a game mode: its route exists only when its data is present.
+        if(Resources.Load<CombatLabSettings>("CombatLabSettings")!=null)
+        {
+            var lab=ActionButton("BATTLE LAB",()=>GameFlow.Instance.OpenCombatLab(),C(CityColor.UiPurple));
+            lab.name="battle-lab";lab.tooltip="Isolated combat practice. F2 opens controls; progress is discarded.";lab.style.height=30;lab.style.marginRight=12;extras.Add(lab);ModeButtons.Add("battle-lab",lab);
+        }
         var strip=Row();Place(strip,6,81,88,14);PanelBox(strip);strip.style.alignItems=Align.Center;strip.style.paddingLeft=26;strip.style.paddingRight=20;Root.Add(strip);
         var levelBlock=new VisualElement();levelBlock.style.width=130;levelBlock.Add(Text("LEVEL",11,C(CityColor.UiMuted),true));levelBlock.Add(Text(Profile.Data.Level.ToString("00"),36,C(CityColor.UiInk),true));strip.Add(levelBlock);
         var powerBlock=new VisualElement();powerBlock.style.flexGrow=1;powerBlock.Add(Text("YOUR POWERS",11,C(CityColor.UiMuted),true));var icons=Row();icons.style.marginTop=8;powerBlock.Add(icons);strip.Add(powerBlock);

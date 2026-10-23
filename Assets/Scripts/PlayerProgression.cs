@@ -29,6 +29,9 @@ public enum PlayerSide { Hero, Villain }
     public bool IntroSeen;
     public List<PowerUsage> PowerStats = new List<PowerUsage>();
     public List<ChallengeProgress> Challenges = new List<ChallengeProgress>();
+    /// Per-course rooftop parkour records (best completion time, completion count, first-completion reward claimed).
+    /// Additive Version 1 field: older saves deserialize with an empty list.
+    public List<ParkourCourseRecord> ParkourCourses = new List<ParkourCourseRecord>();
 }
 /// One XP grant as the player received it: the amount actually added, where it happened (if anywhere) and why.
 public readonly struct XpGrant
@@ -254,6 +257,64 @@ public sealed class PlayerProgression : MonoBehaviour
         if (Data.Rooftops.Contains(id)) return false;
         Data.Rooftops.Add(id); AddXp(config.RooftopXp); return true;
     }
+    public ParkourCourseRecord ParkourRecord(string id, bool create = false)
+    {
+        if (string.IsNullOrEmpty(id)) return null;
+        if (Data.ParkourCourses == null) Data.ParkourCourses = new List<ParkourCourseRecord>();
+        var list = Data.ParkourCourses;
+        for (int i = 0; i < list.Count; i++) if (list[i].Id == id) return list[i];
+        if (!create) return null;
+        var created = new ParkourCourseRecord { Id = id };
+        list.Add(created);
+        return created;
+    }
+    public float BestParkourTime(string id)
+    {
+        var r = ParkourRecord(id);
+        return r != null && r.Completed && r.BestSeconds > 0f ? r.BestSeconds : 0f;
+    }
+    public bool HasCompletedParkour(string id) => ParkourRecord(id)?.Completed ?? false;
+    /// Records a rooftop parkour completion, updates personal best only when faster, and awards first-completion XP once
+    /// (plus a small personal-best bonus only when beating a prior record by at least 0.10s, preventing repeat XP farming).
+    public ParkourCompletionSummary RecordParkourCompletion(ParkourCourseDefinition course, float seconds, Vector3 finishPosition)
+    {
+        if (course == null || string.IsNullOrEmpty(course.Id))
+            return new ParkourCompletionSummary("", "", seconds, seconds, false, false, 0, Time.unscaledTime);
+        seconds = Mathf.Max(0.01f, seconds);
+        var record = ParkourRecord(course.Id, create: true);
+        bool firstCompletion = !record.Completed;
+        bool hadValidBest = record.Completed && record.BestSeconds > 0f && !float.IsNaN(record.BestSeconds) && !float.IsInfinity(record.BestSeconds);
+        bool newPersonalBest = !hadValidBest || seconds < record.BestSeconds;
+        bool beatRecordMeaningfully = hadValidBest && (record.BestSeconds - seconds) >= 0.10f;
+
+        record.Completed = true;
+        record.Completions = Mathf.Max(0, record.Completions) + 1;
+        if (newPersonalBest) record.BestSeconds = seconds;
+
+        int xp = 0;
+        if (!record.RewardClaimed)
+        {
+            record.RewardClaimed = true;
+            xp = Mathf.Max(0, course.FirstCompletionXp);
+        }
+        else if (beatRecordMeaningfully)
+        {
+            xp = Mathf.Max(0, course.PersonalBestXp);
+        }
+
+        if (xp > 0) Grant(xp, true, finishPosition, "parkour");
+        else { Save(); Changed?.Invoke(); }
+
+        return new ParkourCompletionSummary(
+            course.Id,
+            course.DisplayName,
+            seconds,
+            record.BestSeconds,
+            newPersonalBest,
+            firstCompletion,
+            xp,
+            Time.unscaledTime);
+    }
     public void Save()
     {
         if (string.IsNullOrEmpty(SavePath)) return;
@@ -383,6 +444,27 @@ public sealed class PlayerProgression : MonoBehaviour
             else { same.Progress = Mathf.Max(same.Progress, c.Progress); same.Completed |= c.Completed; same.Paid |= c.Paid; Note("duplicate challenge " + c.Id); }
         }
         d.Challenges = challenges;
+        if (d.ParkourCourses == null) d.ParkourCourses = new List<ParkourCourseRecord>();
+        var parkour = new List<ParkourCourseRecord>();
+        foreach (var p in d.ParkourCourses)
+        {
+            if (p == null || string.IsNullOrEmpty(p.Id)) { Note("empty parkour entry"); continue; }
+            p.Completions = Mathf.Max(0, p.Completions);
+            if (float.IsNaN(p.BestSeconds) || float.IsInfinity(p.BestSeconds) || p.BestSeconds < 0f) p.BestSeconds = 0f;
+            if (p.RewardClaimed || p.Completions > 0 || p.BestSeconds > 0f) p.Completed = true;
+            var same = parkour.Find(x => x.Id == p.Id);
+            if (same == null) parkour.Add(p);
+            else
+            {
+                same.Completions = Mathf.Max(same.Completions, p.Completions);
+                same.Completed |= p.Completed;
+                same.RewardClaimed |= p.RewardClaimed;
+                if (p.BestSeconds > 0f && (same.BestSeconds <= 0f || p.BestSeconds < same.BestSeconds))
+                    same.BestSeconds = p.BestSeconds;
+                Note("duplicate parkour " + p.Id);
+            }
+        }
+        d.ParkourCourses = parkour;
         if (d.Level > MaxLevel) { d.Level = MaxLevel; Note("level clamped"); }
         d.SessionsPlayed = Mathf.Max(0, d.SessionsPlayed); d.SessionsWon = Mathf.Clamp(d.SessionsWon, 0, d.SessionsPlayed);
         d.BestSessionScore = Mathf.Max(0, d.BestSessionScore); d.LastSessionXp = Mathf.Max(0, d.LastSessionXp);

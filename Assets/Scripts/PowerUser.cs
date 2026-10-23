@@ -22,6 +22,7 @@ public sealed class PowerUser : MonoBehaviour
         if(float.IsNaN(amount)||float.IsInfinity(amount)||amount<0||Energy<amount)return false;
         Energy-=amount;return true;
     }
+    /// Practice-only refill. Never touches a session profile: the lab's progression is transient (null SavePath).
     public bool RestorePracticeEnergy()
     {
         var world=WorldSession.Instance;

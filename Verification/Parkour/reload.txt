@@ -1,0 +1,10 @@
+---- SEPARATE-PROCESS RELOAD VERIFICATION
+PASS Reloaded save preserves both courses and unknown course ID without crashing.
+PASS Separate-process reload matches saved level, XP, points, best times, and claimed flags:
+  level=2 xp=110 points=51
+  downtown-dash:True:True:3:38.50
+  vertical-ascent:True:True:1:74.20
+  unknown-legacy-course-id:True:True:1:99.50
+PASS Session reads reloaded 38.50s personal best for Downtown Dash.
+PASS Started Downtown Dash in reloaded session.
+PASS Reloaded session slower completion grants 0 XP and keeps 38.50s personal best.

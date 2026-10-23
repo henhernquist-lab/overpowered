@@ -5578,6 +5578,56 @@ Shared session pool: 116 transforms, 70 shared-cube solids and 38 lines; 20 repe
 FAILED historical attempts retained: Phase B verifier void-Save compile error; neutral Villain patrol matrix fixture24/1 (corrected to hostile responder without changing faction gates); incorrect CameraVerification.Run batch entry (corrected Verify45/0). No unresolved failure in selected evidence. UNVERIFIED: hands-on balance/feel, busy/night readability, physical input, near-camera placement and long-running dynamic standalone performance; no standalone build/human playtest claimed. Complete roster is ready for normal gameplay and human acceptance. No push.
 
 
+## Rooftop Parkour & Time Trial System — 2026-10-20 (`feature/rooftop-parkour-trials`)
+
+Branch `feature/rooftop-parkour-trials` in isolated worktree `../op-argon-rooftop`, based on `2ed79a9` (`codex/synergies-2-final-four`). Implemented a reusable, data-driven rooftop parkour time trial system with two playable courses, pooled Built-in Render Pipeline checkpoint gates, HUD integration, XP progression rewards, and additive save persistence.
+
+### Architecture & Courses
+- **Data Definitions (`Assets/Scripts/Parkour/ParkourCourseDefinition.cs`, `ParkourCatalog.cs`, `Assets/Resources/ParkourCatalog.asset`)**:
+  - `ParkourCourseDefinition` defines stable `Id`, `DisplayName`, palette colors (`PrimaryColor`, `SecondaryColor`, `FinishColor`), `TargetSeconds`, `FirstCompletionXp`, `PersonalBestXp`, `StartInteractRadius`, `Start` anchor spec, and ordered `Checkpoints` (`ParkourCheckpointSpec[]`).
+  - `ParkourCoursePlacement.Resolve` deterministically resolves `BuildingRoof`, `BuildingSetback`, `BuildingBase`, `LandmarkOffset`, and `WorldPoint` specs against the generated `CityDistrict` buildings (`Seed = 2409`), raycasting for static physical support and checking `CharacterController` capsule clearance.
+- **Course 1 — Downtown Dash (`Assets/Resources/Parkour/downtown-dash.asset`)**:
+  - `Id: downtown-dash`, cyan/blue/cream theme (`PrimaryColor: Cyan`, `SecondaryColor: Blue`, `FinishColor: Cream`), `TargetSeconds: 48`, `FirstCompletionXp: 75`, `PersonalBestXp: 25`, **7 ordered checkpoints** across western Downtown rooftops (`(-65, 13)` roof start -> `(-47, 13)` north setback -> `(-47, -5)` south setback -> `(-47, -5)` south roof -> `(-47, 13)` north roof -> `(-47, 51)` warehouse roof -> `(-65, 51)` slate tower roof -> `(-65, 107)` north glass roof finish leap). Completable with universal movement (running, double jump, wall climb/mantle) without requiring Speed or Teleport; equipped mobility powers remain usable and may significantly reduce completion times.
+- **Course 2 — Vertical Ascent (`Assets/Resources/Parkour/vertical-ascent.asset`)**:
+  - `Id: vertical-ascent`, purple/amber-gold theme (`PrimaryColor: UiPurple`, `SecondaryColor: Amber`, `FinishColor: LitWindow`), `TargetSeconds: 80`, `FirstCompletionXp: 110`, `PersonalBestXp: 35`, **9 ordered checkpoints** scaling from central Downtown street (`(-9, 13)` base at `y = 0.2m`) up stepped terraces, roof transfers, and high-rise walls to the `62.78m` skyline summit (`(-9, -5)` apex roof).
+- **Pooled Marker & Burst VFX (`Assets/Scripts/Parkour/ParkourVfx.cs`)**:
+  - Prebuilds a fixed session pool (`4` start markers + `12` checkpoint gate slots + `1` shared `ParticleSystem` burst emitter) using **one shared cube mesh** and existing `CityMaterials` palette swatches. Zero runtime material or mesh allocations after session initialization, zero `LineRenderer` components, and **zero `Collider` components** (eliminating any risk of third-person or first-person camera collision glitches).
+- **Runtime Manager, HUD & Save Integration (`ParkourCourseManager.cs`, `GameHudParkour.cs`, `PlayerProgression.cs`, `WorldSession.cs`)**:
+  - Intentional start via `R` near a start beacon (respecting nearby encounter R-hold priority), `R` retry, and `Backspace` cancel. Strict single-active-challenge and sequential checkpoint enforcement (`CurrentCheckpointIndex`).
+  - `GameHudParkour.cs` renders a compact top-left overlay card below `LevelGroup` (registered in `PopupAvoid()` and `AvoidList()`), displaying course name, live `MM:SS.xx` timer, `Checkpoint X / Y`, and `COURSE COMPLETE` summary (`Your Time`, `Best Time`, `NEW PERSONAL BEST`).
+  - Additive `ProgressSave.ParkourCourses` (`List<ParkourCourseRecord>`) persists completed IDs, best times, completion counts, and `RewardClaimed` flags. First completion grants `FirstCompletionXp` once; beating a personal best by `>= 0.10s` grants `PersonalBestXp`; slower or repeated runs grant `0 XP` (preventing XP farming). Old saves and unknown course IDs load and repair cleanly.
+
+### Verification Status
+- **VERIFIED — live Unity 6000.6.0f1 batch Play Mode, both stages exit 0**:
+  - `Unity -batchmode -projectPath <worktree> -executeMethod ParkourVerification.Run` → **RUN_EXIT=0**, 84/84 checks, `Verification/Parkour/results.txt`.
+  - `Unity -batchmode -projectPath <worktree> -executeMethod ParkourVerification.Reload` (separate process) → **RELOAD_EXIT=0**, 5/5 checks, `Verification/Parkour/reload.txt`; reloaded level/XP/points/best times/claimed flags match `expected.txt` exactly, and a slower 44 s rerun after reload pays 0 XP and keeps the 38.50 s best.
+  - No `LogType.Error/Exception/Assert` from `Assets/Scripts` in either run (the harness fails the suite on any such entry); 0 `error CS`.
+  - Measured placement: both courses resolve every anchor onto real city geometry — Downtown Dash 7 checkpoints (Teal setbacks/roofs, Midtown warehouse, Slate tower, north glass leap), Vertical Ascent 9 checkpoints with **+106.2 m** net gain from street start (y 0.12) to the 107.80 m skyline summit.
+  - Measured rewards: first completion Downtown Dash **+75 XP** once, 52.00 s rerun **0 XP** (best 45.00 s kept), 38.50 s run **+25 XP** and new best, Vertical Ascent first completion **+110 XP**; 20+ checkpoint activations and burst effects created **0 new renderers** (209 pooled).
+  - Measured HUD/camera: parkour card at (27.5, 120) with 247.5×142.5 bounds never overlaps the crosshair at (787.5, 587.5) in third- and first-person; camera collision volume stays clear of every marker; universal jump, double jump, Speed secondary and Fire primary all work mid-trial.
+- **Two verifier bugs found and fixed by the live run** (suite-only, no gameplay change): the harness asserted HUD visibility 2 frames after city entry while free-play's 7 s mission briefing deliberately suppresses every guidance card, and then after `DismissBriefing` during the `BriefingFadeSeconds` (0.25 s) fade, when `Shown(Briefing)` is still true. It now dismisses the briefing and waits for the card to actually hide.
+- **UNVERIFIED (human playtest)**:
+  - Hands-on traversal feel, target-time tuning (48 s Downtown Dash / 80 s Vertical Ascent), marker readability in day/night lighting, and sustained standalone FPS. Batch Play Mode measures logic and layout, not frame pacing on the target machine; a human must run the courses to judge whether the target times are fair.
+
+
+## Battle Lab on the Home screen — 2026-10-21 (`codex/synergies-2-final-four`)
+
+The Combat Lab from `codex/combat-lab-enemy-expansion` is now reachable from the Home menu in this checkout as a **BATTLE LAB** chip, using the branch's own lab runtime (no Skirmisher/Bulwark or Endless-wave changes were taken).
+
+- **Route**: `ModeScreens.BuildHome` adds the chip to the same extras row as FREE PLAY / ENDLESS FIGHT, gated on `Resources.CombatLabSettings` existing, so the route appears only where the lab data is present. The chip calls `GameFlow.OpenCombatLab()`, which loads `Assets/Scenes/CombatLab.unity`; `GameFlow.SceneReady` dispatches `CombatLab.Build()` for that scene name (the branch's single hook). The scene is also in `EditorBuildSettings`, and `Overpowered > Combat > Open Combat Lab` still opens it directly.
+- **Practice isolation**: `WorldSession` is a partial class with `IsPractice`; the lab session skips Heat, police, crimes, modes and XP, `PlayerProgression.InitializeTransient` copies a snapshot with a null save path, and `PowerUser.RestorePracticeEnergy` / `WorldSession.RestorePracticeHealth` only act in practice. `CityNpc` holds position in a practice arena instead of querying the generated sidewalk graph.
+- **Deliberately not merged**: Skirmisher/Bulwark archetypes, their guard/evasion code, and the Endless wave-table integration stay on the source branch, so this checkout's combat balance and enemy roster are unchanged. `CombatLabSettings.asset` therefore lists the three existing archetypes (Rusher, Gunner, Brute).
+
+### Verification
+
+`Unity -batchmode -executeMethod BattleLabVerification.Run` → **32/32 PASS, 0 FAIL, exit 0** (`Verification/BattleLab/results.txt`); no `error CS`; the personal save (`~/Library/Application Support/Hen Hernquist Lab/Overpowered Prototype/overpowered-progression.json`) is byte-identical after the run.
+
+- Positive: chip present, labelled, enabled, same 31.5 px chip row as FREE PLAY, does not overlap the HERO MODE card; the chip's own Clickable handler loads the lab through GameFlow; practice session is the active `WorldSession` with a `CharacterController` hero and 3 configured archetypes; spawn one/group/repeated spawns stay within the 12 cap; shared damage path defeats them; clear empties the arena; health and energy restore; leaving returns Home with the lab destroyed and the chip still there.
+- Negative: no `GameModeSession`, one metadata sidewalk instead of a generated city, no district context, no save path on the practice profile, lab defeats pay 0 XP and raise 0 Heat.
+- **Limits**: batch mode proves the route and the isolation logic, not how the arena feels. The panel's F2/Esc flow, camera framing and performance need a human in Play Mode; also unverified is the `CombatLabVerification` suite from the source branch (it depends on the Skirmisher/Bulwark code that was not taken).
+
+
+
 ## Combat Lab + Skirmisher/Bulwark expansion — 2026-10-21 UTC (Codex isolated branch)
 
 Branch `codex/combat-lab-enemy-expansion`, worktree `/Users/melaniehernquist/.codex/worktrees/combat-lab-enemy-expansion/op-overnight-recovery`, baseline `2ed79a9`. No merge/push. Phase commits: `c03745b` isolated lab, `39666d2` Skirmisher, `a6bb246` Bulwark, `2bc60ef` Endless table. Detailed launch/controls/tuning/file inventory, verification commands, limitations, human checklist and merge notes: `docs/combat-lab.md`.

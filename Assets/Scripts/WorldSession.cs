@@ -25,6 +25,8 @@ public sealed partial class WorldSession : MonoBehaviour
     public HeatResponse Response { get; private set; }
     /// Session civilian outcomes (rescued / harmed by whom / lost / escorted); transient, never saved.
     public CivilianLedger Civilians { get; private set; }
+    /// Rooftop parkour time trial manager (definitions: Resources/ParkourCatalog).
+    public ParkourCourseManager Parkour { get; private set; }
     public int Stars => Mathf.Clamp(Mathf.CeilToInt(Heat),0,Tuning.Heat.MaximumStars);
     public SessionDifficulty Difficulty { get; private set; } = new SessionDifficulty(null);
     public float PoliceResponseInterval => Difficulty.Interval(Tuning.Heat.ResponseInterval*(Response!=null?Response.ArrivalMultiplier:1f));
@@ -59,6 +61,7 @@ public sealed partial class WorldSession : MonoBehaviour
         Pursuit=gameObject.AddComponent<PursuitTracker>(); Pursuit.Initialize(this);
         Response=gameObject.AddComponent<HeatResponse>(); Response.Initialize(this);
         Civilians=gameObject.AddComponent<CivilianLedger>();
+        Parkour=gameObject.AddComponent<ParkourCourseManager>(); Parkour.Initialize(this);
         if(GameFlow.Instance!=null&&GameFlow.Instance.ActiveMode!=null)
         { Mode=gameObject.AddComponent<GameModeSession>(); Mode.Initialize(this,GameFlow.Instance.ActiveMode); Message=Mode.Definition.Description; }
         int civilians=Mode==null?tuning.City.Civilians:Mode.Definition.Civilians;

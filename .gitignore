@@ -58,6 +58,8 @@ ExportedObj/
 /Verification/Menus/save-*.json*
 /Verification/Forge/*.json*
 /Verification/Forge/save-path.txt
+/Verification/Parkour/saves/
+/Verification/Parkour/save-path.txt
 /Verification/FirstPerson/*.json*
 /Verification/FirstPerson/save-path.txt
 /Verification/Audio/save-*.json*
@@ -176,3 +178,6 @@ Verification/PhaseShift/save-path.txt
 /Verification/CombatLab/static/*.dll
 /Verification/CombatLab/static/*.pdb
 /Verification/CombatLab/static/*.runtimeconfig.json
+
+# Home Battle Lab route verification uses isolated profiles.
+/Verification/BattleLab/saves/

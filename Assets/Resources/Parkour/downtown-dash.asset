@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07c776a9ea21d76552f3143631ba6e2e, type: 3}
+  m_Name: downtown-dash
+  m_EditorClassIdentifier: Assembly-CSharp::ParkourCourseDefinition
+  Id: downtown-dash
+  DisplayName: DOWNTOWN DASH
+  Description: Fast-paced horizontal rooftop sprint across western Downtown with double-jump gaps, short wall climbs, and a final leap to the south terrace.
+  PrimaryColor: 15
+  SecondaryColor: 14
+  FinishColor: 29
+  TargetSeconds: 48
+  FirstCompletionXp: 75
+  PersonalBestXp: 25
+  StartInteractRadius: 3.8
+  Start:
+    Label: West Glass Roof Start
+    Anchor: 1
+    District: 0
+    ReferencePosition: {x: -65, y: 13}
+    LandmarkName: 
+    Offset: {x: -0.25, y: 1.25, z: -0.25}
+    TriggerRadius: 3.5
+  Checkpoints:
+  - Label: Teal North Setback Ledge
+    Anchor: 2
+    District: 0
+    ReferencePosition: {x: -47, y: 13}
+    LandmarkName: 
+    Offset: {x: -0.82, y: 1.35, z: 0.15}
+    TriggerRadius: 3.4
+  - Label: Teal South Setback Ledge
+    Anchor: 2
+    District: 0
+    ReferencePosition: {x: -47, y: -5}
+    LandmarkName: 
+    Offset: {x: -0.82, y: 1.35, z: 0.25}
+    TriggerRadius: 3.4
+  - Label: Teal South Roof Deck
+    Anchor: 1
+    District: 0
+    ReferencePosition: {x: -47, y: -5}
+    LandmarkName: 
+    Offset: {x: 0.15, y: 1.35, z: 0.15}
+    TriggerRadius: 3.4
+  - Label: Teal North Roof Deck
+    Anchor: 1
+    District: 0
+    ReferencePosition: {x: -47, y: 13}
+    LandmarkName: 
+    Offset: {x: 0.15, y: 1.35, z: 0.35}
+    TriggerRadius: 3.4
+  - Label: Midtown Warehouse Roof
+    Anchor: 1
+    District: 0
+    ReferencePosition: {x: -47, y: 51}
+    LandmarkName: 
+    Offset: {x: 0.15, y: 1.35, z: -0.35}
+    TriggerRadius: 3.5
+  - Label: Slate Tower Roof
+    Anchor: 1
+    District: 0
+    ReferencePosition: {x: -65, y: 51}
+    LandmarkName: 
+    Offset: {x: 0.15, y: 1.35, z: 0.15}
+    TriggerRadius: 3.4
+  - Label: North Glass Finish Leap
+    Anchor: 1
+    District: 0
+    ReferencePosition: {x: -65, y: 107}
+    LandmarkName: 
+    Offset: {x: 0, y: 1.45, z: -0.25}
+    TriggerRadius: 3.8
