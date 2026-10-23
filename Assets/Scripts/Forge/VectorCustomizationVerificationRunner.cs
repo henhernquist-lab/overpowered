@@ -91,6 +91,14 @@ public sealed class VectorCustomizationVerificationRunner : MonoBehaviour
         Colors(assembler,vector,profile.Appearance(vector));yield return null;yield return null;
         foreach(var skin in model.GetComponentsInChildren<SkinnedMeshRenderer>()){var diagnostic=new Mesh();skin.BakeMesh(diagnostic);Log($"MEASURED preview {skin.name}: bounds={diagnostic.bounds} local={skin.transform.localPosition} scale={skin.transform.lossyScale} enabled={skin.enabled} bones={skin.bones.Length} layer={skin.gameObject.layer}");Destroy(diagnostic);}
         var menuTarget=new RenderTexture(1440,900,24);menuTarget.Create();menu.Panel.targetTexture=menuTarget;yield return null;yield return null;
+        var rows=screen.Root.Q<VisualElement>("forge-form").Children().ToArray();
+        Check(rows.Zip(rows.Skip(1),(x,y)=>x.worldBound.yMax<=y.worldBound.yMin+1).All(x=>x),"Appearance and power rows retain their height without overlapping text in the scrolling Forge form");
+        Check(screen.Root.Q<ScrollView>("forge-form-scroll").contentContainer.worldBound.height>screen.Root.Q<ScrollView>("forge-form-scroll").contentViewport.worldBound.height,"Expanded Forge form scrolls instead of compressing controls");
+        var scroll=screen.Root.Q<ScrollView>("forge-form-scroll");
+        Check(scroll.contentViewport.worldBound.yMax<=screen.Root.Q<Button>("forge-done").worldBound.yMin&&scroll.resolvedStyle.overflow==Overflow.Hidden,"Scroll viewport clips controls above the footer and inside the Forge panel");
+        scroll.scrollOffset=new Vector2(0,10000);yield return null;yield return null;
+        Check(scroll.scrollOffset.y>100&&rows.Last().worldBound.yMax<=scroll.contentViewport.worldBound.yMax+1,"Signature controls remain reachable by scrolling to the end of the form");
+        scroll.scrollOffset=Vector2.zero;yield return null;yield return null;
         var menuImage=Capture(menuTarget,"vector-forge-menu.png");Destroy(menuImage);menu.Panel.targetTexture=null;menuTarget.Release();Destroy(menuTarget);
         var hood=Capture(rt,"vector-hood.png");
         Check(screen.SelectCosmetic(CosmeticSlot.Mask,"vector-hood-respirator"),"Second fitted mask package selectable");yield return null;yield return null;VisibleBody(rt,"vector-immediate-mask-swap.png");var covered=Capture(rt,"vector-hood-face-cover.png");
@@ -124,6 +132,9 @@ public sealed class VectorCustomizationVerificationRunner : MonoBehaviour
         Check(GameFlow.Instance.OpenCombatLab(),"Enter actual gameplay through Home Battle Lab");yield return Scene("CombatLab");
         var presentation=W.Hero.GetComponent<HumanoidPresentation>();var live=W.Hero.GetComponentInChildren<HeroAppearanceRenderer>();
         Check(live.SuitId=="vector-starter-modular"&&live.MaskId=="vector-hood-respirator"&&live.EmblemId=="vector-no-emblem","Actual playable VECTOR uses exact saved cosmetics");Colors(live,vector,W.Progression.Appearance(vector));
+        var runtimeSkins=live.GetComponentsInChildren<SkinnedMeshRenderer>();
+        Check(runtimeSkins.Sum(r=>r.sharedMesh.vertexCount)<=vector.Suit.Body.vertexCount&&runtimeSkins.Sum(r=>r.bones.Length)<=vector.Suit.BodyBones.Length,"Runtime modular vertex and bone budgets stay below the optimized original body");
+        Check(runtimeSkins.All(r=>r.sharedMaterial==live.ColorMaterial)&&presentation.VisualRoot.GetComponentsInChildren<Animator>().Length==1,"Runtime body and mask share one cached material and the existing single Animator");
         Check(!W.Progression.SetAppearance(W.Progression.Appearance(vector)),"Live session appearance mutation refused; startup camera renderer cache remains complete");
         Check(W.Powers.HeroStats==vector.Stats&&Mathf.Approximately(W.MaxHealth,W.Tuning.Movement.Health*vector.Stats.MaxHealth*W.Difficulty.PlayerHealth),"Actual gameplay retains the selected hero stat definition and unchanged health formula");
         var cc=W.Hero.GetComponent<CharacterController>();var capsule=(cc.height,cc.radius,cc.center,W.Hero.transform.localScale);
@@ -152,6 +163,9 @@ public sealed class VectorCustomizationVerificationRunner : MonoBehaviour
         GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);
         Check(GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero")),"Customized VECTOR enters the normal Hero city session");yield return Scene(GameFlow.CityScene);
         live=W.Hero.GetComponentInChildren<HeroAppearanceRenderer>();Check(!W.IsPractice&&live.SuitId=="vector-starter-modular"&&live.MaskId=="vector-hood-respirator","Normal city spawn reconstructs the same saved outfit outside practice");
+        var gameplayCamera=Camera.main;var portrait=new RenderTexture(400,500,24);portrait.Create();gameplayCamera.targetTexture=portrait;
+        gameplayCamera.transform.position=W.Hero.transform.position+W.Hero.transform.forward*3.6f+W.Hero.transform.right*.8f+Vector3.up*1.35f;gameplayCamera.transform.LookAt(W.Hero.transform.position+Vector3.up*.95f);gameplayCamera.Render();
+        var gameplayImage=Capture(portrait,"vector-gameplay-city.png");Destroy(gameplayImage);gameplayCamera.targetTexture=null;portrait.Release();Destroy(portrait);
         var viewCamera=Camera.main;var follow=viewCamera.GetComponent<ThirdPersonCamera>();follow.enabled=false;viewCamera.transform.position=W.Hero.transform.position+Vector3.up*3;viewCamera.transform.LookAt(W.Hero.transform.position+Vector3.forward*5);
         Check(W.Powers.SynergyRunner.TryActivate(),"Existing signature can activate on the customized playable hero");yield return null;
         Check(W.Hero.GetComponent<HumanoidPresentation>().State=="Cast","Real signature dispatch preserves the shared Cast animation");W.Powers.SynergyRunner.Cancel();

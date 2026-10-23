@@ -38,17 +38,21 @@ public sealed class HeroForgeScreen : MonoBehaviour
         Root=new VisualElement{name="hero-forge"};Root.style.position=Position.Absolute;Root.style.left=Length.Percent(5);Root.style.right=Length.Percent(5);Root.style.top=Length.Percent(5);Root.style.bottom=Length.Percent(5);
         Root.style.backgroundColor=C(CityColor.UiNavy);Root.style.paddingLeft=Root.style.paddingRight=32;Root.style.paddingTop=24;
         Root.style.color=C(CityColor.UiInk);menu.Root.Add(Root);
-        var title=new Label("HERO FORGE");title.style.fontSize=42;title.style.unityFontStyleAndWeight=FontStyle.Bold;title.style.color=C(CityColor.HeroAccent);Root.Add(title);
-        var row=new VisualElement();row.style.flexDirection=FlexDirection.Row;row.style.flexGrow=1;Root.Add(row);
-        var column=new VisualElement{name="hero-preview-column"};column.style.width=Length.Percent(42);column.style.marginRight=30;row.Add(column);
-        var image=new Image{name="hero-preview",scaleMode=ScaleMode.ScaleToFit};image.style.flexGrow=1;column.Add(image);
-        StatsPanel=new VisualElement{name="forge-stats"};StatsPanel.style.backgroundColor=C(CityColor.UiPanel);StatsPanel.style.paddingLeft=StatsPanel.style.paddingRight=12;
+        var title=new Label("HERO FORGE");title.style.fontSize=42;title.style.unityFontStyleAndWeight=FontStyle.Bold;title.style.color=C(CityColor.HeroAccent);title.style.flexShrink=0;Root.Add(title);
+        var row=new VisualElement();row.style.flexDirection=FlexDirection.Row;row.style.flexGrow=1;row.style.flexBasis=0;row.style.minHeight=0;Root.Add(row);
+        var column=new VisualElement{name="hero-preview-column"};column.style.minHeight=0;column.style.width=Length.Percent(42);column.style.marginRight=30;row.Add(column);
+        var image=new Image{name="hero-preview",scaleMode=ScaleMode.ScaleToFit};image.style.flexGrow=1;image.style.flexBasis=0;image.style.minHeight=0;column.Add(image);
+        StatsPanel=new VisualElement{name="forge-stats"};StatsPanel.style.flexShrink=0;StatsPanel.style.backgroundColor=C(CityColor.UiPanel);StatsPanel.style.paddingLeft=StatsPanel.style.paddingRight=12;
         StatsPanel.style.paddingTop=StatsPanel.style.paddingBottom=8;StatsPanel.style.marginTop=8;column.Add(StatsPanel);
         Preview=new RenderTexture(400,500,24){name="Hero Forge preview"};Preview.Create();image.image=Preview;
-        var formScroll=new ScrollView(ScrollViewMode.Vertical);formScroll.style.flexGrow=1;row.Add(formScroll);
-        form=new VisualElement();form.style.paddingTop=12;formScroll.Add(form);
-        feedback=new Label();feedback.style.fontSize=15;Root.Add(feedback);
-        var done=new Button(()=>Close()){text="SAVE & BACK",name="forge-done"};done.style.height=48;done.style.marginTop=16;done.style.marginBottom=20;done.style.backgroundColor=C(CityColor.HeroAccent);done.style.color=C(CityColor.UiNavy);done.style.fontSize=18;done.style.unityFontStyleAndWeight=FontStyle.Bold;done.style.unityTextAlign=TextAnchor.MiddleCenter;Root.Add(done);
+        var formScroll=new ScrollView(ScrollViewMode.Vertical){name="forge-form-scroll"};formScroll.style.flexGrow=1;formScroll.style.flexBasis=0;formScroll.style.minHeight=0;formScroll.style.overflow=Overflow.Hidden;
+        // The Home panel deliberately has no default Unity theme, so size and clip the ScrollView's internal viewport explicitly.
+        var scrollBody=formScroll.contentViewport.parent;scrollBody.style.flexDirection=FlexDirection.Row;scrollBody.style.flexGrow=1;scrollBody.style.flexShrink=1;scrollBody.style.flexBasis=0;scrollBody.style.minHeight=0;
+        formScroll.contentViewport.style.flexGrow=1;formScroll.contentViewport.style.flexShrink=1;formScroll.contentViewport.style.minHeight=0;formScroll.contentViewport.style.overflow=Overflow.Hidden;
+        formScroll.contentContainer.style.flexShrink=0;formScroll.contentContainer.style.flexGrow=0;row.Add(formScroll);
+        form=new VisualElement{name="forge-form"};form.style.flexShrink=0;form.style.paddingTop=12;formScroll.Add(form);
+        feedback=new Label();feedback.style.flexShrink=0;feedback.style.fontSize=15;Root.Add(feedback);
+        var done=new Button(()=>Close()){text="SAVE & BACK",name="forge-done"};done.style.flexShrink=0;done.style.height=48;done.style.marginTop=16;done.style.marginBottom=20;done.style.backgroundColor=C(CityColor.HeroAccent);done.style.color=C(CityColor.UiNavy);done.style.fontSize=18;done.style.unityFontStyleAndWeight=FontStyle.Bold;done.style.unityTextAlign=TextAnchor.MiddleCenter;Root.Add(done);
         Open();
     }
     public void Open()
@@ -152,6 +156,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
         SynergyStatus.style.fontSize=13;SynergyStatus.style.unityFontStyleAndWeight=FontStyle.Bold;SynergyStatus.style.color=C(CityColor.UiMuted);SynergyStatus.style.marginBottom=4;form.Add(SynergyStatus);
         var detail=new Label(synergy?.Description??"");detail.style.whiteSpace=WhiteSpace.Normal;detail.style.marginBottom=12;form.Add(detail);
         BuildStats();
+        foreach(var child in form.Children())child.style.flexShrink=0;
         rebuilding=false;
     }
     void BuildCosmetics()
