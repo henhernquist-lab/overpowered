@@ -1,12 +1,14 @@
 # Combat Lab and enemy expansion
 
+Current integration (2026-10-23): the full enemy expansion is now combined with the playable game's parkour and Home **BATTLE LAB** route on `codex/synergies-2-final-four`. Launch from Home; both new enemies are selectable in the lab and join both Endless variants at waves 3 and 5. [Combined-game verification and integration notes](combat-integration.md). The dated feature-delivery notes below describe the earlier isolated branch and its historical evidence; their no-merge status is superseded by the developer's integration request.
+
 Baseline: `2ed79a9` (complete Synergies 2.0). Work is isolated on `codex/combat-lab-enemy-expansion`; no merge or push.
 
 The original checkout contained two untracked Power Mechanics verification scripts and their metadata, plus metadata for the already tracked PoisonProjectilePool. The two test scripts are not runtime dependencies and remain untouched in the original. The stable PoisonProjectilePool metadata is copied byte-for-byte into this branch so import does not assign a different GUID. No original checkout files are edited.
 
 ## Launch and practice safety
 
-Open `Assets/Scenes/CombatLab.unity` and press Play, or use **Overpowered > Combat > Open Combat Lab**. The scene is in Build Settings for arena resets. GameFlow has one early scene dispatch; the normal Home/Prototype/Results flow is unchanged. No Home menu integration is required.
+Open `Assets/Scenes/CombatLab.unity` and press Play, or use **Overpowered > Combat > Open Combat Lab**. The scene is in Build Settings for arena resets. GameFlow has one early scene dispatch; the normal Home/Prototype/Results flow is unchanged. The current game also exposes this scene through Home’s BATTLE LAB button.
 
 The lab copies the current saved profile read-only, deep clones it and initializes PlayerProgression with a null SavePath. Profile repair, XP, usage stats, side/view/difficulty edits and quit saves cannot write to the personal profile. WorldSession practice skips Heat, rewards, police, crimes and mode creation. Its CityDistrict is an empty metadata holder, never a generated city. Baked arena navigation is removed on scene exit.
 

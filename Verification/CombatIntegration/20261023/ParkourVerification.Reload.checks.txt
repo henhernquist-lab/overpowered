@@ -1,0 +1,5 @@
+PASS Reloaded save preserves both courses and unknown course ID without crashing.
+PASS Separate-process reload matches saved level, XP, points, best times, and claimed flags:
+PASS Session reads reloaded 38.50s personal best for Downtown Dash.
+PASS Started Downtown Dash in reloaded session.
+PASS Reloaded session slower completion grants 0 XP and keeps 38.50s personal best.

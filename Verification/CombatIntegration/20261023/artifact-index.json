@@ -1,0 +1,121 @@
+[
+  {
+    "path": "Verification/BattleLab/results.txt",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/BattleLab/results.txt",
+    "sha256": "a7ed77970a9707a52d2d0f46ced514a5185bbaf12ee0c40b33069f7148deb1fa",
+    "new_file": false,
+    "restored_sha256": "258b8042538707692cf0938d18c8cdc40a174692044356518e33cf8f667735c0"
+  },
+  {
+    "path": "Verification/Forge/forge-menu.png",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/Forge/forge-menu.png",
+    "sha256": "7f28e3e39e3b1b4072f3ffc105a7c657f1abea51b1ef6982998a59ff8bae2a8d",
+    "new_file": false,
+    "restored_sha256": "08e60cff5fd11420b134ba03010de6d35aaf9a737f69644215ce45a8fb1c823d"
+  },
+  {
+    "path": "Verification/Forge/forge-preview.png",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/Forge/forge-preview.png",
+    "sha256": "85807aaad745067fba83faa7ef55981f8582ead9ba22b7ef98f36022b3d25dd7",
+    "new_file": false,
+    "restored_sha256": "749cfc8e2c096c909be5079b455dc5e24bf07493d5a043f220a8dfe69ae2514b"
+  },
+  {
+    "path": "Verification/Forge/forge-reveal-peak.png",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/Forge/forge-reveal-peak.png",
+    "sha256": "10e9e9e73581f582c63e3b4e1fb6f62610d42749ba58ad27d0b6bbc4ba492f64",
+    "new_file": false,
+    "restored_sha256": "e07762ba6c9ab8cd3c64014b469e8533f38d3a9de34193d6d3f7f47ba470a9c3"
+  },
+  {
+    "path": "Verification/Forge/reload.txt",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/Forge/reload.txt",
+    "sha256": "601d82c4d9976da9ccb00f5212992ab54ef56c1da030b4ffb12bd3be6028a919",
+    "new_file": false,
+    "restored_sha256": "f42af9e6ef265e3d4b15635bb16a9839ddcc84f7752ce3d0fbe537394ae7943f"
+  },
+  {
+    "path": "Verification/Forge/results.txt",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/Forge/results.txt",
+    "sha256": "5684e313c574d320841a071e94e1e8e99edddf1700a188a19d758bfb591c67fe",
+    "new_file": false,
+    "restored_sha256": "0bc3c6100f253cbf7e28e8b46ea50f40fa5c2ee63551e1d349d0a45a113eee7a"
+  },
+  {
+    "path": "Verification/Forge/sonic-impact.png",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/Forge/sonic-impact.png",
+    "sha256": "6955189729710aa9934d32d4c95c4a9d531aa3b1aced2835dbe23d4da5f889ab",
+    "new_file": false,
+    "restored_sha256": "cb131377dfd39d602020ebbd747e9d41c4cd833b938305838173304e760b17c0"
+  },
+  {
+    "path": "Verification/ModeExpansion/endless-results-lower-score.png",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/ModeExpansion/endless-results-lower-score.png",
+    "sha256": "10aefb7e0294a7c265c48ab551275fb518ed7b3668355afc6fda4618ee9ec4b8",
+    "new_file": false,
+    "restored_sha256": "46c5a53f13b941487f5422c19afdabaa7b607ffebf66d29fe7b1dd90bb5f1c88"
+  },
+  {
+    "path": "Verification/ModeExpansion/endless-results-new-best.png",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/ModeExpansion/endless-results-new-best.png",
+    "sha256": "7efd704c13e4f7d7aaebd9c1cffb83dc6a7ae2f9e6b81209350a9858ef81e25f",
+    "new_file": false,
+    "restored_sha256": "2c0c23d76a563b2f5a54f9b57a058fabaca2ed6f6f8bc8eb813a8b57bbaad8d4"
+  },
+  {
+    "path": "Verification/ModeExpansion/endless-villain-results.png",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/ModeExpansion/endless-villain-results.png",
+    "sha256": "9eec3c99514ce4ae41a11a89bb44f962b7f028a609d8df15695d291a185c25f8",
+    "new_file": false,
+    "restored_sha256": "cf0178ee7b3766e175050a581e2ee7afed6646144c7e8682895594da7f1874f3"
+  },
+  {
+    "path": "Verification/ModeExpansion/endless-wave-1-gameplay-camera.png",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/ModeExpansion/endless-wave-1-gameplay-camera.png",
+    "sha256": "e08848d848fea50de009225319db21304c9d36d7334db34dfe66f946c280fd6a",
+    "new_file": false,
+    "restored_sha256": "f73ae8894711c4e63a9ac371bd80e1692fd2528c9a5f1f8762e4d3933ef589be"
+  },
+  {
+    "path": "Verification/ModeExpansion/endless-wave-5-gameplay-camera.png",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/ModeExpansion/endless-wave-5-gameplay-camera.png",
+    "sha256": "1f44977ca820d6026800689d7947349db2be449e8ae42ed39def69692d8cac83",
+    "new_file": false,
+    "restored_sha256": "62c03fc3fef7ac91a833ba77473b30166bc3de41326527da1348355870bfd341"
+  },
+  {
+    "path": "Verification/ModeExpansion/endless-wave-6-maxalive-gameplay-camera.png",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/ModeExpansion/endless-wave-6-maxalive-gameplay-camera.png",
+    "sha256": "2b995dcbb8943cbe16f36eca32de9caae2b5d2ce36f2f0b74d4ac858e9fe6ce2",
+    "new_file": false,
+    "restored_sha256": "08f5fdb5caf3099ddec414dddab66f0191f5ed78b01d773871c3df480a7377d5"
+  },
+  {
+    "path": "Verification/ModeExpansion/home-extras.png",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/ModeExpansion/home-extras.png",
+    "sha256": "5ce9c9ea6c8f98debf52e1e1991a0530773f41c87e2dc983e27ce957301e34c9",
+    "new_file": false,
+    "restored_sha256": "3beaba90b0217a5630146e2f13aa300e4e5bf253e23d106783d20c9e550212c3"
+  },
+  {
+    "path": "Verification/ModeExpansion/reload.txt",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/ModeExpansion/reload.txt",
+    "sha256": "1a65fdb4bd683df07b32c8db5bc663854dc1b8811e5de72d793bef7e2cbf6d86",
+    "new_file": false,
+    "restored_sha256": "c3c523e653e6c2252b5948dd930502991484ee2620aaa4ff60ab10deeed70322"
+  },
+  {
+    "path": "Verification/ModeExpansion/results.txt",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/ModeExpansion/results.txt",
+    "sha256": "95e1fe806bbb9e82c212f379e8570f2bdcce26cfc90bcfa3a00d1730a6b5666e",
+    "new_file": false,
+    "restored_sha256": "70834c09694d91c2c2481e50efbaa0abc05c04c135ea730aa8674f09c3abb038"
+  },
+  {
+    "path": "Verification/Parkour/results.txt",
+    "archive": "Verification/CombatIntegration/20261023/artifacts/Parkour/results.txt",
+    "sha256": "a04c32341788f58aba4ca78c0fd222fb9a1cdb7be009cf39cbc58c6210ce9b3e",
+    "new_file": false,
+    "restored_sha256": "1c94ddca1d9bcf59115e5812cb3c888e6515562787d7451845a8c775d7ccf5da"
+  }
+]
