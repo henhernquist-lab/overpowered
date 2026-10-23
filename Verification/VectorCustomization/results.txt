@@ -1,0 +1,136 @@
+PASS Fresh/legacy Version 1 save has no forced appearance migration
+PASS Missing appearance resolves original suit and exact legacy colors
+PASS Existing Forge selects VECTOR
+PASS Real modular body and fitted hood selectable
+PASS Three palette channels selectable and persisted
+PASS Completed preview contains the rendered lower body (13419 foreground pixels), not only headgear
+PASS Cosmetic changes preserve XP/level/powers/signature/difficulty/session and parkour records exactly
+PASS Incompatible mask and missing emblem refused by actual Forge API
+PASS Both missing emblem artworks are visibly unavailable
+PASS All primary/secondary/accent swatches and protected skin/hair/eyes match the authored map and palette
+MEASURED preview mesh: bounds=Center: (-0.01, 0.86, 0.05), Extents: (0.40, 0.91, 0.31) local=(0.00, 0.00, 0.00) scale=(1.02, 1.02, 1.02) enabled=True bones=65 layer=30
+MEASURED preview Cosmetic Mask: bounds=Center: (-0.02, 1.59, 0.00), Extents: (0.16, 0.20, 0.20) local=(0.00, 0.00, 0.00) scale=(1.02, 1.02, 1.02) enabled=True bones=1 layer=30
+PASS Appearance and power rows retain their height without overlapping text in the scrolling Forge form
+PASS Expanded Forge form scrolls instead of compressing controls
+PASS Scroll viewport clips controls above the footer and inside the Forge panel
+PASS Signature controls remain reachable by scrolling to the end of the form
+PASS Second fitted mask package selectable
+PASS Completed preview contains the rendered lower body (13419 foreground pixels), not only headgear
+PASS Mask swapping changes actual rendered preview pixels
+PASS Explicit preview update 0
+PASS Explicit preview update 1
+PASS Explicit preview update 2
+PASS Explicit preview update 3
+PASS Explicit preview update 4
+PASS Explicit preview update 5
+PASS Explicit preview update 6
+PASS Explicit preview update 7
+PASS Explicit preview update 8
+PASS Explicit preview update 9
+PASS Explicit preview update 10
+PASS Explicit preview update 11
+PASS Explicit preview update 12
+PASS Explicit preview update 13
+PASS Explicit preview update 14
+PASS Explicit preview update 15
+PASS Explicit preview update 16
+PASS Explicit preview update 17
+PASS Explicit preview update 18
+PASS Explicit preview update 19
+PASS Explicit preview update 20
+PASS Explicit preview update 21
+PASS Explicit preview update 22
+PASS Explicit preview update 23
+PASS Explicit preview update 24
+PASS Explicit preview update 25
+PASS Explicit preview update 26
+PASS Explicit preview update 27
+PASS Explicit preview update 28
+PASS Explicit preview update 29
+PASS Explicit preview update 30
+PASS Explicit preview update 31
+PASS Explicit preview update 32
+PASS Explicit preview update 33
+PASS Explicit preview update 34
+PASS Explicit preview update 35
+PASS Explicit preview update 36
+PASS Explicit preview update 37
+PASS Explicit preview update 38
+PASS Explicit preview update 39
+PASS Explicit preview update 40
+PASS Explicit preview update 41
+PASS Explicit preview update 42
+PASS Explicit preview update 43
+PASS Explicit preview update 44
+PASS Explicit preview update 45
+PASS Explicit preview update 46
+PASS Explicit preview update 47
+PASS 96 appearance edits reuse the exact model, Animator, camera, render texture and material
+PASS Repeated preview edits create zero persistent meshes/materials/textures
+PASS Mask swaps preserve canonical scale, one Animator and two bounded renderers
+MEASURED preview resources after 96 edits: Mesh=18, Material=67, Texture2D=285; RT=400x500
+PASS Unknown cosmetic IDs can be preserved without destructive repair
+PASS Unknown outfit renders safe legacy fallback while retaining all saved IDs
+PASS Disk reload retains unknown IDs
+PASS Changing combat powers preserves every appearance field
+PASS Select unchanged TITAN
+PASS TITAN retains its optimized body, original Avatar and one renderer
+PASS Select unchanged NOVA
+PASS NOVA retains its optimized body, original Avatar and one renderer
+PASS Returning to VECTOR restores per-hero outfit and all three colors
+PASS Enter actual gameplay through Home Battle Lab
+PASS Actual playable VECTOR uses exact saved cosmetics
+PASS All primary/secondary/accent swatches and protected skin/hair/eyes match the authored map and palette
+PASS Runtime modular vertex and bone budgets stay below the optimized original body
+PASS Runtime body and mask share one cached material and the existing single Animator
+PASS Live session appearance mutation refused; startup camera renderer cache remains complete
+PASS Actual gameplay retains the selected hero stat definition and unchanged health formula
+PASS First-person hides body AND modular headgear through the real startup renderer cache
+PASS Third-person restores both original shadow modes
+PASS View/cosmetics never change physics capsule, root scale or root motion
+PASS Locomotion: existing controller state present
+PASS Locomotion: finite baked body/mask under the unchanged shared controller
+PASS Locomotion: finite baked body/mask under the unchanged shared controller
+PASS Jump: existing controller state present
+PASS Jump: finite baked body/mask under the unchanged shared controller
+PASS Jump: finite baked body/mask under the unchanged shared controller
+PASS Double Jump: existing controller state present
+PASS Double Jump: finite baked body/mask under the unchanged shared controller
+PASS Double Jump: finite baked body/mask under the unchanged shared controller
+PASS Backflip: existing controller state present
+PASS Backflip: finite baked body/mask under the unchanged shared controller
+PASS Backflip: finite baked body/mask under the unchanged shared controller
+PASS Climb: existing controller state present
+PASS Climb: finite baked body/mask under the unchanged shared controller
+PASS Climb: finite baked body/mask under the unchanged shared controller
+PASS Fall: existing controller state present
+PASS Fall: finite baked body/mask under the unchanged shared controller
+PASS Fall: finite baked body/mask under the unchanged shared controller
+PASS Land: existing controller state present
+PASS Land: finite baked body/mask under the unchanged shared controller
+PASS Land: finite baked body/mask under the unchanged shared controller
+PASS Punch: existing controller state present
+PASS Punch: finite baked body/mask under the unchanged shared controller
+PASS Punch: finite baked body/mask under the unchanged shared controller
+PASS Martelo Kick: existing controller state present
+PASS Martelo Kick: finite baked body/mask under the unchanged shared controller
+PASS Martelo Kick: finite baked body/mask under the unchanged shared controller
+PASS Hurricane Kick: existing controller state present
+PASS Hurricane Kick: finite baked body/mask under the unchanged shared controller
+PASS Hurricane Kick: finite baked body/mask under the unchanged shared controller
+PASS Cast: existing controller state present
+PASS Cast: finite baked body/mask under the unchanged shared controller
+PASS Cast: finite baked body/mask under the unchanged shared controller
+PASS Real running moves the customized playable character
+PASS Real grounded jump accepts customized character
+PASS Real double jump accepts customized character
+PASS Real punch windup accepts customized character
+PASS Real Hurricane Kick accepts customized character
+PASS Real backflip accepts customized character
+PASS Real wall latch accepts the customized character
+PASS Real climbing advances customized body and shared Climb presentation
+PASS Customized VECTOR enters the normal Hero city session
+PASS Normal city spawn reconstructs the same saved outfit outside practice
+PASS Existing signature can activate on the customized playable hero
+PASS Real signature dispatch preserves the shared Cast animation
+MEASURED modular VECTOR: 14402 body vertices + 1963 hood/face vertices; body65 + mask3 bone entries; two renderers; one Animator; shared baked meshes, one shared suit material

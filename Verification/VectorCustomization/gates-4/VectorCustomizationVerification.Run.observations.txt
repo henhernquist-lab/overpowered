@@ -1,0 +1,4 @@
+MEASURED preview mesh: bounds=Center: (-0.01, 0.86, 0.05), Extents: (0.40, 0.91, 0.31) local=(0.00, 0.00, 0.00) scale=(1.02, 1.02, 1.02) enabled=True bones=65 layer=30
+MEASURED preview Cosmetic Mask: bounds=Center: (-0.02, 1.59, 0.00), Extents: (0.16, 0.20, 0.20) local=(0.00, 0.00, 0.00) scale=(1.02, 1.02, 1.02) enabled=True bones=1 layer=30
+MEASURED preview resources after 96 edits: Mesh=18, Material=67, Texture2D=285; RT=400x500
+MEASURED modular VECTOR: 14402 body vertices + 1963 hood/face vertices; body65 + mask3 bone entries; two renderers; one Animator; shared baked meshes, one shared suit material

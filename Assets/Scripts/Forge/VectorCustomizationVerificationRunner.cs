@@ -95,7 +95,7 @@ public sealed class VectorCustomizationVerificationRunner : MonoBehaviour
         Check(rows.Zip(rows.Skip(1),(x,y)=>x.worldBound.yMax<=y.worldBound.yMin+1).All(x=>x),"Appearance and power rows retain their height without overlapping text in the scrolling Forge form");
         Check(screen.Root.Q<ScrollView>("forge-form-scroll").contentContainer.worldBound.height>screen.Root.Q<ScrollView>("forge-form-scroll").contentViewport.worldBound.height,"Expanded Forge form scrolls instead of compressing controls");
         var scroll=screen.Root.Q<ScrollView>("forge-form-scroll");
-        Check(scroll.contentViewport.worldBound.yMax<=screen.Root.Q<Button>("forge-done").worldBound.yMin&&scroll.resolvedStyle.overflow==Overflow.Hidden,"Scroll viewport clips controls above the footer and inside the Forge panel");
+        Check(scroll.contentViewport.worldBound.yMax<=screen.Root.Q<Button>("forge-done").worldBound.yMin&&scroll.style.overflow.value==Overflow.Hidden,"Scroll viewport clips controls above the footer and inside the Forge panel");
         scroll.scrollOffset=new Vector2(0,10000);yield return null;yield return null;
         Check(scroll.scrollOffset.y>100&&rows.Last().worldBound.yMax<=scroll.contentViewport.worldBound.yMax+1,"Signature controls remain reachable by scrolling to the end of the form");
         scroll.scrollOffset=Vector2.zero;yield return null;yield return null;

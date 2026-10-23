@@ -1,0 +1,10 @@
+PASS Fresh/legacy Version 1 save has no forced appearance migration
+PASS Missing appearance resolves original suit and exact legacy colors
+PASS Existing Forge selects VECTOR
+PASS Real modular body and fitted hood selectable
+PASS Three palette channels selectable and persisted
+FAIL System.Exception: Immediate preview contains the rendered lower body (0 foreground pixels), not only headgear
+  at VectorCustomizationVerificationRunner.Check (System.Boolean value, System.String text) [0x0001b] in /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/Forge/VectorCustomizationVerificationRunner.cs:22 
+  at VectorCustomizationVerificationRunner.VisibleBody (UnityEngine.RenderTexture rt, System.String file) [0x00068] in /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/Forge/VectorCustomizationVerificationRunner.cs:51 
+  at VectorCustomizationVerificationRunner+<Checks>d__21.MoveNext () [0x00392] in /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/Forge/VectorCustomizationVerificationRunner.cs:84 
+  at VectorCustomizationVerificationRunner+<Start>d__14.MoveNext () [0x0005b] in /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Assets/Scripts/Forge/VectorCustomizationVerificationRunner.cs:29 

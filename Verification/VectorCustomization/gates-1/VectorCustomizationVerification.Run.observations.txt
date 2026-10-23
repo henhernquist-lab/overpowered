@@ -1,0 +1,2 @@
+MEASURED preview resources after 96 edits: Mesh=18, Material=67, Texture2D=285; RT=400x500
+MEASURED modular VECTOR: 14402 body vertices + 1963 hood/face vertices; body65 + mask3 bone entries; two renderers; one Animator; shared baked meshes, one shared suit material

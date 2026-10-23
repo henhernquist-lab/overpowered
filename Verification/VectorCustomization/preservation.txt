@@ -1,0 +1,4 @@
+PASS 1002 pre-existing modified/untracked files byte-identical to task-start SHA-256 snapshot.
+PASS 524 pre-existing Forge/Sidekick/FirstPerson/Humanoid verification files restored byte-exact.
+PASS 66 changed/new regression artifacts retained separately.
+PASS all 9 selected processes preserve personal-save and Sidekick database hashes.

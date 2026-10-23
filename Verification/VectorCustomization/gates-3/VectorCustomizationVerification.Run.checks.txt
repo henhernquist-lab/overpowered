@@ -1,0 +1,6 @@
+PASS Fresh/legacy Version 1 save has no forced appearance migration
+PASS Missing appearance resolves original suit and exact legacy colors
+PASS Existing Forge selects VECTOR
+PASS Real modular body and fitted hood selectable
+PASS Three palette channels selectable and persisted
+FAIL System.Exception: Immediate preview contains the rendered lower body (0 foreground pixels), not only headgear

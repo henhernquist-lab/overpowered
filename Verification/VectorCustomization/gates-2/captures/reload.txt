@@ -1,0 +1,4 @@
+PASS SECOND PROCESS exact progress, appearances, powers, signature, difficulty and parkour data survive
+PASS SECOND PROCESS exact VECTOR mask and accent restored
+PASS SECOND PROCESS saved appearance enters actual Battle Lab
+PASS SECOND PROCESS gameplay reconstructs the saved modular outfit
