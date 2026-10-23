@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-10-23T21:12:34.601841+00:00",
+  "reference_project": "/Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery",
+  "runtime_verified": false,
+  "results": [
+    {
+      "check": "Assembly-CSharp",
+      "exit": 0
+    },
+    {
+      "check": "Assembly-CSharp-Editor",
+      "exit": 0
+    },
+    {
+      "check": "pure guard policy",
+      "exit": 0,
+      "passes": 31
+    }
+  ]
+}

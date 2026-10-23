@@ -1,0 +1,32 @@
+PASS front inside guard arc
+PASS inside half-angle boundary
+PASS outside half-angle boundary
+PASS flank and overhead outside arc
+PASS rear outside arc
+PASS maximum authored arc cannot cover flanks/rear
+PASS frontal reduction remains positive: 0.1
+PASS absorbed damage spends integrity once: 0.1
+PASS frontal reduction remains positive: 1
+PASS absorbed damage spends integrity once: 1
+PASS frontal reduction remains positive: 10
+PASS absorbed damage spends integrity once: 10
+PASS frontal reduction remains positive: 100
+PASS absorbed damage spends integrity once: 100
+PASS frontal reduction remains positive: 10000
+PASS absorbed damage spends integrity once: 10000
+PASS repeated attacks deplete finite guard: hit 1
+PASS repeated attacks deplete finite guard: hit 2
+PASS repeated attacks deplete finite guard: hit 3
+PASS repeated attacks deplete finite guard: hit 4
+PASS repeated attacks deplete finite guard: hit 5
+PASS repeated attacks deplete finite guard: hit 6
+PASS repeated attacks deplete finite guard: hit 7
+PASS repeated attacks deplete finite guard: hit 8
+PASS repeated attacks deplete finite guard: hit 9
+PASS repeated attacks deplete finite guard: hit 10
+PASS repeated attacks deplete finite guard: hit 11
+PASS repeated attacks deplete finite guard: hit 12
+PASS guard-depleting blow deals full damage
+PASS configuration cannot create absolute immunity
+PASS zero hit never spends integrity
+RESULT 31 PASS, 0 FAIL (pure guard policy only)
