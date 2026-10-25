@@ -1,0 +1,36 @@
+[
+  {
+    "entry": "SidekickVerification.Run",
+    "commit": "94cc5801b5e5767a09219fa93e5af21fdf0b4b51",
+    "status_before": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/HeroForgeArt/\n?? docs/hero-forge-art-integration.md",
+    "started_utc": "2026-10-25T19:34:00.594518+00:00",
+    "save_before": "021e7414e7f187c8b17fd0ae2ff614dd650992224d8fa91325f839fc7497670c",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/HeroForgeArt/sidekick-final/SidekickVerification.Run.log",
+    "pid": 34523,
+    "exit": 0,
+    "seconds": 36.51,
+    "pass": 102,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Verification/Sidekick/heroes-recolour.png\n M Verification/Sidekick/results.txt\n M Verification/Sidekick/session-heroes.png\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/HeroForgeArt/\n?? docs/hero-forge-art-integration.md"
+  },
+  {
+    "entry": "SidekickVerification.Reload",
+    "commit": "94cc5801b5e5767a09219fa93e5af21fdf0b4b51",
+    "status_before": "M Verification/Sidekick/heroes-recolour.png\n M Verification/Sidekick/results.txt\n M Verification/Sidekick/session-heroes.png\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/HeroForgeArt/\n?? docs/hero-forge-art-integration.md",
+    "started_utc": "2026-10-25T19:34:37.293125+00:00",
+    "save_before": "021e7414e7f187c8b17fd0ae2ff614dd650992224d8fa91325f839fc7497670c",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/HeroForgeArt/sidekick-final/SidekickVerification.Reload.log",
+    "pid": 34596,
+    "exit": 0,
+    "seconds": 26.01,
+    "pass": 7,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Verification/Sidekick/heroes-recolour.png\n M Verification/Sidekick/reload-session.png\n M Verification/Sidekick/results.txt\n M Verification/Sidekick/session-heroes.png\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/HeroForgeArt/\n?? docs/hero-forge-art-integration.md"
+  }
+]

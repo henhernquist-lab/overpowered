@@ -1,0 +1,505 @@
+PASS Production disk catalog has unique stable IDs; no temporary registration scope
+PASS Fresh Version 1 save keeps legacy defaults without forced appearance migration
+PASS vector: missing records resolve the original legacy suit
+PASS titan: missing records resolve the original legacy suit
+PASS nova: missing records resolve the original legacy suit
+PASS Seed a real purchased upgrade through PlayerProgression before cosmetic preservation controls
+PASS vector: actual Hero Forge archetype selection
+PASS vector: two distinct authored mask assets and two distinct emblem assets
+PASS vector: actual compatible costume, mask and emblem selectors
+PASS vector: select all three palette channels
+PASS vector: second mask replaces first
+PASS vector: mask selection visibly changes actual preview pixels
+PASS vector: second emblem replaces first
+PASS vector: emblem selection visibly changes actual preview pixels
+PASS vector: three palette channels and protected facial/eye cells match the authored map
+PASS vector: costume changes preserve every noncosmetic profile field, including purchased tiers and records
+PASS vector: invalid and wrong-archetype masks refused
+PASS vector: Forge displays no missing-art option buttons
+PASS vector: 96 edits reuse model, Animator, camera, render texture and material
+PASS vector: 96 edits retain zero extra live mesh/material/texture resources
+PASS vector: masks replace one bounded renderer; no stacked helmets
+PASS vector: future IDs can be stored without destructive repair
+PASS vector: unknown IDs render legacy safely and remain in save
+PASS vector: unknown IDs survive actual disk reload
+PASS vector/vector_mask_aegis: unchanged Locomotion state exists
+PASS vector/vector_mask_aegis: finite posed body, helmet and emblem for Locomotion
+PASS vector/vector_mask_aegis: unchanged Jump state exists
+PASS vector/vector_mask_aegis: finite posed body, helmet and emblem for Jump
+PASS vector/vector_mask_aegis: unchanged Double Jump state exists
+PASS vector/vector_mask_aegis: finite posed body, helmet and emblem for Double Jump
+PASS vector/vector_mask_aegis: unchanged Backflip state exists
+PASS vector/vector_mask_aegis: finite posed body, helmet and emblem for Backflip
+PASS vector/vector_mask_aegis: unchanged Climb state exists
+PASS vector/vector_mask_aegis: finite posed body, helmet and emblem for Climb
+PASS vector/vector_mask_aegis: unchanged Fall state exists
+PASS vector/vector_mask_aegis: finite posed body, helmet and emblem for Fall
+PASS vector/vector_mask_aegis: unchanged Land state exists
+PASS vector/vector_mask_aegis: finite posed body, helmet and emblem for Land
+PASS vector/vector_mask_aegis: unchanged Punch state exists
+PASS vector/vector_mask_aegis: finite posed body, helmet and emblem for Punch
+PASS vector/vector_mask_aegis: unchanged Martelo Kick state exists
+PASS vector/vector_mask_aegis: finite posed body, helmet and emblem for Martelo Kick
+PASS vector/vector_mask_aegis: unchanged Hurricane Kick state exists
+PASS vector/vector_mask_aegis: finite posed body, helmet and emblem for Hurricane Kick
+PASS vector/vector_mask_aegis: unchanged Cast state exists
+PASS vector/vector_mask_aegis: finite posed body, helmet and emblem for Cast
+PASS vector/vector_mask_sentinel: unchanged Locomotion state exists
+PASS vector/vector_mask_sentinel: finite posed body, helmet and emblem for Locomotion
+PASS vector/vector_mask_sentinel: unchanged Jump state exists
+PASS vector/vector_mask_sentinel: finite posed body, helmet and emblem for Jump
+PASS vector/vector_mask_sentinel: unchanged Double Jump state exists
+PASS vector/vector_mask_sentinel: finite posed body, helmet and emblem for Double Jump
+PASS vector/vector_mask_sentinel: unchanged Backflip state exists
+PASS vector/vector_mask_sentinel: finite posed body, helmet and emblem for Backflip
+PASS vector/vector_mask_sentinel: unchanged Climb state exists
+PASS vector/vector_mask_sentinel: finite posed body, helmet and emblem for Climb
+PASS vector/vector_mask_sentinel: unchanged Fall state exists
+PASS vector/vector_mask_sentinel: finite posed body, helmet and emblem for Fall
+PASS vector/vector_mask_sentinel: unchanged Land state exists
+PASS vector/vector_mask_sentinel: finite posed body, helmet and emblem for Land
+PASS vector/vector_mask_sentinel: unchanged Punch state exists
+PASS vector/vector_mask_sentinel: finite posed body, helmet and emblem for Punch
+PASS vector/vector_mask_sentinel: unchanged Martelo Kick state exists
+PASS vector/vector_mask_sentinel: finite posed body, helmet and emblem for Martelo Kick
+PASS vector/vector_mask_sentinel: unchanged Hurricane Kick state exists
+PASS vector/vector_mask_sentinel: finite posed body, helmet and emblem for Hurricane Kick
+PASS vector/vector_mask_sentinel: unchanged Cast state exists
+PASS vector/vector_mask_sentinel: finite posed body, helmet and emblem for Cast
+PASS titan: actual Hero Forge archetype selection
+PASS titan: two distinct authored mask assets and two distinct emblem assets
+PASS titan: actual compatible costume, mask and emblem selectors
+PASS titan: select all three palette channels
+PASS titan: second mask replaces first
+PASS titan: mask selection visibly changes actual preview pixels
+PASS titan: second emblem replaces first
+PASS titan: emblem selection visibly changes actual preview pixels
+PASS titan: three palette channels and protected facial/eye cells match the authored map
+PASS titan: costume changes preserve every noncosmetic profile field, including purchased tiers and records
+PASS titan: invalid and wrong-archetype masks refused
+PASS titan: Forge displays no missing-art option buttons
+PASS titan: 96 edits reuse model, Animator, camera, render texture and material
+PASS titan: 96 edits retain zero extra live mesh/material/texture resources
+PASS titan: masks replace one bounded renderer; no stacked helmets
+PASS titan: future IDs can be stored without destructive repair
+PASS titan: unknown IDs render legacy safely and remain in save
+PASS titan: unknown IDs survive actual disk reload
+PASS titan/titan_mask_guardian: unchanged Locomotion state exists
+PASS titan/titan_mask_guardian: finite posed body, helmet and emblem for Locomotion
+PASS titan/titan_mask_guardian: unchanged Jump state exists
+PASS titan/titan_mask_guardian: finite posed body, helmet and emblem for Jump
+PASS titan/titan_mask_guardian: unchanged Double Jump state exists
+PASS titan/titan_mask_guardian: finite posed body, helmet and emblem for Double Jump
+PASS titan/titan_mask_guardian: unchanged Backflip state exists
+PASS titan/titan_mask_guardian: finite posed body, helmet and emblem for Backflip
+PASS titan/titan_mask_guardian: unchanged Climb state exists
+PASS titan/titan_mask_guardian: finite posed body, helmet and emblem for Climb
+PASS titan/titan_mask_guardian: unchanged Fall state exists
+PASS titan/titan_mask_guardian: finite posed body, helmet and emblem for Fall
+PASS titan/titan_mask_guardian: unchanged Land state exists
+PASS titan/titan_mask_guardian: finite posed body, helmet and emblem for Land
+PASS titan/titan_mask_guardian: unchanged Punch state exists
+PASS titan/titan_mask_guardian: finite posed body, helmet and emblem for Punch
+PASS titan/titan_mask_guardian: unchanged Martelo Kick state exists
+PASS titan/titan_mask_guardian: finite posed body, helmet and emblem for Martelo Kick
+PASS titan/titan_mask_guardian: unchanged Hurricane Kick state exists
+PASS titan/titan_mask_guardian: finite posed body, helmet and emblem for Hurricane Kick
+PASS titan/titan_mask_guardian: unchanged Cast state exists
+PASS titan/titan_mask_guardian: finite posed body, helmet and emblem for Cast
+PASS titan/titan_mask_vanguard: unchanged Locomotion state exists
+PASS titan/titan_mask_vanguard: finite posed body, helmet and emblem for Locomotion
+PASS titan/titan_mask_vanguard: unchanged Jump state exists
+PASS titan/titan_mask_vanguard: finite posed body, helmet and emblem for Jump
+PASS titan/titan_mask_vanguard: unchanged Double Jump state exists
+PASS titan/titan_mask_vanguard: finite posed body, helmet and emblem for Double Jump
+PASS titan/titan_mask_vanguard: unchanged Backflip state exists
+PASS titan/titan_mask_vanguard: finite posed body, helmet and emblem for Backflip
+PASS titan/titan_mask_vanguard: unchanged Climb state exists
+PASS titan/titan_mask_vanguard: finite posed body, helmet and emblem for Climb
+PASS titan/titan_mask_vanguard: unchanged Fall state exists
+PASS titan/titan_mask_vanguard: finite posed body, helmet and emblem for Fall
+PASS titan/titan_mask_vanguard: unchanged Land state exists
+PASS titan/titan_mask_vanguard: finite posed body, helmet and emblem for Land
+PASS titan/titan_mask_vanguard: unchanged Punch state exists
+PASS titan/titan_mask_vanguard: finite posed body, helmet and emblem for Punch
+PASS titan/titan_mask_vanguard: unchanged Martelo Kick state exists
+PASS titan/titan_mask_vanguard: finite posed body, helmet and emblem for Martelo Kick
+PASS titan/titan_mask_vanguard: unchanged Hurricane Kick state exists
+PASS titan/titan_mask_vanguard: finite posed body, helmet and emblem for Hurricane Kick
+PASS titan/titan_mask_vanguard: unchanged Cast state exists
+PASS titan/titan_mask_vanguard: finite posed body, helmet and emblem for Cast
+PASS nova: actual Hero Forge archetype selection
+PASS nova: two distinct authored mask assets and two distinct emblem assets
+PASS nova: actual compatible costume, mask and emblem selectors
+PASS nova: select all three palette channels
+PASS nova: second mask replaces first
+PASS nova: mask selection visibly changes actual preview pixels
+PASS nova: second emblem replaces first
+PASS nova: emblem selection visibly changes actual preview pixels
+PASS nova: three palette channels and protected facial/eye cells match the authored map
+PASS nova: costume changes preserve every noncosmetic profile field, including purchased tiers and records
+PASS nova: invalid and wrong-archetype masks refused
+PASS nova: Forge displays no missing-art option buttons
+PASS nova: 96 edits reuse model, Animator, camera, render texture and material
+PASS nova: 96 edits retain zero extra live mesh/material/texture resources
+PASS nova: masks replace one bounded renderer; no stacked helmets
+PASS nova: future IDs can be stored without destructive repair
+PASS nova: unknown IDs render legacy safely and remain in save
+PASS nova: unknown IDs survive actual disk reload
+PASS nova/nova_mask_spectrum: unchanged Locomotion state exists
+PASS nova/nova_mask_spectrum: finite posed body, helmet and emblem for Locomotion
+PASS nova/nova_mask_spectrum: unchanged Jump state exists
+PASS nova/nova_mask_spectrum: finite posed body, helmet and emblem for Jump
+PASS nova/nova_mask_spectrum: unchanged Double Jump state exists
+PASS nova/nova_mask_spectrum: finite posed body, helmet and emblem for Double Jump
+PASS nova/nova_mask_spectrum: unchanged Backflip state exists
+PASS nova/nova_mask_spectrum: finite posed body, helmet and emblem for Backflip
+PASS nova/nova_mask_spectrum: unchanged Climb state exists
+PASS nova/nova_mask_spectrum: finite posed body, helmet and emblem for Climb
+PASS nova/nova_mask_spectrum: unchanged Fall state exists
+PASS nova/nova_mask_spectrum: finite posed body, helmet and emblem for Fall
+PASS nova/nova_mask_spectrum: unchanged Land state exists
+PASS nova/nova_mask_spectrum: finite posed body, helmet and emblem for Land
+PASS nova/nova_mask_spectrum: unchanged Punch state exists
+PASS nova/nova_mask_spectrum: finite posed body, helmet and emblem for Punch
+PASS nova/nova_mask_spectrum: unchanged Martelo Kick state exists
+PASS nova/nova_mask_spectrum: finite posed body, helmet and emblem for Martelo Kick
+PASS nova/nova_mask_spectrum: unchanged Hurricane Kick state exists
+PASS nova/nova_mask_spectrum: finite posed body, helmet and emblem for Hurricane Kick
+PASS nova/nova_mask_spectrum: unchanged Cast state exists
+PASS nova/nova_mask_spectrum: finite posed body, helmet and emblem for Cast
+PASS nova/nova_mask_phantom: unchanged Locomotion state exists
+PASS nova/nova_mask_phantom: finite posed body, helmet and emblem for Locomotion
+PASS nova/nova_mask_phantom: unchanged Jump state exists
+PASS nova/nova_mask_phantom: finite posed body, helmet and emblem for Jump
+PASS nova/nova_mask_phantom: unchanged Double Jump state exists
+PASS nova/nova_mask_phantom: finite posed body, helmet and emblem for Double Jump
+PASS nova/nova_mask_phantom: unchanged Backflip state exists
+PASS nova/nova_mask_phantom: finite posed body, helmet and emblem for Backflip
+PASS nova/nova_mask_phantom: unchanged Climb state exists
+PASS nova/nova_mask_phantom: finite posed body, helmet and emblem for Climb
+PASS nova/nova_mask_phantom: unchanged Fall state exists
+PASS nova/nova_mask_phantom: finite posed body, helmet and emblem for Fall
+PASS nova/nova_mask_phantom: unchanged Land state exists
+PASS nova/nova_mask_phantom: finite posed body, helmet and emblem for Land
+PASS nova/nova_mask_phantom: unchanged Punch state exists
+PASS nova/nova_mask_phantom: finite posed body, helmet and emblem for Punch
+PASS nova/nova_mask_phantom: unchanged Martelo Kick state exists
+PASS nova/nova_mask_phantom: finite posed body, helmet and emblem for Martelo Kick
+PASS nova/nova_mask_phantom: unchanged Hurricane Kick state exists
+PASS nova/nova_mask_phantom: finite posed body, helmet and emblem for Hurricane Kick
+PASS nova/nova_mask_phantom: unchanged Cast state exists
+PASS nova/nova_mask_phantom: finite posed body, helmet and emblem for Cast
+PASS vector: cycling all three heroes retains independent outfit/colors
+PASS titan: cycling all three heroes retains independent outfit/colors
+PASS nova: cycling all three heroes retains independent outfit/colors
+PASS vector/hero: equip combat controls through existing Forge gates
+PASS vector: equip actual Fire signature through progression
+PASS vector/hero: enter ordinary existing game route
+PASS vector/hero: leaving Home disposes the Forge preview RenderTexture
+PASS vector/hero: ordinary playable spawn matches selected suit, mask and emblem
+PASS vector: three palette channels and protected facial/eye cells match the authored map
+PASS vector/hero: exactly three bounded renderers share one cached material with valid bindings
+PASS vector/hero: modern geometry and renderer bone entries stay below legacy budgets
+PASS vector/hero: existing Avatar, one Animator and no root motion
+PASS vector/hero: masks and modes preserve physics capsule and root scale
+PASS vector/hero: cosmetics retain hero stats and original health formula
+PASS vector/hero: first-person hides body, helmet and emblem through the real startup cache
+PASS vector/hero: third-person restores every original shadow mode
+PASS vector/hero: live appearance mutation gate remains intact
+PASS vector/villain: equip combat controls through existing Forge gates
+PASS vector: equip actual Fire signature through progression
+PASS vector/villain: enter ordinary existing game route
+PASS vector/villain: leaving Home disposes the Forge preview RenderTexture
+PASS vector/villain: ordinary playable spawn matches selected suit, mask and emblem
+PASS vector: three palette channels and protected facial/eye cells match the authored map
+PASS vector/villain: exactly three bounded renderers share one cached material with valid bindings
+PASS vector/villain: modern geometry and renderer bone entries stay below legacy budgets
+PASS vector/villain: existing Avatar, one Animator and no root motion
+PASS vector/villain: masks and modes preserve physics capsule and root scale
+PASS vector/villain: cosmetics retain hero stats and original health formula
+PASS vector/villain: first-person hides body, helmet and emblem through the real startup cache
+PASS vector/villain: third-person restores every original shadow mode
+PASS vector/villain: live appearance mutation gate remains intact
+PASS vector/free-play: equip combat controls through existing Forge gates
+PASS vector: equip actual Fire signature through progression
+PASS vector/free-play: enter ordinary existing game route
+PASS vector/free-play: leaving Home disposes the Forge preview RenderTexture
+PASS vector/free-play: ordinary playable spawn matches selected suit, mask and emblem
+PASS vector: three palette channels and protected facial/eye cells match the authored map
+PASS vector/free-play: exactly three bounded renderers share one cached material with valid bindings
+PASS vector/free-play: modern geometry and renderer bone entries stay below legacy budgets
+PASS vector/free-play: existing Avatar, one Animator and no root motion
+PASS vector/free-play: masks and modes preserve physics capsule and root scale
+PASS vector/free-play: cosmetics retain hero stats and original health formula
+PASS vector/free-play: first-person hides body, helmet and emblem through the real startup cache
+PASS vector/free-play: third-person restores every original shadow mode
+PASS vector/free-play: live appearance mutation gate remains intact
+PASS vector/endless-fight: equip combat controls through existing Forge gates
+PASS vector: equip actual Fire signature through progression
+PASS vector/endless-fight: enter ordinary existing game route
+PASS vector/endless-fight: leaving Home disposes the Forge preview RenderTexture
+PASS vector/endless-fight: ordinary playable spawn matches selected suit, mask and emblem
+PASS vector: three palette channels and protected facial/eye cells match the authored map
+PASS vector/endless-fight: exactly three bounded renderers share one cached material with valid bindings
+PASS vector/endless-fight: modern geometry and renderer bone entries stay below legacy budgets
+PASS vector/endless-fight: existing Avatar, one Animator and no root motion
+PASS vector/endless-fight: masks and modes preserve physics capsule and root scale
+PASS vector/endless-fight: cosmetics retain hero stats and original health formula
+PASS vector/endless-fight: first-person hides body, helmet and emblem through the real startup cache
+PASS vector/endless-fight: third-person restores every original shadow mode
+PASS vector/endless-fight: live appearance mutation gate remains intact
+PASS vector/endless-fight-villain: equip combat controls through existing Forge gates
+PASS vector: equip actual Fire signature through progression
+PASS vector/endless-fight-villain: enter ordinary existing game route
+PASS vector/endless-fight-villain: leaving Home disposes the Forge preview RenderTexture
+PASS vector/endless-fight-villain: ordinary playable spawn matches selected suit, mask and emblem
+PASS vector: three palette channels and protected facial/eye cells match the authored map
+PASS vector/endless-fight-villain: exactly three bounded renderers share one cached material with valid bindings
+PASS vector/endless-fight-villain: modern geometry and renderer bone entries stay below legacy budgets
+PASS vector/endless-fight-villain: existing Avatar, one Animator and no root motion
+PASS vector/endless-fight-villain: masks and modes preserve physics capsule and root scale
+PASS vector/endless-fight-villain: cosmetics retain hero stats and original health formula
+PASS vector/endless-fight-villain: first-person hides body, helmet and emblem through the real startup cache
+PASS vector/endless-fight-villain: third-person restores every original shadow mode
+PASS vector/endless-fight-villain: live appearance mutation gate remains intact
+PASS vector/lab: equip combat controls through existing Forge gates
+PASS vector: equip actual Fire signature through progression
+PASS vector/lab: enter ordinary existing game route
+PASS vector/lab: leaving Home disposes the Forge preview RenderTexture
+PASS vector/lab: ordinary playable spawn matches selected suit, mask and emblem
+PASS vector: three palette channels and protected facial/eye cells match the authored map
+PASS vector/lab: exactly three bounded renderers share one cached material with valid bindings
+PASS vector/lab: modern geometry and renderer bone entries stay below legacy budgets
+PASS vector/lab: existing Avatar, one Animator and no root motion
+PASS vector/lab: masks and modes preserve physics capsule and root scale
+PASS vector/lab: cosmetics retain hero stats and original health formula
+PASS vector/lab: first-person hides body, helmet and emblem through the real startup cache
+PASS vector/lab: third-person restores every original shadow mode
+PASS vector/lab: live appearance mutation gate remains intact
+PASS vector: actual running moves the equipped character
+PASS vector: actual grounded jump
+PASS vector: actual double jump
+PASS vector: actual paid punch
+PASS vector: immediate kick is refused by the existing shared cooldown without extra payment
+PASS vector: actual first combo tap
+PASS vector: second combo tap dispatches the existing Martelo finisher
+PASS vector: actual Hurricane Kick
+PASS vector: actual grounded backflip
+PASS vector: actual wall latch
+PASS vector: climb advances body, helmet and shared presentation
+PASS vector: actual equipped Phase Shift secondary activates
+PASS vector: phased offensive-action refusal remains intact
+PASS vector: Phase Shift expires through its normal lifecycle
+PASS vector: actual primary Fire accepted
+PASS vector: actual equipped Solar Flare accepted
+PASS vector: signature immediately dispatches the established Cast event
+MEASURED vector legacy: same idle Battle Lab/camera, 60 warm +120 measured frames, one explicit 1280x720 render/frame; render CPU median/p95 0.452/0.533ms, whole Editor frame 1.906/2.482ms, whole-frame GC median 1468B. Not a standalone FPS, GPU or causal skinning-isolation claim.
+MEASURED vector modern: same idle Battle Lab/camera, 60 warm +120 measured frames, one explicit 1280x720 render/frame; render CPU median/p95 0.479/0.546ms, whole Editor frame 1.685/1.958ms, whole-frame GC median 1468B. Not a standalone FPS, GPU or causal skinning-isolation claim.
+PASS titan/hero: equip combat controls through existing Forge gates
+PASS titan: equip actual Fire signature through progression
+PASS titan/hero: enter ordinary existing game route
+PASS titan/hero: leaving Home disposes the Forge preview RenderTexture
+PASS titan/hero: ordinary playable spawn matches selected suit, mask and emblem
+PASS titan: three palette channels and protected facial/eye cells match the authored map
+PASS titan/hero: exactly three bounded renderers share one cached material with valid bindings
+PASS titan/hero: modern geometry and renderer bone entries stay below legacy budgets
+PASS titan/hero: existing Avatar, one Animator and no root motion
+PASS titan/hero: masks and modes preserve physics capsule and root scale
+PASS titan/hero: cosmetics retain hero stats and original health formula
+PASS titan/hero: first-person hides body, helmet and emblem through the real startup cache
+PASS titan/hero: third-person restores every original shadow mode
+PASS titan/hero: live appearance mutation gate remains intact
+PASS titan/villain: equip combat controls through existing Forge gates
+PASS titan: equip actual Fire signature through progression
+PASS titan/villain: enter ordinary existing game route
+PASS titan/villain: leaving Home disposes the Forge preview RenderTexture
+PASS titan/villain: ordinary playable spawn matches selected suit, mask and emblem
+PASS titan: three palette channels and protected facial/eye cells match the authored map
+PASS titan/villain: exactly three bounded renderers share one cached material with valid bindings
+PASS titan/villain: modern geometry and renderer bone entries stay below legacy budgets
+PASS titan/villain: existing Avatar, one Animator and no root motion
+PASS titan/villain: masks and modes preserve physics capsule and root scale
+PASS titan/villain: cosmetics retain hero stats and original health formula
+PASS titan/villain: first-person hides body, helmet and emblem through the real startup cache
+PASS titan/villain: third-person restores every original shadow mode
+PASS titan/villain: live appearance mutation gate remains intact
+PASS titan/free-play: equip combat controls through existing Forge gates
+PASS titan: equip actual Fire signature through progression
+PASS titan/free-play: enter ordinary existing game route
+PASS titan/free-play: leaving Home disposes the Forge preview RenderTexture
+PASS titan/free-play: ordinary playable spawn matches selected suit, mask and emblem
+PASS titan: three palette channels and protected facial/eye cells match the authored map
+PASS titan/free-play: exactly three bounded renderers share one cached material with valid bindings
+PASS titan/free-play: modern geometry and renderer bone entries stay below legacy budgets
+PASS titan/free-play: existing Avatar, one Animator and no root motion
+PASS titan/free-play: masks and modes preserve physics capsule and root scale
+PASS titan/free-play: cosmetics retain hero stats and original health formula
+PASS titan/free-play: first-person hides body, helmet and emblem through the real startup cache
+PASS titan/free-play: third-person restores every original shadow mode
+PASS titan/free-play: live appearance mutation gate remains intact
+PASS titan/endless-fight: equip combat controls through existing Forge gates
+PASS titan: equip actual Fire signature through progression
+PASS titan/endless-fight: enter ordinary existing game route
+PASS titan/endless-fight: leaving Home disposes the Forge preview RenderTexture
+PASS titan/endless-fight: ordinary playable spawn matches selected suit, mask and emblem
+PASS titan: three palette channels and protected facial/eye cells match the authored map
+PASS titan/endless-fight: exactly three bounded renderers share one cached material with valid bindings
+PASS titan/endless-fight: modern geometry and renderer bone entries stay below legacy budgets
+PASS titan/endless-fight: existing Avatar, one Animator and no root motion
+PASS titan/endless-fight: masks and modes preserve physics capsule and root scale
+PASS titan/endless-fight: cosmetics retain hero stats and original health formula
+PASS titan/endless-fight: first-person hides body, helmet and emblem through the real startup cache
+PASS titan/endless-fight: third-person restores every original shadow mode
+PASS titan/endless-fight: live appearance mutation gate remains intact
+PASS titan/endless-fight-villain: equip combat controls through existing Forge gates
+PASS titan: equip actual Fire signature through progression
+PASS titan/endless-fight-villain: enter ordinary existing game route
+PASS titan/endless-fight-villain: leaving Home disposes the Forge preview RenderTexture
+PASS titan/endless-fight-villain: ordinary playable spawn matches selected suit, mask and emblem
+PASS titan: three palette channels and protected facial/eye cells match the authored map
+PASS titan/endless-fight-villain: exactly three bounded renderers share one cached material with valid bindings
+PASS titan/endless-fight-villain: modern geometry and renderer bone entries stay below legacy budgets
+PASS titan/endless-fight-villain: existing Avatar, one Animator and no root motion
+PASS titan/endless-fight-villain: masks and modes preserve physics capsule and root scale
+PASS titan/endless-fight-villain: cosmetics retain hero stats and original health formula
+PASS titan/endless-fight-villain: first-person hides body, helmet and emblem through the real startup cache
+PASS titan/endless-fight-villain: third-person restores every original shadow mode
+PASS titan/endless-fight-villain: live appearance mutation gate remains intact
+PASS titan/lab: equip combat controls through existing Forge gates
+PASS titan: equip actual Fire signature through progression
+PASS titan/lab: enter ordinary existing game route
+PASS titan/lab: leaving Home disposes the Forge preview RenderTexture
+PASS titan/lab: ordinary playable spawn matches selected suit, mask and emblem
+PASS titan: three palette channels and protected facial/eye cells match the authored map
+PASS titan/lab: exactly three bounded renderers share one cached material with valid bindings
+PASS titan/lab: modern geometry and renderer bone entries stay below legacy budgets
+PASS titan/lab: existing Avatar, one Animator and no root motion
+PASS titan/lab: masks and modes preserve physics capsule and root scale
+PASS titan/lab: cosmetics retain hero stats and original health formula
+PASS titan/lab: first-person hides body, helmet and emblem through the real startup cache
+PASS titan/lab: third-person restores every original shadow mode
+PASS titan/lab: live appearance mutation gate remains intact
+PASS titan: actual running moves the equipped character
+PASS titan: actual grounded jump
+PASS titan: actual double jump
+PASS titan: actual paid punch
+PASS titan: immediate kick is refused by the existing shared cooldown without extra payment
+PASS titan: actual first combo tap
+PASS titan: second combo tap dispatches the existing Martelo finisher
+PASS titan: actual Hurricane Kick
+PASS titan: actual grounded backflip
+PASS titan: actual wall latch
+PASS titan: climb advances body, helmet and shared presentation
+PASS titan: actual equipped Phase Shift secondary activates
+PASS titan: phased offensive-action refusal remains intact
+PASS titan: Phase Shift expires through its normal lifecycle
+PASS titan: actual primary Fire accepted
+PASS titan: actual equipped Solar Flare accepted
+PASS titan: signature immediately dispatches the established Cast event
+MEASURED titan legacy: same idle Battle Lab/camera, 60 warm +120 measured frames, one explicit 1280x720 render/frame; render CPU median/p95 0.445/0.503ms, whole Editor frame 2.023/2.243ms, whole-frame GC median 1468B. Not a standalone FPS, GPU or causal skinning-isolation claim.
+MEASURED titan modern: same idle Battle Lab/camera, 60 warm +120 measured frames, one explicit 1280x720 render/frame; render CPU median/p95 0.452/0.504ms, whole Editor frame 1.539/1.730ms, whole-frame GC median 1468B. Not a standalone FPS, GPU or causal skinning-isolation claim.
+PASS nova/hero: equip combat controls through existing Forge gates
+PASS nova: equip actual Fire signature through progression
+PASS nova/hero: enter ordinary existing game route
+PASS nova/hero: leaving Home disposes the Forge preview RenderTexture
+PASS nova/hero: ordinary playable spawn matches selected suit, mask and emblem
+PASS nova: three palette channels and protected facial/eye cells match the authored map
+PASS nova/hero: exactly three bounded renderers share one cached material with valid bindings
+PASS nova/hero: modern geometry and renderer bone entries stay below legacy budgets
+PASS nova/hero: existing Avatar, one Animator and no root motion
+PASS nova/hero: masks and modes preserve physics capsule and root scale
+PASS nova/hero: cosmetics retain hero stats and original health formula
+PASS nova/hero: first-person hides body, helmet and emblem through the real startup cache
+PASS nova/hero: third-person restores every original shadow mode
+PASS nova/hero: live appearance mutation gate remains intact
+PASS nova/villain: equip combat controls through existing Forge gates
+PASS nova: equip actual Fire signature through progression
+PASS nova/villain: enter ordinary existing game route
+PASS nova/villain: leaving Home disposes the Forge preview RenderTexture
+PASS nova/villain: ordinary playable spawn matches selected suit, mask and emblem
+PASS nova: three palette channels and protected facial/eye cells match the authored map
+PASS nova/villain: exactly three bounded renderers share one cached material with valid bindings
+PASS nova/villain: modern geometry and renderer bone entries stay below legacy budgets
+PASS nova/villain: existing Avatar, one Animator and no root motion
+PASS nova/villain: masks and modes preserve physics capsule and root scale
+PASS nova/villain: cosmetics retain hero stats and original health formula
+PASS nova/villain: first-person hides body, helmet and emblem through the real startup cache
+PASS nova/villain: third-person restores every original shadow mode
+PASS nova/villain: live appearance mutation gate remains intact
+PASS nova/free-play: equip combat controls through existing Forge gates
+PASS nova: equip actual Fire signature through progression
+PASS nova/free-play: enter ordinary existing game route
+PASS nova/free-play: leaving Home disposes the Forge preview RenderTexture
+PASS nova/free-play: ordinary playable spawn matches selected suit, mask and emblem
+PASS nova: three palette channels and protected facial/eye cells match the authored map
+PASS nova/free-play: exactly three bounded renderers share one cached material with valid bindings
+PASS nova/free-play: modern geometry and renderer bone entries stay below legacy budgets
+PASS nova/free-play: existing Avatar, one Animator and no root motion
+PASS nova/free-play: masks and modes preserve physics capsule and root scale
+PASS nova/free-play: cosmetics retain hero stats and original health formula
+PASS nova/free-play: first-person hides body, helmet and emblem through the real startup cache
+PASS nova/free-play: third-person restores every original shadow mode
+PASS nova/free-play: live appearance mutation gate remains intact
+PASS nova/endless-fight: equip combat controls through existing Forge gates
+PASS nova: equip actual Fire signature through progression
+PASS nova/endless-fight: enter ordinary existing game route
+PASS nova/endless-fight: leaving Home disposes the Forge preview RenderTexture
+PASS nova/endless-fight: ordinary playable spawn matches selected suit, mask and emblem
+PASS nova: three palette channels and protected facial/eye cells match the authored map
+PASS nova/endless-fight: exactly three bounded renderers share one cached material with valid bindings
+PASS nova/endless-fight: modern geometry and renderer bone entries stay below legacy budgets
+PASS nova/endless-fight: existing Avatar, one Animator and no root motion
+PASS nova/endless-fight: masks and modes preserve physics capsule and root scale
+PASS nova/endless-fight: cosmetics retain hero stats and original health formula
+PASS nova/endless-fight: first-person hides body, helmet and emblem through the real startup cache
+PASS nova/endless-fight: third-person restores every original shadow mode
+PASS nova/endless-fight: live appearance mutation gate remains intact
+PASS nova/endless-fight-villain: equip combat controls through existing Forge gates
+PASS nova: equip actual Fire signature through progression
+PASS nova/endless-fight-villain: enter ordinary existing game route
+PASS nova/endless-fight-villain: leaving Home disposes the Forge preview RenderTexture
+PASS nova/endless-fight-villain: ordinary playable spawn matches selected suit, mask and emblem
+PASS nova: three palette channels and protected facial/eye cells match the authored map
+PASS nova/endless-fight-villain: exactly three bounded renderers share one cached material with valid bindings
+PASS nova/endless-fight-villain: modern geometry and renderer bone entries stay below legacy budgets
+PASS nova/endless-fight-villain: existing Avatar, one Animator and no root motion
+PASS nova/endless-fight-villain: masks and modes preserve physics capsule and root scale
+PASS nova/endless-fight-villain: cosmetics retain hero stats and original health formula
+PASS nova/endless-fight-villain: first-person hides body, helmet and emblem through the real startup cache
+PASS nova/endless-fight-villain: third-person restores every original shadow mode
+PASS nova/endless-fight-villain: live appearance mutation gate remains intact
+PASS nova/lab: equip combat controls through existing Forge gates
+PASS nova: equip actual Fire signature through progression
+PASS nova/lab: enter ordinary existing game route
+PASS nova/lab: leaving Home disposes the Forge preview RenderTexture
+PASS nova/lab: ordinary playable spawn matches selected suit, mask and emblem
+PASS nova: three palette channels and protected facial/eye cells match the authored map
+PASS nova/lab: exactly three bounded renderers share one cached material with valid bindings
+PASS nova/lab: modern geometry and renderer bone entries stay below legacy budgets
+PASS nova/lab: existing Avatar, one Animator and no root motion
+PASS nova/lab: masks and modes preserve physics capsule and root scale
+PASS nova/lab: cosmetics retain hero stats and original health formula
+PASS nova/lab: first-person hides body, helmet and emblem through the real startup cache
+PASS nova/lab: third-person restores every original shadow mode
+PASS nova/lab: live appearance mutation gate remains intact
+PASS nova: actual running moves the equipped character
+PASS nova: actual grounded jump
+PASS nova: actual double jump
+PASS nova: actual paid punch
+PASS nova: immediate kick is refused by the existing shared cooldown without extra payment
+PASS nova: actual first combo tap
+PASS nova: second combo tap dispatches the existing Martelo finisher
+PASS nova: actual Hurricane Kick
+PASS nova: actual grounded backflip
+PASS nova: actual wall latch
+PASS nova: climb advances body, helmet and shared presentation
+PASS nova: actual equipped Phase Shift secondary activates
+PASS nova: phased offensive-action refusal remains intact
+PASS nova: Phase Shift expires through its normal lifecycle
+PASS nova: actual primary Fire accepted
+PASS nova: actual equipped Solar Flare accepted
+PASS nova: signature immediately dispatches the established Cast event
+MEASURED nova legacy: same idle Battle Lab/camera, 60 warm +120 measured frames, one explicit 1280x720 render/frame; render CPU median/p95 0.462/0.528ms, whole Editor frame 2.016/2.347ms, whole-frame GC median 1468B. Not a standalone FPS, GPU or causal skinning-isolation claim.
+MEASURED nova modern: same idle Battle Lab/camera, 60 warm +120 measured frames, one explicit 1280x720 render/frame; render CPU median/p95 0.466/0.544ms, whole Editor frame 1.553/2.018ms, whole-frame GC median 1468B. Not a standalone FPS, GPU or causal skinning-isolation claim.
+PASS Outer save version remains 1 after all actual modes and character choices

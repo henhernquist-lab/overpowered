@@ -1,0 +1,1 @@
+[HUMANOID VERIFY] MEASURED populated skinned/Animator city: civilians=26, cops=7, active animators=37; 1280x720, frames=309, seconds=5.015, FPS=61.62, p95=17.24ms, drawcalls median/max=610/614; previous city seed2409=50.25 FPS (22.6%), historical155=(-60.2%); AMD Radeon Pro 5300.

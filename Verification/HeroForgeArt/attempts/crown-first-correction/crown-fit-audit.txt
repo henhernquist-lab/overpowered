@@ -1,0 +1,3 @@
+FAIL vector_mask_sentinel: 23 actual skull vertices, missing shell rays=0, minimum radial crown clearance=-0.001494102m
+FAIL System.Exception: Crown fit failed vector_mask_sentinel
+  at HeroForgeArtFitAudit.Run () [0x00330] in /Users/melaniehernquist/Documents/ChatGPT/op-hero-forge-art-integration/Assets/Editor/HeroForgeArt/HeroForgeArtFitAudit.cs:37

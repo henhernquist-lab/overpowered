@@ -1,0 +1,4 @@
+PASS vector_mask_sentinel: 23 actual skull vertices, missing shell rays=0, minimum radial crown clearance=0.001077443m
+PASS titan_mask_guardian: 23 actual skull vertices, missing shell rays=0, minimum radial crown clearance=0.004023351m
+PASS titan_mask_vanguard: 23 actual skull vertices, missing shell rays=0, minimum radial crown clearance=0.001077555m
+PASS nova_mask_phantom: 23 actual skull vertices, missing shell rays=0, minimum radial crown clearance=0.001395091m

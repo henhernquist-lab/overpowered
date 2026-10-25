@@ -1,0 +1,153 @@
+{
+  "historical_tracked_files_restored": [
+    {
+      "path": "Verification/FirstPerson/city-first.png",
+      "restored_sha256": "0be9b68e14cd7325e4ba92a876c9ab7edff5d6d554838ad50b1c7a6cc2955d5d"
+    },
+    {
+      "path": "Verification/FirstPerson/city-third.png",
+      "restored_sha256": "60ff04b0f21d65b5efd2ed5cb1a52293dbecc67b1d5a32941cf8654e7bdd199e"
+    },
+    {
+      "path": "Verification/FirstPerson/hero-first-fire.png",
+      "restored_sha256": "6445bd4fa1517048796d0be4f3035658c9f6e883d060cc6c72d121abd2f204b9"
+    },
+    {
+      "path": "Verification/FirstPerson/hero-first-ice.png",
+      "restored_sha256": "68c602e20638a8f08185dc7058ce778f70d0dfe083e390aaee57b14998ba1214"
+    },
+    {
+      "path": "Verification/FirstPerson/hero-first-telekinesis.png",
+      "restored_sha256": "df40af2700c073a5c4b1350216a74a0767deae45e51f2847ad43dbfebbebe1a3"
+    },
+    {
+      "path": "Verification/FirstPerson/hero-third-fire.png",
+      "restored_sha256": "8add5e2701cc5d00dbe7eeb55b8ba78080ae95920723ddebcb4dbf1bbbe1b9ba"
+    },
+    {
+      "path": "Verification/FirstPerson/hero-third-ice.png",
+      "restored_sha256": "5c145e6b6d2acc3ac9088ef5a83fc2046c2575489af8a4b11605aa0de1f595af"
+    },
+    {
+      "path": "Verification/FirstPerson/hero-third-telekinesis.png",
+      "restored_sha256": "6b5d9259e43d1ca2e7b63619dce225ba68d9b26ed62804a4a34df1ee32493ae6"
+    },
+    {
+      "path": "Verification/FirstPerson/reload.txt",
+      "restored_sha256": "c8fa1eec740e873e6029dfa780926a70867fa39643acdf6fd185ff70b3433469"
+    },
+    {
+      "path": "Verification/FirstPerson/results.txt",
+      "restored_sha256": "d5adbf5c5b6f966d4ae7a0fe7293cc46f426f48fb93e5c8cf5f3856d71ebe40a"
+    },
+    {
+      "path": "Verification/FirstPerson/tight-space-first.png",
+      "restored_sha256": "d141ba6743972edf740065251354535e198be2c30ec4af415a87e90c9b6438fd"
+    },
+    {
+      "path": "Verification/FirstPerson/tight-space-look-down.png",
+      "restored_sha256": "483998f4d29b29668b205bc7de78df94cfcf4711ea7558bc59c975d82f02d454"
+    },
+    {
+      "path": "Verification/FirstPerson/villain-first-fire.png",
+      "restored_sha256": "ebfe0aaaad9c06486939669634ee6d0b6913d81ca37c1c82010153b075a232b6"
+    },
+    {
+      "path": "Verification/FirstPerson/villain-first-ice.png",
+      "restored_sha256": "0513631ea0016524d803f2bad54874c0b5809ba11296713f330c42ae68e0cbcb"
+    },
+    {
+      "path": "Verification/FirstPerson/villain-first-telekinesis.png",
+      "restored_sha256": "45589bd67746f436c3ab3d45b7113c25dbec6015460f0622ee2794353d2f9075"
+    },
+    {
+      "path": "Verification/FirstPerson/villain-third-fire.png",
+      "restored_sha256": "da0a28138045b1221dc7be5012d191646838d2d5f3211d3c17e0e9ab8c4b1de4"
+    },
+    {
+      "path": "Verification/FirstPerson/villain-third-ice.png",
+      "restored_sha256": "a46450aad7017e85e0a1e7533a54c818fc906297c811c09452f42168dcc3f7a3"
+    },
+    {
+      "path": "Verification/FirstPerson/villain-third-telekinesis.png",
+      "restored_sha256": "f4c3c6aaddb29fb8d8206efcf8352baeafe9c7cdaffeee2b9d9ca944e6864095"
+    },
+    {
+      "path": "Verification/Forge/forge-menu.png",
+      "restored_sha256": "08e60cff5fd11420b134ba03010de6d35aaf9a737f69644215ce45a8fb1c823d"
+    },
+    {
+      "path": "Verification/Forge/forge-preview.png",
+      "restored_sha256": "749cfc8e2c096c909be5079b455dc5e24bf07493d5a043f220a8dfe69ae2514b"
+    },
+    {
+      "path": "Verification/Forge/forge-reveal-peak.png",
+      "restored_sha256": "e07762ba6c9ab8cd3c64014b469e8533f38d3a9de34193d6d3f7f47ba470a9c3"
+    },
+    {
+      "path": "Verification/Forge/forge-reveal-start.png",
+      "restored_sha256": "c05b74adbc120789eb83b9ef157c921202f4e1f869b1c01400644b4ae0af38d4"
+    },
+    {
+      "path": "Verification/Forge/reload.txt",
+      "restored_sha256": "f42af9e6ef265e3d4b15635bb16a9839ddcc84f7752ce3d0fbe537394ae7943f"
+    },
+    {
+      "path": "Verification/Forge/results.txt",
+      "restored_sha256": "0bc3c6100f253cbf7e28e8b46ea50f40fa5c2ee63551e1d349d0a45a113eee7a"
+    },
+    {
+      "path": "Verification/Forge/sonic-impact.png",
+      "restored_sha256": "cb131377dfd39d602020ebbd747e9d41c4cd833b938305838173304e760b17c0"
+    },
+    {
+      "path": "Verification/Humanoid/cop-shoot.png",
+      "restored_sha256": "483fa2f998804823e18f78d3ab4dbb5a524742ab313311a213f613e10ac7b6cf"
+    },
+    {
+      "path": "Verification/Humanoid/death.png",
+      "restored_sha256": "6ae6742ea39f818f74cca1c2fd11d217a8c2d2ddbd466efcc9704c9f10a7e7f6"
+    },
+    {
+      "path": "Verification/Humanoid/forward-flight.png",
+      "restored_sha256": "59ce15ec7120c0aeca14281df0e08315038646e1bddc218b455091acf72e27d7"
+    },
+    {
+      "path": "Verification/Humanoid/hover.png",
+      "restored_sha256": "0be46ff651dd4de72dd3690aaca43891a6c55799bdd6b61d99cae723fcdcb20a"
+    },
+    {
+      "path": "Verification/Humanoid/idle-model.png",
+      "restored_sha256": "dcaf27093c426e2e450ffc4cf55855eec05ded370ab0fdb0f84fe320bb9f160b"
+    },
+    {
+      "path": "Verification/Humanoid/normal-jog.png",
+      "restored_sha256": "a914fa237ff7647fde1b0681449ea89a7a5744b6e4a30e02f2d6589c4456c8ee"
+    },
+    {
+      "path": "Verification/Humanoid/panic-20.png",
+      "restored_sha256": "be252aa1e9b8cf53307a8df9c6794512355ee13f59a629269150fa4079f3aeb2"
+    },
+    {
+      "path": "Verification/Humanoid/panic-60.png",
+      "restored_sha256": "7c47e5d2783f96b3d73a44e6a3fdec0f709e0c6c700257240b4beb1482eb939f"
+    },
+    {
+      "path": "Verification/Humanoid/punch-impact.png",
+      "restored_sha256": "f917c601ebad0758a417440ed5582354e38b03f95b940f4bfabadaaf5be359f1"
+    },
+    {
+      "path": "Verification/Humanoid/results.txt",
+      "restored_sha256": "6203b2485b2938a0e3acc14418f0f0cf2f35bcfa70fa74064f568ac08fbc3e44"
+    },
+    {
+      "path": "Verification/Humanoid/telekinesis-rig.png",
+      "restored_sha256": "2d883e1c8ba7590ebfa54202ce431936952402a0ebe10205d26427e0b4bea8c0"
+    }
+  ],
+  "fresh_artifacts_archived": [
+    "Verification/Pulsebreaker/reload-results.txt",
+    "Verification/Pulsebreaker/results.txt"
+  ],
+  "ephemeral_test_files_removed": 3
+}

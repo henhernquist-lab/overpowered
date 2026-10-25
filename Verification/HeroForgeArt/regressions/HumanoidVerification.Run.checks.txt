@@ -1,0 +1,79 @@
+[HUMANOID VERIFY] PASS Home camera retained.
+[HUMANOID VERIFY] PASS Establish Strength + Telekinesis attacks before testing unequipped Fire and Ice.
+[HUMANOID VERIFY] PASS Player uses the selected hero's valid Humanoid (vector-rigged: 1 skinned mesh(es)), no capsule renderer.
+[HUMANOID VERIFY] PASS CONTROL: player collider unchanged: height=1.800m radius=.380m; NPC capsule=1.800m/.350m.
+[HUMANOID VERIFY] PASS Reference skinned vertices height=1.7658m, visual scale=1.0194, fitted height=1.8000m; exactly one authoritative player collider.
+[HUMANOID VERIFY] PASS SAME controller asset on player and all 33 civilians/cops/criminals.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Intermediate-speed CONTROL has two nonzero clip weights, not a snapped state.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Intermediate-speed CONTROL has two nonzero clip weights, not a snapped state.
+[HUMANOID VERIFY] PASS Continuous actual-speed parameter tracks measured motion.
+[HUMANOID VERIFY] PASS Negative actual local velocity selects Standing Run Back.
+[HUMANOID VERIFY] PASS Long idle dispatches low-priority Taunt only on the hero.
+[HUMANOID VERIFY] PASS Movement immediately cancels the idle Taunt without delaying locomotion.
+[HUMANOID VERIFY] PASS Normal charged punch accepted.
+[HUMANOID VERIFY] PASS Cooldown CONTROL refuses immediate second punch.
+[HUMANOID VERIFY] PASS Windup CONTROL has no premature force.
+[HUMANOID VERIFY] PASS Actual force and evaluated clip impact marker align within two rendered frames.
+[HUMANOID VERIFY] PASS Real force=1350 N·s, mass=45kg, velocity=17.192m/s, displacement=3.438m.
+[HUMANOID VERIFY] PASS Zero-charge CONTROL refuses punch.
+[HUMANOID VERIFY] PASS Rejected punches emit no extra impact.
+[HUMANOID VERIFY] PASS Original 1.25s charge recharge retained.
+[HUMANOID VERIFY] PASS Current Humanoid session has no equipped Flight secondary.
+[HUMANOID VERIFY] PASS Unequipped Flight CONTROL cannot spend fuel through the real consumption gate.
+[HUMANOID VERIFY] PASS Grounded fuel recharge still follows the Flight definition.
+[HUMANOID VERIFY] PASS Real light NPC damage triggers Head Hit reaction.
+[HUMANOID VERIFY] PASS Undamaged NPC CONTROL plays neither hit nor death.
+[HUMANOID VERIFY] PASS Strong actual impulse selects Shoved Spin without changing damage rules.
+[HUMANOID VERIFY] PASS Panic onset CONTROL does not steal a live strong-hit reaction.
+[HUMANOID VERIFY] PASS Lethal damage triggers Death, disables navigation/collision; no root 90-degree flip.
+[HUMANOID VERIFY] PASS Real player damage triggers brief Head Hit reaction.
+[HUMANOID VERIFY] PASS Hover vs forward distinct: body difference=76.45deg, hand height 0.925->1.931m; maximum rendered-frame pitch change=5.02deg.
+[HUMANOID VERIFY] PASS Uncaptured live transition CONTROL stays below 20 degrees per rendered frame.
+[HUMANOID VERIFY] PASS Flight CONTROL gives the original flight head overlay full ownership after the gaze fade.
+[HUMANOID VERIFY] PASS Landing transition releases flight bones/root smoothly.
+[HUMANOID VERIFY] PASS Normal-jog CONTROL is not alarmed and has no panic overlay.
+[HUMANOID VERIFY] PASS Civilian alarm retains flee AI without a Terrified clip or panic presentation state.
+[HUMANOID VERIFY] PASS Every fleeing frame used ordinary locomotion without a procedural scared overlay.
+[HUMANOID VERIFY] PASS Live fleeing civilian moved 2.64m at peak 5.00m/s using normal gait.
+[HUMANOID VERIFY] PASS Flee destination/path retained: destination=(-28.81, 0.06, 20.01), current=(-31.95, 0.03, 20.87).
+[HUMANOID VERIFY] PASS Meaningful downward airborne velocity selects the trimmed Falling loop before landing.
+[HUMANOID VERIFY] PASS Actual controller fall: 1 impact at 15.613m/s; Land clip played with single existing squash minY=0.785, recovered=1.000; collider=1.800m.
+[HUMANOID VERIFY] PASS CONTROL menu-open grounded jump refused.
+[HUMANOID VERIFY] PASS Existing grounded jump accepted.
+[HUMANOID VERIFY] PASS Jump presentation comes from real movement event.
+[HUMANOID VERIFY] PASS Fire Blast and Ice both configured for shared Casting Spell presentation.
+[HUMANOID VERIFY] PASS Fire Blast and Ice owned through earned points but NOT equipped (session loadout strength + telekinesis).
+[HUMANOID VERIFY] PASS CONTROL: unequipped Fire Blast and Ice refused by the equip gate (Select/Use false, "Power not equipped").
+[HUMANOID VERIFY] PASS CONTROL: refused unequipped casts charged nothing (Fire charges 3->3, Ice charges 3->3, energy 100.00->100.00).
+[HUMANOID VERIFY] PASS CONTROL: refused unequipped casts spawned no projectile (12 before/after), froze nothing, raised no Activated event and played no Casting Spell (state=Locomotion).
+[HUMANOID VERIFY] PASS Owned Fire Blast + Ice equipped through PlayerProgression.SetLoadout before the session.
+[HUMANOID VERIFY] PASS New session receives equipped pair fire + ice.
+[HUMANOID VERIFY] PASS Real Fire Blast activation succeeds.
+[HUMANOID VERIFY] PASS Successful Fire Blast triggers Casting Spell.
+[HUMANOID VERIFY] PASS Real Ice activation succeeds.
+[HUMANOID VERIFY] PASS Successful Ice triggers same Casting Spell and freezes actual body.
+[HUMANOID VERIFY] PASS Equip telekinesis through progression for the rig test.
+[HUMANOID VERIFY] PASS Animation Rigging graph is live on the visual Animator; root motion stays off.
+[HUMANOID VERIFY] PASS Select equipped telekinesis.
+[HUMANOID VERIFY] PASS Actual telekinesis cast acquires the real movable prop.
+[HUMANOID VERIFY] PASS Both hands aim toward the held prop through real IK without moving the physics root.
+[HUMANOID VERIFY] PASS Rigged hero can enter first person.
+[HUMANOID VERIFY] PASS First-person CONTROL removes gaze while preserving the hidden Animator and hold pose.
+[HUMANOID VERIFY] PASS Release fades arm rig back to Animator ownership.
+[HUMANOID VERIFY] PASS Nearby civilian awareness turns toward the hero within the restrained forward cone.
+[HUMANOID VERIFY] PASS Far-tier CONTROL disables the rig graph and retains cheap Animator stepping.
+[HUMANOID VERIFY] PASS Near promotion rebuilds the awareness rig.
+[HUMANOID VERIFY] PASS Hit clip CONTROL has zero rig weights.
+[HUMANOID VERIFY] PASS Death CONTROL clears both rig weights.
+[HUMANOID VERIFY] PASS Villain mode spawns same humanoid/controller and renders.
+[HUMANOID VERIFY] PASS Moving cop (phase=Approach) actual speed=0.157m/s selects shared Pistol Run.
+[HUMANOID VERIFY] PASS CONTROL: patrol cop at 0 stars is hostile=False (per-side data, hostile from 1).
+[HUMANOID VERIFY] PASS Heat raised to 1 star(s): the same patrol cop is now hostile.
+[HUMANOID VERIFY] PASS Live hostile cop attack: HP 100->90; shared controller plays Shooting Gun.
+[HUMANOID VERIFY] PASS Hero and Villain return Home without camera regression.

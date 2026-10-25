@@ -1,0 +1,53 @@
+[
+  {
+    "entry": "HeroForgeArtPreview.Run",
+    "commit": "94cc5801b5e5767a09219fa93e5af21fdf0b4b51",
+    "status_before": "M Verification/FirstPerson/city-first.png\n M Verification/FirstPerson/city-third.png\n M Verification/FirstPerson/hero-first-fire.png\n M Verification/FirstPerson/hero-first-ice.png\n M Verification/FirstPerson/hero-first-telekinesis.png\n M Verification/FirstPerson/hero-third-fire.png\n M Verification/FirstPerson/hero-third-ice.png\n M Verification/FirstPerson/hero-third-telekinesis.png\n M Verification/FirstPerson/reload.txt\n M Verification/FirstPerson/results.txt\n M Verification/FirstPerson/tight-space-first.png\n M Verification/FirstPerson/tight-space-look-down.png\n M Verification/FirstPerson/villain-first-fire.png\n M Verification/FirstPerson/villain-first-ice.png\n M Verification/FirstPerson/villain-first-telekinesis.png\n M Verification/FirstPerson/villain-third-fire.png\n M Verification/FirstPerson/villain-third-ice.png\n M Verification/FirstPerson/villain-third-telekinesis.png\n M Verification/Forge/forge-menu.png\n M Verification/Forge/forge-preview.png\n M Verification/Forge/forge-reveal-peak.png\n M Verification/Forge/forge-reveal-start.png\n M Verification/Forge/reload.txt\n M Verification/Forge/results.txt\n M Verification/Forge/sonic-impact.png\n M Verification/Humanoid/cop-shoot.png\n M Verification/Humanoid/death.png\n M Verification/Humanoid/forward-flight.png\n M Verification/Humanoid/hover.png\n M Verification/Humanoid/idle-model.png\n M Verification/Humanoid/normal-jog.png\n M Verification/Humanoid/panic-20.png\n M Verification/Humanoid/panic-60.png\n M Verification/Humanoid/punch-impact.png\n M Verification/Humanoid/results.txt\n M Verification/Humanoid/telekinesis-rig.png\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/HeroForgeArt/\n?? Verification/Pulsebreaker/reload-results.txt\n?? Verification/Pulsebreaker/results.txt\n?? Verification/Pulsebreaker/save-path.txt\n?? Verification/Pulsebreaker/saves/\n?? docs/hero-forge-art-integration.md",
+    "started_utc": "2026-10-25T19:27:43.211420+00:00",
+    "save_before": "021e7414e7f187c8b17fd0ae2ff614dd650992224d8fa91325f839fc7497670c",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/HeroForgeArt/final/HeroForgeArtPreview.Run.log",
+    "pid": 34067,
+    "exit": 0,
+    "seconds": 18.97,
+    "pass": 6,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Verification/FirstPerson/city-first.png\n M Verification/FirstPerson/city-third.png\n M Verification/FirstPerson/hero-first-fire.png\n M Verification/FirstPerson/hero-first-ice.png\n M Verification/FirstPerson/hero-first-telekinesis.png\n M Verification/FirstPerson/hero-third-fire.png\n M Verification/FirstPerson/hero-third-ice.png\n M Verification/FirstPerson/hero-third-telekinesis.png\n M Verification/FirstPerson/reload.txt\n M Verification/FirstPerson/results.txt\n M Verification/FirstPerson/tight-space-first.png\n M Verification/FirstPerson/tight-space-look-down.png\n M Verification/FirstPerson/villain-first-fire.png\n M Verification/FirstPerson/villain-first-ice.png\n M Verification/FirstPerson/villain-first-telekinesis.png\n M Verification/FirstPerson/villain-third-fire.png\n M Verification/FirstPerson/villain-third-ice.png\n M Verification/FirstPerson/villain-third-telekinesis.png\n M Verification/Forge/forge-menu.png\n M Verification/Forge/forge-preview.png\n M Verification/Forge/forge-reveal-peak.png\n M Verification/Forge/forge-reveal-start.png\n M Verification/Forge/reload.txt\n M Verification/Forge/results.txt\n M Verification/Forge/sonic-impact.png\n M Verification/Humanoid/cop-shoot.png\n M Verification/Humanoid/death.png\n M Verification/Humanoid/forward-flight.png\n M Verification/Humanoid/hover.png\n M Verification/Humanoid/idle-model.png\n M Verification/Humanoid/normal-jog.png\n M Verification/Humanoid/panic-20.png\n M Verification/Humanoid/panic-60.png\n M Verification/Humanoid/punch-impact.png\n M Verification/Humanoid/results.txt\n M Verification/Humanoid/telekinesis-rig.png\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/HeroForgeArt/\n?? Verification/Pulsebreaker/reload-results.txt\n?? Verification/Pulsebreaker/results.txt\n?? Verification/Pulsebreaker/save-path.txt\n?? Verification/Pulsebreaker/saves/\n?? docs/hero-forge-art-integration.md"
+  },
+  {
+    "entry": "HeroForgeArtVerification.Run",
+    "commit": "94cc5801b5e5767a09219fa93e5af21fdf0b4b51",
+    "status_before": "M Verification/FirstPerson/city-first.png\n M Verification/FirstPerson/city-third.png\n M Verification/FirstPerson/hero-first-fire.png\n M Verification/FirstPerson/hero-first-ice.png\n M Verification/FirstPerson/hero-first-telekinesis.png\n M Verification/FirstPerson/hero-third-fire.png\n M Verification/FirstPerson/hero-third-ice.png\n M Verification/FirstPerson/hero-third-telekinesis.png\n M Verification/FirstPerson/reload.txt\n M Verification/FirstPerson/results.txt\n M Verification/FirstPerson/tight-space-first.png\n M Verification/FirstPerson/tight-space-look-down.png\n M Verification/FirstPerson/villain-first-fire.png\n M Verification/FirstPerson/villain-first-ice.png\n M Verification/FirstPerson/villain-first-telekinesis.png\n M Verification/FirstPerson/villain-third-fire.png\n M Verification/FirstPerson/villain-third-ice.png\n M Verification/FirstPerson/villain-third-telekinesis.png\n M Verification/Forge/forge-menu.png\n M Verification/Forge/forge-preview.png\n M Verification/Forge/forge-reveal-peak.png\n M Verification/Forge/forge-reveal-start.png\n M Verification/Forge/reload.txt\n M Verification/Forge/results.txt\n M Verification/Forge/sonic-impact.png\n M Verification/Humanoid/cop-shoot.png\n M Verification/Humanoid/death.png\n M Verification/Humanoid/forward-flight.png\n M Verification/Humanoid/hover.png\n M Verification/Humanoid/idle-model.png\n M Verification/Humanoid/normal-jog.png\n M Verification/Humanoid/panic-20.png\n M Verification/Humanoid/panic-60.png\n M Verification/Humanoid/punch-impact.png\n M Verification/Humanoid/results.txt\n M Verification/Humanoid/telekinesis-rig.png\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/HeroForgeArt/\n?? Verification/Pulsebreaker/reload-results.txt\n?? Verification/Pulsebreaker/results.txt\n?? Verification/Pulsebreaker/save-path.txt\n?? Verification/Pulsebreaker/saves/\n?? docs/hero-forge-art-integration.md",
+    "started_utc": "2026-10-25T19:28:02.365437+00:00",
+    "save_before": "021e7414e7f187c8b17fd0ae2ff614dd650992224d8fa91325f839fc7497670c",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/HeroForgeArt/final/HeroForgeArtVerification.Run.log",
+    "pid": 34132,
+    "exit": 0,
+    "seconds": 94.3,
+    "pass": 499,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/HeroForgeArt/\n?? docs/hero-forge-art-integration.md"
+  },
+  {
+    "entry": "HeroForgeArtVerification.Reload",
+    "commit": "94cc5801b5e5767a09219fa93e5af21fdf0b4b51",
+    "status_before": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/HeroForgeArt/\n?? docs/hero-forge-art-integration.md",
+    "started_utc": "2026-10-25T19:29:36.857517+00:00",
+    "save_before": "021e7414e7f187c8b17fd0ae2ff614dd650992224d8fa91325f839fc7497670c",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/HeroForgeArt/final/HeroForgeArtVerification.Reload.log",
+    "pid": 34294,
+    "exit": 0,
+    "seconds": 27.97,
+    "pass": 44,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/HeroForgeArt/\n?? docs/hero-forge-art-integration.md"
+  }
+]

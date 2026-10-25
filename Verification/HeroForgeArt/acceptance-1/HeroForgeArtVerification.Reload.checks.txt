@@ -1,0 +1,41 @@
+PASS Production disk catalog has unique stable IDs; no temporary registration scope
+PASS SECOND PROCESS exact XP, levels, tiers, powers, secondary, signature, difficulty, records, parkour and per-hero appearances survive
+PASS vector: SECOND PROCESS independent cosmetic IDs restored
+PASS titan: SECOND PROCESS independent cosmetic IDs restored
+PASS nova: SECOND PROCESS independent cosmetic IDs restored
+PASS vector: SECOND PROCESS select restored hero through actual Forge
+PASS vector: SECOND PROCESS enter actual Hero Mode
+PASS vector/reload Hero Mode: ordinary playable spawn matches selected suit, mask and emblem
+PASS vector: three palette channels and protected facial/eye cells match the authored map
+PASS vector/reload Hero Mode: exactly three bounded renderers share one cached material with valid bindings
+PASS vector/reload Hero Mode: modern geometry and renderer bone entries stay below legacy budgets
+PASS vector/reload Hero Mode: existing Avatar, one Animator and no root motion
+PASS vector/reload Hero Mode: masks and modes preserve physics capsule and root scale
+PASS vector/reload Hero Mode: cosmetics retain hero stats and original health formula
+PASS vector/reload Hero Mode: first-person hides body, helmet and emblem through the real startup cache
+PASS vector/reload Hero Mode: third-person restores every original shadow mode
+PASS vector/reload Hero Mode: live appearance mutation gate remains intact
+PASS titan: SECOND PROCESS select restored hero through actual Forge
+PASS titan: SECOND PROCESS enter actual Hero Mode
+PASS titan/reload Hero Mode: ordinary playable spawn matches selected suit, mask and emblem
+PASS titan: three palette channels and protected facial/eye cells match the authored map
+PASS titan/reload Hero Mode: exactly three bounded renderers share one cached material with valid bindings
+PASS titan/reload Hero Mode: modern geometry and renderer bone entries stay below legacy budgets
+PASS titan/reload Hero Mode: existing Avatar, one Animator and no root motion
+PASS titan/reload Hero Mode: masks and modes preserve physics capsule and root scale
+PASS titan/reload Hero Mode: cosmetics retain hero stats and original health formula
+PASS titan/reload Hero Mode: first-person hides body, helmet and emblem through the real startup cache
+PASS titan/reload Hero Mode: third-person restores every original shadow mode
+PASS titan/reload Hero Mode: live appearance mutation gate remains intact
+PASS nova: SECOND PROCESS select restored hero through actual Forge
+PASS nova: SECOND PROCESS enter actual Hero Mode
+PASS nova/reload Hero Mode: ordinary playable spawn matches selected suit, mask and emblem
+PASS nova: three palette channels and protected facial/eye cells match the authored map
+PASS nova/reload Hero Mode: exactly three bounded renderers share one cached material with valid bindings
+PASS nova/reload Hero Mode: modern geometry and renderer bone entries stay below legacy budgets
+PASS nova/reload Hero Mode: existing Avatar, one Animator and no root motion
+PASS nova/reload Hero Mode: masks and modes preserve physics capsule and root scale
+PASS nova/reload Hero Mode: cosmetics retain hero stats and original health formula
+PASS nova/reload Hero Mode: first-person hides body, helmet and emblem through the real startup cache
+PASS nova/reload Hero Mode: third-person restores every original shadow mode
+PASS nova/reload Hero Mode: live appearance mutation gate remains intact
