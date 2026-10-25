@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CosmeticCatalog
   Items:
   - Id: nova_suit_energyweave
-    DisplayName: "Energy Weave \xB7 fitted suit"
+    DisplayName: Energy Weave
     HeroId: nova
     Slot: 0
     Suits: []
@@ -103,20 +103,22 @@ MonoBehaviour:
     Slot: 1
     Suits:
     - nova_suit_energyweave
-    Available: 0
-    UnavailableReason: No suitable futuristic visor exists in the installed Starter art. Needs an artist-fitted Sidekick NOVA visor mesh; the eye patch, hood and fox mask are not substituted.
-    Mesh: {fileID: 0}
-    Bones: []
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 4300000, guid: 5d0c467f7c5ef43f6a12369304536fb7, type: 2}
+    Bones:
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01/head
   - Id: nova_mask_phantom
     DisplayName: Phantom Helmet
     HeroId: nova
     Slot: 1
     Suits:
     - nova_suit_energyweave
-    Available: 0
-    UnavailableReason: No suitable enclosed lightweight futuristic helmet exists in the installed Starter art. Needs an artist-fitted NOVA helmet. No overlapping fox-mask or placeholder helmet is rendered.
-    Mesh: {fileID: 0}
-    Bones: []
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 4300000, guid: 1877ea577bf5049dabc9083137656bed, type: 2}
+    Bones:
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01/head
   - Id: nova_emblem_star
     DisplayName: Nova Star
     HeroId: nova

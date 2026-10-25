@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CosmeticCatalog
   Items:
   - Id: titan_suit_guardian
-    DisplayName: "Guardian \xB7 fitted suit"
+    DisplayName: Guardian plated suit
     HeroId: titan
     Slot: 0
     Suits: []
@@ -103,20 +103,22 @@ MonoBehaviour:
     Slot: 1
     Suits:
     - titan_suit_guardian
-    Available: 0
-    UnavailableReason: No suitable enclosed modern armored helmet exists in the installed Starter art. Requires artist-fitted TITAN headgear; the knight helmet, pumpkin and hood are not substituted.
-    Mesh: {fileID: 0}
-    Bones: []
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 4300000, guid: 44cbc867fe04a4466b88d2b7309b1c40, type: 2}
+    Bones:
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01/head
   - Id: titan_mask_vanguard
     DisplayName: Vanguard Mask
     HeroId: titan
     Slot: 1
     Suits:
     - titan_suit_guardian
-    Available: 0
-    UnavailableReason: No suitable streamlined armored superhero mask exists in the installed Starter art. Requires a fitted original Sidekick TITAN mask.
-    Mesh: {fileID: 0}
-    Bones: []
+    Available: 1
+    UnavailableReason: 
+    Mesh: {fileID: 4300000, guid: eed8f0fcbaed54a378c482e06e22394e, type: 2}
+    Bones:
+    - root/pelvis/spine_01/spine_02/spine_03/neck_01/head
   - Id: titan_emblem_shield
     DisplayName: Shield Crest
     HeroId: titan
