@@ -177,10 +177,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
             {
                 var fallback=new Label("Saved "+slot.ToString().ToLowerInvariant()+" unavailable; showing "+(resolved?.DisplayName??"legacy appearance")+". Selection retained.");fallback.style.whiteSpace=WhiteSpace.Normal;fallback.style.fontSize=12;form.Add(fallback);
             }
-            foreach(var missing in cosmetics.Items.Where(x=>x!=null&&x.HeroId==hero.Id&&x.Slot==slot&&!x.Available))
-            {
-                var unavailable=new Button{text=missing.DisplayName+" · ART NEEDED",name="cosmetic-unavailable-"+missing.Id,tooltip=missing.UnavailableReason};unavailable.SetEnabled(false);unavailable.style.whiteSpace=WhiteSpace.Normal;unavailable.style.minHeight=30;form.Add(unavailable);
-            }
+
         }
     }
     /// One row per archetype stat: the selected hero's real value and a bar filled relative to the best value across the
