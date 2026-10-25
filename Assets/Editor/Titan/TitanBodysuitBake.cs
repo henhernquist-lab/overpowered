@@ -63,7 +63,24 @@ public static class TitanBodysuitBake
                 log.AppendLine("MEASURED excluded attachment recipe drift="+(candidates[0]-cursor)+" vertices; recovered head start="+candidates[0]);cursor=candidates[0];
             }
             int matched=pu.Where((v,i)=>(v-su[cursor+i]).sqrMagnitude<1e-10f).Count();
-            if(retainedPart){Check(matched==count,"exact fitted retained UV range "+name,log);keep.AddRange(Enumerable.Range(cursor,count));sources.Add("FITTED "+name);}
+            if(retainedPart)
+            {
+                Check(matched==count,"exact fitted retained UV range "+name,log);
+                if(type>=10&&type<=21)
+                {
+                    // Main armor is Primary, cloth/straps are Secondary, and small warm-metal hardware is Accent.
+                    // This garment-only remap prevents the broad dark breastplate from becoming Accent-colored.
+                    for(int j=cursor;j<cursor+count;j++)
+                    {
+                        var cell=new Vector2Int(Mathf.Clamp(Mathf.FloorToInt(su[j].x*16),0,15),Mathf.Clamp(Mathf.FloorToInt(su[j].y*16),0,15));
+                        var swatch=suit.Swatches.First(x=>x.Cell==cell);
+                        SuitRole role=swatch.Name.EndsWith("Metal 04")?SuitRole.Primary:swatch.Name.EndsWith("Metal 01")||swatch.Name.EndsWith("Metal 02")?SuitRole.Trim:SuitRole.Secondary;
+                        su[j]=colorCells[role];
+                    }
+                    log.AppendLine("COLORS remapped costume-only "+name+" to armor Primary / cloth Secondary / hardware Accent");
+                }
+                keep.AddRange(Enumerable.Range(cursor,count));sources.Add("FITTED "+name);
+            }
             else log.AppendLine("REMOVED "+name+"; source UV matches="+matched+"/"+count+"; no excluded surface copied");
             cursor+=count;
         }
