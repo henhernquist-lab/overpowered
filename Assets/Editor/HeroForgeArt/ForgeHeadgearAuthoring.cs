@@ -53,7 +53,7 @@ public static class ForgeHeadgearAuthoring
         Vector3 Surface(float t,float angle,float outset,float bulk)
         {
             float y=Mathf.LerpUnclamped(bounds.min.y,bounds.max.y,t);var dir=new Vector2(Mathf.Sin(angle),Mathf.Cos(angle));var section=Section(Mathf.Clamp(y,bounds.min.y+.001f,bounds.max.y-.001f));
-            float radius=Mathf.Max(.008f,section.Max(p=>Vector2.Dot(p,dir)));float crown=t>.94f?Mathf.Lerp(1,.15f,Mathf.InverseLerp(.94f,1.035f,t)):1;
+            float radius=Mathf.Max(.008f,section.Max(p=>Vector2.Dot(p,dir)));float crown=t>1f?Mathf.Lerp(1,.45f,Mathf.InverseLerp(1f,1.065f,t)):1;
             float r=(radius+outset)*crown;return new Vector3(dir.x*r*bulk,y,centerZ+dir.y*r);
         }
         foreach(var definition in module.Items.Where(d=>d.Slot==CosmeticSlot.Mask&&d.Id!=hero.Id+"_mask_unmasked"))
@@ -78,7 +78,7 @@ public static class ForgeHeadgearAuthoring
             }
             else
             {
-                int sectors=24;float[] rows={.015f,.23f,.40f,eyeT-.065f,eyeT+.065f,.82f,.94f,1.025f};rows=rows.Distinct().OrderBy(x=>x).ToArray();
+                int sectors=24;float[] rows={.015f,.23f,.40f,eyeT-.065f,eyeT+.065f,.82f,.94f,1.0f,1.055f};rows=rows.Distinct().OrderBy(x=>x).ToArray();
                 Vector3 Point(int ring,int sector)
                 {
                     float a=sector*Mathf.PI*2/sectors;var p=Surface(rows[ring],a,outset,bulk);float front=Mathf.Max(0,Mathf.Cos(a));
@@ -95,7 +95,7 @@ public static class ForgeHeadgearAuthoring
                     SuitRole role=visor?SuitRole.Secondary:rim||guardian&&t<.24f||phantom&&Mathf.Abs(Mathf.Sin(angle))<.15f?SuitRole.Trim:SuitRole.Primary;
                     Quad(Point(j,i),Point(j,(i+1)%sectors),Point(j+1,(i+1)%sectors),Point(j+1,i),role);
                 }
-                int cap=points.Count;points.Add(new Vector3(0,bounds.max.y+.014f,centerZ));uv.Add(roles[SuitRole.Primary]);
+                int cap=points.Count;points.Add(new Vector3(0,bounds.max.y+.024f,centerZ));uv.Add(roles[SuitRole.Primary]);
                 for(int i=0;i<sectors;i++){int k=points.Count;points.Add(Point(rows.Length-1,i));points.Add(Point(rows.Length-1,(i+1)%sectors));uv.Add(roles[SuitRole.Primary]);uv.Add(roles[SuitRole.Primary]);triangles.AddRange(new[]{k,k+1,cap});}
             }
             var mesh=new Mesh{name=id};mesh.SetVertices(points);mesh.SetUVs(0,uv);mesh.SetTriangles(triangles,0);mesh.boneWeights=Enumerable.Repeat(new BoneWeight{weight0=1},points.Count).ToArray();mesh.bindposes=new[]{body.bindposes[head]};mesh.RecalculateNormals();mesh.RecalculateBounds();

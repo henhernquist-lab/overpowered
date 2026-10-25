@@ -8,7 +8,7 @@ public sealed partial class HeroForgeArtVerificationRunner
 {
     IEnumerator Poses(HeroForgeScreen screen,HeroDefinition hero,string mask)
     {
-        var animator=screen.PreviewModel.GetComponent<Animator>();var camera=screen.PreviewModel.transform.parent.GetComponentInChildren<Camera>();var bake=new Mesh();var originalPosition=camera.transform.position;var originalRotation=camera.transform.rotation;float originalFov=camera.fieldOfView;
+        var animator=screen.PreviewModel.GetComponent<Animator>();var camera=screen.PreviewModel.transform.parent.GetComponentInChildren<Camera>();var bake=new Mesh();var originalPosition=camera.transform.position;var originalRotation=camera.transform.rotation;float originalFov=camera.fieldOfView;float originalAspect=camera.aspect;
         foreach(string state in new[]{"Locomotion","Jump","Double Jump","Backflip","Climb","Fall","Land","Punch","Martelo Kick","Hurricane Kick","Cast"})
         {
             Check(animator.HasState(0,Animator.StringToHash(state)),hero.Id+"/"+mask+": unchanged "+state+" state exists");animator.Play(state,0,.35f);animator.Update(0);yield return null;yield return null;
@@ -19,11 +19,11 @@ public sealed partial class HeroForgeArtVerificationRunner
                 foreach(var p in bake.vertices){finite&=float.IsFinite(p.x)&&float.IsFinite(p.y)&&float.IsFinite(p.z);var q=skin.transform.TransformPoint(p);if(first){world=new Bounds(q,Vector3.zero);first=false;}else world.Encapsulate(q);}
             }
             Check(finite,hero.Id+"/"+mask+": finite posed body, helmet and emblem for "+state);
-            camera.fieldOfView=32;float distance=Mathf.Max(world.size.y,world.size.x/.8f)*.5f/Mathf.Tan(16*Mathf.Deg2Rad)*1.18f;
+            camera.fieldOfView=32;camera.aspect=.8f;float distance=Mathf.Max(world.size.y,world.size.x/.8f)*.5f/Mathf.Tan(16*Mathf.Deg2Rad)*1.65f;
             camera.transform.position=world.center+new Vector3(.16f,.04f,1).normalized*distance;camera.transform.LookAt(world.center);camera.targetTexture=screen.Preview;camera.Render();camera.targetTexture=null;
             var image=Capture(screen.Preview,"poses/"+mask+"/"+state.Replace(" ","-")+".png");Destroy(image);
         }
-        animator.Play("Locomotion");animator.Update(0);camera.transform.SetPositionAndRotation(originalPosition,originalRotation);camera.fieldOfView=originalFov;Destroy(bake);
+        animator.Play("Locomotion");animator.Update(0);camera.transform.SetPositionAndRotation(originalPosition,originalRotation);camera.fieldOfView=originalFov;camera.aspect=originalAspect;Destroy(bake);
     }
     IEnumerator PreviewChecks()
     {
