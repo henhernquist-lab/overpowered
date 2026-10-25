@@ -193,8 +193,11 @@ public sealed class NovaCustomizationVerificationRunner : MonoBehaviour
         gameplayCamera.transform.position=W.Hero.transform.position+W.Hero.transform.forward*3.6f+W.Hero.transform.right*.8f+Vector3.up*1.35f;gameplayCamera.transform.LookAt(W.Hero.transform.position+Vector3.up*.95f);gameplayCamera.Render();
         var gameplayImage=Capture(portrait,"nova-gameplay-city.png");Destroy(gameplayImage);gameplayCamera.targetTexture=null;portrait.Release();Destroy(portrait);
         var viewCamera=Camera.main;var follow=viewCamera.GetComponent<ThirdPersonCamera>();follow.enabled=false;viewCamera.transform.position=W.Hero.transform.position+Vector3.up*3;viewCamera.transform.LookAt(W.Hero.transform.position+Vector3.forward*5);
-        Check(W.Powers.SynergyRunner.TryActivate(),"Existing signature can activate on the customized playable hero");yield return null;
-        Check(W.Hero.GetComponent<HumanoidPresentation>().State=="Cast","Real signature dispatch preserves the shared Cast animation");W.Powers.SynergyRunner.Cancel();
+        string signatureState=W.Powers.Synergy.Effect is SeismicSlamEffect?"Punch":"Cast";
+        Check(W.Powers.SynergyRunner.TryActivate(),"Existing signature can activate on the customized playable hero");
+        float signatureDeadline=Time.realtimeSinceStartup+.4f;var signaturePresentation=W.Hero.GetComponent<HumanoidPresentation>();
+        while(signaturePresentation.State!=signatureState&&Time.realtimeSinceStartup<signatureDeadline)yield return null;
+        Check(signaturePresentation.State==signatureState,"Real "+W.Powers.Synergy.Id+" dispatch preserves its existing "+signatureState+" animation (observed "+signaturePresentation.State+")");W.Powers.SynergyRunner.Cancel();
         // City session instrumentation may legitimately add a power-session counter; compare the separate-process save against the real final state.
         W.Progression.Save();File.WriteAllText(Dir+"/saves/expected.json",JsonUtility.ToJson(W.Progression.Data));
         Log("MEASURED NOVA runtime: "+string.Join("; ",live.GetComponentsInChildren<SkinnedMeshRenderer>().Select(r=>r.sharedMesh.vertexCount+" vertices / "+r.bones.Length+" bones"))+"; one Animator and shared costume material");
