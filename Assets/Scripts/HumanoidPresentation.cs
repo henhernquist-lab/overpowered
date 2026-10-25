@@ -44,7 +44,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
 #endif
     SuperHeroController hero;CityNpc npc;
     WorldSession world;PowerUser powers;Vector3 neutralHipsPosition;
-    float actionUntil, phase, lean, actionYaw, attackImpactSeconds, attackEndSeconds, attackFollowRate, lastActiveTime;
+    float actionUntil, phase, lean, actionYaw, attackImpactSeconds, attackEndSeconds, attackFollowRate, lastActiveTime, bossWindupOverride=-1f;
     bool dead, punchMarkerPending, kickMarkerPending, marteloMarkerPending, attackMarkerPending, deferredHit, deferredStrongHit;
     Vector3 stableClimbNormal;
     Quaternion climbFacing=Quaternion.identity;
@@ -224,7 +224,7 @@ public sealed class HumanoidPresentation : MonoBehaviour
     }
     void FitAttack(string state,AnimationClip clip,float start,float impact,float end,float followRate)
     {
-        float windup=Mathf.Max(.01f,npc.WindupSeconds);
+        float windup=Mathf.Max(.01f,bossWindupOverride>0f?bossWindupOverride:npc.WindupSeconds);
         AttackFittedRate=Mathf.Max(.01f,(impact-start)/windup);
         attackClip=clip;attackImpactSeconds=impact;attackEndSeconds=Mathf.Max(impact,end);attackFollowRate=Mathf.Max(.01f,followRate);
         Action(state,clip,AttackFittedRate,start,true);AttackState=attackMarkerState=state;attackMarkerPending=true;
@@ -236,6 +236,20 @@ public sealed class HumanoidPresentation : MonoBehaviour
         if(AttackState==null)return;
         attackMarkerPending=false;AttackState=null;if(!dead)actionUntil=0; // Update() returns to locomotion
     }
+    // ---- Pulsebreaker miniboss: the same fitted playback, with the boss's own windup and gesture. No new clips.
+    /// Plays `state` so the clip's impact marker lands exactly at the boss attack's release.
+    public void BossAttack(string state,AnimationClip clip,float start,float impact,float end,float followRate,float windup)
+    {
+        if(dead||npc==null||clip==null)return;
+        bossWindupOverride=Mathf.Max(.01f,windup);
+        FitAttack(state,clip,start,impact,end,followRate);
+        bossWindupOverride=-1f;
+    }
+    /// Release: finish the gesture at the clip's normal follow-through playback.
+    public void BossAttackRelease(){Attack();}
+    /// The boss attack was aborted (freeze, pause, death): return to locomotion without a follow-through.
+    public void BossAttackCancel(){AttackCanceled();}
+
     void Attack()
     {
         if(dead)return;

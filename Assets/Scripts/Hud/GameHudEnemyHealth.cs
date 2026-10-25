@@ -118,7 +118,7 @@ public sealed partial class GameHud
     }
     EnemyBarDisplay ShowEnemyBar(CityNpc target,float until)
     {
-        if(target==null || target.Role==NpcRole.Civilian || !target.Hostile)return null;
+        if(target==null || target.Role==NpcRole.Civilian || !target.Hostile || target.IsBoss)return null;   // the boss has its own bar
         foreach(var bar in EnemyBars)if(bar.Target==target){bar.ShowUntil=Mathf.Max(bar.ShowUntil,until);return bar;}
         EnemyBarDisplay free=null;
         foreach(var bar in EnemyBars)if(bar.Target==null ||

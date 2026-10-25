@@ -89,7 +89,7 @@ public class EndlessWaveDirector : ModeDirector
     }
 }
 
-public struct EnemySpec { public NpcRole Role; public EnemyArchetype Archetype; public float Health, Damage; }
+public struct EnemySpec { public NpcRole Role; public EnemyArchetype Archetype; public float Health, Damage; [Tooltip("The miniboss slot: the spawned body is handed to PulsebreakerBoss.")] public bool Boss; }
 [System.Serializable] public struct ArchetypeShare { public EnemyArchetype Archetype; [Min(1)] public int FromWave; [Min(0)] public int Weight; }
 
 /// Runtime wave state for EndlessWaveDirector (lives on the session object, destroyed with the city scene).
@@ -176,7 +176,8 @@ public sealed class EndlessWaveState : ModeDirectorState
         World.Message = $"WAVE {Wave}: {Size} enemies";
         if (Plan != null && (Plan.Modifiers.Count > 0 || Plan.Miniboss))
         {
-            string names = Plan.Names + (Plan.Miniboss ? (Plan.Modifiers.Count > 0 ? " + " : "") + "MINIBOSS" : "");
+            string bossName = Tuning.Events.MinibossArchetype != null ? Tuning.Events.MinibossArchetype.DisplayName.ToUpperInvariant() : "MINIBOSS";
+            string names = Plan.Names + (Plan.Miniboss ? (Plan.Modifiers.Count > 0 ? " + " : "") + bossName : "");
             World.Message += " · " + names;
             Announce($"WAVE {Wave}", names, Plan.Elites > 0 ? $"{Plan.Elites} ELITES" : "");
         }
@@ -216,6 +217,7 @@ public sealed class EndlessWaveState : ModeDirectorState
             var slot = EndlessWaveEvents.Slot.Regular; var spec = Spec(ref slot);
             var npc = CityNpc.Spawn(World, hit.position, spec.Role, spec.Archetype, spec.Health, spec.Damage);
             if (npc == null) continue;
+            if (spec.Boss) PulsebreakerBoss.Attach(npc, Wave);   // the only place a miniboss is created
             npc.AlwaysAggro = true;
             npc.Damaged += dead => { if (dead) Defeated(npc); };
             Alive.Add(npc); AliveSlots.Add(slot); AliveCost += Tuning.Events != null ? Tuning.Events.CostOf(slot) : 1; Spawned++;
@@ -241,6 +243,7 @@ public sealed class EndlessWaveState : ModeDirectorState
             spec.Health = Tuning.HealthFor(Wave) * Plan.Health * h * events.MinibossHealthMultiplier;
             spec.Damage = Tuning.DamageFor(Wave) * Plan.Damage * d * events.MinibossDamageMultiplier;
         }
+        spec.Boss = slot == EndlessWaveEvents.Slot.Miniboss;
         return spec;
     }
     void Defeated(CityNpc npc)

@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b9ccdcf82ea48a28ba2367f5ef84bc1, type: 3}
+  m_Name: PulsebreakerTuning
+  m_EditorClassIdentifier: Assembly-CSharp::PulsebreakerTuning
+  DamageCapFraction: 0.25
+  FreezeResistance: 0.5
+  RootResistance: 0.6
+  ArrivalSeconds: 1.2
+  GapSeconds: 1.9
+  RepositionSeconds: 1.1
+  SlamWindup: 1
+  SlamRecovery: 1.2
+  SlamChooseRange: 4.6
+  SlamCoreRadius: 3
+  SlamRadius: 8
+  SlamRingSeconds: 0.45
+  SlamRingBand: 0.9
+  SlamJumpHeight: 1.3
+  SlamDamageMultiplier: 1
+  SlamKnockback: 3.5
+  SlamKnockbackSeconds: 0.3
+  CannonWindup: 1.35
+  CannonRecovery: 1
+  CannonMinRange: 5
+  CannonMaxRange: 26
+  CannonDamageMultiplier: 1.25
+  CannonTelegraphWidth: 0.55
+  CannonMuzzleHeight: 1.35
+  CannonBoltSpeed: 24
+  CannonBoltRange: 30
+  CannonBoltRadius: 0.45
+  CannonKnockback: 2
+  CannonKnockbackSeconds: 0.25
+  RushWindup: 0.8
+  RushSpeed: 26
+  RushMaxSeconds: 0.45
+  RushRecoveryMiss: 1.5
+  RushRecoveryHit: 0.6
+  RushStaggerSeconds: 0.7
+  RushMinRange: 4
+  RushMaxRange: 16
+  RushLaneWidth: 1.2
+  RushDamageMultiplier: 0.9
+  RushKnockback: 5
+  RushKnockbackSeconds: 0.35
+  RushContactRadius: 0.35
+  PhaseHealthFraction: 0.4
+  PhaseShiftSeconds: 0.6
+  Phase2GapMultiplier: 0.6
+  Phase2RecoveryMultiplier: 0.7
+  Phase2MoveSpeedMultiplier: 1.15
+  ComboGap: 0.35
+  ApproachSpeedMultiplier: 0.9
+  HoldMin: 3.5
+  HoldMax: 7
+  StrafeSpeed: 1.6
+  MaxEngageDistance: 45

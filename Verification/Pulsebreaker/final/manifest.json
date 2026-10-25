@@ -1,0 +1,36 @@
+[
+  {
+    "entry": "PulsebreakerVerification.Run",
+    "commit": "eb5290c5195b87530979471b22b0cebe841d5f47",
+    "status_before": "M Assets/Resources/ModeDirectors/EndlessWaveEvents.asset\n M Assets/Scripts/CityNpc.cs\n M Assets/Scripts/EndlessWaveDirector.cs\n M Assets/Scripts/GameHud.cs\n M Assets/Scripts/Hud/GameHudEnemyHealth.cs\n M Assets/Scripts/HumanoidPresentation.cs\n?? Assets/Editor/PulsebreakerVerification.cs\n?? Assets/Editor/PulsebreakerVerification.cs.meta\n?? Assets/Resources/Enemies/Pulsebreaker.asset\n?? Assets/Resources/Enemies/Pulsebreaker.asset.meta\n?? Assets/Resources/Enemies/PulsebreakerTuning.asset\n?? Assets/Resources/Enemies/PulsebreakerTuning.asset.meta\n?? Assets/Scripts/Enemies.meta\n?? Assets/Scripts/Enemies/\n?? Assets/Scripts/Hud/GameHudBoss.cs\n?? Assets/Scripts/Hud/GameHudBoss.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/Pulsebreaker/\n?? docs/pulsebreaker.md",
+    "started_utc": "2026-10-25T16:37:20.424629+00:00",
+    "save_before": "920cfbae3994ce721333c5f712436d57dbfd54c24657e8538d0fd26e153e711e",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Pulsebreaker/final/PulsebreakerVerification.Run.log",
+    "pid": 8576,
+    "exit": 0,
+    "seconds": 81.16,
+    "pass": 420,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Resources/ModeDirectors/EndlessWaveEvents.asset\n M Assets/Scripts/CityNpc.cs\n M Assets/Scripts/EndlessWaveDirector.cs\n M Assets/Scripts/GameHud.cs\n M Assets/Scripts/Hud/GameHudEnemyHealth.cs\n M Assets/Scripts/HumanoidPresentation.cs\n?? Assets/Editor/PulsebreakerVerification.cs\n?? Assets/Editor/PulsebreakerVerification.cs.meta\n?? Assets/Resources/Enemies/Pulsebreaker.asset\n?? Assets/Resources/Enemies/Pulsebreaker.asset.meta\n?? Assets/Resources/Enemies/PulsebreakerTuning.asset\n?? Assets/Resources/Enemies/PulsebreakerTuning.asset.meta\n?? Assets/Scripts/Enemies.meta\n?? Assets/Scripts/Enemies/\n?? Assets/Scripts/Hud/GameHudBoss.cs\n?? Assets/Scripts/Hud/GameHudBoss.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/Pulsebreaker/\n?? docs/pulsebreaker.md"
+  },
+  {
+    "entry": "PulsebreakerVerification.Reload",
+    "commit": "eb5290c5195b87530979471b22b0cebe841d5f47",
+    "status_before": "M Assets/Resources/ModeDirectors/EndlessWaveEvents.asset\n M Assets/Scripts/CityNpc.cs\n M Assets/Scripts/EndlessWaveDirector.cs\n M Assets/Scripts/GameHud.cs\n M Assets/Scripts/Hud/GameHudEnemyHealth.cs\n M Assets/Scripts/HumanoidPresentation.cs\n?? Assets/Editor/PulsebreakerVerification.cs\n?? Assets/Editor/PulsebreakerVerification.cs.meta\n?? Assets/Resources/Enemies/Pulsebreaker.asset\n?? Assets/Resources/Enemies/Pulsebreaker.asset.meta\n?? Assets/Resources/Enemies/PulsebreakerTuning.asset\n?? Assets/Resources/Enemies/PulsebreakerTuning.asset.meta\n?? Assets/Scripts/Enemies.meta\n?? Assets/Scripts/Enemies/\n?? Assets/Scripts/Hud/GameHudBoss.cs\n?? Assets/Scripts/Hud/GameHudBoss.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/Pulsebreaker/\n?? docs/pulsebreaker.md",
+    "started_utc": "2026-10-25T16:38:41.802037+00:00",
+    "save_before": "920cfbae3994ce721333c5f712436d57dbfd54c24657e8538d0fd26e153e711e",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Pulsebreaker/final/PulsebreakerVerification.Reload.log",
+    "pid": 8688,
+    "exit": 0,
+    "seconds": 28.74,
+    "pass": 8,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Resources/ModeDirectors/EndlessWaveEvents.asset\n M Assets/Scripts/CityNpc.cs\n M Assets/Scripts/EndlessWaveDirector.cs\n M Assets/Scripts/GameHud.cs\n M Assets/Scripts/Hud/GameHudEnemyHealth.cs\n M Assets/Scripts/HumanoidPresentation.cs\n?? Assets/Editor/PulsebreakerVerification.cs\n?? Assets/Editor/PulsebreakerVerification.cs.meta\n?? Assets/Resources/Enemies/Pulsebreaker.asset\n?? Assets/Resources/Enemies/Pulsebreaker.asset.meta\n?? Assets/Resources/Enemies/PulsebreakerTuning.asset\n?? Assets/Resources/Enemies/PulsebreakerTuning.asset.meta\n?? Assets/Scripts/Enemies.meta\n?? Assets/Scripts/Enemies/\n?? Assets/Scripts/Hud/GameHudBoss.cs\n?? Assets/Scripts/Hud/GameHudBoss.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/Pulsebreaker/\n?? docs/pulsebreaker.md"
+  }
+]

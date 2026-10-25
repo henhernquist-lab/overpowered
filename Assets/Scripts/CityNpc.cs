@@ -68,6 +68,7 @@ public sealed partial class CityNpc : MonoBehaviour
     public void Root(float duration)
     {
         if(duration<=0f||Dead)return;
+        duration*=RootResistance;   // 1 for every archetype; the miniboss (CityNpc.Boss.cs) is harder to pin down
         DisruptGuard(Mathf.Max(duration,HasGuard?Archetype.Guard.BreakSeconds:0));
         rootedUntil=Mathf.Max(rootedUntil,Time.time+duration);
         if(Agent!=null&&Agent.enabled&&Agent.isOnNavMesh){Agent.isStopped=true;Agent.velocity=Vector3.zero;}
@@ -155,6 +156,7 @@ public sealed partial class CityNpc : MonoBehaviour
     /// suppression in crime encounters), which must not show a frost glyph.
     public void Freeze(float duration, bool ice=true)
     {
+        duration*=FreezeResistance;   // 1 for every archetype; the miniboss (CityNpc.Boss.cs) is harder to lock down
         if(!Frozen&&duration>0)FreezeStartedFrame=Time.frameCount; frozenUntil=Mathf.Max(frozenUntil,Time.time+duration);
         if(duration<=0f)return;
         CancelAttack(); DisruptGuard(Mathf.Max(duration,HasGuard?Archetype.Guard.BreakSeconds:0));
@@ -200,6 +202,9 @@ public sealed partial class CityNpc : MonoBehaviour
     }
     void Update()
     {
+        // The Pulsebreaker miniboss owns its frame completely: its own state machine, its own timings, never the archetype
+        // attack cycle and never NpcLod's reduced think rate (its telegraphed windows must land on time).
+        if (boss != null) { boss.Tick(); return; }
         if (world==null || Dead) return;
         if (NpcLod.Current!=null && !NpcLod.Current.ShouldThink(this)) return;   // far NPC between its reduced-rate AI ticks
         if (!Agent.isOnNavMesh || (world.Mode!=null&&(world.Mode.Ended||world.Mode.Paused))) { CancelAttack(); return; }
@@ -347,6 +352,7 @@ public sealed partial class CityNpc : MonoBehaviour
     }
     void CancelAttack()
     {
+        boss?.Abort("cancel");   // freeze / pause / session end / death / lost hostility
         burstIndex=0; CancelEvasion();
         if (Phase!=AttackPhase.Windup && Phase!=AttackPhase.Engage) { Withdraw(); return; }
         bool windup=Phase==AttackPhase.Windup;

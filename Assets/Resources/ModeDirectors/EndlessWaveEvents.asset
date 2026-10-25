@@ -70,7 +70,7 @@ MonoBehaviour:
   EliteDamageMultiplier: 1.4
   EliteAliveCost: 2
   MinibossEvery: 5
-  MinibossArchetype: {fileID: 11400000, guid: 8849d95f3b6842299eb95540af7b454b, type: 2}
+  MinibossArchetype: {fileID: 11400000, guid: 3aaa6d8d541b494cbfe38d3f2f0748e5, type: 2}
   MinibossHealthMultiplier: 8
   MinibossDamageMultiplier: 1.6
   MinibossAliveCost: 4

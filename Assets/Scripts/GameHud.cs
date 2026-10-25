@@ -76,7 +76,7 @@ public sealed partial class GameHud : MonoBehaviour
         Root = Document.rootVisualElement; Root.name = "game-hud"; Root.pickingMode = PickingMode.Ignore;
         Root.style.position = Position.Absolute; Root.style.left = Root.style.right = Root.style.top = Root.style.bottom = 0;
         Root.style.unityFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"); Root.style.color = C(CityColor.UiInk);
-        Build(); BuildOverlay(); BuildFeedback(); BuildEnemyFeedback(); BuildParkourHud();
+        Build(); BuildOverlay(); BuildFeedback(); BuildEnemyFeedback(); BuildParkourHud(); BuildBossBar();
     }
 
     /// Shows or hides the whole HUD (the FPS A/B uses this to measure the legacy IMGUI-only frame).
@@ -328,6 +328,7 @@ public sealed partial class GameHud : MonoBehaviour
         long started = System.Diagnostics.Stopwatch.GetTimestamp();
         Refresh();
         TickEnemyFeedback();
+        TickBossBar();
         LastUpdateMs = (System.Diagnostics.Stopwatch.GetTimestamp() - started) * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
     }
     void Refresh()

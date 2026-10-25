@@ -5681,3 +5681,65 @@ Historical attempts retained: initial logic-only passes missed incomplete same-f
 Preservation: 1,002 task-start modified/untracked files verified byte-identical; 524 pre-existing Forge/Sidekick/first-person/Humanoid verification files restored exactly. 66 fresh changed/new regression artifacts retained separately; proof in `Verification/VectorCustomization/preservation.txt`. Existing unrelated local work remains in place.
 
 UNVERIFIED / remaining art: two chest-emblem meshes, human art/polish approval, hardware-input feel, all day/night/near-camera angles, long-session memory behavior and sustained standalone CPU/GPU/draw-call comparison. No standalone build or polished-superhero completion claim. Open Home → HERO FORGE → VECTOR → SUIT: Starter armor · light fittings to try the available package; use scrolling to reach all power/signature controls.
+
+
+## PULSEBREAKER miniboss — Endless elite — 2026-10-25
+
+Branch `feature/pulsebreaker-miniboss` in worktree `../op-pulsebreaker` (based on committed `eb5290c`). No merge or push. Full
+implementation handoff, attack tables and human checklist: `docs/pulsebreaker.md`.
+
+Pulsebreaker is a `CityNpc` body with its own brain (`PulsebreakerBoss`), not a Brute with more health. It owns its frame
+(`CityNpc.Update` returns into `boss.Tick()` before `NpcLod` and the archetype cycle), takes exactly one `AttackToken` per
+attack and releases it in recovery, and routes every hit through the existing boundaries: damage to the boss via
+`CityNpc.Damage` (guard, stats, `NpcDamageResult`, XP/Heat, `OnDefeat`), damage to the player via `WorldSession.DamagePlayer`
+plus `FeelDirector.PlayerHit`. Three telegraphed attacks: Shockwave Slam (1.00 s windup, 3 m core disc, ring expanding to 8 m
+in 0.45 s, 1.20 s recovery, jumpable above 1.3 m), Pulse Cannon (1.35 s windup, aim locked at commit, 24 m/s bolt from a
+3-object pool with a 30 m cap, 1.00 s recovery, blocked by walls), Overdrive Rush (0.80 s windup, capsule + NavMesh validated
+lane that shortens rather than clipping, 26 m/s capped at 0.45 s, 1.50 s miss recovery / 0.60 s on hit). Phase two at
+`HealthFraction <= 0.40`, once, damageable during the 0.6 s transition, gaps x0.6, recovery x0.7, move x1.15, a 40% chance of
+one chained follow-up, reactor/gauntlets cyan -> fire, HUD `PHASE 2`; death always wins over the transition. Every player hit
+is capped at `MaxHealth x 0.25`, so no single boss hit can kill from full.
+
+Numbers against the shipped values: round 5 Normal Endless is `HealthFor(5) 104 x slot 8 x archetype 1.0 = 832 HP` mean
+(+-10% spawn roll; 769-906 observed) at `DamageFor(5) x 1.6 = 17.9` base (slam 17.9 / cannon 22.4 / rush 16.1 before the cap),
+versus the previous Brute-slot miniboss's 2,496 HP, 40%-of-a-bar slam and ~55 s reference-DPS fight. Rounds 10/15/20 scale
+through the existing `HealthFor`/`DamageFor` only; nothing double-applies difficulty. `FreezeResistance .5` /
+`RootResistance .6` are shared multipliers on the existing `Freeze`/`Root` entry points (1 for every other enemy), not special
+cases inside powers.
+
+Spawning is Endless-only by construction: `hero`, `villain` and `free-play` have no `Director`, BATTLE LAB is a practice
+session with no director. `EndlessWaveEvents.MinibossArchetype` now points at `Enemies/Pulsebreaker` with `MinibossEvery 5`
+and the untouched slot multipliers (health x8, damage x1.6, alive cost 4). One live boss (`Attach` refuses a second,
+idempotent on the same body); the kill flows through the existing `OnDefeat -> EndlessWaveState.Defeated` path. Boss HP is read
+by a new `GameHudBoss` bar every frame and the small floating enemy bar is suppressed for it, so there is one readout.
+
+VERIFIED: **428 PASS / 0 FAIL across two serial Unity 6000.6.0f1 processes**, both exit 0, personal save and Sidekick
+database hashes unchanged. `PulsebreakerVerification.Run` 420 PASS / 81.16 s and the separate-process
+`PulsebreakerVerification.Reload` 8 PASS / 28.74 s (level 3 / 15 XP persisted, saved ice+strength loadout intact, imported
+archetype/tuning/miniboss slot intact, no boss in the hub). Evidence: `Verification/Pulsebreaker/final/manifest.json` with
+per-process logs and check lists. Covered live: mode gating, Free Play containing no boss at any frame and never showing the
+bar, rounds 1-6 of a 1-per-wave Endless clone (no boss before 5, exactly one at 5, `MinibossKills` recorded once, round
+advances, none at 6), boss HP against `HealthFor(5) x 8 x difficulty`, the bar against the authoritative fraction, measured
+1.00 s slam windup with telegraph shown then hidden, ring damage on a grounded player, distance and 2.2 m-height dodges,
+token release, cannon lane telegraph + one pooled bolt + hit, lane-dodge control, wall-block control, rush telegraph, 10.2 m
+bounded travel, dodged-rush miss recovery, rush stopped on the near side of a wall, phase two once at 38-40% with the bar
+switching and never repeating, death in phase two and death during the phase transition, and regression controls (a Rusher
+still runs its own cycle, ordinary enemies keep freeze resistance 1, a 2 s freeze becomes 1 s on the boss, freezing mid-windup
+cancels and hides the telegraph, no token leak, boss thaws and resumes a valid state).
+
+Retained failed attempts during this work: the first live run exposed that `CityNpc.Update` never called the boss brain at all
+(330 PASS then a fail on `Active` clearing) - fixed by the documented `Update` hook, and the suite then ran the full attack
+matrix; a `ClearLane` fixture that assumed a fixed lane length made the slam damage check flaky and was replaced with explicit
+`Agent.Warp` fixtures; the first Reload claimed XP that the run had never granted (boss kills used a null source) and was fixed
+by granting XP through the real `AddXp` API before the reload.
+
+MEASURED: nothing new. No FPS, frame-time or allocation claim is made for the boss. Its cost is one `CityNpc` plus a header
+brain, three pooled bolt cubes, two primitive gauntlets, one reactor sphere and one process-wide ring mesh, all sharing
+`CityMaterials` palette swatches; there is no per-frame instantiate, no per-frame material creation and no full-scene query.
+Prior performance history above is unchanged and no detail was cut.
+
+UNVERIFIED: human feel and read - whether the 3 m core disc plus the fast ring reads clearly at combat speed, day/night
+contrast of the cyan/fire reactor, physical-input dodging, camera shake comfort, and sustained standalone frame rate with the
+boss plus a full wave. **Missing art:** no bespoke armored boss model, no authored reactor/gauntlet VFX, no custom animations;
+the silhouette is the scaled (1.25) shared mannequin plus primitives and the shared `Hurricane Kick`/`Shoot`/`Punch`/`Taunt`
+clips. A real boss armor set is the largest remaining presentation gap. Human checklist: `docs/pulsebreaker.md` section 12.
