@@ -8,7 +8,8 @@ public sealed partial class HeroForgeArtVerificationRunner
 {
     IEnumerator Poses(HeroForgeScreen screen,HeroDefinition hero,string mask)
     {
-        var animator=screen.PreviewModel.GetComponent<Animator>();var camera=screen.PreviewModel.transform.parent.GetComponentInChildren<Camera>();var bake=new Mesh();var originalPosition=camera.transform.position;var originalRotation=camera.transform.rotation;float originalFov=camera.fieldOfView;float originalAspect=camera.aspect;
+        var animator=screen.PreviewModel.GetComponent<Animator>();var originalCamera=screen.PreviewModel.transform.parent.GetComponentInChildren<Camera>();
+        var camera=new GameObject("Independent art pose camera").AddComponent<Camera>();camera.CopyFrom(originalCamera);camera.enabled=false;camera.usePhysicalProperties=false;camera.ResetProjectionMatrix();var bake=new Mesh();
         foreach(string state in new[]{"Locomotion","Jump","Double Jump","Backflip","Climb","Fall","Land","Punch","Martelo Kick","Hurricane Kick","Cast"})
         {
             Check(animator.HasState(0,Animator.StringToHash(state)),hero.Id+"/"+mask+": unchanged "+state+" state exists");animator.Play(state,0,.35f);animator.Update(0);yield return null;yield return null;
@@ -23,7 +24,7 @@ public sealed partial class HeroForgeArtVerificationRunner
             camera.transform.position=world.center+new Vector3(.16f,.04f,1).normalized*distance;camera.transform.LookAt(world.center);camera.targetTexture=screen.Preview;camera.Render();camera.targetTexture=null;
             var image=Capture(screen.Preview,"poses/"+mask+"/"+state.Replace(" ","-")+".png");Destroy(image);
         }
-        animator.Play("Locomotion");animator.Update(0);camera.transform.SetPositionAndRotation(originalPosition,originalRotation);camera.fieldOfView=originalFov;camera.aspect=originalAspect;Destroy(bake);
+        animator.Play("Locomotion");animator.Update(0);Destroy(camera.gameObject);Destroy(bake);
     }
     IEnumerator PreviewChecks()
     {

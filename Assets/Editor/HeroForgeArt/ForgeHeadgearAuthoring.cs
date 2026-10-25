@@ -64,7 +64,7 @@ public static class ForgeHeadgearAuthoring
             {
                 int k=points.Count;points.AddRange(new[]{a,b,c,d});uv.AddRange(Enumerable.Repeat(roles[role],4));triangles.AddRange(new[]{k,k+1,k+3,k+1,k+2,k+3});
             }
-            float outset=guardian ? .018f:phantom ? .012f:.011f;float bulk=guardian?1.09f:phantom?1.015f:1.025f;
+            float outset=band ? .011f : guardian ? .026f : phantom ? .020f : .019f;float bulk=guardian?1.09f:phantom?1.015f:1.025f;
             if(band)
             {
                 int sectors=spectrum?20:16;float halfAngle=spectrum?1.72f:1.87f;var rows=new[]{0f,.16f,.84f,1f};
