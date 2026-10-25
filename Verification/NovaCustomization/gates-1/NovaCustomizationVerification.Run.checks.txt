@@ -1,0 +1,4 @@
+PASS Character registration is idempotent and retains other heroes
+PASS Local module contains only the exclusive character
+PASS Fresh/legacy Version 1 save has no forced appearance migration
+FAIL System.Exception: Missing appearance resolves original suit and exact legacy colors

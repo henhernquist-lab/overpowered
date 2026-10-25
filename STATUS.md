@@ -5743,3 +5743,22 @@ contrast of the cyan/fire reactor, physical-input dodging, camera shake comfort,
 boss plus a full wave. **Missing art:** no bespoke armored boss model, no authored reactor/gauntlet VFX, no custom animations;
 the silhouette is the scaled (1.25) shared mannequin plus primitives and the shared `Hurricane Kick`/`Shoot`/`Punch`/`Taunt`
 clips. A real boss armor set is the largest remaining presentation gap. Human checklist: `docs/pulsebreaker.md` section 12.
+
+
+## NOVA modular appearance module — 2026-10-25 (`feature/hero-forge-nova`)
+
+Isolated from baseline `eb5290c` in `../op-hero-forge-nova`; no merge/push. Asset phase `375f2c5`, integration/tests `949f7c5`, diagnostic lens `f19c02e`/`f6c43cd`, equipped-signature fixture contract `e528eae`. Detailed source/assets/integration/limitations: `docs/nova-customization.md`.
+
+Energy Weave is a real fitted skinned bodysuit from installed Sidekick human part meshes (feminine100/skinny14.5) with the existing fitted face/boots; the fox mask, robe and hanging accessories are removed. One native shared body: **5,065 vertices / 65 weighted bone entries**; Nova Star **49 vertices/64 triangles**, Energy Core **32/32**, each on one existing chest bone. Core-equipped gameplay total **5,097 vertices / 66 entries**, two renderers, one Animator and one cached palette suit material. Existing Avatar, full skeleton, physics and stats remain. Three channels color garments/emblems while facial cells remain protected. Optional glow deferred.
+
+**Integration-ready, not ordinarily registered:** local module uses the VECTOR catalog/renderer/UI/save APIs with an explicit registration menu. Tests temporarily register in memory; the central catalog on disk is unchanged. After authorized integration invoke `Overpowered > Forge > Nova > Register content after integration`, review/commit the resulting catalog diff. Old profiles retain legacy defaults; stable IDs and independent hero records use existing PlayerProgression.
+
+**Missing art / not satisfied:** Spectrum Visor and Phantom Helmet have unavailable definitions with reasons; no substitute mesh is passed off as either design. Human visual approval, full-motion seam/clipping review and standalone performance remain UNVERIFIED. Some Climb pose framing crops the crown; pose snapshots are samples, not continuous-animation proof.
+
+Selected native Unity 6000.6.0f1 evidence: `Verification/NovaCustomization/final-contract/manifest.json`, tested source `e528eae`: **Run 140/0 + separate-process Reload 6/0**, both exit 0, unchanged real personal-save and Sidekick DB hashes. Checks exercise actual Forge/swatches/pixel swaps, 96 edits with no persistent mesh/material/texture growth, invalid IDs/fallback, per-hero persistence, other hero bodies/Avatars, first-person, unchanged capsule/health formula, eleven shared animation states, run/jumps/secondary/punch/kick/backflip/climb/Fire/signature and normal-city spawn. Actual PNGs/contact sheet inspected. No standalone FPS/GPU/crowd/long-session claim. Existing vendor Metal tessellation errors and obsolete API warnings are outside the passed runtime assertions; whole Console is not claimed clean.
+
+Preserved failures: initial legacy-color fixture **3/1**; restored-default-power fixture **127/1**; later single-frame Cast observation **139/1**. Fixtures now use real Forge equip gates/cooldown and bounded immediate/dispatch presentation checks; no gameplay gate changed. The failed signature run selected Solar Flare; its exact intermediate observed state/cause was not logged and remains UNVERIFIED. Initial strict matrix/pivot fitting failed before the measured weighted-pivot correction. An accessory-only robe attempt was visually rejected and retained under `attempts/rejected-robe`. Native joint delta 20.465mm and differing imported axes were explicitly fitted to the existing rig.
+
+`source-preservation.json` confirms all **6,277 baseline files excluding this append-only STATUS** unchanged/missing=0, including shared gameplay/scenes/catalog, other heroes and vendor files. New shared folder meta is identical to TITAN's separate branch. Main checkout's existing dirty work was not used as scratch space.
+
+Final exact fixture loadout is Fire/Strength + **Phase Shift** secondary + **Solar Flare** signature. Phase Shift activation was tested. Flight activation/procedural flight pose remain **UNVERIFIED**; the conditional Flight fixture branch was not exercised. See `verified-loadout.json`.
