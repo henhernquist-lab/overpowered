@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7df26f6ccef465ba6eae88287559f97, type: 3}
   m_Name: EndlessWaveEvents
   m_EditorClassIdentifier: Assembly-CSharp::EndlessWaveEvents
-  ModifierFromWave: 4
+  ModifierFromWave: 99
   ModifierEvery: 2
   ExtraModifierEvery: 10
   MaxModifiersPerWave: 3
@@ -62,7 +62,7 @@ MonoBehaviour:
     Count: 1
     Score: 1.4
     EliteShareBonus: 0.2
-  EliteFromWave: 3
+  EliteFromWave: 99
   EliteShare: 0.15
   EliteShareGrowthPerWave: 0.01
   MaxEliteShare: 0.4
@@ -76,6 +76,30 @@ MonoBehaviour:
   MinibossAliveCost: 4
   EliteKillScore: 25
   MinibossKillScore: 150
-  FlawlessBonus: 40
+  FlawlessBonus: 0
   Seed: 7331
   RandomizePerRun: 1
+  CurveKind: 2
+  StandardCurve:
+    Rusher: {fileID: 11400000, guid: 1d334c48aa174f13a7467013e21ed45a, type: 2}
+    Gunner: {fileID: 11400000, guid: 5c4548189b514982a60622ee54f14bbc, type: 2}
+    Brute: {fileID: 11400000, guid: 8849d95f3b6842299eb95540af7b454b, type: 2}
+    Skirmisher: {fileID: 11400000, guid: eec591fa5c5841e9b8746290afff91ff, type: 2}
+    Bulwark: {fileID: 11400000, guid: e30197579ed34e71910a9987c3401918, type: 2}
+    GunnerFromWave: 2
+    BruteFromWave: 3
+    SkirmisherFromWave: 3
+    BulwarkFromWave: 5
+    MinRusherWeight: 0.05
+  EndlessCurve:
+    Rusher: {fileID: 11400000, guid: 1d334c48aa174f13a7467013e21ed45a, type: 2}
+    Gunner: {fileID: 11400000, guid: 5c4548189b514982a60622ee54f14bbc, type: 2}
+    Brute: {fileID: 11400000, guid: 8849d95f3b6842299eb95540af7b454b, type: 2}
+    Skirmisher: {fileID: 11400000, guid: eec591fa5c5841e9b8746290afff91ff, type: 2}
+    Bulwark: {fileID: 11400000, guid: e30197579ed34e71910a9987c3401918, type: 2}
+    GunnerFromWave: 2
+    BruteFromWave: 3
+    SkirmisherFromWave: 3
+    BulwarkFromWave: 5
+    MinRusherWeight: 0.05
+  MinibossRegularCost: 3

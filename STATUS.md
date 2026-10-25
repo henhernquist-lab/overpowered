@@ -5743,3 +5743,62 @@ contrast of the cyan/fire reactor, physical-input dodging, camera shake comfort,
 boss plus a full wave. **Missing art:** no bespoke armored boss model, no authored reactor/gauntlet VFX, no custom animations;
 the silhouette is the scaled (1.25) shared mannequin plus primitives and the shared `Hurricane Kick`/`Shoot`/`Punch`/`Taunt`
 clips. A real boss armor set is the largest remaining presentation gap. Human checklist: `docs/pulsebreaker.md` section 12.
+
+
+## Enemy Spawn Director 2.0 — progressive archetype curves + boss rounds — 2026-10-25
+
+Branch `feature/enemy-spawn-director-2` in worktree `../op-enemy-spawn-director`, based on `eb5290c` and fast-forwarded to
+`3301e39` (the committed Pulsebreaker miniboss; nothing unrelated came with it). No merge, no push. Design/verification
+handoff and the human checklist: `docs/enemy-spawn-director.md`.
+
+Repository truth that shaped this work: only `endless-fight` and `endless-fight-villain` have rounds (both share
+`ModeDirectors/EndlessWaves.asset`); `hero`, `villain` and `free-play` have no `Director` (Hero/Villain are encounter-driven,
+Free Play is ambient), and BATTLE LAB is a practice session. The director also had **no `Events` assigned**, so the wave-events
+asset existed but was never live and Pulsebreaker could not spawn in the real game at all.
+
+Implemented: `EnemyCompositionCurve` (five archetypes, unlock rounds, and a wave-dependent weight with `Standard` and
+`Endless` shapes) chosen by `EndlessWaveEvents.CurveKind`; `EndlessWaveDirector.ArchetypeFor` now feeds the existing
+deterministic weighted round-robin from either the curve or the untouched `Composition` weight table. Weights are always
+finite, non-negative, normalised over the archetypes unlocked that round, so a locked enemy cannot be drawn, the Rusher
+never disappears (floor .05, renormalised) and the mix is exact rather than randomly lumpy. `MinibossRegularCost = 3` trades
+three regular spawns for the boss on boss rounds; the events asset is now assigned to the shipping director with the
+**curve and the miniboss schedule only** (elites and modifier waves off, flawless bonus 0, so existing wave scoring is
+unchanged) and Pulsebreaker every 5th round.
+
+Standard: rounds 1-2 48/34/18/0/0; 3-4 39/29/19/13/0; 5+ `0.32-.07t / 0.29-.03t / .19 / .12+.05t / .08+.05t` with
+`t=clamp01((r-5)/15)`, settling at 25/26/19/17/13. Endless (shipping): 1-2 48/34/18/0/0; 3-4 38/30/20/12/0; 5+ Gunner .28,
+Brute .20, Skirmisher `min(.22,.12+.005(r-5))`, Bulwark `min(.16,.08+.004(r-5))`, Rusher the remainder - 32/28/20/12/8 at
+round 5, 23/28/20/17/12 at 15, 14/28/20/22/16 at 25 and beyond. **Deliberate adaptation:** the existing introduction rounds
+(Gunner 2, Brute 3, Skirmisher 3, Bulwark 5) are preserved instead of fielding Gunners and Brutes on round 1, so rounds 1-4
+renormalise over what is unlocked (round 1 is Rusher-only, round 2 is 58.5/41.5) and the published tables hold exactly from
+round 5. Counts, cadence, `MaxAlive 12`, spawn-ring validation and reinforcement are unchanged; the brief's fallback N(r)/I(r)
+curves were not layered on the existing growth. The `Standard` curve has no shipped consumer yet because no shipped mode has
+rounds; pointing a finite round mode at a director whose events use `CurveKind = Standard` enables it with no code change.
+
+VERIFIED: **2,451 PASS / 0 FAIL across four Unity 6000.6.0f1 processes**, all exit 0, personal save and Sidekick database
+hashes unchanged. `SpawnCurveVerification.Run` 1,962 PASS / 187.6 s (curves at rounds 1,2,3,4,5,10,15,20,25,50,100: finite,
+non-negative, sum 1.0000, locked archetypes exactly 0, Rusher never 0, no archetype over 60%; published tables at 5/15/20/25/100
+to three decimals; 200-spawn drawn mix exactly 64/56/40/24/16 at round 5, 46/56/40/34/24 at 15, 28/56/40/44/32 at 25; wave-1
+Rusher-only, wave-2 Rusher+Gunner, wave-3 +Brute+Skirmisher, wave-4 still no Bulwark, wave-5 all five; legacy WeightTable
+control; plans 1-30 with a boss exactly on multiples of 5, regulars minus 3, one boss slot, no elites; live Extreme Endless
+where wave 5 is the boss round with 8 regulars + one Pulsebreaker carrying the boss brain, exactly one boss, the alive budget
+holds every frame, the kill is counted once and round 6 follows; Free Play with no director, no boss, no boss bar and intact
+ambient population). Regressions on the new shipping data: `EndlessEventsVerification.Run` 43 PASS / 0 FAIL (with
+`--combat-roll 0.5` for exact stat comparisons, which is what that suite needs), `PulsebreakerVerification.Run` 446 PASS /
+0 FAIL, and `EndlessSimulation.Run` exit 0 with 9 PASS / 0 FAIL in its results file for waves 1-50 including the boss round
+trade.
+
+Difficulty application is verified exact rather than inferred: with a fixed combat roll on Extreme the round-5 Rusher spawns
+at 67.08 HP = `HealthFor(5) 104 x archetype 0.6 x 1.075`; a doubled multiplier would be 72.11. Composition is identical across
+Normal/Hard/Extreme by construction (the curve has no difficulty term).
+
+Retained failed attempts: `Verification/SpawnCurve/regressions` (EndlessSimulation first run, `DirectoryNotFoundException`
+because a fresh worktree had no `Verification/EndlessSimulation/` folder to write `waves.csv` into - environmental, then
+passed) and `Verification/SpawnCurve/regressions3` (EndlessEventsVerification without the fixed combat percentile, whose
+0.05 HP tolerance cannot hold against the +/-10% spawn variance; its documented `--combat-roll 0.5` invocation passes).
+Neither is counted as a pass.
+
+UNVERIFIED: how the mix and the round-5 boss round feel at human speed, whether 8 regulars plus a boss reads as fair, difficulty
+pacing beyond the single fixed-roll measurement, Hero/Villain encounter composition (untouched, no rounds to test) and
+sustained standalone frame rate. Elites and modifier waves remain deliberately off in shipping and are not balance-tested
+here. Human checklist: `docs/enemy-spawn-director.md` section 10.

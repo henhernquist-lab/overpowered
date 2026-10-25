@@ -59,10 +59,13 @@ public class EndlessWaveDirector : ModeDirector
         return new EnemySpec { Role = role, Archetype = archetype, Health = HealthFor(wave) * health, Damage = DamageFor(wave) * damage };
     }
 
-    /// Smooth weighted round-robin over the archetypes eligible in this wave (FromWave <= wave, Weight > 0), replayed
-    /// from the wave's first spawn to `index`: deterministic, interleaved, and proportional to the weights.
+    /// Archetype of one spawn: the active wave curve when the events asset defines one (Standard / Endless), else the
+    /// Composition table. Both paths use the same deterministic round-robin, so a wave's mix stays exact and repeatable.
     public EnemyArchetype ArchetypeFor(int wave, int index)
     {
+        var kind = Events != null ? Events.CurveKind : CompositionCurveKind.WeightTable;
+        var curve = Events != null && kind != CompositionCurveKind.WeightTable ? Events.Curve(kind) : null;
+        if (curve != null && curve.Weights(kind, wave, curveWeights)) return Rotate(curve, kind, wave, index);
         if (Composition == null || Composition.Length == 0) return null;
         var current = new int[Composition.Length]; EnemyArchetype pick = null;
         for (int step = 0; step <= Mathf.Max(0, index); step++)
@@ -77,6 +80,29 @@ public class EndlessWaveDirector : ModeDirector
             }
             if (best < 0) return null;
             current[best] -= total; pick = Composition[best].Archetype;
+        }
+        return pick;
+    }
+
+    /// Scratch buffer for the active curve's normalised weights (one spawn at a time, main thread).
+    readonly float[] curveWeights = new float[EnemyCompositionCurve.Slots];
+
+    /// Same smooth weighted round-robin as the Composition path, over the curve's unlocked archetypes with that wave's
+    /// weights. Locked archetypes are simply absent, so the drawn mix always sums to the wave's available pool.
+    EnemyArchetype Rotate(EnemyCompositionCurve curve, CompositionCurveKind kind, int wave, int index)
+    {
+        var current = new float[EnemyCompositionCurve.Slots]; EnemyArchetype pick = null;
+        for (int step = 0; step <= Mathf.Max(0, index); step++)
+        {
+            float total = 0f; int best = -1;
+            for (int slot = 0; slot < EnemyCompositionCurve.Slots; slot++)
+            {
+                if (!curve.Unlocked(slot, wave) || curveWeights[slot] <= 0f) continue;
+                current[slot] += curveWeights[slot]; total += curveWeights[slot];
+                if (best < 0 || current[slot] > current[best]) best = slot;
+            }
+            if (best < 0) return null;
+            current[best] -= total; pick = curve.At(best);
         }
         return pick;
     }

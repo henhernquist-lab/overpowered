@@ -1,0 +1,22 @@
+PASS Shipping director loaded: FirstWaveCount 3, EnemiesPerWave 2, MaxAlive 12, health 65 x(1+0.15(w-1)), damage 8 x(1+0.1(w-1)).
+Shipping director Events: EndlessWaveEvents. This simulation uses the EndlessEventsSetup recipe in memory.
+PASS Original formulas (no events) unchanged for waves 1-50: size = First + PerWave x (w-1), alive target = min(MaxAlive, size).
+PASS Wave 1 formulas: 0 modifier(s) [], 3 base x 1 = 3 regulars, 0 elites (share 0 %), miniboss False, regular hp 65.0, elite hp 130.0, miniboss hp 0.0, kill score 10, full clear 120.
+WAVE  1:   3 enemies (0 elite); regular hp 65 dmg 8.0; total hp 195; peak alive 3 (cost 3/3); full-clear score 120 (cumulative 120); est. 8 s at 45 dps.
+PASS Wave 5 formulas: 0 modifier(s) [], 11 base x 1 = 8 regulars, 1 elites (share 17 %), miniboss True, regular hp 104.0, elite hp 208.0, miniboss hp 2496.0, kill score 50, full clear 1775.
+WAVE  5:   9 enemies (1 elite, miniboss); regular hp 104 dmg 11.2; total hp 3432; peak alive 8 (cost 9/9); full-clear score 1775 (cumulative 3962); est. 80 s at 45 dps.
+PASS Wave 10 formulas: 1 modifier(s) [FRENZIED], 21 base x 1 = 18 regulars, 3 elites (share 22 %), miniboss True, regular hp 152.8, elite hp 305.5, miniboss hp 3666.0, kill score 130, full clear 5620.
+WAVE 10:  19 enemies (3 elite, miniboss) [FRENZIED]; regular hp 153 dmg 20.5; total hp 6874; peak alive 11 (cost 12/12); full-clear score 5620 (cumulative 19749); est. 157 s at 45 dps.
+WAVE 15:  29 enemies (7 elite, miniboss); regular hp 202 dmg 19.2; total hp 11889; peak alive 10 (cost 12/12); full-clear score 10575 (cumulative 63726); est. 268 s at 45 dps.
+PASS Wave 20 formulas: 2 modifier(s) [ARMOURED + SWARM], 41 base x 1.5 = 59 regulars, 18 elites (share 32 %), miniboss True, regular hp 281.5, elite hp 563.1, miniboss hp 6756.8, kill score 312, full clear 32520.
+WAVE 20:  60 enemies (18 elite, miniboss) [ARMOURED + SWARM]; regular hp 282 dmg 23.2; total hp 28435; peak alive 9 (cost 12/12); full-clear score 32520 (cumulative 171842); est. 636 s at 45 dps.
+PASS Wave 25 formulas: 0 modifier(s) [], 51 base x 1 = 48 regulars, 17 elites (share 37 %), miniboss True, regular hp 299.0, elite hp 598.0, miniboss hp 7176.0, kill score 250, full clear 28875.
+WAVE 25:  49 enemies (17 elite, miniboss); regular hp 299 dmg 27.2; total hp 26611; peak alive 9 (cost 12/12); full-clear score 28875 (cumulative 321835); est. 595 s at 45 dps.
+WAVE 30:  59 enemies (34 elite, miniboss) [ARMOURED + VETERANS + FRENZIED]; regular hp 522 dmg 42.1; total hp 60509; peak alive 8 (cost 12/12); full-clear score 74590 (cumulative 577423); est. 1349 s at 45 dps.
+WAVE 35:  69 enemies (27 elite, miniboss); regular hp 397 dmg 35.2; total hp 47184; peak alive 9 (cost 12/12); full-clear score 56175 (cumulative 924275); est. 1053 s at 45 dps.
+WAVE 40:  79 enemies (46 elite, miniboss) [VETERANS + ARMOURED + FRENZIED]; regular hp 668 dmg 52.9; total hp 98846; peak alive 8 (cost 12/12); full-clear score 130334 (cumulative 1456680); est. 2201 s at 45 dps.
+WAVE 45:  89 enemies (35 elite, miniboss); regular hp 494 dmg 43.2; total hp 72618; peak alive 9 (cost 12/12); full-clear score 90225 (cumulative 1993009); est. 1618 s at 45 dps.
+WAVE 50: 150 enemies (59 elite, miniboss) [SWARM + FRENZIED + ARMOURED]; regular hp 611 dmg 63.7; total hp 141658; peak alive 9 (cost 12/12); full-clear score 237850 (cumulative 2798832); est. 3152 s at 45 dps.
+PASS Run seeds: the same seed replays the same 50-wave modifier sequence; a different seed draws a different one (RandomizePerRun True).
+PASS Waves 1-50: deterministic plans, modifier rules, exact elite/miniboss slot counts, finite stats, no alive-budget deadlock, peak alive <= MaxAlive and cost <= target (a lone heavy enemy excepted).
+NOTE est_clear_seconds assumes a constant 45 dps with no travel, misses or defensive time: a ratio between waves, not a playtest number.

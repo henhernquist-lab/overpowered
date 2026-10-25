@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "SpawnCurveVerification.Run",
+    "commit": "3301e39bf44d7a1fd3e54d3fc76fb27a3e8e8a71",
+    "status_before": "M Assets/Editor/EndlessSimulation.cs\n M Assets/Resources/ModeDirectors/EndlessWaveEvents.asset\n M Assets/Resources/ModeDirectors/EndlessWaves.asset\n M Assets/Scripts/EndlessEventsVerificationRunner.cs\n M Assets/Scripts/EndlessWaveDirector.cs\n M Assets/Scripts/EndlessWaveEvents.cs\n?? Assets/Editor/SpawnCurveVerification.cs\n?? Assets/Editor/SpawnCurveVerification.cs.meta\n?? Assets/Scripts/Enemies/EnemyCompositionCurve.cs\n?? Assets/Scripts/Enemies/EnemyCompositionCurve.cs.meta\n?? Assets/Scripts/Enemies/SpawnCurveVerificationRunner.cs\n?? Assets/Scripts/Enemies/SpawnCurveVerificationRunner.cs.meta",
+    "started_utc": "2026-10-25T18:32:16.613941+00:00",
+    "save_before": "021e7414e7f187c8b17fd0ae2ff614dd650992224d8fa91325f839fc7497670c",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/SpawnCurve/gates/SpawnCurveVerification.Run.log",
+    "pid": 27819,
+    "exit": 0,
+    "seconds": 187.6,
+    "pass": 1962,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Editor/EndlessSimulation.cs\n M Assets/Resources/ModeDirectors/EndlessWaveEvents.asset\n M Assets/Resources/ModeDirectors/EndlessWaves.asset\n M Assets/Scripts/EndlessEventsVerificationRunner.cs\n M Assets/Scripts/EndlessWaveDirector.cs\n M Assets/Scripts/EndlessWaveEvents.cs\n?? Assets/Editor/SpawnCurveVerification.cs\n?? Assets/Editor/SpawnCurveVerification.cs.meta\n?? Assets/Scripts/Enemies/EnemyCompositionCurve.cs\n?? Assets/Scripts/Enemies/EnemyCompositionCurve.cs.meta\n?? Assets/Scripts/Enemies/SpawnCurveVerificationRunner.cs\n?? Assets/Scripts/Enemies/SpawnCurveVerificationRunner.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/SpawnCurve/"
+  }
+]

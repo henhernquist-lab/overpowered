@@ -1,0 +1,1962 @@
+PASS EndlessWaveEvents asset loads.
+PASS The shipping Endless director runs the wave-events asset (minibosses and the composition curve are live).
+PASS Shipping composition curve is Endless.
+PASS Miniboss every 5 rounds: Pulsebreaker.
+PASS A boss round trades 3 regular spawns for the boss.
+PASS SHIPPING SCOPE: elite and modifier waves stay off; the events asset is wired for the curve and the boss schedule.
+PASS Legacy weight table kept as the fallback (5 entries).
+PASS Both curves reference all five regular archetypes; Pulsebreaker is never part of the pool.
+PASS Introduction rounds preserved: Gunner 2, Brute 3, Skirmisher 3, Bulwark 5.
+PASS Standard wave 1: weights exist.
+PASS Standard wave 1: every weight is finite and non-negative.
+PASS Standard wave 1: weights sum to 1.0000.
+PASS Standard wave 1: locked Gunner carries zero weight.
+PASS Standard wave 1: locked Brute carries zero weight.
+PASS Standard wave 1: locked Skirmisher carries zero weight.
+PASS Standard wave 1: locked Bulwark carries zero weight.
+PASS Standard wave 1: the Rusher never disappears (weight 1.000).
+PASS Standard wave 1: teaching rounds stay Rusher/Gunner.
+PASS Standard wave 2: weights exist.
+PASS Standard wave 2: every weight is finite and non-negative.
+PASS Standard wave 2: weights sum to 1.0000.
+PASS Standard wave 2: locked Brute carries zero weight.
+PASS Standard wave 2: locked Skirmisher carries zero weight.
+PASS Standard wave 2: locked Bulwark carries zero weight.
+PASS Standard wave 2: the Rusher never disappears (weight 0.585).
+PASS Standard wave 2: no single archetype dominates (0.585).
+PASS Standard wave 2: teaching rounds stay Rusher/Gunner.
+PASS Standard wave 3: weights exist.
+PASS Standard wave 3: every weight is finite and non-negative.
+PASS Standard wave 3: weights sum to 1.0000.
+PASS Standard wave 3: locked Bulwark carries zero weight.
+PASS Standard wave 3: the Rusher never disappears (weight 0.390).
+PASS Standard wave 3: no single archetype dominates (0.390).
+PASS Standard wave 4: weights exist.
+PASS Standard wave 4: every weight is finite and non-negative.
+PASS Standard wave 4: weights sum to 1.0000.
+PASS Standard wave 4: locked Bulwark carries zero weight.
+PASS Standard wave 4: the Rusher never disappears (weight 0.390).
+PASS Standard wave 4: no single archetype dominates (0.390).
+PASS Standard wave 4: the Bulwark has not joined yet.
+PASS Standard wave 5: weights exist.
+PASS Standard wave 5: every weight is finite and non-negative.
+PASS Standard wave 5: weights sum to 1.0000.
+PASS Standard wave 5: the Rusher never disappears (weight 0.320).
+PASS Standard wave 5: no single archetype dominates (0.320).
+PASS Standard wave 5: all five archetypes are eligible.
+PASS Standard wave 10: weights exist.
+PASS Standard wave 10: every weight is finite and non-negative.
+PASS Standard wave 10: weights sum to 1.0000.
+PASS Standard wave 10: the Rusher never disappears (weight 0.297).
+PASS Standard wave 10: no single archetype dominates (0.297).
+PASS Standard wave 10: all five archetypes are eligible.
+PASS Standard wave 15: weights exist.
+PASS Standard wave 15: every weight is finite and non-negative.
+PASS Standard wave 15: weights sum to 1.0000.
+PASS Standard wave 15: the Rusher never disappears (weight 0.273).
+PASS Standard wave 15: no single archetype dominates (0.273).
+PASS Standard wave 15: all five archetypes are eligible.
+PASS Standard wave 20: weights exist.
+PASS Standard wave 20: every weight is finite and non-negative.
+PASS Standard wave 20: weights sum to 1.0000.
+PASS Standard wave 20: the Rusher never disappears (weight 0.250).
+PASS Standard wave 20: no single archetype dominates (0.260).
+PASS Standard wave 20: all five archetypes are eligible.
+PASS Standard wave 25: weights exist.
+PASS Standard wave 25: every weight is finite and non-negative.
+PASS Standard wave 25: weights sum to 1.0000.
+PASS Standard wave 25: the Rusher never disappears (weight 0.250).
+PASS Standard wave 25: no single archetype dominates (0.260).
+PASS Standard wave 25: all five archetypes are eligible.
+PASS Standard wave 50: weights exist.
+PASS Standard wave 50: every weight is finite and non-negative.
+PASS Standard wave 50: weights sum to 1.0000.
+PASS Standard wave 50: the Rusher never disappears (weight 0.250).
+PASS Standard wave 50: no single archetype dominates (0.260).
+PASS Standard wave 50: all five archetypes are eligible.
+PASS Standard wave 100: weights exist.
+PASS Standard wave 100: every weight is finite and non-negative.
+PASS Standard wave 100: weights sum to 1.0000.
+PASS Standard wave 100: the Rusher never disappears (weight 0.250).
+PASS Standard wave 100: no single archetype dominates (0.260).
+PASS Standard wave 100: all five archetypes are eligible.
+PASS Endless wave 1: weights exist.
+PASS Endless wave 1: every weight is finite and non-negative.
+PASS Endless wave 1: weights sum to 1.0000.
+PASS Endless wave 1: locked Gunner carries zero weight.
+PASS Endless wave 1: locked Brute carries zero weight.
+PASS Endless wave 1: locked Skirmisher carries zero weight.
+PASS Endless wave 1: locked Bulwark carries zero weight.
+PASS Endless wave 1: the Rusher never disappears (weight 1.000).
+PASS Endless wave 1: teaching rounds stay Rusher/Gunner.
+PASS Endless wave 2: weights exist.
+PASS Endless wave 2: every weight is finite and non-negative.
+PASS Endless wave 2: weights sum to 1.0000.
+PASS Endless wave 2: locked Brute carries zero weight.
+PASS Endless wave 2: locked Skirmisher carries zero weight.
+PASS Endless wave 2: locked Bulwark carries zero weight.
+PASS Endless wave 2: the Rusher never disappears (weight 0.585).
+PASS Endless wave 2: no single archetype dominates (0.585).
+PASS Endless wave 2: teaching rounds stay Rusher/Gunner.
+PASS Endless wave 3: weights exist.
+PASS Endless wave 3: every weight is finite and non-negative.
+PASS Endless wave 3: weights sum to 1.0000.
+PASS Endless wave 3: locked Bulwark carries zero weight.
+PASS Endless wave 3: the Rusher never disappears (weight 0.380).
+PASS Endless wave 3: no single archetype dominates (0.380).
+PASS Endless wave 4: weights exist.
+PASS Endless wave 4: every weight is finite and non-negative.
+PASS Endless wave 4: weights sum to 1.0000.
+PASS Endless wave 4: locked Bulwark carries zero weight.
+PASS Endless wave 4: the Rusher never disappears (weight 0.380).
+PASS Endless wave 4: no single archetype dominates (0.380).
+PASS Endless wave 4: the Bulwark has not joined yet.
+PASS Endless wave 5: weights exist.
+PASS Endless wave 5: every weight is finite and non-negative.
+PASS Endless wave 5: weights sum to 1.0000.
+PASS Endless wave 5: the Rusher never disappears (weight 0.320).
+PASS Endless wave 5: no single archetype dominates (0.320).
+PASS Endless wave 5: all five archetypes are eligible.
+PASS Endless wave 10: weights exist.
+PASS Endless wave 10: every weight is finite and non-negative.
+PASS Endless wave 10: weights sum to 1.0000.
+PASS Endless wave 10: the Rusher never disappears (weight 0.275).
+PASS Endless wave 10: no single archetype dominates (0.280).
+PASS Endless wave 10: all five archetypes are eligible.
+PASS Endless wave 15: weights exist.
+PASS Endless wave 15: every weight is finite and non-negative.
+PASS Endless wave 15: weights sum to 1.0000.
+PASS Endless wave 15: the Rusher never disappears (weight 0.230).
+PASS Endless wave 15: no single archetype dominates (0.280).
+PASS Endless wave 15: all five archetypes are eligible.
+PASS Endless wave 20: weights exist.
+PASS Endless wave 20: every weight is finite and non-negative.
+PASS Endless wave 20: weights sum to 1.0000.
+PASS Endless wave 20: the Rusher never disappears (weight 0.185).
+PASS Endless wave 20: no single archetype dominates (0.280).
+PASS Endless wave 20: all five archetypes are eligible.
+PASS Endless wave 25: weights exist.
+PASS Endless wave 25: every weight is finite and non-negative.
+PASS Endless wave 25: weights sum to 1.0000.
+PASS Endless wave 25: the Rusher never disappears (weight 0.140).
+PASS Endless wave 25: no single archetype dominates (0.280).
+PASS Endless wave 25: all five archetypes are eligible.
+PASS Endless wave 50: weights exist.
+PASS Endless wave 50: every weight is finite and non-negative.
+PASS Endless wave 50: weights sum to 1.0000.
+PASS Endless wave 50: the Rusher never disappears (weight 0.140).
+PASS Endless wave 50: no single archetype dominates (0.280).
+PASS Endless wave 50: all five archetypes are eligible.
+PASS Endless wave 100: weights exist.
+PASS Endless wave 100: every weight is finite and non-negative.
+PASS Endless wave 100: weights sum to 1.0000.
+PASS Endless wave 100: the Rusher never disappears (weight 0.140).
+PASS Endless wave 100: no single archetype dominates (0.280).
+PASS Endless wave 100: all five archetypes are eligible.
+PASS Standard wave 5: 32 %/29 %/19 %/12 %/8 % (spec 32 %/29 %/19 %/12 %/8 %).
+PASS Standard wave 20: 25 %/26 %/19 %/17 %/13 % (spec 25 %/26 %/19 %/17 %/13 %).
+PASS Standard wave 100: 25 %/26 %/19 %/17 %/13 % (spec 25 %/26 %/19 %/17 %/13 %).
+PASS Endless wave 5: 32 %/28 %/20 %/12 %/8 % (spec 32 %/28 %/20 %/12 %/8 %).
+PASS Endless wave 15: 23 %/28 %/20 %/17 %/12 % (spec 23 %/28 %/20 %/17 %/12 %).
+PASS Endless wave 25: 14 %/28 %/20 %/22 %/16 % (spec 14 %/28 %/20 %/22 %/16 %).
+PASS Endless wave 100: 14 %/28 %/20 %/22 %/16 % (spec 14 %/28 %/20 %/22 %/16 %).
+PASS Endless wave 5: spawn 0 resolves an archetype.
+PASS Endless wave 5: spawn 1 resolves an archetype.
+PASS Endless wave 5: spawn 2 resolves an archetype.
+PASS Endless wave 5: spawn 3 resolves an archetype.
+PASS Endless wave 5: spawn 4 resolves an archetype.
+PASS Endless wave 5: spawn 5 resolves an archetype.
+PASS Endless wave 5: spawn 6 resolves an archetype.
+PASS Endless wave 5: spawn 7 resolves an archetype.
+PASS Endless wave 5: spawn 8 resolves an archetype.
+PASS Endless wave 5: spawn 9 resolves an archetype.
+PASS Endless wave 5: spawn 10 resolves an archetype.
+PASS Endless wave 5: spawn 11 resolves an archetype.
+PASS Endless wave 5: spawn 12 resolves an archetype.
+PASS Endless wave 5: spawn 13 resolves an archetype.
+PASS Endless wave 5: spawn 14 resolves an archetype.
+PASS Endless wave 5: spawn 15 resolves an archetype.
+PASS Endless wave 5: spawn 16 resolves an archetype.
+PASS Endless wave 5: spawn 17 resolves an archetype.
+PASS Endless wave 5: spawn 18 resolves an archetype.
+PASS Endless wave 5: spawn 19 resolves an archetype.
+PASS Endless wave 5: spawn 20 resolves an archetype.
+PASS Endless wave 5: spawn 21 resolves an archetype.
+PASS Endless wave 5: spawn 22 resolves an archetype.
+PASS Endless wave 5: spawn 23 resolves an archetype.
+PASS Endless wave 5: spawn 24 resolves an archetype.
+PASS Endless wave 5: spawn 25 resolves an archetype.
+PASS Endless wave 5: spawn 26 resolves an archetype.
+PASS Endless wave 5: spawn 27 resolves an archetype.
+PASS Endless wave 5: spawn 28 resolves an archetype.
+PASS Endless wave 5: spawn 29 resolves an archetype.
+PASS Endless wave 5: spawn 30 resolves an archetype.
+PASS Endless wave 5: spawn 31 resolves an archetype.
+PASS Endless wave 5: spawn 32 resolves an archetype.
+PASS Endless wave 5: spawn 33 resolves an archetype.
+PASS Endless wave 5: spawn 34 resolves an archetype.
+PASS Endless wave 5: spawn 35 resolves an archetype.
+PASS Endless wave 5: spawn 36 resolves an archetype.
+PASS Endless wave 5: spawn 37 resolves an archetype.
+PASS Endless wave 5: spawn 38 resolves an archetype.
+PASS Endless wave 5: spawn 39 resolves an archetype.
+PASS Endless wave 5: spawn 40 resolves an archetype.
+PASS Endless wave 5: spawn 41 resolves an archetype.
+PASS Endless wave 5: spawn 42 resolves an archetype.
+PASS Endless wave 5: spawn 43 resolves an archetype.
+PASS Endless wave 5: spawn 44 resolves an archetype.
+PASS Endless wave 5: spawn 45 resolves an archetype.
+PASS Endless wave 5: spawn 46 resolves an archetype.
+PASS Endless wave 5: spawn 47 resolves an archetype.
+PASS Endless wave 5: spawn 48 resolves an archetype.
+PASS Endless wave 5: spawn 49 resolves an archetype.
+PASS Endless wave 5: spawn 50 resolves an archetype.
+PASS Endless wave 5: spawn 51 resolves an archetype.
+PASS Endless wave 5: spawn 52 resolves an archetype.
+PASS Endless wave 5: spawn 53 resolves an archetype.
+PASS Endless wave 5: spawn 54 resolves an archetype.
+PASS Endless wave 5: spawn 55 resolves an archetype.
+PASS Endless wave 5: spawn 56 resolves an archetype.
+PASS Endless wave 5: spawn 57 resolves an archetype.
+PASS Endless wave 5: spawn 58 resolves an archetype.
+PASS Endless wave 5: spawn 59 resolves an archetype.
+PASS Endless wave 5: spawn 60 resolves an archetype.
+PASS Endless wave 5: spawn 61 resolves an archetype.
+PASS Endless wave 5: spawn 62 resolves an archetype.
+PASS Endless wave 5: spawn 63 resolves an archetype.
+PASS Endless wave 5: spawn 64 resolves an archetype.
+PASS Endless wave 5: spawn 65 resolves an archetype.
+PASS Endless wave 5: spawn 66 resolves an archetype.
+PASS Endless wave 5: spawn 67 resolves an archetype.
+PASS Endless wave 5: spawn 68 resolves an archetype.
+PASS Endless wave 5: spawn 69 resolves an archetype.
+PASS Endless wave 5: spawn 70 resolves an archetype.
+PASS Endless wave 5: spawn 71 resolves an archetype.
+PASS Endless wave 5: spawn 72 resolves an archetype.
+PASS Endless wave 5: spawn 73 resolves an archetype.
+PASS Endless wave 5: spawn 74 resolves an archetype.
+PASS Endless wave 5: spawn 75 resolves an archetype.
+PASS Endless wave 5: spawn 76 resolves an archetype.
+PASS Endless wave 5: spawn 77 resolves an archetype.
+PASS Endless wave 5: spawn 78 resolves an archetype.
+PASS Endless wave 5: spawn 79 resolves an archetype.
+PASS Endless wave 5: spawn 80 resolves an archetype.
+PASS Endless wave 5: spawn 81 resolves an archetype.
+PASS Endless wave 5: spawn 82 resolves an archetype.
+PASS Endless wave 5: spawn 83 resolves an archetype.
+PASS Endless wave 5: spawn 84 resolves an archetype.
+PASS Endless wave 5: spawn 85 resolves an archetype.
+PASS Endless wave 5: spawn 86 resolves an archetype.
+PASS Endless wave 5: spawn 87 resolves an archetype.
+PASS Endless wave 5: spawn 88 resolves an archetype.
+PASS Endless wave 5: spawn 89 resolves an archetype.
+PASS Endless wave 5: spawn 90 resolves an archetype.
+PASS Endless wave 5: spawn 91 resolves an archetype.
+PASS Endless wave 5: spawn 92 resolves an archetype.
+PASS Endless wave 5: spawn 93 resolves an archetype.
+PASS Endless wave 5: spawn 94 resolves an archetype.
+PASS Endless wave 5: spawn 95 resolves an archetype.
+PASS Endless wave 5: spawn 96 resolves an archetype.
+PASS Endless wave 5: spawn 97 resolves an archetype.
+PASS Endless wave 5: spawn 98 resolves an archetype.
+PASS Endless wave 5: spawn 99 resolves an archetype.
+PASS Endless wave 5: spawn 100 resolves an archetype.
+PASS Endless wave 5: spawn 101 resolves an archetype.
+PASS Endless wave 5: spawn 102 resolves an archetype.
+PASS Endless wave 5: spawn 103 resolves an archetype.
+PASS Endless wave 5: spawn 104 resolves an archetype.
+PASS Endless wave 5: spawn 105 resolves an archetype.
+PASS Endless wave 5: spawn 106 resolves an archetype.
+PASS Endless wave 5: spawn 107 resolves an archetype.
+PASS Endless wave 5: spawn 108 resolves an archetype.
+PASS Endless wave 5: spawn 109 resolves an archetype.
+PASS Endless wave 5: spawn 110 resolves an archetype.
+PASS Endless wave 5: spawn 111 resolves an archetype.
+PASS Endless wave 5: spawn 112 resolves an archetype.
+PASS Endless wave 5: spawn 113 resolves an archetype.
+PASS Endless wave 5: spawn 114 resolves an archetype.
+PASS Endless wave 5: spawn 115 resolves an archetype.
+PASS Endless wave 5: spawn 116 resolves an archetype.
+PASS Endless wave 5: spawn 117 resolves an archetype.
+PASS Endless wave 5: spawn 118 resolves an archetype.
+PASS Endless wave 5: spawn 119 resolves an archetype.
+PASS Endless wave 5: spawn 120 resolves an archetype.
+PASS Endless wave 5: spawn 121 resolves an archetype.
+PASS Endless wave 5: spawn 122 resolves an archetype.
+PASS Endless wave 5: spawn 123 resolves an archetype.
+PASS Endless wave 5: spawn 124 resolves an archetype.
+PASS Endless wave 5: spawn 125 resolves an archetype.
+PASS Endless wave 5: spawn 126 resolves an archetype.
+PASS Endless wave 5: spawn 127 resolves an archetype.
+PASS Endless wave 5: spawn 128 resolves an archetype.
+PASS Endless wave 5: spawn 129 resolves an archetype.
+PASS Endless wave 5: spawn 130 resolves an archetype.
+PASS Endless wave 5: spawn 131 resolves an archetype.
+PASS Endless wave 5: spawn 132 resolves an archetype.
+PASS Endless wave 5: spawn 133 resolves an archetype.
+PASS Endless wave 5: spawn 134 resolves an archetype.
+PASS Endless wave 5: spawn 135 resolves an archetype.
+PASS Endless wave 5: spawn 136 resolves an archetype.
+PASS Endless wave 5: spawn 137 resolves an archetype.
+PASS Endless wave 5: spawn 138 resolves an archetype.
+PASS Endless wave 5: spawn 139 resolves an archetype.
+PASS Endless wave 5: spawn 140 resolves an archetype.
+PASS Endless wave 5: spawn 141 resolves an archetype.
+PASS Endless wave 5: spawn 142 resolves an archetype.
+PASS Endless wave 5: spawn 143 resolves an archetype.
+PASS Endless wave 5: spawn 144 resolves an archetype.
+PASS Endless wave 5: spawn 145 resolves an archetype.
+PASS Endless wave 5: spawn 146 resolves an archetype.
+PASS Endless wave 5: spawn 147 resolves an archetype.
+PASS Endless wave 5: spawn 148 resolves an archetype.
+PASS Endless wave 5: spawn 149 resolves an archetype.
+PASS Endless wave 5: spawn 150 resolves an archetype.
+PASS Endless wave 5: spawn 151 resolves an archetype.
+PASS Endless wave 5: spawn 152 resolves an archetype.
+PASS Endless wave 5: spawn 153 resolves an archetype.
+PASS Endless wave 5: spawn 154 resolves an archetype.
+PASS Endless wave 5: spawn 155 resolves an archetype.
+PASS Endless wave 5: spawn 156 resolves an archetype.
+PASS Endless wave 5: spawn 157 resolves an archetype.
+PASS Endless wave 5: spawn 158 resolves an archetype.
+PASS Endless wave 5: spawn 159 resolves an archetype.
+PASS Endless wave 5: spawn 160 resolves an archetype.
+PASS Endless wave 5: spawn 161 resolves an archetype.
+PASS Endless wave 5: spawn 162 resolves an archetype.
+PASS Endless wave 5: spawn 163 resolves an archetype.
+PASS Endless wave 5: spawn 164 resolves an archetype.
+PASS Endless wave 5: spawn 165 resolves an archetype.
+PASS Endless wave 5: spawn 166 resolves an archetype.
+PASS Endless wave 5: spawn 167 resolves an archetype.
+PASS Endless wave 5: spawn 168 resolves an archetype.
+PASS Endless wave 5: spawn 169 resolves an archetype.
+PASS Endless wave 5: spawn 170 resolves an archetype.
+PASS Endless wave 5: spawn 171 resolves an archetype.
+PASS Endless wave 5: spawn 172 resolves an archetype.
+PASS Endless wave 5: spawn 173 resolves an archetype.
+PASS Endless wave 5: spawn 174 resolves an archetype.
+PASS Endless wave 5: spawn 175 resolves an archetype.
+PASS Endless wave 5: spawn 176 resolves an archetype.
+PASS Endless wave 5: spawn 177 resolves an archetype.
+PASS Endless wave 5: spawn 178 resolves an archetype.
+PASS Endless wave 5: spawn 179 resolves an archetype.
+PASS Endless wave 5: spawn 180 resolves an archetype.
+PASS Endless wave 5: spawn 181 resolves an archetype.
+PASS Endless wave 5: spawn 182 resolves an archetype.
+PASS Endless wave 5: spawn 183 resolves an archetype.
+PASS Endless wave 5: spawn 184 resolves an archetype.
+PASS Endless wave 5: spawn 185 resolves an archetype.
+PASS Endless wave 5: spawn 186 resolves an archetype.
+PASS Endless wave 5: spawn 187 resolves an archetype.
+PASS Endless wave 5: spawn 188 resolves an archetype.
+PASS Endless wave 5: spawn 189 resolves an archetype.
+PASS Endless wave 5: spawn 190 resolves an archetype.
+PASS Endless wave 5: spawn 191 resolves an archetype.
+PASS Endless wave 5: spawn 192 resolves an archetype.
+PASS Endless wave 5: spawn 193 resolves an archetype.
+PASS Endless wave 5: spawn 194 resolves an archetype.
+PASS Endless wave 5: spawn 195 resolves an archetype.
+PASS Endless wave 5: spawn 196 resolves an archetype.
+PASS Endless wave 5: spawn 197 resolves an archetype.
+PASS Endless wave 5: spawn 198 resolves an archetype.
+PASS Endless wave 5: spawn 199 resolves an archetype.
+PASS Endless wave 5: Rusher drawn 64/200 (32 %, curve 32 %, expected ~64).
+PASS Endless wave 5: Gunner drawn 56/200 (28 %, curve 28 %, expected ~56).
+PASS Endless wave 5: Brute drawn 40/200 (20 %, curve 20 %, expected ~40).
+PASS Endless wave 5: Skirmisher drawn 24/200 (12 %, curve 12 %, expected ~24).
+PASS Endless wave 5: Bulwark drawn 16/200 (8 %, curve 8 %, expected ~16).
+PASS Endless wave 5: exactly the 5 eligible archetypes appear (5).
+PASS Endless wave 15: spawn 0 resolves an archetype.
+PASS Endless wave 15: spawn 1 resolves an archetype.
+PASS Endless wave 15: spawn 2 resolves an archetype.
+PASS Endless wave 15: spawn 3 resolves an archetype.
+PASS Endless wave 15: spawn 4 resolves an archetype.
+PASS Endless wave 15: spawn 5 resolves an archetype.
+PASS Endless wave 15: spawn 6 resolves an archetype.
+PASS Endless wave 15: spawn 7 resolves an archetype.
+PASS Endless wave 15: spawn 8 resolves an archetype.
+PASS Endless wave 15: spawn 9 resolves an archetype.
+PASS Endless wave 15: spawn 10 resolves an archetype.
+PASS Endless wave 15: spawn 11 resolves an archetype.
+PASS Endless wave 15: spawn 12 resolves an archetype.
+PASS Endless wave 15: spawn 13 resolves an archetype.
+PASS Endless wave 15: spawn 14 resolves an archetype.
+PASS Endless wave 15: spawn 15 resolves an archetype.
+PASS Endless wave 15: spawn 16 resolves an archetype.
+PASS Endless wave 15: spawn 17 resolves an archetype.
+PASS Endless wave 15: spawn 18 resolves an archetype.
+PASS Endless wave 15: spawn 19 resolves an archetype.
+PASS Endless wave 15: spawn 20 resolves an archetype.
+PASS Endless wave 15: spawn 21 resolves an archetype.
+PASS Endless wave 15: spawn 22 resolves an archetype.
+PASS Endless wave 15: spawn 23 resolves an archetype.
+PASS Endless wave 15: spawn 24 resolves an archetype.
+PASS Endless wave 15: spawn 25 resolves an archetype.
+PASS Endless wave 15: spawn 26 resolves an archetype.
+PASS Endless wave 15: spawn 27 resolves an archetype.
+PASS Endless wave 15: spawn 28 resolves an archetype.
+PASS Endless wave 15: spawn 29 resolves an archetype.
+PASS Endless wave 15: spawn 30 resolves an archetype.
+PASS Endless wave 15: spawn 31 resolves an archetype.
+PASS Endless wave 15: spawn 32 resolves an archetype.
+PASS Endless wave 15: spawn 33 resolves an archetype.
+PASS Endless wave 15: spawn 34 resolves an archetype.
+PASS Endless wave 15: spawn 35 resolves an archetype.
+PASS Endless wave 15: spawn 36 resolves an archetype.
+PASS Endless wave 15: spawn 37 resolves an archetype.
+PASS Endless wave 15: spawn 38 resolves an archetype.
+PASS Endless wave 15: spawn 39 resolves an archetype.
+PASS Endless wave 15: spawn 40 resolves an archetype.
+PASS Endless wave 15: spawn 41 resolves an archetype.
+PASS Endless wave 15: spawn 42 resolves an archetype.
+PASS Endless wave 15: spawn 43 resolves an archetype.
+PASS Endless wave 15: spawn 44 resolves an archetype.
+PASS Endless wave 15: spawn 45 resolves an archetype.
+PASS Endless wave 15: spawn 46 resolves an archetype.
+PASS Endless wave 15: spawn 47 resolves an archetype.
+PASS Endless wave 15: spawn 48 resolves an archetype.
+PASS Endless wave 15: spawn 49 resolves an archetype.
+PASS Endless wave 15: spawn 50 resolves an archetype.
+PASS Endless wave 15: spawn 51 resolves an archetype.
+PASS Endless wave 15: spawn 52 resolves an archetype.
+PASS Endless wave 15: spawn 53 resolves an archetype.
+PASS Endless wave 15: spawn 54 resolves an archetype.
+PASS Endless wave 15: spawn 55 resolves an archetype.
+PASS Endless wave 15: spawn 56 resolves an archetype.
+PASS Endless wave 15: spawn 57 resolves an archetype.
+PASS Endless wave 15: spawn 58 resolves an archetype.
+PASS Endless wave 15: spawn 59 resolves an archetype.
+PASS Endless wave 15: spawn 60 resolves an archetype.
+PASS Endless wave 15: spawn 61 resolves an archetype.
+PASS Endless wave 15: spawn 62 resolves an archetype.
+PASS Endless wave 15: spawn 63 resolves an archetype.
+PASS Endless wave 15: spawn 64 resolves an archetype.
+PASS Endless wave 15: spawn 65 resolves an archetype.
+PASS Endless wave 15: spawn 66 resolves an archetype.
+PASS Endless wave 15: spawn 67 resolves an archetype.
+PASS Endless wave 15: spawn 68 resolves an archetype.
+PASS Endless wave 15: spawn 69 resolves an archetype.
+PASS Endless wave 15: spawn 70 resolves an archetype.
+PASS Endless wave 15: spawn 71 resolves an archetype.
+PASS Endless wave 15: spawn 72 resolves an archetype.
+PASS Endless wave 15: spawn 73 resolves an archetype.
+PASS Endless wave 15: spawn 74 resolves an archetype.
+PASS Endless wave 15: spawn 75 resolves an archetype.
+PASS Endless wave 15: spawn 76 resolves an archetype.
+PASS Endless wave 15: spawn 77 resolves an archetype.
+PASS Endless wave 15: spawn 78 resolves an archetype.
+PASS Endless wave 15: spawn 79 resolves an archetype.
+PASS Endless wave 15: spawn 80 resolves an archetype.
+PASS Endless wave 15: spawn 81 resolves an archetype.
+PASS Endless wave 15: spawn 82 resolves an archetype.
+PASS Endless wave 15: spawn 83 resolves an archetype.
+PASS Endless wave 15: spawn 84 resolves an archetype.
+PASS Endless wave 15: spawn 85 resolves an archetype.
+PASS Endless wave 15: spawn 86 resolves an archetype.
+PASS Endless wave 15: spawn 87 resolves an archetype.
+PASS Endless wave 15: spawn 88 resolves an archetype.
+PASS Endless wave 15: spawn 89 resolves an archetype.
+PASS Endless wave 15: spawn 90 resolves an archetype.
+PASS Endless wave 15: spawn 91 resolves an archetype.
+PASS Endless wave 15: spawn 92 resolves an archetype.
+PASS Endless wave 15: spawn 93 resolves an archetype.
+PASS Endless wave 15: spawn 94 resolves an archetype.
+PASS Endless wave 15: spawn 95 resolves an archetype.
+PASS Endless wave 15: spawn 96 resolves an archetype.
+PASS Endless wave 15: spawn 97 resolves an archetype.
+PASS Endless wave 15: spawn 98 resolves an archetype.
+PASS Endless wave 15: spawn 99 resolves an archetype.
+PASS Endless wave 15: spawn 100 resolves an archetype.
+PASS Endless wave 15: spawn 101 resolves an archetype.
+PASS Endless wave 15: spawn 102 resolves an archetype.
+PASS Endless wave 15: spawn 103 resolves an archetype.
+PASS Endless wave 15: spawn 104 resolves an archetype.
+PASS Endless wave 15: spawn 105 resolves an archetype.
+PASS Endless wave 15: spawn 106 resolves an archetype.
+PASS Endless wave 15: spawn 107 resolves an archetype.
+PASS Endless wave 15: spawn 108 resolves an archetype.
+PASS Endless wave 15: spawn 109 resolves an archetype.
+PASS Endless wave 15: spawn 110 resolves an archetype.
+PASS Endless wave 15: spawn 111 resolves an archetype.
+PASS Endless wave 15: spawn 112 resolves an archetype.
+PASS Endless wave 15: spawn 113 resolves an archetype.
+PASS Endless wave 15: spawn 114 resolves an archetype.
+PASS Endless wave 15: spawn 115 resolves an archetype.
+PASS Endless wave 15: spawn 116 resolves an archetype.
+PASS Endless wave 15: spawn 117 resolves an archetype.
+PASS Endless wave 15: spawn 118 resolves an archetype.
+PASS Endless wave 15: spawn 119 resolves an archetype.
+PASS Endless wave 15: spawn 120 resolves an archetype.
+PASS Endless wave 15: spawn 121 resolves an archetype.
+PASS Endless wave 15: spawn 122 resolves an archetype.
+PASS Endless wave 15: spawn 123 resolves an archetype.
+PASS Endless wave 15: spawn 124 resolves an archetype.
+PASS Endless wave 15: spawn 125 resolves an archetype.
+PASS Endless wave 15: spawn 126 resolves an archetype.
+PASS Endless wave 15: spawn 127 resolves an archetype.
+PASS Endless wave 15: spawn 128 resolves an archetype.
+PASS Endless wave 15: spawn 129 resolves an archetype.
+PASS Endless wave 15: spawn 130 resolves an archetype.
+PASS Endless wave 15: spawn 131 resolves an archetype.
+PASS Endless wave 15: spawn 132 resolves an archetype.
+PASS Endless wave 15: spawn 133 resolves an archetype.
+PASS Endless wave 15: spawn 134 resolves an archetype.
+PASS Endless wave 15: spawn 135 resolves an archetype.
+PASS Endless wave 15: spawn 136 resolves an archetype.
+PASS Endless wave 15: spawn 137 resolves an archetype.
+PASS Endless wave 15: spawn 138 resolves an archetype.
+PASS Endless wave 15: spawn 139 resolves an archetype.
+PASS Endless wave 15: spawn 140 resolves an archetype.
+PASS Endless wave 15: spawn 141 resolves an archetype.
+PASS Endless wave 15: spawn 142 resolves an archetype.
+PASS Endless wave 15: spawn 143 resolves an archetype.
+PASS Endless wave 15: spawn 144 resolves an archetype.
+PASS Endless wave 15: spawn 145 resolves an archetype.
+PASS Endless wave 15: spawn 146 resolves an archetype.
+PASS Endless wave 15: spawn 147 resolves an archetype.
+PASS Endless wave 15: spawn 148 resolves an archetype.
+PASS Endless wave 15: spawn 149 resolves an archetype.
+PASS Endless wave 15: spawn 150 resolves an archetype.
+PASS Endless wave 15: spawn 151 resolves an archetype.
+PASS Endless wave 15: spawn 152 resolves an archetype.
+PASS Endless wave 15: spawn 153 resolves an archetype.
+PASS Endless wave 15: spawn 154 resolves an archetype.
+PASS Endless wave 15: spawn 155 resolves an archetype.
+PASS Endless wave 15: spawn 156 resolves an archetype.
+PASS Endless wave 15: spawn 157 resolves an archetype.
+PASS Endless wave 15: spawn 158 resolves an archetype.
+PASS Endless wave 15: spawn 159 resolves an archetype.
+PASS Endless wave 15: spawn 160 resolves an archetype.
+PASS Endless wave 15: spawn 161 resolves an archetype.
+PASS Endless wave 15: spawn 162 resolves an archetype.
+PASS Endless wave 15: spawn 163 resolves an archetype.
+PASS Endless wave 15: spawn 164 resolves an archetype.
+PASS Endless wave 15: spawn 165 resolves an archetype.
+PASS Endless wave 15: spawn 166 resolves an archetype.
+PASS Endless wave 15: spawn 167 resolves an archetype.
+PASS Endless wave 15: spawn 168 resolves an archetype.
+PASS Endless wave 15: spawn 169 resolves an archetype.
+PASS Endless wave 15: spawn 170 resolves an archetype.
+PASS Endless wave 15: spawn 171 resolves an archetype.
+PASS Endless wave 15: spawn 172 resolves an archetype.
+PASS Endless wave 15: spawn 173 resolves an archetype.
+PASS Endless wave 15: spawn 174 resolves an archetype.
+PASS Endless wave 15: spawn 175 resolves an archetype.
+PASS Endless wave 15: spawn 176 resolves an archetype.
+PASS Endless wave 15: spawn 177 resolves an archetype.
+PASS Endless wave 15: spawn 178 resolves an archetype.
+PASS Endless wave 15: spawn 179 resolves an archetype.
+PASS Endless wave 15: spawn 180 resolves an archetype.
+PASS Endless wave 15: spawn 181 resolves an archetype.
+PASS Endless wave 15: spawn 182 resolves an archetype.
+PASS Endless wave 15: spawn 183 resolves an archetype.
+PASS Endless wave 15: spawn 184 resolves an archetype.
+PASS Endless wave 15: spawn 185 resolves an archetype.
+PASS Endless wave 15: spawn 186 resolves an archetype.
+PASS Endless wave 15: spawn 187 resolves an archetype.
+PASS Endless wave 15: spawn 188 resolves an archetype.
+PASS Endless wave 15: spawn 189 resolves an archetype.
+PASS Endless wave 15: spawn 190 resolves an archetype.
+PASS Endless wave 15: spawn 191 resolves an archetype.
+PASS Endless wave 15: spawn 192 resolves an archetype.
+PASS Endless wave 15: spawn 193 resolves an archetype.
+PASS Endless wave 15: spawn 194 resolves an archetype.
+PASS Endless wave 15: spawn 195 resolves an archetype.
+PASS Endless wave 15: spawn 196 resolves an archetype.
+PASS Endless wave 15: spawn 197 resolves an archetype.
+PASS Endless wave 15: spawn 198 resolves an archetype.
+PASS Endless wave 15: spawn 199 resolves an archetype.
+PASS Endless wave 15: Rusher drawn 46/200 (23 %, curve 23 %, expected ~46).
+PASS Endless wave 15: Gunner drawn 56/200 (28 %, curve 28 %, expected ~56).
+PASS Endless wave 15: Brute drawn 40/200 (20 %, curve 20 %, expected ~40).
+PASS Endless wave 15: Skirmisher drawn 34/200 (17 %, curve 17 %, expected ~34).
+PASS Endless wave 15: Bulwark drawn 24/200 (12 %, curve 12 %, expected ~24).
+PASS Endless wave 15: exactly the 5 eligible archetypes appear (5).
+PASS Endless wave 25: spawn 0 resolves an archetype.
+PASS Endless wave 25: spawn 1 resolves an archetype.
+PASS Endless wave 25: spawn 2 resolves an archetype.
+PASS Endless wave 25: spawn 3 resolves an archetype.
+PASS Endless wave 25: spawn 4 resolves an archetype.
+PASS Endless wave 25: spawn 5 resolves an archetype.
+PASS Endless wave 25: spawn 6 resolves an archetype.
+PASS Endless wave 25: spawn 7 resolves an archetype.
+PASS Endless wave 25: spawn 8 resolves an archetype.
+PASS Endless wave 25: spawn 9 resolves an archetype.
+PASS Endless wave 25: spawn 10 resolves an archetype.
+PASS Endless wave 25: spawn 11 resolves an archetype.
+PASS Endless wave 25: spawn 12 resolves an archetype.
+PASS Endless wave 25: spawn 13 resolves an archetype.
+PASS Endless wave 25: spawn 14 resolves an archetype.
+PASS Endless wave 25: spawn 15 resolves an archetype.
+PASS Endless wave 25: spawn 16 resolves an archetype.
+PASS Endless wave 25: spawn 17 resolves an archetype.
+PASS Endless wave 25: spawn 18 resolves an archetype.
+PASS Endless wave 25: spawn 19 resolves an archetype.
+PASS Endless wave 25: spawn 20 resolves an archetype.
+PASS Endless wave 25: spawn 21 resolves an archetype.
+PASS Endless wave 25: spawn 22 resolves an archetype.
+PASS Endless wave 25: spawn 23 resolves an archetype.
+PASS Endless wave 25: spawn 24 resolves an archetype.
+PASS Endless wave 25: spawn 25 resolves an archetype.
+PASS Endless wave 25: spawn 26 resolves an archetype.
+PASS Endless wave 25: spawn 27 resolves an archetype.
+PASS Endless wave 25: spawn 28 resolves an archetype.
+PASS Endless wave 25: spawn 29 resolves an archetype.
+PASS Endless wave 25: spawn 30 resolves an archetype.
+PASS Endless wave 25: spawn 31 resolves an archetype.
+PASS Endless wave 25: spawn 32 resolves an archetype.
+PASS Endless wave 25: spawn 33 resolves an archetype.
+PASS Endless wave 25: spawn 34 resolves an archetype.
+PASS Endless wave 25: spawn 35 resolves an archetype.
+PASS Endless wave 25: spawn 36 resolves an archetype.
+PASS Endless wave 25: spawn 37 resolves an archetype.
+PASS Endless wave 25: spawn 38 resolves an archetype.
+PASS Endless wave 25: spawn 39 resolves an archetype.
+PASS Endless wave 25: spawn 40 resolves an archetype.
+PASS Endless wave 25: spawn 41 resolves an archetype.
+PASS Endless wave 25: spawn 42 resolves an archetype.
+PASS Endless wave 25: spawn 43 resolves an archetype.
+PASS Endless wave 25: spawn 44 resolves an archetype.
+PASS Endless wave 25: spawn 45 resolves an archetype.
+PASS Endless wave 25: spawn 46 resolves an archetype.
+PASS Endless wave 25: spawn 47 resolves an archetype.
+PASS Endless wave 25: spawn 48 resolves an archetype.
+PASS Endless wave 25: spawn 49 resolves an archetype.
+PASS Endless wave 25: spawn 50 resolves an archetype.
+PASS Endless wave 25: spawn 51 resolves an archetype.
+PASS Endless wave 25: spawn 52 resolves an archetype.
+PASS Endless wave 25: spawn 53 resolves an archetype.
+PASS Endless wave 25: spawn 54 resolves an archetype.
+PASS Endless wave 25: spawn 55 resolves an archetype.
+PASS Endless wave 25: spawn 56 resolves an archetype.
+PASS Endless wave 25: spawn 57 resolves an archetype.
+PASS Endless wave 25: spawn 58 resolves an archetype.
+PASS Endless wave 25: spawn 59 resolves an archetype.
+PASS Endless wave 25: spawn 60 resolves an archetype.
+PASS Endless wave 25: spawn 61 resolves an archetype.
+PASS Endless wave 25: spawn 62 resolves an archetype.
+PASS Endless wave 25: spawn 63 resolves an archetype.
+PASS Endless wave 25: spawn 64 resolves an archetype.
+PASS Endless wave 25: spawn 65 resolves an archetype.
+PASS Endless wave 25: spawn 66 resolves an archetype.
+PASS Endless wave 25: spawn 67 resolves an archetype.
+PASS Endless wave 25: spawn 68 resolves an archetype.
+PASS Endless wave 25: spawn 69 resolves an archetype.
+PASS Endless wave 25: spawn 70 resolves an archetype.
+PASS Endless wave 25: spawn 71 resolves an archetype.
+PASS Endless wave 25: spawn 72 resolves an archetype.
+PASS Endless wave 25: spawn 73 resolves an archetype.
+PASS Endless wave 25: spawn 74 resolves an archetype.
+PASS Endless wave 25: spawn 75 resolves an archetype.
+PASS Endless wave 25: spawn 76 resolves an archetype.
+PASS Endless wave 25: spawn 77 resolves an archetype.
+PASS Endless wave 25: spawn 78 resolves an archetype.
+PASS Endless wave 25: spawn 79 resolves an archetype.
+PASS Endless wave 25: spawn 80 resolves an archetype.
+PASS Endless wave 25: spawn 81 resolves an archetype.
+PASS Endless wave 25: spawn 82 resolves an archetype.
+PASS Endless wave 25: spawn 83 resolves an archetype.
+PASS Endless wave 25: spawn 84 resolves an archetype.
+PASS Endless wave 25: spawn 85 resolves an archetype.
+PASS Endless wave 25: spawn 86 resolves an archetype.
+PASS Endless wave 25: spawn 87 resolves an archetype.
+PASS Endless wave 25: spawn 88 resolves an archetype.
+PASS Endless wave 25: spawn 89 resolves an archetype.
+PASS Endless wave 25: spawn 90 resolves an archetype.
+PASS Endless wave 25: spawn 91 resolves an archetype.
+PASS Endless wave 25: spawn 92 resolves an archetype.
+PASS Endless wave 25: spawn 93 resolves an archetype.
+PASS Endless wave 25: spawn 94 resolves an archetype.
+PASS Endless wave 25: spawn 95 resolves an archetype.
+PASS Endless wave 25: spawn 96 resolves an archetype.
+PASS Endless wave 25: spawn 97 resolves an archetype.
+PASS Endless wave 25: spawn 98 resolves an archetype.
+PASS Endless wave 25: spawn 99 resolves an archetype.
+PASS Endless wave 25: spawn 100 resolves an archetype.
+PASS Endless wave 25: spawn 101 resolves an archetype.
+PASS Endless wave 25: spawn 102 resolves an archetype.
+PASS Endless wave 25: spawn 103 resolves an archetype.
+PASS Endless wave 25: spawn 104 resolves an archetype.
+PASS Endless wave 25: spawn 105 resolves an archetype.
+PASS Endless wave 25: spawn 106 resolves an archetype.
+PASS Endless wave 25: spawn 107 resolves an archetype.
+PASS Endless wave 25: spawn 108 resolves an archetype.
+PASS Endless wave 25: spawn 109 resolves an archetype.
+PASS Endless wave 25: spawn 110 resolves an archetype.
+PASS Endless wave 25: spawn 111 resolves an archetype.
+PASS Endless wave 25: spawn 112 resolves an archetype.
+PASS Endless wave 25: spawn 113 resolves an archetype.
+PASS Endless wave 25: spawn 114 resolves an archetype.
+PASS Endless wave 25: spawn 115 resolves an archetype.
+PASS Endless wave 25: spawn 116 resolves an archetype.
+PASS Endless wave 25: spawn 117 resolves an archetype.
+PASS Endless wave 25: spawn 118 resolves an archetype.
+PASS Endless wave 25: spawn 119 resolves an archetype.
+PASS Endless wave 25: spawn 120 resolves an archetype.
+PASS Endless wave 25: spawn 121 resolves an archetype.
+PASS Endless wave 25: spawn 122 resolves an archetype.
+PASS Endless wave 25: spawn 123 resolves an archetype.
+PASS Endless wave 25: spawn 124 resolves an archetype.
+PASS Endless wave 25: spawn 125 resolves an archetype.
+PASS Endless wave 25: spawn 126 resolves an archetype.
+PASS Endless wave 25: spawn 127 resolves an archetype.
+PASS Endless wave 25: spawn 128 resolves an archetype.
+PASS Endless wave 25: spawn 129 resolves an archetype.
+PASS Endless wave 25: spawn 130 resolves an archetype.
+PASS Endless wave 25: spawn 131 resolves an archetype.
+PASS Endless wave 25: spawn 132 resolves an archetype.
+PASS Endless wave 25: spawn 133 resolves an archetype.
+PASS Endless wave 25: spawn 134 resolves an archetype.
+PASS Endless wave 25: spawn 135 resolves an archetype.
+PASS Endless wave 25: spawn 136 resolves an archetype.
+PASS Endless wave 25: spawn 137 resolves an archetype.
+PASS Endless wave 25: spawn 138 resolves an archetype.
+PASS Endless wave 25: spawn 139 resolves an archetype.
+PASS Endless wave 25: spawn 140 resolves an archetype.
+PASS Endless wave 25: spawn 141 resolves an archetype.
+PASS Endless wave 25: spawn 142 resolves an archetype.
+PASS Endless wave 25: spawn 143 resolves an archetype.
+PASS Endless wave 25: spawn 144 resolves an archetype.
+PASS Endless wave 25: spawn 145 resolves an archetype.
+PASS Endless wave 25: spawn 146 resolves an archetype.
+PASS Endless wave 25: spawn 147 resolves an archetype.
+PASS Endless wave 25: spawn 148 resolves an archetype.
+PASS Endless wave 25: spawn 149 resolves an archetype.
+PASS Endless wave 25: spawn 150 resolves an archetype.
+PASS Endless wave 25: spawn 151 resolves an archetype.
+PASS Endless wave 25: spawn 152 resolves an archetype.
+PASS Endless wave 25: spawn 153 resolves an archetype.
+PASS Endless wave 25: spawn 154 resolves an archetype.
+PASS Endless wave 25: spawn 155 resolves an archetype.
+PASS Endless wave 25: spawn 156 resolves an archetype.
+PASS Endless wave 25: spawn 157 resolves an archetype.
+PASS Endless wave 25: spawn 158 resolves an archetype.
+PASS Endless wave 25: spawn 159 resolves an archetype.
+PASS Endless wave 25: spawn 160 resolves an archetype.
+PASS Endless wave 25: spawn 161 resolves an archetype.
+PASS Endless wave 25: spawn 162 resolves an archetype.
+PASS Endless wave 25: spawn 163 resolves an archetype.
+PASS Endless wave 25: spawn 164 resolves an archetype.
+PASS Endless wave 25: spawn 165 resolves an archetype.
+PASS Endless wave 25: spawn 166 resolves an archetype.
+PASS Endless wave 25: spawn 167 resolves an archetype.
+PASS Endless wave 25: spawn 168 resolves an archetype.
+PASS Endless wave 25: spawn 169 resolves an archetype.
+PASS Endless wave 25: spawn 170 resolves an archetype.
+PASS Endless wave 25: spawn 171 resolves an archetype.
+PASS Endless wave 25: spawn 172 resolves an archetype.
+PASS Endless wave 25: spawn 173 resolves an archetype.
+PASS Endless wave 25: spawn 174 resolves an archetype.
+PASS Endless wave 25: spawn 175 resolves an archetype.
+PASS Endless wave 25: spawn 176 resolves an archetype.
+PASS Endless wave 25: spawn 177 resolves an archetype.
+PASS Endless wave 25: spawn 178 resolves an archetype.
+PASS Endless wave 25: spawn 179 resolves an archetype.
+PASS Endless wave 25: spawn 180 resolves an archetype.
+PASS Endless wave 25: spawn 181 resolves an archetype.
+PASS Endless wave 25: spawn 182 resolves an archetype.
+PASS Endless wave 25: spawn 183 resolves an archetype.
+PASS Endless wave 25: spawn 184 resolves an archetype.
+PASS Endless wave 25: spawn 185 resolves an archetype.
+PASS Endless wave 25: spawn 186 resolves an archetype.
+PASS Endless wave 25: spawn 187 resolves an archetype.
+PASS Endless wave 25: spawn 188 resolves an archetype.
+PASS Endless wave 25: spawn 189 resolves an archetype.
+PASS Endless wave 25: spawn 190 resolves an archetype.
+PASS Endless wave 25: spawn 191 resolves an archetype.
+PASS Endless wave 25: spawn 192 resolves an archetype.
+PASS Endless wave 25: spawn 193 resolves an archetype.
+PASS Endless wave 25: spawn 194 resolves an archetype.
+PASS Endless wave 25: spawn 195 resolves an archetype.
+PASS Endless wave 25: spawn 196 resolves an archetype.
+PASS Endless wave 25: spawn 197 resolves an archetype.
+PASS Endless wave 25: spawn 198 resolves an archetype.
+PASS Endless wave 25: spawn 199 resolves an archetype.
+PASS Endless wave 25: Rusher drawn 28/200 (14 %, curve 14 %, expected ~28).
+PASS Endless wave 25: Gunner drawn 56/200 (28 %, curve 28 %, expected ~56).
+PASS Endless wave 25: Brute drawn 40/200 (20 %, curve 20 %, expected ~40).
+PASS Endless wave 25: Skirmisher drawn 44/200 (22 %, curve 22 %, expected ~44).
+PASS Endless wave 25: Bulwark drawn 32/200 (16 %, curve 16 %, expected ~32).
+PASS Endless wave 25: exactly the 5 eligible archetypes appear (5).
+PASS wave 1: spawn resolves Rusher (Rusher).
+PASS wave 1: spawn resolves Rusher (Rusher).
+PASS Wave 2 pool: Rusher, Gunner.
+PASS Wave 3 pool: Rusher, Gunner, Brute, Skirmisher.
+PASS Bulwark joins at wave 5 (wave 4: Rusher, Gunner, Brute, Skirmisher / wave 5: Rusher, Gunner, Brute, Skirmisher, Bulwark).
+PASS Wave 5 fields all five archetypes: Rusher, Gunner, Brute, Skirmisher, Bulwark.
+PASS CONTROL: with CurveKind WeightTable the old Composition weights still field five archetypes (Rusher, Gunner, Skirmisher, Brute, Bulwark).
+PASS CONTROL: legacy wave 1 is still Rusher-only (Rusher).
+PASS Wave 1: miniboss False (schedule every 5).
+PASS Wave 1: 3 regulars (base 3).
+PASS Wave 1: size 3 = regulars + boss.
+PASS Wave 1: no elites in shipping scope.
+PASS Wave 1: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 2: miniboss False (schedule every 5).
+PASS Wave 2: 5 regulars (base 5).
+PASS Wave 2: size 5 = regulars + boss.
+PASS Wave 2: no elites in shipping scope.
+PASS Wave 2: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 3: miniboss False (schedule every 5).
+PASS Wave 3: 7 regulars (base 7).
+PASS Wave 3: size 7 = regulars + boss.
+PASS Wave 3: no elites in shipping scope.
+PASS Wave 3: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 4: miniboss False (schedule every 5).
+PASS Wave 4: 9 regulars (base 9).
+PASS Wave 4: size 9 = regulars + boss.
+PASS Wave 4: no elites in shipping scope.
+PASS Wave 4: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 5: miniboss True (schedule every 5).
+PASS Wave 5: 8 regulars (base 11 - 3 for the boss).
+PASS Wave 5: size 9 = regulars + boss.
+PASS Wave 5: no elites in shipping scope.
+PASS Wave 5: exactly 1 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 6: miniboss False (schedule every 5).
+PASS Wave 6: 13 regulars (base 13).
+PASS Wave 6: size 13 = regulars + boss.
+PASS Wave 6: no elites in shipping scope.
+PASS Wave 6: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 7: miniboss False (schedule every 5).
+PASS Wave 7: 15 regulars (base 15).
+PASS Wave 7: size 15 = regulars + boss.
+PASS Wave 7: no elites in shipping scope.
+PASS Wave 7: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 8: miniboss False (schedule every 5).
+PASS Wave 8: 17 regulars (base 17).
+PASS Wave 8: size 17 = regulars + boss.
+PASS Wave 8: no elites in shipping scope.
+PASS Wave 8: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 9: miniboss False (schedule every 5).
+PASS Wave 9: 19 regulars (base 19).
+PASS Wave 9: size 19 = regulars + boss.
+PASS Wave 9: no elites in shipping scope.
+PASS Wave 9: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 10: miniboss True (schedule every 5).
+PASS Wave 10: 18 regulars (base 21 - 3 for the boss).
+PASS Wave 10: size 19 = regulars + boss.
+PASS Wave 10: no elites in shipping scope.
+PASS Wave 10: exactly 1 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 11: miniboss False (schedule every 5).
+PASS Wave 11: 23 regulars (base 23).
+PASS Wave 11: size 23 = regulars + boss.
+PASS Wave 11: no elites in shipping scope.
+PASS Wave 11: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 12: miniboss False (schedule every 5).
+PASS Wave 12: 25 regulars (base 25).
+PASS Wave 12: size 25 = regulars + boss.
+PASS Wave 12: no elites in shipping scope.
+PASS Wave 12: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 13: miniboss False (schedule every 5).
+PASS Wave 13: 27 regulars (base 27).
+PASS Wave 13: size 27 = regulars + boss.
+PASS Wave 13: no elites in shipping scope.
+PASS Wave 13: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 14: miniboss False (schedule every 5).
+PASS Wave 14: 29 regulars (base 29).
+PASS Wave 14: size 29 = regulars + boss.
+PASS Wave 14: no elites in shipping scope.
+PASS Wave 14: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 15: miniboss True (schedule every 5).
+PASS Wave 15: 28 regulars (base 31 - 3 for the boss).
+PASS Wave 15: size 29 = regulars + boss.
+PASS Wave 15: no elites in shipping scope.
+PASS Wave 15: exactly 1 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 16: miniboss False (schedule every 5).
+PASS Wave 16: 33 regulars (base 33).
+PASS Wave 16: size 33 = regulars + boss.
+PASS Wave 16: no elites in shipping scope.
+PASS Wave 16: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 17: miniboss False (schedule every 5).
+PASS Wave 17: 35 regulars (base 35).
+PASS Wave 17: size 35 = regulars + boss.
+PASS Wave 17: no elites in shipping scope.
+PASS Wave 17: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 18: miniboss False (schedule every 5).
+PASS Wave 18: 37 regulars (base 37).
+PASS Wave 18: size 37 = regulars + boss.
+PASS Wave 18: no elites in shipping scope.
+PASS Wave 18: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 19: miniboss False (schedule every 5).
+PASS Wave 19: 39 regulars (base 39).
+PASS Wave 19: size 39 = regulars + boss.
+PASS Wave 19: no elites in shipping scope.
+PASS Wave 19: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 20: miniboss True (schedule every 5).
+PASS Wave 20: 38 regulars (base 41 - 3 for the boss).
+PASS Wave 20: size 39 = regulars + boss.
+PASS Wave 20: no elites in shipping scope.
+PASS Wave 20: exactly 1 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 21: miniboss False (schedule every 5).
+PASS Wave 21: 43 regulars (base 43).
+PASS Wave 21: size 43 = regulars + boss.
+PASS Wave 21: no elites in shipping scope.
+PASS Wave 21: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 22: miniboss False (schedule every 5).
+PASS Wave 22: 45 regulars (base 45).
+PASS Wave 22: size 45 = regulars + boss.
+PASS Wave 22: no elites in shipping scope.
+PASS Wave 22: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 23: miniboss False (schedule every 5).
+PASS Wave 23: 47 regulars (base 47).
+PASS Wave 23: size 47 = regulars + boss.
+PASS Wave 23: no elites in shipping scope.
+PASS Wave 23: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 24: miniboss False (schedule every 5).
+PASS Wave 24: 49 regulars (base 49).
+PASS Wave 24: size 49 = regulars + boss.
+PASS Wave 24: no elites in shipping scope.
+PASS Wave 24: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 25: miniboss True (schedule every 5).
+PASS Wave 25: 48 regulars (base 51 - 3 for the boss).
+PASS Wave 25: size 49 = regulars + boss.
+PASS Wave 25: no elites in shipping scope.
+PASS Wave 25: exactly 1 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 26: miniboss False (schedule every 5).
+PASS Wave 26: 53 regulars (base 53).
+PASS Wave 26: size 53 = regulars + boss.
+PASS Wave 26: no elites in shipping scope.
+PASS Wave 26: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 27: miniboss False (schedule every 5).
+PASS Wave 27: 55 regulars (base 55).
+PASS Wave 27: size 55 = regulars + boss.
+PASS Wave 27: no elites in shipping scope.
+PASS Wave 27: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 28: miniboss False (schedule every 5).
+PASS Wave 28: 57 regulars (base 57).
+PASS Wave 28: size 57 = regulars + boss.
+PASS Wave 28: no elites in shipping scope.
+PASS Wave 28: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 29: miniboss False (schedule every 5).
+PASS Wave 29: 59 regulars (base 59).
+PASS Wave 29: size 59 = regulars + boss.
+PASS Wave 29: no elites in shipping scope.
+PASS Wave 29: exactly 0 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Wave 30: miniboss True (schedule every 5).
+PASS Wave 30: 58 regulars (base 61 - 3 for the boss).
+PASS Wave 30: size 59 = regulars + boss.
+PASS Wave 30: no elites in shipping scope.
+PASS Wave 30: exactly 1 miniboss slot(s).
+PASS A boss fits the alive budget.
+PASS Boss rounds 5, 10 and 15; round 6 has none.
+PASS Difficulty set to Extreme (isolated verification save).
+PASS Loadout saved.
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Wave 1: a plan exists.
+PASS Wave 1: 3 regulars, no boss.
+PASS Alive budget holds (3/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Wave 2: a plan exists.
+PASS Alive budget holds (5/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Wave 3: a plan exists.
+PASS Alive budget holds (7/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Wave 4: a plan exists.
+PASS Alive budget holds (8/8).
+PASS Alive budget holds (1/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Wave 5: a plan exists.
+PASS Wave 5 is a boss round.
+PASS Wave 5: 8 regulars after the boss trade.
+PASS Alive budget holds (5/8).
+PASS The boss body carries the Pulsebreaker brain.
+PASS Boss archetype Pulsebreaker.
+PASS Difficulty applied exactly once: Rusher at 67.08 HP = HealthFor(5) 104.00 x archetype 0.6 x Extreme 1.075 (a doubled multiplier would be 72.11).
+PASS Alive budget holds (4/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Alive budget holds (0/8).
+PASS Exactly one Pulsebreaker in the boss round (1).
+PASS The Bulwark does not appear before round 5.
+PASS Round advanced after the boss died (round 6).
+PASS Miniboss kill counted once (1).
+PASS The boss is gone after the kill.
+PASS Boss bar hidden after the kill.
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS Free Play has no round director at any frame.
+PASS No boss is spawned automatically in Free Play.
+PASS No boss bar in Free Play.
+PASS Ambient population preserved (26 NPCs).

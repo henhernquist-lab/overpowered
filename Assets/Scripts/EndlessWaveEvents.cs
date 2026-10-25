@@ -35,6 +35,17 @@ public sealed class EndlessWaveEvents : ScriptableObject
     [Tooltip("Null = the regular composition archetype.")] public EnemyArchetype MinibossArchetype;
     public float MinibossHealthMultiplier = 8f, MinibossDamageMultiplier = 1.6f;
     [Min(1)] public int MinibossAliveCost = 4;
+    [Header("Composition curve")]
+    [Tooltip("WeightTable keeps the director's Composition weights exactly as they were. Standard / Endless replace them " +
+             "with a wave curve (early rounds basic, agile + shielded archetypes ramping in later).")]
+    public CompositionCurveKind CurveKind = CompositionCurveKind.WeightTable;
+    [Tooltip("Used when CurveKind = Standard (finite, campaign-shaped rounds).")] public EnemyCompositionCurve StandardCurve = new EnemyCompositionCurve();
+    [Tooltip("Used when CurveKind = Endless (Endless Fight).")] public EnemyCompositionCurve EndlessCurve = new EnemyCompositionCurve();
+    [Header("Miniboss round budget")]
+    [Tooltip("Regular spawns taken off a miniboss wave: one boss replaces this many regular enemies, so a boss round adds " +
+             "pressure instead of a boss stacked on an already saturated wave.")]
+    [Min(0)] public int MinibossRegularCost = 3;
+
     [Header("Scoring (each x wave)")]
     public int EliteKillScore = 25, MinibossKillScore = 150, FlawlessBonus = 40;
     [Tooltip("Modifier draws are seeded by (run seed, wave). The run seed is Seed, or a fresh random one per run.")] public int Seed = 7331;
@@ -63,6 +74,8 @@ public sealed class EndlessWaveEvents : ScriptableObject
         foreach (var m in plan.Modifiers) { plan.Health *= m.Health; plan.Damage *= m.Damage; plan.Count *= m.Count; plan.Score *= m.Score; eliteBonus += m.EliteShareBonus; }
         plan.Miniboss = MinibossEvery > 0 && wave > 0 && wave % MinibossEvery == 0;
         plan.Regulars = Mathf.Max(1, Mathf.RoundToInt(director.WaveSize(wave) * plan.Count));
+        // A boss round trades regular bodies for the boss: the encounter keeps its pacing without a longer wave.
+        if (plan.Miniboss && MinibossRegularCost > 0) plan.Regulars = Mathf.Max(1, plan.Regulars - MinibossRegularCost);
         plan.Size = plan.Regulars + (plan.Miniboss ? 1 : 0);
         plan.EliteShare = wave >= EliteFromWave ? Mathf.Clamp01(Mathf.Min(MaxEliteShare, EliteShare + EliteShareGrowthPerWave * (wave - EliteFromWave)) + eliteBonus) : 0f;
         plan.Elites = Mathf.FloorToInt(plan.EliteShare * plan.Regulars + 1e-4f);
@@ -75,6 +88,10 @@ public sealed class EndlessWaveEvents : ScriptableObject
         if (plan.Elites <= 0 || index < 0 || index >= plan.Regulars) return Slot.Regular;
         return (long)(index + 1) * plan.Elites / plan.Regulars > (long)index * plan.Elites / plan.Regulars ? Slot.Elite : Slot.Regular;
     }
+    /// The curve the director should use, or null when this asset keeps the director's own weight table.
+    public EnemyCompositionCurve Curve(CompositionCurveKind kind) =>
+        kind == CompositionCurveKind.Standard ? StandardCurve : kind == CompositionCurveKind.Endless ? EndlessCurve : null;
+
     public int CostOf(Slot slot) => slot == Slot.Miniboss ? MinibossAliveCost : slot == Slot.Elite ? EliteAliveCost : 1;
     /// Composition index among the regular / elite enemies (the miniboss does not shift the archetype rotation).
     public static int CompositionIndex(WavePlan plan, int index) => plan.Miniboss ? Mathf.Max(0, index - 1) : index;

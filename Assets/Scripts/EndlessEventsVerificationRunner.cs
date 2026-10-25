@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-/// See EndlessEventsVerification. (1) The shipping Endless director has no Events: wave 1 keeps the original size, kill
-/// and clear scores, and no elite / miniboss / flawless events exist. (2) An in-memory mode + director clone carrying the
+/// See EndlessEventsVerification. (1) The shipping Endless director runs the wave-events asset for the composition curve
+/// and the round-5 miniboss schedule only (elites and modifier waves off, flawless bonus 0): wave 1 keeps its size, kill
+/// and clear scores, and no elite / miniboss event fires before round 5. (2) An in-memory mode + director clone carrying the
 /// EndlessEventsSetup recipe (tightened so three waves cover every feature: elites from wave 1, a miniboss every 2nd wave,
 /// modifiers every wave from 2, MaxAlive 4): live spawn budget every frame, each enemy's health by slot against the
 /// formulas, and every score event summed against the session score, with a flawless wave and a hit (non-flawless) control.
@@ -37,17 +38,23 @@ public sealed class EndlessEventsVerificationRunner : SessionVerificationRunner
         Log("---- SHIPPING DIRECTOR (no events)");
         yield return Enter(F.Heroes[0], "ice", "strength", "endless-fight");
         var d = (EndlessWaveDirector)W.Mode.Definition.Director;
-        Check(d.Events == null, "Shipping EndlessWaves has no Events assigned.");
+        Check(d.Events != null && d.Events.MinibossEvery == 5 && d.Events.MinibossArchetype != null,
+            $"Shipping EndlessWaves runs wave events: miniboss every {d.Events?.MinibossEvery} waves ({d.Events?.MinibossArchetype?.DisplayName}).");
+        Check(d.Events.EliteFromWave > 50 && d.Events.ModifierFromWave > 50,
+            "SHIPPING SCOPE: elites and modifier waves stay off; the asset is wired for the composition curve and the boss schedule.");
         events.Clear(); State.Scored += events.Add; int score = W.Mode.Score;
         yield return WaitWave(1);
-        Check(State.Plan == null && State.Size == d.WaveSize(1), $"Wave 1 plan-free, size {State.Size} = WaveSize(1).");
+        Check(State.Plan != null && !State.Plan.Miniboss && State.Plan.Elites == 0 && State.Size == d.WaveSize(1),
+            $"Wave 1: plan without a boss or elites, size {State.Size} = WaveSize(1).");
         float until = Time.time + 20f;
         while (!State.Intermission && Time.time < until) { KillAll(); yield return null; }
         Check(State.Intermission && State.Wave == 1, "Wave 1 cleared.");
         int kills = events.Count(e => e.Kind == EndlessScoreKind.Kill), clears = events.Count(e => e.Kind == EndlessScoreKind.WaveClear);
         Check(kills == d.WaveSize(1) && events.Where(e => e.Kind == EndlessScoreKind.Kill).All(e => e.Amount == d.KillScore) && clears == 1 && events.Single(e => e.Kind == EndlessScoreKind.WaveClear).Amount == d.WaveClearBonus,
             $"Original scoring: {kills} kills x {d.KillScore}, clear {d.WaveClearBonus}.");
-        Check(!events.Any(e => e.Kind == EndlessScoreKind.EliteKill || e.Kind == EndlessScoreKind.MinibossKill || e.Kind == EndlessScoreKind.Flawless), "CONTROL: no elite / miniboss / flawless events without Events.");
+        Check(!events.Any(e => e.Kind == EndlessScoreKind.EliteKill || e.Kind == EndlessScoreKind.MinibossKill) &&
+              events.Count(e => e.Kind == EndlessScoreKind.Flawless) == 1 && events.Single(e => e.Kind == EndlessScoreKind.Flawless).Amount == 0,
+            "CONTROL: wave 1 has no elite or miniboss event, and the flawless bonus is configured to 0 so wave scoring is unchanged.");
         Check(W.Mode.Score - score == events.Sum(e => e.Amount), $"Score delta {W.Mode.Score - score} = sum of score events.");
     }
     IEnumerator WithEvents()

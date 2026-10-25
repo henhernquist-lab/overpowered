@@ -1,0 +1,43 @@
+PASS Wave-events recipe built in memory (5 modifiers).
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Shipping EndlessWaves runs wave events: miniboss every 5 waves (Pulsebreaker).
+PASS SHIPPING SCOPE: elites and modifier waves stay off; the asset is wired for the composition curve and the boss schedule.
+PASS Wave 1 started.
+PASS Wave 1: plan without a boss or elites, size 3 = WaveSize(1).
+PASS Wave 1 cleared.
+PASS Original scoring: 3 kills x 10, clear 50.
+PASS CONTROL: wave 1 has no elite or miniboss event, and the flawless bonus is configured to 0 so wave scoring is unchanged.
+PASS Score delta 80 = sum of score events.
+PASS Loadout saved.
+PASS Wave 1 started.
+PASS Wave 1 plan: 3 enemies, 1 elites, miniboss False, modifiers [], x1 hp x1 dmg x1 score.
+PASS Wave 1 cleared (3 enemies seen, peak alive 2, peak cost 3).
+PASS Alive budget held every frame: <= 4 alive, cost <= target (or a lone heavy enemy).
+PASS Every enemy's health matches its slot formula (1 elites, 0 miniboss).
+PASS 3 kill events of 10 (KillScore x wave x modifier score).
+PASS 1 elite-kill events of 25.
+PASS Miniboss-kill events: 0.
+PASS No damage taken -> one flawless bonus of 40.
+PASS Score delta 145 = sum of this wave's score events.
+PASS Wave 2 started.
+PASS Wave 2 plan: 3 enemies, 0 elites, miniboss True, modifiers [ARMOURED], x1.5 hp x1 dmg x1.3 score.
+PASS Wave 2 cleared (3 enemies seen, peak alive 2, peak cost 4).
+PASS Alive budget held every frame: <= 4 alive, cost <= target (or a lone heavy enemy).
+PASS Every enemy's health matches its slot formula (0 elites, 1 miniboss).
+PASS 3 kill events of 26 (KillScore x wave x modifier score).
+PASS 0 elite-kill events of 50.
+PASS Miniboss-kill events: 1.
+PASS CONTROL: a hit during the wave -> no flawless bonus.
+PASS Score delta 478 = sum of this wave's score events.
+PASS Wave 3 started.
+PASS Wave 3 plan: 7 enemies, 2 elites, miniboss False, modifiers [ARMOURED], x1.5 hp x1 dmg x1.3 score.
+PASS Wave 3 cleared (7 enemies seen, peak alive 3, peak cost 4).
+PASS Alive budget held every frame: <= 4 alive, cost <= target (or a lone heavy enemy).
+PASS Every enemy's health matches its slot formula (2 elites, 0 miniboss).
+PASS 7 kill events of 39 (KillScore x wave x modifier score).
+PASS 2 elite-kill events of 75.
+PASS Miniboss-kill events: 0.
+PASS No damage taken -> one flawless bonus of 120.
+PASS Score delta 693 = sum of this wave's score events.
