@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "NovaCustomizationVerification.Run",
+    "commit": "f6c43cd4e184cc411311705dc2be45123aa1ada3",
+    "status_before": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/NovaCustomization/\n?? docs/nova-customization.md",
+    "started_utc": "2026-10-25T17:11:19.488350+00:00",
+    "save_before": "920cfbae3994ce721333c5f712436d57dbfd54c24657e8538d0fd26e153e711e",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/NovaCustomization/final-framed/NovaCustomizationVerification.Run.log",
+    "pid": 22772,
+    "exit": 1,
+    "seconds": 43.08,
+    "pass": 139,
+    "fail": 1,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/NovaCustomization/\n?? docs/nova-customization.md"
+  }
+]
