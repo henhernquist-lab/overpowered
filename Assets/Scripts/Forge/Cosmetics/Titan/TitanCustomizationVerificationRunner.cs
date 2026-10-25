@@ -138,7 +138,8 @@ public sealed class TitanCustomizationVerificationRunner : MonoBehaviour
         foreach(string pose in new[]{"Locomotion","Jump","Double Jump","Backflip","Climb","Fall","Land","Punch","Martelo Kick","Hurricane Kick","Cast"})
         {
             poseAnimator.Play(pose,0,.35f);poseAnimator.Update(0);yield return null;yield return null;
-            poseCamera.targetTexture=screen.Preview;poseCamera.Render();poseCamera.targetTexture=null;
+            // Cinemachine evaluates the preview lens during the yielded frames; set the diagnostic lens after that.
+            poseCamera.fieldOfView=44;poseCamera.targetTexture=screen.Preview;poseCamera.Render();poseCamera.targetTexture=null;
             var frame=Capture(screen.Preview,"poses/"+pose.Replace(" ","-")+".png");Destroy(frame);
         }
         poseCamera.fieldOfView=idleFov;Check(true,"Captured eleven actual shared-controller preview poses for human deformation review");
