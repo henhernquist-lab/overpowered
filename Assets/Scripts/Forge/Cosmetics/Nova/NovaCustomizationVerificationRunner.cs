@@ -134,14 +134,14 @@ public sealed class NovaCustomizationVerificationRunner : MonoBehaviour
         Check(screen.SelectHero(nova)&&JsonUtility.ToJson(profile.Appearance(nova))==appearanceBefore,"Returning to NOVA restores per-hero outfit and all three colors");
         Check(screen.SelectPower(0,Resources.Load<PowerDefinition>("Powers/fire"))&&screen.SelectPower(1,Resources.Load<PowerDefinition>("Powers/strength")),"After hero cycling, explicitly restore the paid Fire/Strength verification loadout through Forge");
         // Capture the actual shared-controller poses, in the real Forge preview, for visual review.
-        Directory.CreateDirectory(Dir+"/poses");var poseAnimator=screen.PreviewModel.GetComponent<Animator>();var poseCamera=screen.PreviewModel.transform.parent.GetComponentInChildren<Camera>();
+        Directory.CreateDirectory(Dir+"/poses");var poseAnimator=screen.PreviewModel.GetComponent<Animator>();var poseCamera=screen.PreviewModel.transform.parent.GetComponentInChildren<Camera>();float idleFov=poseCamera.fieldOfView;poseCamera.fieldOfView=44;
         foreach(string pose in new[]{"Locomotion","Jump","Double Jump","Backflip","Climb","Fall","Land","Punch","Martelo Kick","Hurricane Kick","Cast"})
         {
             poseAnimator.Play(pose,0,.35f);poseAnimator.Update(0);yield return null;yield return null;
             poseCamera.targetTexture=screen.Preview;poseCamera.Render();poseCamera.targetTexture=null;
             var frame=Capture(screen.Preview,"poses/"+pose.Replace(" ","-")+".png");Destroy(frame);
         }
-        Check(true,"Captured eleven actual shared-controller preview poses for human deformation review");
+        poseCamera.fieldOfView=idleFov;Check(true,"Captured eleven actual shared-controller preview poses for human deformation review");
         profile.Save();File.WriteAllText(Dir+"/saves/expected.json",JsonUtility.ToJson(profile.Data));screen.Close();
         Check(GameFlow.Instance.OpenCombatLab(),"Enter actual gameplay through Home Battle Lab");yield return Scene("CombatLab");
         var presentation=W.Hero.GetComponent<HumanoidPresentation>();var live=W.Hero.GetComponentInChildren<HeroAppearanceRenderer>();
