@@ -1,0 +1,56 @@
+PASS source part vertex range SK_FANT_KNGT_17_10TORS_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_10TORS_HU01
+PASS source part vertex range SK_FANT_KNGT_17_11AUPL_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_11AUPL_HU01
+PASS source part vertex range SK_FANT_KNGT_17_12AUPR_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_12AUPR_HU01
+PASS source part vertex range SK_FANT_KNGT_17_13ALWL_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_13ALWL_HU01
+PASS source part vertex range SK_FANT_KNGT_17_14ALWR_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_14ALWR_HU01
+PASS source part vertex range SK_FANT_KNGT_17_15HNDL_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_15HNDL_HU01
+PASS source part vertex range SK_FANT_KNGT_17_16HNDR_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_16HNDR_HU01
+PASS source part vertex range SK_FANT_KNGT_17_17HIPS_HU01
+REMOVED SK_FANT_KNGT_17_17HIPS_HU01; source UV matches=2833/2833; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_18LEGL_HU01
+REMOVED SK_FANT_KNGT_17_18LEGL_HU01; source UV matches=775/775; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_19LEGR_HU01
+REMOVED SK_FANT_KNGT_17_19LEGR_HU01; source UV matches=774/774; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_20FOTL_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_20FOTL_HU01
+PASS source part vertex range SK_FANT_KNGT_17_21FOTR_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_21FOTR_HU01
+PASS source part vertex range SK_FANT_KNGT_17_22AHED_HU01
+REMOVED SK_FANT_KNGT_17_22AHED_HU01; source UV matches=2394/2394; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_23AFAC_HU01
+REMOVED SK_FANT_KNGT_17_23AFAC_HU01; source UV matches=422/422; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_24ABAC_HU01
+REMOVED SK_FANT_KNGT_17_24ABAC_HU01; source UV matches=4477/4477; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_25AHPF_HU01
+REMOVED SK_FANT_KNGT_17_25AHPF_HU01; source UV matches=934/934; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_26AHPB_HU01
+REMOVED SK_FANT_KNGT_17_26AHPB_HU01; source UV matches=496/496; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_27AHPL_HU01
+REMOVED SK_FANT_KNGT_17_27AHPL_HU01; source UV matches=492/492; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_28AHPR_HU01
+REMOVED SK_FANT_KNGT_17_28AHPR_HU01; source UV matches=481/481; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_29ASHL_HU01
+REMOVED SK_FANT_KNGT_17_29ASHL_HU01; source UV matches=329/527; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_30ASHR_HU01
+REMOVED SK_FANT_KNGT_17_30ASHR_HU01; source UV matches=6/475; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_31AEBL_HU01
+REMOVED SK_FANT_KNGT_17_31AEBL_HU01; source UV matches=3/171; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_32AEBR_HU01
+REMOVED SK_FANT_KNGT_17_32AEBR_HU01; source UV matches=4/177; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_33AKNL_HU01
+REMOVED SK_FANT_KNGT_17_33AKNL_HU01; source UV matches=7/188; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_34AKNR_HU01
+REMOVED SK_FANT_KNGT_17_34AKNR_HU01; source UV matches=14/236; no excluded surface copied
+PASS source part vertex range SK_HUMN_BASE_01_01HEAD_HU01
+FAIL exact fitted retained UV range SK_HUMN_BASE_01_01HEAD_HU01
+FAIL System.Exception: exact fitted retained UV range SK_HUMN_BASE_01_01HEAD_HU01
+  at TitanBodysuitBake.Check (System.Boolean ok, System.String text, System.Text.StringBuilder log) [0x00026] in /Users/melaniehernquist/Documents/ChatGPT/op-hero-forge-titan/Assets/Editor/Titan/TitanBodysuitBake.cs:19 
+  at TitanBodysuitBake.Build (System.Text.StringBuilder log) [0x00351] in /Users/melaniehernquist/Documents/ChatGPT/op-hero-forge-titan/Assets/Editor/Titan/TitanBodysuitBake.cs:57 
+  at TitanBodysuitBake.Run () [0x00008] in /Users/melaniehernquist/Documents/ChatGPT/op-hero-forge-titan/Assets/Editor/Titan/TitanBodysuitBake.cs:28 

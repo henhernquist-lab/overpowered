@@ -1,0 +1,36 @@
+[
+  {
+    "entry": "TitanCustomizationVerification.Run",
+    "commit": "cdd58f3cc3beba223237cdf7cf82864c5e57d96d",
+    "status_before": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/TitanCustomization/\n?? docs/titan-customization.md",
+    "started_utc": "2026-10-25T17:09:33.069803+00:00",
+    "save_before": "920cfbae3994ce721333c5f712436d57dbfd54c24657e8538d0fd26e153e711e",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/TitanCustomization/final/TitanCustomizationVerification.Run.log",
+    "pid": 16523,
+    "exit": 0,
+    "seconds": 36.72,
+    "pass": 140,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/TitanCustomization/\n?? docs/titan-customization.md"
+  },
+  {
+    "entry": "TitanCustomizationVerification.Reload",
+    "commit": "cdd58f3cc3beba223237cdf7cf82864c5e57d96d",
+    "status_before": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/TitanCustomization/\n?? docs/titan-customization.md",
+    "started_utc": "2026-10-25T17:10:09.987128+00:00",
+    "save_before": "920cfbae3994ce721333c5f712436d57dbfd54c24657e8538d0fd26e153e711e",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/TitanCustomization/final/TitanCustomizationVerification.Reload.log",
+    "pid": 19348,
+    "exit": 0,
+    "seconds": 25.39,
+    "pass": 6,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/TitanCustomization/\n?? docs/titan-customization.md"
+  }
+]

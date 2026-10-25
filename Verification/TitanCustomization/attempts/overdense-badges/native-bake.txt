@@ -1,0 +1,112 @@
+PASS source part vertex range SK_FANT_KNGT_17_10TORS_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_10TORS_HU01
+PASS source part vertex range SK_FANT_KNGT_17_11AUPL_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_11AUPL_HU01
+PASS source part vertex range SK_FANT_KNGT_17_12AUPR_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_12AUPR_HU01
+PASS source part vertex range SK_FANT_KNGT_17_13ALWL_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_13ALWL_HU01
+PASS source part vertex range SK_FANT_KNGT_17_14ALWR_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_14ALWR_HU01
+PASS source part vertex range SK_FANT_KNGT_17_15HNDL_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_15HNDL_HU01
+PASS source part vertex range SK_FANT_KNGT_17_16HNDR_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_16HNDR_HU01
+PASS source part vertex range SK_FANT_KNGT_17_17HIPS_HU01
+REMOVED SK_FANT_KNGT_17_17HIPS_HU01; source UV matches=2833/2833; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_18LEGL_HU01
+REMOVED SK_FANT_KNGT_17_18LEGL_HU01; source UV matches=775/775; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_19LEGR_HU01
+REMOVED SK_FANT_KNGT_17_19LEGR_HU01; source UV matches=774/774; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_20FOTL_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_20FOTL_HU01
+PASS source part vertex range SK_FANT_KNGT_17_21FOTR_HU01
+PASS exact fitted retained UV range SK_FANT_KNGT_17_21FOTR_HU01
+PASS source part vertex range SK_FANT_KNGT_17_22AHED_HU01
+REMOVED SK_FANT_KNGT_17_22AHED_HU01; source UV matches=2394/2394; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_23AFAC_HU01
+REMOVED SK_FANT_KNGT_17_23AFAC_HU01; source UV matches=422/422; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_24ABAC_HU01
+REMOVED SK_FANT_KNGT_17_24ABAC_HU01; source UV matches=4477/4477; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_25AHPF_HU01
+REMOVED SK_FANT_KNGT_17_25AHPF_HU01; source UV matches=934/934; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_26AHPB_HU01
+REMOVED SK_FANT_KNGT_17_26AHPB_HU01; source UV matches=496/496; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_27AHPL_HU01
+REMOVED SK_FANT_KNGT_17_27AHPL_HU01; source UV matches=492/492; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_28AHPR_HU01
+REMOVED SK_FANT_KNGT_17_28AHPR_HU01; source UV matches=481/481; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_29ASHL_HU01
+REMOVED SK_FANT_KNGT_17_29ASHL_HU01; source UV matches=329/527; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_30ASHR_HU01
+REMOVED SK_FANT_KNGT_17_30ASHR_HU01; source UV matches=6/475; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_31AEBL_HU01
+REMOVED SK_FANT_KNGT_17_31AEBL_HU01; source UV matches=3/171; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_32AEBR_HU01
+REMOVED SK_FANT_KNGT_17_32AEBR_HU01; source UV matches=4/177; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_33AKNL_HU01
+REMOVED SK_FANT_KNGT_17_33AKNL_HU01; source UV matches=7/188; no excluded surface copied
+PASS source part vertex range SK_FANT_KNGT_17_34AKNR_HU01
+REMOVED SK_FANT_KNGT_17_34AKNR_HU01; source UV matches=14/236; no excluded surface copied
+PASS source part vertex range SK_HUMN_BASE_01_01HEAD_HU01
+PASS unique exact full head UV sequence after excluded source-version attachment drift
+MEASURED excluded attachment recipe drift=3 vertices; recovered head start=23271
+PASS exact fitted retained UV range SK_HUMN_BASE_01_01HEAD_HU01
+PASS source part vertex range SK_HUMN_BASE_01_03EBRL_HU01
+PASS exact fitted retained UV range SK_HUMN_BASE_01_03EBRL_HU01
+PASS source part vertex range SK_HUMN_BASE_01_04EBRR_HU01
+PASS exact fitted retained UV range SK_HUMN_BASE_01_04EBRR_HU01
+PASS source part vertex range SK_HUMN_BASE_01_05EYEL_HU01
+PASS exact fitted retained UV range SK_HUMN_BASE_01_05EYEL_HU01
+PASS source part vertex range SK_HUMN_BASE_01_06EYER_HU01
+PASS exact fitted retained UV range SK_HUMN_BASE_01_06EYER_HU01
+PASS source part vertex range SK_HUMN_BASE_01_07EARL_HU01
+PASS exact fitted retained UV range SK_HUMN_BASE_01_07EARL_HU01
+PASS source part vertex range SK_HUMN_BASE_01_08EARR_HU01
+PASS exact fitted retained UV range SK_HUMN_BASE_01_08EARR_HU01
+PASS source part vertex range SK_HUMN_BASE_01_35NOSE_HU01
+PASS exact fitted retained UV range SK_HUMN_BASE_01_35NOSE_HU01
+PASS source part vertex range SK_HUMN_BASE_01_36TETH_HU01
+PASS exact fitted retained UV range SK_HUMN_BASE_01_36TETH_HU01
+PASS source part vertex range SK_HUMN_BASE_01_37TONG_HU01
+PASS exact fitted retained UV range SK_HUMN_BASE_01_37TONG_HU01
+PASS source part vertex range SK_HUMN_BASE_10_09FCHR_HU01
+REMOVED SK_HUMN_BASE_10_09FCHR_HU01; source UV matches=963/963; no excluded surface copied
+PASS all original geometry accounted for before accessory removal
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 1.788139E-07 for SK_HUMN_BASE_01_17HIPS_HU01
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_17HIPS_HU01 joint delta=1.788139E-07
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 1.788139E-07 for SK_HUMN_BASE_01_18LEGL_HU01
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_18LEGL_HU01 joint delta=1.788139E-07
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 1.788139E-07 for SK_HUMN_BASE_01_19LEGR_HU01
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_19LEGR_HU01 joint delta=1.788139E-07
+PASS optimized suit budget 10262 vertices / 65 bones
+ASSETS FITTED SK_FANT_KNGT_17_10TORS_HU01
+ASSETS FITTED SK_FANT_KNGT_17_11AUPL_HU01
+ASSETS FITTED SK_FANT_KNGT_17_12AUPR_HU01
+ASSETS FITTED SK_FANT_KNGT_17_13ALWL_HU01
+ASSETS FITTED SK_FANT_KNGT_17_14ALWR_HU01
+ASSETS FITTED SK_FANT_KNGT_17_15HNDL_HU01
+ASSETS FITTED SK_FANT_KNGT_17_16HNDR_HU01
+ASSETS FITTED SK_FANT_KNGT_17_20FOTL_HU01
+ASSETS FITTED SK_FANT_KNGT_17_21FOTR_HU01
+ASSETS FITTED SK_HUMN_BASE_01_01HEAD_HU01
+ASSETS FITTED SK_HUMN_BASE_01_03EBRL_HU01
+ASSETS FITTED SK_HUMN_BASE_01_04EBRR_HU01
+ASSETS FITTED SK_HUMN_BASE_01_05EYEL_HU01
+ASSETS FITTED SK_HUMN_BASE_01_06EYER_HU01
+ASSETS FITTED SK_HUMN_BASE_01_07EARL_HU01
+ASSETS FITTED SK_HUMN_BASE_01_08EARR_HU01
+ASSETS FITTED SK_HUMN_BASE_01_35NOSE_HU01
+ASSETS FITTED SK_HUMN_BASE_01_36TETH_HU01
+ASSETS FITTED SK_HUMN_BASE_01_37TONG_HU01
+ASSETS SUIT SK_HUMN_BASE_01_17HIPS_HU01 (masculine, neutral body shape; clothing-only UVs)
+ASSETS SUIT SK_HUMN_BASE_01_18LEGL_HU01 (masculine, neutral body shape; clothing-only UVs)
+ASSETS SUIT SK_HUMN_BASE_01_19LEGR_HU01 (masculine, neutral body shape; clothing-only UVs)
+PASS bounded badge stand-off correction 0.007375058m
+MEASURED shield residual ridge stand-off correction=0.007375058m
+PASS authored shield triangle/corner torso clearance >= 0.002m
+MEASURED titan_emblem_shield: 681 vertices / 1280 triangles / 1 existing spine bone
+PASS bounded badge stand-off correction 0.009549107m
+MEASURED core residual ridge stand-off correction=0.009549107m
+PASS authored core triangle/corner torso clearance >= 0.002m
+MEASURED titan_emblem_core: 4352 vertices / 8192 triangles / 1 existing spine bone
