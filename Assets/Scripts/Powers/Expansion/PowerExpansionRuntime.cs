@@ -17,9 +17,9 @@ public sealed partial class PowerExpansionRuntime : MonoBehaviour
         weaponBlock=new MaterialPropertyBlock();User=user;Art=Resources.Load<PowerExpansionArt>("PowerExpansionArt");Tuning=Resources.Load<PowerExpansionTuning>("PowerExpansionTuning");
         Vfx=gameObject.AddComponent<ExpansionVfx>();Vfx.Initialize();
     }
-    public bool Visible(Vector3 from,CityNpc npc)
+    public bool Visible(Vector3 from,CityNpc npc,Vector3? targetPoint=null)
     {
-        Vector3 delta=npc.transform.position+Vector3.up-from;float distance=delta.magnitude;
+        Vector3 delta=(targetPoint??(npc.transform.position+Vector3.up))-from;float distance=delta.magnitude;if(distance<.001f)return true;
         int count=Physics.RaycastNonAlloc(from,delta.normalized,rays,distance,~0,QueryTriggerInteraction.Ignore);if(count>=rays.Length)return false;
         for(int i=0;i<count;i++)if(rays[i].transform.root!=transform&&rays[i].collider.GetComponentInParent<CityNpc>()==null&&rays[i].distance<distance-.05f)return false;
         return true;
@@ -31,8 +31,16 @@ public sealed partial class PowerExpansionRuntime : MonoBehaviour
         for(int i=0;i<count&&Targets.Count<Mathf.Min(16,maximum);i++)
         {
             var n=hits[i].GetComponentInParent<CityNpc>();if(n==null||n.Dead||!n.Hostile||!unique.Add(n))continue;
-            var direction=n.transform.position+Vector3.up-origin;
-            if(direction.sqrMagnitude>range*range||Vector3.Dot(direction.normalized,forward)<cosine||!Visible(origin,n))continue;
+            Vector3 target=n.transform.position+Vector3.up;
+            // A cone intersects the actual hostile capsule: a head-height crosshair hit must not miss
+            // merely because a representative torso point sits outside the cone at very close range.
+            if(halfAngle<90)
+            {
+                float along=Mathf.Clamp(Vector3.Dot(hits[i].bounds.center-origin,forward),0,range);
+                target=hits[i].ClosestPoint(origin+forward*along);
+            }
+            var direction=target-origin;
+            if(direction.sqrMagnitude>range*range||(direction.sqrMagnitude>.000001f&&Vector3.Dot(direction.normalized,forward)<cosine)||!Visible(origin,n,target))continue;
             Targets.Add(n);
         }
         for(int i=1;i<Targets.Count;i++)

@@ -1,0 +1,8 @@
+PASS Isolated in-memory staged aerokinesis enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS aerokinesis: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS aerokinesis: actual first-person center ray visibly intersects close hostile capsule
+PASS Close directional cast accepted
+FAIL System.Exception: aerokinesis: center-screen point-blank target receives real damage rather than missing an arbitrary torso point

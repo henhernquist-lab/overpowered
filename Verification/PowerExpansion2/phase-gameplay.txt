@@ -574,6 +574,6 @@ PASS Enter real existing Combat Lab for native collision/damage controls
 PASS aerokinesis: actual primary slot selection
 PASS One hundred wind casts retain fixed 32 visual slots and shared native mesh/material/Animator counts
 PASS Stress visuals fully expire
-MEASURED same empty native Combat Lab, 30 warm +120 idle +120 active Editor frames: median/p95 1.24/1.42ms idle, 1.30/1.57ms repeated wind. Frame timing includes Editor and batch environment; no standalone/GPU/causal skinning claim.
+MEASURED same empty native Combat Lab, 30 warm +120 idle +120 active Editor frames: median/p95 1.22/1.44ms idle, 1.33/1.61ms repeated wind. Frame timing includes Editor and batch environment; no standalone/GPU/causal skinning claim.
 PASS Measured phase leaves no live expansion VFX
 LIMIT: native functional/render/object-budget evidence, not standalone GPU/CPU profiling or human balance/feel/art approval.

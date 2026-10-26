@@ -15,7 +15,8 @@ public sealed partial class PowerExpansionVerificationRunner
     void ReadySecondary(){W.Powers.SecondaryRuntime.Cooldown=0;W.Powers.SecondaryRuntime.Charges=3;W.Powers.RestorePracticeEnergy();}
     IEnumerator SecondaryChecks()
     {
-        Check(!Power("grapple-line").Selectable&&!Power("mirage-decoy").Selectable,"Traversal/distraction remain hidden until full acceptance");
+        if(Phase=="d")Check(!Power("grapple-line").Selectable&&!Power("mirage-decoy").Selectable,"Traversal/distraction remain hidden until full acceptance");
+        else Check(Power("grapple-line").Selectable&&Power("mirage-decoy").Selectable,"Both implemented secondaries are available in the complete shipping roster");
         yield return EnterSecondary("grapple-line");ReadySecondary();
         Check(!W.Powers.UseSecondary(),"CONTROL empty aiming lane refuses invalid grapple without payment");
         var wall=Wall(new Vector3(0,3,14),new Vector3(8,8,.5f));yield return null;

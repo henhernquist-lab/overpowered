@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "PowerExpansionVerification.AimControls",
+    "commit": "fe4a076f9a3916ad693a33a8f3dcf2272db6fe77",
+    "status_before": "M Assets/Editor/PowerExpansionVerification.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionVerificationRunner.cs\n?? Assets/Scripts/Powers/Expansion/PowerExpansionAimVerification.cs\n?? Assets/Scripts/Powers/Expansion/PowerExpansionAimVerification.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt",
+    "started_utc": "2026-10-26T05:15:22.543018+00:00",
+    "save_before": "4af031e1cea8617fee9bcc6765be39815b95b05bdfb92e0af9c205cee52186ad",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/PowerExpansion2/point-blank-aim-before/PowerExpansionVerification.AimControls.log",
+    "pid": 58265,
+    "exit": 1,
+    "seconds": 37.31,
+    "pass": 7,
+    "fail": 1,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Editor/PowerExpansionVerification.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionVerificationRunner.cs\n?? Assets/Scripts/Powers/Expansion/PowerExpansionAimVerification.cs\n?? Assets/Scripts/Powers/Expansion/PowerExpansionAimVerification.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/PowerExpansion2/phase-aim.txt"
+  }
+]

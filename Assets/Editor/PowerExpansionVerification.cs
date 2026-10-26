@@ -13,6 +13,8 @@ public static class PowerExpansionVerification
     public static void PhaseC()=>Begin("c");
     public static void PhaseD()=>Begin("d");
     public static void PhaseE()=>Begin("e");
+    public static void AimControls()=>Begin("aim");
+    public static void Secondaries()=>Begin("secondaries");
     public static void BossCombat()=>Begin("bosscombat");
     public static void Presentation()=>Begin("presentation");
     public static void Gameplay()=>Begin("gameplay");
