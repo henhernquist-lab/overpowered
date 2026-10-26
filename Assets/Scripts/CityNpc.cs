@@ -216,7 +216,7 @@ public sealed partial class CityNpc : MonoBehaviour
         if (!combatant) CancelAttack();
         if (Phase==AttackPhase.Windup) { TickWindup(); return; }
         MoveSpeed(combatant ? combatSpeed : Role==NpcRole.Civilian ? (Fleeing ? c.FleeSpeed : c.CivilianSpeed) : Role==NpcRole.PursuingHero ? c.HeroSpeed : c.CopSpeed);
-        float distance=Vector3.Distance(transform.position,world.Hero.transform.position);
+        float distance=Vector3.Distance(transform.position,CombatTargetPosition);
         bool aggro=combatant && (AlwaysAggro || distance<c.DetectionRange);
         // Phase 8 routes: any response (flee, hostility, combat, encounter) takes the body off its route on this tick; re-path now.
         if (Walker!=null && Walker.Override(aggro || Fleeing || Encounter!=null || (Hostile && (AlwaysAggro || distance<c.DetectionRange)))) nextPath=0f;
@@ -230,7 +230,7 @@ public sealed partial class CityNpc : MonoBehaviour
         nextPath=Time.time+(Hostile || Fleeing ? c.RepathSeconds : c.WanderSeconds);
         if (aggro) { CombatMove(); return; }
         Vector3 destination;
-        if (Hostile && (AlwaysAggro || distance<c.DetectionRange)) destination=world.Hero.transform.position;
+        if (Hostile && (AlwaysAggro || distance<c.DetectionRange)) destination=CombatTargetPosition;
         else if (Fleeing) destination=PanicDestination(transform.position+(transform.position-alarm).normalized*c.FleeDistance);
         else
         {
@@ -250,7 +250,7 @@ public sealed partial class CityNpc : MonoBehaviour
             if (distance<=a.TriggerDistance) { StartWindup(); return true; }
             if (Time.time>engageUntil) { tokens.Release(this); Phase=AttackPhase.Approach; nextAttack=Time.time+Roster.RetrySeconds; return false; }
             MoveSpeed(combatSpeed=a.MoveSpeed);
-            if (Time.time>=nextPath) { nextPath=Time.time+world.Tuning.Npcs.RepathSeconds; Go(world.Hero.transform.position); }
+            if (Time.time>=nextPath) { nextPath=Time.time+world.Tuning.Npcs.RepathSeconds; Go(CombatTargetPosition); }
             return true;
         }
         if (Time.time<nextAttack) { Withdraw(); return false; }
@@ -263,12 +263,13 @@ public sealed partial class CityNpc : MonoBehaviour
         queued=false;
         if (a.Kind==AttackKind.Ranged || distance<=a.TriggerDistance) { StartWindup(); return true; }
         Phase=AttackPhase.Engage; engageUntil=Time.time+Roster.EngageTimeoutSeconds; nextPath=Time.time+world.Tuning.Npcs.RepathSeconds;
-        MoveSpeed(combatSpeed=a.MoveSpeed); Go(world.Hero.transform.position);
+        MoveSpeed(combatSpeed=a.MoveSpeed); Go(CombatTargetPosition);
         return true;
     }
     void StartWindup()
     {
-        var a=Archetype; Vector3 player=world.Hero.transform.position;
+        committedDecoy=CombatDecoy;committedAtDecoy=committedDecoy!=null;
+        var a=Archetype; Vector3 player=CombatTargetPosition;
         Vector3 facing=player-transform.position; facing.y=0f;
         facing=facing.sqrMagnitude>.0001f ? facing.normalized : transform.forward;
         Phase=AttackPhase.Windup; Windups++;
@@ -308,6 +309,8 @@ public sealed partial class CityNpc : MonoBehaviour
         if (LastReleaseHit)
         {
             Hits++;
+            if(committedAtDecoy){if(committedDecoy!=null&&committedDecoy.Alive)committedDecoy.Hit(ContactDamage);}
+            else {
             float before=world.Health;
             if(world.Powers?.Shield?.Up==true&&!world.Powers.OffensiveActionsBlocked)
                 world.Powers.Shield.PrimeHitFrom(transform.position);
@@ -315,6 +318,7 @@ public sealed partial class CityNpc : MonoBehaviour
             if (world.Health<before) FeelDirector.PlayerHit(before-world.Health, transform.position);   // feel only
             float knockback=a.Knockback*(1f-Mathf.Clamp01(world.Powers!=null?world.Powers.HeroStats.KnockbackResistance:0f));   // hero archetype resistance
             if (knockback>0f && world.Health<before && !world.PlayerDead) StartCoroutine(Knockback(CommittedDirection, knockback, a.KnockbackSeconds));
+            }
         }
         Agent.isStopped=Rooted;
         if(followup) { burstIndex++; StartWindup(); return; }
@@ -323,7 +327,8 @@ public sealed partial class CityNpc : MonoBehaviour
     /// Distance of the player's CURRENT body outside the COMMITTED shape (<= 0 means hit).
     float ShapeMargin()
     {
-        var a=Archetype; var hero=world.Hero.transform; var body=world.Hero.GetComponent<CharacterController>();
+        if(committedAtDecoy&&(committedDecoy==null||!committedDecoy.Alive))return float.PositiveInfinity;
+        var a=Archetype; var hero=committedAtDecoy?committedDecoy.transform:world.Hero.transform; var body=committedAtDecoy?null:world.Hero.GetComponent<CharacterController>();
         float radius=body!=null ? body.radius : world.Tuning.Movement.Radius;
         if (a.Kind!=AttackKind.Ranged)
         {
@@ -331,7 +336,7 @@ public sealed partial class CityNpc : MonoBehaviour
             if (height>a.MaxHitHeight || height<-a.MaxHitHeight) return Mathf.Max(flat.magnitude-a.Radius-radius, Mathf.Abs(height)-a.MaxHitHeight);
             return flat.magnitude-a.Radius-radius;
         }
-        float half=body!=null ? Mathf.Max(0f, body.height*.5f-radius) : 0f;
+        float half=body!=null ? Mathf.Max(0f, body.height*.5f-radius) : Mathf.Max(0,world.Tuning.Movement.Height*.5f-radius);
         Vector3 centre=body!=null ? hero.TransformPoint(body.center) : hero.position+Vector3.up*world.Tuning.Movement.Height*.5f;
         Vector3 end=CommittedPoint+CommittedDirection*a.Range;
         float along=SegmentDistance(CommittedPoint, end, centre-Vector3.up*half, centre+Vector3.up*half, out float s);
@@ -366,7 +371,7 @@ public sealed partial class CityNpc : MonoBehaviour
     /// otherwise circle slowly; neighbours on the same ring push each other apart by angle so they never stack.
     void CombatMove()
     {
-        var a=Archetype; var r=Roster; Vector3 player=world.Hero.transform.position;
+        var a=Archetype; var r=Roster; Vector3 player=CombatTargetPosition;
         Vector3 away=transform.position-player; away.y=0f; float d=away.magnitude;
         Vector3 bearing=d>.01f ? away/d : -transform.forward;
         bool ranged=a.Kind==AttackKind.Ranged;
@@ -400,7 +405,7 @@ public sealed partial class CityNpc : MonoBehaviour
     {
         if (Time.time<nextSight) return sight;
         nextSight=Time.time+world.Tuning.Npcs.RepathSeconds;
-        Vector3 from=Muzzle, to=Chest(world.Hero.transform.position)-from;
+        Vector3 from=Muzzle, to=Chest(CombatTargetPosition)-from;
         sight=!Blocked(from, to, to.magnitude);
         return sight;
     }

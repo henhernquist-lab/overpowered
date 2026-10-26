@@ -1,0 +1,35 @@
+PASS Traversal/distraction remain hidden until full acceptance
+PASS Actual staged secondary equip gates: grapple-line
+PASS Enter Combat Lab with staged secondary
+PASS CONTROL empty aiming lane refuses invalid grapple without payment
+PASS First-person actual grapple activation on static world collider
+PASS Grapple owns movement through existing controller contract
+PASS Grapple pays established secondary energy once
+PASS Grapple traverses actual space with capsule collision, no teleport
+PASS Grapple speed remains bounded
+PASS Intentional release restores ordinary control
+PASS Grapple can reanchor
+PASS Destroyed anchor cannot leave stuck traversal
+PASS Actual staged secondary equip gates: grapple-line
+PASS Enter Combat Lab with staged secondary
+PASS Third-person crosshair grapple also anchors
+PASS CONTROL new intervening wall releases tether
+PASS Actual staged secondary equip gates: mirage-decoy
+PASS Enter Combat Lab with staged secondary
+PASS Mirage summoned through real secondary payment path
+PASS One finite hologram active
+PASS Actual hero shared skinned meshes without Animator/player/NPC/progression clone
+PASS All hologram surfaces use authored shared translucent shimmer material
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Real eligible AI redirects windup and actual attack release to decoy
+PASS Decoy attacks do not damage/heal player or grant XP
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS Pulsebreaker remains resistant to illusion target substitution
+PASS Replacing decoy is finite
+PASS At most one hologram after replacement cleanup
+PASS Destroyed decoy returns valid hero acquisition
+PASS Natural expiry removes hologram and aggro lease
+PASS Hologram death/expiry grants no progression
+PASS Menu cancellation cleans finite decoy

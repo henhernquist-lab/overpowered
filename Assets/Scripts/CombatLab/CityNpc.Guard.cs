@@ -29,7 +29,7 @@ public sealed partial class CityNpc
         if(guardRefillPending&&!GuardBroken){guardIntegrity=Mathf.Max(1,Archetype.Guard.Capacity);guardRefillPending=false;}
         Agent.updateRotation=!aggro;
         if(!aggro||Phase==AttackPhase.Windup||Frozen||Rooted)return;
-        Vector3 toward=world.Hero.transform.position-transform.position;toward.y=0;
+        Vector3 toward=CombatTargetPosition-transform.position;toward.y=0;
         if(toward.sqrMagnitude>.01f)transform.rotation=Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation(toward),Mathf.Max(1,Archetype.Guard.TurnDegreesPerSecond)*Time.deltaTime);
     }
     float ResolveGuardDamage(float damage,Vector3? origin,float impulse)

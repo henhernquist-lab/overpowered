@@ -16,6 +16,7 @@ public sealed partial class PowerExpansionVerificationRunner : SessionVerificati
         yield return Scene(GameFlow.HomeScene);
         if(Phase=="b")yield return Ranged();
         if(Phase=="c")yield return MeleeChecks();
+        if(Phase=="d")yield return SecondaryChecks();
     }
     IEnumerator EnterExpansion(string primary)
     {

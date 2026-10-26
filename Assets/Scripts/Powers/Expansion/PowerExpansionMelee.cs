@@ -10,7 +10,7 @@ public sealed partial class PowerExpansionRuntime
     public bool MeleePending{get;private set;}
     public bool DrivesMotion=>lunging||Grappling;
     // Traversal is implemented in the next isolated phase.
-    public bool Grappling=>false;
+    public bool Grappling=>grappleAnchor!=null;
     bool lunging,chargedRequested;
     float comboUntil,chargeStarted=-1,apexUntil;
     readonly MeshRenderer[] weapons=new MeshRenderer[2];
@@ -23,6 +23,8 @@ public sealed partial class PowerExpansionRuntime
     public string Status
     {
         get{
+            if(Grappling)return "GRAPPLE / F release / Space jump release";
+            if(Decoy!=null&&Decoy.Alive)return "MIRAGE / hologram active";
             if(User?.Selected?.Definition.Effect is CombatMorphingEffect)return "MORPH / "+Form+" / "+Tuning.MorphFormKey+" change form"+(ApexActive?" / APEX":"");
             if(User?.Selected?.Definition.Effect is PlasmaBladesEffect)return "PLASMA / strike "+(PlasmaStage%3+1)+" / hold "+Tuning.PlasmaChargeKey+" to charge";
             return "";
@@ -30,7 +32,8 @@ public sealed partial class PowerExpansionRuntime
     }
     void Update()
     {
-        if(!CanAct){chargeStarted=-1;return;}
+        if(!CanAct){ReleaseGrapple(false);if(Decoy!=null)Decoy.Dissolve();chargeStarted=-1;return;}
+        TickGrapple();
         var selected=User.Selected?.Definition.Effect;
         if(selected is CombatMorphingEffect&&Input.GetKeyDown(Tuning.MorphFormKey))CycleForm();
         if(selected is PlasmaBladesEffect)
@@ -123,5 +126,5 @@ public sealed partial class PowerExpansionRuntime
             weapons[i].shadowCastingMode=rig!=null&&rig.FirstPerson?ShadowCastingMode.ShadowsOnly:ShadowCastingMode.On;weapons[i].enabled=mesh!=null;
         }
     }
-    void OnDisable(){StopAllCoroutines();lunging=false;MeleePending=false;apexUntil=0;chargeStarted=-1;foreach(var w in weapons)if(w!=null)w.enabled=false;}
+    void OnDisable(){StopAllCoroutines();ReleaseGrapple(false);if(Decoy!=null)Decoy.Dissolve();lunging=false;MeleePending=false;apexUntil=0;chargeStarted=-1;foreach(var w in weapons)if(w!=null)w.enabled=false;}
 }

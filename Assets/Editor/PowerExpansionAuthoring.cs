@@ -11,6 +11,14 @@ public static class PowerExpansionAuthoring
     {
         var a=AssetDatabase.LoadAssetAtPath<T>(path);if(a==null){a=ScriptableObject.CreateInstance<T>();AssetDatabase.CreateAsset(a,path);}configure(a);EditorUtility.SetDirty(a);return a;
     }
+    public static void PhaseD()
+    {
+        var grapple=Asset<GrappleLineEffect>(Dir+"/GrappleLineEffect.asset",a=>{});
+        var mirage=Asset<MirageDecoyEffect>(Dir+"/MirageDecoyEffect.asset",a=>{});
+        var g=Power("grapple-line","Grapple Line","F: tether to static geometry within 35m. Pull/swing with movement; F releases, Space jump-releases. Maximum tether 8s.",grapple,0,35,3,12,0,CityColor.Cyan);g.Role=PowerRole.Secondary;g.Duration=8;EditorUtility.SetDirty(g);
+        var m=Power("mirage-decoy","Mirage Decoy","F: finite holographic appearance copy. Nearby regular hostile enemies can target and damage it; bosses resist. One decoy, 50 health, 6s lifetime.",mirage,0,14,12,20,0,CityColor.UiPurple);m.Role=PowerRole.Secondary;m.Duration=6;EditorUtility.SetDirty(m);
+        AssetDatabase.SaveAssets();Debug.Log("PASS Phase D traversal and finite real AI distraction resources authored, staged until roster acceptance.");EditorApplication.Exit(0);
+    }
     public static void PhaseC()
     {
         var art=Asset<PowerExpansionArt>("Assets/Resources/PowerExpansionArt.asset",a=>{});
