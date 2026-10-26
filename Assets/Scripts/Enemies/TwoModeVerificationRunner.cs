@@ -91,6 +91,9 @@ public sealed class TwoModeVerificationRunner : SessionVerificationRunner
                 yield return BossRound(round,false);
             }
         }
+        float corpseLifetime=Mathf.Max(W.Tuning.Npcs.DestroyDelay,Resources.Load<HumanoidAnimationTuning>("HumanoidAnimationTuning").Death.length/Resources.Load<HumanoidAnimationTuning>("HumanoidAnimationTuning").ActionPlayback);
+        yield return new WaitForSeconds(corpseLifetime+.25f);yield return null;
+        Check(W.Npcs.Count(n=>n!=null&&n.Dead)==0&&W.Npcs.Count(n=>n!=null&&!n.Dead)<=State.Tuning.MaxAlive,"Repeated rounds clean up dead actors after their configured lifetime; live cap remains bounded");
         yield return Home();Submit(Menu.ModeButtons["free-play"]);yield return Scene(GameFlow.CityScene);
         Check(State==null&&W.Mode.Definition.Director==null&&W.Mode.Definition.InitialEncounters==0&&W.Mode.Definition.MaximumEncounters==0,"Free Play has no wave director, forced combat encounters or rounds");
         W.Mode.Tick(10000);W.AddHeat(3);W.ReconcilePolice();yield return null;
@@ -153,7 +156,12 @@ public sealed class TwoModeVerificationRunner : SessionVerificationRunner
         int updates=hud.BossBarUpdates;boss.Npc.Damage(.25f,null);
         Check(hud.BossBarUpdates==updates+1&&Mathf.Abs(hud.BossFraction-boss.Npc.HealthFraction)<.000001f,"Existing NPC health event updates even a sub-.25% hit immediately; no epsilon filtering");
         Check(!string.IsNullOrWhiteSpace(hud.BossRoot.Q<Label>("boss-value").text),"Boss bar displays actual current / maximum HP text");
-        if(captures)yield return Composite("round-5-phase-1-third",1280,720);
+        if(captures)
+        {
+            Vector3 before=W.Hero.transform.position;PlaceHero(before+Vector3.right*120);yield return null;
+            Check(hud.BossBarVisible,"Living encounter bar remains visible beyond the former 90m distance cutoff");
+            PlaceHero(before,true);yield return null;yield return Composite("round-5-phase-1-third",1280,720);
+        }
         var view=Camera.main.GetComponent<ThirdPersonCamera>();bool wasFirst=view.FirstPerson;if(!wasFirst)view.ToggleView();yield return null;
         Check(hud.BossBarVisible,"Boss bar remains visible in first-person");
         if(captures)yield return Composite("round-5-phase-1-first",1920,1080);
@@ -209,6 +217,7 @@ public sealed class TwoModeVerificationRunner : SessionVerificationRunner
         var bounds=hud.BossRoot.worldBound;var outer=hud.OverlayRoot.worldBound;
         Check(bounds.width>200&&bounds.xMin>=outer.xMin&&bounds.xMax<=outer.xMax&&bounds.yMin>=outer.yMin&&bounds.yMax<=outer.yMax,"Boss bar fits actual "+width+"x"+height+" layout");
         Check(!bounds.Overlaps(hud.DirectorGroup.worldBound),"Boss bar clears the round/score HUD");
+        Check(!GameHud.Shown(hud.Banner)||!bounds.Overlaps(hud.Banner.worldBound),"Boss bar does not cover actual level-up/milestone banner");
         bool enabled=cam.enabled;cam.enabled=false;cam.targetTexture=rt;cam.Render();cam.targetTexture=null;hud.Root.MarkDirtyRepaint();hud.OverlayRoot.MarkDirtyRepaint();yield return null;
         SaveImage(rt,name+".png");cam.enabled=enabled;cam.ResetAspect();hud.Panel.targetTexture=null;hud.OverlayPanel.targetTexture=null;rt.Release();Destroy(rt);yield return null;
     }

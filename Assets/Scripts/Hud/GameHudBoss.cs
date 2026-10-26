@@ -93,7 +93,7 @@ public sealed partial class GameHud
             Border(bossRoot, Alpha(accent, .85f), 2);
             bossTag.style.color = accent;
         }
-        // Keep the bar inside the existing popup avoidance lists (no overlap with banners / briefings).
+        // The existing banner/popup/waypoint layout includes this persistent panel in its avoidance bounds.
         if (bossRoot.parent == null) OverlayRoot.Add(bossRoot);
     }
     void BindBossHealth(CityNpc npc)
