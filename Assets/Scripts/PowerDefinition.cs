@@ -17,6 +17,7 @@ public sealed class PowerDefinition : ScriptableObject
 {
     public string Id, DisplayName;
     public PowerRole Role;
+    [Tooltip("Normal Forge selection. False retains legacy or staged definitions without exposing them.")] public bool Selectable=true;
     [TextArea] public string Description;
     public PowerEffect Effect;
     public bool InitiallyUnlocked;

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class PowerUser : MonoBehaviour
+public sealed partial class PowerUser : MonoBehaviour
 {
     /// Resolve one logical attack; Stats remains the authored, upgraded mean. Never call from a tick loop.
     public float RollDamage(float mean, float? variance = null) => WorldSession.Instance.Rolls.Damage(mean, variance ?? WorldSession.Instance.Tuning.CombatRanges.PlayerDamageVariance);

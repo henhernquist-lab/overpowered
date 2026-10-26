@@ -66,10 +66,10 @@ public sealed class HeroForgeScreen : MonoBehaviour
         if(Array.IndexOf(catalog.Heroes,value)<0)return false;
         if(hero!=null)menu.Profile.SetAppearance(appearance);
         hero=value;appearance=menu.Profile.Appearance(hero);primary=appearance.Primary;secondary=appearance.Secondary;
-        var owned=hero.AvailablePowers.Where(p=>menu.Profile.Owns(p)&&p.Role==PowerRole.Combat).ToArray();
+        var owned=hero.AvailablePowers.Where(p=>p.Selectable&&menu.Profile.Owns(p)&&p.Role==PowerRole.Combat).ToArray();
         a=owned.Contains(hero.DefaultA)?hero.DefaultA:owned[0];
         b=owned.Contains(hero.DefaultB)&&hero.DefaultB!=a?hero.DefaultB:owned.First(p=>p!=a);
-        utility=hero.AvailablePowers.First(p=>menu.Profile.Owns(p)&&p.Role==PowerRole.Secondary);
+        utility=hero.AvailablePowers.First(p=>p.Selectable&&menu.Profile.Owns(p)&&p.Role==PowerRole.Secondary);
         return Save();
     }
     public bool SelectPower(int slot,PowerDefinition power)
@@ -77,7 +77,7 @@ public sealed class HeroForgeScreen : MonoBehaviour
         if(!menu.Profile.Owns(power))return false;
         if(slot==2){if(!catalog.AllowedSecondary(hero,power))return false;utility=power;return Save();}
         if(!catalog.AllowedCombat(hero,power))return false;
-        if(slot==0){a=power;if(b==a)b=hero.AvailablePowers.First(p=>p!=a&&p.Role==PowerRole.Combat&&menu.Profile.Owns(p));}
+        if(slot==0){a=power;if(b==a)b=hero.AvailablePowers.First(p=>p.Selectable&&p!=a&&p.Role==PowerRole.Combat&&menu.Profile.Owns(p));}
         else if(slot==1){if(power==a)return false;b=power;}else return false;
         return Save();
     }
@@ -122,11 +122,11 @@ public sealed class HeroForgeScreen : MonoBehaviour
         Dropdown("PRIMARY SUIT",catalog.SuitColors.Select(c=>c.ToString()).ToArray(),Array.IndexOf(catalog.SuitColors,primary),i=>SetColors(catalog.SuitColors[i],secondary));
         Dropdown("SECONDARY SUIT",catalog.SuitColors.Select(c=>c.ToString()).ToArray(),Array.IndexOf(catalog.SuitColors,secondary),i=>SetColors(primary,catalog.SuitColors[i]));
         Dropdown("ACCENT",catalog.SuitColors.Select(c=>c.ToString()).ToArray(),Array.IndexOf(catalog.SuitColors,appearance.Accent),i=>SetColors(primary,secondary,catalog.SuitColors[i]));
-        var first=hero.AvailablePowers.Where(p=>menu.Profile.Owns(p)&&p.Role==PowerRole.Combat).ToArray();
+        var first=hero.AvailablePowers.Where(p=>p.Selectable&&menu.Profile.Owns(p)&&p.Role==PowerRole.Combat).ToArray();
         SlotA=Dropdown("ATTACK POWER 1",first.Select(p=>p.DisplayName).ToArray(),Array.IndexOf(first,a),i=>SelectPower(0,first[i]));
         var second=first.Where(p=>p!=a).ToArray();
         SlotB=Dropdown("ATTACK POWER 2",second.Select(p=>p.DisplayName).ToArray(),Array.IndexOf(second,b),i=>SelectPower(1,second[i]));
-        var secondaries=hero.AvailablePowers.Where(p=>menu.Profile.Owns(p)&&p.Role==PowerRole.Secondary).ToArray();
+        var secondaries=hero.AvailablePowers.Where(p=>p.Selectable&&menu.Profile.Owns(p)&&p.Role==PowerRole.Secondary).ToArray();
         SecondarySlot=Dropdown("SECONDARY POWER / F",secondaries.Select(p=>p.DisplayName).ToArray(),Array.IndexOf(secondaries,utility),i=>SelectPower(2,secondaries[i]));
         var signatures=Resources.Load<SignatureCatalog>("SignatureCatalog");
         bool preview=signatures!=null&&signatures.Enabled;

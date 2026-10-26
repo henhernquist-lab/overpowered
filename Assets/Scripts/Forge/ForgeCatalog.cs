@@ -23,7 +23,7 @@ public sealed class ForgeCatalog : ScriptableObject
     public PowerSynergyDefinition Resolve(PowerDefinition a,PowerDefinition b)=>Array.Find(Synergies,s=>s!=null&&s.Matches(a,b));
     public PowerSynergyDefinition Resolve(PowerDefinition a,PowerDefinition b,PowerDefinition secondary)
         => Resolve(a,b)??Resolve(a,secondary)??Resolve(b,secondary);
-    public bool Allowed(HeroDefinition hero,PowerDefinition power)=>power!=null&&Array.IndexOf(hero.AvailablePowers,power)>=0;
+    public bool Allowed(HeroDefinition hero,PowerDefinition power)=>power!=null&&power.Selectable&&Array.IndexOf(hero.AvailablePowers,power)>=0;
     public bool AllowedCombat(HeroDefinition hero,PowerDefinition power)=>Allowed(hero,power)&&power.Role==PowerRole.Combat;
     public bool AllowedSecondary(HeroDefinition hero,PowerDefinition power)=>Allowed(hero,power)&&power.Role==PowerRole.Secondary;
     public CityColor ColorOrDefault(CityColor value,CityColor fallback)=>Array.IndexOf(SuitColors,value)>=0?value:fallback;
