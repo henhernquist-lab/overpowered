@@ -15,7 +15,7 @@ MonoBehaviour:
   Id: aerokinesis
   DisplayName: Aerokinesis
   Role: 0
-  Selectable: 0
+  Selectable: 1
   Description: WIND BLAST / directional gust, finite displacement and windup interruption. Heavy enemies resist the shove.
   Effect: {fileID: 11400000, guid: 4d8b1ba844d084d14bdb6a93534fb749, type: 2}
   InitiallyUnlocked: 1

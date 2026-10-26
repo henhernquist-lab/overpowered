@@ -15,7 +15,7 @@ MonoBehaviour:
   Id: sonic-manipulation
   DisplayName: Sonic Manipulation
   Role: 0
-  Selectable: 0
+  Selectable: 1
   Description: SONIC BURST / directional concussion and brief stagger. Interruption has a refractory window, especially on bosses.
   Effect: {fileID: 11400000, guid: c529316c9026647528e9a9f2e943f60e, type: 2}
   InitiallyUnlocked: 1

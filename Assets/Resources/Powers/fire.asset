@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerDefinition
   Id: fire
   DisplayName: Fire Blast
+  Role: 0
+  Selectable: 1
   Description: Launch an explosive physics projectile at the crosshair.
   Effect: {fileID: 11400000, guid: 8949018453c804f20a57c47d929925e4, type: 2}
   InitiallyUnlocked: 1
@@ -48,6 +50,8 @@ MonoBehaviour:
     Seconds: 0.32
     Travel: 0.6
   MenuIcon: 1
+  Activation: 0
+  DrainPerSecond: 0
   Upgrades:
   - Name: Upgrade
     PointCost: 1

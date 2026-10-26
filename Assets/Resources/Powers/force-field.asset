@@ -15,6 +15,7 @@ MonoBehaviour:
   Id: force-field
   DisplayName: Force Field
   Role: 1
+  Selectable: 1
   Description: Raise a shield that absorbs up to 60 damage for 6 s. Deals no damage.
   Effect: {fileID: 11400000, guid: 7a250331531f040938de6b5b0de232e2, type: 2}
   InitiallyUnlocked: 1

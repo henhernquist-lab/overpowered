@@ -162,11 +162,32 @@ public sealed class PlayerProgression : MonoBehaviour
         var restored=registry.Resolve(Data.Loadout.UnresolvedSignatureId,EquippedA,EquippedB);
         Data.Loadout.SignatureId=(restored??registry.First(EquippedA,EquippedB))?.Id;
     }
+    // Additive stable-ID migration. Legacy ownership and usage records remain intact.
+    bool MigratePowerExpansion()
+    {
+        var registry=Resources.Load<SignatureCatalog>("SignatureCatalog");
+        if(registry==null||registry.ExpectedPrimaries!=10||!registry.Complete)return false;
+        bool changed=false;
+        string PrimaryAlias(string id)=>id=="strength"?"combat-morphing":id=="laser-eyes"?"plasma-blades":id;
+        string SignatureAlias(string id)=>id=="seismic-slam"?"apex-mutation":id=="prism-barrage"?"blade-cyclone":id;
+        foreach(var legacy in new[]{"strength","laser-eyes"})
+        {
+            var old=Data.Powers.Find(p=>p.Id==legacy);if(old==null)continue;
+            string id=PrimaryAlias(legacy);var replacement=Data.Powers.Find(p=>p.Id==id);
+            if(replacement==null){Data.Powers.Add(new PowerOwnership{Id=id,Tier=old.Tier});changed=true;}
+            else if(replacement.Tier<old.Tier){replacement.Tier=old.Tier;changed=true;}
+        }
+        var loadout=Data.Loadout;if(loadout==null)return changed;
+        string a=PrimaryAlias(loadout.PowerA),b=PrimaryAlias(loadout.PowerB),sig=SignatureAlias(loadout.SignatureId),unresolved=SignatureAlias(loadout.UnresolvedSignatureId);
+        changed|=a!=loadout.PowerA||b!=loadout.PowerB||sig!=loadout.SignatureId||unresolved!=loadout.UnresolvedSignatureId;
+        loadout.PowerA=a;loadout.PowerB=b;loadout.SignatureId=sig;loadout.UnresolvedSignatureId=unresolved;
+        if(changed)Repairs.Add("Power Expansion 2 stable aliases migrated; legacy records preserved");return changed;
+    }
     void ValidateLoadout()
     {
         var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");if(forge==null||forge.Heroes.Length==0)return;
         var hero=forge.Hero(Data.Loadout?.HeroId);
-        var available=Array.FindAll(hero.AvailablePowers,p=>p!=null&&Owns(p));
+        var available=Array.FindAll(hero.AvailablePowers,p=>p!=null&&p.Selectable&&Owns(p));
         var combat=Array.FindAll(available,p=>p.Role==PowerRole.Combat);
         var utilities=Array.FindAll(available,p=>p.Role==PowerRole.Secondary);
         if(combat.Length<2||utilities.Length==0)return;
@@ -395,8 +416,9 @@ public sealed class PlayerProgression : MonoBehaviour
             if (d != null) p.Tier = Mathf.Clamp(p.Tier, 0, d.Upgrades.Length);
         }
         string previousLoadout=JsonUtility.ToJson(Data.Loadout);
+        bool expansionMigrated=MigratePowerExpansion();
         ValidateLoadout();
-        if(previousLoadout!=JsonUtility.ToJson(Data.Loadout))
+        if(expansionMigrated||previousLoadout!=JsonUtility.ToJson(Data.Loadout))
         {
             Repairs.Add("Loadout repaired to current selectable roster");
             Save(); // Repair is durable immediately, including before the first session or application quit.

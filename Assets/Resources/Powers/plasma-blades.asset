@@ -15,7 +15,7 @@ MonoBehaviour:
   Id: plasma-blades
   DisplayName: Plasma Blades
   Role: 0
-  Selectable: 0
+  Selectable: 1
   Description: 'LMB: fast three-strike plasma combo. Hold G for 0.6s, release for a committed charged strike (+8 energy).'
   Effect: {fileID: 11400000, guid: e8f6ed81af72d4f15a70db13bcba647e, type: 2}
   InitiallyUnlocked: 1

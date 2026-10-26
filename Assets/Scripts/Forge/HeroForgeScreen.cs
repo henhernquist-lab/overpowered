@@ -131,6 +131,13 @@ public sealed class HeroForgeScreen : MonoBehaviour
         var signatures=Resources.Load<SignatureCatalog>("SignatureCatalog");
         bool preview=signatures!=null&&signatures.Enabled;
         var difficulty=new SessionDifficulty(menu.Profile.SelectedDifficulty);
+        foreach(var power in new[]{a,b,utility})
+        {
+            if(power==null)continue;var stats=power.GetStats(Mathf.Max(0,menu.Profile.Tier(power)));
+            float cooldown=stats.Cooldown*difficulty.Cooldown*(power.Effect is PunchEffect?1:(hero.Stats??HeroStats.Baseline).CooldownMultiplier);
+            var information=new Label($"{power.DisplayName} / {stats.Charges} charges · {cooldown:0.##}s base cooldown · {power.ResourceCost*difficulty.EnergyUsage:0.##} energy\n{power.Description}"){name="forge-power-info-"+power.Id};
+            information.style.whiteSpace=WhiteSpace.Normal;information.style.fontSize=12;information.style.color=C(CityColor.UiInk);information.style.marginBottom=10;form.Add(information);
+        }
         var synergy=preview?menu.Profile.EquippedSignature:catalog.Resolve(a,b,utility);
         if(preview)
         {

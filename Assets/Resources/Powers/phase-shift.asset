@@ -15,6 +15,7 @@ MonoBehaviour:
   Id: phase-shift
   DisplayName: Phase Shift
   Role: 1
+  Selectable: 1
   Description: Briefly evade ordinary attacks and pass NPC bodies. World walls stay solid; attacks are locked.
   Effect: {fileID: 11400000, guid: 4790cd5786b54862b4956e19cf751903, type: 2}
   InitiallyUnlocked: 1

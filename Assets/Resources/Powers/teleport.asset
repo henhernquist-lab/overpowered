@@ -15,6 +15,7 @@ MonoBehaviour:
   Id: teleport
   DisplayName: Teleport
   Role: 1
+  Selectable: 1
   Description: Blink across a clear path to a supported landing.
   Effect: {fileID: 11400000, guid: 5fae9bdc19dc499cba86c3b99cf17fbf, type: 2}
   InitiallyUnlocked: 1

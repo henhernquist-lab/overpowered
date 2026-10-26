@@ -15,6 +15,7 @@ MonoBehaviour:
   Id: flight
   DisplayName: Flight
   Role: 1
+  Selectable: 0
   Description: Hold F airborne. Space ascends; no directional input hovers. Land to recharge.
   Effect: {fileID: 11400000, guid: 5a16d0985b8a34843880e6d8ab29008c, type: 2}
   InitiallyUnlocked: 1
@@ -41,7 +42,16 @@ MonoBehaviour:
   Color: {r: 1, g: 0.25, b: 0.03, a: 1}
   PaletteColor: 16
   CastingPresentation: 0
+  Light:
+    Enabled: 0
+    Color: 16
+    Intensity: 3
+    Range: 8
+    Seconds: 0.3
+    Travel: 0.5
   MenuIcon: 2
+  Activation: 0
+  DrainPerSecond: 0
   Upgrades:
   - Name: Upgrade
     PointCost: 1

@@ -15,7 +15,7 @@ MonoBehaviour:
   Id: combat-morphing
   DisplayName: Combat Morphing
   Role: 0
-  Selectable: 0
+  Selectable: 1
   Description: 'Adaptive arm weapons: V cycles Blade Arms, Hammer Fists, Extended Claws. LMB attacks; E/RMB remain universal melee.'
   Effect: {fileID: 11400000, guid: 7954018351bba4134a88deea96ecad39, type: 2}
   InitiallyUnlocked: 1

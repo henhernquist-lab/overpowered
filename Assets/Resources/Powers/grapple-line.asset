@@ -15,7 +15,7 @@ MonoBehaviour:
   Id: grapple-line
   DisplayName: Grapple Line
   Role: 1
-  Selectable: 0
+  Selectable: 1
   Description: 'F: tether to static geometry within 35m. Pull/swing with movement; F releases, Space jump-releases. Maximum tether 8s.'
   Effect: {fileID: 11400000, guid: 513a2028275ec40b29a417aead0431f0, type: 2}
   InitiallyUnlocked: 1

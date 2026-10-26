@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerDefinition
   Id: poison
   DisplayName: Poison
+  Role: 0
+  Selectable: 1
   Description: Poison the aimed enemy (damage over time). If it dies while poisoned, the poison jumps to nearby enemies.
   Effect: {fileID: 11400000, guid: 4cd7c2e827c8d47ddb330fe813e809a8, type: 2}
   InitiallyUnlocked: 1

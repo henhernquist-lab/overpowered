@@ -11,6 +11,28 @@ public static class PowerExpansionAuthoring
     {
         var a=AssetDatabase.LoadAssetAtPath<T>(path);if(a==null){a=ScriptableObject.CreateInstance<T>();AssetDatabase.CreateAsset(a,path);}configure(a);EditorUtility.SetDirty(a);return a;
     }
+    public static void PhaseF()
+    {
+        string[] current={"telekinesis","fire","ice","darkness","lightning","poison","aerokinesis","sonic-manipulation","combat-morphing","plasma-blades","speed","teleport","force-field","phase-shift","grapple-line","mirage-decoy"};
+        var powers=new List<PowerDefinition>();
+        foreach(string id in current)
+        {
+            var p=AssetDatabase.LoadAssetAtPath<PowerDefinition>("Assets/Resources/Powers/"+id+".asset");if(p==null||p.Effect==null)throw new Exception("Missing implemented power "+id);p.Selectable=true;EditorUtility.SetDirty(p);powers.Add(p);
+        }
+        foreach(string id in new[]{"strength","laser-eyes","flight"}){var p=AssetDatabase.LoadAssetAtPath<PowerDefinition>("Assets/Resources/Powers/"+id+".asset");p.Selectable=false;EditorUtility.SetDirty(p);}
+        var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");
+        foreach(var hero in forge.Heroes)
+        {
+            hero.AvailablePowers=powers.ToArray();
+            if(hero.DefaultA!=null&&hero.DefaultA.Id=="strength")hero.DefaultA=powers.Find(p=>p.Id=="combat-morphing");if(hero.DefaultA!=null&&hero.DefaultA.Id=="laser-eyes")hero.DefaultA=powers.Find(p=>p.Id=="plasma-blades");
+            if(hero.DefaultB!=null&&hero.DefaultB.Id=="strength")hero.DefaultB=powers.Find(p=>p.Id=="combat-morphing");if(hero.DefaultB!=null&&hero.DefaultB.Id=="laser-eyes")hero.DefaultB=powers.Find(p=>p.Id=="plasma-blades");EditorUtility.SetDirty(hero);
+        }
+        var registry=Resources.Load<SignatureCatalog>("SignatureCatalog");var signatures=new List<PowerSynergyDefinition>();
+        foreach(var existing in registry.Abilities)if(existing!=null&&existing.OwnerPrimary!=null&&existing.OwnerPrimary.Selectable)signatures.Add(existing);
+        foreach(string id in new[]{"tempest-funnel","resonance-cascade","apex-mutation","blade-cyclone"}){var definition=Resources.Load<PowerSynergyDefinition>("PowerExpansion/"+id);if(!signatures.Contains(definition))signatures.Add(definition);}
+        registry.Abilities=signatures.ToArray();registry.ExpectedPrimaries=10;registry.EnableWhenComplete=true;registry.DeveloperPreview=false;EditorUtility.SetDirty(registry);
+        if(!registry.Complete)throw new Exception("Incomplete final roster");AssetDatabase.SaveAssets();Debug.Log("PASS Atomic final roster: ten primaries, six secondaries, ten implemented signatures; all three heroes, legacy assets retained.");EditorApplication.Exit(0);
+    }
     public static void PhaseE()
     {
         Signature<TempestFunnelEffect>("tempest-funnel","Tempest Funnel","aerokinesis","Moving wind funnel: finite ground displacement, six damage pulses, heavy resistance.",60,3,18,30,5,6);
