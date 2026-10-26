@@ -99,8 +99,9 @@ public static class EndlessSimulation
         float count = 1f, health = 1f, score = 1f, bonus = 0f; foreach (var m in plan.Modifiers) { count *= m.Count; health *= m.Health; score *= m.Score; bonus += m.EliteShareBonus; }
         bool modWave = w >= e.ModifierFromWave && (w - e.ModifierFromWave) % e.ModifierEvery == 0;
         int mods = modWave ? Math.Min(e.MaxModifiersPerWave, 1 + (w - e.ModifierFromWave) / e.ExtraModifierEvery) : 0;
-        int regulars = Math.Max(1, (int)Math.Round(baseSize * (double)count, MidpointRounding.ToEven));
         bool boss = w % e.MinibossEvery == 0;
+        int regulars = Math.Max(1, (int)Math.Round(baseSize * (double)count, MidpointRounding.ToEven));
+        if (boss) regulars = Math.Max(1, regulars - e.MinibossRegularCost);   // a boss round trades regular bodies for the boss
         float share = w >= e.EliteFromWave ? Mathf.Clamp01(Mathf.Min(e.MaxEliteShare, e.EliteShare + e.EliteShareGrowthPerWave * (w - e.EliteFromWave)) + bonus) : 0f;
         int elites = (int)Math.Floor(share * regulars + 1e-4);
         float hp = d.BaseHealth * (1f + d.HealthGrowthPerWave * (w - 1)) * health;
