@@ -329,6 +329,7 @@ public sealed partial class GameHud : MonoBehaviour
         Refresh();
         TickEnemyFeedback();
         TickBossBar();
+        TickHealFeedback();
         LastUpdateMs = (System.Diagnostics.Stopwatch.GetTimestamp() - started) * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
     }
     void Refresh()
@@ -476,7 +477,7 @@ public sealed partial class GameHud : MonoBehaviour
         Show(directorCaption, shown.Length > 0);
     }
 
-    void OnDestroy() { CityNpc.DamageApplied -= OnNpcDamageApplied; StopFeedbackTweens(); Bind(null); BindHero(null); if (Panel != null) Destroy(Panel); if (OverlayPanel != null) Destroy(OverlayPanel); if (overlayHost != null) Destroy(overlayHost); }
+    void OnDestroy() { CityNpc.DamageApplied -= OnNpcDamageApplied; UnbindHealEvents(); StopFeedbackTweens(); Bind(null); BindHero(null); if (Panel != null) Destroy(Panel); if (OverlayPanel != null) Destroy(OverlayPanel); if (overlayHost != null) Destroy(overlayHost); }
 }
 
 /// One power-bar slot and the values it is currently drawing (verification reads these).

@@ -1,0 +1,1 @@
+MEASURED hero vector: MaxHealth 100.00 = Movement.Health 100.0 x archetype 1.00 x difficulty 1.00.

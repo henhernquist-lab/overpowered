@@ -5872,3 +5872,57 @@ stop long after their menu sections pass:
 first-person (it is the same `OverlayRoot` element with no camera branch, but not measured), sustained standalone frame rate,
 and the authored boss armor. Pulsebreaker still wears the shared humanoid rig with a scaled silhouette and energy VFX; a
 bespoke armor set remains the largest presentation gap. `docs/two-modes.md` section 8 is the playtest checklist.
+
+## HEALTH ON KILL — 2026-10-25
+
+Branch `feature/health-on-kill` (base `58a0156`, the two-mode/Pulsebreaker tree). No merge, no push. Tuning:
+`Assets/Resources/HealthOnKill.asset`; code: `HealthOnKill.cs`, `WorldSession.HealPlayer`, `Hud/GameHudHeal.cs`.
+
+**One funnel, no per-power code.** `CityNpc.Damage` is already the only place an NPC's health reaches zero (after difficulty,
+guard and the authoritative health write), so it now calls `HealthOnKill.OnEnemyDefeated(world, this, source)` exactly once per
+death. Direct hits, melee, signatures, telekinesis impacts, poison/Darkness/Solar-Flare ticks and every delayed effect in the
+project already reach that same call with the hero's own `PowerUser`, so no power was edited and no attribution was guessed:
+`source == world.Powers` (or a `PowerUser` on the hero object) is the ownership test. `WorldSession.PlayerHealed` carries the
+APPLIED amount and the HUD only draws that number - no predicted or invented value. `CityNpc.KillRewardClaimed` makes the
+reward once per enemy life, so a repeated death notification, a second damage call or a despawn can never pay twice.
+
+**Formula** (`HealthOnKillTuning`, normal: `min(W x (0.04 M + 0.08 missing), 0.18 M, missing)`; boss:
+`min(0.20 M + 0.15 missing, 0.35 M, missing)`). `M` is `WorldSession.MaxHealth` at the moment of the kill (GameTuning x hero
+archetype x difficulty), never a constant, so a future run upgrade that raises max health is used by the next kill with no
+change here. Weights per archetype live on `EnemyArchetype.HealOnKillMultiplier` (Rusher/Gunner 1, Skirmisher 1.15, Brute 1.3,
+Bulwark 1.4, Robber 1); Pulsebreaker (any `CityNpc.IsBoss`) uses the boss formula and ignores its own weight. At M=100/H=50
+that is 8.0 / 8.0 / 9.2 / 10.4 / 11.2 and 27.5 for the boss; full health pays 0.
+
+**Eligibility.** Real combat archetype, hostile to the player at the moment of death, killed by player-owned damage, player
+alive, session running. Civilians, neutrals (a 0-star patrol cop), non-player kills, despawns and an already-claimed body pay
+nothing, with `HealthOnKill.LastBlocked` recording the reason. Combat Lab practice kills heal (the HUD health bar is live there)
+but still grant no XP/currency because `WorldSession.OnDefeat` keeps its existing practice early-out. No passive regeneration,
+no max-health change, no persistent reward. `HealPlayer` refuses to revive a dead player and cannot exceed `MaxHealth`.
+
+**HUD.** `Hud/GameHudHeal.cs` builds ONE pooled 8-label layer in the existing `OverlayRoot` (green `+N HP`, `CityColor.Lawn`),
+subscribes to `WorldSession.PlayerHealed` only while a session exists, stacks simultaneous heals, reuses the oldest label at
+saturation, and unsubscribes in `GameHud.OnDestroy`. No raycast per number (the anchor is the hero), no per-frame allocation.
+
+**VERIFIED** (Unity 6000.6.0f1, batch Play Mode, fresh isolated save, exit code checked, save and `Side_Kick_Data.db` hashes
+unchanged): `HealthOnKillVerification.Run` (new, `Verification/HealthOnKill/results.txt` + `gates4/`) **59 PASS / 0 FAIL,
+exit 0** - the whole formula table including the 0.18/0.35 caps, full-health zero, missing-health bound and TITAN's 140 max;
+then in a real Free Play session every regular archetype paid its exact value through the live death funnel (8.00 / 8.00 /
+9.20 / 10.40 / 11.20 at 50/100), a REAL poison cast killed a target over time and paid 8.00 with the killing tick credited
+to `poison` (so delayed, non-assault power damage pays through the same funnel), same-frame multi-kill paid each kill at
+the state the previous left (+22.13 of an expected
+22.13, capped at max), one claim per life, civilians / neutral cops / sourceless kills / despawns / a dead player all paid 0
+with the documented reason, respawn unaffected, a real Pulsebreaker body paid +27.50 = the boss formula, the boss cleaned up,
+and the HUD started one number per applied heal (12 numbers, last `+27.50 HP`; telemetry 11 kills / 103.66 HP). A second real
+session as TITAN (MaxHealth 140) paid 11.20 for the same Rusher kill, proving the per-hero maximum.
+`TwoModesVerification.Run` regression: **124 PASS / 0 FAIL, exit 0**, identical to the count recorded before this branch.
+
+**FAILED, pre-existing, not caused by healing**: `EndlessEventsVerification.Run` stops at `Every enemy's health matches its
+slot formula (1 elites, 0 miniboss)`; its log shows `MISMATCH Regular 36.36 vs 39.00`, `42.59 vs 39.00`, `Elite 82.61 vs 78.00`
+- the documented +/-10% spawn health roll (`GameTuning CombatRanges.EnemyHealthVariance`) that this suite's stat loop still
+ignores, the same staleness STATUS records for `ModeExpansionVerification`. Nothing in this branch changes spawn health, and
+the 17 checks before it pass.
+
+**UNVERIFIED**: human feel of sustain at real speed (is 4-8% of max per kill the right pressure?), readability of stacked green
+numbers in a crowded fight, the heal number over the hero in first-person, and interaction with the future run-based leveling
+(same API, but the upgrade system does not exist yet). Caps at the shipping coefficients never bind (raw <= 0.168 M normal,
+0.35 M boss); they are a guard, asserted as such.

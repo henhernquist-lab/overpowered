@@ -198,6 +198,7 @@ public sealed partial class CityNpc : MonoBehaviour
         if (!Dead) return;
         Agent.enabled=false; GetComponent<Collider>().enabled=false;
         if(source!=null) world.OnDefeat(this); Crime?.CriminalDefeated();
+        HealthOnKill.OnEnemyDefeated(world, this, source);   // credited player kills restore health (Resources/HealthOnKill); see HealthOnKill.cs
         Destroy(gameObject,Mathf.Max(world.Tuning.Npcs.DestroyDelay,animationTuning.Death.length/animationTuning.ActionPlayback));
     }
     void Update()

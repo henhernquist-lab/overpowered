@@ -1,0 +1,64 @@
+---- FORMULA (Resources/HealthOnKill, M=100 H=50)
+PASS HealthOnKill asset loads.
+PASS Shipping coefficients: 0.04 M + 0.08 missing, cap 0.18 M; boss 0.20 M + 0.15 missing, cap 0.35 M.
+PASS Rusher x1: 8.00 = 8.00 at 50/100 HP.
+PASS Gunner x1: 8.00 = 8.00 at 50/100 HP.
+PASS Skirmisher x1.15: 9.20 = 9.20 at 50/100 HP.
+PASS Brute x1.3: 10.40 = 10.40 at 50/100 HP.
+PASS Bulwark x1.4: 11.20 = 11.20 at 50/100 HP.
+PASS Pulsebreaker (boss formula, its own multiplier ignored): 27.50 = 27.50 at 50/100 HP.
+PASS Full health -> 0 for a normal enemy and the boss.
+PASS Near full (99/100): bounded by the missing 1 HP -> 1.000.
+PASS Caps: normal 16.80 <= 0.18 M, boss 35.00 = 0.35 M at 0 health.
+PASS Max-health scaling (TITAN 140): normal 11.20, boss 38.50 at half health.
+PASS Zero max health and a zero archetype multiplier both resolve to 0.
+---- LIVE (real Free Play session, real CityNpc.Damage death funnel)
+PASS Save VECTOR with poison + strength through the loadout API.
+PASS Session equips poison + strength.
+PASS poison selected for LMB (key 1).
+PASS GameHud present in the live session.
+MEASURED hero vector: MaxHealth 100.00 = Movement.Health 100.0 x archetype 1.00 x difficulty 1.00.
+PASS Healing reads the SAME authoritative maximum (hero archetype x difficulty) the HUD health bar uses.
+PASS Live Rusher kill at 50.0/100.0: +8.00 HP (expected 8.00 = multiplier 1.00); health now 58.00 <= 100.00.
+PASS Rusher death consumed its one reward claim.
+PASS Live Gunner kill at 50.0/100.0: +8.00 HP (expected 8.00 = multiplier 1.00); health now 58.00 <= 100.00.
+PASS Gunner death consumed its one reward claim.
+PASS Live Skirmisher kill at 50.0/100.0: +9.20 HP (expected 9.20 = multiplier 1.15); health now 59.20 <= 100.00.
+PASS Skirmisher death consumed its one reward claim.
+PASS Live Brute kill at 50.0/100.0: +10.40 HP (expected 10.40 = multiplier 1.30); health now 60.40 <= 100.00.
+PASS Brute death consumed its one reward claim.
+PASS Live Bulwark kill at 50.0/100.0: +11.20 HP (expected 11.20 = multiplier 1.40); health now 61.20 <= 100.00.
+PASS Bulwark death consumed its one reward claim.
+PASS poison selected for the real-power kill control.
+PASS Real poison cast accepted and one charge paid.
+PASS A real poison application killed the target over time (dead).
+PASS The killing damage was credited to the poison power ('poison').
+PASS Poison kill healed 8.00 at 50.0/100.0 (the same funnel pays delayed power damage).
+PASS HealPlayer to full: health equals MaxHealth.
+PASS At full health a kill heals 0.00 (claim spent, no HUD number, health stays 100.00).
+PASS At 99.0/100.0 a Brute kill heals exactly the missing 1 HP (1.000).
+PASS Same-frame multi-kill: 50.00 -> 72.13 (+22.13, expected +22.13); capped by MaxHealth.
+PASS HUD started a number per applied heal (7 -> 11).
+PASS A repeated death notification pays 0 ('already claimed') and later damage cannot pay twice.
+PASS Neutral CONTROL: 0 Heat stars (0) before the friendly-cop check.
+PASS The Heat-0 patrol cop is not hostile (Hero side).
+PASS Neutral cop death: 0 healing ('not hostile').
+PASS Civilian death: 0 healing ('civilian').
+PASS A death with no player source (NPC-on-NPC equivalent): 0 healing ('not player-owned').
+PASS Despawning an enemy pays nothing (no death notification).
+PASS Player killed (unblockable) for the same-frame control.
+PASS Kill while dead: 0 healing ('player dead'), player stays dead.
+PASS Existing respawn restored full health; healing did not interfere.
+PASS Pulsebreaker body attached outside the wave director (verification entry point).
+PASS Pulsebreaker kill at 50.0/100.0: +27.50 HP = 0.20 M + 0.15 missing (normal formula would be 8.00).
+PASS Boss body cleaned up after death (no lingering boss).
+PASS HUD feedback came from real heals: 13 numbers, last '+27.50 HP'.
+PASS Telemetry: 12 credited kills paid 111.66 HP in total.
+---- SECOND HERO (a different MaxHealth uses the same formula)
+PASS TITAN max-health multiplier 1.40 (> 1).
+PASS Save TITAN with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS TITAN session MaxHealth 140.00 is larger than the baseline health pool.
+PASS TITAN Rusher kill at 70.0/140.0: +11.20 HP (same percentages, bigger pool; Vector would have paid 8.00).
+LIMIT: no hardware keyboard/mouse in batch mode. Healing is measured at the shared CityNpc.Damage death funnel (the boundary every power and delayed effect uses) in a real Home -> Free Play session, with one REAL poison cast as the power-owned control: signatures, telekinesis impacts and synergy ticks reach the same call but were not cast here. Human feel/pacing of sustain is UNVERIFIED. The 0.18/0.35 caps never bind at the current coefficients (raw <= 0.168M / 0.35M); they are asserted as the guard they are.

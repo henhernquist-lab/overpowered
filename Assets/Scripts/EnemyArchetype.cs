@@ -15,6 +15,8 @@ public sealed class EnemyArchetype : ScriptableObject
     [Tooltip("Hostile movement speed, m/s. Non-hostile NPCs keep their role speed.")] public float MoveSpeed=5.5f;
     [Tooltip("x standard enemy health (GameTuning CopHealth + Heat stars) or x the Endless wave health.")] public float HealthMultiplier=1f;
     [Tooltip("x standard enemy damage (GameTuning AttackDamage + Heat stars) or x the Endless wave damage.")] public float DamageMultiplier=1f;
+    [Tooltip("x the player's health-on-kill heal for defeating this archetype (Resources/HealthOnKill). Ignored for a boss, " +
+             "which uses the boss formula.")] public float HealOnKillMultiplier=1f;
     [Header("Telegraphed attack: Approach -> Windup (commit) -> Release (re-check) -> Recover")]
     public AttackKind Kind=AttackKind.Melee;
     [Tooltip("Melee/Slam: the NPC commits once the player is this close. Ranged: maximum distance to start a shot.")] public float TriggerDistance=1.6f;
@@ -45,6 +47,7 @@ public sealed class EnemyArchetype : ScriptableObject
     void OnValidate()
     {
         MoveSpeed=Mathf.Max(.1f,MoveSpeed);HealthMultiplier=Mathf.Max(.01f,HealthMultiplier);DamageMultiplier=Mathf.Max(0,DamageMultiplier);
+        HealOnKillMultiplier=Mathf.Max(0,HealOnKillMultiplier);
         TriggerDistance=Mathf.Max(.1f,TriggerDistance);Radius=Mathf.Max(.05f,Radius);Range=Mathf.Max(.5f,Range);
         WindupSeconds=Mathf.Max(0,WindupSeconds);CooldownSeconds=Mathf.Max(0,CooldownSeconds);KnockbackSeconds=Mathf.Max(.01f,KnockbackSeconds);
         PreferredBand=Mathf.Max(.1f,PreferredBand);VisualScale=Mathf.Clamp(VisualScale,.5f,2f);

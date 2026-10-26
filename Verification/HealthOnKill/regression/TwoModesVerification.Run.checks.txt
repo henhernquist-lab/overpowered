@@ -1,0 +1,124 @@
+PASS Exactly two player-facing modes, in menu order: Endless Fight + Free Play
+PASS hero: still a Playable definition, hidden from the menu.
+PASS villain: still a Playable definition, hidden from the menu.
+PASS endless-fight-villain: still a Playable definition, hidden from the menu.
+PASS Endless Fight owns the round director; Free Play has none.
+PASS Both modes run without encounter spawning; Free Play keeps the Heat HUD (Health, Powers, Progression, Heat).
+PASS Boss schedule data: one Pulsebreaker every 5 rounds.
+PASS Boss tuning asset loads.
+PASS Home menu exists.
+PASS Home offers exactly two mode cards plus the Battle Lab route: endless-fight, free-play, battle-lab
+PASS No Hero, Villain or Endless (Villain) card remains on Home.
+PASS Both mode cards render at real size ((x:85.50, y:420.75, width:621.00, height:357.75), (x:733.50, y:420.75, width:621.00, height:357.75)).
+PASS The two cards sit side by side in the same row.
+PASS Hero Forge keeps its own Home route (it is not a third gameplay mode).
+PASS Battle Lab keeps its route below the cards.
+PASS Real ENDLESS FIGHT card submit starts an Endless session with its wave director.
+PASS The Home menu is gone once the session starts (no lingering UI document).
+PASS Round 1 started.
+PASS Round cleared.
+PASS Round 1 cleared (3 enemies) through normal kills.
+PASS Round 2 started.
+PASS Round 2 started: rounds keep progressing.
+PASS Real FREE PLAY card submit starts a Free Play session with no director and no wave state.
+PASS Free Play session runs without a round director.
+PASS Free Play: no Pulsebreaker existed on any of 414 frames.
+PASS Free Play: the boss bar is never shown.
+PASS Free Play still populates the city (26 NPCs).
+PASS CONTROL: repeated frames never install a director in Free Play.
+PASS Round 1: miniboss absent (wave of 3 enemies).
+PASS Round 2: miniboss absent (wave of 5 enemies).
+PASS Round 3: miniboss absent (wave of 7 enemies).
+PASS Round 4: miniboss absent (wave of 9 enemies).
+PASS Round 5: miniboss scheduled (wave of 9 enemies).
+PASS Round 5: the first spawn is the reserved miniboss slot, ahead of every regular body.
+PASS Round 5: the boss takes 3 regular bodies off the wave instead of stacking on top of it.
+PASS Round 6: miniboss absent (wave of 13 enemies).
+PASS Round 7: miniboss absent (wave of 15 enemies).
+PASS Round 8: miniboss absent (wave of 17 enemies).
+PASS Round 9: miniboss absent (wave of 19 enemies).
+PASS Round 10: miniboss scheduled (wave of 19 enemies).
+PASS Round 10: the first spawn is the reserved miniboss slot, ahead of every regular body.
+PASS Round 10: the boss takes 3 regular bodies off the wave instead of stacking on top of it.
+PASS Round 11: miniboss absent (wave of 23 enemies).
+PASS Round 12: miniboss absent (wave of 25 enemies).
+PASS Round 13: miniboss absent (wave of 27 enemies).
+PASS Round 14: miniboss absent (wave of 29 enemies).
+PASS Round 15: miniboss scheduled (wave of 29 enemies).
+PASS Round 15: the first spawn is the reserved miniboss slot, ahead of every regular body.
+PASS Round 15: the boss takes 3 regular bodies off the wave instead of stacking on top of it.
+PASS Round 16: miniboss absent (wave of 33 enemies).
+PASS Round 17: miniboss absent (wave of 35 enemies).
+PASS Round 18: miniboss absent (wave of 37 enemies).
+PASS Round 19: miniboss absent (wave of 39 enemies).
+PASS Round 20: miniboss scheduled (wave of 39 enemies).
+PASS Round 20: the first spawn is the reserved miniboss slot, ahead of every regular body.
+PASS Round 20: the boss takes 3 regular bodies off the wave instead of stacking on top of it.
+PASS Round 21: miniboss absent (wave of 43 enemies).
+PASS Round 22: miniboss absent (wave of 45 enemies).
+PASS Round 23: miniboss absent (wave of 47 enemies).
+PASS Round 24: miniboss absent (wave of 49 enemies).
+PASS Round 25: miniboss scheduled (wave of 49 enemies).
+PASS Round 25: the first spawn is the reserved miniboss slot, ahead of every regular body.
+PASS Round 25: the boss takes 3 regular bodies off the wave instead of stacking on top of it.
+PASS Round 26: miniboss absent (wave of 53 enemies).
+PASS Round 27: miniboss absent (wave of 55 enemies).
+PASS Round 28: miniboss absent (wave of 57 enemies).
+PASS Round 29: miniboss absent (wave of 59 enemies).
+PASS Round 30: miniboss scheduled (wave of 59 enemies).
+PASS Round 30: the first spawn is the reserved miniboss slot, ahead of every regular body.
+PASS Round 30: the boss takes 3 regular bodies off the wave instead of stacking on top of it.
+PASS 6 boss rounds in 30: 5, 10, 15, 20, 25, 30.
+PASS CONTROL: round 1 has no miniboss.
+PASS CONTROL: round 2 has no miniboss.
+PASS CONTROL: round 3 has no miniboss.
+PASS CONTROL: round 4 has no miniboss.
+PASS CONTROL: round 6 has no miniboss.
+PASS CONTROL: round 7 has no miniboss.
+PASS CONTROL: round 8 has no miniboss.
+PASS CONTROL: round 9 has no miniboss.
+PASS CONTROL: round 11 has no miniboss.
+PASS CONTROL: round 14 has no miniboss.
+PASS CONTROL: round 16 has no miniboss.
+PASS The boss schedule is a rule, not a seeded draw: every run seed gets the boss on round 5.
+PASS Loadout saved for the boss-round fixture.
+PASS Clone session started at round 1.
+PASS Round 1 plan: miniboss no (expected no).
+PASS Round 2 plan: miniboss no (expected no).
+PASS Round 3 plan: miniboss no (expected no).
+PASS Round 4 plan: miniboss no (expected no).
+PASS Round 5 plan: miniboss yes (expected yes).
+PASS Round 5: the live body is a real Pulsebreaker (797 max HP, 17.9 contact damage).
+PASS Round 5: the boss is hostile and permanently aggroed.
+PASS Round 5: the boss bar is visible while it is alive.
+PASS Round 5: the bar reads PULSEBREAKER / PHASE 1.
+PASS Round 5: the bar shows the authoritative fraction (100.0 % of 797 HP).
+PASS Round 5: exactly one boss bar element exists (no UI accumulation).
+PASS Round 5: bar follows real damage (90.0 %).
+PASS Round 6 plan: miniboss no (expected no).
+PASS Round 7 plan: miniboss no (expected no).
+PASS Round 8 plan: miniboss no (expected no).
+PASS Round 9 plan: miniboss no (expected no).
+PASS Round 10 plan: miniboss yes (expected yes).
+PASS Round 10: the live body is a real Pulsebreaker (1113 max HP, 24.3 contact damage).
+PASS Round 10: the boss is hostile and permanently aggroed.
+PASS Round 10: the boss bar is visible while it is alive.
+PASS Round 10: the bar reads PULSEBREAKER / PHASE 1.
+PASS Round 10: the bar shows the authoritative fraction (100.0 % of 1113 HP).
+PASS Round 10: exactly one boss bar element exists (no UI accumulation).
+PASS Round 10: bar follows real damage (90.0 %).
+PASS Rounds 5 and 10 each spawned exactly one Pulsebreaker; run reached round 10.
+PASS Session counters come from the real director: 46 kills, 7550 score.
+PASS No boss remains after the last boss round.
+PASS The boss bar is gone after the last boss died.
+PASS Both boss kills counted toward round completion (2).
+PASS CONTROL: rounds 11-14 carried no boss on any frame (now round 15).
+PASS Run reached round 15.
+PASS Round 15 spawned the third Pulsebreaker (wave 15).
+PASS Round 15: the bar is back for the new boss.
+PASS Three boss kills counted toward round completion (3).
+PASS Run reached round 15 before the session ended.
+PASS Save holds 1 mode record(s).
+PASS Every saved mode id still resolves to a definition (no orphan ids after the menu change): endless-fight
+PASS Saved last mode endless-fight; best score 19750 equals the run's 19750.
+PASS Best wave recorded: 15 (run reached 15).

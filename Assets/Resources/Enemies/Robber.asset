@@ -16,6 +16,7 @@ MonoBehaviour:
   MoveSpeed: 7
   HealthMultiplier: 1
   DamageMultiplier: 1
+  HealOnKillMultiplier: 1
   Kind: 0
   TriggerDistance: 3.2
   Reach: 1.8

@@ -36,6 +36,8 @@ public sealed partial class WorldSession : MonoBehaviour
     /// GameTuning.Movement.Health x the session hero's MaxHealth archetype multiplier.
     public float MaxHealth => Tuning.Movement.Health * (Powers != null ? Powers.HeroStats.MaxHealth : 1f) * Difficulty.PlayerHealth;
     public event System.Action<bool> PlayerDamaged;
+    /// Raised with the health ACTUALLY restored by HealPlayer (never a predicted amount); the HUD shows this number.
+    public event System.Action<float> PlayerHealed;
     public event System.Action PlayerRespawned;
     /// Raised after a mode encounter has been placed and initialised (HUD alerts listen; spawning is unchanged).
     public event System.Action<CrimeEncounter> EncounterSpawned;
@@ -166,6 +168,18 @@ public sealed partial class WorldSession : MonoBehaviour
         if (!unblockable&&Powers!=null) damage=Powers.AbsorbIncoming(damage);
         if (damage<=0) return;
         Health=Mathf.Max(0,Health-damage); PlayerDamaged?.Invoke(PlayerDead); if (PlayerDead) {Powers.Phase?.End();Powers.Release(false);Mode?.PlayerDefeated();}
+    }
+    /// The one authoritative healing entry point (health on kill today, run upgrades later). Never revives, never exceeds the
+    /// CURRENT MaxHealth (hero archetype x difficulty), and returns the health actually restored. A dead player, an ended
+    /// session or a zero request changes nothing and raises no event.
+    public float HealPlayer(float amount)
+    {
+        if (amount<=0f||PlayerDead||(Mode!=null&&Mode.Ended)) return 0f;
+        float before=Health;
+        Health=Mathf.Min(MaxHealth,Health+amount);
+        float applied=Health-before;
+        if (applied>0f) PlayerHealed?.Invoke(applied);
+        return applied;
     }
     public void ResolveCrime(CrimeEvent crime)
     {
