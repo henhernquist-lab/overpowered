@@ -1,0 +1,9 @@
+PASS Home screen rebuilt its progression from the save file.
+PASS SECOND PROCESS: saved progression parsed without error.
+PASS SECOND PROCESS: the saved loadout survived the reload (ice + strength).
+PASS SECOND PROCESS: XP granted during the live run persisted (level 3, 15 XP).
+PASS SECOND PROCESS: the imported Pulsebreaker archetype is intact.
+PASS SECOND PROCESS: the imported tuning still carries the verified slam radius and phase threshold.
+PASS SECOND PROCESS: the Endless miniboss slot still points at Pulsebreaker, every 5 rounds.
+PASS SECOND PROCESS: no boss exists in the Home scene.
+Save file: save-37478f7724374cd2b8b69e8839559f00.json

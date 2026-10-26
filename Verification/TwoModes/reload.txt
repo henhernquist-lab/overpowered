@@ -1,0 +1,14 @@
+PASS SECOND PROCESS exact progression, legacy mode records, cosmetics, signature, difficulty and loadout restored
+PASS Home exposes exactly two gameplay choices: ENDLESS FIGHT and FREE PLAY; no campaign/variant/Lab route
+PASS Actual card titles match the two-mode design
+PASS Hero Forge and all three difficulty choices remain accessible
+PASS Existing Version 1 profile loads without mode errors
+PASS SECOND PROCESS actual Home Endless route uses shipping events
+PASS SECOND PROCESS development jump accepted
+PASS Actual round 5 started
+PASS Actual functioning boss brain attached to live wave actor
+PASS Maximum one active Pulsebreaker
+PASS Boss spawned on valid ground NavMesh, not a rooftop
+PASS Boss is hostile to current allegiance and permanently aggroed
+PASS SECOND PROCESS actual round-5 boss and bar present
+PASS SECOND PROCESS Home disposes boss

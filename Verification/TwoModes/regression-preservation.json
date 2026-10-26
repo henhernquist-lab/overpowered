@@ -1,0 +1,286 @@
+{
+  "historical_tracked_files_checked": 768,
+  "historical_changed_files_restored": [
+    "Verification/FirstPerson/villain-third-ice.png",
+    "Verification/FirstPerson/villain-first-ice.png",
+    "Verification/FirstPerson/villain-third-telekinesis.png",
+    "Verification/FirstPerson/hero-third-ice.png",
+    "Verification/FirstPerson/hero-first-ice.png",
+    "Verification/FirstPerson/tight-space-look-down.png",
+    "Verification/FirstPerson/villain-first-telekinesis.png",
+    "Verification/FirstPerson/results.txt",
+    "Verification/FirstPerson/tight-space-first.png",
+    "Verification/FirstPerson/hero-first-fire.png",
+    "Verification/FirstPerson/city-third.png",
+    "Verification/FirstPerson/city-first.png",
+    "Verification/FirstPerson/hero-first-telekinesis.png",
+    "Verification/FirstPerson/villain-third-fire.png",
+    "Verification/FirstPerson/reload.txt",
+    "Verification/FirstPerson/hero-third-telekinesis.png",
+    "Verification/FirstPerson/hero-third-fire.png",
+    "Verification/FirstPerson/villain-first-fire.png",
+    "Verification/Forge/forge-preview.png",
+    "Verification/Forge/forge-reveal-peak.png",
+    "Verification/Forge/sonic-impact.png",
+    "Verification/Forge/results.txt",
+    "Verification/Forge/reload.txt",
+    "Verification/Forge/forge-reveal-start.png",
+    "Verification/Forge/forge-menu.png",
+    "Verification/Sidekick/session-heroes.png",
+    "Verification/Sidekick/results.txt",
+    "Verification/Sidekick/heroes-recolour.png",
+    "Verification/Sidekick/reload-session.png",
+    "Verification/HeroForgeArt/results.txt",
+    "Verification/HeroForgeArt/gameplay/titan-hero-city.png",
+    "Verification/HeroForgeArt/gameplay/nova-hero-city.png",
+    "Verification/HeroForgeArt/gameplay/vector-hero-city.png",
+    "Verification/HeroForgeArt/preview/titan_emblem_core.png",
+    "Verification/HeroForgeArt/preview/nova-forge-menu.png",
+    "Verification/HeroForgeArt/preview/titan-forge-menu.png",
+    "Verification/HeroForgeArt/preview/nova_emblem_core.png",
+    "Verification/HeroForgeArt/preview/titan_mask_vanguard.png",
+    "Verification/HeroForgeArt/preview/titan_emblem_shield.png",
+    "Verification/HeroForgeArt/preview/nova_emblem_star.png",
+    "Verification/HeroForgeArt/preview/nova_mask_phantom.png",
+    "Verification/HeroForgeArt/preview/nova_mask_spectrum.png",
+    "Verification/HeroForgeArt/preview/titan_mask_guardian.png",
+    "Verification/HeroForgeArt/preview/vector-forge-menu.png"
+  ],
+  "fresh_artifacts_archived": [
+    {
+      "path": "Verification/Pulsebreaker/results.txt",
+      "sha256": "d8721a3b10cd5b30624b8a93d80e7369995de8f9ae4493603335dd6f660d7650"
+    },
+    {
+      "path": "Verification/Pulsebreaker/reload-results.txt",
+      "sha256": "c6ade8814d69ea0d2f94a63c1b9464998d9fc290de30970fb99849fbbbe0e2e5"
+    },
+    {
+      "path": "Verification/FirstPerson/villain-third-ice.png",
+      "sha256": "752620b82045f83596fc95fc5539bed51e1837631e5306efdce81185d2e1c718"
+    },
+    {
+      "path": "Verification/FirstPerson/villain-first-ice.png",
+      "sha256": "f331d58ec4b4b1e62fbe77bb567905583ba3b33d1766733fb10b23b060b4e38c"
+    },
+    {
+      "path": "Verification/FirstPerson/villain-third-telekinesis.png",
+      "sha256": "c584cb8f0925b08cbfa7d03e9f9d0c51d582dfbbbb1019d84cb062eac2da5618"
+    },
+    {
+      "path": "Verification/FirstPerson/hero-third-ice.png",
+      "sha256": "ce799b580e63eb5cb979356505d2dafe7da2aebdf8ec8fcf5ea38674ed75f5c5"
+    },
+    {
+      "path": "Verification/FirstPerson/hero-first-ice.png",
+      "sha256": "4011f37a28a8b842bc2aa4f891e4459ba74d83d6f18594f1854b1babb32806b0"
+    },
+    {
+      "path": "Verification/FirstPerson/tight-space-look-down.png",
+      "sha256": "60ff7d79487d2f7d2ec59300d4a8c1221ab4f6a479628e6cee9aa796d9132a51"
+    },
+    {
+      "path": "Verification/FirstPerson/villain-first-telekinesis.png",
+      "sha256": "734f7623431cd5c5c6611d44c6b5b3406a4cf26c6e9be6a2dc7f856f00227905"
+    },
+    {
+      "path": "Verification/FirstPerson/results.txt",
+      "sha256": "ced6ac34952a7a8206e828866f5a1949fe188cc99cee596de8ea447db295ea35"
+    },
+    {
+      "path": "Verification/FirstPerson/tight-space-first.png",
+      "sha256": "4693628fcffe29196fb2ebac22455fb8106b3ec70b2705139f029c77bd7a8289"
+    },
+    {
+      "path": "Verification/FirstPerson/hero-first-fire.png",
+      "sha256": "0f4ef3ee94b03f32faef5781bb6b64736cddcbfb246bfb19d78b2c848cb0b0a3"
+    },
+    {
+      "path": "Verification/FirstPerson/city-third.png",
+      "sha256": "89889d0f8969b59046a64813555cd8a11f7ba2fb586f3d3cfa39a41cc3bc583e"
+    },
+    {
+      "path": "Verification/FirstPerson/city-first.png",
+      "sha256": "0d716cdbb05f35bb753a04da2e707971358e86d083bcfa222e95d339e458f1af"
+    },
+    {
+      "path": "Verification/FirstPerson/hero-first-telekinesis.png",
+      "sha256": "3723b8a6d897e34df16b03ac12aa0f79961b0fbdb8f5088fe19410eafbadd84e"
+    },
+    {
+      "path": "Verification/FirstPerson/villain-third-fire.png",
+      "sha256": "aaebb71552daab3ea7fe7e47fdbe681d72222bd258ac994a148c2a74f5577d61"
+    },
+    {
+      "path": "Verification/FirstPerson/reload.txt",
+      "sha256": "18e40b63356e0f44d74035b4a324dd41b0aba312988ade6488751c3c4d21ebfd"
+    },
+    {
+      "path": "Verification/FirstPerson/old-c5cdbb16-7bda-4ea6-9e8c-4272974a64bd.json.bak",
+      "sha256": "24d27530456ad08898f7133bf42e76d34471ee04ec6c72427764ecf9029021b8"
+    },
+    {
+      "path": "Verification/FirstPerson/old-c5cdbb16-7bda-4ea6-9e8c-4272974a64bd.json",
+      "sha256": "dddf70b496ae51c00e457a8f4940c4dfc4f2bb90148d0b14ae4a759e5866d463"
+    },
+    {
+      "path": "Verification/FirstPerson/hero-third-telekinesis.png",
+      "sha256": "8111f07e68c83e85302f2b12ab8dbf11dc9c978d668f9ca664b1cfdeeb136c29"
+    },
+    {
+      "path": "Verification/FirstPerson/hero-third-fire.png",
+      "sha256": "accde6b958368dc5cfe50d5bf6965c98dfa5fe7b81db5c123a773218c9a85f78"
+    },
+    {
+      "path": "Verification/FirstPerson/fresh-0caacc30-03df-4ab1-98f2-a4cd32b16e40.json",
+      "sha256": "d25dc572c3dadf742984041b63b649032ac3218d7ff1b02b86503ba520966ead"
+    },
+    {
+      "path": "Verification/FirstPerson/villain-first-fire.png",
+      "sha256": "9e6bd54c40298bde2edf2ed86002281211e518147ed8c129887e1ddadb3419aa"
+    },
+    {
+      "path": "Verification/Forge/forge-preview.png",
+      "sha256": "e5de25bdc47d6eaf32d9b136022a7aafde196805d8312a624d6205fb8855d01f"
+    },
+    {
+      "path": "Verification/Forge/fresh-e78f5b3a-99ca-427e-8cda-1c871d7376e8.json",
+      "sha256": "d25dc572c3dadf742984041b63b649032ac3218d7ff1b02b86503ba520966ead"
+    },
+    {
+      "path": "Verification/Forge/forge-reveal-peak.png",
+      "sha256": "ca20f99d0417f7f663217d0539ec835ec7c675831b181e501e74ae581f9396ff"
+    },
+    {
+      "path": "Verification/Forge/sonic-impact.png",
+      "sha256": "9f96f1cfc09d04450f9de2d275ea2d2fbf4c08cacc21e8b4aa2f9c506d5c95d1"
+    },
+    {
+      "path": "Verification/Forge/results.txt",
+      "sha256": "ee13995ec088545b80325500d5cac02ae67266cc36168e165437d3c365caac5a"
+    },
+    {
+      "path": "Verification/Forge/reload.txt",
+      "sha256": "601d82c4d9976da9ccb00f5212992ab54ef56c1da030b4ffb12bd3be6028a919"
+    },
+    {
+      "path": "Verification/Forge/forge-reveal-start.png",
+      "sha256": "99bd5c9640aa5580b733eb01585919e3d9cbb8fa393271d03df237b8ca9a8706"
+    },
+    {
+      "path": "Verification/Forge/forge-menu.png",
+      "sha256": "14e25425d871e610d1a3e8475bd8b19fd2f08a96bfc31d711957649cc3284512"
+    },
+    {
+      "path": "Verification/Sidekick/session-heroes.png",
+      "sha256": "a88a512f54e532f3c069898c2158aaf5026ff42ed7706deb23f318f52525e12a"
+    },
+    {
+      "path": "Verification/Sidekick/results.txt",
+      "sha256": "180abcc14468998c70baae79f6802b3d86f90a5808c9506b920b3ac5ae447fc5"
+    },
+    {
+      "path": "Verification/Sidekick/heroes-recolour.png",
+      "sha256": "2a77d46168a0e22f3045f5d84511a4ad06a57387723f8e8a64b0d04cdbfa9227"
+    },
+    {
+      "path": "Verification/Sidekick/reload-session.png",
+      "sha256": "5ee070e447733d6a08c9d8fe5f43ddc2d9c2963cd2de1404b90ff041d4a7bc7e"
+    },
+    {
+      "path": "Verification/HeroForgeArt/results.txt",
+      "sha256": "fb7a5011d07ee127d103059a8b75c3fcdc0c5f94714abbdc4e8dda8458ac5ad1"
+    },
+    {
+      "path": "Verification/HeroForgeArt/gameplay/titan-hero-city.png",
+      "sha256": "56c631ba3edfd9822fc211f854fa65c968dd163080d735eb42b79ee3b2994972"
+    },
+    {
+      "path": "Verification/HeroForgeArt/gameplay/nova-hero-city.png",
+      "sha256": "6eff51713e6262be5d562d90c3bb046654848ed946e87d6231a56eb097e119fa"
+    },
+    {
+      "path": "Verification/HeroForgeArt/gameplay/vector-hero-city.png",
+      "sha256": "8360dfd8667df50e4b500e71ed59f6978af90d6ff3e329d7211a072bac18a71e"
+    },
+    {
+      "path": "Verification/HeroForgeArt/preview/titan_emblem_core.png",
+      "sha256": "2fbd207f0db1cc509de6b29e1c090b40dad81199da03fda00230cb9f8bf773fb"
+    },
+    {
+      "path": "Verification/HeroForgeArt/preview/nova-forge-menu.png",
+      "sha256": "5edbd68dea91377a9800722e33cf17ff9cc5a75ae825a13c5f8be461d321c838"
+    },
+    {
+      "path": "Verification/HeroForgeArt/preview/titan-forge-menu.png",
+      "sha256": "9d47fbd484433cf3bd0d3c0ea0d1ac4721d1f899f34a0319c0ba57f038f937e8"
+    },
+    {
+      "path": "Verification/HeroForgeArt/preview/nova_emblem_core.png",
+      "sha256": "c85d4ee9f06ecc04cc840215c7aef180565634fb0dc4a4988e81e7baa6e7710c"
+    },
+    {
+      "path": "Verification/HeroForgeArt/preview/titan_mask_vanguard.png",
+      "sha256": "75b2e8f96fd58ac83c0a226acd56ddd8e354b8147f6cda4e4e27503b749dabf6"
+    },
+    {
+      "path": "Verification/HeroForgeArt/preview/titan_emblem_shield.png",
+      "sha256": "75b2e8f96fd58ac83c0a226acd56ddd8e354b8147f6cda4e4e27503b749dabf6"
+    },
+    {
+      "path": "Verification/HeroForgeArt/preview/nova_emblem_star.png",
+      "sha256": "ca460854135c5f42c68c96a7067d7960e8b6d1b0ac06d6455f1205ee822ab78a"
+    },
+    {
+      "path": "Verification/HeroForgeArt/preview/nova_mask_phantom.png",
+      "sha256": "ca460854135c5f42c68c96a7067d7960e8b6d1b0ac06d6455f1205ee822ab78a"
+    },
+    {
+      "path": "Verification/HeroForgeArt/preview/nova_mask_spectrum.png",
+      "sha256": "4fe4b107881df4511d08dc34ff595b8809ebb0dabda1e9e254cc1960ba28debc"
+    },
+    {
+      "path": "Verification/HeroForgeArt/preview/titan_mask_guardian.png",
+      "sha256": "d656de8c9ecad274cf6825625c1927020bc989600eb7a18d4cb27548b7676943"
+    },
+    {
+      "path": "Verification/HeroForgeArt/preview/vector-forge-menu.png",
+      "sha256": "07247496055b97f23a5b71e28f11a6ef629ebe8a86f334ca0a0a0ac25b64c2d5"
+    },
+    {
+      "path": "Verification/SpawnCurve/results.txt",
+      "sha256": "433d2aedb1fcb980212a1a39c9d9989fe57068430a4b153e914a34b1faaf0cce"
+    }
+  ],
+  "ephemeral_new_files_removed": [
+    "Verification/Pulsebreaker/save-path.txt",
+    "Verification/Pulsebreaker/results.txt",
+    "Verification/Pulsebreaker/reload-results.txt",
+    "Verification/Pulsebreaker/saves/save-37478f7724374cd2b8b69e8839559f00.json",
+    "Verification/Pulsebreaker/saves/save-37478f7724374cd2b8b69e8839559f00.json.bak",
+    "Verification/FirstPerson/save-path.txt",
+    "Verification/FirstPerson/save-458ba23e-0c56-4b87-880f-6fae3d9bbe15.json.bak",
+    "Verification/FirstPerson/old-c5cdbb16-7bda-4ea6-9e8c-4272974a64bd.json.bak",
+    "Verification/FirstPerson/save-458ba23e-0c56-4b87-880f-6fae3d9bbe15.json",
+    "Verification/FirstPerson/old-c5cdbb16-7bda-4ea6-9e8c-4272974a64bd.json",
+    "Verification/FirstPerson/fresh-0caacc30-03df-4ab1-98f2-a4cd32b16e40.json",
+    "Verification/Forge/save-fad80e757cb4487d81beca4cd9633800.json.bak",
+    "Verification/Forge/fresh-e78f5b3a-99ca-427e-8cda-1c871d7376e8.json",
+    "Verification/Forge/save-fad80e757cb4487d81beca4cd9633800.json",
+    "Verification/Forge/save-path.txt",
+    "Verification/Sidekick/saves/save-path.txt",
+    "Verification/Sidekick/saves/save-499ada2faae44678ab2a6e9aa93d06ab.json.bak",
+    "Verification/Sidekick/saves/expected.txt",
+    "Verification/Sidekick/saves/fresh-7f8e3adc485f44509aa4ede06ab35dd6.json",
+    "Verification/Sidekick/saves/save-499ada2faae44678ab2a6e9aa93d06ab.json",
+    "Verification/HeroForgeArt/saves/expected.json",
+    "Verification/HeroForgeArt/saves/save-0758a09c4c2a4132ae79a9ba2fcede52.json.bak",
+    "Verification/HeroForgeArt/saves/save-path.txt",
+    "Verification/HeroForgeArt/saves/save-0758a09c4c2a4132ae79a9ba2fcede52.json",
+    "Verification/HeroForgeArt/saves/save-740454c975b443cdb7fef2c9323f91ab.json",
+    "Verification/HeroForgeArt/saves/save-740454c975b443cdb7fef2c9323f91ab.json.bak",
+    "Verification/SpawnCurve/results.txt",
+    "Verification/SpawnCurve/saves/save-9716ab4192a441ae8660320c0ef70d47.json",
+    "Verification/SpawnCurve/saves/save-9716ab4192a441ae8660320c0ef70d47.json.bak"
+  ]
+}

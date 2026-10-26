@@ -1,0 +1,1 @@
+PASS Home assets expose exactly Endless Fight and Free Play; legacy definitions remain playable internally.
