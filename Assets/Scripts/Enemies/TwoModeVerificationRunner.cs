@@ -198,7 +198,13 @@ public sealed class TwoModeVerificationRunner : SessionVerificationRunner
     }
     IEnumerator Composite(string name,int width,int height)
     {
-        var hud=Hud;var cam=Camera.main;var rt=new RenderTexture(width,height,24);rt.Create();hud.Panel.targetTexture=rt;hud.OverlayPanel.targetTexture=rt;cam.aspect=width/(float)height;
+        var hud=Hud;var cam=Camera.main;
+        hud.DismissBriefing("verification: existing briefing dismiss control");
+        for(float end=Time.realtimeSinceStartup+2;GameHud.Shown(hud.Briefing)&&Time.realtimeSinceStartup<end;)yield return null;
+        Check(!GameHud.Shown(hud.Briefing),"Capture uses the existing dismissed briefing, so actual boss combat is visible");
+        var rig=cam.GetComponent<ThirdPersonCamera>();var delta=Boss.transform.position+Vector3.up*1.5f-(W.Hero.transform.position+Vector3.up*1.5f);
+        rig.SetLook(Mathf.Atan2(delta.x,delta.z)*Mathf.Rad2Deg,rig.FirstPerson?-Mathf.Atan2(delta.y,new Vector2(delta.x,delta.z).magnitude)*Mathf.Rad2Deg:10f);
+        var rt=new RenderTexture(width,height,24);rt.Create();hud.Panel.targetTexture=rt;hud.OverlayPanel.targetTexture=rt;cam.aspect=width/(float)height;
         for(int i=0;i<4;i++)yield return null;
         var bounds=hud.BossRoot.worldBound;var outer=hud.OverlayRoot.worldBound;
         Check(bounds.width>200&&bounds.xMin>=outer.xMin&&bounds.xMax<=outer.xMax&&bounds.yMin>=outer.yMin&&bounds.yMax<=outer.yMax,"Boss bar fits actual "+width+"x"+height+" layout");
