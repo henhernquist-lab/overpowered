@@ -12,7 +12,7 @@ public sealed partial class PowerExpansionRuntime : MonoBehaviour
     public int RangedHits{get;private set;}
     public void Initialize(PowerUser user)
     {
-        User=user;Art=Resources.Load<PowerExpansionArt>("PowerExpansionArt");Tuning=Resources.Load<PowerExpansionTuning>("PowerExpansionTuning");
+        weaponBlock=new MaterialPropertyBlock();User=user;Art=Resources.Load<PowerExpansionArt>("PowerExpansionArt");Tuning=Resources.Load<PowerExpansionTuning>("PowerExpansionTuning");
         Vfx=gameObject.AddComponent<ExpansionVfx>();Vfx.Initialize();
     }
     public bool Visible(Vector3 from,CityNpc npc)

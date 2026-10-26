@@ -31,6 +31,7 @@ public sealed partial class GameHud : MonoBehaviour
     public VisualElement BottomStack { get; private set; }
     public VisualElement PowerBar { get; private set; }
     public VisualElement MeleeHint { get; private set; }
+    public Label ExpansionLine { get; private set; }
     public Label MessageLine { get; private set; }
     public Label ErrorLine { get; private set; }
     public VisualElement Crosshair { get; private set; }
@@ -169,6 +170,7 @@ public sealed partial class GameHud : MonoBehaviour
         ErrorLine.style.whiteSpace = WhiteSpace.Normal; ErrorLine.style.maxWidth = 620; ErrorLine.style.marginBottom = 8; ErrorLine.style.display = DisplayStyle.None; BottomStack.Add(ErrorLine);
         MessageLine = Text("", 14, ink); MessageLine.name = "hud-message"; MessageLine.style.backgroundColor = Alpha(C(CityColor.UiNavy), .82f); Round(MessageLine, 8); Pad(MessageLine, 6, 14);
         MessageLine.style.whiteSpace = WhiteSpace.Normal; MessageLine.style.maxWidth = 620; MessageLine.style.unityTextAlign = TextAnchor.MiddleCenter; MessageLine.style.marginBottom = 10; MessageLine.style.display = DisplayStyle.None; BottomStack.Add(MessageLine);
+        ExpansionLine=Text("",12,ink); ExpansionLine.name="hud-expansion"; ExpansionLine.style.backgroundColor=Alpha(C(CityColor.UiNavy),.9f); Pad(ExpansionLine,4,10); BottomStack.Add(ExpansionLine);
         PowerBar = Box("hud-powers", FlexDirection.Row); PowerBar.style.alignItems = Align.FlexStart; PanelBox(PowerBar); Pad(PowerBar, 10, 6); BottomStack.Add(PowerBar);
 
         // ---- the only centre element
@@ -399,6 +401,7 @@ public sealed partial class GameHud : MonoBehaviour
         // Power bar (Powers)
         bool powers = (hud & ModeHud.Powers) != 0;
         Show(PowerBar, powers);
+        string expansionStatus=user.ExpansionStatus; if(ExpansionLine.text!=expansionStatus)ExpansionLine.text=expansionStatus; Show(ExpansionLine,powers&&!string.IsNullOrEmpty(expansionStatus));
         if (LoadoutChanged(user)) RebuildPowers(user);
         if (powers) foreach (var slot in Slots) UpdateSlot(slot, user);
 

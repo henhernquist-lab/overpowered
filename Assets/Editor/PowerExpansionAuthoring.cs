@@ -11,6 +11,38 @@ public static class PowerExpansionAuthoring
     {
         var a=AssetDatabase.LoadAssetAtPath<T>(path);if(a==null){a=ScriptableObject.CreateInstance<T>();AssetDatabase.CreateAsset(a,path);}configure(a);EditorUtility.SetDirty(a);return a;
     }
+    public static void PhaseC()
+    {
+        var art=Asset<PowerExpansionArt>("Assets/Resources/PowerExpansionArt.asset",a=>{});
+        art.MorphBlade=Weapon("morph-blade",0);art.MorphHammer=Weapon("morph-hammer",1);art.MorphClaws=Weapon("morph-claws",2);art.PlasmaBlade=Weapon("plasma-blade",3);EditorUtility.SetDirty(art);
+        var morph=Asset<CombatMorphingEffect>(Dir+"/CombatMorphingEffect.asset",a=>{});
+        var plasma=Asset<PlasmaBladesEffect>(Dir+"/PlasmaBladesEffect.asset",a=>{});
+        Power("combat-morphing","Combat Morphing","Adaptive arm weapons: V cycles Blade Arms, Hammer Fists, Extended Claws. LMB attacks; E/RMB remain universal melee.",morph,24,2.8f,.45f,10,500,CityColor.Metal);
+        Power("plasma-blades","Plasma Blades","LMB: fast three-strike plasma combo. Hold G for 0.6s, release for a committed charged strike (+8 energy).",plasma,18,2.6f,.25f,10,260,CityColor.Cyan);
+        AssetDatabase.SaveAssets();Debug.Log("PASS Phase C native fitted blade/hammer/claw/plasma meshes and hidden functional melee definitions authored.");EditorApplication.Exit(0);
+    }
+    static Mesh Weapon(string name,int kind)
+    {
+        var vertices=new List<Vector3>();var triangles=new List<int>();
+        Action<Vector3,Vector3> box=(center,size)=>{
+            int start=vertices.Count;
+            for(int i=0;i<8;i++)vertices.Add(center+Vector3.Scale(new Vector3((i&1)==0?-1:1,(i&2)==0?-1:1,(i&4)==0?-1:1),size)*.5f);
+            int[] faces={0,2,1,1,2,3,4,5,6,5,7,6,0,1,4,1,5,4,2,6,3,3,6,7,0,4,2,2,4,6,1,3,5,3,7,5};foreach(int index in faces)triangles.Add(start+index);
+        };
+        if(kind==1){box(new Vector3(0,0,.45f),new Vector3(1.3f,1.1f,1.5f));box(new Vector3(0,0,-.3f),new Vector3(.75f,.75f,.8f));}
+        else
+        {
+            box(Vector3.zero,new Vector3(.65f,.5f,.9f));int blades=kind==2?3:1;
+            for(int j=0;j<blades;j++)
+            {
+                float x=(j-(blades-1)*.5f)*.33f;int n=vertices.Count;
+                vertices.AddRange(new[]{new Vector3(x-.16f,-.12f,.2f),new Vector3(x+.16f,-.12f,.2f),new Vector3(x+.12f,.12f,.2f),new Vector3(x-.12f,.12f,.2f),new Vector3(x,0,kind==3?2.7f:kind==2?2.3f:2)});
+                foreach(int index in new[]{0,1,4,1,2,4,2,3,4,3,0,4,0,3,1,1,3,2})triangles.Add(n+index);
+            }
+        }
+        var mesh=new Mesh{name=name};mesh.SetVertices(vertices);mesh.SetTriangles(triangles,0);mesh.RecalculateNormals();mesh.RecalculateBounds();
+        string path=Dir+"/"+name+".asset";var old=AssetDatabase.LoadAssetAtPath<Mesh>(path);if(old==null){AssetDatabase.CreateAsset(mesh,path);return mesh;}EditorUtility.CopySerialized(mesh,old);UnityEngine.Object.DestroyImmediate(mesh);EditorUtility.SetDirty(old);return old;
+    }
     public static void PhaseB()
     {
         if(!AssetDatabase.IsValidFolder(Dir))AssetDatabase.CreateFolder("Assets/Resources","PowerExpansion");

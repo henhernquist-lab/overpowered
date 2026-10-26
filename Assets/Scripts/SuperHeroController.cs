@@ -60,7 +60,7 @@ public sealed class SuperHeroController : MonoBehaviour
     float backflipUntil=-1f, backflipReadyAt=-1f;
     bool kickPending, comboKickPending;
     float basicReadyAt;
-    public bool AbilityDriving=>powers?.SynergyRunner!=null&&powers.SynergyRunner.DrivesMotion;
+    public bool AbilityDriving=>(powers?.SynergyRunner!=null&&powers.SynergyRunner.DrivesMotion)||powers?.ExpansionDrivesMotion==true;
     public CollisionFlags MoveAbility(Vector3 velocity,bool flying)
     {
         EndClimb();

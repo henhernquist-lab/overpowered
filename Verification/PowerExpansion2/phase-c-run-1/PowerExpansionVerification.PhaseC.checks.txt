@@ -1,0 +1,4 @@
+PASS Melee replacements remain staged
+PASS Isolated in-memory staged combat-morphing enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+FAIL System.Exception: Gameplay Console error: UnityException: CreateImpl is not allowed to be called from a MonoBehaviour constructor (or instance field initializer), call it in Awake or Start instead. Called from MonoBehaviour 'PowerExpansionRuntime' on game object 'Practice hero'.

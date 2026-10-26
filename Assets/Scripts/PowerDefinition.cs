@@ -51,6 +51,8 @@ public struct PowerStats { public float? DamageVariance; public int Charges; pub
 public abstract class PowerEffect : ScriptableObject
 {
     public virtual bool IsFlight => false;
+    public virtual bool IsMelee => false;
+    public virtual bool HasRuntimePresentation => false;
     public abstract bool Execute(PowerUser user, PowerRuntime power);
 }
 /// Held powers: Execute starts the channel (true = started), Sustain runs every frame it stays held, Stop runs once when it ends.
@@ -64,5 +66,6 @@ public sealed class PowerRuntime
     public PowerDefinition Definition;
     public int Charges;
     public float Cooldown, ChargeTimer, Fuel;
+    public float ActivationCooldownMultiplier=1;
     public PowerRuntime(PowerDefinition definition) { Definition = definition; Charges = definition.Charges; Fuel = definition.Duration; }
 }
