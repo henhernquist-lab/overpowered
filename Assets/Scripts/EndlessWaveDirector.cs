@@ -23,6 +23,7 @@ public class EndlessWaveDirector : ModeDirector
     public float SpawnRadius=22f;
     public float MinSpawnDistanceFromPlayer=12f;
     [Tooltip("Ring directions tried per spawn before retrying on a later tick.")] public int SpawnCandidates=16;
+    [Min(.1f)] public float SpawnRetrySeconds=.5f;
     [Header("Score: each kill = KillScore * wave; each cleared wave = WaveClearBonus * wave")]
     public int KillScore=10;
     public int WaveClearBonus=50;
@@ -59,10 +60,13 @@ public class EndlessWaveDirector : ModeDirector
         return new EnemySpec { Role = role, Archetype = archetype, Health = HealthFor(wave) * health, Damage = DamageFor(wave) * damage };
     }
 
-    /// Smooth weighted round-robin over the archetypes eligible in this wave (FromWave <= wave, Weight > 0), replayed
-    /// from the wave's first spawn to `index`: deterministic, interleaved, and proportional to the weights.
+    /// Archetype of one spawn: the active wave curve when the events asset defines one (Standard / Endless), else the
+    /// Composition table. Both paths use the same deterministic round-robin, so a wave's mix stays exact and repeatable.
     public EnemyArchetype ArchetypeFor(int wave, int index)
     {
+        var kind = Events != null ? Events.CurveKind : CompositionCurveKind.WeightTable;
+        var curve = Events != null && kind != CompositionCurveKind.WeightTable ? Events.Curve(kind) : null;
+        if (curve != null && curve.Weights(kind, wave, curveWeights)) return Rotate(curve, kind, wave, index);
         if (Composition == null || Composition.Length == 0) return null;
         var current = new int[Composition.Length]; EnemyArchetype pick = null;
         for (int step = 0; step <= Mathf.Max(0, index); step++)
@@ -77,6 +81,29 @@ public class EndlessWaveDirector : ModeDirector
             }
             if (best < 0) return null;
             current[best] -= total; pick = Composition[best].Archetype;
+        }
+        return pick;
+    }
+
+    /// Scratch buffer for the active curve's normalised weights (one spawn at a time, main thread).
+    readonly float[] curveWeights = new float[EnemyCompositionCurve.Slots];
+
+    /// Same smooth weighted round-robin as the Composition path, over the curve's unlocked archetypes with that wave's
+    /// weights. Locked archetypes are simply absent, so the drawn mix always sums to the wave's available pool.
+    EnemyArchetype Rotate(EnemyCompositionCurve curve, CompositionCurveKind kind, int wave, int index)
+    {
+        var current = new float[EnemyCompositionCurve.Slots]; EnemyArchetype pick = null;
+        for (int step = 0; step <= Mathf.Max(0, index); step++)
+        {
+            float total = 0f; int best = -1;
+            for (int slot = 0; slot < EnemyCompositionCurve.Slots; slot++)
+            {
+                if (!curve.Unlocked(slot, wave) || curveWeights[slot] <= 0f) continue;
+                current[slot] += curveWeights[slot]; total += curveWeights[slot];
+                if (best < 0 || current[slot] > current[best]) best = slot;
+            }
+            if (best < 0) return null;
+            current[best] -= total; pick = curve.At(best);
         }
         return pick;
     }
@@ -128,6 +155,14 @@ public sealed class EndlessWaveState : ModeDirectorState
     public readonly List<EndlessWaveEvents.Slot> AliveSlots = new List<EndlessWaveEvents.Slot>();
     /// Every score award the director makes (kill, elite kill, miniboss kill, wave clear, flawless), after it is added.
     public event System.Action<EndlessScoreEvent> Scored;
+    public bool BossRequired => Plan != null && Plan.Miniboss;
+    public bool BossDefeated { get; private set; }
+    public bool BossPending => BossRequired && !BossDefeated && waveBoss == null;
+    public int BossSpawnAttempts { get; private set; }
+    public int SpawnFailures { get; private set; }
+    CityNpc waveBoss;
+    float nextSpawnRetry, nextSpawnDiagnostic;
+    static readonly Collider[] spawnOverlaps = new Collider[16];
     bool hitThisWave;
     NavMeshPath path;
 
@@ -158,7 +193,7 @@ public sealed class EndlessWaveState : ModeDirectorState
             return;
         }
         Reinforce();
-        if (WaveKills >= Size)
+        if (WaveKills >= Size && (!BossRequired || BossDefeated))
         {
             Award(EndlessScoreKind.WaveClear, Tuning.WaveClearBonus * Wave);
             int flawless = 0;
@@ -172,6 +207,7 @@ public sealed class EndlessWaveState : ModeDirectorState
     void StartWave(int wave)
     {
         Wave = wave; Spawned = 0; WaveKills = 0; Intermission = false; IntermissionLeft = 0f; hitThisWave = false;
+        BossDefeated = false; waveBoss = null; BossSpawnAttempts = 0; nextSpawnRetry = nextSpawnDiagnostic = 0f;
         Plan = Tuning.Events != null ? Tuning.Events.Plan(Tuning, wave, RunSeed) : null;
         World.Message = $"WAVE {Wave}: {Size} enemies";
         if (Plan != null && (Plan.Modifiers.Count > 0 || Plan.Miniboss))
@@ -190,11 +226,22 @@ public sealed class EndlessWaveState : ModeDirectorState
     public int AliveTargetNow => Mathf.Min(Mathf.Max(1, Tuning.MaxAlive), Size);
     void Reinforce()
     {
+        if (Time.time < nextSpawnRetry) return;
         while (Spawned < Size)
         {
-            int cost = Tuning.Events != null && Plan != null ? Tuning.Events.CostOf(Tuning.Events.SlotOf(Plan, Spawned)) : 1;
+            int cost = Tuning.Events != null && Plan != null ? Tuning.Events.CostOf(NextSlot()) : 1;
             if (!Room(Alive.Count, AliveCost, cost, AliveTargetNow, Tuning.MaxAlive)) break;
-            if (!SpawnOne()) break; // no valid ring point this tick (player standing on the ring); retry next tick
+            if (!SpawnOne())
+            {
+                SpawnFailures++; nextSpawnRetry = Time.time + Mathf.Max(.1f, Tuning.SpawnRetrySeconds);
+                if (BossPending && Time.time >= nextSpawnDiagnostic)
+                {
+                    nextSpawnDiagnostic = Time.time + 5f;
+                    Debug.LogWarning($"Endless round {Wave}: Pulsebreaker slot reserved; no safe spawn/brain available after {BossSpawnAttempts} attempts. Retrying in {Tuning.SpawnRetrySeconds:0.0}s. Arena={Arena}, player={World.Hero.transform.position}, activeBoss={PulsebreakerBoss.Active != null}.");
+                    World.Message = $"ROUND {Wave} · PULSEBREAKER ARRIVAL BLOCKED · RETRYING";
+                }
+                break;
+            }
         }
     }
     /// The alive-budget rule (shared with EndlessSimulation): room for the next enemy of `nextCost` slots?
@@ -202,22 +249,43 @@ public sealed class EndlessWaveState : ModeDirectorState
         aliveCount < Mathf.Max(1, maxAlive) && (aliveCount == 0 || aliveCost + nextCost <= target);
     int CostAt(int i) => Tuning.Events != null ? Tuning.Events.CostOf(AliveSlots[i]) : 1;
 
+    EndlessWaveEvents.Slot NextSlot() => BossPending ? EndlessWaveEvents.Slot.Miniboss :
+        Tuning.Events != null && Plan != null ? Tuning.Events.SlotOf(Plan, Mathf.Max(Plan.Miniboss ? 1 : 0, Spawned)) : EndlessWaveEvents.Slot.Regular;
+
     bool SpawnOne()
     {
-        Vector3 player = World.Hero.transform.position; player.y = 0f;
-        int candidates = Mathf.Max(1, Tuning.SpawnCandidates); float start = Random.value * 360f;
+        var slot = EndlessWaveEvents.Slot.Regular; var spec = Spec(ref slot);
+        if (spec.Boss)
+        {
+            BossSpawnAttempts++;
+            if (PulsebreakerBoss.Active != null) return false; // reserve the slot, never admit an ordinary replacement
+        }
+        Vector3 player = World.Hero.transform.position; player.y = Arena.y;
+        int candidates = Mathf.Clamp(Tuning.SpawnCandidates, 1, 64); float start = Random.value * 360f;
+        // Boss gets three bounded safe rings. When the player leaves the arena, try nearby grounded paths first.
+        Vector3 centre = spec.Boss && (player - Arena).sqrMagnitude > 30f * 30f ? player : Arena;
+        for (int ring = 0; ring < (spec.Boss ? 3 : 1); ring++)
         for (int i = 0; i < candidates; i++)
         {
-            Vector3 point = Arena + Quaternion.Euler(0f, start + i * 360f / candidates, 0f) * Vector3.forward * Tuning.SpawnRadius;
+            float radius = Tuning.SpawnRadius * (ring == 1 ? .75f : ring == 2 ? 1.25f : 1f);
+            Vector3 point = centre + Quaternion.Euler(0f, start + i * 360f / candidates, 0f) * Vector3.forward * radius;
             if (!NavMesh.SamplePosition(point, out var hit, World.Tuning.Npcs.NavSampleRadius, NavMesh.AllAreas)) continue;
-            Vector3 flat = hit.position; flat.y = 0f;
+            Vector3 flat = hit.position; flat.y = Arena.y;
             if (Vector3.Distance(flat, player) < Tuning.MinSpawnDistanceFromPlayer) continue;
-            // Ground only: a rooftop NavMesh island would strand the enemy.
+            if (Mathf.Abs(hit.position.y - Arena.y) > 1f) continue;
             if (!NavMesh.CalculatePath(hit.position, Arena, NavMesh.AllAreas, path) || path.status != NavMeshPathStatus.PathComplete) continue;
-            var slot = EndlessWaveEvents.Slot.Regular; var spec = Spec(ref slot);
+            if (spec.Boss && !BossClearance(hit.position, spec.Archetype)) continue;
             var npc = CityNpc.Spawn(World, hit.position, spec.Role, spec.Archetype, spec.Health, spec.Damage);
             if (npc == null) continue;
-            if (spec.Boss) PulsebreakerBoss.Attach(npc, Wave);   // the only place a miniboss is created
+            if (spec.Boss)
+            {
+                if (PulsebreakerBoss.Attach(npc, Wave) == null)
+                {
+                    npc.Agent.enabled = false; npc.GetComponent<Collider>().enabled = false;
+                    World.Npcs.Remove(npc); Destroy(npc.gameObject); return false;
+                }
+                waveBoss = npc;
+            }
             npc.AlwaysAggro = true;
             npc.Damaged += dead => { if (dead) Defeated(npc); };
             Alive.Add(npc); AliveSlots.Add(slot); AliveCost += Tuning.Events != null ? Tuning.Events.CostOf(slot) : 1; Spawned++;
@@ -227,12 +295,34 @@ public sealed class EndlessWaveState : ModeDirectorState
         return false;
     }
 
+    bool BossClearance(Vector3 feet, EnemyArchetype archetype)
+    {
+        float scale = archetype != null ? archetype.VisualScale : 1f;
+        float radius = World.Tuning.Npcs.Radius * scale;
+        float height = Mathf.Max(radius * 2f, World.Tuning.Npcs.Height * scale);
+        Vector3 bottom = feet + Vector3.up * (radius + .08f);
+        Vector3 top = feet + Vector3.up * (height - radius + .08f);
+        return Physics.OverlapCapsuleNonAlloc(bottom, top, radius, spawnOverlaps, ~0, QueryTriggerInteraction.Ignore) == 0;
+    }
+
+#if UNITY_EDITOR
+    /// Explicit development action only; no shipping shortcut or saved round override.
+    public bool JumpToRoundForDevelopment(int round)
+    {
+        if (Session.Ended || round < 1 || round > 10000) return false;
+        foreach (var npc in Alive) if (npc != null) Destroy(npc.gameObject);
+        Alive.Clear(); AliveSlots.Clear(); AliveCost = 0; waveBoss = null;
+        Wave = round - 1; Intermission = true; IntermissionLeft = 0f; nextSpawnRetry = 0f;
+        return true;
+    }
+#endif
+
     /// The next enemy's spec: the director's Compose (unchanged without Events), then the plan's multipliers and slot.
     public EnemySpec Spec(ref EndlessWaveEvents.Slot slot)
     {
         var events = Tuning.Events;
         if (events == null || Plan == null) return Tuning.Compose(Wave, Spawned, World.Progression.Data.Side);
-        slot = events.SlotOf(Plan, Spawned);
+        slot = NextSlot();
         var spec = Tuning.Compose(Wave, EndlessWaveEvents.CompositionIndex(Plan, Spawned), World.Progression.Data.Side);
         spec.Health *= Plan.Health; spec.Damage *= Plan.Damage;
         if (slot == EndlessWaveEvents.Slot.Elite) { spec.Health *= events.EliteHealthMultiplier; spec.Damage *= events.EliteDamageMultiplier; }
@@ -252,6 +342,7 @@ public sealed class EndlessWaveState : ModeDirectorState
         var slot = AliveSlots[i]; AliveCost -= CostAt(i); Alive.RemoveAt(i); AliveSlots.RemoveAt(i);
         if (Session.Ended) return;
         Kills++; WaveKills++;
+        if (slot == EndlessWaveEvents.Slot.Miniboss) { BossDefeated = true; waveBoss = null; }
         var events = Tuning.Events;
         Award(EndlessScoreKind.Kill, Plan != null ? Mathf.RoundToInt(Tuning.KillScore * Wave * Plan.Score) : Tuning.KillScore * Wave);
         if (events == null) return;

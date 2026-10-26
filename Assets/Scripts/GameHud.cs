@@ -476,7 +476,7 @@ public sealed partial class GameHud : MonoBehaviour
         Show(directorCaption, shown.Length > 0);
     }
 
-    void OnDestroy() { CityNpc.DamageApplied -= OnNpcDamageApplied; StopFeedbackTweens(); Bind(null); BindHero(null); if (Panel != null) Destroy(Panel); if (OverlayPanel != null) Destroy(OverlayPanel); if (overlayHost != null) Destroy(overlayHost); }
+    void OnDestroy() { BindBossHealth(null); CityNpc.DamageApplied -= OnNpcDamageApplied; StopFeedbackTweens(); Bind(null); BindHero(null); if (Panel != null) Destroy(Panel); if (OverlayPanel != null) Destroy(OverlayPanel); if (overlayHost != null) Destroy(overlayHost); }
 }
 
 /// One power-bar slot and the values it is currently drawing (verification reads these).

@@ -43,3 +43,4 @@ MonoBehaviour:
   - Archetype: {fileID: 11400000, guid: e30197579ed34e71910a9987c3401918, type: 2}
     FromWave: 5
     Weight: 1
+  Events: {fileID: 11400000, guid: 39645eb4bc00a4ca49e7b418e8a3c22c, type: 2}

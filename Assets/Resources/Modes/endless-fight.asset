@@ -13,13 +13,16 @@ MonoBehaviour:
   m_Name: endless-fight
   m_EditorClassIdentifier: Assembly-CSharp::GameModeDefinition
   Id: endless-fight
-  DisplayName: Endless Fight (Hero)
-  Description: Criminals attack in endless waves that grow larger and tougher. One defeat ends the run. Survive as many waves as you can and beat your best score.
-  MenuOrder: 3
+  DisplayName: Endless Fight
+  Description: Survive progressive combat rounds with your equipped hero. Defeat Pulsebreaker every fifth round and beat your best score.
+  MenuOrder: 0
   Playable: 1
+  ShowOnHome: 1
+  MenuTagline: PROGRESSIVE ROUNDS. A BOSS EVERY FIVE.
   Side: 0
   Rules: {fileID: 0}
   Encounters: []
+  Selection: {fileID: 0}
   Hud: 7
   SuccessGoal: 0
   FailureLimit: 0
@@ -38,13 +41,13 @@ MonoBehaviour:
   SuccessXp: 0
   SuccessHeat: 0
   FailureHeat: 0
-  SideFromProfile: 0
+  SideFromProfile: 1
   AllowSideSwitch: 0
   ShowResults: 1
   Results: 1
   Director: {fileID: 11400000, guid: 2e6e905315e140a9b3adad6bd9aa9826, type: 2}
   Lighting: {fileID: 11400000, guid: 50f58a12356014bd086a6c8a8dcb5378, type: 2}
-  BriefingGoal: Survive endless waves of criminals.
+  BriefingGoal: Survive combat rounds. Pulsebreaker arrives every fifth round.
   BriefingWin: Beat your best wave and score.
   BriefingLose: One knockout ends the run.
   BriefingSeconds: 7
