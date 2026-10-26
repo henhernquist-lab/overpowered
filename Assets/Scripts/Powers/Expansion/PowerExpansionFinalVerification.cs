@@ -79,6 +79,12 @@ public sealed partial class PowerExpansionVerificationRunner
     {
         Check(JsonUtility.ToJson(Profile.Data)==File.ReadAllText(SaveDir+"reload-expected.json"),"SECOND PROCESS exact complete Version 1 save survived including all progression and appearance fields");
         Check(Profile.SelectedHero.Id=="nova"&&Profile.EquippedA.Id=="combat-morphing"&&Profile.EquippedB.Id=="plasma-blades"&&Profile.EquippedSecondary.Id=="grapple-line"&&Profile.EquippedSignature.Id=="blade-cyclone","SECOND PROCESS all four equipped stable IDs reconstruct correctly");
+        foreach(string kind in new[]{"strength","laser-eyes","duplicate","unknown"})
+        {
+            string path=Path.GetFullPath(SaveDir+kind+".json");var written=JsonUtility.FromJson<ProgressSave>(File.ReadAllText(path));
+            var go=new GameObject("SECOND PROCESS migrated save");var restored=go.AddComponent<PlayerProgression>();restored.Initialize(Resources.Load<GameTuning>("GameTuning").Progression,Resources.LoadAll<PowerDefinition>("Powers"),path);
+            Check(JsonUtility.ToJson(restored.Data)==JsonUtility.ToJson(written)&&restored.Data.Level==7&&restored.Data.Xp==31&&restored.SelectedHero.Id=="titan"&&restored.EquippedA.Selectable&&restored.EquippedB.Selectable&&restored.EquippedA!=restored.EquippedB&&restored.EquippedSignature!=null,"SECOND PROCESS migrated "+kind+": exact nonzero progression/cosmetics/unknown records and valid equipment survive without another repair");Destroy(go);
+        }
         Check(GameFlow.Instance.OpenCombatLab(),"SECOND PROCESS enter gameplay with reconstructed appearance and loadout");yield return Scene(CombatLab.SceneName);
         Check(W.Powers.EquippedA.Id=="combat-morphing"&&W.Powers.EquippedB.Id=="plasma-blades"&&W.Powers.Synergy.Id=="blade-cyclone"&&W.Hero.GetComponentsInChildren<Animator>().Length==1,"SECOND PROCESS live session caches new primary pair/signature and existing Animator");
         Check(Camera.main.GetComponent<ThirdPersonCamera>().FirstPerson,"SECOND PROCESS preserved first-person preference");

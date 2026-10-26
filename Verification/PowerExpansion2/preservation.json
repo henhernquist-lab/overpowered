@@ -1,0 +1,72 @@
+{
+  "baseline": "d70ccc1",
+  "source_commit": "748c2f645c27f9b273cf62676ea44b36c5c6167c",
+  "protected_baseline_paths": 1195,
+  "protected_differences": [],
+  "retained_power_data": {
+    "telekinesis": {
+      "authored_top_level_values_unchanged": true,
+      "changed_existing_fields": [],
+      "upgrade_block_unchanged": true
+    },
+    "fire": {
+      "authored_top_level_values_unchanged": true,
+      "changed_existing_fields": [],
+      "upgrade_block_unchanged": true
+    },
+    "ice": {
+      "authored_top_level_values_unchanged": true,
+      "changed_existing_fields": [],
+      "upgrade_block_unchanged": true
+    },
+    "darkness": {
+      "authored_top_level_values_unchanged": true,
+      "changed_existing_fields": [],
+      "upgrade_block_unchanged": true
+    },
+    "lightning": {
+      "authored_top_level_values_unchanged": true,
+      "changed_existing_fields": [],
+      "upgrade_block_unchanged": true
+    },
+    "poison": {
+      "authored_top_level_values_unchanged": true,
+      "changed_existing_fields": [],
+      "upgrade_block_unchanged": true
+    },
+    "speed": {
+      "authored_top_level_values_unchanged": true,
+      "changed_existing_fields": [],
+      "upgrade_block_unchanged": true
+    },
+    "teleport": {
+      "authored_top_level_values_unchanged": true,
+      "changed_existing_fields": [],
+      "upgrade_block_unchanged": true
+    },
+    "force-field": {
+      "authored_top_level_values_unchanged": true,
+      "changed_existing_fields": [],
+      "upgrade_block_unchanged": true
+    },
+    "phase-shift": {
+      "authored_top_level_values_unchanged": true,
+      "changed_existing_fields": [],
+      "upgrade_block_unchanged": true
+    }
+  },
+  "original_checkout": {
+    "branch": "feature/health-on-kill",
+    "snapshot_entries": 1018,
+    "hashes_unchanged": 1016,
+    "entries_without_file_hash": 1,
+    "changed_since_snapshot_by_concurrent_work": [
+      {
+        "path": "Verification/EndlessEvents/results.txt",
+        "before": "c071d0d3ff92e8dda459e7b941e0b0795c4f98737cf64ceb58a4a87ffe073590",
+        "now": "3f4fb0e19a019830ad75dd74bd4c1c0dc3f7318e3d6b16321dd6dc6d4e123ad5"
+      }
+    ],
+    "policy": "This task wrote only the isolated worktree. Concurrent original-checkout changes are reported, never rolled back."
+  }
+}
