@@ -41,7 +41,24 @@ public sealed partial class PowerExpansionRuntime
         var flags=User.Hero.MoveAbility(grappleVelocity,false);
         if((flags&CollisionFlags.Above)!=0&&grappleVelocity.y>0)grappleVelocity.y=0;
         if((flags&CollisionFlags.Sides)!=0){grappleVelocity*=.5f;if(distance<2.5f)ReleaseGrapple(true);}
-        tether.SetPosition(0,User.AimOrigin);tether.SetPosition(1,anchor);
+    }
+    void UpdateTether()
+    {
+        if(!Grappling||tether==null||!tether.enabled)return;
+        var camera=Camera.main;var view=camera!=null?camera.GetComponent<ThirdPersonCamera>():null;
+        bool first=view!=null&&view.FirstPerson;
+        float width=first? .012f:.045f;
+        if(!Mathf.Approximately(tether.startWidth,width)){tether.startWidth=width;tether.endWidth=first? .008f:.025f;}
+        Vector3 origin=transform.position+Vector3.up;
+        if(first)
+            origin=camera.transform.position+camera.transform.right*.24f-camera.transform.up*.2f+camera.transform.forward*.45f;
+        else
+        {
+            var pose=GetComponent<HumanoidPresentation>();var hand=pose?.Animator!=null&&pose.Animator.isHuman?pose.Animator.GetBoneTransform(HumanBodyBones.RightHand):null;
+            if(hand!=null)origin=hand.position;
+        }
+        // Visual hand origin only: anchor rays and collision checks continue to use the view-aware aim origin.
+        tether.SetPosition(0,origin);tether.SetPosition(1,grappleAnchor.transform.TransformPoint(localAnchor));
     }
     bool TetherClear(Vector3 from,Vector3 anchor)
     {

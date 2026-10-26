@@ -101,7 +101,7 @@ public sealed partial class PowerExpansionRuntime
             Vfx.Emit(Art.Slash,origin+forward,forward,Vector3.one*(charge?1.8f:1),forward*3,.25f,plasma?CityColor.Cyan:CityColor.Cream,1,plasma?300:120);
         }finally{lunging=false;MeleePending=false;}
     }
-    void LateUpdate(){UpdateWeapons();}
+    void LateUpdate(){UpdateWeapons();UpdateTether();}
     void UpdateWeapons()
     {
         bool morph=User?.Selected?.Definition.Effect is CombatMorphingEffect,plasma=User?.Selected?.Definition.Effect is PlasmaBladesEffect;

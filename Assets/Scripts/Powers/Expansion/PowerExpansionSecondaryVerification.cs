@@ -25,10 +25,14 @@ public sealed partial class PowerExpansionVerificationRunner
         Check(Mathf.Abs(W.Powers.Energy-(energy-W.Powers.EnergyCost(W.Powers.SecondaryRuntime)))<.01f,"Grapple pays established secondary energy once");
         yield return new WaitForSeconds(.5f);
         Check(W.Hero.transform.position.z>before.z+1&&W.Hero.transform.position.z<13.5f,"Grapple traverses actual space with capsule collision, no teleport");
-        Check(Expansion.GrappleVelocity.magnitude<=22.01f,"Grapple speed remains bounded");Expansion.ReleaseGrapple();yield return null;Check(!Expansion.Grappling&&!Expansion.DrivesMotion,"Intentional release restores ordinary control");
+        Check(Expansion.GrappleVelocity.magnitude<=22.01f,"Grapple speed remains bounded");
+        var rope=W.Hero.GetComponentsInChildren<LineRenderer>().Single(x=>x.name=="Grapple tether");var eye=W.Powers.AimOrigin;
+        Check(Vector3.Cross(rope.GetPosition(0)-eye,(rope.GetPosition(1)-eye).normalized).magnitude>.1f,"First-person hand tether has visible separation from the center ray");Picture("grapple-first");Expansion.ReleaseGrapple();yield return null;Check(!Expansion.Grappling&&!Expansion.DrivesMotion,"Intentional release restores ordinary control");
         ReadySecondary();Check(W.Powers.UseSecondary(),"Grapple can reanchor");Destroy(wall);yield return null;yield return null;Check(!Expansion.Grappling&&!Expansion.DrivesMotion,"Destroyed anchor cannot leave stuck traversal");
         yield return EnterSecondary("grapple-line");ReadySecondary();var view=Camera.main.GetComponent<ThirdPersonCamera>();view.ToggleView();view.SetLook(0,0);yield return null;
-        wall=Wall(new Vector3(0,3,14),new Vector3(8,8,.5f));yield return null;Check(W.Powers.UseSecondary(),"Third-person crosshair grapple also anchors");
+        wall=Wall(new Vector3(0,3,14),new Vector3(8,8,.5f));yield return null;Check(W.Powers.UseSecondary(),"Third-person crosshair grapple also anchors");yield return new WaitForSeconds(.1f);
+        rope=W.Hero.GetComponentsInChildren<LineRenderer>().Single(x=>x.name=="Grapple tether");var hand=W.Hero.GetComponent<HumanoidPresentation>().Animator.GetBoneTransform(HumanBodyBones.RightHand);
+        Check(Vector3.Distance(rope.GetPosition(0),hand.position)<.01f,"Third-person tether follows the finalized right-hand bone");Picture("grapple-third");
         var blocker=Wall(new Vector3(0,2,4),new Vector3(8,5,.4f));yield return new WaitForSeconds(.2f);Check(!Expansion.Grappling,"CONTROL new intervening wall releases tether");Destroy(wall);Destroy(blocker);
         yield return EnterSecondary("mirage-decoy");ReadySecondary();Check(W.Powers.UseSecondary(),"Mirage summoned through real secondary payment path");yield return null;
         var decoy=Expansion.Decoy;Check(decoy!=null&&decoy.Alive,"One finite hologram active");

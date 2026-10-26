@@ -1,0 +1,36 @@
+[
+  {
+    "entry": "PowerExpansionVerification.Secondaries",
+    "commit": "939567f2148272916b9f21baa9cf451ed772b74e",
+    "status_before": "M Assets/Scripts/Powers/Expansion/PowerExpansionMelee.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionSecondaryVerification.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionTraversal.cs",
+    "started_utc": "2026-10-26T05:46:46.065071+00:00",
+    "save_before": "4af031e1cea8617fee9bcc6765be39815b95b05bdfb92e0af9c205cee52186ad",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/PowerExpansion2/tether-visual-origin/PowerExpansionVerification.Secondaries.log",
+    "pid": 59205,
+    "exit": 0,
+    "seconds": 44.97,
+    "pass": 37,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Scripts/Powers/Expansion/PowerExpansionMelee.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionSecondaryVerification.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionTraversal.cs\n M Verification/PowerExpansion2/images/grapple-first.png\n M Verification/PowerExpansion2/phase-secondaries.txt\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/PowerExpansion2/images/grapple-third.png"
+  },
+  {
+    "entry": "PowerExpansionVerification.Presentation",
+    "commit": "939567f2148272916b9f21baa9cf451ed772b74e",
+    "status_before": "M Assets/Scripts/Powers/Expansion/PowerExpansionMelee.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionSecondaryVerification.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionTraversal.cs\n M Verification/PowerExpansion2/images/grapple-first.png\n M Verification/PowerExpansion2/phase-secondaries.txt\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/PowerExpansion2/images/grapple-third.png\n?? Verification/PowerExpansion2/tether-visual-origin/",
+    "started_utc": "2026-10-26T05:47:31.213453+00:00",
+    "save_before": "4af031e1cea8617fee9bcc6765be39815b95b05bdfb92e0af9c205cee52186ad",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/PowerExpansion2/tether-visual-origin/PowerExpansionVerification.Presentation.log",
+    "pid": 59271,
+    "exit": 0,
+    "seconds": 41.7,
+    "pass": 67,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Scripts/Powers/Expansion/PowerExpansionMelee.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionSecondaryVerification.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionTraversal.cs\n M Verification/PowerExpansion2/images/charged-plasma-extreme.png\n M Verification/PowerExpansion2/images/charged-plasma-hard.png\n M Verification/PowerExpansion2/images/charged-plasma-normal.png\n M Verification/PowerExpansion2/images/grapple-first.png\n M Verification/PowerExpansion2/images/nova-fitted-BladeArms.png\n M Verification/PowerExpansion2/images/nova-fitted-ExtendedClaws.png\n M Verification/PowerExpansion2/images/nova-fitted-HammerFists.png\n M Verification/PowerExpansion2/images/nova-fitted-plasma.png\n M Verification/PowerExpansion2/images/titan-fitted-BladeArms.png\n M Verification/PowerExpansion2/images/titan-fitted-ExtendedClaws.png\n M Verification/PowerExpansion2/images/titan-fitted-HammerFists.png\n M Verification/PowerExpansion2/images/titan-fitted-plasma.png\n M Verification/PowerExpansion2/images/vector-fitted-BladeArms.png\n M Verification/PowerExpansion2/images/vector-fitted-ExtendedClaws.png\n M Verification/PowerExpansion2/images/vector-fitted-HammerFists.png\n M Verification/PowerExpansion2/images/vector-fitted-plasma.png\n M Verification/PowerExpansion2/phase-secondaries.txt\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/PowerExpansion2/images/grapple-third.png\n?? Verification/PowerExpansion2/tether-visual-origin/"
+  }
+]

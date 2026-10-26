@@ -7,12 +7,14 @@ PASS Grapple owns movement through existing controller contract
 PASS Grapple pays established secondary energy once
 PASS Grapple traverses actual space with capsule collision, no teleport
 PASS Grapple speed remains bounded
+PASS First-person hand tether has visible separation from the center ray
 PASS Intentional release restores ordinary control
 PASS Grapple can reanchor
 PASS Destroyed anchor cannot leave stuck traversal
 PASS Actual staged secondary equip gates: grapple-line
 PASS Enter Combat Lab with staged secondary
 PASS Third-person crosshair grapple also anchors
+PASS Third-person tether follows the finalized right-hand bone
 PASS CONTROL new intervening wall releases tether
 PASS Actual staged secondary equip gates: mirage-decoy
 PASS Enter Combat Lab with staged secondary
