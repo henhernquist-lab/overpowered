@@ -1,6 +1,6 @@
 # Power Expansion 2.0 implementation report
 
-**VERIFIED: 3,784 PASS / 0 FAIL in 20 selected serial native Unity processes.** Final runtime source: `10b05c7`. All phases A–G are complete. This is a local, unmerged feature branch; the original checkout still belongs to the concurrent health-on-kill task.
+**VERIFIED: 3,786 PASS / 0 FAIL in 20 selected serial native Unity processes.** Final runtime source: `0926826`. All phases A–G are complete. This is a local, unmerged feature branch; the original checkout still belongs to the concurrent health-on-kill task.
 
 ## Workspace and architecture
 
@@ -60,12 +60,12 @@ Measured on the native empty Combat Lab: 30 warm frames, 120 idle, 120 repeated-
 
 
 
-The final selected evidence records actual exits, assertion counts, source revisions, pre-run source changes and personal-save/vendor-database hash checks. Later targeted fixes were reverified; earlier tests of unchanged systems keep their actual revisions. These are native Editor import/compilation and Play Mode harnesses using real scene/menu/equip/damage/movement APIs, not inferred source-only passes. Counts follow literal PASS/FAIL lines; an older lab summary counted an editor-only annotation as a pass, and that summary counter is now fixed. No standalone executable or physical keyboard/mouse automation was certified.
+The final selected evidence records actual exits, assertion counts, source revisions, pre-run source changes and personal-save/vendor-database hash checks. Later targeted fixes were reverified; earlier tests of unchanged systems keep their actual revisions. These are native Editor import/compilation and Play Mode harnesses using real scene/menu/equip/damage/movement APIs, not inferred source-only passes. Counts use literal PASS/FAIL lines; an older lab summary included an editor-only annotation, and its summary counter is fixed. No standalone executable or physical keyboard/mouse automation was certified.
 
 | Native suite | PASS | Result |
 |---|---:|---|
 | `PowerExpansionVerification.AimControls` | 50 | exit 0, no failed checks |
-| `PowerExpansionVerification.Secondaries` | 35 | exit 0, no failed checks |
+| `PowerExpansionVerification.Secondaries` | 37 | exit 0, no failed checks |
 | `PowerExpansionVerification.Gameplay` | 577 | exit 0, no failed checks |
 | `PowerExpansionVerification.BossCombat` | 94 | exit 0, no failed checks |
 | `PowerExpansionVerification.Signatures` | 74 | exit 0, no failed checks |
@@ -85,7 +85,7 @@ The final selected evidence records actual exits, assertion counts, source revis
 | `TwoModeVerification.Run` | 412 | exit 0, no failed checks |
 | `TwoModeVerification.Reload` | 14 | exit 0, no failed checks |
 
-Staged implementation evidence remains separate: ranged 85, melee 49, secondaries 35, signatures 74, and the initial roster 178 + reload 5. Six successful native authoring/import processes are also retained separately and are not added to the 3,784 total.
+Staged implementation evidence remains separate: ranged 85, melee 49, secondaries 35, signatures 74, and the initial roster 178 + reload 5. Six successful native authoring/import processes are also retained separately and are not added to the 3,786 total.
 
 **FAILED attempts retained / resolved:** 14 intermediate invocations are recorded, including early test-only compilation/threshold/profile mistakes, temporary staged-catalog reloading, old Strength/Flight and cooldown fixtures, a scene-exit palette/VFX null reference, and the confirmed point-blank cone miss. The latter two were real runtime defects and are fixed with positive/negative lifecycle and aiming controls. No unresolved functional failure remains in the selected acceptance set.
 
@@ -120,6 +120,7 @@ The exact source/asset inventory and hashes are linked below. Main extension poi
 | G | `748c2f6` | Fitted marker timing, scene cleanup, upgrade/target caps and live-boss evidence |
 | G | `fe4a076` | Full cosmetic/mode regressions and second-process legacy migration checks |
 | G | `10b05c7` | Confirmed close-aim fix and final current-roster gameplay acceptance |
+| G | `0926826` | Readable first-person hand tether and finalized third-person bone origin; gameplay targeting unchanged |
 
 ## Preservation and evidence
 
