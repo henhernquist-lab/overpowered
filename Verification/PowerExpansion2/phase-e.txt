@@ -1,0 +1,75 @@
+PASS Staged signature owner passes actual equip gates: aerokinesis
+PASS Actual saved signature choice: tempest-funnel
+PASS Enter real lab with tempest-funnel
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS tempest-funnel: actual signature gate activates / Tempest Funnel / equipped=tempest-funnel / energy=70
+PASS CONTROL signature repeat refused while busy/cooling down
+PASS Signature energy paid once through existing runner
+PASS CONTROL other signatures retain existing primary lock
+PASS tempest-funnel: finite signature and movement end
+PASS tempest-funnel: real damage with deferred signature ownership
+PASS Pulsebreaker remains a finite valid signature target
+PASS Signature expansion effects fully expire
+PASS Signatures retain one existing humanoid Animator
+PASS Staged signature owner passes actual equip gates: sonic-manipulation
+PASS Actual saved signature choice: resonance-cascade
+PASS Enter real lab with resonance-cascade
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS resonance-cascade: actual signature gate activates / Resonance Cascade / equipped=resonance-cascade / energy=70
+PASS CONTROL signature repeat refused while busy/cooling down
+PASS Signature energy paid once through existing runner
+PASS CONTROL other signatures retain existing primary lock
+PASS resonance-cascade: finite signature and movement end
+PASS resonance-cascade: real damage with deferred signature ownership
+PASS Pulsebreaker remains a finite valid signature target
+PASS CONTROL linked sonic pulses respect interrupt refractory
+PASS Signature expansion effects fully expire
+PASS Signatures retain one existing humanoid Animator
+PASS Staged signature owner passes actual equip gates: combat-morphing
+PASS Actual saved signature choice: apex-mutation
+PASS Enter real lab with apex-mutation
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS apex-mutation: actual signature gate activates / Apex Mutation / equipped=apex-mutation / energy=75
+PASS CONTROL signature repeat refused while busy/cooling down
+PASS Signature energy paid once through existing runner
+PASS Apex explicitly manifests morph weapons
+PASS Apex permits actual morph primaries while its timer runs
+PASS Apex buffs only morph strike damage through authoritative pipeline
+PASS Apex changes no physics capsule
+PASS Cancellation restores normal morph immediately
+PASS Normal morph damage restored after Apex ends
+PASS Signature expansion effects fully expire
+PASS Signatures retain one existing humanoid Animator
+PASS Staged signature owner passes actual equip gates: plasma-blades
+PASS Actual saved signature choice: blade-cyclone
+PASS Enter real lab with blade-cyclone
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS blade-cyclone: actual signature gate activates / Blade Cyclone / equipped=blade-cyclone / energy=65
+PASS CONTROL signature repeat refused while busy/cooling down
+PASS Signature energy paid once through existing runner
+PASS CONTROL other signatures retain existing primary lock
+PASS blade-cyclone: finite signature and movement end
+PASS blade-cyclone: real damage with deferred signature ownership
+PASS Pulsebreaker remains a finite valid signature target
+PASS Signature expansion effects fully expire
+PASS Signatures retain one existing humanoid Animator
+PASS Staged signature owner passes actual equip gates: plasma-blades
+PASS Actual saved signature choice: blade-cyclone
+PASS Enter real lab with blade-cyclone
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Wall CONTROL has a valid implemented equipped signature
+PASS CONTROL Blade Cyclone refuses target behind a solid building for visibility, not a configuration failure
+LIMIT: bounded native signature mechanics verified; human visual/balance approval and standalone performance remain unverified.

@@ -11,6 +11,19 @@ public static class PowerExpansionAuthoring
     {
         var a=AssetDatabase.LoadAssetAtPath<T>(path);if(a==null){a=ScriptableObject.CreateInstance<T>();AssetDatabase.CreateAsset(a,path);}configure(a);EditorUtility.SetDirty(a);return a;
     }
+    public static void PhaseE()
+    {
+        Signature<TempestFunnelEffect>("tempest-funnel","Tempest Funnel","aerokinesis","Moving wind funnel: finite ground displacement, six damage pulses, heavy resistance.",60,3,18,30,5,6);
+        Signature<ResonanceCascadeEffect>("resonance-cascade","Resonance Cascade","sonic-manipulation","Marks up to six visible enemies; three linked concussive pulses with falloff and stagger refractory.",66,1.5f,18,30,6,6);
+        Signature<ApexMutationEffect>("apex-mutation","Apex Mutation","combat-morphing","Seven seconds of enlarged morph weapons, 45% morph damage, extra reach and faster form recovery. Universal melee unchanged.",0,7,20,25,3,1);
+        Signature<BladeCycloneEffect>("blade-cyclone","Blade Cyclone","plasma-blades","Collision-safe short lunges and a finite three-hit plasma sequence per nearby target. Four targets maximum.",70,3,18,35,3,4);
+        AssetDatabase.SaveAssets();Debug.Log("PASS Four functional signature assets authored without replacing the shipping catalog yet.");EditorApplication.Exit(0);
+    }
+    static void Signature<T>(string id,string title,string owner,string description,float damage,float duration,float cooldown,float energy,float radius,int maximum) where T:SynergyEffect
+    {
+        var effect=Asset<T>(Dir+"/"+typeof(T).Name+".asset",a=>{});
+        Asset<PowerSynergyDefinition>(Dir+"/"+id+".asset",a=>{a.Id=id;a.DisplayName=title;a.OwnerPrimary=AssetDatabase.LoadAssetAtPath<PowerDefinition>("Assets/Resources/Powers/"+owner+".asset");a.Effect=effect;a.Description=description;a.Damage=damage;a.Duration=duration;a.Cooldown=cooldown;a.EnergyCost=energy;a.Radius=radius;a.Range=id=="blade-cyclone"?8:18;a.MaxTargets=maximum;a.Force=900;});
+    }
     public static void PhaseD()
     {
         var grapple=Asset<GrappleLineEffect>(Dir+"/GrappleLineEffect.asset",a=>{});

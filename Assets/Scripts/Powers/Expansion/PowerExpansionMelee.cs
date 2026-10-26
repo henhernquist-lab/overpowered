@@ -81,11 +81,11 @@ public sealed partial class PowerExpansionRuntime
             lunging=lunge;float end=Time.time+windup;
             while(Time.time<end)
             {
-                if(!CanAct||User.Selected!=power)yield break;
+                if(!CanAct||User.Selected!=power||(User.SynergyRunner.Busy&&!User.SynergyRunner.Definition.Effect.AllowsPrimaryActions))yield break;
                 if(lunge)User.Hero.MoveAbility(forward*7+Vector3.down*2,false);
                 yield return null;
             }
-            if(!CanAct||User.Selected!=power)yield break;
+            if(!CanAct||User.Selected!=power||(User.SynergyRunner.Busy&&!User.SynergyRunner.Definition.Effect.AllowsPrimaryActions))yield break;
             Vector3 origin=transform.position+Vector3.up;
             using(User.Credit(power.Definition.Id))foreach(var n in Scan(origin,forward,range,plasma?65:55,Tuning.MaxTargets))
             {

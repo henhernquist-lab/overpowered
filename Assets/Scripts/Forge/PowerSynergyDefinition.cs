@@ -23,6 +23,8 @@ public sealed class PowerSynergyDefinition : ScriptableObject
 }
 public abstract class SynergyEffect : ScriptableObject
 {
+    public virtual bool AllowsPrimaryActions=>false;
+    public virtual bool PreservesTraversalState=>false;
     public virtual bool Repeat(SynergyRunner runner)=>false;
     public abstract bool CanBegin(SynergyRunner runner);
     public abstract System.Collections.IEnumerator Execute(SynergyRunner runner);

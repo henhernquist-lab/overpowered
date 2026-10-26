@@ -17,6 +17,7 @@ public sealed partial class PowerExpansionVerificationRunner : SessionVerificati
         if(Phase=="b")yield return Ranged();
         if(Phase=="c")yield return MeleeChecks();
         if(Phase=="d")yield return SecondaryChecks();
+        if(Phase=="e")yield return SignatureChecks();
     }
     IEnumerator EnterExpansion(string primary)
     {

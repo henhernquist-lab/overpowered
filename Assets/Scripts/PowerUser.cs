@@ -208,7 +208,7 @@ public sealed partial class PowerUser : MonoBehaviour
     {
         if(OffensiveActionsBlocked){Message="Cannot attack while phased";return false;}
         if(power==null||!Powers.Contains(power)||!IsEquipped(power.Definition)){Message="Power not equipped";return false;}
-        if(SynergyRunner!=null&&SynergyRunner.Busy)
+        if(SynergyRunner!=null&&SynergyRunner.Busy&&!(power.Definition.Role==PowerRole.Combat&&SynergyRunner.Definition.Effect.AllowsPrimaryActions))
         {
             Message="Synergy in progress";return false;
         }
