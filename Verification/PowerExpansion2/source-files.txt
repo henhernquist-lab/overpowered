@@ -131,6 +131,8 @@ A	Assets/Scripts/Powers/Expansion/NpcPowerDisplacement.cs
 A	Assets/Scripts/Powers/Expansion/NpcPowerDisplacement.cs.meta
 A	Assets/Scripts/Powers/Expansion/PlasmaBladesEffect.cs
 A	Assets/Scripts/Powers/Expansion/PlasmaBladesEffect.cs.meta
+A	Assets/Scripts/Powers/Expansion/PowerExpansionAimVerification.cs
+A	Assets/Scripts/Powers/Expansion/PowerExpansionAimVerification.cs.meta
 A	Assets/Scripts/Powers/Expansion/PowerExpansionArt.cs
 A	Assets/Scripts/Powers/Expansion/PowerExpansionArt.cs.meta
 A	Assets/Scripts/Powers/Expansion/PowerExpansionBossVerification.cs
@@ -171,4 +173,7 @@ M	Assets/Scripts/SuperHeroController.cs
 A	Assets/Shaders.meta
 A	Assets/Shaders/PowerExpansionUnlit.shader
 A	Assets/Shaders/PowerExpansionUnlit.shader.meta
+M	STATUS.md
+M	docs/hero-forge.md
 A	docs/power-expansion-2-audit.md
+A	docs/power-expansion-2.md

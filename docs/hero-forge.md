@@ -1,5 +1,8 @@
 # Hero Forge
 
+> Current shipping roster (Power Expansion 2.0, 2026-10-26): 10 primaries, 6 secondaries and one owner signature per primary. Strength/Laser Eyes and their signatures remain legacy resources with safe aliases; they are not normal Forge choices. Legacy Flight also stays outside current selection. See [the complete implementation, controls, tuning and verification report](power-expansion-2.md). Older pair-synergy and retained-resource descriptions below are historical integration references.
+
+
 Start at Home and choose **Hero Forge / Select Hero**. Previous/next buttons choose a
 hero, two palette suit colors, two distinct combat powers and one secondary power. Changes save immediately
 through PlayerProgression's existing atomic JSON save. Save & Back returns to the

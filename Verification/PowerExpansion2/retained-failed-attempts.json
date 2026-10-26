@@ -1,0 +1,100 @@
+[
+  {
+    "manifest": "Verification/PowerExpansion2/committed-final-regressions/manifest.json",
+    "entry": "HeroForgeArtVerification.Run",
+    "exit": 1,
+    "pass": 284,
+    "fail": 1
+  },
+  {
+    "manifest": "Verification/PowerExpansion2/committed-regressions-1/manifest.json",
+    "entry": "FirstPersonVerification.Run",
+    "exit": 1,
+    "pass": 204,
+    "fail": 1
+  },
+  {
+    "manifest": "Verification/PowerExpansion2/final-targeted-1/manifest.json",
+    "entry": "PowerExpansionVerification.Presentation",
+    "exit": 1,
+    "pass": 63,
+    "fail": 1
+  },
+  {
+    "manifest": "Verification/PowerExpansion2/lab-current-roster-1/manifest.json",
+    "entry": "CombatLabVerification.Run",
+    "exit": 1,
+    "pass": 0,
+    "fail": 0
+  },
+  {
+    "manifest": "Verification/PowerExpansion2/phase-b-run-1/manifest.json",
+    "entry": "PowerExpansionVerification.PhaseB",
+    "exit": 1,
+    "pass": 0,
+    "fail": 0
+  },
+  {
+    "manifest": "Verification/PowerExpansion2/phase-c-run-1/manifest.json",
+    "entry": "PowerExpansionVerification.PhaseC",
+    "exit": 1,
+    "pass": 3,
+    "fail": 1
+  },
+  {
+    "manifest": "Verification/PowerExpansion2/phase-c-run-2/manifest.json",
+    "entry": "PowerExpansionVerification.PhaseC",
+    "exit": 1,
+    "pass": 44,
+    "fail": 1
+  },
+  {
+    "manifest": "Verification/PowerExpansion2/phase-d-run-1/manifest.json",
+    "entry": "PowerExpansionVerification.PhaseD",
+    "exit": 1,
+    "pass": 24,
+    "fail": 1
+  },
+  {
+    "manifest": "Verification/PowerExpansion2/phase-e-run-1/manifest.json",
+    "entry": "PowerExpansionVerification.PhaseE",
+    "exit": 1,
+    "pass": 7,
+    "fail": 1
+  },
+  {
+    "manifest": "Verification/PowerExpansion2/phase-e-run-2/manifest.json",
+    "entry": "PowerExpansionVerification.PhaseE",
+    "exit": 1,
+    "pass": 7,
+    "fail": 1
+  },
+  {
+    "manifest": "Verification/PowerExpansion2/phase-e-run-3/manifest.json",
+    "entry": "PowerExpansionVerification.PhaseE",
+    "exit": 1,
+    "pass": 7,
+    "fail": 1
+  },
+  {
+    "manifest": "Verification/PowerExpansion2/point-blank-aim-before/manifest.json",
+    "entry": "PowerExpansionVerification.AimControls",
+    "exit": 1,
+    "pass": 7,
+    "fail": 1
+  },
+  {
+    "manifest": "Verification/PowerExpansion2/presentation-and-lab-1/manifest.json",
+    "entry": "CombatLabVerification.Run",
+    "exit": 1,
+    "pass": 0,
+    "fail": 1
+  },
+  {
+    "manifest": "Verification/PowerExpansion2/presentation-and-lab-2/manifest.json",
+    "entry": "CombatLabVerification.Run",
+    "exit": 1,
+    "pass": 368,
+    "fail": 1
+  }
+]
