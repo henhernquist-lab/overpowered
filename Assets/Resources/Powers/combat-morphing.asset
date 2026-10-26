@@ -41,7 +41,7 @@ MonoBehaviour:
   HoldMaxMass: 500
   Color: {r: 1, g: 0.25, b: 0.03, a: 1}
   PaletteColor: 10
-  CastingPresentation: 1
+  CastingPresentation: 0
   Light:
     Enabled: 0
     Color: 16

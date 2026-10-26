@@ -9,7 +9,7 @@ public sealed partial class CombatLabVerificationRunner
         var waves=Resources.Load<EndlessWaveDirector>("ModeDirectors/EndlessWaves");
         foreach(string id in new[]{"endless-fight","endless-fight-villain"})Check(Resources.Load<GameModeDefinition>("Modes/"+id).Director==waves,id+" shares the expanded wave table");
         foreach(string id in new[]{"hero","villain","free-play"})Check(Resources.Load<GameModeDefinition>("Modes/"+id).Director==null,id+" receives no invented rounds or automatic director");
-        Check(waves.Events==null,"No miniboss/events enabled by combat expansion");
+        Check(waves.Events==Resources.Load<EndlessWaveEvents>("ModeDirectors/EndlessWaveEvents")&&waves.Events.MinibossEvery==5&&waves.Events.MinibossArchetype==Resources.Load<EnemyArchetype>("Enemies/Pulsebreaker")&&waves.Events.Plan(waves,5).Miniboss&&waves.Events.Plan(waves,10).Miniboss&&waves.Events.Plan(waves,15).Miniboss&&!waves.Events.Plan(waves,4).Miniboss,"Existing shipping Pulsebreaker schedule remains guaranteed on 5/10/15, with round 4 negative control");
         for(int wave=1;wave<=12;wave++)
         {
             var names=new HashSet<string>();

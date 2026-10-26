@@ -28,7 +28,7 @@ public sealed partial class HeroForgeArtVerificationRunner
         var presentation=W.Hero.GetComponent<HumanoidPresentation>();var start=W.Hero.transform.position;W.Hero.ScriptedMove=Vector3.right;W.Hero.ScriptedRun=true;yield return new WaitForSeconds(.35f);W.Hero.ScriptedMove=Vector3.zero;
         Check(Vector3.Distance(start,W.Hero.transform.position)>.25f,hero.Id+": actual running moves the equipped character");
         Check(W.Hero.TryJump(),hero.Id+": actual grounded jump");yield return new WaitForSeconds(.15f);Check(W.Hero.TryJump(),hero.Id+": actual double jump");yield return new WaitForSeconds(2f);
-        W.Hero.DebugSetResources(2,3,0);Check(W.Hero.TryPunch(),hero.Id+": actual paid punch");int charges=W.Hero.Charges;
+        W.Hero.DebugSetResources(2,3,0);Check(W.Hero.TryPunch(),hero.Id+": actual universal punch");int charges=W.Hero.Charges;
         Check(!W.Hero.TryHurricaneKick()&&W.Hero.Charges==charges,hero.Id+": immediate kick is refused by the existing shared cooldown without extra payment");yield return new WaitForSeconds(Mathf.Max(W.Hero.PunchWindupSeconds,W.Powers.Stats(W.Powers.Strength).Cooldown)+.1f);
         Check(W.Hero.TryComboAttack(),hero.Id+": actual first combo tap");yield return new WaitForSeconds(Mathf.Max(W.Hero.PunchWindupSeconds,W.Powers.Stats(W.Powers.Strength).Cooldown)+.06f);
         Check(W.Hero.TryComboAttack()&&W.Hero.LastComboStage==2,hero.Id+": second combo tap dispatches the existing Martelo finisher");yield return new WaitForSeconds(.8f);

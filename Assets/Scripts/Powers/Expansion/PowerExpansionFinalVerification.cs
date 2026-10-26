@@ -30,15 +30,28 @@ public sealed partial class PowerExpansionVerificationRunner
         Check(!Profile.SetLoadout(F.Heroes[0],Power("strength"),Power("fire"),Power("speed"),CityColor.Blue,CityColor.Cyan)&&!Profile.SetLoadout(F.Heroes[0],Power("fire"),Power("fire"),Power("speed"),CityColor.Blue,CityColor.Cyan),"CONTROL retired primaries and duplicate slots rejected by actual save API");
         var menu=FindAnyObjectByType<ModeScreens>();using(var e=NavigationSubmitEvent.GetPooled()){e.target=menu.ForgeButton;menu.ForgeButton.SendEvent(e);}yield return null;
         var screen=menu.ForgeScreen;Check(screen!=null&&screen.SlotA!=null&&screen.SlotB!=null&&screen.SecondarySlot!=null,"Existing live Hero Forge builds all three power selectors");
+        Check(screen.SlotA.choices.Count==10&&screen.SlotB.choices.Count==9&&screen.SecondarySlot.choices.Count==6,"Actual UI choices expose ten primaries, exclude duplicate slot, and expose six secondaries");
         foreach(var hero in F.Heroes)
         {
             Check(screen.SelectHero(hero),hero.Id+": existing Forge hero selection");
             var appearance=Profile.Appearance(hero);string before=JsonUtility.ToJson(appearance);
             Check(screen.SelectPower(0,Power("combat-morphing"))&&screen.SelectPower(1,Power("plasma-blades"))&&screen.SelectPower(2,Power("mirage-decoy")),hero.Id+": new primary and secondary choices work through actual Forge UI handlers");
             Check(JsonUtility.ToJson(Profile.Appearance(hero))==before,hero.Id+": changing powers preserves complete appearance selection");
+            Check(screen.Root.Query<Button>().ToList().Count(x=>x.name!=null&&x.name.StartsWith("signature-")&&x.text.StartsWith("SELECTED"))==1,hero.Id+": existing Forge displays exactly one equipped signature");
+            Check(screen.Root.Q<Label>("forge-power-info-combat-morphing")!=null&&screen.Root.Q<Label>("forge-power-info-plasma-blades")!=null&&screen.Root.Q<Label>("forge-power-info-mirage-decoy")!=null,hero.Id+": descriptions and real base costs/cooldowns appear for all equipped powers");
             Check(!screen.SelectPower(0,Power("laser-eyes"))&&!screen.SelectPower(0,Power("strength")),"CONTROL existing UI refuses both retired primaries");
         }
         screen.Close();
+        Check(menu.Root.Query<MenuIcon>().ToList().Count(x=>x.name!=null&&x.name.StartsWith("owned-"))==16&&!menu.Root.Query<MenuIcon>().ToList().Any(x=>x.name=="owned-strength"||x.name=="owned-laser-eyes"||x.name=="owned-flight"),"Home owned-power strip exposes exactly the current sixteen powers, preserving legacy records only in the save");
+        foreach(var current in all.Where(x=>x.Selectable))Profile.Data.Powers.Find(x=>x.Id==current.Id).Tier=current.Upgrades.Length;
+        Profile.Data.Powers.Find(x=>x.Id=="fire").Tier=0;Profile.Data.Points=9;Profile.Save();
+        GameFlow.Instance.Results(new SessionResult{ModeId="endless-fight",ModeName="ENDLESS FIGHT",StartLevel=1,EndLevel=2,Xp=250,Layout=ResultsLayout.Survival,Side=PlayerSide.Hero});yield return Scene(GameFlow.ResultsScene);
+        menu=FindAnyObjectByType<ModeScreens>();for(float end=Time.unscaledTime+5;!menu.RewardVisible&&Time.unscaledTime<end;)yield return null;
+        Check(menu.RewardVisible&&menu.UpgradeButtons.Count==1&&menu.UpgradeButtons[0].name=="upgrade-fire","Results offers the one remaining current upgrade and no retired resources, even when all current alternatives are maxed");
+        int points=menu.Profile.Data.Points;
+        Check(!menu.ChooseUpgrade(Power("strength"))&&!menu.ChooseUpgrade(Power("laser-eyes"))&&menu.Profile.Data.Points==points,"CONTROL results rejects retired upgrade choices without spending progression points");
+        Check(menu.ChooseUpgrade(Power("fire"))&&menu.Profile.Tier(Power("fire"))==1&&menu.Profile.Data.Points==points-Power("fire").Upgrades[0].PointCost,"Current power upgrade still uses the established payment and ownership path");
+        yield return Home();
         foreach(string legacy in new[]{"strength","laser-eyes","duplicate","unknown"})
         {
             var data=JsonUtility.FromJson<ProgressSave>(JsonUtility.ToJson(Profile.Data));

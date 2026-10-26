@@ -155,6 +155,15 @@ public sealed class HumanoidPresentation : MonoBehaviour
         // Normalized clip offset is independent of playback multiplier; fixed-time offsets are not.
         Change(state,immediate,immediate?start/clip.length:start/speed);
     }
+    /// New primary weapons reuse Punch while fitting its existing impact marker to their committed windup.
+    /// This changes only presentation playback, never the physics root or the universal melee event contract.
+    public void FitPrimaryPunch(float windup)
+    {
+        if(dead||hero==null||Tuning.Punch==null)return;
+        lastActiveTime=Time.time;punchMarkerPending=true;
+        float rate=Mathf.Max(.01f,(Tuning.PunchImpactSeconds-Tuning.PunchStartSeconds)/Mathf.Max(.03f,windup));
+        Action("Punch",Tuning.Punch,rate,Tuning.PunchStartSeconds,true);
+    }
     void Punch(){lastActiveTime=Time.time;punchMarkerPending=true;Action("Punch",Tuning.Punch,Tuning.PunchPlayback,Tuning.PunchStartSeconds,true);}
     void Jump()
     {

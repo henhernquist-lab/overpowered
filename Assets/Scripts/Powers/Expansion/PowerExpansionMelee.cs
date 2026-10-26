@@ -11,7 +11,7 @@ public sealed partial class PowerExpansionRuntime
     public bool DrivesMotion=>lunging||Grappling;
     // One bounded traversal lease shares the existing controller motion contract.
     public bool Grappling=>grappleAnchor!=null;
-    bool lunging,chargedRequested;
+    bool lunging,chargedRequested;CombatMorphForm committedForm;
     float comboUntil,chargeStarted=-1,apexUntil;
     readonly MeshRenderer[] weapons=new MeshRenderer[2];
     readonly MeshFilter[] weaponMeshes=new MeshFilter[2];
@@ -54,8 +54,9 @@ public sealed partial class PowerExpansionRuntime
     public bool Melee(PowerRuntime power,bool plasma)
     {
         if(!CanAct||MeleePending||Art==null||Tuning==null)return false;
-        bool charge=plasma&&chargedRequested;
-        if(charge&&User.Energy<User.EnergyCost(power)+8)return false;
+        committedForm=Form;bool charge=plasma&&chargedRequested;
+        float extra=8*User.Difficulty.EnergyUsage;
+        if(charge&&User.Energy<User.EnergyCost(power)+extra)return false;
         var stats=User.Stats(power);float windup,multiplier,recovery,range=stats.Range,force=stats.Force;
         bool lunge=!plasma&&Form==CombatMorphForm.ExtendedClaws;
         bool hammer=!plasma&&Form==CombatMorphForm.HammerFists;
@@ -65,7 +66,7 @@ public sealed partial class PowerExpansionRuntime
             windup=charge? .4f:PlasmaStage==3? .25f:.1f;
             multiplier=charge?2.2f:PlasmaStage==3?1.5f:PlasmaStage==2? .9f:1;
             recovery=charge?4:PlasmaStage==3?2.2f:1;
-            if(charge)User.TrySpendEnergy(8);
+            if(charge)User.TrySpendEnergy(extra);
         }
         else
         {
@@ -75,7 +76,8 @@ public sealed partial class PowerExpansionRuntime
         }
         power.ActivationCooldownMultiplier=recovery;
         Vector3 forward=User.AimDirection;forward.y=0;forward.Normalize();if(forward.sqrMagnitude<.1f)forward=transform.forward;
-        MeleePending=true;User.Hero.PresentPunch();
+        MeleePending=true;User.Hero.PresentPunch();GetComponent<HumanoidPresentation>()?.FitPrimaryPunch(windup);
+        for(int side=-1;side<=1;side+=2)Vfx.Emit(Art.Slash,User.AimOrigin+forward*.65f+transform.right*(side*.22f),forward,Vector3.one*.2f,forward*.6f,windup,plasma?CityColor.Cyan:CityColor.Cream,1,plasma?240:60);
         StartCoroutine(Strike(power,forward,User.RollDamage(stats.Damage*multiplier,stats.DamageVariance),range,force,windup,lunge,hammer,plasma,charge));return true;
     }
     IEnumerator Strike(PowerRuntime power,Vector3 forward,float damage,float range,float force,float windup,bool lunge,bool hammer,bool plasma,bool charge)
@@ -116,7 +118,8 @@ public sealed partial class PowerExpansionRuntime
             var forearm=animator.GetBoneTransform(i==0?HumanBodyBones.LeftLowerArm:HumanBodyBones.RightLowerArm);
             var hand=animator.GetBoneTransform(i==0?HumanBodyBones.LeftHand:HumanBodyBones.RightHand);
             if(forearm==null||hand==null){weapons[i].enabled=false;continue;}
-            Mesh mesh=plasma?Art.PlasmaBlade:Form==CombatMorphForm.HammerFists?Art.MorphHammer:Form==CombatMorphForm.ExtendedClaws?Art.MorphClaws:Art.MorphBlade;
+            var shownForm=MeleePending?committedForm:Form;
+            Mesh mesh=plasma?Art.PlasmaBlade:shownForm==CombatMorphForm.HammerFists?Art.MorphHammer:shownForm==CombatMorphForm.ExtendedClaws?Art.MorphClaws:Art.MorphBlade;
             if(weaponMeshes[i].sharedMesh!=mesh)weaponMeshes[i].sharedMesh=mesh;
             var material=plasma?Art.EffectMaterial:CityMaterials.Get(CityColor.Metal);
             if(weapons[i].sharedMaterial!=material)weapons[i].sharedMaterial=material;
@@ -129,5 +132,5 @@ public sealed partial class PowerExpansionRuntime
             weapons[i].shadowCastingMode=rig!=null&&rig.FirstPerson?ShadowCastingMode.ShadowsOnly:ShadowCastingMode.On;weapons[i].enabled=mesh!=null;
         }
     }
-    void OnDisable(){StopAllCoroutines();ReleaseGrapple(false);if(Decoy!=null)Decoy.Dissolve();lunging=false;MeleePending=false;apexUntil=0;chargeStarted=-1;foreach(var w in weapons)if(w!=null)w.enabled=false;}
+    void OnDisable(){StopAllCoroutines();ReleaseGrapple(false);if(Decoy!=null)Decoy.Dissolve(false);lunging=false;MeleePending=false;apexUntil=0;chargeStarted=-1;foreach(var w in weapons)if(w!=null)w.enabled=false;}
 }

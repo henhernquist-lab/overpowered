@@ -2,14 +2,14 @@ using UnityEngine;
 using UnityEngine.AI;
 public sealed partial class PowerExpansionRuntime
 {
-    Collider grappleAnchor;Vector3 localAnchor,grappleVelocity;float grappleUntil;int grappleFrame;
+    Collider grappleAnchor;Vector3 localAnchor,grappleVelocity;float grappleUntil,grappleMaxRange;int grappleFrame;
     LineRenderer tether;
     public Vector3 GrappleVelocity=>grappleVelocity;
     public MirageDecoy Decoy{get;private set;}
     public bool BeginGrapple(PowerRuntime power)
     {
         if(!CanAct||Grappling||lunging||Art==null)return false;
-        float range=User.Stats(power).Range;Vector3 origin=User.AimOrigin,direction=(User.AimPoint(range)-origin).normalized;
+        float range=Mathf.Clamp(User.Stats(power).Range,2,60);grappleMaxRange=range;Vector3 origin=User.AimOrigin,direction=(User.AimPoint(range)-origin).normalized;
         int count=Physics.RaycastNonAlloc(origin,direction,rays,range,~0,QueryTriggerInteraction.Ignore);if(count>=rays.Length)return false;
         RaycastHit closest=default;float distance=range+.01f;
         for(int i=0;i<count;i++)if(rays[i].transform.root!=transform&&rays[i].distance<distance){closest=rays[i];distance=closest.distance;}
@@ -33,7 +33,7 @@ public sealed partial class PowerExpansionRuntime
         }
         Vector3 anchor=grappleAnchor.transform.TransformPoint(localAnchor),origin=transform.position+Vector3.up;
         Vector3 delta=anchor-origin;float distance=delta.magnitude;
-        if(distance<1.2f||distance>45||!TetherClear(origin,anchor)){ReleaseGrapple(true);return;}
+        if(distance<1.2f||distance>grappleMaxRange+2||!TetherClear(origin,anchor)){ReleaseGrapple(true);return;}
         var camera=Camera.main;Vector3 right=camera!=null?camera.transform.right:transform.right;
         Vector3 input=right*Input.GetAxisRaw("Horizontal")+Vector3.Cross(right,Vector3.up)*Input.GetAxisRaw("Vertical");
         grappleVelocity+=(delta.normalized*28+Vector3.down*12+Vector3.ProjectOnPlane(input,delta.normalized)*9)*Time.deltaTime;

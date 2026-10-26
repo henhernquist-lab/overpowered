@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+// Follow final weighted humanoid bones after presentation (50) and view updates (100).
+[DefaultExecutionOrder(150)]
 public sealed partial class PowerExpansionRuntime : MonoBehaviour
 {
     public PowerUser User{get;private set;}

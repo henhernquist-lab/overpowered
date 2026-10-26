@@ -141,18 +141,29 @@ PASS nova: unordered pair poison + telekinesis equips and provides exactly two s
 PASS nova: unordered pair sonic-manipulation + telekinesis equips and provides exactly two selectable owner signatures
 PASS CONTROL retired primaries and duplicate slots rejected by actual save API
 PASS Existing live Hero Forge builds all three power selectors
+PASS Actual UI choices expose ten primaries, exclude duplicate slot, and expose six secondaries
 PASS vector: existing Forge hero selection
 PASS vector: new primary and secondary choices work through actual Forge UI handlers
 PASS vector: changing powers preserves complete appearance selection
+PASS vector: existing Forge displays exactly one equipped signature
+PASS vector: descriptions and real base costs/cooldowns appear for all equipped powers
 PASS CONTROL existing UI refuses both retired primaries
 PASS titan: existing Forge hero selection
 PASS titan: new primary and secondary choices work through actual Forge UI handlers
 PASS titan: changing powers preserves complete appearance selection
+PASS titan: existing Forge displays exactly one equipped signature
+PASS titan: descriptions and real base costs/cooldowns appear for all equipped powers
 PASS CONTROL existing UI refuses both retired primaries
 PASS nova: existing Forge hero selection
 PASS nova: new primary and secondary choices work through actual Forge UI handlers
 PASS nova: changing powers preserves complete appearance selection
+PASS nova: existing Forge displays exactly one equipped signature
+PASS nova: descriptions and real base costs/cooldowns appear for all equipped powers
 PASS CONTROL existing UI refuses both retired primaries
+PASS Home owned-power strip exposes exactly the current sixteen powers, preserving legacy records only in the save
+PASS Results offers the one remaining current upgrade and no retired resources, even when all current alternatives are maxed
+PASS CONTROL results rejects retired upgrade choices without spending progression points
+PASS Current power upgrade still uses the established payment and ownership path
 PASS strength: outer version, hero, palette colors and secondary survive actual legacy load
 PASS strength: exact XP/level/points/difficulty/identity/cosmetics/stats/records/parkour/unknown records preserved
 PASS strength: mapped upgrade tiers plus original and unknown ownership records retained

@@ -65,7 +65,7 @@ public sealed class FirstPersonVerificationRunner : MonoBehaviour
         if(Reload)
         {
             Check(profile.Data.FirstPerson,"SECOND PROCESS restores first-person preference in existing save.");
-            Check(profile.Data.Loadout.PowerA=="fire"&&profile.Data.Loadout.PowerB=="strength"&&
+            Check(profile.Data.Loadout.PowerA=="fire"&&profile.Data.Loadout.PowerB=="combat-morphing"&&
                 profile.Data.Loadout.SecondaryPower=="phase-shift"&&profile.Data.Level>=1,
                 "Existing two attacks and progression preserved; retired Flight repairs to Phase Shift.");
             var fresh=new GameObject("Fresh control").AddComponent<PlayerProgression>();
@@ -104,7 +104,7 @@ public sealed class FirstPersonVerificationRunner : MonoBehaviour
         }
         using(var legacyFlight=new LegacyFlightVerificationScope())
         {
-        Equip("fire","strength","flight");GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);
+        Equip("fire","combat-morphing","flight");GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/hero"));yield return Scene(GameFlow.CityScene);
         Check(Rig.FirstPerson,"Hero reload starts in saved view.");W.Hero.enabled=false;Place(new Vector3(0,153,0));Rig.SetLook(0,0);
         for(int i=0;i<50;i++){W.Hero.MoveAbility(Vector3.zero,true);yield return null;}
         Check(Rig.FlightFov<.1f,"Hover CONTROL has no forward-flight FOV increase.");

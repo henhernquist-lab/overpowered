@@ -11,6 +11,14 @@ public static class PowerExpansionAuthoring
     {
         var a=AssetDatabase.LoadAssetAtPath<T>(path);if(a==null){a=ScriptableObject.CreateInstance<T>();AssetDatabase.CreateAsset(a,path);}configure(a);EditorUtility.SetDirty(a);return a;
     }
+    public static void RepairMeleePresentation()
+    {
+        foreach(string id in new[]{"combat-morphing","plasma-blades"})
+        {
+            var power=AssetDatabase.LoadAssetAtPath<PowerDefinition>("Assets/Resources/Powers/"+id+".asset");power.CastingPresentation=false;EditorUtility.SetDirty(power);
+        }
+        AssetDatabase.SaveAssets();Debug.Log("PASS Melee resources preserve fitted punch presentation instead of dispatching a competing generic Cast gesture.");EditorApplication.Exit(0);
+    }
     public static void PhaseF()
     {
         string[] current={"telekinesis","fire","ice","darkness","lightning","poison","aerokinesis","sonic-manipulation","combat-morphing","plasma-blades","speed","teleport","force-field","phase-shift","grapple-line","mirage-decoy"};
@@ -101,7 +109,7 @@ public static class PowerExpansionAuthoring
         AssetDatabase.SaveAssets();Debug.Log("PASS Phase B creates two real hidden primaries, native shared VFX meshes/materials and data; existing selectable eight remain.");EditorApplication.Exit(0);
     }
     public static PowerDefinition Power(string id,string name,string description,PowerEffect effect,float damage,float range,float cooldown,float energy,float force,CityColor color)
-        =>Asset<PowerDefinition>("Assets/Resources/Powers/"+id+".asset",a=>{a.Id=id;a.DisplayName=name;a.Description=description;a.Effect=effect;a.Role=PowerRole.Combat;a.Selectable=false;a.InitiallyUnlocked=true;a.Damage=damage;a.Range=range;a.Radius=2;a.Cooldown=cooldown;a.ResourceCost=energy;a.Force=force;a.Charges=3;a.ChargeRecharge=1.5f;a.PaletteColor=color;a.CastingPresentation=true;a.MenuIcon=MenuGlyph.Star;});
+        =>Asset<PowerDefinition>("Assets/Resources/Powers/"+id+".asset",a=>{a.Id=id;a.DisplayName=name;a.Description=description;a.Effect=effect;a.Role=PowerRole.Combat;a.Selectable=false;a.InitiallyUnlocked=true;a.Damage=damage;a.Range=range;a.Radius=2;a.Cooldown=cooldown;a.ResourceCost=energy;a.Force=force;a.Charges=3;a.ChargeRecharge=1.5f;a.PaletteColor=color;a.CastingPresentation=!effect.IsMelee;a.MenuIcon=MenuGlyph.Star;});
     static Material Material(string name,Shader shader,bool holo)
     {
         string path=Dir+"/"+name+".mat";var a=AssetDatabase.LoadAssetAtPath<Material>(path);

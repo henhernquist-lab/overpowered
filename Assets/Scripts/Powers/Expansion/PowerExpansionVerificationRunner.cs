@@ -19,6 +19,8 @@ public sealed partial class PowerExpansionVerificationRunner : SessionVerificati
         if(Phase=="d")yield return SecondaryChecks();
         if(Phase=="e"||Phase=="signatures")yield return SignatureChecks();
         if(Phase=="gameplay")yield return GameplayChecks();
+        if(Phase=="presentation")yield return PresentationChecks();
+        if(Phase=="bosscombat")yield return BossCombatChecks();
         if(Phase=="final")yield return FinalChecks();
         if(Phase=="reload")yield return ReloadChecks();
     }

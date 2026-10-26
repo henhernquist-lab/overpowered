@@ -6,7 +6,7 @@ public sealed class MirageDecoy : MonoBehaviour
     public static MirageDecoy Current{get;private set;}
     public bool Alive=>health>0&&Time.time<until;
     public int ReceivedHits{get;private set;}
-    float health=50,until;PowerExpansionRuntime owner;
+    bool dissolving;float health=50,until;PowerExpansionRuntime owner;
     public static MirageDecoy Create(PowerExpansionRuntime source,Vector3 at,float duration)
     {
         var presentation=source.GetComponent<HumanoidPresentation>();if(presentation?.VisualRoot==null)return null;
@@ -39,10 +39,11 @@ public sealed class MirageDecoy : MonoBehaviour
     }
     public void Hit(float damage){if(!Alive)return;ReceivedHits++;health-=Mathf.Max(0,damage);if(health<=0)Dissolve();}
     void Update(){if(!Alive||owner==null)Dissolve();}
-    public void Dissolve()
+    public void Dissolve(bool cue=true)
     {
+        if(dissolving)return;dissolving=true;
         if(Current==this)Current=null;health=0;
-        if(owner!=null)owner.Vfx.Emit(owner.Art.SoundRing,transform.position+Vector3.up,Vector3.up,Vector3.one*.8f,Vector3.up,.3f,CityColor.UiPurple,3,80);
+        if(cue&&owner!=null&&owner.Vfx!=null)owner.Vfx.Emit(owner.Art.SoundRing,transform.position+Vector3.up,Vector3.up,Vector3.one*.8f,Vector3.up,.3f,CityColor.UiPurple,3,80);
         Destroy(gameObject);
     }
     void OnDestroy(){if(Current==this)Current=null;}

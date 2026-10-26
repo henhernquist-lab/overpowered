@@ -1,0 +1,69 @@
+PASS Isolated in-memory staged aerokinesis enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS aerokinesis: actual primary slot selection
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS Actual live Pulsebreaker committed a visible cannon windup
+PASS aerokinesis: activate during actual boss windup
+PASS aerokinesis: real boss attack cancels with authoritative damage
+PASS Boss control expires after its resisted duration
+PASS Actual live Pulsebreaker committed a visible cannon windup
+PASS CONTROL repeated boss control inside six-second refractory cannot cancel another windup
+PASS Boss resumes a real attack and keeps valid navigation after resisted control
+PASS Isolated in-memory staged sonic-manipulation enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS sonic-manipulation: actual primary slot selection
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS Actual live Pulsebreaker committed a visible cannon windup
+PASS sonic-manipulation: activate during actual boss windup
+PASS sonic-manipulation: real boss attack cancels with authoritative damage
+PASS Boss control expires after its resisted duration
+PASS Actual live Pulsebreaker committed a visible cannon windup
+PASS CONTROL repeated boss control inside six-second refractory cannot cancel another windup
+PASS Boss resumes a real attack and keeps valid navigation after resisted control
+PASS Staged signature owner passes actual equip gates: aerokinesis
+PASS Actual saved signature choice: tempest-funnel
+PASS Enter real lab with tempest-funnel
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS Actual live Pulsebreaker committed a visible cannon windup
+PASS tempest-funnel: actual shipping signature during live boss encounter
+PASS tempest-funnel: finite encounter damage without disabling boss navigation
+PASS tempest-funnel: existing resolved-damage number path receives correct attacker/source
+PASS tempest-funnel: actual boss bar reads authoritative remaining HP
+PASS tempest-funnel: boss continues real telegraphed combat after signature
+PASS Staged signature owner passes actual equip gates: sonic-manipulation
+PASS Actual saved signature choice: resonance-cascade
+PASS Enter real lab with resonance-cascade
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS Actual live Pulsebreaker committed a visible cannon windup
+PASS resonance-cascade: actual shipping signature during live boss encounter
+PASS resonance-cascade: finite encounter damage without disabling boss navigation
+PASS resonance-cascade: existing resolved-damage number path receives correct attacker/source
+PASS resonance-cascade: actual boss bar reads authoritative remaining HP
+PASS resonance-cascade: boss continues real telegraphed combat after signature
+PASS Staged signature owner passes actual equip gates: combat-morphing
+PASS Actual saved signature choice: apex-mutation
+PASS Enter real lab with apex-mutation
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS Actual live Pulsebreaker committed a visible cannon windup
+PASS apex-mutation: actual shipping signature during live boss encounter
+PASS Apex permits a real fitted morph attack against the live boss
+PASS apex-mutation: finite encounter damage without disabling boss navigation
+PASS apex-mutation: existing resolved-damage number path receives correct attacker/source
+PASS apex-mutation: actual boss bar reads authoritative remaining HP
+PASS apex-mutation: boss continues real telegraphed combat after signature
+PASS Staged signature owner passes actual equip gates: plasma-blades
+PASS Actual saved signature choice: blade-cyclone
+PASS Enter real lab with blade-cyclone
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS Actual live Pulsebreaker committed a visible cannon windup
+PASS blade-cyclone: actual shipping signature during live boss encounter
+PASS blade-cyclone: finite encounter damage without disabling boss navigation
+PASS blade-cyclone: existing resolved-damage number path receives correct attacker/source
+PASS blade-cyclone: actual boss bar reads authoritative remaining HP
+PASS blade-cyclone: boss continues real telegraphed combat after signature
