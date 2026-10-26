@@ -15,6 +15,13 @@ public sealed class GameModeDefinition : ScriptableObject
     public EncounterDefinition[] Encounters;
     [Tooltip("Optional weighted / banded / district-aware / seeded encounter picks. Null = round robin over Encounters (the original behaviour).")] public EncounterSelection Selection;
     public ModeHud Hud=ModeHud.All;
+    [Header("Home menu card")]
+    [Tooltip("Hidden from the Home menu. The mode stays loadable by id (GameFlow.Select, verification, internal side behaviour) but is not a player-facing choice.")] public bool MenuHidden;
+    [Tooltip("Card tag above the glyph. Empty = derived from Side (01 / PROTECT, 02 / DISRUPT).")] public string MenuTag;
+    [Tooltip("Card tagline under the title. Empty = derived from Side.")] public string MenuTagline;
+    [Tooltip("Card glyph. Default Shield; the mode's identity, not its side, picks it.")] public MenuGlyph CardGlyph=MenuGlyph.Shield;
+    [Tooltip("Use CardAccent (a palette role) instead of the side's colour for this card.")] public bool UseCardAccent;
+    public CityColor CardAccent=CityColor.Cyan;
     [Header("Session conditions (zero disables a limit)")]
     public int SuccessGoal=5, FailureLimit=3, DefeatLimit=3;
     public float SessionSeconds=900f;

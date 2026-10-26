@@ -326,7 +326,7 @@ public sealed class PulsebreakerVerificationRunner : SessionVerificationRunner
         Check(!boss.HoldingToken, "The phase shift releases the attack token.");
         Check(boss.Tuning.Phase2GapMultiplier < 1f && boss.Tuning.Phase2RecoveryMultiplier < 1f, "Phase 2 compresses gaps, not telegraphs.");
         yield return null; yield return null;
-        Check(Hud != null && Hud.BossPhaseShown == "PHASE 2", "Boss bar switched to PHASE 2.");
+        Check(Hud != null && Hud.BossPhaseShown == "PHASE 2 · OVERDRIVE", "Boss bar switched to PHASE 2 · OVERDRIVE.");
         boss.Npc.Damage(boss.Npc.MaxHealth * .1f, null);
         yield return null; yield return null;
         Check(boss.PhaseShifts == 1, "CONTROL: the phase shift never repeats.");

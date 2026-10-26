@@ -21,6 +21,12 @@ MonoBehaviour:
   Rules: {fileID: 0}
   Encounters: []
   Hud: 7
+  MenuHidden: 1
+  MenuTag: 
+  MenuTagline: 
+  CardGlyph: 0
+  UseCardAccent: 0
+  CardAccent: 15
   SuccessGoal: 0
   FailureLimit: 0
   DefeatLimit: 1

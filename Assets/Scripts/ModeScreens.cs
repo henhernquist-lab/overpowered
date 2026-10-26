@@ -77,14 +77,17 @@ public sealed partial class ModeScreens : MonoBehaviour
     {
         var eyebrow=Text("YOUR CITY. YOUR RULES.",13,C(CityColor.HeroAccent),true);Place(eyebrow,6,5,88,4);Root.Add(eyebrow);
         Headline=Text("OVERPOWERED",76,C(CityColor.UiInk),true);Headline.style.unityFontStyleAndWeight=FontStyle.BoldAndItalic;Place(Headline,5.6f,8,89,12);Root.Add(Headline);
-        var choose=Text("CHOOSE YOUR SIDE",14,C(CityColor.UiMuted),true);Place(choose,6,21,88,4);Root.Add(choose);
+        var choose=Text("CHOOSE YOUR MODE",14,C(CityColor.UiMuted),true);Place(choose,6,21,88,4);Root.Add(choose);
         var row=Row();Place(row,6,39,88,33);Root.Add(row);
         BuildDifficulty();
-        var primary=new[]{modes.FirstOrDefault(m=>m.Playable&&m.Side==PlayerSide.Hero),modes.FirstOrDefault(m=>m.Playable&&m.Side==PlayerSide.Villain)}.Where(m=>m!=null).ToArray();
+        // The menu is data: the two primary cards are the playable modes that are not MenuHidden, in MenuOrder.
+        // Hero / Villain remain ordinary definitions (still loadable by id) but are no longer player-facing choices.
+        var visible=modes.Where(m=>m.Playable&&!m.MenuHidden).ToArray();
+        var primary=visible.Take(2).ToArray();
         foreach(var mode in primary){var card=ModeCard(mode);if(row.childCount>0)card.style.marginLeft=26;row.Add(card);}
         // Additional data-defined playable modes retain a route without changing the menu code.
         var extras=Row();Place(extras,6,74,88,4);Root.Add(extras);
-        foreach(var mode in modes.Where(m=>m.Playable&&!primary.Contains(m))){var button=ActionButton(mode.DisplayName.ToUpperInvariant(),()=>Launch(mode),ColorFor(mode.Side));button.style.height=30;button.style.marginRight=12;extras.Add(button);ModeButtons.Add(mode.Id,button);}
+        foreach(var mode in visible.Skip(2)){var button=ActionButton(mode.DisplayName.ToUpperInvariant(),()=>Launch(mode),CardAccent(mode));button.style.height=30;button.style.marginRight=12;extras.Add(button);ModeButtons.Add(mode.Id,button);}
         // The Combat Lab is a standalone developer scene, not a game mode: its route exists only when its data is present.
         if(Resources.Load<CombatLabSettings>("CombatLabSettings")!=null)
         {
@@ -95,7 +98,7 @@ public sealed partial class ModeScreens : MonoBehaviour
         var levelBlock=new VisualElement();levelBlock.style.width=130;levelBlock.Add(Text("LEVEL",11,C(CityColor.UiMuted),true));levelBlock.Add(Text(Profile.Data.Level.ToString("00"),36,C(CityColor.UiInk),true));strip.Add(levelBlock);
         var powerBlock=new VisualElement();powerBlock.style.flexGrow=1;powerBlock.Add(Text("YOUR POWERS",11,C(CityColor.UiMuted),true));var icons=Row();icons.style.marginTop=8;powerBlock.Add(icons);strip.Add(powerBlock);
         foreach(var power in powers.Where(Profile.Owns)){var icon=new MenuIcon(power.MenuIcon,C(power.PaletteColor));icon.style.width=37;icon.style.height=37;icon.style.marginRight=13;icon.tooltip=power.DisplayName+" · tier "+Profile.Tier(power);icons.Add(icon);}
-        foreach(var mode in modes.Where(m=>!m.Playable))
+        foreach(var mode in modes.Where(m=>!m.Playable&&!m.MenuHidden))
         {
             var button=new Button(()=>Launch(mode)){name="mode-"+mode.Id};ResetButton(button);button.style.width=172;button.style.height=64;button.style.marginLeft=12;button.style.backgroundColor=Alpha(C(CityColor.UiPurple),.55f);Round(button,9);
             button.Add(Text(mode.DisplayName.ToUpperInvariant(),12,C(CityColor.UiMuted),true));button.Add(Text("COMING SOON",10,C(CityColor.UiMuted)));button.SetEnabled(false);strip.Add(button);ModeButtons.Add(mode.Id,button);
@@ -111,18 +114,23 @@ public sealed partial class ModeScreens : MonoBehaviour
     }
     Button ModeCard(GameModeDefinition mode)
     {
-        var accent=ColorFor(mode.Side);var glyph=mode.Side==PlayerSide.Hero?MenuGlyph.Shield:MenuGlyph.Flame;
+        var accent=CardAccent(mode);var glyph=mode.CardGlyph;
         var button=new Button(()=>Launch(mode)){name="mode-"+mode.Id};ResetButton(button);button.style.flexGrow=1;button.style.flexBasis=0;button.style.height=Length.Percent(100);button.style.alignItems=Align.FlexStart;button.style.overflow=Overflow.Hidden;Round(button,18);Border(button,Alpha(accent,.65f),2);button.style.backgroundColor=Alpha(Color.Lerp(C(CityColor.UiPanel),accent,.13f),.96f);
         var ghost=new MenuIcon(glyph,Alpha(accent,.075f));ghost.style.position=Position.Absolute;ghost.style.width=360;ghost.style.height=360;ghost.style.right=-46;ghost.style.top=-38;button.Add(ghost);
-        var tag=Text(mode.Side==PlayerSide.Hero?"01 / PROTECT":"02 / DISRUPT",12,accent,true);tag.style.position=Position.Absolute;tag.style.left=30;tag.style.top=23;button.Add(tag);
+        var tag=Text(!string.IsNullOrEmpty(mode.MenuTag)?mode.MenuTag.ToUpperInvariant():mode.Side==PlayerSide.Hero?"01 / PROTECT":"02 / DISRUPT",12,accent,true);tag.style.position=Position.Absolute;tag.style.left=30;tag.style.top=23;button.Add(tag);
         var icon=new MenuIcon(glyph,accent){name="mode-glyph-"+mode.Id};icon.style.position=Position.Absolute;icon.style.width=60;icon.style.height=60;icon.style.left=30;icon.style.top=47;button.Add(icon);
         var title=Text(mode.DisplayName.ToUpperInvariant(),36,C(CityColor.UiInk),true);title.name="mode-title-"+mode.Id;title.style.position=Position.Absolute;title.style.left=32;title.style.bottom=45;button.Add(title);
-        var tagline=Text(mode.Side==PlayerSide.Hero?"STOP CRIMES. SAVE CIVILIANS.":"CAUSE CHAOS. ESCAPE THE HEAT.",13,accent,true);tagline.style.position=Position.Absolute;tagline.style.left=34;tagline.style.bottom=20;button.Add(tagline);
+        var tagline=Text(!string.IsNullOrEmpty(mode.MenuTagline)?mode.MenuTagline.ToUpperInvariant():mode.Side==PlayerSide.Hero?"STOP CRIMES. SAVE CIVILIANS.":"CAUSE CHAOS. ESCAPE THE HEAT.",13,accent,true);tagline.style.position=Position.Absolute;tagline.style.left=34;tagline.style.bottom=20;button.Add(tagline);
         var play=Text("PLAY",12,accent,true);play.style.position=Position.Absolute;play.style.right=47;play.style.top=24;button.Add(play);
         var arrow=new MenuIcon(MenuGlyph.Chevron,accent);arrow.style.position=Position.Absolute;arrow.style.width=22;arrow.style.height=22;arrow.style.right=23;arrow.style.top=20;button.Add(arrow);
         var motion=new CardMotion{Button=button,Accent=accent};cards.Add(motion);button.RegisterCallback<PointerEnterEvent>(_=>motion.Hover=true);button.RegisterCallback<PointerLeaveEvent>(_=>motion.Hover=false);button.RegisterCallback<FocusInEvent>(_=>motion.Hover=true);button.RegisterCallback<FocusOutEvent>(_=>motion.Hover=false);ModeButtons.Add(mode.Id,button);return button;
     }
     void Launch(GameModeDefinition mode){GameFlow.Instance.Select(mode);}
+    /// Card colour: a palette role when the mode asks for one, else the side's accent.
+    Color CardAccent(GameModeDefinition mode)=>mode.UseCardAccent?C(mode.CardAccent):ColorFor(mode.Side);
+    /// Programmatic route for a definition the Home menu does not offer (Hero / Villain stay loadable for internal
+    /// side behaviour and the verification suites) and for suites that exercise a mode start without the menu.
+    public bool LaunchModeById(string id){var mode=modes.FirstOrDefault(m=>m.Id==id);if(mode==null||!mode.Playable)return false;Launch(mode);return true;}
     void BuildResults()
     {
         var accent=ColorFor(result.Side);bool hero=result.Side==PlayerSide.Hero,won=result.Outcome==SessionOutcome.Won;

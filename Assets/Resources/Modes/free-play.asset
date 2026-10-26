@@ -15,12 +15,18 @@ MonoBehaviour:
   Id: free-play
   DisplayName: Free Play
   Description: No objectives, no timer, no defeat limit. Roam the city as you like. Heat and the police still react to what you do. Press H to switch Hero/Villain at any time.
-  MenuOrder: 2
+  MenuOrder: 1
   Playable: 1
   Side: 0
   Rules: {fileID: 0}
   Encounters: []
   Hud: 15
+  MenuHidden: 0
+  MenuTag: 02 / EXPLORE
+  MenuTagline: OPEN CITY. YOUR RULES.
+  CardGlyph: 2
+  UseCardAccent: 1
+  CardAccent: 15
   SuccessGoal: 0
   FailureLimit: 0
   DefeatLimit: 0

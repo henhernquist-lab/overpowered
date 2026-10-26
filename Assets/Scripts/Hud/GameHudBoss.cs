@@ -19,7 +19,8 @@ public sealed partial class GameHud
     void BuildBossBar()
     {
         if (bossRoot != null) return;
-        var ink = C(CityColor.UiInk); var muted = C(CityColor.UiMuted); var accent = C(CityColor.Cyan);
+        // PULSEBREAKER reads crimson in phase 1 and a hotter orange in Overdrive.
+        var ink = C(CityColor.UiInk); var muted = C(CityColor.UiMuted); var accent = C(CityColor.Red);
         bossRoot = Box("hud-boss");
         Absolute(bossRoot);
         bossRoot.style.left = Length.Percent(50f);
@@ -84,18 +85,22 @@ public sealed partial class GameHud
         }
         string shownName = boss.Npc.Archetype != null ? boss.Npc.Archetype.DisplayName.ToUpperInvariant() : "PULSEBREAKER";
         if (BossNameShown != shownName) { BossNameShown = shownName; bossName.text = shownName; }
-        string phase = boss.Phase2 ? "PHASE 2" : "PHASE 1";
+        string phase = boss.Phase2 ? "PHASE 2 · OVERDRIVE" : "PHASE 1";
         if (BossPhaseShown != phase)
         {
             BossPhaseShown = phase;
             bossPhase.text = phase;
-            var accent = C(boss.Phase2 ? CityColor.Fire : CityColor.Cyan);
+            var accent = C(boss.Phase2 ? CityColor.Fire : CityColor.Red);
             bossPhase.style.color = accent;
             bossPhase.style.borderTopColor = bossPhase.style.borderBottomColor = bossPhase.style.borderLeftColor = bossPhase.style.borderRightColor = Alpha(accent, .6f);
             bossPhase.style.backgroundColor = Alpha(accent, .16f);
             bossFill.style.backgroundColor = accent;
             Border(bossRoot, Alpha(accent, .85f), 2);
             bossTag.style.color = accent;
+            // Overdrive is a one-way change of the panel's whole accent, not just the label: the bar is unmistakable.
+            bossTag.text = boss.Phase2 ? "OVERDRIVE" : "ELITE THREAT";
+            bossRoot.style.borderBottomColor = Alpha(accent, 1f);
+            bossRoot.style.borderBottomWidth = boss.Phase2 ? 4 : 3;
         }
         // Keep the bar inside the existing popup avoidance lists (no overlap with banners / briefings).
         if (bossRoot.parent == null) OverlayRoot.Add(bossRoot);

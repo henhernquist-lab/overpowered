@@ -4,10 +4,19 @@ PASS Legacy fixture genuinely lacks field.
 PASS Old save defaults Normal.
 PASS Three buttons; selected class for normal
 PASS Button saves choice and shows actual percentages normal
+PASS Mode icon/title do not overlap at 1280x720: endless-fight
+PASS Mode icon/title do not overlap at 1280x720: free-play
+PASS Difficulty details clear both mode cards at 1280x720
 PASS Three buttons; selected class for hard
 PASS Button saves choice and shows actual percentages hard
+PASS Mode icon/title do not overlap at 1280x720: endless-fight
+PASS Mode icon/title do not overlap at 1280x720: free-play
+PASS Difficulty details clear both mode cards at 1280x720
 PASS Three buttons; selected class for extreme
 PASS Button saves choice and shows actual percentages extreme
+PASS Mode icon/title do not overlap at 1280x720: endless-fight
+PASS Mode icon/title do not overlap at 1280x720: free-play
+PASS Difficulty details clear both mode cards at 1280x720
 PASS Extreme deviation 0: -0.04500, expected -0.04500.
 PASS Extreme deviation 1: 0.07500, expected 0.07500.
 PASS Extreme deviation 2: -0.07500, expected -0.07500.
@@ -205,7 +214,7 @@ PASS No early recurring encounter
 PASS Exactly one encounter at resolved cadence
 PASS No early police reinforcement
 PASS Real police arrival obeys adjusted timer
-MEASURED normal actual police arrival 2.00015s, interval 2.00000s, spawned 4.
+MEASURED normal actual police arrival 2.00018s, interval 2.00000s, spawned 4.
 PASS Bar displays actual spawned difficulty-scaled rolled maximum
 PASS Paid Fire cast normal
 PASS Actual final Fire hit: 24.74200, expected 24.74200.
@@ -408,7 +417,7 @@ PASS Wave health and difficulty applied once.
 PASS Wave health and difficulty applied once.
 PASS Wave health and difficulty applied once.
 PASS Wave-five final mean passes through difficulty exactly once
-PASS Wave-five enemy damage scaling unchanged: 8.40000, expected 8.40000.
+PASS Wave-five enemy damage scaling unchanged: 25.20000, expected 25.20000.
 PASS Full budget cannot double-spawn.
 MEASURED Endless reinforcement interval: 0 (immediate), unchanged for normal; cap 12
 PASS Bar displays actual spawned difficulty-scaled rolled maximum
@@ -485,7 +494,7 @@ PASS Dense sample real Fire cast
 PASS Dense sample real Fire cast
 PASS Dense sample real Fire cast
 PASS Dense sample real Fire cast
-MEASURED dense normal: 132.19 FPS / 7.565 ms; alive 12; peak active particle systems 8; bars 20, labels 96, peak active labels 72. 180-frame fixed12-target Editor workload; not standalone pressure benchmark.
+MEASURED dense normal: 143.67 FPS / 6.960 ms; alive 12; peak active particle systems 8; bars 20, labels 96, peak active labels 72. 180-frame fixed12-target Editor workload; not standalone pressure benchmark.
 PASS Dense workload keeps fixed enemy/UI budgets
 PASS Choose hard for next hero
 PASS Save VECTOR with fire + strength through the loadout API.
@@ -678,7 +687,7 @@ PASS No early recurring encounter
 PASS Exactly one encounter at resolved cadence
 PASS No early police reinforcement
 PASS Real police arrival obeys adjusted timer
-MEASURED hard actual police arrival 1.74068s, interval 1.73913s, spawned 4.
+MEASURED hard actual police arrival 1.73987s, interval 1.73913s, spawned 4.
 PASS Bar displays actual spawned difficulty-scaled rolled maximum
 PASS Paid Fire cast hard
 PASS Actual final Fire hit: 23.99974, expected 23.99974.
@@ -881,7 +890,7 @@ PASS Wave health and difficulty applied once.
 PASS Wave health and difficulty applied once.
 PASS Wave health and difficulty applied once.
 PASS Wave-five final mean passes through difficulty exactly once
-PASS Wave-five enemy damage scaling unchanged: 8.40000, expected 8.40000.
+PASS Wave-five enemy damage scaling unchanged: 25.20000, expected 25.20000.
 PASS Full budget cannot double-spawn.
 MEASURED Endless reinforcement interval: 0 (immediate), unchanged for hard; cap 12
 PASS Bar displays actual spawned difficulty-scaled rolled maximum
@@ -958,7 +967,7 @@ PASS Dense sample real Fire cast
 PASS Dense sample real Fire cast
 PASS Dense sample real Fire cast
 PASS Dense sample real Fire cast
-MEASURED dense hard: 132.46 FPS / 7.550 ms; alive 12; peak active particle systems 8; bars 20, labels 96, peak active labels 72. 180-frame fixed12-target Editor workload; not standalone pressure benchmark.
+MEASURED dense hard: 133.54 FPS / 7.488 ms; alive 12; peak active particle systems 8; bars 20, labels 96, peak active labels 72. 180-frame fixed12-target Editor workload; not standalone pressure benchmark.
 PASS Dense workload keeps fixed enemy/UI budgets
 PASS Choose extreme for next hero
 PASS Save VECTOR with fire + strength through the loadout API.
@@ -1151,7 +1160,7 @@ PASS No early recurring encounter
 PASS Exactly one encounter at resolved cadence
 PASS No early police reinforcement
 PASS Real police arrival obeys adjusted timer
-MEASURED extreme actual police arrival 1.63304s, interval 1.63265s, spawned 4.
+MEASURED extreme actual police arrival 1.63454s, interval 1.63265s, spawned 4.
 PASS Bar displays actual spawned difficulty-scaled rolled maximum
 PASS Paid Fire cast extreme
 PASS Actual final Fire hit: 23.62861, expected 23.62861.
@@ -1354,7 +1363,7 @@ PASS Wave health and difficulty applied once.
 PASS Wave health and difficulty applied once.
 PASS Wave health and difficulty applied once.
 PASS Wave-five final mean passes through difficulty exactly once
-PASS Wave-five enemy damage scaling unchanged: 8.40000, expected 8.40000.
+PASS Wave-five enemy damage scaling unchanged: 25.20000, expected 25.20000.
 PASS Full budget cannot double-spawn.
 MEASURED Endless reinforcement interval: 0 (immediate), unchanged for extreme; cap 12
 PASS Bar displays actual spawned difficulty-scaled rolled maximum
@@ -1431,7 +1440,7 @@ PASS Dense sample real Fire cast
 PASS Dense sample real Fire cast
 PASS Dense sample real Fire cast
 PASS Dense sample real Fire cast
-MEASURED dense extreme: 130.65 FPS / 7.654 ms; alive 12; peak active particle systems 8; bars 20, labels 96, peak active labels 72. 180-frame fixed12-target Editor workload; not standalone pressure benchmark.
+MEASURED dense extreme: 137.95 FPS / 7.249 ms; alive 12; peak active particle systems 8; bars 20, labels 96, peak active labels 72. 180-frame fixed12-target Editor workload; not standalone pressure benchmark.
 PASS Dense workload keeps fixed enemy/UI budgets
 PASS Save Extreme for separate-process reload.
 LIMIT: short Editor measurements, no human balance/feel acceptance or standalone performance claim.

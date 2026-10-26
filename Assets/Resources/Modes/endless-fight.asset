@@ -13,14 +13,20 @@ MonoBehaviour:
   m_Name: endless-fight
   m_EditorClassIdentifier: Assembly-CSharp::GameModeDefinition
   Id: endless-fight
-  DisplayName: Endless Fight (Hero)
+  DisplayName: Endless Fight
   Description: Criminals attack in endless waves that grow larger and tougher. One defeat ends the run. Survive as many waves as you can and beat your best score.
-  MenuOrder: 3
+  MenuOrder: 0
   Playable: 1
   Side: 0
   Rules: {fileID: 0}
   Encounters: []
   Hud: 7
+  MenuHidden: 0
+  MenuTag: 01 / SURVIVE
+  MenuTagline: ENDLESS WAVES. ESCALATING THREATS.
+  CardGlyph: 3
+  UseCardAccent: 0
+  CardAccent: 15
   SuccessGoal: 0
   FailureLimit: 0
   DefeatLimit: 1

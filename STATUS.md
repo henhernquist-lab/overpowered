@@ -5802,3 +5802,73 @@ UNVERIFIED: how the mix and the round-5 boss round feel at human speed, whether 
 pacing beyond the single fixed-roll measurement, Hero/Villain encounter composition (untouched, no rounds to test) and
 sustained standalone frame rate. Elites and modifier waves remain deliberately off in shipping and are not balance-tested
 here. Human checklist: `docs/enemy-spawn-director.md` section 10.
+
+## TWO MODES + GUARANTEED PULSEBREAKER ROUNDS — 2026-10-25
+
+Branch `feature/two-modes-boss-encounters` in worktree `../op-two-modes` (base `44acb44`). No merge, no push. Design and
+the human checklist: `docs/two-modes.md`.
+
+**Why Pulsebreaker never appeared.** Not a spawn bug: the boss existed only on its own feature branch. The checkout the game
+was opened from (`op-overnight-recovery` at `eb5290c`) predates `3301e39`, so it has no `PulsebreakerBoss`, no
+`Enemies/Pulsebreaker.asset` and no miniboss slot in its director. In addition, the baseline director had no `Events` asset
+assigned, so even a build containing the boss had no boss round. This branch is the tree that contains the boss, the events
+asset is live on `ModeDirectors/EndlessWaves.asset`, and the boss slot is now reserved and retried rather than
+budget-dependent.
+
+**Two modes.** `GameModeDefinition` gains menu data (`MenuHidden`, `MenuTag`, `MenuTagline`, `CardGlyph`, `UseCardAccent`,
+`CardAccent`) and `ModeScreens.BuildHome` builds cards from the visible playable definitions in `MenuOrder` instead of
+hard-coding Hero/Villain. `endless-fight` and `free-play` are visible; `hero`, `villain` and `endless-fight-villain` are
+`MenuHidden` but still `Playable` and loadable by id (`ModeScreens.LaunchModeById`, `GameFlow.Select`), so internal side
+behaviour, the verification suites and old saves keep working - no enum, save field or gameplay code was deleted. Hero Forge
+stays a button, BATTLE LAB keeps its route. `GameFlow` and `ModeScreens` otherwise untouched.
+
+**Guaranteed boss rounds.** `bossRound = round >= 5 && round % 5 == 0` via `EndlessWaveEvents.MinibossEvery = 5`. The boss is
+slot 0 of the plan (before every regular body) and `EndlessWaveState.SpawnBossSlot` spawns it without waiting for the alive
+budget, with a wider placement search (3 rings, 4x candidates), a bounded arena-floor fallback after `BossSpawnRetryLimit = 8`
+attempts, retry on the next tick, `BossSpawnDiagnostic` + a HUD message when placement fails, and a guard that refuses to
+create a body while another miniboss is alive (so a retry can never leak an orphan or duplicate a boss). `MinibossRegularCost
+= 3` trades regular bodies for the boss; `MinibossAliveCost = 4` of `MaxAlive 12`; health/damage stay on the existing wave
+formulas x the slot multipliers (x8 / x1.6) x the single existing difficulty multiplier. Measured on Normal: round 5 = 832
+max HP, 17.9 contact damage; round 10 = 1109 HP, 24.3. Free Play has no `Director`, so waves and bosses cannot start there.
+
+**Boss bar.** `Hud/GameHudBoss.cs`: one top-centre panel (560 logical px at y 104) built once and driven every frame from
+`PulsebreakerBoss.Active` and the authoritative `CityNpc.CurrentHealth/MaxHealth`. Crimson (`CityColor.Red`) in phase 1,
+`CityColor.Fire` with `PHASE 2 · OVERDRIVE` and an `OVERDRIVE` tag from the 40% shift. Visible only while the boss is alive,
+hostile, inside 90 m, and the session is running with no menu open; hidden for ordinary enemies and gone on death, despawn,
+pause, results and city unload. It is one element in the existing `OverlayRoot` (no accumulation, no per-frame allocation).
+
+**VERIFIED** (Unity 6000.6.0f1, batch Play Mode, this worktree, fresh isolated saves, each process checked by exit code):
+
+- `TwoModesVerification.Run` (new, `Verification/TwoModes/results.txt`): **124 PASS / 0 FAIL, exit 0**. Exactly two visible
+  modes in menu order with Hero/Villain/Endless (Villain) Playable-but-hidden; the two real cards render side by side with the
+  Forge and Battle Lab routes and no Hero/Villain card; real card submits start Endless (rounds 1-2 clear and progress) and
+  Free Play (no director, no wave state, no boss on any of 3 s of frames, no boss bar); the schedule is exact for rounds
+  1-30 (boss only on 5/10/15/20/25/30, first slot reserved, -3 regulars, identical for every run seed) with negative controls
+  on 1-4, 6-9, 11, 14 and 16; live rounds 5, 10 and 15 each spawn a real hostile aggroed Pulsebreaker with the bar showing the
+  authoritative fraction, following real damage, one bar element, the kill counted once toward completion and the bar gone
+  afterwards; rounds 11-14 carry no boss on any frame; the finished run's save resolves every mode id and keeps best score
+  and wave.
+- `PulsebreakerVerification.Run`: **435 PASS / 0 FAIL, exit 0** (the bar phase label is the new `PHASE 2 · OVERDRIVE`).
+- `MenuPresentationVerification.Run`: **45 PASS / 0 FAIL, exit 0** (rewritten for the two cards, results flow reached through
+  by-id Hero/Villain launches).
+- `DifficultyVerification.Run`: **1415 PASS / 0 FAIL, exit 0** (layout checks now run on the two cards that exist).
+
+**FAILED, and not counted as passes** - both are stale expectations from earlier features, not from the menu change, and both
+stop long after their menu sections pass:
+
+- `ModeExpansionVerification.Run` **FAILED** at `WAVE 5: inconsistent enemy Pulsebreaker ... health=846.57 expected 104.00
+  damage=17.92 expected 11.20`: its `Sample` stat loop predates the boss slot, so it reads the boss as a regular body. The
+  menu and wave-1..4 sections now pass (130 PASS, including the two-card catalog and by-id Hero/Villain launches) after
+  updating that loop to take the wave base from the director and the documented +/-10% spawn health roll (waves now mix
+  archetypes, so deriving the base from the first body could not hold). Wave sizes on boss rounds, boss multipliers and the
+  later wave-5+ expectations still need the same treatment; the equivalent ground is green in `SpawnCurveVerification`,
+  `PulsebreakerVerification` and `TwoModesVerification`, so this suite was not rewritten here.
+- `AudioVerification.Run` **FAILED** at `Owned Telekinesis + Flight equipped through PlayerProgression.SetLoadout`: its
+  `EquipSession` helper still pairs the legacy, non-equippable Flight power, which the Hero Forge gate refuses. 82 PASS before
+  that point; the suite's Home menu step now hovers/submits the Free Play card and its unequipped-power control skips the
+  session's own two equipped powers instead of assuming a Flight+Strength default.
+
+**UNVERIFIED**: hands-on feel of the boss and its telegraphs at human speed, readability at dusk/night, the bar in
+first-person (it is the same `OverlayRoot` element with no camera branch, but not measured), sustained standalone frame rate,
+and the authored boss armor. Pulsebreaker still wears the shared humanoid rig with a scaled silhouette and energy VFX; a
+bespoke armor set remains the largest presentation gap. `docs/two-modes.md` section 8 is the playtest checklist.

@@ -64,28 +64,30 @@ public sealed class MenuPresentationVerificationRunner : MonoBehaviour
     IEnumerator Checks()
     {
         yield return Scene(GameFlow.HomeScene);yield return Menu();
-        var palette=Resources.Load<CityPalette>("CityPalette");var hero=ui.ModeButtons["hero"];var villain=ui.ModeButtons["villain"];
-        Check(hero.worldBound.xMax<villain.worldBound.xMin&&Mathf.Abs(hero.worldBound.y-villain.worldBound.y)<1,"Hero/Villain cards are genuinely side by side.");
-        Check(hero.Query<MenuIcon>().ToList().Any(i=>i.Glyph==MenuGlyph.Shield&&i.Ink==ui.ColorFor(PlayerSide.Hero))&&villain.Query<MenuIcon>().ToList().Any(i=>i.Glyph==MenuGlyph.Flame&&i.Ink==ui.ColorFor(PlayerSide.Villain)),"Original shield/city and angular flame use distinct shared Hero/Villain palette colors.");
+        var palette=Resources.Load<CityPalette>("CityPalette");
+        // TWO MODES: ENDLESS FIGHT and FREE PLAY are the only player-facing cards. Hero / Villain stay Playable data that
+        // is launched by id (verification, internal side behaviour) but is no longer a menu choice.
+        var endlessCard=ui.ModeButtons["endless-fight"];var freeCard=ui.ModeButtons["free-play"];
+        Check(endlessCard.worldBound.xMax<freeCard.worldBound.xMin&&Mathf.Abs(endlessCard.worldBound.y-freeCard.worldBound.y)<1,"Endless Fight / Free Play cards are genuinely side by side.");
+        Check(endlessCard.Query<MenuIcon>().ToList().Any(i=>i.Glyph==MenuGlyph.Fist&&i.Ink==ui.ColorFor(PlayerSide.Hero))&&freeCard.Query<MenuIcon>().ToList().Any(i=>i.Glyph==MenuGlyph.Wing&&i.Ink==palette.Colors[(int)CityColor.Cyan]),
+            "Card glyph and ink come from the mode data: Endless Fight = fist in the Hero accent, Free Play = wing in the Cyan card accent.");
+        Check(ui.ModeButtons.Count==3&&!ui.ModeButtons.ContainsKey("hero")&&!ui.ModeButtons.ContainsKey("villain")&&!ui.ModeButtons.ContainsKey("endless-fight-villain"),
+            "Home offers exactly the two mode cards plus the Battle Lab route ("+string.Join(", ",ui.ModeButtons.Keys)+").");
         Check(ui.Profile.Data.Level==1&&ui.Profile.Data.Xp==0&&ui.Profile.Data.Points==0,"Fresh-save CONTROL starts level 1 / XP 0 / points 0.");
-        // Free Play and both Endless Fight variants are now playable data-defined modes (intentional change, Step 2-3):
-        // the extras row shows them ENABLED below the side cards, and no Coming Soon placeholder remains.
-        foreach(var id in new[]{"free-play","endless-fight","endless-fight-villain"})
-        {
-            var button=ui.ModeButtons[id];
-            Check(Resources.Load<GameModeDefinition>("Modes/"+id).Playable&&button.enabledInHierarchy&&button.worldBound.width>0&&button.worldBound.yMin>hero.worldBound.yMax,"Visible ENABLED extras-row button "+id+" below the side cards.");
-        }
+        foreach(var id in new[]{"endless-fight","free-play"})
+            Check(Resources.Load<GameModeDefinition>("Modes/"+id).Playable&&ui.ModeButtons[id].enabledInHierarchy&&ui.ModeButtons[id].worldBound.width>0,"Visible ENABLED mode card: "+id+".");
+        Check(Resources.Load<GameModeDefinition>("Modes/hero").Playable&&Resources.Load<GameModeDefinition>("Modes/villain").Playable,"Hero and Villain remain Playable definitions (loadable by id) while hidden from the menu.");
         Check(ui.Root.Query<Label>().ToList().All(l=>l.text!="COMING SOON"),"Coming Soon strip is empty: no non-playable mode definitions remain.");
         var hidden=UnityEngine.Object.Instantiate(Resources.Load<GameModeDefinition>("Modes/free-play"));hidden.Playable=false;
         Check(!GameFlow.Instance.Select(hidden)&&!GameFlow.Instance.Loading&&SceneManager.GetActiveScene().name==GameFlow.HomeScene,"Flow-guard CONTROL: a Playable=false definition still does not launch.");Destroy(hidden);
         Capture("home");
-        using(var enter=PointerEnterEvent.GetPooled()){enter.target=hero;hero.SendEvent(enter);}yield return new WaitForSecondsRealtime(.4f);
-        Check(hero.style.translate.value.y.value<-7,$"Hover lifts Hero card {hero.style.translate.value.y.value:F2} logical pixels; configured -8.");Capture("home-hover");
+        using(var enter=PointerEnterEvent.GetPooled()){enter.target=endlessCard;endlessCard.SendEvent(enter);}yield return new WaitForSecondsRealtime(.4f);
+        Check(endlessCard.style.translate.value.y.value<-7,$"Hover lifts the Endless Fight card {endlessCard.style.translate.value.y.value:F2} logical pixels; configured -8.");Capture("home-hover");
         var skyline=GameFlow.Instance.GetComponent<MenuSkyline>();int plannedBuildings=Resources.Load<CityLayout>("CityLayout").Generate(Resources.Load<GameTuning>("GameTuning").City).Count;Check(skyline.BuildingCount==plannedBuildings&&plannedBuildings>=40&&skyline.Texture.IsCreated(),$"Skyline uses {skyline.BuildingCount} actual seeded buildings; one-time capture {skyline.CaptureMilliseconds:F1}ms; cached {skyline.Texture.width}x{skyline.Texture.height}.");
         yield return Benchmark(false,"home static A");yield return Benchmark(true,"home animated B");yield return Benchmark(true,"home animated B2");yield return Benchmark(false,"home static A2");ui.MotionEnabled=true;
         Submit(ui.ModeButtons["free-play"]);yield return Scene(GameFlow.CityScene);Check(W.Mode.Definition.Id=="free-play"&&!W.Progression.SideLocked,"Actual Free Play extras-button submit loads Free Play (side not locked).");
-        GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);yield return Menu();hero=ui.ModeButtons["hero"];
-        Submit(hero);yield return Scene(GameFlow.CityScene);Check(W.Mode.Definition.Side==PlayerSide.Hero,"Actual Hero card submit loads Hero gameplay.");
+        GameFlow.Instance.Home();yield return Scene(GameFlow.HomeScene);yield return Menu();
+        Check(ui.LaunchModeById("hero"),"Hero gameplay is still launchable by id after the two-mode menu change.");yield return Scene(GameFlow.CityScene);Check(W.Mode.Definition.Side==PlayerSide.Hero,"By-id Hero launch runs a Hero session.");
         W.Mode.AddScore(240);W.AddHeat(2);W.Mode.RecordRescue();W.Progression.AddXp(W.Progression.RequiredXp+40);W.Mode.Finish(SessionOutcome.Won,"UI verification accelerated completion");
         yield return Scene(GameFlow.ResultsScene);yield return Menu();
         float early=ui.DisplayedXpFraction;int earlyLevel=ui.DisplayedLevel;yield return new WaitForSecondsRealtime(2);
@@ -99,7 +101,7 @@ public sealed class MenuPresentationVerificationRunner : MonoBehaviour
         Check(!ui.ChooseUpgrade(strength)&&ui.Profile.Tier(strength)==tier+1,"Zero-point repeated purchase CONTROL rejected.");
         Capture("hero-results-upgraded");Submit(ui.ReplayButton);yield return Scene(GameFlow.CityScene);Check(W.Mode.Definition.Side==PlayerSide.Hero&&W.Progression.Tier(strength)==tier+1,"PLAY AGAIN loads Hero; purchased upgrade reloaded from save.");W.Mode.Finish(SessionOutcome.Lost,"UI loss presentation control");
         yield return Scene(GameFlow.ResultsScene);yield return Menu();yield return new WaitForSecondsRealtime(2);Check(ui.Headline.text=="MISSION FAILED"&&!ui.RewardVisible&&ui.UpgradeButtons.Count==0,"Hero loss / no-level-up CONTROL: MISSION FAILED, no reward choices.");Capture("hero-results-loss");Submit(ui.HomeButton);yield return Scene(GameFlow.HomeScene);yield return Menu();
-        Check(ui.Profile.Data.Level==2&&ui.Profile.Tier(strength)==tier+1,"HOME progression preview reloads real level and power tier.");Submit(ui.ModeButtons["villain"]);yield return Scene(GameFlow.CityScene);Check(W.Mode.Definition.Side==PlayerSide.Villain,"Actual Villain card submit loads Villain gameplay.");
+        Check(ui.Profile.Data.Level==2&&ui.Profile.Tier(strength)==tier+1,"HOME progression preview reloads real level and power tier.");Check(ui.LaunchModeById("villain"),"Villain gameplay is still launchable by id after the two-mode menu change.");yield return Scene(GameFlow.CityScene);Check(W.Mode.Definition.Side==PlayerSide.Villain,"By-id Villain launch runs a Villain session.");
         W.Mode.AddScore(420);W.AddHeat(3.5f);W.Progression.AddXp(30);W.Mode.Finish(SessionOutcome.Won,"UI verification accelerated completion");yield return Scene(GameFlow.ResultsScene);yield return Menu();yield return new WaitForSecondsRealtime(2);
         Check(ui.Headline.text=="ESCAPED THE HEAT"&&ui.Headline.style.color.value==palette.Colors[(int)CityColor.VillainAccent]&&ui.StatCount==4,"Villain result: ESCAPED THE HEAT, shared orange, same component/layout, four stats.");Check(GameFlow.Instance.Result.PeakHeat>=3.5f,"Peak Heat snapshot records actual WorldSession.AddHeat updates.");Capture("villain-results");yield return Benchmark(true,"villain results animated");
         Submit(ui.ReplayButton);yield return Scene(GameFlow.CityScene);Check(W.Mode.Definition.Side==PlayerSide.Villain,"PLAY AGAIN loads Villain.");W.Mode.Finish(SessionOutcome.Lost,"UI loss presentation control");yield return Scene(GameFlow.ResultsScene);yield return Menu();yield return new WaitForSecondsRealtime(2);Check(ui.Headline.text=="CAUGHT","Villain loss shows CAUGHT.");Capture("villain-results-loss");Submit(ui.HomeButton);yield return Scene(GameFlow.HomeScene);yield return Menu();

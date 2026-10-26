@@ -150,6 +150,14 @@ public sealed class EndlessWaveState : ModeDirectorState
     public int EliteKills { get; private set; }
     public int MinibossKills { get; private set; }
     public int FlawlessWaves { get; private set; }
+    /// Miniboss placement health for this wave: attempts, last-resort placements, bosses actually created and the last
+    /// diagnostic. A boss round can never complete without its boss, so these are the observable proof it arrived.
+    public int BossSpawnAttempts { get; private set; }
+    public int BossFallbacks { get; private set; }
+    public int BossesSpawned { get; private set; }
+    public string BossSpawnDiagnostic { get; private set; }
+    /// Failed boss placements before the arena floor is used instead of the spawn ring.
+    public const int BossSpawnRetryLimit = 8;
     /// Slot kind of each Alive entry (parallel list).
     public readonly List<EndlessWaveEvents.Slot> AliveSlots = new List<EndlessWaveEvents.Slot>();
     /// Every score award the director makes (kill, elite kill, miniboss kill, wave clear, flawless), after it is added.
@@ -198,6 +206,7 @@ public sealed class EndlessWaveState : ModeDirectorState
     void StartWave(int wave)
     {
         Wave = wave; Spawned = 0; WaveKills = 0; Intermission = false; IntermissionLeft = 0f; hitThisWave = false;
+        BossSpawnAttempts = 0; BossFallbacks = 0; BossesSpawned = 0; BossSpawnDiagnostic = null;
         Plan = Tuning.Events != null ? Tuning.Events.Plan(Tuning, wave, RunSeed) : null;
         World.Message = $"WAVE {Wave}: {Size} enemies";
         if (Plan != null && (Plan.Modifiers.Count > 0 || Plan.Miniboss))
@@ -205,7 +214,8 @@ public sealed class EndlessWaveState : ModeDirectorState
             string bossName = Tuning.Events.MinibossArchetype != null ? Tuning.Events.MinibossArchetype.DisplayName.ToUpperInvariant() : "MINIBOSS";
             string names = Plan.Names + (Plan.Miniboss ? (Plan.Modifiers.Count > 0 ? " + " : "") + bossName : "");
             World.Message += " · " + names;
-            Announce($"WAVE {Wave}", names, Plan.Elites > 0 ? $"{Plan.Elites} ELITES" : "");
+            // A miniboss round says so: the banner is how the player learns an elite threat arrived.
+            Announce($"WAVE {Wave}", names, Plan.Miniboss ? "ELITE THREAT" : Plan.Elites > 0 ? $"{Plan.Elites} ELITES" : "");
         }
         Reinforce();
     }
@@ -218,7 +228,15 @@ public sealed class EndlessWaveState : ModeDirectorState
     {
         while (Spawned < Size)
         {
-            int cost = Tuning.Events != null && Plan != null ? Tuning.Events.CostOf(Tuning.Events.SlotOf(Plan, Spawned)) : 1;
+            var slot = Tuning.Events != null && Plan != null ? Tuning.Events.SlotOf(Plan, Spawned) : EndlessWaveEvents.Slot.Regular;
+            if (slot == EndlessWaveEvents.Slot.Miniboss)
+            {
+                // RESERVED: the miniboss is spawned before any regular enemy of the wave and never waits for the alive
+                // budget (a heavy slot can therefore never be silently blocked by a full arena, or replaced by a regular).
+                if (!SpawnBossSlot()) break;
+                continue;
+            }
+            int cost = Tuning.Events != null && Plan != null ? Tuning.Events.CostOf(slot) : 1;
             if (!Room(Alive.Count, AliveCost, cost, AliveTargetNow, Tuning.MaxAlive)) break;
             if (!SpawnOne()) break; // no valid ring point this tick (player standing on the ring); retry next tick
         }
@@ -228,29 +246,85 @@ public sealed class EndlessWaveState : ModeDirectorState
         aliveCount < Mathf.Max(1, maxAlive) && (aliveCount == 0 || aliveCost + nextCost <= target);
     int CostAt(int i) => Tuning.Events != null ? Tuning.Events.CostOf(AliveSlots[i]) : 1;
 
-    bool SpawnOne()
+    /// The miniboss slot: a wider placement search than a regular enemy (three rings, four times the candidates), then a
+    /// bounded last resort on the arena floor, then a diagnostic and a retry next tick. It is never dropped.
+    bool SpawnBossSlot()
     {
-        Vector3 player = World.Hero.transform.position; player.y = 0f;
-        int candidates = Mathf.Max(1, Tuning.SpawnCandidates); float start = Random.value * 360f;
-        for (int i = 0; i < candidates; i++)
+        // One boss per city: if a previous miniboss is somehow still alive, wait instead of creating a body the boss brain
+        // would refuse (which would leave an unregistered orphan and stall the wave).
+        if (PulsebreakerBoss.Active != null)
         {
-            Vector3 point = Arena + Quaternion.Euler(0f, start + i * 360f / candidates, 0f) * Vector3.forward * Tuning.SpawnRadius;
-            if (!NavMesh.SamplePosition(point, out var hit, World.Tuning.Npcs.NavSampleRadius, NavMesh.AllAreas)) continue;
-            Vector3 flat = hit.position; flat.y = 0f;
-            if (Vector3.Distance(flat, player) < Tuning.MinSpawnDistanceFromPlayer) continue;
-            // Ground only: a rooftop NavMesh island would strand the enemy.
-            if (!NavMesh.CalculatePath(hit.position, Arena, NavMesh.AllAreas, path) || path.status != NavMeshPathStatus.PathComplete) continue;
-            var slot = EndlessWaveEvents.Slot.Regular; var spec = Spec(ref slot);
-            var npc = CityNpc.Spawn(World, hit.position, spec.Role, spec.Archetype, spec.Health, spec.Damage);
-            if (npc == null) continue;
-            if (spec.Boss) PulsebreakerBoss.Attach(npc, Wave);   // the only place a miniboss is created
-            npc.AlwaysAggro = true;
-            npc.Damaged += dead => { if (dead) Defeated(npc); };
-            Alive.Add(npc); AliveSlots.Add(slot); AliveCost += Tuning.Events != null ? Tuning.Events.CostOf(slot) : 1; Spawned++;
-            PeakAlive = Mathf.Max(PeakAlive, Alive.Count); PeakAliveCost = Mathf.Max(PeakAliveCost, AliveCost);
+            BossSpawnDiagnostic = $"Wave {Wave}: a miniboss is still alive; the boss slot waits for it.";
+            return false;
+        }
+        BossSpawnAttempts++;
+        var slot = EndlessWaveEvents.Slot.Miniboss;
+        var spec = Spec(ref slot);
+        if (Place(spec, slot, Tuning.SpawnRadius, Mathf.Max(4, Tuning.SpawnCandidates), true)) return true;
+        if (BossSpawnAttempts >= BossSpawnRetryLimit && Place(spec, slot, 0f, 1, false))
+        {
+            BossFallbacks++;
+            BossSpawnDiagnostic = $"Wave {Wave}: {BossName()} placed at the arena floor after {BossSpawnAttempts} failed ring placements.";
+            Debug.LogWarning(BossSpawnDiagnostic);
             return true;
         }
+        BossSpawnDiagnostic = $"Wave {Wave}: {BossName()} could not be placed ({BossSpawnAttempts} attempts, no ground NavMesh point near the arena); retrying.";
+        World.Message = "BOSS ARRIVAL BLOCKED — NO GROUND POINT NEAR THE ARENA";
         return false;
+    }
+
+    /// The miniboss's data name, for the placement diagnostics.
+    string BossName() => Tuning.Events != null && Tuning.Events.MinibossArchetype != null ? Tuning.Events.MinibossArchetype.DisplayName : "Miniboss";
+
+    bool SpawnOne()
+    {
+        var slot = Tuning.Events != null && Plan != null ? Tuning.Events.SlotOf(Plan, Spawned) : EndlessWaveEvents.Slot.Regular;
+        var spec = Spec(ref slot);
+        return Place(spec, slot, Tuning.SpawnRadius, Mathf.Max(1, Tuning.SpawnCandidates), false);
+    }
+
+    /// Finds a valid ground point (on the NavMesh, with a complete walk back to the arena) and creates the enemy.
+    /// `ringRadius` 0 places at the arena point itself; `wide` widens the ring search instead of giving up.
+    bool Place(EnemySpec spec, EndlessWaveEvents.Slot slot, float ringRadius, int candidates, bool wide)
+    {
+        Vector3 player = World.Hero.transform.position; player.y = 0f;
+        float start = Random.value * 360f;
+        int rings = wide && ringRadius > 0f ? 3 : 1;
+        for (int ring = 0; ring < rings; ring++)
+        {
+            float radius = ringRadius * (1f + .35f * ring);
+            int count = ringRadius > 0f ? candidates * (ring + 1) : 1;
+            for (int i = 0; i < count; i++)
+            {
+                Vector3 point = ringRadius > 0f
+                    ? Arena + Quaternion.Euler(0f, start + i * 360f / count, 0f) * Vector3.forward * radius
+                    : Arena;
+                if (!NavMesh.SamplePosition(point, out var hit, World.Tuning.Npcs.NavSampleRadius, NavMesh.AllAreas)) continue;
+                Vector3 flat = hit.position; flat.y = 0f;
+                if (Vector3.Distance(flat, player) < Tuning.MinSpawnDistanceFromPlayer) continue;
+                // Ground only: a rooftop NavMesh island would strand the enemy.
+                if (!NavMesh.CalculatePath(hit.position, Arena, NavMesh.AllAreas, path) || path.status != NavMeshPathStatus.PathComplete) continue;
+                if (Create(spec, slot, hit.position) != null) return true;
+            }
+        }
+        return false;
+    }
+
+    CityNpc Create(EnemySpec spec, EndlessWaveEvents.Slot slot, Vector3 point)
+    {
+        var npc = CityNpc.Spawn(World, point, spec.Role, spec.Archetype, spec.Health, spec.Damage);
+        if (npc == null) return null;
+        if (spec.Boss)
+        {
+            // The only place a miniboss is created. Attach refuses a second body, so a retry can never duplicate it.
+            if (PulsebreakerBoss.Attach(npc, Wave) == null) return null;
+            BossesSpawned++;
+        }
+        npc.AlwaysAggro = true;
+        npc.Damaged += dead => { if (dead) Defeated(npc); };
+        Alive.Add(npc); AliveSlots.Add(slot); AliveCost += Tuning.Events != null ? Tuning.Events.CostOf(slot) : 1; Spawned++;
+        PeakAlive = Mathf.Max(PeakAlive, Alive.Count); PeakAliveCost = Mathf.Max(PeakAliveCost, AliveCost);
+        return npc;
     }
 
     /// The next enemy's spec: the director's Compose (unchanged without Events), then the plan's multipliers and slot.

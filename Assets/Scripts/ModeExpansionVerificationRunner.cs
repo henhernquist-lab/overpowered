@@ -95,11 +95,14 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
         waves=Resources.Load<EndlessWaveDirector>("ModeDirectors/EndlessWaves");
         yield return Scene(GameFlow.HomeScene);yield return Menu();
         Check(ui.Profile.Data.Level==1&&ui.Profile.Data.SessionsPlayed==0&&ui.Profile.Data.ModeRecords.Count==0,"Fresh isolated save CONTROL: level 1, 0 sessions, 0 mode records.");
-        foreach(var id in new[]{"free-play","endless-fight","endless-fight-villain"})
-        {
-            var button=ui.ModeButtons[id];
-            Check(button.enabledInHierarchy&&button.worldBound.width>0&&button.worldBound.yMin>ui.ModeButtons["hero"].worldBound.yMax,$"Home shows ENABLED '{id}' in the data-driven extras row below the side cards (rect {button.worldBound}).");
-        }
+        // TWO MODES: ENDLESS FIGHT and FREE PLAY are the primary cards; Hero / Villain / Endless (Villain) are data-only.
+        var endlessCard=ui.ModeButtons["endless-fight"];var freeCard=ui.ModeButtons["free-play"];
+        Check(endlessCard.enabledInHierarchy&&freeCard.enabledInHierarchy&&endlessCard.worldBound.xMax<freeCard.worldBound.xMin&&Mathf.Abs(endlessCard.worldBound.y-freeCard.worldBound.y)<1,
+            $"Home shows exactly the two mode cards, side by side: ENDLESS FIGHT {endlessCard.worldBound}, FREE PLAY {freeCard.worldBound}.");
+        Check(!ui.ModeButtons.ContainsKey("hero")&&!ui.ModeButtons.ContainsKey("villain")&&!ui.ModeButtons.ContainsKey("endless-fight-villain"),
+            $"Hero / Villain / Endless (Villain) are no longer Home choices (buttons: {string.Join(", ",ui.ModeButtons.Keys)}).");
+        Check(ui.ModeButtons.ContainsKey("battle-lab")&&ui.ModeButtons["battle-lab"].worldBound.yMin>endlessCard.worldBound.yMax,
+            $"BATTLE LAB keeps its own enabled route below the cards ({ui.ModeButtons["battle-lab"].worldBound}).");
         Check(ui.Root.Query<Label>().ToList().All(l=>l.text!="COMING SOON"),"No COMING SOON placeholder remains on Home.");
         Capture(uiTarget,"home-extras");
         if(only!="endless"){yield return FreePlay();yield return FreePlayControls();yield return FreePlayPowers();}
@@ -304,14 +307,19 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
     }
     WaveSample Sample(string label)
     {
-        var s=State;var alive=s.Alive;var first=alive[0];
+        var s=State;var alive=s.Alive;
         var role=W.Progression.Data.Side==PlayerSide.Hero?waves.HeroSideEnemy:waves.VillainSideEnemy;
-        // Step 4: per-enemy stats = the wave's explicit health/damage x that enemy's archetype multipliers (still Heat-independent).
-        float waveHealth=first.MaxHealth/first.Archetype.HealthMultiplier,waveDamage=first.ContactDamage/first.Archetype.DamageMultiplier;
+        // Per-enemy stats = the wave's explicit health/damage (the director formulas x the plan x difficulty) x that enemy's
+        // archetype multipliers. Waves now MIX archetypes, so the base comes from the director rather than from the first
+        // body, and health carries the shared +/-10% spawn roll (GameTuning CombatRanges.EnemyHealthVariance); damage is
+        // explicit and exact. Still Heat-independent.
+        float waveHealth=waves.HealthFor(s.Wave)*(s.Plan!=null?s.Plan.Health:1f)*W.Difficulty.EnemyHealth;
+        float waveDamage=waves.DamageFor(s.Wave)*(s.Plan!=null?s.Plan.Damage:1f);
         foreach(var npc in alive)
         {
-            if(npc.Role!=role||!npc.Hostile||!npc.AlwaysAggro||npc.Archetype==null||npc.Health!=npc.MaxHealth||Mathf.Abs(npc.MaxHealth-waveHealth*npc.Archetype.HealthMultiplier)>.001f||Mathf.Abs(npc.ContactDamage-waveDamage*npc.Archetype.DamageMultiplier)>.001f)
-                throw new Exception($"{label}: inconsistent enemy {npc.name} role={npc.Role} archetype={(npc.Archetype!=null?npc.Archetype.name:"none")} hostile={npc.Hostile} health={npc.Health}/{npc.MaxHealth} damage={npc.ContactDamage}");
+            float health=waveHealth*(npc.Archetype!=null?npc.Archetype.HealthMultiplier:1f),damage=waveDamage*(npc.Archetype!=null?npc.Archetype.DamageMultiplier:1f);
+            if(npc.Role!=role||!npc.Hostile||!npc.AlwaysAggro||npc.Archetype==null||npc.Health!=npc.MaxHealth||Mathf.Abs(npc.MaxHealth-health)>health*.1001f||Mathf.Abs(npc.ContactDamage-damage)>Mathf.Max(.001f,damage*.001f))
+                throw new Exception($"{label}: inconsistent enemy {npc.name} role={npc.Role} archetype={(npc.Archetype!=null?npc.Archetype.name:"none")} hostile={npc.Hostile} health={npc.Health}/{npc.MaxHealth} expected {health:F2} damage={npc.ContactDamage} expected {damage:F2}");
             if(Flat(npc.transform.position,W.Hero.transform.position)<waves.MinSpawnDistanceFromPlayer-.01f)throw new Exception($"{label}: {npc.name} spawned {Flat(npc.transform.position,W.Hero.transform.position):F2}m from the player");
             float ring=Flat(npc.transform.position,s.Arena);
             if(ring>waves.SpawnRadius+W.Tuning.Npcs.NavSampleRadius+.01f)throw new Exception($"{label}: {npc.name} {ring:F1}m from arena centre");
@@ -326,7 +334,7 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
             Check(liveMix.SequenceEqual(expectedMix)&&liveMix.Distinct().Count()==Mathf.Min(eligible,alive.Count),$"{label} composition matches EndlessWaves over the current roster: {string.Join(", ",liveMix.GroupBy(n=>n).Select(g=>g.Count()+" "+g.Key))} ({eligible} archetypes eligible); alive {alive.Count} <= MaxAlive {waves.MaxAlive}.");
         }
         var sample=new WaveSample{Wave=s.Wave,Alive=alive.Count,Health=waveHealth,MaxHealth=waveHealth,Damage=waveDamage};
-        Log($"RECORD {label}: wave={sample.Wave}, alive={sample.Alive}, wave health={sample.MaxHealth:F2}, wave damage={sample.Damage:F2} (per enemy x archetype: {string.Join(", ",alive.Select(n=>$"{n.Archetype.name} {n.MaxHealth:F1}/{n.ContactDamage:F2}"))}), role={first.Role}, Heat stars={W.Stars}; spawn distances from player {string.Join(",",alive.Select(n=>Flat(n.transform.position,W.Hero.transform.position).ToString("F1")))}m; ring radii {string.Join(",",alive.Select(n=>Flat(n.transform.position,s.Arena).ToString("F1")))}m.");
+        Log($"RECORD {label}: wave={sample.Wave}, alive={sample.Alive}, wave health={sample.MaxHealth:F2}, wave damage={sample.Damage:F2} (per enemy x archetype: {string.Join(", ",alive.Select(n=>$"{n.Archetype.name} {n.MaxHealth:F1}/{n.ContactDamage:F2}"))}), role={alive[0].Role}, Heat stars={W.Stars}; spawn distances from player {string.Join(",",alive.Select(n=>Flat(n.transform.position,W.Hero.transform.position).ToString("F1")))}m; ring radii {string.Join(",",alive.Select(n=>Flat(n.transform.position,s.Arena).ToString("F1")))}m.");
         return sample;
     }
     /// One real NPC contact attack against the player; returns health lost.
@@ -487,9 +495,9 @@ public sealed class ModeExpansionVerificationRunner : MonoBehaviour
 
     IEnumerator EndlessVillain()
     {
-        Submit(ui.ModeButtons["endless-fight-villain"]);yield return Scene(GameFlow.CityScene);
+        Check(ui.LaunchModeById("endless-fight-villain"),"Endless Fight (Villain) launched by id: the definition stays loadable although it is not a Home card.");yield return Scene(GameFlow.CityScene);
         var session=W.Mode;var s=State;Hover();
-        Check(session.Definition==endlessVillain&&W.Progression.Data.Side==PlayerSide.Villain&&W.Progression.SideLocked&&s.Tuning==waves,"Real Home button launched Endless Fight (Villain): side Villain, locked, same director asset.");
+        Check(session.Definition==endlessVillain&&W.Progression.Data.Side==PlayerSide.Villain&&W.Progression.SideLocked&&s.Tuning==waves,"By-id Endless Fight (Villain): side Villain, locked, same director asset.");
         yield return StartNextWave();
         var w1=Sample("VILLAIN WAVE 1");
         Check(w1.Alive==waves.FirstWaveCount&&s.Alive.All(n=>n.Role==NpcRole.Cop&&n.Hostile)&&Count(NpcRole.Criminal)==0&&Count(NpcRole.Civilian)==0,$"Villain enemies are {w1.Alive} hostile Cops; 0 criminals, 0 civilians.");

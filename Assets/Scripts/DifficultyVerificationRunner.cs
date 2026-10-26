@@ -225,12 +225,13 @@ public sealed class DifficultyVerificationRunner : SessionVerificationRunner
         var rt=new RenderTexture(width,height,24);rt.Create();menu.Panel.targetTexture=rt;
         yield return Frames(5);menu.Root.MarkDirtyRepaint();yield return Frames(2);
         var old=RenderTexture.active;RenderTexture.active=rt;var image=new Texture2D(width,height,TextureFormat.RGB24,false);
-        foreach(string mode in new[]{"hero","villain"})
+        // The Home menu is two mode cards (ENDLESS FIGHT, FREE PLAY); every layout check runs on the cards that exist.
+        foreach(string mode in new[]{"endless-fight","free-play"})
         {
             var glyph=menu.Root.Q<VisualElement>("mode-glyph-"+mode);var title=menu.Root.Q<Label>("mode-title-"+mode);
             Check(glyph.worldBound.yMax<title.worldBound.yMin,$"Mode icon/title do not overlap at {width}x{height}: "+mode);
         }
-        Check(menu.DifficultyDetails.worldBound.yMax<menu.ModeButtons["hero"].worldBound.yMin,"Difficulty details clear mode cards at "+width+"x"+height);
+        Check(menu.DifficultyDetails.worldBound.yMax<Mathf.Min(menu.ModeButtons["endless-fight"].worldBound.yMin,menu.ModeButtons["free-play"].worldBound.yMin),"Difficulty details clear both mode cards at "+width+"x"+height);
         image.ReadPixels(new Rect(0,0,width,height),0,0);image.Apply();File.WriteAllBytes(Folder+id+".png",image.EncodeToPNG());RenderTexture.active=old;
         menu.Panel.targetTexture=null;Destroy(image);rt.Release();Destroy(rt);
     }

@@ -88,8 +88,9 @@ public sealed class AudioVerificationRunner : MonoBehaviour
         foreach(var key in new[]{"MasterVolume","MusicVolume","SFXVolume","UIVolume","AmbientVolume"})Check(A.Tuning.Mixer.GetFloat(key,out float value),$"Exposed mixer parameter {key} is valid.");
         SourceCheck(AudioCue.Music);yield return MusicCursor();
         var menu=FindAnyObjectByType<ModeScreens>();var disabledButton=new Button(()=>GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/free-play"))){name="verification-disabled"};disabledButton.SetEnabled(false);menu.Root.Add(disabledButton);yield return null;A.StopAll();Submit(disabledButton);Check(Playing(AudioCue.UiClick)==0&&!GameFlow.Instance.Loading,"Disabled UI CONTROL emits no click and launches nothing.");
-        using(var hover=PointerOverEvent.GetPooled()){hover.target=menu.ModeButtons["hero"];menu.ModeButtons["hero"].SendEvent(hover);}SourceCheck(AudioCue.UiHover);
-        Submit(menu.ModeButtons["hero"]);SourceCheck(AudioCue.UiClick);yield return Scene(GameFlow.CityScene);
+        // Free Play is one of the two Home cards: a real card hover/submit, with no waves to disturb the audio fixtures.
+        using(var hover=PointerOverEvent.GetPooled()){hover.target=menu.ModeButtons["free-play"];menu.ModeButtons["free-play"].SendEvent(hover);}SourceCheck(AudioCue.UiHover);
+        Submit(menu.ModeButtons["free-play"]);SourceCheck(AudioCue.UiClick);yield return Scene(GameFlow.CityScene);
         PrepareSession();
         Check(A.BoundWorld==W,"Director binds shipping world without gameplay/bootstrap edits.");
         if(Reload){SourceCheck(AudioCue.CityBed);Check(A.Tuning.Mixer.FindMatchingGroups("").Length==5,"SECOND PROCESS loads persisted mixer with all five groups.");Log("SECOND PROCESS asset/reference reload passed; fresh isolated save used.");yield break;}
@@ -104,11 +105,14 @@ public sealed class AudioVerificationRunner : MonoBehaviour
         Check(W.Powers.Strength.Definition.ResourceCost==0,"Shipping Strength costs 0 energy: its rejection CONTROL is charges/cooldown, not energy. Flight uses fuel; Fire/Ice/Telekinesis energy controls follow.");
         var prop=GameObject.CreatePrimitive(PrimitiveType.Cube);prop.name="Audio damage control";prop.transform.position=W.Hero.transform.position+Vector3.right*3;prop.AddComponent<Rigidbody>().useGravity=false;var breakable=prop.AddComponent<BreakableProp>();breakable.Configure(W.Tuning.Props);A.StopAll();breakable.TakeDamage(1,null);Check(Playing(AudioCue.Destruction)==0,"Damaged-but-unbroken prop CONTROL emits no destruction.");breakable.TakeDamage(10000,null);SourceCheck(AudioCue.Destruction);yield return null;
         W.Progression.AddXp(1000);foreach(var p in W.Powers.Powers)if(!W.Progression.Owns(p.Definition))W.Progression.Buy(p.Definition);
-        // Hero Forge gate CONTROL in the default Flight + Strength session: every owned cue-bound power is refused while
-        // unequipped, with resources ready and a valid target, and emits NO cue and charges nothing.
+        // Hero Forge gate CONTROL in the session's own two equipped powers: every OTHER owned cue-bound power is refused
+        // while unequipped, with resources ready and a valid target, and emits NO cue and charges nothing. The two powers
+        // the session carries are skipped because their positive cases run below; the pair is logged, not assumed.
         foreach(var binding in A.Tuning.Powers)
         {
-            var power=W.Powers.Powers.First(p=>p.Definition.Effect==binding.Effect);power.Cooldown=0;power.Charges=3;Energy(100);
+            var power=W.Powers.Powers.First(p=>p.Definition.Effect==binding.Effect);
+            if(W.Powers.IsEquipped(power.Definition)){Log($"SKIP {power.Definition.DisplayName}: one of this session's equipped powers ({W.Powers.EquippedA.Id} + {W.Powers.EquippedB.Id}); its positive case runs below.");continue;}
+            power.Cooldown=0;power.Charges=3;Energy(100);
             var targetBody=GameObject.CreatePrimitive(PrimitiveType.Cube);targetBody.transform.position=W.Powers.AimOrigin+Vector3.forward*5;targetBody.AddComponent<Rigidbody>().useGravity=false;Physics.SyncTransforms();
             Check(W.Progression.Owns(power.Definition)&&!W.Powers.IsEquipped(power.Definition),$"{power.Definition.DisplayName} owned but NOT equipped (session loadout {W.Powers.EquippedA.Id} + {W.Powers.EquippedB.Id}).");
             A.StopAll();bool selected=W.Powers.Select(power),used=W.Powers.Use(power);
