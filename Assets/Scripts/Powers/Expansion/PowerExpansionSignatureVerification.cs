@@ -8,7 +8,7 @@ public sealed partial class PowerExpansionVerificationRunner
     {
         yield return Home();var p=Power(primary);p.Selectable=true;var registry=Resources.Load<SignatureCatalog>("SignatureCatalog");
         var ability=Resources.Load<PowerSynergyDefinition>("PowerExpansion/"+signature);
-        if(!registry.Abilities.Contains(ability))registry.Abilities=registry.Abilities.Concat(new[]{ability}).ToArray();SignatureCatalog.VerificationPreview=true;
+        if(!registry.Abilities.Contains(ability))registry.Abilities=registry.Abilities.Concat(new[]{ability}).ToArray();SignatureCatalog.VerificationPreview=Phase=="e";
         foreach(var h in F.Heroes)if(!h.AvailablePowers.Contains(p))h.AvailablePowers=h.AvailablePowers.Concat(new[]{p}).ToArray();
         Check(Profile.SetLoadout(F.Heroes[0],p,Power("ice"),Profile.EquippedSecondary,F.Heroes[0].Primary,F.Heroes[0].Secondary),"Staged signature owner passes actual equip gates: "+primary);
         Check(Profile.SetSignature(signature),"Actual saved signature choice: "+signature);

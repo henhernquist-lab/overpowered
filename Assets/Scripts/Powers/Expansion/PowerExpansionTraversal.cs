@@ -51,7 +51,9 @@ public sealed partial class PowerExpansionRuntime
     }
     public void ReleaseGrapple(bool momentum=true)
     {
-        bool was=Grappling||tether!=null&&tether.enabled;grappleAnchor=null;if(tether!=null)tether.enabled=false;
+        bool was=Grappling||tether!=null&&tether.enabled;
+        if(was&&Art!=null&&Vfx!=null)Vfx.Emit(Art.SoundRing,transform.position+Vector3.up,Vector3.up,Vector3.one*.35f,Vector3.zero,.2f,CityColor.Cyan,3,80);
+        grappleAnchor=null;if(tether!=null)tether.enabled=false;
         if(was&&momentum&&User!=null)User.Hero.ResumeTraversalMomentum(grappleVelocity);grappleVelocity=Vector3.zero;
     }
     public bool SummonDecoy(PowerRuntime power)

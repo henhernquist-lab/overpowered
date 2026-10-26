@@ -50,13 +50,13 @@ public sealed class TwoModeVerificationRunner : SessionVerificationRunner
         var forge=Menu.ForgeScreen;
         Check(forge!=null&&forge.SelectHero(F.Heroes[0]),"Existing Hero Forge opens through its real Home button");
         Check(forge.SelectCosmetic(CosmeticSlot.Suit,"vector_suit_tactical")&&forge.SelectCosmetic(CosmeticSlot.Mask,"vector_mask_sentinel")&&forge.SelectCosmetic(CosmeticSlot.Emblem,"vector-emblem-bolt"),"Existing actual modular outfit selections still work");forge.Close();
-        Check(Profile.SetLoadout(F.Heroes[0],Power("ice"),Power("strength"),F.Heroes[0].Primary,F.Heroes[0].Secondary),"Save current hero and two equipped powers through existing ownership/equip gates");
+        Check(Profile.SetLoadout(F.Heroes[0],Power("ice"),Power("combat-morphing"),F.Heroes[0].Primary,F.Heroes[0].Secondary),"Save current hero and two equipped powers through existing ownership/equip gates");
         Check(Menu.SelectDifficulty("normal"),"Normal difficulty selection preserved");
         Submit(Menu.ModeButtons["endless-fight"]);yield return Scene(GameFlow.CityScene);
         Check(State!=null&&ReferenceEquals(State.Tuning,Resources.Load<EndlessWaveDirector>("ModeDirectors/EndlessWaves")),"Actual Home callback starts the SHIPPING Endless director, not a fixture clone");
         Check(State.Tuning.Events!=null&&State.Tuning.Events.MinibossArchetype==Resources.Load<EnemyArchetype>("Enemies/Pulsebreaker"),"Actual shipping director references the actual Pulsebreaker schedule/archetype");
         Check(W.Progression.Data.Side==PlayerSide.Villain&&W.Progression.SideLocked,"Single Endless choice retains saved allegiance and locks it for that run");
-        Check(W.Powers.IsEquipped(Power("ice"))&&W.Powers.IsEquipped(Power("strength")),"Current equipped powers carry through actual menu spawn");
+        Check(W.Powers.IsEquipped(Power("ice"))&&W.Powers.IsEquipped(Power("combat-morphing")),"Current equipped powers carry through actual menu spawn");
         Check(W.Hero.GetComponentInChildren<HeroAppearanceRenderer>().SuitId=="vector_suit_tactical","Actual saved Forge suit carries into Endless");
         W.Rolls.FixedUnit=.5f;
         for(int round=1;round<=15;round++)

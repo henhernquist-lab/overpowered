@@ -18,6 +18,7 @@ public static class FirstPersonVerification
     {
         string task=SessionState.GetString(Key,"");if(task=="")return;
         EditorApplication.LockReloadAssemblies();deadline=EditorApplication.timeSinceStartup+600;
+        PowerExpansionLegacyVerification.RetainedResources();
         GameFlow.VerificationSandbox=false;
         WorldSession.VerificationSavePath=task=="reload"?File.ReadAllText("Verification/FirstPerson/save-path.txt"):
             Path.GetFullPath("Verification/FirstPerson/save-"+Guid.NewGuid()+".json");

@@ -13,6 +13,8 @@ public static class PowerExpansionVerification
     public static void PhaseC()=>Begin("c");
     public static void PhaseD()=>Begin("d");
     public static void PhaseE()=>Begin("e");
+    public static void Gameplay()=>Begin("gameplay");
+    public static void Signatures()=>Begin("signatures");
     public static void Run()=>Begin("final");
     public static void Reload()=>Begin("reload");
     static void Begin(string phase){Directory.CreateDirectory("Verification/PowerExpansion2/saves");SessionState.SetString(Key,phase);EditorSceneManager.OpenScene("Assets/Scenes/Home.unity");EditorApplication.isPlaying=true;}

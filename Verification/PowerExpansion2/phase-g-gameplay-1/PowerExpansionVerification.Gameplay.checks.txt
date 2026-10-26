@@ -1,0 +1,577 @@
+PASS Use actual difficulty selection: normal
+PASS Isolated in-memory staged aerokinesis enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS aerokinesis: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS aerokinesis activates vs Rusher / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Rusher / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS aerokinesis activates vs Gunner / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Gunner / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS aerokinesis activates vs Brute / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Brute / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Skirmisher: fixture lies on actual lab NavMesh
+PASS Skirmisher: actual shared NPC spawned
+PASS aerokinesis activates vs Skirmisher / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Skirmisher / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS aerokinesis activates vs Bulwark / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Bulwark / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS aerokinesis activates vs Pulsebreaker / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Pulsebreaker / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL aerokinesis excludes unprovoked friendly patrol
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS aerokinesis / normal: actual lethal hit credits player and primary ID
+PASS Use actual difficulty selection: normal
+PASS Isolated in-memory staged sonic-manipulation enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS sonic-manipulation: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS sonic-manipulation activates vs Rusher / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Rusher / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS sonic-manipulation activates vs Gunner / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Gunner / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS sonic-manipulation activates vs Brute / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Brute / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Skirmisher: fixture lies on actual lab NavMesh
+PASS Skirmisher: actual shared NPC spawned
+PASS sonic-manipulation activates vs Skirmisher / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Skirmisher / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS sonic-manipulation activates vs Bulwark / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Bulwark / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS sonic-manipulation activates vs Pulsebreaker / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Pulsebreaker / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL sonic-manipulation excludes unprovoked friendly patrol
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS sonic-manipulation / normal: actual lethal hit credits player and primary ID
+PASS Use actual difficulty selection: normal
+PASS Isolated in-memory staged combat-morphing enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS combat-morphing: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS combat-morphing activates vs Rusher / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Rusher / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS combat-morphing activates vs Gunner / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Gunner / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS combat-morphing activates vs Brute / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Brute / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Skirmisher: fixture lies on actual lab NavMesh
+PASS Skirmisher: actual shared NPC spawned
+PASS combat-morphing activates vs Skirmisher / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Skirmisher / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS combat-morphing activates vs Bulwark / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Bulwark / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS combat-morphing activates vs Pulsebreaker / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Pulsebreaker / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL combat-morphing excludes unprovoked friendly patrol
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS combat-morphing / normal: actual lethal hit credits player and primary ID
+PASS Use actual difficulty selection: normal
+PASS Isolated in-memory staged plasma-blades enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS plasma-blades: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS plasma-blades activates vs Rusher / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Rusher / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS plasma-blades activates vs Gunner / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Gunner / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS plasma-blades activates vs Brute / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Brute / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Skirmisher: fixture lies on actual lab NavMesh
+PASS Skirmisher: actual shared NPC spawned
+PASS plasma-blades activates vs Skirmisher / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Skirmisher / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS plasma-blades activates vs Bulwark / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Bulwark / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS plasma-blades activates vs Pulsebreaker / normal
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Pulsebreaker / normal: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL plasma-blades excludes unprovoked friendly patrol
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS plasma-blades / normal: actual lethal hit credits player and primary ID
+PASS Use actual difficulty selection: hard
+PASS Isolated in-memory staged aerokinesis enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS aerokinesis: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS aerokinesis activates vs Rusher / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Rusher / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS aerokinesis activates vs Gunner / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Gunner / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS aerokinesis activates vs Brute / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Brute / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Skirmisher: fixture lies on actual lab NavMesh
+PASS Skirmisher: actual shared NPC spawned
+PASS aerokinesis activates vs Skirmisher / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Skirmisher / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS aerokinesis activates vs Bulwark / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Bulwark / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS aerokinesis activates vs Pulsebreaker / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Pulsebreaker / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL aerokinesis excludes unprovoked friendly patrol
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS aerokinesis / hard: actual lethal hit credits player and primary ID
+PASS Use actual difficulty selection: hard
+PASS Isolated in-memory staged sonic-manipulation enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS sonic-manipulation: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS sonic-manipulation activates vs Rusher / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Rusher / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS sonic-manipulation activates vs Gunner / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Gunner / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS sonic-manipulation activates vs Brute / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Brute / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Skirmisher: fixture lies on actual lab NavMesh
+PASS Skirmisher: actual shared NPC spawned
+PASS sonic-manipulation activates vs Skirmisher / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Skirmisher / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS sonic-manipulation activates vs Bulwark / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Bulwark / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS sonic-manipulation activates vs Pulsebreaker / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Pulsebreaker / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL sonic-manipulation excludes unprovoked friendly patrol
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS sonic-manipulation / hard: actual lethal hit credits player and primary ID
+PASS Use actual difficulty selection: hard
+PASS Isolated in-memory staged combat-morphing enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS combat-morphing: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS combat-morphing activates vs Rusher / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Rusher / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS combat-morphing activates vs Gunner / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Gunner / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS combat-morphing activates vs Brute / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Brute / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Skirmisher: fixture lies on actual lab NavMesh
+PASS Skirmisher: actual shared NPC spawned
+PASS combat-morphing activates vs Skirmisher / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Skirmisher / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS combat-morphing activates vs Bulwark / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Bulwark / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS combat-morphing activates vs Pulsebreaker / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Pulsebreaker / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL combat-morphing excludes unprovoked friendly patrol
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS combat-morphing / hard: actual lethal hit credits player and primary ID
+PASS Use actual difficulty selection: hard
+PASS Isolated in-memory staged plasma-blades enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS plasma-blades: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS plasma-blades activates vs Rusher / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Rusher / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS plasma-blades activates vs Gunner / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Gunner / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS plasma-blades activates vs Brute / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Brute / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Skirmisher: fixture lies on actual lab NavMesh
+PASS Skirmisher: actual shared NPC spawned
+PASS plasma-blades activates vs Skirmisher / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Skirmisher / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS plasma-blades activates vs Bulwark / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Bulwark / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS plasma-blades activates vs Pulsebreaker / hard
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Pulsebreaker / hard: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL plasma-blades excludes unprovoked friendly patrol
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS plasma-blades / hard: actual lethal hit credits player and primary ID
+PASS Use actual difficulty selection: extreme
+PASS Isolated in-memory staged aerokinesis enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS aerokinesis: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS aerokinesis activates vs Rusher / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Rusher / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS aerokinesis activates vs Gunner / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Gunner / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS aerokinesis activates vs Brute / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Brute / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Skirmisher: fixture lies on actual lab NavMesh
+PASS Skirmisher: actual shared NPC spawned
+PASS aerokinesis activates vs Skirmisher / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Skirmisher / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS aerokinesis activates vs Bulwark / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Bulwark / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS aerokinesis activates vs Pulsebreaker / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS aerokinesis / Pulsebreaker / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL aerokinesis excludes unprovoked friendly patrol
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS aerokinesis / extreme: actual lethal hit credits player and primary ID
+PASS Use actual difficulty selection: extreme
+PASS Isolated in-memory staged sonic-manipulation enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS sonic-manipulation: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS sonic-manipulation activates vs Rusher / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Rusher / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS sonic-manipulation activates vs Gunner / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Gunner / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS sonic-manipulation activates vs Brute / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Brute / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Skirmisher: fixture lies on actual lab NavMesh
+PASS Skirmisher: actual shared NPC spawned
+PASS sonic-manipulation activates vs Skirmisher / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Skirmisher / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS sonic-manipulation activates vs Bulwark / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Bulwark / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS sonic-manipulation activates vs Pulsebreaker / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS sonic-manipulation / Pulsebreaker / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL sonic-manipulation excludes unprovoked friendly patrol
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS sonic-manipulation / extreme: actual lethal hit credits player and primary ID
+PASS Use actual difficulty selection: extreme
+PASS Isolated in-memory staged combat-morphing enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS combat-morphing: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS combat-morphing activates vs Rusher / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Rusher / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS combat-morphing activates vs Gunner / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Gunner / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS combat-morphing activates vs Brute / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Brute / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Skirmisher: fixture lies on actual lab NavMesh
+PASS Skirmisher: actual shared NPC spawned
+PASS combat-morphing activates vs Skirmisher / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Skirmisher / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS combat-morphing activates vs Bulwark / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Bulwark / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS combat-morphing activates vs Pulsebreaker / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS combat-morphing / Pulsebreaker / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL combat-morphing excludes unprovoked friendly patrol
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS combat-morphing / extreme: actual lethal hit credits player and primary ID
+PASS Use actual difficulty selection: extreme
+PASS Isolated in-memory staged plasma-blades enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS plasma-blades: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS plasma-blades activates vs Rusher / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Rusher / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS plasma-blades activates vs Gunner / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Gunner / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS plasma-blades activates vs Brute / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Brute / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Skirmisher: fixture lies on actual lab NavMesh
+PASS Skirmisher: actual shared NPC spawned
+PASS plasma-blades activates vs Skirmisher / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Skirmisher / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS plasma-blades activates vs Bulwark / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Bulwark / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS plasma-blades activates vs Pulsebreaker / extreme
+PASS One authoritative charge and difficulty-scaled energy payment
+PASS plasma-blades / Pulsebreaker / extreme: exact resolved damage, one centralized multiplier and deferred ownership
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL plasma-blades excludes unprovoked friendly patrol
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS plasma-blades / extreme: actual lethal hit credits player and primary ID
+PASS Isolated in-memory staged plasma-blades enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS plasma-blades: actual primary slot selection
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS Directional shield CONTROL actually raised before plasma strike
+PASS Plasma uses real directional shield mitigation, no invulnerability bypass
+PASS Rear plasma strike remains stronger than guarded frontal strike
+PASS Isolated in-memory staged combat-morphing enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS combat-morphing: actual primary slot selection
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS Hammer Fists stagger and move actual resistant Brute
+PASS Isolated in-memory staged combat-morphing enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS combat-morphing: actual primary slot selection
+PASS Universal E punch works with Strength retired and unequipped
+PASS Universal E combo first tap accepted
+PASS Universal E second tap dispatches punch-to-kick finisher
+PASS Universal RMB Hurricane Kick remains available
+PASS Universal melee never consumes legacy Strength charges
+PASS Universal ground jump
+PASS Universal double jump
+PASS CONTROL third jump refused
+PASS Universal backflip remains available
+PASS Universal wall climb latches after new melee use
+PASS Shared climb movement and presentation continue
+PASS vector: actual new melee pair selected
+PASS vector: fitted pair of world-scale BladeArms meshes
+PASS vector: fitted pair of world-scale HammerFists meshes
+PASS vector: fitted pair of world-scale ExtendedClaws meshes
+PASS vector: plasma swap keeps existing Avatar/Animator/capsule
+PASS vector: first-person weapon hiding follows renderer-only contract
+PASS vector: existing Phase Shift activates with new melee pair
+PASS CONTROL phase blocks new melee
+PASS titan: actual new melee pair selected
+PASS titan: fitted pair of world-scale BladeArms meshes
+PASS titan: fitted pair of world-scale HammerFists meshes
+PASS titan: fitted pair of world-scale ExtendedClaws meshes
+PASS titan: plasma swap keeps existing Avatar/Animator/capsule
+PASS titan: first-person weapon hiding follows renderer-only contract
+PASS titan: existing Phase Shift activates with new melee pair
+PASS CONTROL phase blocks new melee
+PASS nova: actual new melee pair selected
+PASS nova: fitted pair of world-scale BladeArms meshes
+PASS nova: fitted pair of world-scale HammerFists meshes
+PASS nova: fitted pair of world-scale ExtendedClaws meshes
+PASS nova: plasma swap keeps existing Avatar/Animator/capsule
+PASS nova: first-person weapon hiding follows renderer-only contract
+PASS nova: existing Phase Shift activates with new melee pair
+PASS CONTROL phase blocks new melee
+PASS Actual staged secondary equip gates: grapple-line
+PASS Enter Combat Lab with staged secondary
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS Grapple starts during live hostile combat
+PASS Actual Gunner commits and releases while hero traverses
+PASS Enemy combat does not strand grapple motion
+PASS Air jump consumed before grapple control
+PASS Airborne grapple acquires anchor
+PASS CONTROL grapple release does not grant an extra air jump
+PASS Staged signature owner passes actual equip gates: combat-morphing
+PASS Actual saved signature choice: apex-mutation
+PASS Enter real lab with apex-mutation
+PASS Shipping Apex starts through complete normal catalog
+PASS Apex naturally expires at finite authored duration
+PASS Isolated in-memory staged aerokinesis enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS aerokinesis: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Isolated in-memory staged sonic-manipulation enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS sonic-manipulation: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Isolated in-memory staged combat-morphing enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS combat-morphing: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Isolated in-memory staged plasma-blades enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS plasma-blades: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Actual staged secondary equip gates: mirage-decoy
+PASS Enter Combat Lab with staged secondary
+PASS Actual staged secondary equip gates: grapple-line
+PASS Enter Combat Lab with staged secondary
+PASS Isolated in-memory staged aerokinesis enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS aerokinesis: actual primary slot selection
+PASS One hundred wind casts retain fixed 32 visual slots and shared native mesh/material/Animator counts
+PASS Stress visuals fully expire
+PASS Measured phase leaves no live expansion VFX

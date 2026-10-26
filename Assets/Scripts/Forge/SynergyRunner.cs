@@ -69,7 +69,7 @@ public sealed class SynergyRunner : MonoBehaviour
         Captive=null;
         if(!Definition.Effect.CanBegin(this)){Feedback="No valid target";return false;}
         if(!User.TrySpendEnergy(EnergyCost)){Feedback="Insufficient energy";return false;}
-        User.EndChannel();User.Release(false);
+        User.EndExpansionTraversal();User.EndChannel();User.Release(false);
         ActivationDamage=Definition.IsSignature?User.RollDamage(Definition.Damage*User.HeroStats.PowerDamage):Definition.Damage;
         affected.Clear();suspended.Clear();
         Cooldown=Definition.Cooldown*User.Difficulty.Cooldown;Busy=true;deadline=Time.time+Mathf.Max(8,Definition.Duration+4);

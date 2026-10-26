@@ -9,7 +9,7 @@ public sealed partial class PowerExpansionRuntime
     public int MeleeImpacts{get;private set;}
     public bool MeleePending{get;private set;}
     public bool DrivesMotion=>lunging||Grappling;
-    // Traversal is implemented in the next isolated phase.
+    // One bounded traversal lease shares the existing controller motion contract.
     public bool Grappling=>grappleAnchor!=null;
     bool lunging,chargedRequested;
     float comboUntil,chargeStarted=-1,apexUntil;
@@ -19,15 +19,18 @@ public sealed partial class PowerExpansionRuntime
     public bool ApexActive=>Time.time<apexUntil;
     public void Apex(float duration){apexUntil=Time.time+Mathf.Clamp(duration,0,10);}
     public void CycleForm(){Form=(CombatMorphForm)(((int)Form+1)%3);User.Message="Morph: "+Form+" / "+Tuning.MorphFormKey+" cycles forms";}
-    bool CanAct=>User!=null&&WorldSession.Instance!=null&&!WorldSession.Instance.PlayerDead&&!WorldSession.Instance.MenuOpen&&!User.OffensiveActionsBlocked;
+    bool CanAct=>User!=null&&WorldSession.Instance!=null&&!WorldSession.Instance.PlayerDead&&!WorldSession.Instance.MenuOpen&&!User.OffensiveActionsBlocked&&(WorldSession.Instance.Mode==null||(!WorldSession.Instance.Mode.Ended&&!WorldSession.Instance.Mode.Paused));
+    int statusKey=-1;string status="";
     public string Status
     {
-        get{
-            if(Grappling)return "GRAPPLE / F release / Space jump release";
-            if(Decoy!=null&&Decoy.Alive)return "MIRAGE / hologram active";
-            if(User?.Selected?.Definition.Effect is CombatMorphingEffect)return "MORPH / "+Form+" / "+Tuning.MorphFormKey+" change form"+(ApexActive?" / APEX":"");
-            if(User?.Selected?.Definition.Effect is PlasmaBladesEffect)return "PLASMA / strike "+(PlasmaStage%3+1)+" / hold "+Tuning.PlasmaChargeKey+" to charge";
-            return "";
+        get
+        {
+            bool morph=User?.Selected?.Definition.Effect is CombatMorphingEffect,plasma=User?.Selected?.Definition.Effect is PlasmaBladesEffect;
+            int charge=chargeStarted<0?0:Mathf.Clamp(1+(int)((Time.time-chargeStarted)/.2f),1,4);
+            int key=Grappling?1000:Decoy!=null&&Decoy.Alive?1001:morph?10+(int)Form+(ApexActive?4:0):plasma?100+PlasmaStage+charge*10:0;
+            if(key==statusKey)return status;statusKey=key;
+            status=key==1000?"GRAPPLE / F release / Space jump release":key==1001?"MIRAGE / hologram active":morph?"MORPH / "+Form+" / "+Tuning.MorphFormKey+" change form"+(ApexActive?" / APEX":""):plasma?charge>0?"PLASMA / "+(charge>=4?"CHARGED / release ":"CHARGING / hold ")+Tuning.PlasmaChargeKey:"PLASMA / strike "+(PlasmaStage%3+1)+" / hold "+Tuning.PlasmaChargeKey+" to charge":"";
+            return status;
         }
     }
     void Update()

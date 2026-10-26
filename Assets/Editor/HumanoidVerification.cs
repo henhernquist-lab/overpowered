@@ -21,6 +21,7 @@ public static class HumanoidVerification
     static void Configure()
     {
         if(!SessionState.GetBool(Key,false))return;EditorApplication.LockReloadAssemblies();deadline=EditorApplication.timeSinceStartup+240;
+        PowerExpansionLegacyVerification.RetainedResources();
         WorldSession.VerificationSavePath=Path.GetFullPath("Verification/Humanoid/save-"+Guid.NewGuid().ToString("N")+".json");GameFlow.VerificationSandbox=false;
     }
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]

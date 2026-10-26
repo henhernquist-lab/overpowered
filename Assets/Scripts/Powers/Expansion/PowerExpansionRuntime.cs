@@ -33,7 +33,12 @@ public sealed partial class PowerExpansionRuntime : MonoBehaviour
             if(direction.sqrMagnitude>range*range||Vector3.Dot(direction.normalized,forward)<cosine||!Visible(origin,n))continue;
             Targets.Add(n);
         }
-        Targets.Sort((a,b)=>(a.transform.position-origin).sqrMagnitude.CompareTo((b.transform.position-origin).sqrMagnitude));return Targets;
+        for(int i=1;i<Targets.Count;i++)
+        {
+            var item=Targets[i];float distance=(item.transform.position-origin).sqrMagnitude;int j=i-1;
+            while(j>=0&&(Targets[j].transform.position-origin).sqrMagnitude>distance){Targets[j+1]=Targets[j];j--;}Targets[j+1]=item;
+        }
+        return Targets;
     }
     public bool Directional(PowerRuntime power,bool sonic)
     {
@@ -53,6 +58,12 @@ public sealed partial class PowerExpansionRuntime : MonoBehaviour
             Vfx.Emit(Art.Slash,npc.transform.position+Vector3.up,forward,Vector3.one*.5f,Vector3.zero,.2f,sonic?CityColor.UiPurple:CityColor.Cream,2,90);
         }
         for(int i=0;i<3;i++)Vfx.Emit(sonic?Art.SoundRing:Art.WindArc,origin+forward*(.7f+i*.4f),forward,Vector3.one*(sonic? .5f+i*.15f:.9f),forward*(sonic?14:22),sonic? .5f:.4f,sonic?CityColor.UiPurple:CityColor.Cyan,sonic?4:1,sonic?0:120);
+        if(!sonic)
+        {
+            Vector3 sample=transform.position+forward*2+Vector3.up;
+            if(Physics.Raycast(sample,Vector3.down,out var ground,2,~0,QueryTriggerInteraction.Ignore))
+                for(int i=0;i<3;i++)Vfx.Emit(Art.Slash,ground.point+Vector3.up*.1f+transform.right*(i-1)*.5f,Vector3.up,Vector3.one*.25f,forward*5+Vector3.up*.35f,.35f,CityColor.Sand,2,80);
+        }
         return true;
     }
 }

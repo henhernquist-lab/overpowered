@@ -67,7 +67,7 @@ public sealed partial class HeroForgeArtVerificationRunner
             {
                 var menu=FindAnyObjectByType<ModeScreens>();var profile=menu.Profile;var screen=OpenForge();screen.SelectHero(hero);var selected=appearances[hero.Id].Copy();
                 selected.MaskId=Masks(hero)[mode=="hero"||mode=="free-play"||mode=="endless-fight-villain"?0:1].Id;screen.SelectCosmetic(CosmeticSlot.Mask,selected.MaskId);
-                Check(screen.SelectPower(0,Resources.Load<PowerDefinition>("Powers/fire"))&&screen.SelectPower(1,Resources.Load<PowerDefinition>("Powers/strength"))&&screen.SelectPower(2,Resources.Load<PowerDefinition>("Powers/phase-shift")),hero.Id+"/"+mode+": equip combat controls through existing Forge gates");
+                Check(screen.SelectPower(0,Resources.Load<PowerDefinition>("Powers/fire"))&&screen.SelectPower(1,Resources.Load<PowerDefinition>("Powers/combat-morphing"))&&screen.SelectPower(2,Resources.Load<PowerDefinition>("Powers/phase-shift")),hero.Id+"/"+mode+": equip combat controls through existing Forge gates");
                 Check(profile.SetSignature(Resources.Load<SignatureCatalog>("SignatureCatalog").ForPrimary(Resources.Load<PowerDefinition>("Powers/fire")).Id),hero.Id+": equip actual Fire signature through progression");screen.Close();
                 Check(mode=="lab"?GameFlow.Instance.OpenCombatLab():GameFlow.Instance.Select(Resources.Load<GameModeDefinition>("Modes/"+mode)),hero.Id+"/"+mode+": enter ordinary existing game route");yield return Scene(mode=="lab"?"CombatLab":GameFlow.CityScene);Live(hero,selected,mode);
                 if(mode=="hero")
