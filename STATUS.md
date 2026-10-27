@@ -5926,3 +5926,26 @@ the 17 checks before it pass.
 numbers in a crowded fight, the heal number over the hero in first-person, and interaction with the future run-based leveling
 (same API, but the upgrade system does not exist yet). Caps at the shipping coefficients never bind (raw <= 0.168 M normal,
 0.35 M boss); they are a guard, asserted as such.
+
+### HUD latency check and heal flash - 2026-10-26
+
+Report: "I don't see the health updates in real time." Measured before changing anything, with the SHIPPING `GameHud` in a real
+Endless Fight wave (`HealthOnKillVerificationRunner.RealTimeHud`, evidence `Verification/HealthOnKill/rt1/`): damage and
+healing were already on time - 50 damage put the fill at exactly 50.0%, one real wave-enemy kill through the player's own
+`PowerUser` paid +8.00 immediately and the fill read 58.0% on the next frame, with one `+8 HP` number that was actually on
+screen (`GameHud.Shown`, not just counted). So nothing was late, but an 8-point jump on a 13 px bar is easy to miss, which is
+what the report describes.
+
+Change (`Hud/GameHudHeal.cs`): the health fill now brightens toward `CityColor.Lawn` for `HealFlashSeconds = 0.4 s` after every
+applied heal and returns to `CityColor.Red` when the window ends (`HealFlashStrength` is public for tests). Same pooled
+partial class, same `PlayerHealed` input, no extra element, no allocation, and the colour is only touched during the flash.
+
+**VERIFIED**: `HealthOnKillVerification.Run` (`Verification/HealthOnKill/rt2/`) **73 PASS / 0 FAIL, exit 0**, fresh isolated
+save and `Side_Kick_Data.db` unchanged - the previous 59 checks plus: damage reaches the bar on the next frame, the heal
+reaches it on the next frame (50.0% -> 58.0%), the heal number is visible, the bar flashes (strength 1.00) and the flash ends
+on its own.
+
+Two things that still look like "nothing happened" in game, by design rather than by bug: a kill at FULL health pays 0, and
+only kills of enemies hostile to the player pay - a Villain killing friendly criminals in Free Play, or civilians, pays 0.
+A Play Mode session started before this branch compiled holds the old assembly and shows no numbers at all; leave Play Mode
+(scripts recompile) and press Play again.

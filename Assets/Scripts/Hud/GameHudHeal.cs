@@ -9,6 +9,8 @@ public sealed partial class GameHud
 {
     public const int HealNumberPoolSize = 8;
     public const float HealNumberSeconds = .9f, HealNumberRise = 40f, HealNumberSpacing = 26f;
+    /// The health bar flashes toward green for this long after a heal, so the change reads even when the jump is small.
+    public const float HealFlashSeconds = .4f;
 
     public sealed class HealNumberDisplay
     {
@@ -21,6 +23,9 @@ public sealed partial class GameHud
     /// Every number actually started (verification/diagnostics).
     public int HealNumbersShown { get; private set; }
     public float LastHealShown { get; private set; }
+    /// 1 at the instant of a heal, fading to 0 over HealFlashSeconds (the bar's tint follows this).
+    public float HealFlashStrength { get; private set; }
+    float healFlashAt = -100f; bool healTinted;
 
     VisualElement healNumberLayer;
     WorldSession healBound;
@@ -79,6 +84,21 @@ public sealed partial class GameHud
         slot.Active = true; slot.Amount = amount; slot.StartedAt = now;
         slot.Element.text = "+" + CombatValue(amount) + " HP";
         HealNumbersShown++; LastHealShown = amount;
+        healFlashAt = now;
+    }
+
+    /// Health bar feedback: the fill brightens toward green for HealFlashSeconds, then returns to its normal colour.
+    /// Runs before the number layout so a heal at the same instant tints the bar on the same frame it is drawn.
+    void TickHealFlash(float now)
+    {
+        float progress = (now - healFlashAt) / HealFlashSeconds;
+        float strength = progress >= 0f && progress < 1f ? 1f - progress : 0f;
+        HealFlashStrength = strength;
+        if (HealthFill == null || (strength <= 0f && !healTinted)) return;
+        HealthFill.style.backgroundColor = strength > 0f
+            ? Color.Lerp(C(CityColor.Red), C(CityColor.Lawn), strength * .75f)
+            : C(CityColor.Red);
+        healTinted = strength > 0f;
     }
 
     /// Called once per frame from GameHud.LateUpdate, after the enemy feedback.
@@ -86,6 +106,7 @@ public sealed partial class GameHud
     {
         if (healNumberLayer == null) BuildHealFeedback();
         BindHealEvents();
+        TickHealFlash(Time.unscaledTime);
         var world = WorldSession.Instance; var camera = ViewCamera();
         bool running = world != null && world.Hero != null && camera != null && OverlayRoot != null &&
             OverlayRoot.layout.width > 1f && OverlayRoot.style.display != DisplayStyle.None;

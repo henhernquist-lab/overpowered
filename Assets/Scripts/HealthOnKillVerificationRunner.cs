@@ -19,6 +19,7 @@ public sealed class HealthOnKillVerificationRunner : SessionVerificationRunner
         yield return Scene(GameFlow.HomeScene);
         Table();
         yield return Live();
+        yield return RealTimeHud();
         yield return SecondHero();
         Log("LIMIT: no hardware keyboard/mouse in batch mode. Healing is measured at the shared CityNpc.Damage death funnel (the boundary every power and delayed effect uses) in a real Home -> Free Play session, with one REAL poison cast as the power-owned control: signatures, telekinesis impacts and synergy ticks reach the same call but were not cast here. Human feel/pacing of sustain is UNVERIFIED. The 0.18/0.35 caps never bind at the current coefficients (raw <= 0.168M / 0.35M); they are asserted as the guard they are.");
     }
@@ -190,6 +191,47 @@ public sealed class HealthOnKillVerificationRunner : SessionVerificationRunner
         Check(hud.LastHealShown > 0f && hud.HealNumbersShown > 0, $"HUD feedback came from real heals: {hud.HealNumbersShown} numbers, last '+{hud.LastHealShown:F2} HP'.");
         Check(HealthOnKill.Kills > 0 && HealthOnKill.TotalHealed > 0f, $"Telemetry: {HealthOnKill.Kills} credited kills paid {HealthOnKill.TotalHealed:F2} HP in total.");
     }
+
+    // ------------------------------------------------------------------ real time
+    /// The user-facing question: does the SHIPPING HUD show the heal? A real Endless wave (the mode healing is for), the
+    /// real GameHud, one kill through the player's own PowerUser, then the bar sampled on the next frame — plus the same
+    /// sample for damage as a control.
+    IEnumerator RealTimeHud()
+    {
+        Log("---- REAL TIME (real Endless wave, shipping GameHud)");
+        yield return Enter(F.Heroes[0], "ice", "strength", "endless-fight");
+        var state = W.Mode.Director as EndlessWaveState;
+        Check(state != null, "Endless Fight is running its wave director.");
+        float until = Time.time + 30f;
+        while ((state.Intermission || state.Wave < 1 || state.Alive.Count < 1) && Time.time < until) yield return null;
+        Check(!state.Intermission && state.Wave >= 1 && state.Alive.Count >= 1, $"Wave {state.Wave} is live with {state.Alive.Count} enemy(ies).");
+        var hud = Hud;
+        Check(hud != null, "GameHud present in the live Endless session.");
+        float max = W.MaxHealth;
+        W.DamagePlayer(max * .5f, true);
+        yield return null;
+        float damageFill = FillPercent(hud);
+        Check(Mathf.Abs(damageFill - W.Health / max * 100f) < .1f,
+            $"CONTROL: damage reaches the bar on the next frame — fill {damageFill:F1}% = health {W.Health:F1}/{max:F1} ({W.Health / max * 100f:F1}%).");
+        var victim = state.Alive.FirstOrDefault(n => n != null && !n.Dead && n.Archetype != null);
+        Check(victim != null, "A live wave enemy is available to defeat.");
+        int numbers = hud.HealNumbersShown;
+        float before = W.Health, expected = HealthOnKill.Resolve(max, before, victim.Archetype.HealOnKillMultiplier, victim.IsBoss);
+        victim.Damage(99999f, W.Powers);
+        Check(Mathf.Abs(W.Health - Mathf.Min(max, before + expected)) < .01f,
+            $"The kill raised health at once: {before:F2} -> {W.Health:F2} (+{W.Health - before:F2}, expected +{expected:F2}).");
+        yield return null;
+        float healFill = FillPercent(hud);
+        Check(Mathf.Abs(healFill - W.Health / max * 100f) < .1f,
+            $"The bar shows the heal on the next frame: {damageFill:F1}% -> {healFill:F1}% = health {W.Health:F1}/{max:F1} ({W.Health / max * 100f:F1}%).");
+        Check(hud.HealNumbersShown == numbers + 1, $"One '+N HP' number started for the heal ({numbers} -> {hud.HealNumbersShown}).");
+        Check(hud.HealNumbers.Any(d => d.Active && GameHud.Shown(d.Element)), "The heal number is visible on screen (not just counted).");
+        Check(hud.HealFlashStrength > 0f, $"The health bar flashes on the heal (strength {hud.HealFlashStrength:F2}), so a small jump still reads.");
+        yield return new WaitForSecondsRealtime(GameHud.HealFlashSeconds + .1f);
+        Check(hud.HealFlashStrength == 0f, "The flash ends on its own and the bar returns to its normal colour.");
+    }
+
+    static float FillPercent(GameHud hud) => hud.HealthFill.style.width.value.value;
 
     // ------------------------------------------------------------------ second hero
     IEnumerator SecondHero()
