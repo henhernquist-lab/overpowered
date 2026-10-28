@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "PowerExpansionAuthoring.PhaseF",
+    "commit": "b807c90a8b1764e7ecae01641973f0af3a4ff1d7",
+    "status_before": "M Assets/Editor/PowerExpansionAuthoring.cs\n M Assets/Editor/PowerExpansionVerification.cs\n M Assets/Scripts/Forge/HeroForgeScreen.cs\n M Assets/Scripts/PlayerProgression.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionVerificationRunner.cs\n?? Assets/Scripts/Powers/Expansion/PowerExpansionFinalVerification.cs\n?? Assets/Scripts/Powers/Expansion/PowerExpansionFinalVerification.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt",
+    "started_utc": "2026-10-26T04:14:50.683896+00:00",
+    "save_before": "4af031e1cea8617fee9bcc6765be39815b95b05bdfb92e0af9c205cee52186ad",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/PowerExpansion2/phase-f-authoring/PowerExpansionAuthoring.PhaseF.log",
+    "pid": 54717,
+    "exit": 0,
+    "seconds": 25.54,
+    "pass": 1,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Editor/PowerExpansionAuthoring.cs\n M Assets/Editor/PowerExpansionVerification.cs\n M Assets/Resources/Forge/Heroes/nova.asset\n M Assets/Resources/Forge/Heroes/titan.asset\n M Assets/Resources/Forge/Heroes/vector.asset\n M Assets/Resources/Powers/aerokinesis.asset\n M Assets/Resources/Powers/combat-morphing.asset\n M Assets/Resources/Powers/darkness.asset\n M Assets/Resources/Powers/fire.asset\n M Assets/Resources/Powers/flight.asset\n M Assets/Resources/Powers/force-field.asset\n M Assets/Resources/Powers/grapple-line.asset\n M Assets/Resources/Powers/ice.asset\n M Assets/Resources/Powers/laser-eyes.asset\n M Assets/Resources/Powers/lightning.asset\n M Assets/Resources/Powers/mirage-decoy.asset\n M Assets/Resources/Powers/phase-shift.asset\n M Assets/Resources/Powers/plasma-blades.asset\n M Assets/Resources/Powers/poison.asset\n M Assets/Resources/Powers/sonic-manipulation.asset\n M Assets/Resources/Powers/speed.asset\n M Assets/Resources/Powers/strength.asset\n M Assets/Resources/Powers/telekinesis.asset\n M Assets/Resources/Powers/teleport.asset\n M Assets/Resources/SignatureCatalog.asset\n M Assets/Scripts/Forge/HeroForgeScreen.cs\n M Assets/Scripts/PlayerProgression.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionVerificationRunner.cs\n?? Assets/Scripts/Powers/Expansion/PowerExpansionFinalVerification.cs\n?? Assets/Scripts/Powers/Expansion/PowerExpansionFinalVerification.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt"
+  }
+]

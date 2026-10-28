@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6439bcadf27604138888fd7ef6af365c, type: 3}
+  m_Name: apex-mutation
+  m_EditorClassIdentifier: Assembly-CSharp::PowerSynergyDefinition
+  Id: apex-mutation
+  DisplayName: Apex Mutation
+  Description: Seven seconds of enlarged morph weapons, 45% morph damage, extra reach and faster form recovery. Universal melee unchanged.
+  PowerA: {fileID: 0}
+  PowerB: {fileID: 0}
+  OwnerPrimary: {fileID: 11400000, guid: 9b0ba75cfa9e04002ac914c78d1d2f10, type: 2}
+  EnergyCost: 25
+  Icon: 6
+  Effect: {fileID: 11400000, guid: 74023c86393f3447a8506f5d2b6f2df9, type: 2}
+  Cooldown: 20
+  Duration: 7
+  Damage: 0
+  Force: 900
+  Radius: 3
+  Range: 18
+  LiftSpeed: 14
+  LiftSeconds: 0.3
+  DiveSpeed: 42
+  FreezeSeconds: 2
+  MaxMass: 500
+  OrbitRadius: 2.8
+  Spring: 35
+  Damping: 10
+  LaunchInterval: 0.15
+  BonusMultiplier: 1.7
+  MeleeMultiplier: 1.65
+  BurnSeconds: 0
+  MaxTargets: 1
+  Primary: 15
+  Secondary: 2

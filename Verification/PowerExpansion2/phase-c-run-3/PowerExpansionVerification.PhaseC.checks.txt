@@ -1,0 +1,49 @@
+PASS Melee replacements remain staged
+PASS Isolated in-memory staged combat-morphing enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS combat-morphing: actual primary slot selection
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS Intentional form BladeArms
+PASS BladeArms: real activation accepted
+PASS CONTROL no damage before configured windup
+PASS CONTROL immediate melee repeat refused
+PASS BladeArms: exactly one deferred authoritative impact
+PASS Finite strike/motion completes
+PASS Intentional form HammerFists
+PASS HammerFists: real activation accepted
+PASS CONTROL no damage before configured windup
+PASS CONTROL immediate melee repeat refused
+PASS HammerFists: exactly one deferred authoritative impact
+PASS Finite strike/motion completes
+PASS Intentional form ExtendedClaws
+PASS ExtendedClaws: real activation accepted
+PASS CONTROL no damage before configured windup
+PASS CONTROL immediate melee repeat refused
+PASS ExtendedClaws: exactly one deferred authoritative impact
+PASS Finite strike/motion completes
+PASS Hammer, blade, claw have distinct damage budgets
+PASS Morph never changes physics capsule
+PASS Weapons add no duplicate Animator
+PASS CONTROL switching cancels pending morph damage
+PASS Switching away hides both weapons
+PASS Isolated in-memory staged plasma-blades enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS plasma-blades: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Four distinct real shared weapon meshes
+PASS Plasma strike 1 accepted
+PASS Plasma stage 1 impacts after finite windup
+PASS Plasma strike 2 accepted
+PASS Plasma stage 2 impacts after finite windup
+PASS Plasma strike 3 accepted
+PASS Plasma stage 3 impacts after finite windup
+PASS Charged plasma accepted
+PASS Charged strike requires commitment windup
+PASS Charged strike pays base plus extra energy exactly once
+PASS Charged plasma resolves exact 2.2x damage through centralized difficulty once
+PASS Two fitted world-scale shared-material weapons visible in third person
+PASS First-person hides only weapon renderers, preserving skeleton
+PASS CONTROL menu blocks primary attack
+PASS CONTROL solid wall blocks plasma melee

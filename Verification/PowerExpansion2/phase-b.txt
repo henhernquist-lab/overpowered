@@ -1,0 +1,86 @@
+PASS Staged definitions do not disable the current eight shipping signatures
+PASS Both new powers stay hidden until implementation and full roster acceptance
+PASS Actual distinct native arc/ring meshes and Built-in translucent shader import successfully
+PASS Isolated in-memory staged aerokinesis enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS aerokinesis: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Rusher: Wind Blast activates through existing payment path
+PASS CONTROL immediate wind recast refused by cooldown
+PASS Rusher: exactly one authoritative damage event with correct ownership/source
+PASS One charge and exact centralized energy payment
+PASS Rusher: finite grounded displacement 3.000m <= resisted budget 3.000
+PASS Rusher: no airborne/permanent physics handoff
+PASS Gunner: fixture lies on actual lab NavMesh
+PASS Gunner: actual shared NPC spawned
+PASS Gunner: Wind Blast activates through existing payment path
+PASS CONTROL immediate wind recast refused by cooldown
+PASS Gunner: exactly one authoritative damage event with correct ownership/source
+PASS One charge and exact centralized energy payment
+PASS Gunner: finite grounded displacement 3.000m <= resisted budget 3.000
+PASS Gunner: no airborne/permanent physics handoff
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS Brute: Wind Blast activates through existing payment path
+PASS CONTROL immediate wind recast refused by cooldown
+PASS Brute: exactly one authoritative damage event with correct ownership/source
+PASS One charge and exact centralized energy payment
+PASS Brute: finite grounded displacement 1.200m <= resisted budget 1.200
+PASS Brute: no airborne/permanent physics handoff
+PASS Skirmisher: fixture lies on actual lab NavMesh
+PASS Skirmisher: actual shared NPC spawned
+PASS Skirmisher: Wind Blast activates through existing payment path
+PASS CONTROL immediate wind recast refused by cooldown
+PASS Skirmisher: exactly one authoritative damage event with correct ownership/source
+PASS One charge and exact centralized energy payment
+PASS Skirmisher: finite grounded displacement 3.000m <= resisted budget 3.000
+PASS Skirmisher: no airborne/permanent physics handoff
+PASS Bulwark: fixture lies on actual lab NavMesh
+PASS Bulwark: actual shared NPC spawned
+PASS Bulwark: Wind Blast activates through existing payment path
+PASS CONTROL immediate wind recast refused by cooldown
+PASS Bulwark: exactly one authoritative damage event with correct ownership/source
+PASS One charge and exact centralized energy payment
+PASS Bulwark: finite grounded displacement 0.900m <= resisted budget 0.900
+PASS Bulwark: no airborne/permanent physics handoff
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS Pulsebreaker: Wind Blast activates through existing payment path
+PASS CONTROL immediate wind recast refused by cooldown
+PASS Pulsebreaker: exactly one authoritative damage event with correct ownership/source
+PASS One charge and exact centralized energy payment
+PASS Pulsebreaker: finite grounded displacement 0.360m <= resisted budget 0.360
+PASS Pulsebreaker: no airborne/permanent physics handoff
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Wind can be cast into a blocked lane
+PASS CONTROL static wall shields NPC from wind damage
+PASS CONTROL full NPC capsule cannot be pushed through a solid wall
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL directional wind is not a full-sphere attack
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL friendly unprovoked patrol is not a hostile target
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Lethal wind credits the player-owned kill through existing hit boundary
+PASS Isolated in-memory staged sonic-manipulation enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS sonic-manipulation: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Actual enemy AI committed a readable windup before Sonic control
+PASS Sonic interrupts actual windup and applies short root
+PASS CONTROL immediate repeated Sonic cannot refresh interruption through refractory window
+PASS Sonic control expires and ordinary AI resumes
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+PASS Boss interruption has a long refractory window, not permanent stun
+PASS Boss returns from finite resisted Sonic control
+PASS Forty rapid effects remain inside fixed 32-slot mesh pool
+PASS Repeated effects allocate no runtime meshes/materials
+PASS All wind/sonic active and impact visuals expire
+PASS CONTROL insufficient energy refuses Sonic
+LIMIT: automated native damage/control/VFX checks, not human balance/readability or standalone performance approval.

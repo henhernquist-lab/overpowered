@@ -1,0 +1,190 @@
+PASS Actual shipping resources contain exactly 10 primaries, 6 secondaries and 10 complete signatures
+PASS Legacy resources retained while retired from normal selection
+PASS Every current primary has implemented signature; retired signatures unexposed
+PASS vector: same complete selectable roster
+PASS vector: unordered pair aerokinesis + combat-morphing equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair aerokinesis + darkness equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair aerokinesis + fire equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair aerokinesis + ice equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair aerokinesis + lightning equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair aerokinesis + plasma-blades equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair aerokinesis + poison equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair aerokinesis + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair aerokinesis + telekinesis equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair combat-morphing + darkness equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair combat-morphing + fire equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair combat-morphing + ice equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair combat-morphing + lightning equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair combat-morphing + plasma-blades equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair combat-morphing + poison equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair combat-morphing + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair combat-morphing + telekinesis equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair darkness + fire equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair darkness + ice equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair darkness + lightning equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair darkness + plasma-blades equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair darkness + poison equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair darkness + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair darkness + telekinesis equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair fire + ice equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair fire + lightning equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair fire + plasma-blades equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair fire + poison equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair fire + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair fire + telekinesis equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair ice + lightning equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair ice + plasma-blades equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair ice + poison equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair ice + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair ice + telekinesis equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair lightning + plasma-blades equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair lightning + poison equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair lightning + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair lightning + telekinesis equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair plasma-blades + poison equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair plasma-blades + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair plasma-blades + telekinesis equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair poison + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair poison + telekinesis equips and provides exactly two selectable owner signatures
+PASS vector: unordered pair sonic-manipulation + telekinesis equips and provides exactly two selectable owner signatures
+PASS titan: same complete selectable roster
+PASS titan: unordered pair aerokinesis + combat-morphing equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair aerokinesis + darkness equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair aerokinesis + fire equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair aerokinesis + ice equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair aerokinesis + lightning equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair aerokinesis + plasma-blades equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair aerokinesis + poison equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair aerokinesis + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair aerokinesis + telekinesis equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair combat-morphing + darkness equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair combat-morphing + fire equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair combat-morphing + ice equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair combat-morphing + lightning equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair combat-morphing + plasma-blades equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair combat-morphing + poison equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair combat-morphing + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair combat-morphing + telekinesis equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair darkness + fire equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair darkness + ice equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair darkness + lightning equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair darkness + plasma-blades equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair darkness + poison equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair darkness + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair darkness + telekinesis equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair fire + ice equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair fire + lightning equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair fire + plasma-blades equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair fire + poison equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair fire + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair fire + telekinesis equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair ice + lightning equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair ice + plasma-blades equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair ice + poison equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair ice + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair ice + telekinesis equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair lightning + plasma-blades equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair lightning + poison equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair lightning + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair lightning + telekinesis equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair plasma-blades + poison equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair plasma-blades + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair plasma-blades + telekinesis equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair poison + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair poison + telekinesis equips and provides exactly two selectable owner signatures
+PASS titan: unordered pair sonic-manipulation + telekinesis equips and provides exactly two selectable owner signatures
+PASS nova: same complete selectable roster
+PASS nova: unordered pair aerokinesis + combat-morphing equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair aerokinesis + darkness equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair aerokinesis + fire equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair aerokinesis + ice equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair aerokinesis + lightning equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair aerokinesis + plasma-blades equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair aerokinesis + poison equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair aerokinesis + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair aerokinesis + telekinesis equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair combat-morphing + darkness equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair combat-morphing + fire equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair combat-morphing + ice equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair combat-morphing + lightning equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair combat-morphing + plasma-blades equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair combat-morphing + poison equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair combat-morphing + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair combat-morphing + telekinesis equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair darkness + fire equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair darkness + ice equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair darkness + lightning equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair darkness + plasma-blades equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair darkness + poison equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair darkness + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair darkness + telekinesis equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair fire + ice equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair fire + lightning equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair fire + plasma-blades equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair fire + poison equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair fire + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair fire + telekinesis equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair ice + lightning equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair ice + plasma-blades equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair ice + poison equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair ice + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair ice + telekinesis equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair lightning + plasma-blades equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair lightning + poison equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair lightning + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair lightning + telekinesis equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair plasma-blades + poison equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair plasma-blades + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair plasma-blades + telekinesis equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair poison + sonic-manipulation equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair poison + telekinesis equips and provides exactly two selectable owner signatures
+PASS nova: unordered pair sonic-manipulation + telekinesis equips and provides exactly two selectable owner signatures
+PASS CONTROL retired primaries and duplicate slots rejected by actual save API
+PASS Existing live Hero Forge builds all three power selectors
+PASS Actual UI choices expose ten primaries, exclude duplicate slot, and expose six secondaries
+PASS vector: existing Forge hero selection
+PASS vector: new primary and secondary choices work through actual Forge UI handlers
+PASS vector: changing powers preserves complete appearance selection
+PASS vector: existing Forge displays exactly one equipped signature
+PASS vector: descriptions and real base costs/cooldowns appear for all equipped powers
+PASS CONTROL existing UI refuses both retired primaries
+PASS titan: existing Forge hero selection
+PASS titan: new primary and secondary choices work through actual Forge UI handlers
+PASS titan: changing powers preserves complete appearance selection
+PASS titan: existing Forge displays exactly one equipped signature
+PASS titan: descriptions and real base costs/cooldowns appear for all equipped powers
+PASS CONTROL existing UI refuses both retired primaries
+PASS nova: existing Forge hero selection
+PASS nova: new primary and secondary choices work through actual Forge UI handlers
+PASS nova: changing powers preserves complete appearance selection
+PASS nova: existing Forge displays exactly one equipped signature
+PASS nova: descriptions and real base costs/cooldowns appear for all equipped powers
+PASS CONTROL existing UI refuses both retired primaries
+PASS Home owned-power strip exposes exactly the current sixteen powers, preserving legacy records only in the save
+PASS Results offers the one remaining current upgrade and no retired resources, even when all current alternatives are maxed
+PASS CONTROL results rejects retired upgrade choices without spending progression points
+PASS Current power upgrade still uses the established payment and ownership path
+PASS strength: outer version, hero, palette colors and secondary survive actual legacy load
+PASS strength: exact XP/level/points/difficulty/identity/cosmetics/stats/records/parkour/unknown records preserved
+PASS strength: mapped upgrade tiers plus original and unknown ownership records retained
+PASS strength: valid distinct deterministic replacement build and equipped signature
+PASS strength: preferred primary/signature alias and unaffected primary preserved
+PASS strength: durable migration is idempotent
+PASS laser-eyes: outer version, hero, palette colors and secondary survive actual legacy load
+PASS laser-eyes: exact XP/level/points/difficulty/identity/cosmetics/stats/records/parkour/unknown records preserved
+PASS laser-eyes: mapped upgrade tiers plus original and unknown ownership records retained
+PASS laser-eyes: valid distinct deterministic replacement build and equipped signature
+PASS laser-eyes: preferred primary/signature alias and unaffected primary preserved
+PASS laser-eyes: durable migration is idempotent
+PASS duplicate: outer version, hero, palette colors and secondary survive actual legacy load
+PASS duplicate: exact XP/level/points/difficulty/identity/cosmetics/stats/records/parkour/unknown records preserved
+PASS duplicate: mapped upgrade tiers plus original and unknown ownership records retained
+PASS duplicate: valid distinct deterministic replacement build and equipped signature
+PASS duplicate: durable migration is idempotent
+PASS unknown: outer version, hero, palette colors and secondary survive actual legacy load
+PASS unknown: exact XP/level/points/difficulty/identity/cosmetics/stats/records/parkour/unknown records preserved
+PASS unknown: mapped upgrade tiers plus original and unknown ownership records retained
+PASS unknown: valid distinct deterministic replacement build and equipped signature
+PASS unknown: durable migration is idempotent
+PASS Save final complete new build for a separate native process
+READY separate-process reload pointer and exact expected save written; no personal profile used.

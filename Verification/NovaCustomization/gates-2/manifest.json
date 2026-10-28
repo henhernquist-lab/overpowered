@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "NovaCustomizationVerification.Run",
+    "commit": "eb5290c5195b87530979471b22b0cebe841d5f47",
+    "status_before": "?? Assets/Editor/Nova.meta\n?? Assets/Editor/Nova/\n?? Assets/Resources/Forge/Cosmetics/Nova.meta\n?? Assets/Resources/Forge/Cosmetics/Nova/\n?? Assets/Scripts/Forge/Cosmetics.meta\n?? Assets/Scripts/Forge/Cosmetics/\n?? Verification/NovaCustomization/\n?? tools/__pycache__/\n?? tools/nova_fbx_reader.py",
+    "started_utc": "2026-10-25T16:44:09.945507+00:00",
+    "save_before": "920cfbae3994ce721333c5f712436d57dbfd54c24657e8538d0fd26e153e711e",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/NovaCustomization/gates-2/NovaCustomizationVerification.Run.log",
+    "pid": 8986,
+    "exit": 1,
+    "seconds": 32.54,
+    "pass": 127,
+    "fail": 1,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "?? Assets/Editor/Nova.meta\n?? Assets/Editor/Nova/\n?? Assets/Resources/Forge/Cosmetics/Nova.meta\n?? Assets/Resources/Forge/Cosmetics/Nova/\n?? Assets/Scripts/Forge/Cosmetics.meta\n?? Assets/Scripts/Forge/Cosmetics/\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/NovaCustomization/\n?? tools/__pycache__/\n?? tools/nova_fbx_reader.py"
+  }
+]

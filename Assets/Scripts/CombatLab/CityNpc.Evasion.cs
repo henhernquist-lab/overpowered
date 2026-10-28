@@ -55,7 +55,7 @@ public sealed partial class CityNpc
         }
         if(Time.time<nextEvasion||distance<e.MinimumDistance||distance>e.MaximumDistance||Phase==AttackPhase.Windup)return false;
         bool dash=Phase==AttackPhase.Engage&&distance>Archetype.TriggerDistance+1f&&(evasionSerial++%2)==0;
-        Vector3 toward=world.Hero.transform.position-transform.position;toward.y=0;
+        Vector3 toward=CombatTargetPosition-transform.position;toward.y=0;
         if(toward.sqrMagnitude<.01f)return false;toward.Normalize();
         Vector3 direction=dash?toward:Vector3.Cross(Vector3.up,toward)*circleSign;
         float length=dash?Mathf.Min(e.DashDistance,Mathf.Max(0,distance-Archetype.TriggerDistance)):e.LateralDistance;
@@ -88,7 +88,7 @@ public sealed partial class CityNpc
     void BeginRetreat()
     {
         if(!Evasive||Frozen||Rooted||Dead||world.PlayerDead||!Agent.enabled||!Agent.isOnNavMesh)return;
-        Vector3 away=transform.position-world.Hero.transform.position;away.y=0;
+        Vector3 away=transform.position-CombatTargetPosition;away.y=0;
         if(away.sqrMagnitude<.01f)away=-transform.forward;
         if(BeginEvasion(transform.position+away.normalized*Archetype.Evasion.RetreatDistance))Retreats++;
         // Retreat has its own tell/travel/recovery. Do not restart the independent dodge cooldown on every burst:

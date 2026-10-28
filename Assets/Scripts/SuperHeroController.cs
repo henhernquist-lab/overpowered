@@ -60,7 +60,7 @@ public sealed class SuperHeroController : MonoBehaviour
     float backflipUntil=-1f, backflipReadyAt=-1f;
     bool kickPending, comboKickPending;
     float basicReadyAt;
-    public bool AbilityDriving=>powers?.SynergyRunner!=null&&powers.SynergyRunner.DrivesMotion;
+    public bool AbilityDriving=>(powers?.SynergyRunner!=null&&powers.SynergyRunner.DrivesMotion)||powers?.ExpansionDrivesMotion==true;
     public CollisionFlags MoveAbility(Vector3 velocity,bool flying)
     {
         EndClimb();
@@ -73,6 +73,12 @@ public sealed class SuperHeroController : MonoBehaviour
         PresentationState=new HeroPresentationState(transform.InverseTransformDirection(controller.velocity),controller.isGrounded,flying&&!controller.isGrounded);
         if(!grounded&&(flags&CollisionFlags.Below)!=0&&velocity.y<0)ReportLanding(-velocity.y);
         return flags;
+    }
+    // Preserve existing air-jump accounting when a traversal power hands control back.
+    public void ResumeTraversalMomentum(Vector3 velocity)
+    {
+        velocity=Vector3.ClampMagnitude(velocity,22);wallJumpVelocity=Vector3.ClampMagnitude(new Vector3(velocity.x,0,velocity.z),18);
+        verticalVelocity=Mathf.Clamp(velocity.y,-18,14);
     }
     void ReportLanding(float impactSpeed)
     {

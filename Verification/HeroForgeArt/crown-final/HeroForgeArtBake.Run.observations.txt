@@ -1,0 +1,37 @@
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.004795379 for SK_HUMN_BASE_01_10TORS_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.004795379 for SK_HUMN_BASE_01_11AUPL_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.004795379 for SK_HUMN_BASE_01_12AUPR_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.004795379 for SK_HUMN_BASE_01_13ALWL_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.004795379 for SK_HUMN_BASE_01_14ALWR_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.004795379 for SK_HUMN_BASE_01_15HNDL_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.004795379 for SK_HUMN_BASE_01_16HNDR_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.004795379 for SK_HUMN_BASE_01_17HIPS_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.004795379 for SK_HUMN_BASE_01_18LEGL_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.004795379 for SK_HUMN_BASE_01_19LEGR_HU01
+MEASURED vector-emblem-chevron: 15 vertices / 16 triangles / 1 existing spine bone
+MEASURED vector-emblem-bolt: 6 vertices / 4 triangles / 1 existing spine bone
+MEASURED vector_mask_aegis: original fitted headgear, 192 vertices / 96 triangles / one existing head bone; anatomical bounds=Center: (0.00, 1.62, 0.02), Extents: (0.12, 0.13, 0.14); eye t=0.5286751
+MEASURED vector_mask_sentinel: original fitted headgear, 737 vertices / 368 triangles / one existing head bone; anatomical bounds=Center: (0.00, 1.62, 0.02), Extents: (0.12, 0.13, 0.14); eye t=0.5286751
+MEASURED titan excluded source-recipe drift=3
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 1.788139E-07 for SK_HUMN_BASE_01_10TORS_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 1.788139E-07 for SK_HUMN_BASE_01_17HIPS_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 1.788139E-07 for SK_HUMN_BASE_01_18LEGL_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 1.788139E-07 for SK_HUMN_BASE_01_19LEGR_HU01
+MEASURED titan_emblem_shield: 16 vertices / 20 triangles / 1 existing spine bone
+MEASURED titan_emblem_core: 32 vertices / 32 triangles / 1 existing spine bone
+MEASURED titan_mask_guardian: original fitted headgear, 817 vertices / 408 triangles / one existing head bone; anatomical bounds=Center: (0.00, 1.62, 0.02), Extents: (0.12, 0.13, 0.14); eye t=0.5286752
+MEASURED titan_mask_vanguard: original fitted headgear, 697 vertices / 348 triangles / one existing head bone; anatomical bounds=Center: (0.00, 1.62, 0.02), Extents: (0.12, 0.13, 0.14); eye t=0.5286752
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_10TORS_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_11AUPL_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_12AUPR_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_13ALWL_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_14ALWR_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_15HNDL_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_16HNDR_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_17HIPS_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_18LEGL_HU01
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_19LEGR_HU01
+MEASURED nova_emblem_star: 49 vertices / 64 triangles / 1 existing spine bone
+MEASURED nova_emblem_core: 32 vertices / 32 triangles / 1 existing spine bone
+MEASURED nova_mask_spectrum: original fitted headgear, 240 vertices / 120 triangles / one existing head bone; anatomical bounds=Center: (0.00, 1.62, 0.02), Extents: (0.12, 0.13, 0.14); eye t=0.5279297
+MEASURED nova_mask_phantom: original fitted headgear, 817 vertices / 408 triangles / one existing head bone; anatomical bounds=Center: (0.00, 1.62, 0.02), Extents: (0.12, 0.13, 0.14); eye t=0.5279297

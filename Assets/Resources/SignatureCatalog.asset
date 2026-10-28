@@ -3,16 +3,26 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 639afffe7173475990152343a9d0de2c, type: 3}
   m_Name: SignatureCatalog
+  m_EditorClassIdentifier:
   Abilities:
-  - {fileID: 11400000, guid: a147b0589c124d96857f013904c2e301, type: 2}
   - {fileID: 11400000, guid: a147b0589c124d96857f013904c2e302, type: 2}
   - {fileID: 11400000, guid: a147b0589c124d96857f013904c2e303, type: 2}
   - {fileID: 11400000, guid: a147b0589c124d96857f013904c2e304, type: 2}
-  - {fileID: 11400000, guid: c684b6714aee47d5a0a309c185b5cfa7, type: 2}
   - {fileID: 11400000, guid: 63d770febde542df851f1f3722a4a8fb, type: 2}
   - {fileID: 11400000, guid: 354d6dccc8be4e14b01e5d42e6e49bca, type: 2}
   - {fileID: 11400000, guid: 171ca0b253ea43d6b7be103e93bbeb01, type: 2}
+  - {fileID: 11400000, guid: b1e4bd670ef74431891ea327a75df6e5, type: 2}
+  - {fileID: 11400000, guid: fe7ff9e48c21c4d9ab4cbe1536f3bdf5, type: 2}
+  - {fileID: 11400000, guid: d99d04942b4bd4de58b1ddb1306e22dd, type: 2}
+  - {fileID: 11400000, guid: 9aaab3d38b4a24e35b2837c1bba6f766, type: 2}
   DeveloperPreview: 0
   EnableWhenComplete: 1
+  ExpectedPrimaries: 10

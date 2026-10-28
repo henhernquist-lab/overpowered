@@ -73,7 +73,7 @@ public sealed class SynergyRunner : MonoBehaviour
         Captive=null;
         if(!Definition.Effect.CanBegin(this)){Feedback="No valid target";return false;}
         if(!User.TrySpendEnergy(EnergyCost)){Feedback="Insufficient energy";return false;}
-        User.EndChannel();User.Release(false);
+        User.EndExpansionTraversal();User.EndChannel();User.Release(false);
         ActivationDamage=Definition.IsSignature?User.RollDamage(Definition.Damage*User.HeroStats.PowerDamage*SignatureDamage):Definition.Damage;
         affected.Clear();suspended.Clear();
         Cooldown=Definition.Cooldown*User.Difficulty.Cooldown*(Definition.IsSignature?(RunMods!=null?RunMods.SignatureCooldown:1f):1f);
@@ -104,7 +104,7 @@ public sealed class SynergyRunner : MonoBehaviour
             if(next is IEnumerator nested)steps.Push(nested);else yield return next;
         }
         suspended.Clear();
-        bool droveMotion=DrivesMotion;DrivesMotion=false;Busy=false;if(droveMotion)User.Hero.ResetMotion();action=null;
+        bool droveMotion=DrivesMotion;DrivesMotion=false;Busy=false;if(droveMotion&&!effect.PreservesTraversalState)User.Hero.ResetMotion();action=null;
     }
     public CollisionFlags Move(Vector3 velocity,bool flying)=>User.Hero.MoveAbility(velocity,flying);
     public bool GroundTarget(bool aimed,out Vector3 point)
@@ -190,7 +190,7 @@ public sealed class SynergyRunner : MonoBehaviour
         while(steps.Count>0)(steps.Pop() as IDisposable)?.Dispose();
         foreach(var hold in suspended)if(hold!=null&&hold.enabled)hold.Finish();
         suspended.Clear();Captive=null;
-        if(User!=null)User.Hero.ResetMotion();
+        if(User!=null&&Definition?.Effect.PreservesTraversalState!=true)User.Hero.ResetMotion();
         if(view!=null&&fovUntil>0)view.fieldOfView=baseFov;
         PowerVfx.Instance?.HideBeam();   // a beam synergy (Solar Flare / Eclipse Beam) cut short must not leave its beam drawn
         SignatureVfx.Existing?.HideAll();

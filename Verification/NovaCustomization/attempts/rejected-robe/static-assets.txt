@@ -1,0 +1,69 @@
+PASS Unity vertex stream layout accounts for every byte: nova-body.asset
+PASS Index buffer contains all declared bytes: nova-body.asset
+OBSERVED pre-existing non-hex index suffix 'y' in /Users/melaniehernquist/Documents/ChatGPT/op-hero-forge-nova/Assets/Resources/Forge/Sidekick/nova-body.asset; excluded only after the complete declared buffer; source preserved
+PASS Unity vertex stream layout accounts for every byte: Starter_02.asset
+PASS Index buffer contains all declared bytes: Starter_02.asset
+PASS Fitted optimized body preserves original vertex/triangle order
+PASS Declared optimized BodyBones map is complete
+OBSERVED pre-existing BodyBones non-hex suffix 'i'; source preserved
+PASS Actual NOVA optimized130/source2793 bone mappings verified
+PASS Optimized source preserves weighted transforms, influence 0
+PASS Optimized source preserves weighted transforms, influence 1
+PASS Optimized source preserves weighted transforms, influence 2
+PASS Optimized source preserves weighted transforms, influence 3
+PASS All33 recipe part skeleton blocks account for source bones
+PASS Every vertex has one unambiguous source part; no guessed geometric cuts
+PASS Every source triangle stays within its authored part
+PASS Contiguous authored vertex range: SK_HUMN_BASE_01_01HEAD_HU01
+PASS Contiguous authored vertex range: SK_HUMN_BASE_01_03EBRL_HU01
+PASS Contiguous authored vertex range: SK_HUMN_BASE_01_04EBRR_HU01
+PASS Contiguous authored vertex range: SK_HUMN_BASE_01_05EYEL_HU01
+PASS Contiguous authored vertex range: SK_HUMN_BASE_01_06EYER_HU01
+PASS Contiguous authored vertex range: SK_HUMN_BASE_01_07EARL_HU01
+PASS Contiguous authored vertex range: SK_HUMN_BASE_01_08EARR_HU01
+PASS Contiguous authored vertex range: SK_HUMN_BASE_01_35NOSE_HU01
+PASS Contiguous authored vertex range: SK_HUMN_BASE_01_36TETH_HU01
+PASS Contiguous authored vertex range: SK_HUMN_BASE_01_37TONG_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_02HAIR_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_10TORS_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_11AUPL_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_12AUPR_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_13ALWL_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_14ALWR_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_15HNDL_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_16HNDR_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_17HIPS_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_18LEGL_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_19LEGR_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_20FOTL_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_21FOTR_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_22AHED_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_24ABAC_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_25AHPF_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_27AHPL_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_28AHPR_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_29ASHL_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_33AKNL_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_09_34AKNR_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_10_26AHPB_HU01
+PASS Contiguous authored vertex range: SK_SCFI_CIVL_10_30ASHR_HU01
+PASS 16-bit triangle indices valid: nova_suit_energyweave
+PASS Unity vertex stream layout accounts for every byte: nova_suit_energyweave.asset
+PASS Index buffer contains all declared bytes: nova_suit_energyweave.asset
+PASS Serialized mesh round-trip retains geometry: nova_suit_energyweave
+PASS CPU posed source/extraction maximum error=0.0m
+PASS NEGATIVE CONTROL wrong bone mapping is detected
+PASS Existing NOVA Trim swatch found for both accent badges
+PASS Badge triangle interiors clear actual torso: star min=0.0032138964964479877m; refinements=2
+PASS 16-bit triangle indices valid: nova_emblem_star
+PASS Unity vertex stream layout accounts for every byte: nova_emblem_star.asset
+PASS Index buffer contains all declared bytes: nova_emblem_star.asset
+PASS Serialized mesh round-trip retains geometry: nova_emblem_star
+PASS Authored star badge projects 6mm above the actual rest-pose torso
+PASS Badge triangle interiors clear actual torso: core min=0.00208910199221643m; refinements=0
+PASS 16-bit triangle indices valid: nova_emblem_core
+PASS Unity vertex stream layout accounts for every byte: nova_emblem_core.asset
+PASS Index buffer contains all declared bytes: nova_emblem_core.asset
+PASS Serialized mesh round-trip retains geometry: nova_emblem_core
+PASS Authored core badge projects 6mm above the actual rest-pose torso
+UNVERIFIED Unity import, real Animator clips, runtime/preview rendering, first-person, and separate-process save reload.

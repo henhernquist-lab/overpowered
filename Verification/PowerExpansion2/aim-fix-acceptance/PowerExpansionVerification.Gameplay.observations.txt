@@ -1,0 +1,1 @@
+MEASURED same empty native Combat Lab, 30 warm +120 idle +120 active Editor frames: median/p95 1.22/1.44ms idle, 1.33/1.61ms repeated wind. Frame timing includes Editor and batch environment; no standalone/GPU/causal skinning claim.

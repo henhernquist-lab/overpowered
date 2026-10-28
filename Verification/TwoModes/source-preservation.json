@@ -1,0 +1,31 @@
+{
+  "baseline": "297eb49",
+  "protected_baseline_files_checked": 6910,
+  "allowed_existing_changes": [
+    "Assets/Editor/EndlessSimulation.cs",
+    "Assets/Resources/ModeDirectors/EndlessWaveEvents.asset",
+    "Assets/Resources/ModeDirectors/EndlessWaves.asset",
+    "Assets/Resources/Modes/endless-fight-villain.asset",
+    "Assets/Resources/Modes/endless-fight.asset",
+    "Assets/Resources/Modes/free-play.asset",
+    "Assets/Resources/Modes/hero.asset",
+    "Assets/Resources/Modes/villain.asset",
+    "Assets/Scripts/EndlessEventsVerificationRunner.cs",
+    "Assets/Scripts/EndlessWaveDirector.cs",
+    "Assets/Scripts/EndlessWaveEvents.cs",
+    "Assets/Scripts/GameFlow.cs",
+    "Assets/Scripts/GameHud.cs",
+    "Assets/Scripts/GameModeDefinition.cs",
+    "Assets/Scripts/Hud/GameHudBoss.cs",
+    "Assets/Scripts/Hud/GameHudFeedback.cs",
+    "Assets/Scripts/Hud/GameHudGuidance.cs",
+    "Assets/Scripts/ModeScreens.cs",
+    "STATUS.md",
+    "tools/verify-sequential.py"
+  ],
+  "unexpected_changes": [],
+  "original_local_files_checked": 1003,
+  "original_local_file_mismatches": [],
+  "native_hero_meshes_hash_matched": 15,
+  "pass": true
+}

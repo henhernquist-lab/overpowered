@@ -1,0 +1,31 @@
+{
+  "tracked_historical_files_checked": 1007,
+  "mismatches": [],
+  "fresh_changed_artifacts_archived": 85,
+  "archives": [
+    {
+      "path": "Verification/PowerExpansion2/regression-artifacts/attempt-1/archived-files.json",
+      "files": 26
+    },
+    {
+      "path": "Verification/PowerExpansion2/regression-artifacts/attempt-3/archived-files.json",
+      "files": 1
+    },
+    {
+      "path": "Verification/PowerExpansion2/regression-artifacts/current-final-pass/archived-files.json",
+      "files": 19
+    },
+    {
+      "path": "Verification/PowerExpansion2/regression-artifacts/attempt-2/archived-files.json",
+      "files": 1
+    },
+    {
+      "path": "Verification/PowerExpansion2/regression-artifacts/committed-partial/archived-files.json",
+      "files": 35
+    },
+    {
+      "path": "Verification/PowerExpansion2/regression-artifacts/lab-pass/archived-files.json",
+      "files": 3
+    }
+  ]
+}

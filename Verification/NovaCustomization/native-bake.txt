@@ -1,0 +1,81 @@
+PASS exact fitted part range SK_HUMN_BASE_01_01HEAD_HU01
+PASS exact fitted part range SK_HUMN_BASE_01_03EBRL_HU01
+PASS exact fitted part range SK_HUMN_BASE_01_04EBRR_HU01
+PASS exact fitted part range SK_HUMN_BASE_01_05EYEL_HU01
+PASS exact fitted part range SK_HUMN_BASE_01_06EYER_HU01
+PASS exact fitted part range SK_HUMN_BASE_01_07EARL_HU01
+PASS exact fitted part range SK_HUMN_BASE_01_08EARR_HU01
+PASS exact fitted part range SK_HUMN_BASE_01_35NOSE_HU01
+PASS exact fitted part range SK_HUMN_BASE_01_36TETH_HU01
+PASS exact fitted part range SK_HUMN_BASE_01_37TONG_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_02HAIR_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_10TORS_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_11AUPL_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_12AUPR_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_13ALWL_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_14ALWR_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_15HNDL_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_16HNDR_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_17HIPS_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_18LEGL_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_19LEGR_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_20FOTL_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_21FOTR_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_22AHED_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_24ABAC_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_25AHPF_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_27AHPL_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_28AHPR_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_29ASHL_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_33AKNL_HU01
+PASS exact fitted part range SK_SCFI_CIVL_09_34AKNR_HU01
+PASS exact fitted part range SK_SCFI_CIVL_10_26AHPB_HU01
+PASS exact fitted part range SK_SCFI_CIVL_10_30ASHR_HU01
+PASS all original geometry accounted for before accessory removal
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_10TORS_HU01
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_10TORS_HU01 joint delta=0.02046545
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_11AUPL_HU01
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_11AUPL_HU01 joint delta=0.02046545
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_12AUPR_HU01
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_12AUPR_HU01 joint delta=0.02046545
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_13ALWL_HU01
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_13ALWL_HU01 joint delta=0.02046545
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_14ALWR_HU01
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_14ALWR_HU01 joint delta=0.02046545
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_15HNDL_HU01
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_15HNDL_HU01 joint delta=0.02046545
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_16HNDR_HU01
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_16HNDR_HU01 joint delta=0.02046545
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_17HIPS_HU01
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_17HIPS_HU01 joint delta=0.02046545
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_18LEGL_HU01
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_18LEGL_HU01 joint delta=0.02046545
+MEASURED source imported axes/bind difference 2.65277; joint pivot distance 0.02046545 for SK_HUMN_BASE_01_19LEGR_HU01
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_19LEGR_HU01 joint delta=0.02046545
+PASS optimized suit budget 5065 vertices / 65 bones
+ASSETS FITTED SK_HUMN_BASE_01_01HEAD_HU01
+ASSETS FITTED SK_HUMN_BASE_01_03EBRL_HU01
+ASSETS FITTED SK_HUMN_BASE_01_04EBRR_HU01
+ASSETS FITTED SK_HUMN_BASE_01_05EYEL_HU01
+ASSETS FITTED SK_HUMN_BASE_01_06EYER_HU01
+ASSETS FITTED SK_HUMN_BASE_01_07EARL_HU01
+ASSETS FITTED SK_HUMN_BASE_01_08EARR_HU01
+ASSETS FITTED SK_HUMN_BASE_01_35NOSE_HU01
+ASSETS FITTED SK_HUMN_BASE_01_36TETH_HU01
+ASSETS FITTED SK_HUMN_BASE_01_37TONG_HU01
+ASSETS FITTED SK_SCFI_CIVL_09_20FOTL_HU01
+ASSETS FITTED SK_SCFI_CIVL_09_21FOTR_HU01
+ASSETS SUIT SK_HUMN_BASE_01_10TORS_HU01 (feminine100, skinny14.5; clothing-only UVs)
+ASSETS SUIT SK_HUMN_BASE_01_11AUPL_HU01 (feminine100, skinny14.5; clothing-only UVs)
+ASSETS SUIT SK_HUMN_BASE_01_12AUPR_HU01 (feminine100, skinny14.5; clothing-only UVs)
+ASSETS SUIT SK_HUMN_BASE_01_13ALWL_HU01 (feminine100, skinny14.5; clothing-only UVs)
+ASSETS SUIT SK_HUMN_BASE_01_14ALWR_HU01 (feminine100, skinny14.5; clothing-only UVs)
+ASSETS SUIT SK_HUMN_BASE_01_15HNDL_HU01 (feminine100, skinny14.5; clothing-only UVs)
+ASSETS SUIT SK_HUMN_BASE_01_16HNDR_HU01 (feminine100, skinny14.5; clothing-only UVs)
+ASSETS SUIT SK_HUMN_BASE_01_17HIPS_HU01 (feminine100, skinny14.5; clothing-only UVs)
+ASSETS SUIT SK_HUMN_BASE_01_18LEGL_HU01 (feminine100, skinny14.5; clothing-only UVs)
+ASSETS SUIT SK_HUMN_BASE_01_19LEGR_HU01 (feminine100, skinny14.5; clothing-only UVs)
+PASS authored star triangle/corner torso clearance >= 0.001422912m
+MEASURED nova_emblem_star: 49 vertices / 64 triangles / 1 existing spine bone
+PASS authored core triangle/corner torso clearance >= 0.002756m
+MEASURED nova_emblem_core: 32 vertices / 32 triangles / 1 existing spine bone

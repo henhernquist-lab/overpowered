@@ -55,7 +55,7 @@ public sealed class GameFlow : MonoBehaviour
         if(spawnsEncounters&&(definition.Rules==null||definition.Encounters==null||definition.Encounters.Length==0)) return false;
         ActiveMode=definition; Result=null; Load(CityScene); return true;
     }
-    /// Home's BATTLE LAB route: the lab is a standalone developer scene, so it is loaded directly instead of through a mode.
+    /// Developer combat-practice route, retained for the Editor tooling; not a third Home gameplay choice.
     public bool OpenCombatLab()
     {
         if(Loading) return false;

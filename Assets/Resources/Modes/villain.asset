@@ -17,6 +17,8 @@ MonoBehaviour:
   Description: Complete 5 heists. Steal loot, wreck props, sabotage arson sites, then escape. 3 failed events or defeats loses; 15-minute cap.
   MenuOrder: 1
   Playable: 1
+  ShowOnHome: 0
+  MenuTagline:
   Side: 1
   Rules: {fileID: 11400000, guid: b574636606f35455a952c52b0d0e1ab6, type: 2}
   Encounters:
@@ -26,6 +28,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3f7a2c9d5e1b48d6a0c4f8b27e9d6153, type: 2}
   - {fileID: 11400000, guid: 7c2e8b41d9f04a63b5d8e7c1a4f29b80, type: 2}
   - {fileID: 11400000, guid: 9d4b6f18a2c357e0d1b8f4c6a3e57d92, type: 2}
+  Selection: {fileID: 0}
   Hud: 31
   MenuHidden: 1
   MenuTag: 

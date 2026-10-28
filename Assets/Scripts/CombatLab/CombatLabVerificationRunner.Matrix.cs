@@ -47,7 +47,7 @@ public sealed partial class CombatLabVerificationRunner
         {
             string primary=signature.OwnerPrimary.Id;
             yield return LoadProfile(primary,"speed",difficulty,signature.Id);
-            var runtime=W.Powers.PowerForSlot(1);var npc=Fixture(kind,primary=="strength"?1.3f:6f);float before=npc.Health;
+            var runtime=W.Powers.PowerForSlot(1);var npc=Fixture(kind,runtime.Definition.Effect.IsMelee?2.2f:primary=="strength"?1.3f:6f);float before=npc.Health;
             int received=0;NpcDamageResult last=default;GameObject thrownFixture=null;
             Action<NpcDamageResult> handler=r=>{if(r.Target==npc){received++;last=r;}};
             CityNpc.DamageApplied+=handler;
@@ -78,9 +78,10 @@ public sealed partial class CombatLabVerificationRunner
             }
             finally{if(thrownFixture!=null)Destroy(thrownFixture);CityNpc.DamageApplied-=handler;W.Powers.ScriptedHold=false;W.Powers.EndChannel();}
             Lab.Clear();yield return null;PlaceHero(Vector3.zero);W.Powers.RestorePracticeEnergy();
-            npc=Fixture(kind,primary=="strength"?2f:6f);before=npc.Health;
+            npc=Fixture(kind,runtime.Definition.Effect.IsMelee?2.2f:primary=="strength"?2f:6f);before=npc.Health;
             var runner=W.Powers.SynergyRunner;
             Check(runner.Definition==signature&&runner.TryActivate(),"Signature activation "+signature.Id+" / "+kind+" / "+difficulty);
+            if(signature.Effect is ApexMutationEffect)Check(W.Powers.Use(runtime),"Apex permits a real enhanced morph strike during its finite buff");
             // Glacial Prison's supported repeat action performs its follow-up shatter.
             if(signature.Effect is GlacialPrisonEffect){yield return new WaitForSeconds(1.25f);runner.TryActivate();}
             float end=Time.time+14;while(runner.Busy&&Time.time<end)yield return null;
@@ -93,7 +94,7 @@ public sealed partial class CombatLabVerificationRunner
         }
         var forge=Resources.Load<ForgeCatalog>("ForgeCatalog");var hero=forge.Hero("vector");
         var utilities=Resources.LoadAll<PowerDefinition>("Powers").Where(d=>forge.AllowedSecondary(hero,d)).ToArray();
-        Check(utilities.Length==4,"Only the four current Forge secondary choices are tested; legacy Flight remains unavailable");
+        Check(utilities.Length==6,"All six current Forge secondary choices are tested; legacy Flight remains unavailable");
         Check(!forge.AllowedSecondary(hero,Definition("flight")),"Legacy Flight is refused by the same equipment gate in practice");
         foreach(var utility in utilities)
         {
@@ -108,8 +109,15 @@ public sealed partial class CombatLabVerificationRunner
             }
             else
             {
+                GameObject anchor=null;
+                if(utility.Effect is GrappleLineEffect)
+                {
+                    anchor=GameObject.CreatePrimitive(PrimitiveType.Cube);anchor.name="Matrix static grapple anchor";anchor.transform.position=new Vector3(12,1.3f,0);anchor.transform.localScale=new Vector3(.4f,4,4);anchor.GetComponent<Renderer>().sharedMaterial=CityMaterials.Get(CityColor.Metal);Physics.SyncTransforms();
+                }
                 AimAt(new Vector3(12,1.3f,0));Check(W.Powers.UseSecondary(),"Equipped secondary activates: "+utility.Id+" ("+W.Powers.Message+")");
                 yield return new WaitForSeconds(.25f);
+                if(utility.Effect is GrappleLineEffect){Check(W.Powers.Expansion.Grappling,"Grapple holds a real static anchor");W.Powers.Expansion.ReleaseGrapple();Destroy(anchor);}
+                if(utility.Effect is MirageDecoyEffect){Check(W.Powers.Expansion.Decoy!=null&&W.Powers.Expansion.Decoy.Alive,"Mirage owns one real finite hologram");W.Powers.Expansion.Decoy.Dissolve();}
                 if(utility.Effect is PhaseShiftEffect){Check(W.Powers.Phase.Active,"Phase remains active");W.Powers.Phase.End();}
                 if(utility.Effect is ForceFieldEffect){float hp=W.Health;W.DamagePlayer(5);Check(W.Health==hp,"Force Field absorbs through authoritative health path");}
             }

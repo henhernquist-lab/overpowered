@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "PowerExpansionAuthoring.PhaseB",
+    "commit": "6dc27d602fc7260098de67d6f8bec26c4182326c",
+    "status_before": "M Assets/Scripts/Forge/ForgeCatalog.cs\n M Assets/Scripts/Forge/HeroForgeScreen.cs\n M Assets/Scripts/Forge/SignatureCatalog.cs\n M Assets/Scripts/PowerDefinition.cs\n M Assets/Scripts/PowerUser.cs\n?? Assets/Editor/PowerExpansionAuthoring.cs\n?? Assets/Editor/PowerExpansionAuthoring.cs.meta\n?? Assets/Scripts/Powers/Expansion.meta\n?? Assets/Scripts/Powers/Expansion/\n?? Assets/Shaders/\n?? Verification/PowerExpansion2/",
+    "started_utc": "2026-10-26T03:38:50.366977+00:00",
+    "save_before": "4af031e1cea8617fee9bcc6765be39815b95b05bdfb92e0af9c205cee52186ad",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/PowerExpansion2/phase-b-authoring/PowerExpansionAuthoring.PhaseB.log",
+    "pid": 52166,
+    "exit": 0,
+    "seconds": 67.23,
+    "pass": 1,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Scripts/Forge/ForgeCatalog.cs\n M Assets/Scripts/Forge/HeroForgeScreen.cs\n M Assets/Scripts/Forge/SignatureCatalog.cs\n M Assets/Scripts/PowerDefinition.cs\n M Assets/Scripts/PowerUser.cs\n?? Assets/Editor/PowerExpansionAuthoring.cs\n?? Assets/Editor/PowerExpansionAuthoring.cs.meta\n?? Assets/Resources/PowerExpansion.meta\n?? Assets/Resources/PowerExpansion/\n?? Assets/Resources/PowerExpansionArt.asset\n?? Assets/Resources/PowerExpansionArt.asset.meta\n?? Assets/Resources/PowerExpansionTuning.asset\n?? Assets/Resources/PowerExpansionTuning.asset.meta\n?? Assets/Resources/Powers/aerokinesis.asset\n?? Assets/Resources/Powers/aerokinesis.asset.meta\n?? Assets/Resources/Powers/sonic-manipulation.asset\n?? Assets/Resources/Powers/sonic-manipulation.asset.meta\n?? Assets/Scripts/Powers/Expansion.meta\n?? Assets/Scripts/Powers/Expansion/\n?? Assets/Shaders.meta\n?? Assets/Shaders/\n?? Verification/PowerExpansion2/"
+  }
+]

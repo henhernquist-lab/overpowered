@@ -1,0 +1,498 @@
+{
+  "hero": "nova",
+  "baseline": "eb5290c",
+  "native_unity_verified": false,
+  "parts": [
+    {
+      "name": "SK_HUMN_BASE_01_01HEAD_HU01",
+      "start": 0,
+      "vertices": 1073,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_HUMN_BASE_01_03EBRL_HU01",
+      "start": 1073,
+      "vertices": 64,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_HUMN_BASE_01_04EBRR_HU01",
+      "start": 1137,
+      "vertices": 63,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_HUMN_BASE_01_05EYEL_HU01",
+      "start": 1200,
+      "vertices": 182,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_HUMN_BASE_01_06EYER_HU01",
+      "start": 1382,
+      "vertices": 196,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_HUMN_BASE_01_07EARL_HU01",
+      "start": 1578,
+      "vertices": 101,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_HUMN_BASE_01_08EARR_HU01",
+      "start": 1679,
+      "vertices": 86,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_HUMN_BASE_01_35NOSE_HU01",
+      "start": 1765,
+      "vertices": 101,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_HUMN_BASE_01_36TETH_HU01",
+      "start": 1866,
+      "vertices": 134,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_HUMN_BASE_01_37TONG_HU01",
+      "start": 2000,
+      "vertices": 104,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_02HAIR_HU01",
+      "start": 2104,
+      "vertices": 1747,
+      "retained": false,
+      "bones": 10
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_10TORS_HU01",
+      "start": 3851,
+      "vertices": 2558,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_11AUPL_HU01",
+      "start": 6409,
+      "vertices": 281,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_12AUPR_HU01",
+      "start": 6690,
+      "vertices": 307,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_13ALWL_HU01",
+      "start": 6997,
+      "vertices": 689,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_14ALWR_HU01",
+      "start": 7686,
+      "vertices": 653,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_15HNDL_HU01",
+      "start": 8339,
+      "vertices": 647,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_16HNDR_HU01",
+      "start": 8986,
+      "vertices": 629,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_17HIPS_HU01",
+      "start": 9615,
+      "vertices": 2050,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_18LEGL_HU01",
+      "start": 11665,
+      "vertices": 437,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_19LEGR_HU01",
+      "start": 12102,
+      "vertices": 437,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_20FOTL_HU01",
+      "start": 12539,
+      "vertices": 419,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_21FOTR_HU01",
+      "start": 12958,
+      "vertices": 413,
+      "retained": true,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_22AHED_HU01",
+      "start": 13371,
+      "vertices": 3059,
+      "retained": false,
+      "bones": 13
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_24ABAC_HU01",
+      "start": 16430,
+      "vertices": 4296,
+      "retained": false,
+      "bones": 103
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_25AHPF_HU01",
+      "start": 20726,
+      "vertices": 433,
+      "retained": false,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_27AHPL_HU01",
+      "start": 21159,
+      "vertices": 672,
+      "retained": false,
+      "bones": 89
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_28AHPR_HU01",
+      "start": 21831,
+      "vertices": 536,
+      "retained": false,
+      "bones": 89
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_29ASHL_HU01",
+      "start": 22367,
+      "vertices": 484,
+      "retained": false,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_33AKNL_HU01",
+      "start": 22851,
+      "vertices": 195,
+      "retained": false,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_09_34AKNR_HU01",
+      "start": 23046,
+      "vertices": 186,
+      "retained": false,
+      "bones": 88
+    },
+    {
+      "name": "SK_SCFI_CIVL_10_26AHPB_HU01",
+      "start": 23232,
+      "vertices": 422,
+      "retained": false,
+      "bones": 95
+    },
+    {
+      "name": "SK_SCFI_CIVL_10_30ASHR_HU01",
+      "start": 23654,
+      "vertices": 2921,
+      "retained": false,
+      "bones": 106
+    }
+  ],
+  "source_assets": [
+    "SK_HUMN_BASE_01_01HEAD_HU01",
+    "SK_HUMN_BASE_01_03EBRL_HU01",
+    "SK_HUMN_BASE_01_04EBRR_HU01",
+    "SK_HUMN_BASE_01_05EYEL_HU01",
+    "SK_HUMN_BASE_01_06EYER_HU01",
+    "SK_HUMN_BASE_01_07EARL_HU01",
+    "SK_HUMN_BASE_01_08EARR_HU01",
+    "SK_HUMN_BASE_01_35NOSE_HU01",
+    "SK_HUMN_BASE_01_36TETH_HU01",
+    "SK_HUMN_BASE_01_37TONG_HU01",
+    "SK_SCFI_CIVL_09_10TORS_HU01",
+    "SK_SCFI_CIVL_09_11AUPL_HU01",
+    "SK_SCFI_CIVL_09_12AUPR_HU01",
+    "SK_SCFI_CIVL_09_13ALWL_HU01",
+    "SK_SCFI_CIVL_09_14ALWR_HU01",
+    "SK_SCFI_CIVL_09_15HNDL_HU01",
+    "SK_SCFI_CIVL_09_16HNDR_HU01",
+    "SK_SCFI_CIVL_09_17HIPS_HU01",
+    "SK_SCFI_CIVL_09_18LEGL_HU01",
+    "SK_SCFI_CIVL_09_19LEGR_HU01",
+    "SK_SCFI_CIVL_09_20FOTL_HU01",
+    "SK_SCFI_CIVL_09_21FOTR_HU01"
+  ],
+  "body": {
+    "vertices": 11624,
+    "triangles": 9500,
+    "bones": 65,
+    "paths": [
+      "root/pelvis/thigh_l/calf_l/foot_l/ball_l",
+      "root/pelvis/thigh_r/calf_r/foot_r/ball_r",
+      "root/pelvis/thigh_l/calf_l",
+      "root/pelvis/thigh_r/calf_r",
+      "root/pelvis/thigh_l/calf_l/calf_twist_01_l",
+      "root/pelvis/thigh_r/calf_r/calf_twist_01_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r",
+      "root/pelvis/spine_01/spine_02/spine_03/neck_01/head/eyeLight_l",
+      "root/pelvis/spine_01/spine_02/spine_03/neck_01/head/eyeLight_r",
+      "root/pelvis/spine_01/spine_02/spine_03/neck_01/head/eye_l",
+      "root/pelvis/spine_01/spine_02/spine_03/neck_01/head/eye_r",
+      "root/pelvis/thigh_l/calf_l/foot_l",
+      "root/pelvis/thigh_r/calf_r/foot_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r",
+      "root/pelvis/spine_01/spine_02/spine_03/neck_01/head",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/index_01_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/index_01_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/index_01_l/index_02_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/index_01_r/index_02_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/index_01_l/index_02_l/index_03_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/index_01_r/index_02_r/index_03_r",
+      "root/pelvis/spine_01/spine_02/spine_03/neck_01/head/jaw",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/lowerarm_twist_01_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/lowerarm_twist_01_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/middle_01_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/middle_01_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/middle_01_l/middle_02_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/middle_01_r/middle_02_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/middle_01_l/middle_02_l/middle_03_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/middle_01_r/middle_02_r/middle_03_r",
+      "root/pelvis/spine_01/spine_02/spine_03/neck_01",
+      "root/pelvis",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/pinky_01_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/pinky_01_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/pinky_01_l/pinky_02_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/pinky_01_r/pinky_02_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/pinky_01_l/pinky_02_l/pinky_03_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/pinky_01_r/pinky_02_r/pinky_03_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/ring_01_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/ring_01_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/ring_01_l/ring_02_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/ring_01_r/ring_02_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/ring_01_l/ring_02_l/ring_03_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/ring_01_r/ring_02_r/ring_03_r",
+      "root/pelvis/spine_01",
+      "root/pelvis/spine_01/spine_02",
+      "root/pelvis/spine_01/spine_02/spine_03",
+      "root/pelvis/thigh_l",
+      "root/pelvis/thigh_r",
+      "root/pelvis/thigh_l/thigh_twist_01_l",
+      "root/pelvis/thigh_r/thigh_twist_01_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/thumb_01_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/thumb_01_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/thumb_01_l/thumb_02_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/thumb_01_r/thumb_02_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/thumb_01_l/thumb_02_l/thumb_03_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/thumb_01_r/thumb_02_r/thumb_03_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/upperarm_twist_01_l",
+      "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/upperarm_twist_01_r"
+    ]
+  },
+  "emblems": [
+    {
+      "id": "nova_emblem_star",
+      "mesh": "nova_emblem_star.asset",
+      "vertices": 161,
+      "triangles": 256,
+      "bones": [
+        "root/pelvis/spine_01/spine_02/spine_03"
+      ]
+    },
+    {
+      "id": "nova_emblem_core",
+      "mesh": "nova_emblem_core.asset",
+      "vertices": 32,
+      "triangles": 32,
+      "bones": [
+        "root/pelvis/spine_01/spine_02/spine_03"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "nova_suit_energyweave",
+      "title": "Energy Weave \u00b7 starter fit",
+      "slot": 0,
+      "mesh": "nova_suit_energyweave.asset",
+      "bones": [
+        "root/pelvis/thigh_l/calf_l/foot_l/ball_l",
+        "root/pelvis/thigh_r/calf_r/foot_r/ball_r",
+        "root/pelvis/thigh_l/calf_l",
+        "root/pelvis/thigh_r/calf_r",
+        "root/pelvis/thigh_l/calf_l/calf_twist_01_l",
+        "root/pelvis/thigh_r/calf_r/calf_twist_01_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r",
+        "root/pelvis/spine_01/spine_02/spine_03/neck_01/head/eyeLight_l",
+        "root/pelvis/spine_01/spine_02/spine_03/neck_01/head/eyeLight_r",
+        "root/pelvis/spine_01/spine_02/spine_03/neck_01/head/eye_l",
+        "root/pelvis/spine_01/spine_02/spine_03/neck_01/head/eye_r",
+        "root/pelvis/thigh_l/calf_l/foot_l",
+        "root/pelvis/thigh_r/calf_r/foot_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r",
+        "root/pelvis/spine_01/spine_02/spine_03/neck_01/head",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/index_01_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/index_01_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/index_01_l/index_02_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/index_01_r/index_02_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/index_01_l/index_02_l/index_03_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/index_01_r/index_02_r/index_03_r",
+        "root/pelvis/spine_01/spine_02/spine_03/neck_01/head/jaw",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/lowerarm_twist_01_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/lowerarm_twist_01_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/middle_01_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/middle_01_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/middle_01_l/middle_02_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/middle_01_r/middle_02_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/middle_01_l/middle_02_l/middle_03_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/middle_01_r/middle_02_r/middle_03_r",
+        "root/pelvis/spine_01/spine_02/spine_03/neck_01",
+        "root/pelvis",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/pinky_01_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/pinky_01_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/pinky_01_l/pinky_02_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/pinky_01_r/pinky_02_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/pinky_01_l/pinky_02_l/pinky_03_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/pinky_01_r/pinky_02_r/pinky_03_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/ring_01_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/ring_01_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/ring_01_l/ring_02_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/ring_01_r/ring_02_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/ring_01_l/ring_02_l/ring_03_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/ring_01_r/ring_02_r/ring_03_r",
+        "root/pelvis/spine_01",
+        "root/pelvis/spine_01/spine_02",
+        "root/pelvis/spine_01/spine_02/spine_03",
+        "root/pelvis/thigh_l",
+        "root/pelvis/thigh_r",
+        "root/pelvis/thigh_l/thigh_twist_01_l",
+        "root/pelvis/thigh_r/thigh_twist_01_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/thumb_01_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/thumb_01_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/thumb_01_l/thumb_02_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/thumb_01_r/thumb_02_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/thumb_01_l/thumb_02_l/thumb_03_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/thumb_01_r/thumb_02_r/thumb_03_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/upperarm_twist_01_l",
+        "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/upperarm_twist_01_r"
+      ],
+      "available": true,
+      "reason": "",
+      "suits": []
+    },
+    {
+      "id": "nova_mask_unmasked",
+      "title": "Unmasked",
+      "slot": 1,
+      "mesh": null,
+      "bones": [],
+      "available": true,
+      "reason": "",
+      "suits": [
+        "nova_suit_energyweave"
+      ]
+    },
+    {
+      "id": "nova_mask_spectrum",
+      "title": "Spectrum Visor",
+      "slot": 1,
+      "mesh": null,
+      "bones": [],
+      "available": false,
+      "reason": "No suitable futuristic visor exists in the installed Starter art. Needs an artist-fitted Sidekick NOVA visor mesh; the eye patch, hood and fox mask are not substituted.",
+      "suits": [
+        "nova_suit_energyweave"
+      ]
+    },
+    {
+      "id": "nova_mask_phantom",
+      "title": "Phantom Helmet",
+      "slot": 1,
+      "mesh": null,
+      "bones": [],
+      "available": false,
+      "reason": "No suitable enclosed lightweight futuristic helmet exists in the installed Starter art. Needs an artist-fitted NOVA helmet. No overlapping fox-mask or placeholder helmet is rendered.",
+      "suits": [
+        "nova_suit_energyweave"
+      ]
+    },
+    {
+      "id": "nova_emblem_star",
+      "title": "Nova Star",
+      "slot": 2,
+      "mesh": "nova_emblem_star.asset",
+      "bones": [
+        "root/pelvis/spine_01/spine_02/spine_03"
+      ],
+      "available": true,
+      "reason": "",
+      "suits": [
+        "nova_suit_energyweave"
+      ]
+    },
+    {
+      "id": "nova_emblem_core",
+      "title": "Energy Core",
+      "slot": 2,
+      "mesh": "nova_emblem_core.asset",
+      "bones": [
+        "root/pelvis/spine_01/spine_02/spine_03"
+      ],
+      "available": true,
+      "reason": "",
+      "suits": [
+        "nova_suit_energyweave"
+      ]
+    }
+  ],
+  "posed_error_m": 0.0,
+  "geometry_source_sha256": "6789f2c783fae998aedc4f186c1514bc2f9690e0f3a1900cba6ecf0eb90b0ed6"
+}

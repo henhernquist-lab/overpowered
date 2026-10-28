@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "PowerExpansionVerification.Gameplay",
+    "commit": "33997e3837334e7865f26bf9aa8f3dc0e656617d",
+    "status_before": "M Assets/Editor/FirstPersonVerification.cs\n M Assets/Editor/HumanoidVerification.cs\n M Assets/Editor/PowerExpansionVerification.cs\n M Assets/Scripts/Enemies/TwoModeVerificationRunner.cs\n M Assets/Scripts/Forge/ArtVerification/HeroForgeArtVerificationRunner.Gameplay.cs\n M Assets/Scripts/Forge/SynergyRunner.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionMelee.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionRuntime.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionSignatureVerification.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionTraversal.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionVerificationRunner.cs\n M Assets/Scripts/Powers/Expansion/PowerUser.Expansion.cs\n?? Assets/Editor/PowerExpansionLegacyVerification.cs\n?? Assets/Editor/PowerExpansionLegacyVerification.cs.meta\n?? Assets/Scripts/Powers/Expansion/PowerExpansionGameplayVerification.cs\n?? Assets/Scripts/Powers/Expansion/PowerExpansionGameplayVerification.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt",
+    "started_utc": "2026-10-26T04:19:02.618472+00:00",
+    "save_before": "4af031e1cea8617fee9bcc6765be39815b95b05bdfb92e0af9c205cee52186ad",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/PowerExpansion2/phase-g-gameplay-1/PowerExpansionVerification.Gameplay.log",
+    "pid": 54990,
+    "exit": 0,
+    "seconds": 146.67,
+    "pass": 577,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Editor/FirstPersonVerification.cs\n M Assets/Editor/HumanoidVerification.cs\n M Assets/Editor/PowerExpansionVerification.cs\n M Assets/Scripts/Enemies/TwoModeVerificationRunner.cs\n M Assets/Scripts/Forge/ArtVerification/HeroForgeArtVerificationRunner.Gameplay.cs\n M Assets/Scripts/Forge/SynergyRunner.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionMelee.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionRuntime.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionSignatureVerification.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionTraversal.cs\n M Assets/Scripts/Powers/Expansion/PowerExpansionVerificationRunner.cs\n M Assets/Scripts/Powers/Expansion/PowerUser.Expansion.cs\n?? Assets/Editor/PowerExpansionLegacyVerification.cs\n?? Assets/Editor/PowerExpansionLegacyVerification.cs.meta\n?? Assets/Scripts/Powers/Expansion/PowerExpansionGameplayVerification.cs\n?? Assets/Scripts/Powers/Expansion/PowerExpansionGameplayVerification.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/PowerExpansion2/images/\n?? Verification/PowerExpansion2/phase-gameplay.txt"
+  }
+]

@@ -1,0 +1,412 @@
+PASS Home exposes exactly two gameplay choices: ENDLESS FIGHT and FREE PLAY; no campaign/variant/Lab route
+PASS Actual card titles match the two-mode design
+PASS Hero Forge and all three difficulty choices remain accessible
+PASS Existing Version 1 profile loads without mode errors
+PASS Both main mode cards have usable, nonoverlapping rendered bounds
+PASS Legacy hero remains internally loadable without Home selection
+PASS Legacy villain remains internally loadable without Home selection
+PASS Legacy endless-fight-villain remains internally loadable without Home selection
+PASS Existing Hero Forge opens through its real Home button
+PASS Existing actual modular outfit selections still work
+PASS Save current hero and two equipped powers through existing ownership/equip gates
+PASS Normal difficulty selection preserved
+PASS Actual Home callback starts the SHIPPING Endless director, not a fixture clone
+PASS Actual shipping director references the actual Pulsebreaker schedule/archetype
+PASS Single Endless choice retains saved allegiance and locks it for that run
+PASS Current equipped powers carry through actual menu spawn
+PASS Actual saved Forge suit carries into Endless
+PASS Actual round 1 started
+PASS Shipping round 1: exact guaranteed boss formula
+PASS CONTROL round 1: no automatic boss
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Round 1 completes exactly once after authoritative defeats
+PASS Actual round 2 started
+PASS Shipping round 2: exact guaranteed boss formula
+PASS CONTROL round 2: no automatic boss
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Round 2 completes exactly once after authoritative defeats
+PASS Actual round 3 started
+PASS Shipping round 3: exact guaranteed boss formula
+PASS CONTROL round 3: no automatic boss
+PASS Skirmisher eligibility starts at round 3
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Round 3 completes exactly once after authoritative defeats
+PASS Actual round 4 started
+PASS Shipping round 4: exact guaranteed boss formula
+PASS CONTROL round 4: no automatic boss
+PASS Skirmisher eligibility starts at round 3
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Round 4 completes exactly once after authoritative defeats
+PASS Actual round 5 started
+PASS Shipping round 5: exact guaranteed boss formula
+PASS Actual functioning boss brain attached to live wave actor
+PASS Maximum one active Pulsebreaker
+PASS Boss spawned on valid ground NavMesh, not a rooftop
+PASS Boss is hostile to current allegiance and permanently aggroed
+PASS Boss bar names actual boss and uses authoritative HP/max
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Boss defeat is REQUIRED; regular kills cannot clear round 5
+PASS Existing NPC health event updates even a sub-.25% hit immediately; no epsilon filtering
+PASS Boss bar displays actual current / maximum HP text
+PASS Living encounter bar remains visible beyond the former 90m distance cutoff
+PASS Capture uses the existing dismissed briefing, so actual boss combat is visible
+PASS Boss bar fits actual 1280x720 layout
+PASS Boss bar clears the round/score HUD
+PASS Boss bar does not cover actual level-up/milestone banner
+PASS Boss bar remains visible in first-person
+PASS Capture uses the existing dismissed briefing, so actual boss combat is visible
+PASS Boss bar fits actual 1920x1080 layout
+PASS Boss bar clears the round/score HUD
+PASS Boss bar does not cover actual level-up/milestone banner
+PASS Boss bar hides while pause/menu controls are open
+PASS Boss bar restores after pause
+PASS Authoritative <=40% threshold enters actual Overdrive and explicit phase UI
+PASS Capture uses the existing dismissed briefing, so actual boss combat is visible
+PASS Boss bar fits actual 1280x720 layout
+PASS Boss bar clears the round/score HUD
+PASS Boss bar does not cover actual level-up/milestone banner
+PASS Boss death event immediately removes bar
+PASS Boss defeat accounts exactly once in wave and miniboss rewards
+PASS Defeating final boss completes its round
+PASS Repeated boss rounds reuse one bounded HUD bar
+PASS Round 5 completes exactly once after authoritative defeats
+PASS Actual round 6 started
+PASS Shipping round 6: exact guaranteed boss formula
+PASS CONTROL round 6: no automatic boss
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Round 6 completes exactly once after authoritative defeats
+PASS Actual round 7 started
+PASS Shipping round 7: exact guaranteed boss formula
+PASS CONTROL round 7: no automatic boss
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Round 7 completes exactly once after authoritative defeats
+PASS Actual round 8 started
+PASS Shipping round 8: exact guaranteed boss formula
+PASS CONTROL round 8: no automatic boss
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Round 8 completes exactly once after authoritative defeats
+PASS Actual round 9 started
+PASS Shipping round 9: exact guaranteed boss formula
+PASS CONTROL round 9: no automatic boss
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Round 9 completes exactly once after authoritative defeats
+PASS Actual round 10 started
+PASS Shipping round 10: exact guaranteed boss formula
+PASS Actual functioning boss brain attached to live wave actor
+PASS Maximum one active Pulsebreaker
+PASS Boss spawned on valid ground NavMesh, not a rooftop
+PASS Boss is hostile to current allegiance and permanently aggroed
+PASS Boss bar names actual boss and uses authoritative HP/max
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Boss defeat is REQUIRED; regular kills cannot clear round 10
+PASS Existing NPC health event updates even a sub-.25% hit immediately; no epsilon filtering
+PASS Boss bar displays actual current / maximum HP text
+PASS Boss bar remains visible in first-person
+PASS Boss bar hides while pause/menu controls are open
+PASS Boss bar restores after pause
+PASS Authoritative <=40% threshold enters actual Overdrive and explicit phase UI
+PASS Boss death event immediately removes bar
+PASS Boss defeat accounts exactly once in wave and miniboss rewards
+PASS Defeating final boss completes its round
+PASS Repeated boss rounds reuse one bounded HUD bar
+PASS Round 10 completes exactly once after authoritative defeats
+PASS Actual round 11 started
+PASS Shipping round 11: exact guaranteed boss formula
+PASS CONTROL round 11: no automatic boss
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Skirmisher eligibility starts at round 3
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Round 11 completes exactly once after authoritative defeats
+PASS Actual round 12 started
+PASS Shipping round 12: exact guaranteed boss formula
+PASS CONTROL round 12: no automatic boss
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Round 12 completes exactly once after authoritative defeats
+PASS Actual round 13 started
+PASS Shipping round 13: exact guaranteed boss formula
+PASS CONTROL round 13: no automatic boss
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Round 13 completes exactly once after authoritative defeats
+PASS Actual round 14 started
+PASS Shipping round 14: exact guaranteed boss formula
+PASS CONTROL round 14: no automatic boss
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Round 14 completes exactly once after authoritative defeats
+PASS Actual round 15 started
+PASS Shipping round 15: exact guaranteed boss formula
+PASS Actual functioning boss brain attached to live wave actor
+PASS Maximum one active Pulsebreaker
+PASS Boss spawned on valid ground NavMesh, not a rooftop
+PASS Boss is hostile to current allegiance and permanently aggroed
+PASS Boss bar names actual boss and uses authoritative HP/max
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Boss defeat is REQUIRED; regular kills cannot clear round 15
+PASS Existing NPC health event updates even a sub-.25% hit immediately; no epsilon filtering
+PASS Boss bar displays actual current / maximum HP text
+PASS Boss bar remains visible in first-person
+PASS Boss bar hides while pause/menu controls are open
+PASS Boss bar restores after pause
+PASS Authoritative <=40% threshold enters actual Overdrive and explicit phase UI
+PASS Boss death event immediately removes bar
+PASS Boss defeat accounts exactly once in wave and miniboss rewards
+PASS Defeating final boss completes its round
+PASS Repeated boss rounds reuse one bounded HUD bar
+PASS Round 15 completes exactly once after authoritative defeats
+PASS Shipping rounds 5/10/15 each delivered one functional Pulsebreaker
+PASS All five regular archetypes actually spawned through round 15: Rusher,Gunner,Brute,Skirmisher,Bulwark
+PASS Live enemy count remains within existing MaxAlive cap
+PASS Retry/lost-boss control starts a real scheduled boss round
+PASS Actual round 5 started
+PASS Blocked candidates reserve boss before all regulars and cannot silently clear the round
+PASS Safe bounded candidates retry on cooldown and emit useful reserved-slot diagnostic
+PASS Actual functioning boss brain attached to live wave actor
+PASS Maximum one active Pulsebreaker
+PASS Boss spawned on valid ground NavMesh, not a rooftop
+PASS Boss is hostile to current allegiance and permanently aggroed
+PASS Actual functioning boss brain attached to live wave actor
+PASS Maximum one active Pulsebreaker
+PASS Boss spawned on valid ground NavMesh, not a rooftop
+PASS Boss is hostile to current allegiance and permanently aggroed
+PASS Unexpected despawn is NOT a defeat; reserved slot reconstructs actual Pulsebreaker instead of a regular enemy
+PASS Boss bar names actual boss and uses authoritative HP/max
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Boss defeat is REQUIRED; regular kills cannot clear round 5
+PASS Existing NPC health event updates even a sub-.25% hit immediately; no epsilon filtering
+PASS Boss bar displays actual current / maximum HP text
+PASS Boss bar remains visible in first-person
+PASS Boss bar hides while pause/menu controls are open
+PASS Boss bar restores after pause
+PASS Authoritative <=40% threshold enters actual Overdrive and explicit phase UI
+PASS Boss death event immediately removes bar
+PASS Boss defeat accounts exactly once in wave and miniboss rewards
+PASS Defeating final boss completes its round
+PASS Repeated boss rounds reuse one bounded HUD bar
+PASS Start isolated cap=1 control without mutating shipping asset
+PASS Actual round 5 started
+PASS Actual functioning boss brain attached to live wave actor
+PASS Maximum one active Pulsebreaker
+PASS Boss spawned on valid ground NavMesh, not a rooftop
+PASS Boss is hostile to current allegiance and permanently aggroed
+PASS Even cap=1 admits reserved boss first; no regular enemy silently occupies the slot
+PASS hard: Home difficulty selection works
+PASS hard: jump to 5
+PASS Actual round 5 started
+PASS Actual functioning boss brain attached to live wave actor
+PASS Maximum one active Pulsebreaker
+PASS Boss spawned on valid ground NavMesh, not a rooftop
+PASS Boss is hostile to current allegiance and permanently aggroed
+PASS hard round 5: enemy health difficulty applied exactly once (873.6 / 873.6)
+PASS hard round 5: attack damage remains unscaled until shared player damage boundary
+PASS Boss bar names actual boss and uses authoritative HP/max
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Boss defeat is REQUIRED; regular kills cannot clear round 5
+PASS Existing NPC health event updates even a sub-.25% hit immediately; no epsilon filtering
+PASS Boss bar displays actual current / maximum HP text
+PASS Boss bar remains visible in first-person
+PASS Boss bar hides while pause/menu controls are open
+PASS Boss bar restores after pause
+PASS Authoritative <=40% threshold enters actual Overdrive and explicit phase UI
+PASS Boss death event immediately removes bar
+PASS Boss defeat accounts exactly once in wave and miniboss rewards
+PASS Defeating final boss completes its round
+PASS Repeated boss rounds reuse one bounded HUD bar
+PASS hard: jump to 10
+PASS Actual round 10 started
+PASS Actual functioning boss brain attached to live wave actor
+PASS Maximum one active Pulsebreaker
+PASS Boss spawned on valid ground NavMesh, not a rooftop
+PASS Boss is hostile to current allegiance and permanently aggroed
+PASS hard round 10: enemy health difficulty applied exactly once (1283.1 / 1283.1)
+PASS hard round 10: attack damage remains unscaled until shared player damage boundary
+PASS Boss bar names actual boss and uses authoritative HP/max
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Boss defeat is REQUIRED; regular kills cannot clear round 10
+PASS Existing NPC health event updates even a sub-.25% hit immediately; no epsilon filtering
+PASS Boss bar displays actual current / maximum HP text
+PASS Boss bar remains visible in first-person
+PASS Boss bar hides while pause/menu controls are open
+PASS Boss bar restores after pause
+PASS Authoritative <=40% threshold enters actual Overdrive and explicit phase UI
+PASS Boss death event immediately removes bar
+PASS Boss defeat accounts exactly once in wave and miniboss rewards
+PASS Defeating final boss completes its round
+PASS Repeated boss rounds reuse one bounded HUD bar
+PASS hard: jump to 15
+PASS Actual round 15 started
+PASS Actual functioning boss brain attached to live wave actor
+PASS Maximum one active Pulsebreaker
+PASS Boss spawned on valid ground NavMesh, not a rooftop
+PASS Boss is hostile to current allegiance and permanently aggroed
+PASS hard round 15: enemy health difficulty applied exactly once (1692.6 / 1692.6)
+PASS hard round 15: attack damage remains unscaled until shared player damage boundary
+PASS Boss bar names actual boss and uses authoritative HP/max
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Boss defeat is REQUIRED; regular kills cannot clear round 15
+PASS Existing NPC health event updates even a sub-.25% hit immediately; no epsilon filtering
+PASS Boss bar displays actual current / maximum HP text
+PASS Boss bar remains visible in first-person
+PASS Boss bar hides while pause/menu controls are open
+PASS Boss bar restores after pause
+PASS Authoritative <=40% threshold enters actual Overdrive and explicit phase UI
+PASS Boss death event immediately removes bar
+PASS Boss defeat accounts exactly once in wave and miniboss rewards
+PASS Defeating final boss completes its round
+PASS Repeated boss rounds reuse one bounded HUD bar
+PASS extreme: Home difficulty selection works
+PASS extreme: jump to 5
+PASS Actual round 5 started
+PASS Actual functioning boss brain attached to live wave actor
+PASS Maximum one active Pulsebreaker
+PASS Boss spawned on valid ground NavMesh, not a rooftop
+PASS Boss is hostile to current allegiance and permanently aggroed
+PASS extreme round 5: enemy health difficulty applied exactly once (894.4 / 894.4)
+PASS extreme round 5: attack damage remains unscaled until shared player damage boundary
+PASS Boss bar names actual boss and uses authoritative HP/max
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Boss defeat is REQUIRED; regular kills cannot clear round 5
+PASS Existing NPC health event updates even a sub-.25% hit immediately; no epsilon filtering
+PASS Boss bar displays actual current / maximum HP text
+PASS Boss bar remains visible in first-person
+PASS Boss bar hides while pause/menu controls are open
+PASS Boss bar restores after pause
+PASS Authoritative <=40% threshold enters actual Overdrive and explicit phase UI
+PASS Boss death event immediately removes bar
+PASS Boss defeat accounts exactly once in wave and miniboss rewards
+PASS Defeating final boss completes its round
+PASS Repeated boss rounds reuse one bounded HUD bar
+PASS extreme: jump to 10
+PASS Actual round 10 started
+PASS Actual functioning boss brain attached to live wave actor
+PASS Maximum one active Pulsebreaker
+PASS Boss spawned on valid ground NavMesh, not a rooftop
+PASS Boss is hostile to current allegiance and permanently aggroed
+PASS extreme round 10: enemy health difficulty applied exactly once (1313.65 / 1313.65)
+PASS extreme round 10: attack damage remains unscaled until shared player damage boundary
+PASS Boss bar names actual boss and uses authoritative HP/max
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Boss defeat is REQUIRED; regular kills cannot clear round 10
+PASS Existing NPC health event updates even a sub-.25% hit immediately; no epsilon filtering
+PASS Boss bar displays actual current / maximum HP text
+PASS Boss bar remains visible in first-person
+PASS Boss bar hides while pause/menu controls are open
+PASS Boss bar restores after pause
+PASS Authoritative <=40% threshold enters actual Overdrive and explicit phase UI
+PASS Boss death event immediately removes bar
+PASS Boss defeat accounts exactly once in wave and miniboss rewards
+PASS Defeating final boss completes its round
+PASS Repeated boss rounds reuse one bounded HUD bar
+PASS extreme: jump to 15
+PASS Actual round 15 started
+PASS Actual functioning boss brain attached to live wave actor
+PASS Maximum one active Pulsebreaker
+PASS Boss spawned on valid ground NavMesh, not a rooftop
+PASS Boss is hostile to current allegiance and permanently aggroed
+PASS extreme round 15: enemy health difficulty applied exactly once (1732.9 / 1732.9)
+PASS extreme round 15: attack damage remains unscaled until shared player damage boundary
+PASS Boss bar names actual boss and uses authoritative HP/max
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS Skirmisher eligibility starts at round 3
+PASS Bulwark eligibility starts at round 5
+PASS Skirmisher eligibility starts at round 3
+PASS All intended regular wave actors defeated through existing NPC damage path
+PASS Boss defeat is REQUIRED; regular kills cannot clear round 15
+PASS Existing NPC health event updates even a sub-.25% hit immediately; no epsilon filtering
+PASS Boss bar displays actual current / maximum HP text
+PASS Boss bar remains visible in first-person
+PASS Boss bar hides while pause/menu controls are open
+PASS Boss bar restores after pause
+PASS Authoritative <=40% threshold enters actual Overdrive and explicit phase UI
+PASS Boss death event immediately removes bar
+PASS Boss defeat accounts exactly once in wave and miniboss rewards
+PASS Defeating final boss completes its round
+PASS Repeated boss rounds reuse one bounded HUD bar
+PASS Repeated rounds clean up dead actors after their configured lifetime; live cap remains bounded
+PASS Free Play has no wave director, forced combat encounters or rounds
+PASS Free Play advances independently, preserves Heat/police and never automatically creates Pulsebreaker
+PASS Free Play keeps working internal allegiance switching
+PASS Old mode records and Version 1 survive the overhaul without destructive migration
+PASS Cosmetics persist across both modes and all difficulty runs

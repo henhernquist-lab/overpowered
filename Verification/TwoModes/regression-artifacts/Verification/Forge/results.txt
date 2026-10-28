@@ -1,0 +1,145 @@
+PASS Three selectable data-defined heroes.
+PASS Home button opens Forge in existing panel.
+PASS Character preview render texture exists.
+PASS Duplicate combat pair CONTROL rejected by save API.
+PASS Fresh profile owns every power with 0 points spent (InitiallyUnlocked data).
+PASS Forge shows no UNLOCK purchase buttons.
+PASS Unowned-power CONTROL (ownership removed in memory only) rejected by Forge and SetLoadout; ownership restored.
+PASS Select NOVA definition.
+PASS Suit palette roles saved.
+PASS Slot 1 collision repairs slot 2 immediately.
+PASS Slot 2 UI excludes duplicate.
+PASS Select Fire + Ice attacks and Speed secondary.
+PASS Successful Forge save starts the Cinemachine preview reveal without blocking the form.
+PASS Cinemachine preview camera actually orbits the selected hero (heading -28.0 -> 17.6 deg, camera moved up to 1.70 m, 173 frames).
+PASS Short Forge reveal settles on the front view (heading 0) without delaying navigation.
+PASS Pair lookup is order-independent.
+PASS Enter Hero with saved build.
+PASS Gameplay receives exact equipped pair.
+PASS Unequipped flight CONTROL refuses real fuel API.
+PASS Unequipped Strength CONTROL cannot be selected or fired directly.
+PASS Basic punch remains available without Strength.
+PASS Basic melee force is reduced, not hidden super strength: 160 N.s.
+PASS Live loadout mutation CONTROL refused.
+PASS Selected humanoid model instantiated.
+PASS Save TITAN Strength + Telekinesis attacks with Flight for Sonic synergy.
+PASS Sonic Slam accepted on valid ground.
+PASS Active/cooldown CONTROL refuses immediate spam.
+PASS Pause CONTROL freezes synergy motion/cooldown and rejects activation.
+PASS Sonic Slam rises then collides with actual ground exactly once.
+PASS Sonic force moves real 45kg Rigidbody.
+PASS Outside-radius CONTROL has no horizontal launch.
+MEASURED Sonic peak=154.311m, force=2600.0 N.s, bodies=1, near velocity=34.396m/s, displacement=0.615m; cooldown=34.598s.
+PASS Cooldown still blocks after animation ends.
+PASS Actual pooled ParticleSystem / ring emitted once.
+PASS Real ParticleSystem contains bounded live particles.
+PASS Particle positions advance over real frames (not a frozen emission counter).
+PASS All six VFX slots share the same particle mesh.
+PASS Every pooled synergy ring shares one cached palette ring material; 6 more bursts create no material (122->122).
+PASS Ring is the unlit Cream palette swatch (not the lit Standard swatch) and is owned by the session's CityMaterials.
+PASS Equipped Flight positive control consumes the configured fuel cost.
+PASS Equipped Strength uses existing paid punch.
+PASS Shared punch/kick cooldown still rejects kick.
+PASS Equipped Strength preserves original force.
+PASS Zero Strength charges still reject Hurricane Kick.
+PASS Backflip remains available.
+PASS Backflip CONTROL has no invincibility.
+PASS Leaving the session destroys the unlit ring material with its CityMaterials owner.
+PASS Save final three-slot loadout for separate-process test.
+PASS Villain mode switch preserves build and progression.
+PASS Shipping catalog is EXACTLY the five capped synergies: eclipse-beam, solar-flare, sonic-slam, thermal-shock, void-grasp
+PASS The eight removed legacy synergies are neither in the catalog nor loadable from Resources.
+PASS darkness + fire -> none (no synergy expected).
+PASS darkness + flight -> none (no synergy expected).
+PASS darkness + force-field -> none (no synergy expected).
+PASS darkness + ice -> none (no synergy expected).
+PASS darkness + laser-eyes -> eclipse-beam (capped pair).
+PASS darkness + lightning -> none (no synergy expected).
+PASS darkness + phase-shift -> none (no synergy expected).
+PASS darkness + poison -> none (no synergy expected).
+PASS darkness + speed -> none (no synergy expected).
+PASS darkness + strength -> none (no synergy expected).
+PASS darkness + telekinesis -> void-grasp (capped pair).
+PASS darkness + teleport -> none (no synergy expected).
+PASS fire + flight -> none (no synergy expected).
+PASS fire + force-field -> none (no synergy expected).
+PASS fire + ice -> thermal-shock (capped pair).
+PASS fire + laser-eyes -> solar-flare (capped pair).
+PASS fire + lightning -> none (no synergy expected).
+PASS fire + phase-shift -> none (no synergy expected).
+PASS fire + poison -> none (no synergy expected).
+PASS fire + speed -> none (no synergy expected).
+PASS fire + strength -> none (no synergy expected).
+PASS fire + telekinesis -> none (no synergy expected).
+PASS fire + teleport -> none (no synergy expected).
+PASS flight + force-field -> none (no synergy expected).
+PASS flight + ice -> none (no synergy expected).
+PASS flight + laser-eyes -> none (no synergy expected).
+PASS flight + lightning -> none (no synergy expected).
+PASS flight + phase-shift -> none (no synergy expected).
+PASS flight + poison -> none (no synergy expected).
+PASS flight + speed -> none (no synergy expected).
+PASS flight + strength -> sonic-slam (capped pair).
+PASS flight + telekinesis -> none (no synergy expected).
+PASS flight + teleport -> none (no synergy expected).
+PASS force-field + ice -> none (no synergy expected).
+PASS force-field + laser-eyes -> none (no synergy expected).
+PASS force-field + lightning -> none (no synergy expected).
+PASS force-field + phase-shift -> none (no synergy expected).
+PASS force-field + poison -> none (no synergy expected).
+PASS force-field + speed -> none (no synergy expected).
+PASS force-field + strength -> none (no synergy expected).
+PASS force-field + telekinesis -> none (no synergy expected).
+PASS force-field + teleport -> none (no synergy expected).
+PASS ice + laser-eyes -> none (no synergy expected).
+PASS ice + lightning -> none (no synergy expected).
+PASS ice + phase-shift -> none (no synergy expected).
+PASS ice + poison -> none (no synergy expected).
+PASS ice + speed -> none (no synergy expected).
+PASS ice + strength -> none (no synergy expected).
+PASS ice + telekinesis -> none (no synergy expected).
+PASS ice + teleport -> none (no synergy expected).
+PASS laser-eyes + lightning -> none (no synergy expected).
+PASS laser-eyes + phase-shift -> none (no synergy expected).
+PASS laser-eyes + poison -> none (no synergy expected).
+PASS laser-eyes + speed -> none (no synergy expected).
+PASS laser-eyes + strength -> none (no synergy expected).
+PASS laser-eyes + telekinesis -> none (no synergy expected).
+PASS laser-eyes + teleport -> none (no synergy expected).
+PASS lightning + phase-shift -> none (no synergy expected).
+PASS lightning + poison -> none (no synergy expected).
+PASS lightning + speed -> none (no synergy expected).
+PASS lightning + strength -> none (no synergy expected).
+PASS lightning + telekinesis -> none (no synergy expected).
+PASS lightning + teleport -> none (no synergy expected).
+PASS phase-shift + poison -> none (no synergy expected).
+PASS phase-shift + speed -> none (no synergy expected).
+PASS phase-shift + strength -> none (no synergy expected).
+PASS phase-shift + telekinesis -> none (no synergy expected).
+PASS phase-shift + teleport -> none (no synergy expected).
+PASS poison + speed -> none (no synergy expected).
+PASS poison + strength -> none (no synergy expected).
+PASS poison + telekinesis -> none (no synergy expected).
+PASS poison + teleport -> none (no synergy expected).
+PASS speed + strength -> none (no synergy expected).
+PASS speed + telekinesis -> none (no synergy expected).
+PASS speed + teleport -> none (no synergy expected).
+PASS strength + telekinesis -> none (no synergy expected).
+PASS strength + teleport -> none (no synergy expected).
+PASS telekinesis + teleport -> none (no synergy expected).
+PASS Exactly five unordered pairs resolve a synergy.
+PASS Equip Thermal Shock
+PASS Thermal measured actors have uncapped headroom: 1000 HP each vs expected hits 42.5 / 25
+PASS Thermal Shock activation accepted.
+PASS Thermal Shock completes within bounded duration.
+PASS Thermal Shock cooldown remains after action.
+PASS Thermal affected-target bonus CONTROL: 42.5 vs clean 25
+PASS Thermal Shock emits bounded pooled effects.
+SYNERGY Thermal Shock: impacts=1, VFX emissions=1, cooldown=29.68
+BENCH population civilians=26, cops=9; 1280x720 single camera.
+MEASURED Forge idle phase=0: FPS=68.09, draws=311.2, pool=6.
+MEASURED Forge FX stress phase=1: FPS=69.60, draws=317.6, pool=6.
+MEASURED Forge FX stress phase=2: FPS=71.26, draws=315.5, pool=6.
+MEASURED Forge idle phase=3: FPS=78.30, draws=302.0, pool=6.
+FORGE COST paired means: idle=73.20 FPS, repeated pooled FX=70.43 FPS, difference=2.76 FPS, frame delta=0.536ms. Stress emits every 100ms; not a standalone GPU-time measurement.
+LIMIT: no human feel test; real gameplay entry points, not hardware key injection. Free Play/Endless Fight remain disabled existing definitions.

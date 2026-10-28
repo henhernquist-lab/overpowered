@@ -10,7 +10,15 @@ public sealed partial class CombatLabVerificationRunner : MonoBehaviour
     public Action<int> Finished;public bool Matrix,Reload;string runtimeError;
     void OnEnable(){Application.logMessageReceived+=Logged;}
     void OnDisable(){Application.logMessageReceived-=Logged;}
-    void Logged(string text,string trace,LogType type){if(type==LogType.Exception||type==LogType.Error)runtimeError=text+"\n"+trace;}
+    void Logged(string text,string trace,LogType type)
+    {
+        if(type!=LogType.Exception&&type!=LogType.Error)return;
+        // Unity's own startup indexer throws before gameplay in this Editor installation (raw log retained).
+        // Keep that exact external fault visible, while every project or other unexpected exception still fails.
+        if(text.StartsWith("ArgumentOutOfRangeException")&&trace.Contains("UnityEditor.Search.SearchInit.IndexationOnStartup")&&!trace.Contains("Assets/Scripts/"))
+        {lines.Add("EDITOR-ONLY UNRESOLVED: Quick Search startup indexer exception; see raw native log. Gameplay assertions remain strict.");return;}
+        runtimeError=text+"\n"+trace;
+    }
     readonly List<string> lines=new List<string>();int failures;
     CombatLab Lab=>CombatLab.Active;
     WorldSession W=>Lab.World;
@@ -29,7 +37,7 @@ public sealed partial class CombatLabVerificationRunner : MonoBehaviour
         }
         while(stack.Count>0)(stack.Pop() as IDisposable)?.Dispose();
         Directory.CreateDirectory("Verification/CombatLab");File.WriteAllLines("Verification/CombatLab/"+(Matrix?"power-matrix.txt":Reload?"reload.txt":"combat-lab.txt"),lines);
-        Debug.Log($"Combat Lab verification: {lines.Count-failures} PASS, {failures} FAIL");Finished?.Invoke(failures==0?0:1);
+        Debug.Log($"Combat Lab verification: {lines.FindAll(line=>line.StartsWith("PASS ")).Count} PASS, {failures} FAIL");Finished?.Invoke(failures==0?0:1);
     }
     IEnumerator ReloadChecks()
     {

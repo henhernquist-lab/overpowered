@@ -1,0 +1,36 @@
+[
+  {
+    "entry": "NovaCustomizationVerification.Run",
+    "commit": "949f7c5cd1071a4ae1abcf20e344af06c0580275",
+    "status_before": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/NovaCustomization/\n?? tools/nova_fbx_reader.py",
+    "started_utc": "2026-10-25T16:53:42.805945+00:00",
+    "save_before": "920cfbae3994ce721333c5f712436d57dbfd54c24657e8538d0fd26e153e711e",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/NovaCustomization/gates-4/NovaCustomizationVerification.Run.log",
+    "pid": 11151,
+    "exit": 0,
+    "seconds": 47.04,
+    "pass": 140,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/NovaCustomization/\n?? tools/nova_fbx_reader.py"
+  },
+  {
+    "entry": "NovaCustomizationVerification.Reload",
+    "commit": "949f7c5cd1071a4ae1abcf20e344af06c0580275",
+    "status_before": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/NovaCustomization/\n?? tools/nova_fbx_reader.py",
+    "started_utc": "2026-10-25T16:54:30.013657+00:00",
+    "save_before": "920cfbae3994ce721333c5f712436d57dbfd54c24657e8538d0fd26e153e711e",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/NovaCustomization/gates-4/NovaCustomizationVerification.Reload.log",
+    "pid": 11643,
+    "exit": 0,
+    "seconds": 23.69,
+    "pass": 6,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/NovaCustomization/\n?? tools/nova_fbx_reader.py"
+  }
+]

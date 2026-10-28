@@ -15,6 +15,7 @@ MonoBehaviour:
   Id: speed
   DisplayName: Speed
   Role: 1
+  Selectable: 1
   Description: Burst dash through the crowd toward your movement (or aim). Clips enemies you pass.
   Effect: {fileID: 11400000, guid: 915cca671012e427d9bf27bdceec38df, type: 2}
   InitiallyUnlocked: 1

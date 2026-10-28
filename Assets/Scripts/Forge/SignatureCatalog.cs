@@ -12,6 +12,7 @@ public sealed class SignatureCatalog : ScriptableObject
     public static bool VerificationPreview;
     [Tooltip("Shipping activation additionally requires a complete, unique mapping for every primary.")]
     public bool EnableWhenComplete=true;
+    public int ExpectedPrimaries=8;
     public bool Enabled => ((DeveloperPreview||VerificationPreview)&&(Application.isEditor||Debug.isDebugBuild))||(EnableWhenComplete&&Complete);
     public bool Complete
     {
@@ -20,17 +21,17 @@ public sealed class SignatureCatalog : ScriptableObject
             int count=0;
             foreach(var power in Resources.LoadAll<PowerDefinition>("Powers"))
             {
-                if(power.Role!=PowerRole.Combat)continue;
+                if(power.Role!=PowerRole.Combat||!power.Selectable)continue;
                 count++;int matches=0;
                 foreach(var d in Abilities)if(Implemented(d)&&d.OwnerPrimary==power)matches++;
                 if(matches!=1)return false;
             }
-            return count==8&&Abilities.Length==8;
+            return count==ExpectedPrimaries&&Abilities.Length==ExpectedPrimaries;
         }
     }
     public bool Implemented(PowerSynergyDefinition d)
     {
-        if(d==null||string.IsNullOrWhiteSpace(d.Id)||d.OwnerPrimary==null||d.OwnerPrimary.Role!=PowerRole.Combat||d.Effect==null)return false;
+        if(d==null||string.IsNullOrWhiteSpace(d.Id)||d.OwnerPrimary==null||d.OwnerPrimary.Role!=PowerRole.Combat||!d.OwnerPrimary.Selectable||d.Effect==null)return false;
         foreach(var other in Abilities)if(other!=null&&other!=d&&(other.Id==d.Id||other.OwnerPrimary==d.OwnerPrimary))return false;
         return true;
     }

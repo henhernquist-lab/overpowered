@@ -1,0 +1,9 @@
+PASS SECOND PROCESS exact complete Version 1 save survived including all progression and appearance fields
+PASS SECOND PROCESS all four equipped stable IDs reconstruct correctly
+PASS SECOND PROCESS migrated strength: exact nonzero progression/cosmetics/unknown records and valid equipment survive without another repair
+PASS SECOND PROCESS migrated laser-eyes: exact nonzero progression/cosmetics/unknown records and valid equipment survive without another repair
+PASS SECOND PROCESS migrated duplicate: exact nonzero progression/cosmetics/unknown records and valid equipment survive without another repair
+PASS SECOND PROCESS migrated unknown: exact nonzero progression/cosmetics/unknown records and valid equipment survive without another repair
+PASS SECOND PROCESS enter gameplay with reconstructed appearance and loadout
+PASS SECOND PROCESS live session caches new primary pair/signature and existing Animator
+PASS SECOND PROCESS preserved first-person preference

@@ -1,0 +1,36 @@
+[
+  {
+    "entry": "NovaCustomizationVerification.Run",
+    "commit": "375f2c5d07c5f6271c2ac810e1fca39b1b4c39a2",
+    "status_before": "?? Assets/Editor/Nova/NovaAssetPreview.cs\n?? Assets/Editor/Nova/NovaAssetPreview.cs.meta\n?? Assets/Editor/Nova/NovaCosmeticIntegration.cs\n?? Assets/Editor/Nova/NovaCosmeticIntegration.cs.meta\n?? Assets/Editor/Nova/NovaCustomizationVerification.cs\n?? Assets/Editor/Nova/NovaCustomizationVerification.cs.meta\n?? Assets/Scripts/Forge/Cosmetics/Nova/NovaCustomizationVerificationRunner.cs\n?? Assets/Scripts/Forge/Cosmetics/Nova/NovaCustomizationVerificationRunner.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/NovaCustomization/\n?? tools/__pycache__/\n?? tools/nova_fbx_reader.py",
+    "started_utc": "2026-10-25T16:48:50.746417+00:00",
+    "save_before": "920cfbae3994ce721333c5f712436d57dbfd54c24657e8538d0fd26e153e711e",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/NovaCustomization/gates-3/NovaCustomizationVerification.Run.log",
+    "pid": 9238,
+    "exit": 0,
+    "seconds": 44.5,
+    "pass": 137,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "?? Assets/Editor/Nova/NovaAssetPreview.cs\n?? Assets/Editor/Nova/NovaAssetPreview.cs.meta\n?? Assets/Editor/Nova/NovaCosmeticIntegration.cs\n?? Assets/Editor/Nova/NovaCosmeticIntegration.cs.meta\n?? Assets/Editor/Nova/NovaCustomizationVerification.cs\n?? Assets/Editor/Nova/NovaCustomizationVerification.cs.meta\n?? Assets/Scripts/Forge/Cosmetics/Nova/NovaCustomizationVerificationRunner.cs\n?? Assets/Scripts/Forge/Cosmetics/Nova/NovaCustomizationVerificationRunner.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/NovaCustomization/\n?? tools/__pycache__/\n?? tools/nova_fbx_reader.py"
+  },
+  {
+    "entry": "NovaCustomizationVerification.Reload",
+    "commit": "375f2c5d07c5f6271c2ac810e1fca39b1b4c39a2",
+    "status_before": "?? Assets/Editor/Nova/NovaAssetPreview.cs\n?? Assets/Editor/Nova/NovaAssetPreview.cs.meta\n?? Assets/Editor/Nova/NovaCosmeticIntegration.cs\n?? Assets/Editor/Nova/NovaCosmeticIntegration.cs.meta\n?? Assets/Editor/Nova/NovaCustomizationVerification.cs\n?? Assets/Editor/Nova/NovaCustomizationVerification.cs.meta\n?? Assets/Scripts/Forge/Cosmetics/Nova/NovaCustomizationVerificationRunner.cs\n?? Assets/Scripts/Forge/Cosmetics/Nova/NovaCustomizationVerificationRunner.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/NovaCustomization/\n?? tools/__pycache__/\n?? tools/nova_fbx_reader.py",
+    "started_utc": "2026-10-25T16:49:35.425549+00:00",
+    "save_before": "920cfbae3994ce721333c5f712436d57dbfd54c24657e8538d0fd26e153e711e",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/NovaCustomization/gates-3/NovaCustomizationVerification.Reload.log",
+    "pid": 9380,
+    "exit": 0,
+    "seconds": 28.54,
+    "pass": 6,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "?? Assets/Editor/Nova/NovaAssetPreview.cs\n?? Assets/Editor/Nova/NovaAssetPreview.cs.meta\n?? Assets/Editor/Nova/NovaCosmeticIntegration.cs\n?? Assets/Editor/Nova/NovaCosmeticIntegration.cs.meta\n?? Assets/Editor/Nova/NovaCustomizationVerification.cs\n?? Assets/Editor/Nova/NovaCustomizationVerification.cs.meta\n?? Assets/Scripts/Forge/Cosmetics/Nova/NovaCustomizationVerificationRunner.cs\n?? Assets/Scripts/Forge/Cosmetics/Nova/NovaCustomizationVerificationRunner.cs.meta\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/NovaCustomization/\n?? tools/nova_fbx_reader.py"
+  }
+]

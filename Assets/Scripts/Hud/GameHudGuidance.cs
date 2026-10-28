@@ -407,7 +407,7 @@ public sealed partial class GameHud
         }
         return point;
     }
-    IEnumerable<VisualElement> AvoidList() { yield return LevelGroup; yield return HeatGroup; yield return TopCentre; yield return VitalsGroup; yield return BottomStack; yield return AlertCard; yield return PromptCard; yield return Banner; if (ParkourCard != null) yield return ParkourCard; }
+    IEnumerable<VisualElement> AvoidList() { yield return LevelGroup; yield return HeatGroup; yield return TopCentre; if (bossRoot != null) yield return bossRoot; yield return VitalsGroup; yield return BottomStack; yield return AlertCard; yield return PromptCard; yield return Banner; if (ParkourCard != null) yield return ParkourCard; }
     /// Horizontal direction to a world point relative to the camera heading (degrees clockwise, 0 = ahead).
     public static float HeadingBearing(Camera cam, Vector3 from, Vector3 world)
     {

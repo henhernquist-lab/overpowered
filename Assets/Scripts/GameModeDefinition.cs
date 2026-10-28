@@ -10,6 +10,8 @@ public sealed class GameModeDefinition : ScriptableObject
     [TextArea] public string Description;
     public int MenuOrder;
     public bool Playable=true;
+    [Tooltip("Expose this definition as a Home gameplay choice. Legacy/internal modes remain loadable when hidden.")]
+    public bool ShowOnHome;
     public PlayerSide Side;
     public ModeRules Rules;
     public EncounterDefinition[] Encounters;

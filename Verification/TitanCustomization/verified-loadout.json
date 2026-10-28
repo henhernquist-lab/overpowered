@@ -1,0 +1,13 @@
+{
+  "source": "Final isolated fixture save read after passing separate-process Reload",
+  "loadout": {
+    "HeroId": "titan",
+    "PowerA": "fire",
+    "PowerB": "strength",
+    "SecondaryPower": "phase-shift",
+    "SignatureId": "solar-flare"
+  },
+  "flight_branch_exercised": false,
+  "signature_dispatch_observed": "Cast",
+  "signature_failure_intermediate_state": "UNVERIFIED"
+}

@@ -1,0 +1,183 @@
+PASS source range vector/SK_FANT_KNGT_17_10TORS_HU01
+PASS source range vector/SK_FANT_KNGT_17_11AUPL_HU01
+PASS source range vector/SK_FANT_KNGT_17_12AUPR_HU01
+PASS source range vector/SK_FANT_KNGT_17_13ALWL_HU01
+PASS source range vector/SK_FANT_KNGT_17_17HIPS_HU01
+PASS source range vector/SK_FANT_KNGT_17_18LEGL_HU01
+PASS source range vector/SK_FANT_KNGT_17_19LEGR_HU01
+PASS source range vector/SK_FANT_KNGT_17_26AHPB_HU01
+PASS source range vector/SK_FANT_KNGT_17_31AEBL_HU01
+PASS source range vector/SK_FANT_KNGT_17_32AEBR_HU01
+PASS source range vector/SK_HUMN_BASE_01_03EBRL_HU01
+PASS exact retained fitted range vector/SK_HUMN_BASE_01_03EBRL_HU01
+PASS source range vector/SK_HUMN_BASE_01_04EBRR_HU01
+PASS exact retained fitted range vector/SK_HUMN_BASE_01_04EBRR_HU01
+PASS source range vector/SK_HUMN_BASE_01_05EYEL_HU01
+PASS exact retained fitted range vector/SK_HUMN_BASE_01_05EYEL_HU01
+PASS source range vector/SK_HUMN_BASE_01_06EYER_HU01
+PASS exact retained fitted range vector/SK_HUMN_BASE_01_06EYER_HU01
+PASS source range vector/SK_HUMN_BASE_01_07EARL_HU01
+PASS exact retained fitted range vector/SK_HUMN_BASE_01_07EARL_HU01
+PASS source range vector/SK_HUMN_BASE_01_08EARR_HU01
+PASS exact retained fitted range vector/SK_HUMN_BASE_01_08EARR_HU01
+PASS source range vector/SK_HUMN_BASE_01_35NOSE_HU01
+PASS exact retained fitted range vector/SK_HUMN_BASE_01_35NOSE_HU01
+PASS source range vector/SK_HUMN_BASE_01_36TETH_HU01
+PASS exact retained fitted range vector/SK_HUMN_BASE_01_36TETH_HU01
+PASS source range vector/SK_HUMN_BASE_01_37TONG_HU01
+PASS exact retained fitted range vector/SK_HUMN_BASE_01_37TONG_HU01
+PASS source range vector/SK_HUMN_BASE_02_01HEAD_HU01
+PASS exact retained fitted range vector/SK_HUMN_BASE_02_01HEAD_HU01
+PASS source range vector/SK_SCFI_CIVL_09_14ALWR_HU01
+PASS source range vector/SK_SCFI_CIVL_09_15HNDL_HU01
+PASS source range vector/SK_SCFI_CIVL_09_16HNDR_HU01
+PASS source range vector/SK_SCFI_CIVL_09_20FOTL_HU01
+PASS exact retained fitted range vector/SK_SCFI_CIVL_09_20FOTL_HU01
+PASS source range vector/SK_SCFI_CIVL_09_21FOTR_HU01
+PASS exact retained fitted range vector/SK_SCFI_CIVL_09_21FOTR_HU01
+PASS source range vector/SK_SCFI_CIVL_09_23AFAC_HU01
+PASS source range vector/SK_SCFI_CIVL_09_25AHPF_HU01
+PASS source range vector/SK_SCFI_CIVL_09_29ASHL_HU01
+PASS source range vector/SK_SCFI_CIVL_09_30ASHR_HU01
+PASS source range vector/SK_SCFI_CIVL_09_33AKNL_HU01
+PASS source range vector/SK_SCFI_CIVL_09_34AKNR_HU01
+PASS source range vector/SK_SCFI_CIVL_10_22AHED_HU01
+PASS source range vector/SK_SCFI_CIVL_10_27AHPL_HU01
+PASS source range vector/SK_SCFI_CIVL_10_28AHPR_HU01
+PASS all original geometry accounted for before accessory removal
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_10TORS_HU01 joint delta=0.004795379
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_11AUPL_HU01 joint delta=0.004795379
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_12AUPR_HU01 joint delta=0.004795379
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_13ALWL_HU01 joint delta=0.004795379
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_14ALWR_HU01 joint delta=0.004795379
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_15HNDL_HU01 joint delta=0.004795379
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_16HNDR_HU01 joint delta=0.004795379
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_17HIPS_HU01 joint delta=0.004795379
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_18LEGL_HU01 joint delta=0.004795379
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_19LEGR_HU01 joint delta=0.004795379
+PASS optimized suit budget 5065 vertices / 65 bones
+PASS authored chevron triangle/corner torso clearance >= 0.001904853m
+PASS authored bolt triangle/corner torso clearance >= 0.001027651m
+PASS source range titan/SK_FANT_KNGT_17_10TORS_HU01
+PASS source range titan/SK_FANT_KNGT_17_11AUPL_HU01
+PASS exact retained fitted range titan/SK_FANT_KNGT_17_11AUPL_HU01
+PASS source range titan/SK_FANT_KNGT_17_12AUPR_HU01
+PASS exact retained fitted range titan/SK_FANT_KNGT_17_12AUPR_HU01
+PASS source range titan/SK_FANT_KNGT_17_13ALWL_HU01
+PASS exact retained fitted range titan/SK_FANT_KNGT_17_13ALWL_HU01
+PASS source range titan/SK_FANT_KNGT_17_14ALWR_HU01
+PASS exact retained fitted range titan/SK_FANT_KNGT_17_14ALWR_HU01
+PASS source range titan/SK_FANT_KNGT_17_15HNDL_HU01
+PASS exact retained fitted range titan/SK_FANT_KNGT_17_15HNDL_HU01
+PASS source range titan/SK_FANT_KNGT_17_16HNDR_HU01
+PASS exact retained fitted range titan/SK_FANT_KNGT_17_16HNDR_HU01
+PASS source range titan/SK_FANT_KNGT_17_17HIPS_HU01
+PASS source range titan/SK_FANT_KNGT_17_18LEGL_HU01
+PASS source range titan/SK_FANT_KNGT_17_19LEGR_HU01
+PASS source range titan/SK_FANT_KNGT_17_20FOTL_HU01
+PASS exact retained fitted range titan/SK_FANT_KNGT_17_20FOTL_HU01
+PASS source range titan/SK_FANT_KNGT_17_21FOTR_HU01
+PASS exact retained fitted range titan/SK_FANT_KNGT_17_21FOTR_HU01
+PASS source range titan/SK_FANT_KNGT_17_22AHED_HU01
+PASS source range titan/SK_FANT_KNGT_17_23AFAC_HU01
+PASS source range titan/SK_FANT_KNGT_17_24ABAC_HU01
+PASS source range titan/SK_FANT_KNGT_17_25AHPF_HU01
+PASS source range titan/SK_FANT_KNGT_17_26AHPB_HU01
+PASS source range titan/SK_FANT_KNGT_17_27AHPL_HU01
+PASS source range titan/SK_FANT_KNGT_17_28AHPR_HU01
+PASS source range titan/SK_FANT_KNGT_17_29ASHL_HU01
+PASS source range titan/SK_FANT_KNGT_17_30ASHR_HU01
+PASS source range titan/SK_FANT_KNGT_17_31AEBL_HU01
+PASS source range titan/SK_FANT_KNGT_17_32AEBR_HU01
+PASS source range titan/SK_FANT_KNGT_17_33AKNL_HU01
+PASS source range titan/SK_FANT_KNGT_17_34AKNR_HU01
+PASS unique exact head recovery titan
+PASS source range titan/SK_HUMN_BASE_01_01HEAD_HU01
+PASS exact retained fitted range titan/SK_HUMN_BASE_01_01HEAD_HU01
+PASS source range titan/SK_HUMN_BASE_01_03EBRL_HU01
+PASS exact retained fitted range titan/SK_HUMN_BASE_01_03EBRL_HU01
+PASS source range titan/SK_HUMN_BASE_01_04EBRR_HU01
+PASS exact retained fitted range titan/SK_HUMN_BASE_01_04EBRR_HU01
+PASS source range titan/SK_HUMN_BASE_01_05EYEL_HU01
+PASS exact retained fitted range titan/SK_HUMN_BASE_01_05EYEL_HU01
+PASS source range titan/SK_HUMN_BASE_01_06EYER_HU01
+PASS exact retained fitted range titan/SK_HUMN_BASE_01_06EYER_HU01
+PASS source range titan/SK_HUMN_BASE_01_07EARL_HU01
+PASS exact retained fitted range titan/SK_HUMN_BASE_01_07EARL_HU01
+PASS source range titan/SK_HUMN_BASE_01_08EARR_HU01
+PASS exact retained fitted range titan/SK_HUMN_BASE_01_08EARR_HU01
+PASS source range titan/SK_HUMN_BASE_01_35NOSE_HU01
+PASS exact retained fitted range titan/SK_HUMN_BASE_01_35NOSE_HU01
+PASS source range titan/SK_HUMN_BASE_01_36TETH_HU01
+PASS exact retained fitted range titan/SK_HUMN_BASE_01_36TETH_HU01
+PASS source range titan/SK_HUMN_BASE_01_37TONG_HU01
+PASS exact retained fitted range titan/SK_HUMN_BASE_01_37TONG_HU01
+PASS source range titan/SK_HUMN_BASE_10_09FCHR_HU01
+PASS all original geometry accounted for before accessory removal
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_10TORS_HU01 joint delta=1.788139E-07
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_17HIPS_HU01 joint delta=1.788139E-07
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_18LEGL_HU01 joint delta=1.788139E-07
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_19LEGR_HU01 joint delta=1.788139E-07
+PASS optimized suit budget 7336 vertices / 65 bones
+PASS authored shield triangle/corner torso clearance >= 0.00378634m
+PASS authored core triangle/corner torso clearance >= 0.004320681m
+PASS source range nova/SK_HUMN_BASE_01_01HEAD_HU01
+PASS exact retained fitted range nova/SK_HUMN_BASE_01_01HEAD_HU01
+PASS source range nova/SK_HUMN_BASE_01_03EBRL_HU01
+PASS exact retained fitted range nova/SK_HUMN_BASE_01_03EBRL_HU01
+PASS source range nova/SK_HUMN_BASE_01_04EBRR_HU01
+PASS exact retained fitted range nova/SK_HUMN_BASE_01_04EBRR_HU01
+PASS source range nova/SK_HUMN_BASE_01_05EYEL_HU01
+PASS exact retained fitted range nova/SK_HUMN_BASE_01_05EYEL_HU01
+PASS source range nova/SK_HUMN_BASE_01_06EYER_HU01
+PASS exact retained fitted range nova/SK_HUMN_BASE_01_06EYER_HU01
+PASS source range nova/SK_HUMN_BASE_01_07EARL_HU01
+PASS exact retained fitted range nova/SK_HUMN_BASE_01_07EARL_HU01
+PASS source range nova/SK_HUMN_BASE_01_08EARR_HU01
+PASS exact retained fitted range nova/SK_HUMN_BASE_01_08EARR_HU01
+PASS source range nova/SK_HUMN_BASE_01_35NOSE_HU01
+PASS exact retained fitted range nova/SK_HUMN_BASE_01_35NOSE_HU01
+PASS source range nova/SK_HUMN_BASE_01_36TETH_HU01
+PASS exact retained fitted range nova/SK_HUMN_BASE_01_36TETH_HU01
+PASS source range nova/SK_HUMN_BASE_01_37TONG_HU01
+PASS exact retained fitted range nova/SK_HUMN_BASE_01_37TONG_HU01
+PASS source range nova/SK_SCFI_CIVL_09_02HAIR_HU01
+PASS source range nova/SK_SCFI_CIVL_09_10TORS_HU01
+PASS source range nova/SK_SCFI_CIVL_09_11AUPL_HU01
+PASS source range nova/SK_SCFI_CIVL_09_12AUPR_HU01
+PASS source range nova/SK_SCFI_CIVL_09_13ALWL_HU01
+PASS source range nova/SK_SCFI_CIVL_09_14ALWR_HU01
+PASS source range nova/SK_SCFI_CIVL_09_15HNDL_HU01
+PASS source range nova/SK_SCFI_CIVL_09_16HNDR_HU01
+PASS source range nova/SK_SCFI_CIVL_09_17HIPS_HU01
+PASS source range nova/SK_SCFI_CIVL_09_18LEGL_HU01
+PASS source range nova/SK_SCFI_CIVL_09_19LEGR_HU01
+PASS source range nova/SK_SCFI_CIVL_09_20FOTL_HU01
+PASS exact retained fitted range nova/SK_SCFI_CIVL_09_20FOTL_HU01
+PASS source range nova/SK_SCFI_CIVL_09_21FOTR_HU01
+PASS exact retained fitted range nova/SK_SCFI_CIVL_09_21FOTR_HU01
+PASS source range nova/SK_SCFI_CIVL_09_22AHED_HU01
+PASS source range nova/SK_SCFI_CIVL_09_24ABAC_HU01
+PASS source range nova/SK_SCFI_CIVL_09_25AHPF_HU01
+PASS source range nova/SK_SCFI_CIVL_09_27AHPL_HU01
+PASS source range nova/SK_SCFI_CIVL_09_28AHPR_HU01
+PASS source range nova/SK_SCFI_CIVL_09_29ASHL_HU01
+PASS source range nova/SK_SCFI_CIVL_09_33AKNL_HU01
+PASS source range nova/SK_SCFI_CIVL_09_34AKNR_HU01
+PASS source range nova/SK_SCFI_CIVL_10_26AHPB_HU01
+PASS source range nova/SK_SCFI_CIVL_10_30ASHR_HU01
+PASS all original geometry accounted for before accessory removal
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_10TORS_HU01 joint delta=0.02046545
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_11AUPL_HU01 joint delta=0.02046545
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_12AUPR_HU01 joint delta=0.02046545
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_13ALWL_HU01 joint delta=0.02046545
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_14ALWR_HU01 joint delta=0.02046545
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_15HNDL_HU01 joint delta=0.02046545
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_16HNDR_HU01 joint delta=0.02046545
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_17HIPS_HU01 joint delta=0.02046545
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_18LEGL_HU01 joint delta=0.02046545
+PASS source belongs to the compatible Sidekick fit family SK_HUMN_BASE_01_19LEGR_HU01 joint delta=0.02046545
+PASS optimized suit budget 5065 vertices / 65 bones
+PASS authored star triangle/corner torso clearance >= 0.001422912m
+PASS authored core triangle/corner torso clearance >= 0.002756m
+PASS registered disk catalog contains valid real mesh bindings

@@ -264,7 +264,7 @@ public sealed partial class GameHud
         point = centre + dir * (r + extent + .5f);
         return true;
     }
-    IEnumerable<VisualElement> PopupAvoid() { yield return LevelGroup; yield return HeatGroup; yield return TopCentre; yield return Banner; yield return VitalsGroup; yield return BottomStack; if (ParkourCard != null) yield return ParkourCard; }
+    IEnumerable<VisualElement> PopupAvoid() { yield return LevelGroup; yield return HeatGroup; yield return TopCentre; if (bossRoot != null) yield return bossRoot; yield return Banner; yield return VitalsGroup; yield return BottomStack; if (ParkourCard != null) yield return ParkourCard; }
     public int ActivePopups { get { int n = 0; foreach (var p in Popups) if (p.Active) n++; return n; } }
 
     // ------------------------------------------------------------------ heat flash
@@ -360,7 +360,9 @@ public sealed partial class GameHud
             bannerTween?.Kill();bannerTween=null;
             CurrentBanner = null; Show(Banner, false); return;
         }
-        Banner.style.top = Shown(TopCentre) ? TopCentre.layout.yMax + BannerGap : SafeMargin + 40f;
+        float bannerTop = Shown(TopCentre) ? TopCentre.layout.yMax + BannerGap : SafeMargin + 40f;
+        if (BossBarVisible && bossRoot != null) bannerTop = Mathf.Max(bannerTop, bossRoot.layout.yMax + BannerGap);
+        Banner.style.top = bannerTop;
     }
     void StartBannerTween()
     {

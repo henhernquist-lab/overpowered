@@ -1,0 +1,50 @@
+PASS Isolated in-memory staged aerokinesis enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS aerokinesis: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS aerokinesis: actual first-person center ray visibly intersects close hostile capsule
+PASS Close directional cast accepted
+PASS aerokinesis: center-screen point-blank target receives real damage rather than missing an arbitrary torso point
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL close intervening wall still blocks directional damage
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL capsule-volume test still excludes a target outside the forward cone
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS aerokinesis: actual third-person center ray visibly intersects close hostile capsule
+PASS Close directional cast accepted
+PASS aerokinesis: center-screen point-blank target receives real damage rather than missing an arbitrary torso point
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL close intervening wall still blocks directional damage
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL capsule-volume test still excludes a target outside the forward cone
+PASS Isolated in-memory staged sonic-manipulation enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS sonic-manipulation: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS sonic-manipulation: actual first-person center ray visibly intersects close hostile capsule
+PASS Close directional cast accepted
+PASS sonic-manipulation: center-screen point-blank target receives real damage rather than missing an arbitrary torso point
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL close intervening wall still blocks directional damage
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL capsule-volume test still excludes a target outside the forward cone
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS sonic-manipulation: actual third-person center ray visibly intersects close hostile capsule
+PASS Close directional cast accepted
+PASS sonic-manipulation: center-screen point-blank target receives real damage rather than missing an arbitrary torso point
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL close intervening wall still blocks directional damage
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS CONTROL capsule-volume test still excludes a target outside the forward cone

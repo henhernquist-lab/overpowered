@@ -1,0 +1,6 @@
+PASS native rendered vector_mask_aegis with actual registered suit/emblem
+PASS native rendered vector_mask_sentinel with actual registered suit/emblem
+PASS native rendered titan_mask_guardian with actual registered suit/emblem
+PASS native rendered titan_mask_vanguard with actual registered suit/emblem
+PASS native rendered nova_mask_spectrum with actual registered suit/emblem
+PASS native rendered nova_mask_phantom with actual registered suit/emblem

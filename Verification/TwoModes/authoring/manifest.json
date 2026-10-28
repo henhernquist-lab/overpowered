@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "TwoModeDataAuthoring.Run",
+    "commit": "297eb49843994f2dca3bd9fad6f7f184b147f6bd",
+    "status_before": "M Assets/Resources/ModeDirectors/EndlessWaveEvents.asset\n M Assets/Resources/ModeDirectors/EndlessWaves.asset\n M Assets/Scripts/EndlessWaveDirector.cs\n M Assets/Scripts/EndlessWaveEvents.cs\n M Assets/Scripts/GameHud.cs\n M Assets/Scripts/GameModeDefinition.cs\n M Assets/Scripts/Hud/GameHudBoss.cs\n M Assets/Scripts/ModeScreens.cs\n?? Assets/Editor/SpawnCurveVerification.cs\n?? Assets/Editor/SpawnCurveVerification.cs.meta\n?? Assets/Editor/TwoModeDataAuthoring.cs\n?? Assets/Editor/TwoModeDataAuthoring.cs.meta\n?? Assets/Scripts/Enemies/EnemyCompositionCurve.cs\n?? Assets/Scripts/Enemies/EnemyCompositionCurve.cs.meta\n?? Assets/Scripts/Enemies/SpawnCurveVerificationRunner.cs\n?? Assets/Scripts/Enemies/SpawnCurveVerificationRunner.cs.meta",
+    "started_utc": "2026-10-26T01:23:46.101624+00:00",
+    "save_before": "4f40a5a4e0d23d8f240c9fb180047920a58d96b7864bac20a792588a3b44867e",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/TwoModes/authoring/TwoModeDataAuthoring.Run.log",
+    "pid": 41961,
+    "exit": 0,
+    "seconds": 75.6,
+    "pass": 1,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Resources/ModeDirectors/EndlessWaveEvents.asset\n M Assets/Resources/ModeDirectors/EndlessWaves.asset\n M Assets/Resources/Modes/endless-fight-villain.asset\n M Assets/Resources/Modes/endless-fight.asset\n M Assets/Resources/Modes/free-play.asset\n M Assets/Resources/Modes/hero.asset\n M Assets/Resources/Modes/villain.asset\n M Assets/Scripts/EndlessWaveDirector.cs\n M Assets/Scripts/EndlessWaveEvents.cs\n M Assets/Scripts/GameHud.cs\n M Assets/Scripts/GameModeDefinition.cs\n M Assets/Scripts/Hud/GameHudBoss.cs\n M Assets/Scripts/ModeScreens.cs\n?? Assets/Editor/SpawnCurveVerification.cs\n?? Assets/Editor/SpawnCurveVerification.cs.meta\n?? Assets/Editor/TwoModeDataAuthoring.cs\n?? Assets/Editor/TwoModeDataAuthoring.cs.meta\n?? Assets/Scripts/Enemies/EnemyCompositionCurve.cs\n?? Assets/Scripts/Enemies/EnemyCompositionCurve.cs.meta\n?? Assets/Scripts/Enemies/SpawnCurveVerificationRunner.cs\n?? Assets/Scripts/Enemies/SpawnCurveVerificationRunner.cs.meta"
+  }
+]

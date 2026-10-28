@@ -54,8 +54,8 @@ public sealed class RunUpgradeDefinition
     public string TargetLabel => IsHero ? "Hero" : IsSignature ? "Signature" : string.Empty;
 }
 
-/// The shipped catalog. Every power here exists in Assets/Resources/Powers — cards for unimplemented powers
-/// (Aerokinesis, Sonic, Morphing, Plasma Blades, Grapple, Mirage) are deliberately absent until those powers ship.
+/// The shipped catalog. Every power here exists in Assets/Resources/Powers. The power-expansion roster is covered by
+/// stat cards built on the same PowerUser.Stats path, so a run that equips those powers always has legal offers.
 public static class RunUpgradeLibrary
 {
     public static readonly RunUpgradeDefinition[] All = Build();
@@ -72,7 +72,7 @@ public static class RunUpgradeLibrary
 
     static RunUpgradeDefinition[] Build()
     {
-        var list = new List<RunUpgradeDefinition>(72);
+        var list = new List<RunUpgradeDefinition>(96);
         void Add(string id, string name, string power, RunRarity rarity, RunStat stat, float per, int max, string description,
                  int minLevel = 1, string requires = null, RunMechanic mechanic = RunMechanic.None, int mechanicPer = 0)
         {
@@ -143,6 +143,40 @@ public static class RunUpgradeLibrary
             "The beam pierces to a second target", 3, null, RunMechanic.LaserPierce, 1);
         Add("eye-overload", "OVERLOAD", "laser-eyes", RunRarity.Epic, RunStat.None, 0f, 1,
             "Beam damage ramps up to +40% while held", 5, null, RunMechanic.LaserOverload, 1);
+
+        // ---------------------------------------------------------------- Aerokinesis
+        Add("aero-core", "GALE FORCE", "aerokinesis", RunRarity.Common, RunStat.PowerDamage, .15f, 4, "Aerokinesis damage +15%");
+        Add("aero-range", "LONG REACH", "aerokinesis", RunRarity.Common, RunStat.PowerRange, .15f, 3, "Gust reach +15%");
+        Add("aero-cooldown", "FASTER CURRENT", "aerokinesis", RunRarity.Rare, RunStat.PowerCooldown, .12f, 3, "Aerokinesis cooldown -12%");
+        Add("aero-charge", "EYE OF THE STORM", "aerokinesis", RunRarity.Epic, RunStat.ExtraCharges, 1f, 1, "+1 gust charge", 5);
+
+        // ---------------------------------------------------------------- Sonic Manipulation
+        Add("sonic-core", "AMPLIFIED", "sonic-manipulation", RunRarity.Common, RunStat.PowerDamage, .14f, 4, "Sonic damage +14%");
+        Add("sonic-range", "CARRYING NOTE", "sonic-manipulation", RunRarity.Common, RunStat.PowerRange, .15f, 3, "Sonic reach +15%");
+        Add("sonic-cooldown", "QUICKENED PULSE", "sonic-manipulation", RunRarity.Rare, RunStat.PowerCooldown, .12f, 3, "Sonic cooldown -12%");
+        Add("sonic-charge", "ENCORE", "sonic-manipulation", RunRarity.Epic, RunStat.ExtraCharges, 1f, 1, "+1 sonic charge", 5);
+
+        // ---------------------------------------------------------------- Combat Morphing
+        Add("morph-core", "SHARPENED FORMS", "combat-morphing", RunRarity.Common, RunStat.PowerDamage, .14f, 4, "Morph form damage +14%");
+        Add("morph-range", "LONGER REACH", "combat-morphing", RunRarity.Common, RunStat.PowerRange, .12f, 3, "Morph reach +12%");
+        Add("morph-cooldown", "FLUID SHIFT", "combat-morphing", RunRarity.Rare, RunStat.PowerCooldown, .10f, 3, "Morph cooldown -10%");
+        Add("morph-charge", "APEX ENGINE", "combat-morphing", RunRarity.Epic, RunStat.ExtraCharges, 1f, 1, "+1 morph charge", 5);
+
+        // ---------------------------------------------------------------- Plasma Blades
+        Add("blade-core", "SUPERHEATED EDGE", "plasma-blades", RunRarity.Common, RunStat.PowerDamage, .14f, 4, "Plasma damage +14%");
+        Add("blade-range", "EXTENDED ARC", "plasma-blades", RunRarity.Common, RunStat.PowerRange, .12f, 3, "Blade reach +12%");
+        Add("blade-cooldown", "FLICKER COMBO", "plasma-blades", RunRarity.Rare, RunStat.PowerCooldown, .10f, 3, "Blade cooldown -10%");
+        Add("blade-charge", "OVERCHARGED CELL", "plasma-blades", RunRarity.Epic, RunStat.ExtraCharges, 1f, 1, "+1 blade charge", 5);
+
+        // ---------------------------------------------------------------- Grapple Line
+        Add("grapple-range", "LONGER LINE", "grapple-line", RunRarity.Common, RunStat.PowerRange, .15f, 3, "Grapple reach +15%");
+        Add("grapple-cooldown", "QUICK REEL", "grapple-line", RunRarity.Common, RunStat.PowerCooldown, .15f, 3, "Grapple cooldown -15%");
+        Add("grapple-charge", "SECOND ANCHOR", "grapple-line", RunRarity.Rare, RunStat.ExtraCharges, 1f, 1, "+1 grapple charge", 4);
+
+        // ---------------------------------------------------------------- Mirage Decoy
+        Add("mirage-duration", "LASTING ECHO", "mirage-decoy", RunRarity.Common, RunStat.PowerDuration, .15f, 3, "Decoy lasts +15%");
+        Add("mirage-cooldown", "FASTER ILLUSION", "mirage-decoy", RunRarity.Common, RunStat.PowerCooldown, .12f, 3, "Decoy cooldown -12%");
+        Add("mirage-charge", "CROWD OF ONE", "mirage-decoy", RunRarity.Rare, RunStat.ExtraCharges, 1f, 1, "+1 decoy charge", 4);
 
         // ---------------------------------------------------------------- Secondaries
         Add("spd-core", "QUICKER DASH", "speed", RunRarity.Common, RunStat.PowerDamage, .20f, 3, "Dash damage +20%");

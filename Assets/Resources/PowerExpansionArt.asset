@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8c7225f49cf4650ac37ec1367fb3551, type: 3}
+  m_Name: PowerExpansionArt
+  m_EditorClassIdentifier: Assembly-CSharp::PowerExpansionArt
+  WindArc: {fileID: 4300000, guid: 6c75fd77d97bc4c218c15044bdbb51c5, type: 2}
+  SoundRing: {fileID: 4300000, guid: deb797487b79a4b7a97c5e248c605ac3, type: 2}
+  Slash: {fileID: 4300000, guid: 9b90846199a214e4a8cfb12cf32c74d6, type: 2}
+  MorphBlade: {fileID: 4300000, guid: 88685dbe736824ed9ba70fe81279848e, type: 2}
+  MorphHammer: {fileID: 4300000, guid: 5c005e66c35e645128ce455f48f8632a, type: 2}
+  MorphClaws: {fileID: 4300000, guid: 5116b0df3fdb146ee9ab0c1ff412c0c4, type: 2}
+  PlasmaBlade: {fileID: 4300000, guid: 7541860b6b6fd4e6bb8a336de30435e5, type: 2}
+  EffectMaterial: {fileID: 2100000, guid: 1e8ab0dcb2e324db29667b380e402655, type: 2}
+  Hologram: {fileID: 2100000, guid: 73b7262d010284e30a3624cf6b214832, type: 2}

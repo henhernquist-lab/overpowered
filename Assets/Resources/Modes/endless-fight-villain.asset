@@ -17,9 +17,12 @@ MonoBehaviour:
   Description: The police come for you in endless waves that grow larger and tougher. One defeat ends the run. Survive as many waves as you can and beat your best score.
   MenuOrder: 4
   Playable: 1
+  ShowOnHome: 0
+  MenuTagline:
   Side: 1
   Rules: {fileID: 0}
   Encounters: []
+  Selection: {fileID: 0}
   Hud: 7
   MenuHidden: 1
   MenuTag: 

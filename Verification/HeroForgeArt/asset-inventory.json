@@ -1,0 +1,137 @@
+[
+  {
+    "id": "vector_suit_tactical",
+    "asset": "Assets/Resources/Forge/Cosmetics/Vector/vector_suit_tactical.asset",
+    "guid": "9453dbffdae6e4963bf5b3cc8a0d47f1",
+    "vertices": 5065,
+    "triangles": 5172,
+    "bones": 65,
+    "sha256": "af44129ebe74469fdef02793d46bfee059d3dd22de55f6602d781c3c0e2114a2"
+  },
+  {
+    "id": "vector_mask_aegis",
+    "asset": "Assets/Resources/Forge/Cosmetics/Vector/vector_mask_aegis.asset",
+    "guid": "48c5256a2c141417cb9a38d4e5ce87a8",
+    "vertices": 192,
+    "triangles": 96,
+    "bones": 1,
+    "sha256": "9430c36493428dc61a3a34517dc2504b776880fb805c3f641a054b6f718f58b6"
+  },
+  {
+    "id": "vector_mask_sentinel",
+    "asset": "Assets/Resources/Forge/Cosmetics/Vector/vector_mask_sentinel.asset",
+    "guid": "24bda82fee4074509b0f3621a8fe5612",
+    "vertices": 737,
+    "triangles": 368,
+    "bones": 1,
+    "sha256": "c14c67bbd4e3a5d2b99d35a56f88737467b1e9f41c9792686f3cab7c77cdc599"
+  },
+  {
+    "id": "vector-emblem-chevron",
+    "asset": "Assets/Resources/Forge/Cosmetics/Vector/vector-emblem-chevron.asset",
+    "guid": "81873d378f7f44aff91de50abc3f057d",
+    "vertices": 15,
+    "triangles": 16,
+    "bones": 1,
+    "sha256": "a55430a87e6d08eee0d169a0d9ef6a0c2426d54af1b888b25e3771e2267ea9a4"
+  },
+  {
+    "id": "vector-emblem-bolt",
+    "asset": "Assets/Resources/Forge/Cosmetics/Vector/vector-emblem-bolt.asset",
+    "guid": "8fc0850cc0ed94c9ea72808938902415",
+    "vertices": 6,
+    "triangles": 4,
+    "bones": 1,
+    "sha256": "8793beccc44ea2955331e796bada2d8fc089e5b42a25babbe9c604fe0544f616"
+  },
+  {
+    "id": "titan_suit_guardian",
+    "asset": "Assets/Resources/Forge/Cosmetics/Titan/titan_suit_guardian.asset",
+    "guid": "0c4e298a012714b918896343b87538d2",
+    "vertices": 7336,
+    "triangles": 6740,
+    "bones": 65,
+    "sha256": "7fe1a4f3d948145b66a354d764aa8b98661a3b057d168d0a8fb11663ee86ceca"
+  },
+  {
+    "id": "titan_mask_guardian",
+    "asset": "Assets/Resources/Forge/Cosmetics/Titan/titan_mask_guardian.asset",
+    "guid": "44cbc867fe04a4466b88d2b7309b1c40",
+    "vertices": 817,
+    "triangles": 408,
+    "bones": 1,
+    "sha256": "1cf03f7de50df47c9a58e49e1ba5a1c77c907690ec3af869726d9defb02791f0"
+  },
+  {
+    "id": "titan_mask_vanguard",
+    "asset": "Assets/Resources/Forge/Cosmetics/Titan/titan_mask_vanguard.asset",
+    "guid": "eed8f0fcbaed54a378c482e06e22394e",
+    "vertices": 697,
+    "triangles": 348,
+    "bones": 1,
+    "sha256": "21a1f4b5dd47fad9380a6afac2b5d54e8cd05ba816e2b1d407c642074b393968"
+  },
+  {
+    "id": "titan_emblem_shield",
+    "asset": "Assets/Resources/Forge/Cosmetics/Titan/titan_emblem_shield.asset",
+    "guid": "ae3c29772d18f4c7e91e2a03ef3526bf",
+    "vertices": 16,
+    "triangles": 20,
+    "bones": 1,
+    "sha256": "60246892af864fe36171fae5fede6b56ea18e089ad4a8b5bef25b924397ba60b"
+  },
+  {
+    "id": "titan_emblem_core",
+    "asset": "Assets/Resources/Forge/Cosmetics/Titan/titan_emblem_core.asset",
+    "guid": "f42663a557b8f4ede934f396ff71f2d3",
+    "vertices": 32,
+    "triangles": 32,
+    "bones": 1,
+    "sha256": "6f7f30769a6c826c1177fbf40404831d7b412742a96e7407f6a5e90f2f4026ab"
+  },
+  {
+    "id": "nova_suit_energyweave",
+    "asset": "Assets/Resources/Forge/Cosmetics/Nova/nova_suit_energyweave.asset",
+    "guid": "c3073b78ed435c009f9e30be4ad41f6b",
+    "vertices": 5065,
+    "triangles": 5172,
+    "bones": 65,
+    "sha256": "202bf13e9208d6e16f64f910497b13cd193ed4e414367f8c8c4fb833ff39860c"
+  },
+  {
+    "id": "nova_mask_spectrum",
+    "asset": "Assets/Resources/Forge/Cosmetics/Nova/nova_mask_spectrum.asset",
+    "guid": "5d0c467f7c5ef43f6a12369304536fb7",
+    "vertices": 240,
+    "triangles": 120,
+    "bones": 1,
+    "sha256": "de127b563614906ec3a6eb911bdf377110fc782c51667dcd0687377d1cd93c3a"
+  },
+  {
+    "id": "nova_mask_phantom",
+    "asset": "Assets/Resources/Forge/Cosmetics/Nova/nova_mask_phantom.asset",
+    "guid": "1877ea577bf5049dabc9083137656bed",
+    "vertices": 817,
+    "triangles": 408,
+    "bones": 1,
+    "sha256": "22f62bee736feaf9a6a05ca63bacd76a9881d385e274fb18268201efbd775e2b"
+  },
+  {
+    "id": "nova_emblem_star",
+    "asset": "Assets/Resources/Forge/Cosmetics/Nova/nova_emblem_star.asset",
+    "guid": "07134190cf63525990f035f6f8c63541",
+    "vertices": 49,
+    "triangles": 64,
+    "bones": 1,
+    "sha256": "760a2d27e35eeaae860f85616c0a767a7dd8ea38347f96db9bd3b58e069901a2"
+  },
+  {
+    "id": "nova_emblem_core",
+    "asset": "Assets/Resources/Forge/Cosmetics/Nova/nova_emblem_core.asset",
+    "guid": "420d5c1f675655b19e01d104d9482ddc",
+    "vertices": 32,
+    "triangles": 32,
+    "bones": 1,
+    "sha256": "4c22c10a700b794aa53ce0d5a64935e9ff8727e41feb5cdea8e59ec4d1e5d439"
+  }
+]

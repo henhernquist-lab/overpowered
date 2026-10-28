@@ -1,0 +1,86 @@
+{
+    "Version": 1,
+    "Level": 2,
+    "Xp": 4,
+    "Points": 0,
+    "Side": 0,
+    "Powers": [
+        {
+            "Id": "darkness",
+            "Tier": 0
+        },
+        {
+            "Id": "fire",
+            "Tier": 0
+        },
+        {
+            "Id": "flight",
+            "Tier": 0
+        },
+        {
+            "Id": "force-field",
+            "Tier": 0
+        },
+        {
+            "Id": "ice",
+            "Tier": 0
+        },
+        {
+            "Id": "laser-eyes",
+            "Tier": 0
+        },
+        {
+            "Id": "lightning",
+            "Tier": 0
+        },
+        {
+            "Id": "phase-shift",
+            "Tier": 0
+        },
+        {
+            "Id": "poison",
+            "Tier": 0
+        },
+        {
+            "Id": "speed",
+            "Tier": 0
+        },
+        {
+            "Id": "strength",
+            "Tier": 0
+        },
+        {
+            "Id": "telekinesis",
+            "Tier": 0
+        },
+        {
+            "Id": "teleport",
+            "Tier": 0
+        }
+    ],
+    "Rooftops": [],
+    "SessionsPlayed": 0,
+    "SessionsWon": 0,
+    "BestSessionScore": 0,
+    "LastSessionXp": 0,
+    "LastModeId": "",
+    "ModeRecords": [],
+    "Loadout": {
+        "HeroId": "vector",
+        "PowerA": "fire",
+        "PowerB": "strength",
+        "SecondaryPower": "phase-shift",
+        "SignatureId": "solar-flare",
+        "UnresolvedSignatureId": "",
+        "Primary": 14,
+        "Secondary": 15
+    },
+    "HeroAppearances": [],
+    "SeenHints": [],
+    "FirstPerson": false,
+    "DifficultyId": "normal",
+    "IntroSeen": false,
+    "PowerStats": [],
+    "Challenges": [],
+    "ParkourCourses": []
+}

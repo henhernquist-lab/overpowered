@@ -1,0 +1,421 @@
+---- DATA
+PASS PulsebreakerTuning asset loads from Resources/Enemies.
+PASS Tuning: slam windup 1s, ring 8m, damage cap 25 %.
+PASS Tuning: phase at 40 % HP, freeze x0.5, cannon windup 1.35s.
+PASS Pulsebreaker archetype exists.
+PASS Archetype: Kind Slam, health x1, damage x1, accent Cyan, scale 1.25.
+PASS Endless miniboss slot: every 5 rounds, archetype Pulsebreaker.
+PASS Shockwave: a grounded player at 4 m is hit as the ring crosses them.
+PASS CONTROL: 9 m is outside the 8 m ring.
+PASS CONTROL: 2 m above the impact plane is not hit (the jump escape).
+PASS CONTROL: the ring has already passed a player at 2 m.
+---- MODE GATING
+PASS hero: no round director, so a miniboss can never spawn there.
+PASS villain: no round director, so a miniboss can never spawn there.
+PASS free-play: no round director, so a miniboss can never spawn there.
+PASS endless-fight: round director present.
+PASS endless-fight-villain: round director present.
+---- FREE PLAY (unchanged)
+PASS Save VECTOR with ice + strength through the loadout API.
+PASS Session equips ice + strength.
+PASS ice selected for LMB (key 1).
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: no Pulsebreaker exists at any frame.
+PASS Free Play: the boss bar is never shown.
+PASS Free Play: director null, 26 NPCs still populated.
+---- ROUND SPAWNING (in-memory director clone: 1 + 1 per wave, miniboss every 5th, no elites/modifiers)
+PASS Loadout saved for the Endless fixture.
+PASS Endless clone started with its wave state.
+PASS Round 1: no miniboss before round 5.
+PASS Round 1 plan has no miniboss slot.
+PASS Round 2: no miniboss before round 5.
+PASS Round 2 plan has no miniboss slot.
+PASS Round 3: no miniboss before round 5.
+PASS Round 3 plan has no miniboss slot.
+PASS Round 4: no miniboss before round 5.
+PASS Round 4 plan has no miniboss slot.
+PASS Reached round 5 (5).
+PASS Round 5 spawned exactly one Pulsebreaker.
+PASS Round 5 plan marks the miniboss slot.
+PASS The spawned body carries the Pulsebreaker archetype.
+PASS Boss health 807.5 matches HealthFor(5) x slot 8 x difficulty 1.00 = 832.0 (spawn variance 10%).
+PASS Boss is hostile to the player side and permanently aggroed.
+PASS Boss health is a miniboss budget, not a damage sponge (807).
+PASS Re-attaching the same body is idempotent (no duplicate brain).
+PASS Attack-token budget respected (0/2).
+PASS Boss bar is visible while the boss is alive.
+PASS Boss bar reads PULSEBREAKER / PHASE 1.
+PASS Boss bar fraction 100.0 % equals the authoritative health.
+PASS Boss bar follows real damage (90.0 %).
+PASS Miniboss kill recorded once (1).
+PASS No active boss after the kill.
+PASS Round advanced after the boss died (round 6).
+PASS Boss bar hidden after death.
+PASS CONTROL: round 6 has no boss.
+---- COMBAT FIXTURES (frozen clone: no waves, one controlled boss)
+PASS Loadout saved for the Endless fixture.
+PASS Endless clone started with its wave state.
+PASS The fixture street gives 14.0 m of clear lane along (0.00, 0.00, 1.00).
+PASS Boss spawned for the combat fixture.
+PASS Fixture stats: 953.4 HP (900 mean with the shared 10% spawn variance), 12 damage exact.
+PASS The body knows its boss brain (floating bar suppression + round hooks).
+PASS Arrival finished into Approach.
+PASS Boss is ready for the next fixture (Approach).
+PASS Boss committed to Slam (state Windup).
+PASS The slam shows a ground telegraph during the windup.
+PASS Slam released.
+PASS Measured slam windup 1.00s >= 1.00s (readable warning).
+PASS Telegraph hidden at release.
+PASS The seismic ring expanded from the impact point.
+PASS A grounded player standing in the ring takes slam damage.
+PASS The attack token is released after the attack (crowd rhythm preserved).
+PASS Boss is ready for the next fixture (Reposition).
+PASS Boss committed to Slam (state Windup).
+PASS CONTROL: standing 12 m away avoids the 8 m ring entirely.
+PASS Boss is ready for the next fixture (Approach).
+PASS Boss committed to the slam for the jump control.
+PASS CONTROL: a player 2.2 m above the impact plane is not hit (the jump escape).
+PASS Boss is ready for the next fixture (Approach).
+PASS Boss committed to Cannon (state Windup).
+PASS The cannon shows a targeting lane during the windup.
+PASS One bolt fired at release.
+PASS The bolt pool is bounded (3 objects, reused).
+PASS A stationary player in the locked lane is hit.
+PASS Boss is ready for the next fixture (Approach).
+PASS Boss committed to Cannon (state Windup).
+PASS CONTROL: stepping 3.5 m out of the locked lane avoids the shot.
+PASS Boss is ready for the next fixture (Approach).
+PASS Boss committed to Cannon (state Windup).
+PASS CONTROL: a solid wall between the boss and the player stops the bolt.
+PASS Boss is ready for the next fixture (Reposition).
+PASS Boss committed to Rush (state Windup).
+PASS The rush telegraphs its lane before travelling.
+PASS Rush travel is bounded and real (10.2 m).
+PASS A rush whose lane was dodged ends in the miss recovery.
+PASS Rush recovers into Approach (never a stuck state).
+PASS Boss is ready for the next fixture (Approach).
+PASS Boss committed to Rush (state Windup).
+PASS The rush stopped on the near side of the wall (6.6 m from the player, wall at 7 m; 1 hard blocks).
+PASS Boss never sticks in the rush (Recovery).
+PASS Boss is ready for the next fixture (Reposition).
+PASS Phase 1 before the threshold.
+PASS Overdrive triggered once at 38 % HP (threshold 40 %).
+PASS The phase shift releases the attack token.
+PASS Phase 2 compresses gaps, not telegraphs.
+PASS Boss bar switched to PHASE 2.
+PASS CONTROL: the phase shift never repeats.
+PASS Boss dies through the authoritative CityNpc damage path.
+PASS Boss bar disappears on death.
+PASS A second boss can spawn once the first is gone (single live boss, not a one-shot).
+PASS Killing the boss during the phase transition is safe (death wins).
+PASS No phase shift survives death.
+---- REGRESSIONS
+PASS Loadout saved for the Endless fixture.
+PASS Endless clone started with its wave state.
+PASS A normal archetype has no boss brain (inert hook).
+PASS Rusher still runs its own telegraphed cycle (1 windups).
+PASS Ordinary enemies keep freeze resistance 1.
+PASS Boss freeze is scaled by 0.5 for the same 2 s request (no permanent lock).
+PASS The boss thaws normally.
+PASS Boss resumed a valid state after the freeze (Staggered).
+PASS Boss reached a windup for the cancel control.
+PASS Freezing mid-windup cancels the attack and hides the telegraph.
+PASS No token is leaked by a cancelled attack.
+PASS Cleanup after the regression fixtures.
+PASS Progression accepted a real XP grant (level 3, 15 XP).
+LIMIT: batch Play Mode verifies state, timing, damage and layout; hands-on feel, physical input, day/night readability and sustained standalone frame rate remain unverified.

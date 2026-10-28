@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class PowerUser : MonoBehaviour
+public sealed partial class PowerUser : MonoBehaviour
 {
     /// Resolve one logical attack; Stats remains the authored, upgraded mean. Never call from a tick loop.
     public float RollDamage(float mean, float? variance = null) => WorldSession.Instance.Rolls.Damage(mean, variance ?? WorldSession.Instance.Tuning.CombatRanges.PlayerDamageVariance);
@@ -129,6 +129,7 @@ public sealed class PowerUser : MonoBehaviour
         ResolveSynergy();
         Selected = Powers.Find(p=>p.Definition==EquippedA)??Strength; progression.Changed += Refresh;
         Refresh();
+        if(Selected?.Definition.Effect.HasRuntimePresentation==true)_=Expansion;
         var phaseDefinition=System.Array.Find(definitions,d=>d.Effect is PhaseShiftEffect);
         if(phaseDefinition!=null){Phase=gameObject.AddComponent<PlayerPhaseShift>();Phase.Initialize(this,phaseDefinition.PaletteColor);}
         // Stats: one equipped session per power (a Forge loadout's two powers; without a Forge every power counts).
@@ -144,6 +145,7 @@ public sealed class PowerUser : MonoBehaviour
         var h = HeroStats;
         // Hero archetype: melee (Super Strength's punch/kick) scales damage and knockback; every other power scales damage and cooldown.
         if (power.Definition.Effect is PunchEffect) { s.Damage *= h.MeleeDamage; s.Force *= h.MeleeDamage; }
+        else if (power.Definition.Effect != null && power.Definition.Effect.IsMelee) { s.Damage *= h.MeleeDamage; s.Force *= h.MeleeDamage; s.Cooldown *= h.CooldownMultiplier; }
         else if (power.Definition.Effect == null || !power.Definition.Effect.IsFlight) { s.Damage *= h.PowerDamage; s.Cooldown *= h.CooldownMultiplier; }
         s.Cooldown *= Difficulty.Cooldown;
         // RUN UPGRADES: applied last, exactly once, after persistent tier / hero / difficulty. A run without state is a
@@ -187,7 +189,7 @@ public sealed class PowerUser : MonoBehaviour
     public bool Select(PowerRuntime power)
     {
         if (power==null||!Powers.Contains(power)||power.Definition.Role!=PowerRole.Combat||!IsEquipped(power.Definition)||!Progression.Owns(power.Definition)) return false;
-        Release(false); EndChannel(); Selected = power; Message = power.Definition.Description; return true;
+        Release(false); EndChannel(); Selected = power; if(power.Definition.Effect.HasRuntimePresentation)_=Expansion; Message = power.Definition.Description; return true;
     }
     /// Number key (1-9) for a power. With Hero Forge: 1 = equipped slot A, 2 = slot B (the roster has more than nine powers,
     /// so list positions cannot be keys). Without a catalog (legacy all-powers sessions): list position + 1. 0 = no key.
@@ -239,7 +241,7 @@ public sealed class PowerUser : MonoBehaviour
     {
         if(OffensiveActionsBlocked){Message="Cannot attack while phased";return false;}
         if(power==null||!Powers.Contains(power)||!IsEquipped(power.Definition)){Message="Power not equipped";return false;}
-        if(SynergyRunner!=null&&SynergyRunner.Busy)
+        if(SynergyRunner!=null&&SynergyRunner.Busy&&!(power.Definition.Role==PowerRole.Combat&&SynergyRunner.Definition.Effect.AllowsPrimaryActions))
         {
             Message="Synergy in progress";return false;
         }
@@ -253,7 +255,7 @@ public sealed class PowerUser : MonoBehaviour
         bool executed; using (Credit(power.Definition.Id)) executed = power.Definition.Effect.Execute(this, power);
         if (!executed) return false;
         RecordUse(power.Definition.Id);
-        power.Charges--; power.Cooldown = Stats(power).Cooldown; power.ChargeTimer = 0f;
+        power.Charges--; power.Cooldown = Stats(power).Cooldown*Mathf.Clamp(power.ActivationCooldownMultiplier,.25f,4); power.ActivationCooldownMultiplier=1; power.ChargeTimer = 0f;
         Energy -= EnergyCost(power); Message = power.Definition.DisplayName + " activated";
         Activated?.Invoke(power.Definition);
         WorldLightingDirector.Instance?.FlashPower(power.Definition.Light,AimOrigin);

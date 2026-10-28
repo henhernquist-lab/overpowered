@@ -1,0 +1,8 @@
+PASS Staged signature owner passes actual equip gates: aerokinesis
+PASS Actual saved signature choice: tempest-funnel
+PASS Enter real lab with tempest-funnel
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS Pulsebreaker: fixture lies on actual lab NavMesh
+PASS Pulsebreaker: actual shared NPC spawned
+FAIL System.Exception: tempest-funnel: actual signature gate activates

@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerDefinition
   Id: strength
   DisplayName: Super Strength
+  Role: 0
+  Selectable: 0
   Description: Punch nearby physics objects and enemies. E always punches.
   Effect: {fileID: 11400000, guid: ee22ee5a50edd4de2901e78166e57f3a, type: 2}
   InitiallyUnlocked: 1
@@ -40,7 +42,16 @@ MonoBehaviour:
   Color: {r: 1, g: 0.25, b: 0.03, a: 1}
   PaletteColor: 16
   CastingPresentation: 0
+  Light:
+    Enabled: 0
+    Color: 16
+    Intensity: 3
+    Range: 8
+    Seconds: 0.3
+    Travel: 0.5
   MenuIcon: 3
+  Activation: 0
+  DrainPerSecond: 0
   Upgrades:
   - Name: Upgrade
     PointCost: 1

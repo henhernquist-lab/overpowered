@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerDefinition
   Id: ice
   DisplayName: Ice
+  Role: 0
+  Selectable: 1
   Description: Freeze a target, then punch or kick to shatter and launch it.
   Effect: {fileID: 11400000, guid: a7ac3168994994021893c08061345801, type: 2}
   InitiallyUnlocked: 1
@@ -40,7 +42,16 @@ MonoBehaviour:
   Color: {r: 0, g: 1, b: 1, a: 1}
   PaletteColor: 15
   CastingPresentation: 1
+  Light:
+    Enabled: 0
+    Color: 16
+    Intensity: 3
+    Range: 8
+    Seconds: 0.3
+    Travel: 0.5
   MenuIcon: 5
+  Activation: 0
+  DrainPerSecond: 0
   Upgrades:
   - Name: Upgrade
     PointCost: 1

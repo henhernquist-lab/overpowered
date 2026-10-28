@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerDefinition
   Id: laser-eyes
   DisplayName: Laser Eyes
+  Role: 0
+  Selectable: 0
   Description: Hold to fire a continuous beam at the crosshair. Drains energy while held.
   Effect: {fileID: 11400000, guid: 11962f706cf1045a6a8d0078c5ef87c7, type: 2}
   InitiallyUnlocked: 1

@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "TitanCustomizationVerification.Run",
+    "commit": "e77774faf913fb2eb2bd0f28eb96f747f1e74c8d",
+    "status_before": "?? Verification/TitanCustomization/\n?? docs/titan-customization.md",
+    "started_utc": "2026-10-25T17:03:27.702318+00:00",
+    "save_before": "920cfbae3994ce721333c5f712436d57dbfd54c24657e8538d0fd26e153e711e",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/TitanCustomization/gates-1/TitanCustomizationVerification.Run.log",
+    "pid": 12560,
+    "exit": 1,
+    "seconds": 37.25,
+    "pass": 139,
+    "fail": 1,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/TitanCustomization/\n?? docs/titan-customization.md"
+  }
+]

@@ -1,0 +1,44 @@
+PASS Isolated in-memory staged plasma-blades enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS plasma-blades: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS normal: charged primary avoids generic Cast override
+PASS normal: base plus extra charge energy scale centrally once
+PASS Actual existing Punch clip fitted to committed charge windup
+PASS CONTROL charging windup has no early damage
+PASS Fitted animation marker follows real deferred charge impact within native frame tolerance
+PASS Isolated in-memory staged plasma-blades enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS plasma-blades: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS hard: charged primary avoids generic Cast override
+PASS hard: base plus extra charge energy scale centrally once
+PASS Actual existing Punch clip fitted to committed charge windup
+PASS CONTROL charging windup has no early damage
+PASS Fitted animation marker follows real deferred charge impact within native frame tolerance
+PASS Isolated in-memory staged plasma-blades enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS plasma-blades: actual primary slot selection
+PASS Rusher: fixture lies on actual lab NavMesh
+PASS Rusher: actual shared NPC spawned
+PASS extreme: charged primary avoids generic Cast override
+PASS extreme: base plus extra charge energy scale centrally once
+PASS Actual existing Punch clip fitted to committed charge windup
+PASS CONTROL charging windup has no early damage
+PASS Fitted animation marker follows real deferred charge impact within native frame tolerance
+PASS Isolated in-memory staged combat-morphing enters through actual equip gates
+PASS Enter real existing Combat Lab for native collision/damage controls
+PASS combat-morphing: actual primary slot selection
+PASS Brute: fixture lies on actual lab NavMesh
+PASS Brute: actual shared NPC spawned
+PASS Fitted morph attack: BladeArms
+PASS BladeArms: existing Animator owns marker-fitted weapon action
+PASS Form input queues selection without swapping weapon during a committed strike
+PASS Fitted morph attack: HammerFists
+PASS HammerFists: existing Animator owns marker-fitted weapon action
+PASS Form input queues selection without swapping weapon during a committed strike
+PASS Fitted morph attack: ExtendedClaws
+PASS ExtendedClaws: existing Animator owns marker-fitted weapon action
+PASS Form input queues selection without swapping weapon during a committed strike

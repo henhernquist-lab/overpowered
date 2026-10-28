@@ -1,0 +1,13 @@
+{
+  "baseline": "3301e39",
+  "protected_baseline_files_checked": 6302,
+  "allowed_existing_changes": [
+    "Assets/Resources/CosmeticCatalog.asset",
+    "Assets/Scripts/Forge/HeroForgeScreen.cs",
+    "STATUS.md"
+  ],
+  "unexpected_baseline_changes": [],
+  "original_checkout_local_files_checked": 1003,
+  "original_checkout_local_mismatches": [],
+  "pass": true
+}
