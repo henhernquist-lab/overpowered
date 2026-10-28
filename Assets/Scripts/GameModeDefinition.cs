@@ -38,6 +38,8 @@ public sealed class GameModeDefinition : ScriptableObject
     [Tooltip("False: the pause menu offers only Resume and Return home, and ending the session goes straight Home.")] public bool ShowResults=true;
     public ResultsLayout Results=ResultsLayout.Objectives;
     [Tooltip("Optional session director (e.g. endless waves). Null: the session is driven by encounters only.")] public ModeDirector Director;
+    [Tooltip("Run-based temporary progression (Endless Fight): level 1 every run, kill XP, three-card picks. Off = the mode\n" +
+             "keeps today's persistent-only behaviour (Free Play, Hero/Villain, Battle Lab).")] public bool RunProgression;
     [Tooltip("Data-driven day/dusk/night schedule. Null uses WorldLighting.DefaultCycle.")] public LightingCycle Lighting;
     [Header("Mission briefing (shown when the session starts; all three empty = no card)")]
     [Tooltip("The goal, one short line.")] public string BriefingGoal;

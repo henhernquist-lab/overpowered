@@ -50,8 +50,11 @@ public sealed class PrototypeHUD : MonoBehaviour
     {
         var w=WorldSession.Instance; if(w==null) return;
         GUI.skin.label.wordWrap=true;
+        // The run level-up modal pauses the session too, but it owns the whole screen: drawing the Esc pause menu under it
+        // would put two conflicting menus on screen. Nothing else is drawn while a card choice is open.
         if(w.Mode!=null&&w.Mode.Paused)
         {
+            if(w.Run!=null&&w.Run.UpgradeOpen) return;
             GUILayout.BeginArea(new Rect(Screen.width*.5f-220,Screen.height*.25f,440,300),GUI.skin.box);
             GUILayout.Label("PAUSED — "+w.Mode.Definition.DisplayName);
             foreach(var option in PauseOptions(w.Mode)) if(GUILayout.Button(option,GUILayout.Height(45))) ChoosePause(w.Mode,option);

@@ -97,7 +97,8 @@ public sealed class Poisoned : MonoBehaviour
         var chosen = ListPool<CityNpc>.Get();
         try
         {
-            int keep = Mathf.Max(0, settings.MaxSpreadTargets);
+            // RUN EVOLUTION: CONTAGION / PLAGUE BLOOM widen the spread; capped so a chain can never cover the block.
+            int keep = Mathf.Clamp(settings.MaxSpreadTargets + RunMechanics.Stacks(RunMechanic.PoisonSpread), 0, RunTuning.MaxPoisonSpreadTargets);
             for (int i = 0; i < count && keep > 0; i++)
             {
                 var other = nearby[i].GetComponentInParent<CityNpc>();

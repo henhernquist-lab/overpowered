@@ -68,8 +68,11 @@ public sealed class DarknessEffect : PowerEffect
     }
     void Apply(PowerUser user,PowerRuntime power,CityNpc npc,PowerStats stats)
     {
-        npc.Root(Mathf.Min(InitialRootSeconds,stats.Duration));
-        npc.Slow(SlowSpeedFactor,stats.Duration);
+        // RUN EVOLUTION: UMBRAL GRIP lengthens the initial root and deepens the slow (never a permanent lock: both are
+        // still clipped by the curse duration, and the slow floor leaves the enemy moving).
+        int grip = RunMechanics.Stacks(RunMechanic.DarknessRoot);
+        npc.Root(Mathf.Min(InitialRootSeconds + .5f * grip, stats.Duration));
+        npc.Slow(Mathf.Max(.15f, SlowSpeedFactor - .08f * grip), stats.Duration);
         npc.Damage(user.RollDamage(stats.Damage),user);
         var color = power.Definition.PaletteColor;
         if (!npc.Dead)

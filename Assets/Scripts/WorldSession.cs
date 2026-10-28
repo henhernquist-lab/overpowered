@@ -12,6 +12,9 @@ public sealed partial class WorldSession : MonoBehaviour
     public PlayerProgression Progression { get; private set; }
     public PowerUser Powers { get; private set; }
     public GameModeSession Mode { get; private set; }
+    /// Temporary Endless-only progression. Null in every mode that does not opt in (Free Play, Hero/Villain, Battle Lab),
+    /// so all run-facing reads elsewhere are a null check away from today's behaviour.
+    public RunProgress Run { get; internal set; }
     public readonly List<CityNpc> Npcs = new List<CityNpc>();
     public readonly List<CrimeEvent> Crimes = new List<CrimeEvent>();
     /// Attack-token budget shared by every hostile NPC of this city (tuning: Resources/Enemies/EnemyRoster.asset).
@@ -34,7 +37,7 @@ public sealed partial class WorldSession : MonoBehaviour
     public float Health { get; private set; }
     public bool PlayerDead => Health<=0;
     /// GameTuning.Movement.Health x the session hero's MaxHealth archetype multiplier.
-    public float MaxHealth => Tuning.Movement.Health * (Powers != null ? Powers.HeroStats.MaxHealth : 1f) * Difficulty.PlayerHealth;
+    public float MaxHealth => Tuning.Movement.Health * (Powers != null ? Powers.HeroStats.MaxHealth : 1f) * Difficulty.PlayerHealth * (Run != null ? Run.Mods.MaxHealth : 1f);
     public event System.Action<bool> PlayerDamaged;
     /// Raised with the health ACTUALLY restored by HealPlayer (never a predicted amount); the HUD shows this number.
     public event System.Action<float> PlayerHealed;
@@ -81,7 +84,8 @@ public sealed partial class WorldSession : MonoBehaviour
         if(Mode!=null)
         {
             if(Mode.Ended) return;
-            if(Input.GetKeyDown(KeyCode.Escape)) Mode.SetPaused(!Mode.Paused);
+            // A run's level-up card choice owns the pause: Esc must never resume the fight behind an open modal.
+            if(Input.GetKeyDown(KeyCode.Escape)&&(Run==null||!Run.UpgradeOpen)) Mode.SetPaused(!Mode.Paused);
             if(Mode.Paused) return;
         }
         if (Input.GetKeyDown(KeyCode.Tab)) { MenuOpen=!MenuOpen; Cursor.lockState=MenuOpen?CursorLockMode.None:CursorLockMode.Locked; Cursor.visible=MenuOpen; }

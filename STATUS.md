@@ -5949,3 +5949,62 @@ Two things that still look like "nothing happened" in game, by design rather tha
 only kills of enemies hostile to the player pay - a Villain killing friendly criminals in Free Play, or civilians, pays 0.
 A Play Mode session started before this branch compiled holds the old assembly and shows no numbers at all; leave Play Mode
 (scripts recompile) and press Play again.
+
+### Run-based XP and power evolution (Milestone 10) - 2026-10-27
+
+Endless Fight is now a run-based roguelite. `GameModeDefinition.RunProgression` (set only on `Modes/endless-fight` and its villain
+variant) creates a `RunProgress` on the session object. It is temporary by construction: it lives in the city scene, is never
+serialized (`ProgressSave` has no run field, asserted), and every session starts at run level 1 / 0 XP / no stacks no matter what
+the saved menu level is. Inside a run `PowerUser.Stats` reads `GetStats(0)` and then applies the run modifiers once, after hero
+and difficulty; Free Play/Hero/Villain/Battle Lab keep the old persistent-tier behaviour byte-for-byte.
+
+**XP and curve.** `Run/RunTuning.cs` is the single table: Rusher 10, Gunner 14, Skirmisher 18, Brute 34, Bulwark 40,
+Pulsebreaker 300, unknown/new archetypes 12. `RunMath.RequiredXp(L) = round(120 * 1.20^(L-1))` (120/144/173/207/249..., saturated
+at `int.MaxValue`, level capped at 999). A single grant may cross several levels; every level queues one pick. XP uses the same
+credited death gate as health-on-kill (`HealthOnKill.LastClaim`), so one enemy life pays once and delayed power damage pays like
+direct damage. Civilians, neutrals, sourceless deaths, despawns and a dead player pay nothing.
+
+**Upgrades.** `Run/RunUpgradeDefinition.cs` ships 52 plain-C# cards: 4 for each of the 8 shipped primaries (Fire, Ice, Darkness,
+Lightning, Poison, Telekinesis, Super Strength, Laser Eyes), 2 for each of the 5 secondaries, 5 for the equipped signature and 5
+hero/defence cards. No card exists for an unshipped power (Aerokinesis/Sonic/Morphing/Plasma/Grapple/Mirage are absent), asserted
+against the real `Resources/Powers` set. Rarity weights are level-banded (62/30/8 early, 40/38/22 from level 14), stacks are capped,
+and prerequisites must be owned. Ten mechanics (star cards) are read by the real effects: Fire twin detonation, Ice shatter scaling,
+Darkness root strength, Lightning chain targets, Poison spread targets, Telekinesis mass scaling and impact blast, Strength finisher
+shockwave, Laser pierce and held-beam overload. Every guard is a read of `RunMechanics` (0 without a run), so no shared
+ScriptableObject is ever written and every non-run mode is unchanged. The picker only ever offers equipped powers, the equipped
+signature (from run level 4) and hero cards, always includes an equipped primary, and never repeats a capped card.
+
+**UI.** `Hud/GameHudRun.cs` adds the level row (`RUN <level>`, XP bar, pending-pick count) and one recycled three-card modal. A
+level-up pauses the fight through `GameModeSession.SetPaused` (timeScale 0, enemies frozen) until the player clicks or presses
+1/2/3; `WorldSession` gates Esc while a pick is open, and the legacy IMGUI pause box is suppressed so only one menu is visible. XP
+popups reuse the existing fixed 16-label pool (no per-kill object); persistent-account "+XP" is suppressed during a run so one kill
+reads as one number. Picking a max-health card grants the difference immediately; a charge card refills only its own power. A boss
+kill pays its XP plus one **Epic-only** milestone pick (no Common padding; two cards when that is all the loadout has).
+
+**Boss integration.** `EndlessWaveEvents.MinibossEvery = 5` already spawns one Pulsebreaker on rounds 5/10/15..., with its `MinibossRegularCost = 3` budget trade. The run layer does not duplicate that: it pays the boss's XP and milestone and reuses the
+existing boss bar (`Hud/GameHudBoss.cs`) which reads `Npc.CurrentHealth/MaxHealth` and shows PHASE 2 · OVERDRIVE. Boss death goes
+through the normal `CityNpc.Damage` funnel, so the bar disappears and the boss counts once.
+
+**VERIFIED** (Unity 6000.6.0f1, batch Play Mode, fresh isolated save, exit code checked):
+`RunProgressionVerification.Run` (new, `Verification/RunProgression/results.txt`) **693 PASS / 0 FAIL, exit 0**. Measured, not
+claimed: 52 cards over 8 primaries + 5 secondaries; curve 120/144/173/207/249/299/358/430/516/619 for levels 1-10; shipping-data
+model reaches level 5 at round 5 (154 regular + 300 boss XP), 10 at round 10, 16 at round 20 and 20 at round 30. A saved level-11
+account with Fire tier 2 gets 10.00 base damage in a run vs 14.00 in Free Play (tier ignored only in the run). Rusher 10 and Brute
+34 XP through real `CityNpc.Damage`; civilian/sourceless/duplicate deaths pay 0. Level-up pauses (timeScale 0, `MenuOpen`) and
+offers 3 eligible cards; picking SHATTERING COLD raised the real Ice stat 10.00 -> 11.40; 6000 XP raised 12 levels and queued
+12 picks, all resolved. A real Pulsebreaker body gave the bar 1.000 -> 0.281 authoritative fraction, paid exactly 300 XP, one
+Epic-only milestone pick, then cleaned up and hid the bar. Finish closes the run; a second run is level 1 with no stacks; Free Play
+has no run/director and still pays persistent XP. All three heroes start at level 1 (VECTOR 100 / TITAN 140 / NOVA 75 max health,
+one multiplier) and Normal/Hard/Extreme read 1.00/0.95/0.93 exactly once. HUD update 0.039 ms, 16 popup elements total.
+`PulsebreakerVerification.Run` re-ran **exit 0** (all three attacks, phase shift, round-5 spawn, bar, death cleanup and regressions).
+
+**Pre-existing failure reproduced, not caused here:** `EndlessEventsVerification.Run` without `OP_VERIFY_COMBAT_ROLL` stops at
+`Every enemy's health matches its slot formula` with `40.95 vs 39.00` / `80.72 vs 78.00` - the documented +/-10% spawn health roll
+that this suite's exact-health check ignores (the same stale check STATUS already records). Nothing in this branch touches spawn
+health; run `tools/verify-sequential.py --combat-roll 0.5` when that suite is needed.
+
+**UNVERIFIED:** human feel/pacing (is a pause on every level-up right for this game? are 2 cards enough for a boss milestone?),
+the ten mechanical cards as *felt* gameplay (the suite proves the data reaches `RunEffects` and picks 2 of them live; each hook was
+read in code, but no per-card damage/chain/spread test exists), a real long Endless playthrough, TV readability of the modal, and a
+separate-process Reload (no save schema changed; the suite proves no run field is written and Free Play still reads the account).
+No merge/push was performed.

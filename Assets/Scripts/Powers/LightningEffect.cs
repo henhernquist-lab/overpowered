@@ -49,7 +49,9 @@ public sealed class LightningEffect : PowerEffect
             from=camera.transform.position+camera.transform.right*.28f-camera.transform.up*.32f+camera.transform.forward*2.4f;
         float damage = user.RollDamage(stats.Damage);
         var current = first;
-        for (int jump = 0; current != null && jump <= Mathf.Max(0, MaxArcs); jump++)
+        // RUN EVOLUTION: CHAIN REACH / CHAIN STORM add targets, hard-capped so no build can chain forever.
+        int arcs = Mathf.Min(RunTuning.MaxChainTargets, MaxArcs + RunMechanics.Stacks(RunMechanic.LightningArc));
+        for (int jump = 0; current != null && jump <= Mathf.Max(0, arcs); jump++)
         {
             Vector3 chest = current.transform.position + Vector3.up * 1.1f;
             // One ordered gameplay strike has one bright core and one faint longer-lived path.

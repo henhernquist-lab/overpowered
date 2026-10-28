@@ -23,9 +23,13 @@ public sealed class IceEffect : PowerEffect
         }
         else { body=frozen.GetComponent<Rigidbody>();frozen.Thaw(); }
         target.GetComponent<FrozenLook>()?.Clear();
-        body.AddExplosionForce(settings.ShatterImpulse,origin,radius,settings.ShatterLift,ForceMode.Impulse);
+        // RUN EVOLUTION: GLACIAL RUPTURE / ABSOLUTE ZERO scale the shatter itself (percent stored in the mechanic stacks).
+        int shatter = RunMechanics.Stacks(RunMechanic.IceShatter);
+        float damage = settings.ShatterDamage * (1f + shatter / 100f);
+        float blast = radius * (1f + shatter / 200f);
+        body.AddExplosionForce(settings.ShatterImpulse * (1f + shatter / 150f),origin,blast,settings.ShatterLift,ForceMode.Impulse);
         FeelDirector.Instance?.Particles.Burst(target.transform.position+Vector3.up*.8f,power.Definition.PaletteColor,settings.ShatterParticles);
-        return settings.ShatterDamage;
+        return damage;
     }
     public override bool Execute(PowerUser user, PowerRuntime power)
     {

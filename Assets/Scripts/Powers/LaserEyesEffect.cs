@@ -58,14 +58,32 @@ public sealed class LaserEyesEffect : ChanneledEffect
         if (state.Pending < TickSeconds) return;
         float seconds = state.Pending; state.Pending = 0f; state.Ticks++;
         if (!hit) { state.LastTarget = null; return; }
+        // RUN EVOLUTION: OVERLOAD ramps the beam up to +40% over the first 3 seconds of a continuous channel.
+        float dps = state.DamagePerSecond;
+        if (RunMechanics.Has(RunMechanic.LaserOverload)) dps *= 1f + .4f * Mathf.Clamp01(state.Held / 3f);
         var npc = target.collider.GetComponentInParent<CityNpc>();
         if (npc != null)
         {
             state.LastTarget = npc;
             if (npc.Dead) return;
-            float damage = state.DamagePerSecond * seconds;
+            float damage = dps * seconds;
             npc.Damage(damage, user, state.Struck.Add(npc));
             state.Dealt += damage;
+            // RUN EVOLUTION: PIERCING GAZE continues through the first target to one hostile behind it.
+            if (RunMechanics.Has(RunMechanic.LaserPierce))
+            {
+                Vector3 behind = target.point + direction * .15f;
+                if (Physics.Raycast(behind, direction, out RaycastHit second, stats.Range, ~0, QueryTriggerInteraction.Ignore))
+                {
+                    var other = second.collider.GetComponentInParent<CityNpc>();
+                    if (other != null && other != npc && !other.Dead && other.Hostile)
+                    {
+                        float pierced = dps * seconds * .6f;
+                        other.Damage(pierced, user, state.Struck.Add(other));
+                        state.Dealt += pierced;
+                    }
+                }
+            }
             return;
         }
         state.LastTarget = null;

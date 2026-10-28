@@ -6,8 +6,11 @@ public sealed class PowerUser : MonoBehaviour
     /// Resolve one logical attack; Stats remains the authored, upgraded mean. Never call from a tick loop.
     public float RollDamage(float mean, float? variance = null) => WorldSession.Instance.Rolls.Damage(mean, variance ?? WorldSession.Instance.Tuning.CombatRanges.PlayerDamageVariance);
     public SessionDifficulty Difficulty => WorldSession.Instance!=null?WorldSession.Instance.Difficulty:new SessionDifficulty(null);
-    public float EnergyCost(PowerRuntime power) => power.Definition.ResourceCost*Difficulty.EnergyUsage;
-    public float ChannelDrain(PowerRuntime power) => power.Definition.DrainPerSecond*Difficulty.EnergyUsage;
+    public float EnergyCost(PowerRuntime power) => power.Definition.ResourceCost*Difficulty.EnergyUsage*RunEnergyCost(power.Definition.Id);
+    public float ChannelDrain(PowerRuntime power) => power.Definition.DrainPerSecond*Difficulty.EnergyUsage*RunEnergyCost(power.Definition.Id);
+    static float RunEnergyCost(string id) { var run = WorldSession.Instance != null ? WorldSession.Instance.Run : null; return run != null ? run.Mods.EnergyCost(id) : 1f; }
+    static float RunMaxEnergy => WorldSession.Instance != null && WorldSession.Instance.Run != null ? WorldSession.Instance.Run.Mods.MaxEnergy : 1f;
+    static float RunEnergyRegen => WorldSession.Instance != null && WorldSession.Instance.Run != null ? WorldSession.Instance.Run.Mods.EnergyRegen : 1f;
     public float ChargeRecharge(PowerRuntime power) => power.Definition.ChargeRecharge*Difficulty.Cooldown;
     public float ResolveDamage(float damage) => damage * Difficulty.PlayerDamage;
     public readonly List<PowerRuntime> Powers = new List<PowerRuntime>();
@@ -76,8 +79,8 @@ public sealed class PowerUser : MonoBehaviour
     public bool OffensiveActionsBlocked => Phase != null && Phase.Active;
     /// The session hero's archetype (baseline without a Forge hero).
     public HeroStats HeroStats => HeroDefinition != null && HeroDefinition.Stats != null ? HeroDefinition.Stats : HeroStats.Baseline;
-    public float MaxEnergy => config.Energy * HeroStats.MaxEnergy;
-    public float EnergyRegen => config.EnergyRecharge * HeroStats.EnergyRegen;
+    public float MaxEnergy => config.Energy * HeroStats.MaxEnergy * RunMaxEnergy;
+    public float EnergyRegen => config.EnergyRecharge * HeroStats.EnergyRegen * RunEnergyRegen;
     public bool IsEquipped(PowerDefinition definition)=>definition!=null&&(Forge==null||definition==EquippedA||definition==EquippedB||definition==EquippedSecondary);
     public Vector3 AimOrigin
     {
@@ -134,14 +137,44 @@ public sealed class PowerUser : MonoBehaviour
     }
     public PowerStats Stats(PowerRuntime power)
     {
-        var s = power.Definition.GetStats(Mathf.Max(0, Progression.Tier(power.Definition)));
+        // In a RUN, persistent power tiers are deliberately ignored: every run starts from the power's base values, so a
+        // maxed menu account has no head start. Outside a run (Free Play, Hero/Villain, Battle Lab) tiers apply as before.
+        var activeRun = WorldSession.Instance != null ? WorldSession.Instance.Run : null;
+        var s = power.Definition.GetStats(activeRun != null ? 0 : Mathf.Max(0, Progression.Tier(power.Definition)));
         var h = HeroStats;
         // Hero archetype: melee (Super Strength's punch/kick) scales damage and knockback; every other power scales damage and cooldown.
         if (power.Definition.Effect is PunchEffect) { s.Damage *= h.MeleeDamage; s.Force *= h.MeleeDamage; }
         else if (power.Definition.Effect == null || !power.Definition.Effect.IsFlight) { s.Damage *= h.PowerDamage; s.Cooldown *= h.CooldownMultiplier; }
         s.Cooldown *= Difficulty.Cooldown;
+        // RUN UPGRADES: applied last, exactly once, after persistent tier / hero / difficulty. A run without state is a
+        // no-op, so every existing mode is bit-identical. No shared ScriptableObject is ever written.
+        var run = activeRun;
+        if (run != null)
+        {
+            var m = run.Mods; string id = power.Definition.Id;
+            s.Damage *= m.Damage(id) * m.AllPowerDamage;
+            s.Cooldown *= m.Cooldown(id);
+            s.Radius *= m.Radius(id); s.Range *= m.Range(id); s.Duration *= m.Duration(id);
+            s.Charges += m.ExtraCharges(id);
+            if (power.Definition.Effect is PunchEffect) { s.Damage *= m.MeleeDamage; s.Force *= m.MeleeDamage; }
+            s.Cooldown = Mathf.Max(RunTuning.MinPowerCooldown, s.Cooldown);
+        }
         return s;
     }
+    /// Called by RunProgress after a pick. Only the power a charge card targets is refilled; every other power merely clamps
+    /// to its cap, so a damage pick can never hand out a free charge. Fuel is always clamped to the (possibly larger) cap.
+    public void RefreshRunStats(RunUpgradeDefinition picked = null)
+    {
+        foreach (var p in Powers)
+        {
+            var stats = Stats(p);
+            bool refill = picked != null && picked.Stat == RunStat.ExtraCharges && picked.PowerId == p.Definition.Id;
+            p.Charges = refill ? stats.Charges : Mathf.Min(p.Charges, stats.Charges);
+            p.Fuel = Mathf.Min(stats.Duration, p.Fuel);
+        }
+    }
+    /// RUN EVOLUTION: TWIN DETONATION counts the player's own casts (per body, so a new session starts the cycle over).
+    public int RunCastCount;
     public void ResolveSynergy()
     {
         var signatures=Resources.Load<SignatureCatalog>("SignatureCatalog");
@@ -200,7 +233,7 @@ public sealed class PowerUser : MonoBehaviour
     public bool ConsumeFlight(float dt)
     {
         if (OffensiveActionsBlocked||dt<=0||Flight == null || !IsEquipped(Flight.Definition)||!Progression.Owns(Flight.Definition) || Flight.Fuel <= 0f) return false;
-        Flight.Fuel = Mathf.Max(0f, Flight.Fuel - dt * Flight.Definition.ResourceCost); return true;
+        Flight.Fuel = Mathf.Max(0f, Flight.Fuel - dt * Flight.Definition.ResourceCost * RunEnergyCost(Flight.Definition.Id)); return true;
     }
     public bool Use(PowerRuntime power)
     {
@@ -326,6 +359,14 @@ public sealed class ThrownProp : MonoBehaviour
         var npc = other.collider.GetComponentInParent<CityNpc>(); if (npc == null) return;
         if(npc.Dead)return;
         LastContact=other.GetContact(0).point;
+        // RUN EVOLUTION: MASS DRIVER — a heavier prop hits harder (cars and barrels reward setup).
+        int mass = RunMechanics.Stacks(RunMechanic.TelekinesisMass);
+        if (mass > 0)
+        {
+            var rb = GetComponent<Rigidbody>();
+            float weight = rb != null ? Mathf.Clamp01(rb.mass / 400f) : 0f;
+            damage *= 1f + weight * .25f * mass;
+        }
         if(throwSettings!=null)damage=owner.RollDamage(damage);
         if(throwSettings!=null)
         {
@@ -337,6 +378,9 @@ public sealed class ThrownProp : MonoBehaviour
             FeelDirector.Impact(LastContact,LastImpulse,damage,1);
         }
         LastDamage=damage;using(owner.Credit(credit))npc.Damage(damage, owner); spent = true;
+        // RUN EVOLUTION: IMPACT WAVE — the throw's first contact releases a small blast around the impact.
+        if (RunMechanics.Has(RunMechanic.TelekinesisBlast))
+            using (owner.Credit(credit)) CombatImpact.Blast(owner, LastContact, 3f, 700f, damage * .5f, .45f);
     }
     static System.Collections.IEnumerator LaunchAfterContact(CityNpc npc,Vector3 impulse,Collider[] projectileColliders,float separation)
     {

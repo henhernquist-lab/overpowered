@@ -65,6 +65,12 @@ public sealed class GameModeSession : MonoBehaviour
     public ChallengeTracker Challenges {get;private set;}
     public void Begin()
     {
+        // Temporary Endless-only progression. Data-driven (GameModeDefinition.RunProgression), never a mode-ID switch.
+        if (Definition.RunProgression && World.Run == null)
+        {
+            World.Run = gameObject.AddComponent<RunProgress>();
+            World.Run.Configure(World, UnityEngine.Random.Range(int.MinValue, int.MaxValue));
+        }
         Style=gameObject.AddComponent<StyleScoreTracker>(); Style.Begin(World.Powers);
         if(Definition.Director!=null) Director=Definition.Director.Begin(this);
         Challenges=gameObject.AddComponent<ChallengeTracker>(); Challenges.Begin(this);
@@ -127,7 +133,7 @@ public sealed class GameModeSession : MonoBehaviour
     public void Finish(SessionOutcome outcome,string reason,bool home=false)
     {
         if(Ended) return;
-        Ended=true; World.MenuOpen=true; World.Powers.Release(false); World.Pursuit?.ResetState();
+        Ended=true; World.MenuOpen=true; World.Run?.Close(); World.Powers.Release(false); World.Pursuit?.ResetState();
         home|=!Definition.ShowResults;
         var result=new SessionResult {ModeId=Definition.Id,ModeName=Definition.DisplayName,Outcome=outcome,Reason=reason,Score=Score,Xp=XpEarned,Successes=Successes,Failures=Failures,Defeats=Defeats,Seconds=Elapsed,
             Side=World.Progression.Data.Side,Rescues=Rescues,PeakHeat=PeakHeat,TimeLimit=Definition.SessionSeconds,StartLevel=startLevel,StartXp=startXp,Layout=Definition.Results};

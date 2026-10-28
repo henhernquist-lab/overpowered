@@ -26,11 +26,15 @@ public static class HealthOnKill
     public static NpcRole LastRole { get; private set; }
     /// Why the most recent death paid nothing ("civilian", "not hostile", "player dead", "already claimed", "not player-owned", ...).
     public static string LastBlocked { get; private set; }
+    /// True when the most recent death passed every eligibility gate and consumed its one claim (even if the heal was 0).
+    /// Run progression reads this so run XP uses EXACTLY the same kill credit as healing — no second eligibility copy,
+    /// no double award, no way for a new power to pay one and not the other.
+    public static bool LastClaim { get; private set; }
 
     /// Drop the cached asset and the telemetry (verification only).
     public static void ResetTelemetry()
     {
-        tuning = null; Kills = 0; TotalHealed = 0f; LastHeal = 0f; LastBlocked = null; LastRole = NpcRole.Civilian;
+        tuning = null; Kills = 0; TotalHealed = 0f; LastHeal = 0f; LastBlocked = null; LastClaim = false; LastRole = NpcRole.Civilian;
     }
 
     /// The resolved heal for one credited defeat. Pure: never touches health. Exposed so tests can table-drive it.
@@ -43,6 +47,7 @@ public static class HealthOnKill
     /// Called by CityNpc.Damage for every death, exactly once per enemy life. Returns the health actually restored.
     public static float OnEnemyDefeated(WorldSession world, CityNpc victim, PowerUser source)
     {
+        LastClaim = false;
         if (world == null || victim == null) { LastBlocked = "no world or victim"; return 0f; }
         if (!PlayerOwned(world, source)) { LastBlocked = "not player-owned"; return 0f; }
         if (victim.KillRewardClaimed) { LastBlocked = "already claimed"; return 0f; }
@@ -55,8 +60,12 @@ public static class HealthOnKill
         if (asset == null) { LastBlocked = "missing " + ResourcePath; return 0f; }
         // Claim even when the heal resolves to 0 (killing at full health): one reward per enemy life, never a saved-up one.
         victim.ClaimKillReward();
-        LastBlocked = null; LastRole = victim.Role;
+        LastClaim = true; LastBlocked = null; LastRole = victim.Role;
+        // Run upgrades may raise the heal; max health is read from the session at this instant, so a +max-health pick
+        // already applies to the next kill without this code knowing about run state.
         float heal = asset.Resolve(world.MaxHealth, world.Health, victim.Archetype.HealOnKillMultiplier, victim.IsBoss);
+        var run = world.Run;
+        if (run != null) heal *= run.Mods.HealOnKill;
         float applied = world.HealPlayer(heal);
         LastHeal = applied;
         if (applied > 0f) { Kills++; TotalHealed += applied; }

@@ -21,7 +21,7 @@ public sealed class PowerProjectile : MonoBehaviour
 {
     PowerUser owner; PowerDefinition definition; PowerStats stats; FireProjectilePool pool;
     Rigidbody body; SphereCollider sphere; FireProjectileVisual visual;
-    bool exploded,returnPending;float expires,emberAt,launchedAt;string credit;
+    bool exploded,returnPending,doubleBlast;float expires,emberAt,launchedAt;string credit;
     readonly RaycastHit[] visualHits=new RaycastHit[8];
     public FireProjectileVisual Visual=>visual;
     public Vector3 LaunchDirection {get;private set;}
@@ -32,6 +32,9 @@ public sealed class PowerProjectile : MonoBehaviour
     public void Initialize(PowerUser user,PowerRuntime power,Vector3 direction)
     {
         owner=user;definition=power.Definition;stats=user.Stats(power);stats.Damage=user.RollDamage(stats.Damage);credit=user.Crediting;
+        // RUN EVOLUTION: TWIN DETONATION detonates every 3rd blast twice. The counter lives on the player body, so a new
+        // session starts the cycle over and the shared effect asset is never mutated.
+        doubleBlast = RunMechanics.Has(RunMechanic.FireDoubleBlast) && (++user.RunCastCount % 3 == 0);
         LaunchDirection=direction;exploded=false;returnPending=false;
         expires=Time.time+stats.Duration;emberAt=Time.time+.1f;launchedAt=Time.time;
         sphere.radius=definition.ProjectileSize*.5f;sphere.enabled=true;
@@ -69,7 +72,12 @@ public sealed class PowerProjectile : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         if (exploded) return; exploded = true;
-        using (owner.Credit(credit)) CombatImpact.Blast(owner, transform.position, stats.Radius, stats.Force, stats.Damage, definition.UpwardForce,stats.Duration);
+        using (owner.Credit(credit))
+        {
+            CombatImpact.Blast(owner, transform.position, stats.Radius, stats.Force, stats.Damage, definition.UpwardForce,stats.Duration);
+            if (doubleBlast)
+                CombatImpact.Blast(owner, transform.position, stats.Radius * 1.3f, stats.Force * .8f, stats.Damage * .6f, definition.UpwardForce, stats.Duration);
+        }
         LastImpactPoint=collision.contactCount>0?collision.GetContact(0).point:transform.position;
         Vector3 normal=collision.contactCount>0?collision.GetContact(0).normal:-transform.forward;
         pool.Impact(LastImpactPoint,normal,definition.Light);

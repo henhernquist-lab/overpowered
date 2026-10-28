@@ -180,6 +180,10 @@ public sealed partial class GameHud
     void OnXpGranted(XpGrant grant)
     {
         if (grant.Amount <= 0) return;
+        // During an Endless run the HUD row and the popups show RUN XP. The account still earns its own XP from a kill (an
+        // existing, separate progression), but a second "+XP" for the same kill would read as a double reward.
+        var host = WorldSession.Instance;
+        if (host != null && host.Run != null && grant.Reason == "defeat") return;
         XpGrantsReceived++; float now = Time.unscaledTime;
         XpPopup target = null;
         foreach (var p in Popups)

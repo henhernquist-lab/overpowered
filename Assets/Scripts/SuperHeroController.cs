@@ -237,8 +237,12 @@ public sealed class SuperHeroController : MonoBehaviour
     void ApplyPunch(PowerDefinition definition,PowerStats stats,bool pause=false)
     {
         LastForce = stats.Force;
-        using (powers.Credit(MeleeCredit)) LastAffectedBodies = CombatImpact.Blast(powers, transform.position + Vector3.up * definition.OriginHeight + transform.forward * definition.OriginOffset,
-            stats.Radius, stats.Force, powers.RollDamage(stats.Damage,stats.DamageVariance), definition.UpwardForce, melee:true);
+        float dealt = powers.RollDamage(stats.Damage, stats.DamageVariance);
+        Vector3 impact = transform.position + Vector3.up * definition.OriginHeight + transform.forward * definition.OriginOffset;
+        using (powers.Credit(MeleeCredit)) LastAffectedBodies = CombatImpact.Blast(powers, impact, stats.Radius, stats.Force, dealt, definition.UpwardForce, melee:true);
+        // RUN EVOLUTION: SHOCKFIST — landing a finisher releases a second, wider shockwave.
+        if (pause && RunMechanics.Has(RunMechanic.StrengthShockwave))
+            using (powers.Credit(MeleeCredit)) LastAffectedBodies += CombatImpact.Blast(powers, impact, 4f, LastForce * .6f, dealt * .5f, .35f, melee:true);
         LastPunchResult = $"PUNCH: {LastAffectedBodies} bodies hit @ {LastForce:0} N·s";
         LastImpactTime=Time.time;LastImpactFrame=Time.frameCount;PunchImpacted?.Invoke();
         if(pause)FinisherPause();

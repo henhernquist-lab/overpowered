@@ -199,6 +199,9 @@ public sealed partial class CityNpc : MonoBehaviour
         Agent.enabled=false; GetComponent<Collider>().enabled=false;
         if(source!=null) world.OnDefeat(this); Crime?.CriminalDefeated();
         HealthOnKill.OnEnemyDefeated(world, this, source);   // credited player kills restore health (Resources/HealthOnKill); see HealthOnKill.cs
+        // RUN XP: same single claim as the heal, so a kill can never pay twice and a new power can never pay one but not
+        // the other. Null Run (Free Play / Hero / Villain / Battle Lab) means this is a no-op.
+        if (HealthOnKill.LastClaim && world.Run != null) world.Run.ClaimKill(this);
         Destroy(gameObject,Mathf.Max(world.Tuning.Npcs.DestroyDelay,animationTuning.Death.length/animationTuning.ActionPlayback));
     }
     void Update()

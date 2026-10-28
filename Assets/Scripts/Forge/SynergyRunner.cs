@@ -15,7 +15,11 @@ public sealed class SynergyRunner : MonoBehaviour
     string feedback="Ready";float feedbackUntil;
     public string Feedback {get=>feedback;private set{feedback=value;feedbackUntil=Time.time+2f;}}
     public string StatusText=>Time.time<feedbackUntil?Feedback:ReadyState;
-    public float EnergyCost=>Definition!=null?Definition.EnergyCost*User.Difficulty.EnergyUsage:0;
+    RunModifiers RunMods=>WorldSession.Instance!=null?WorldSession.Instance.Run?.Mods:null;
+    float SignatureEnergy=>RunMods!=null?RunMods.SignatureEnergy:1f;
+    float SignatureDamage=>RunMods!=null?RunMods.SignatureDamage:1f;
+    float SignatureRadius=>RunMods!=null?RunMods.SignatureRadius:1f;
+    public float EnergyCost=>Definition!=null?Definition.EnergyCost*User.Difficulty.EnergyUsage*(Definition.IsSignature?SignatureEnergy:1f):0;
     public float ActivationDamage {get;private set;}
     public string ReadyState=>Definition==null?"UNAVAILABLE":Busy?"ACTIVE":Cooldown>0?$"COOLDOWN {Cooldown:0.0}s":User.Energy<EnergyCost?"INSUFFICIENT ENERGY":"READY";
     public Vector3 Target;
@@ -70,9 +74,11 @@ public sealed class SynergyRunner : MonoBehaviour
         if(!Definition.Effect.CanBegin(this)){Feedback="No valid target";return false;}
         if(!User.TrySpendEnergy(EnergyCost)){Feedback="Insufficient energy";return false;}
         User.EndChannel();User.Release(false);
-        ActivationDamage=Definition.IsSignature?User.RollDamage(Definition.Damage*User.HeroStats.PowerDamage):Definition.Damage;
+        ActivationDamage=Definition.IsSignature?User.RollDamage(Definition.Damage*User.HeroStats.PowerDamage*SignatureDamage):Definition.Damage;
         affected.Clear();suspended.Clear();
-        Cooldown=Definition.Cooldown*User.Difficulty.Cooldown;Busy=true;deadline=Time.time+Mathf.Max(8,Definition.Duration+4);
+        Cooldown=Definition.Cooldown*User.Difficulty.Cooldown*(Definition.IsSignature?(RunMods!=null?RunMods.SignatureCooldown:1f):1f);
+        if(Definition.IsSignature)Cooldown=Mathf.Max(RunTuning.MinSignatureCooldown,Cooldown);
+        Busy=true;deadline=Time.time+Mathf.Max(8,Definition.Duration+4);
         Feedback=Definition.DisplayName;
         action=StartCoroutine(Perform(Definition.Effect));
         User.RecordUse(CreditId);
@@ -132,10 +138,11 @@ public sealed class SynergyRunner : MonoBehaviour
     {
         var d=Definition;LastForce=d.Force*multiplier;
         float damage=(d.IsSignature?ActivationDamage:d.Damage)*multiplier;
-        AffectedBodies=CombatImpact.Blast(User,position,d.Radius,LastForce,damage,.65f,d.BurnSeconds,true);
+        float radius=d.IsSignature?d.Radius*SignatureRadius:d.Radius;
+        AffectedBodies=CombatImpact.Blast(User,position,radius,LastForce,damage,.65f,d.BurnSeconds,true);
         if(d.BurnSeconds>0)
         {
-            int count=Physics.OverlapSphereNonAlloc(position,d.Radius,Hits);
+            int count=Physics.OverlapSphereNonAlloc(position,radius,Hits);
             for(int i=0;i<count;i++)Hits[i].GetComponentInParent<CityNpc>()?.MarkBurn(d.BurnSeconds);
         }
         Impacts++;Vfx.Burst(position,d);Feedback=d.DisplayName+" / impact";

@@ -49,6 +49,7 @@ MonoBehaviour:
   ShowResults: 1
   Results: 1
   Director: {fileID: 11400000, guid: 2e6e905315e140a9b3adad6bd9aa9826, type: 2}
+  RunProgression: 1
   Lighting: {fileID: 11400000, guid: 50f58a12356014bd086a6c8a8dcb5378, type: 2}
   BriefingGoal: Survive endless waves of criminals.
   BriefingWin: Beat your best wave and score.

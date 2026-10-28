@@ -35,6 +35,9 @@ public sealed partial class GameHud : MonoBehaviour
     public Label ErrorLine { get; private set; }
     public VisualElement Crosshair { get; private set; }
     public Label LevelValue { get; private set; }
+    /// The level row's caption and XP text exactly as drawn ("LV" for the saved level, "RUN" during an Endless run).
+    public string LevelCaptionText => levelCaption != null ? levelCaption.text : null;
+    public string ExperienceText => xpLabel != null ? xpLabel.text : null;
     public Label TimerValue { get; private set; }
     public Label ObjectiveBody { get; private set; }
     public VisualElement HealthFill { get; private set; }
@@ -76,7 +79,7 @@ public sealed partial class GameHud : MonoBehaviour
         Root = Document.rootVisualElement; Root.name = "game-hud"; Root.pickingMode = PickingMode.Ignore;
         Root.style.position = Position.Absolute; Root.style.left = Root.style.right = Root.style.top = Root.style.bottom = 0;
         Root.style.unityFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"); Root.style.color = C(CityColor.UiInk);
-        Build(); BuildOverlay(); BuildFeedback(); BuildEnemyFeedback(); BuildParkourHud(); BuildBossBar();
+        Build(); BuildOverlay(); BuildFeedback(); BuildEnemyFeedback(); BuildParkourHud(); BuildBossBar(); BuildRunModal();
     }
 
     /// Shows or hides the whole HUD (the FPS A/B uses this to measure the legacy IMGUI-only frame).
@@ -348,10 +351,25 @@ public sealed partial class GameHud : MonoBehaviour
             XpFill.style.backgroundColor = accent; pointsLabel.style.color = accent; directorCaption.style.color = accent; objectiveHeader.style.color = accent;
         }
 
-        // Level + XP (Progression)
+        // Level + XP (Progression). During an Endless run this row shows the TEMPORARY run level, never the saved one:
+        // every run starts at 1 regardless of the menu level. The persistent numbers come back the moment Run is null.
         Show(LevelGroup, (hud & ModeHud.Progression) != 0);
-        if (progress.Data.Level != shownLevel || progress.Data.Xp != shownXp || progress.Data.Points != shownPoints)
+        var run = w.Run;
+        if (run != null)
         {
+            if (levelCaption.text != "RUN") levelCaption.text = "RUN";
+            if (run.Level != shownLevel || run.Xp != shownXp || run.PendingPicks != shownPoints)
+            {
+                shownLevel = run.Level; shownXp = run.Xp; shownPoints = run.PendingPicks;
+                LevelValue.text = shownLevel.ToString(); xpLabel.text = $"{shownXp} / {run.RequiredXp} XP";
+                XpFill.style.width = Length.Percent(100f * Mathf.Clamp01(shownXp / (float)run.RequiredXp));
+                pointsLabel.text = shownPoints > 0 ? $"{shownPoints} UPGRADE{(shownPoints == 1 ? "" : "S")} READY" : "";
+                Show(pointsLabel, shownPoints > 0);
+            }
+        }
+        else if (progress.Data.Level != shownLevel || progress.Data.Xp != shownXp || progress.Data.Points != shownPoints || levelCaption.text != "LV")
+        {
+            levelCaption.text = "LV";
             shownLevel = progress.Data.Level; shownXp = progress.Data.Xp; shownPoints = progress.Data.Points;
             LevelValue.text = shownLevel.ToString(); xpLabel.text = $"{shownXp} / {progress.RequiredXp} XP";
             XpFill.style.width = Length.Percent(100f * Mathf.Clamp01(shownXp / (float)progress.RequiredXp));
@@ -477,7 +495,7 @@ public sealed partial class GameHud : MonoBehaviour
         Show(directorCaption, shown.Length > 0);
     }
 
-    void OnDestroy() { CityNpc.DamageApplied -= OnNpcDamageApplied; UnbindHealEvents(); StopFeedbackTweens(); Bind(null); BindHero(null); if (Panel != null) Destroy(Panel); if (OverlayPanel != null) Destroy(OverlayPanel); if (overlayHost != null) Destroy(overlayHost); }
+    void OnDestroy() { CityNpc.DamageApplied -= OnNpcDamageApplied; UnbindHealEvents(); UnbindRun(); StopFeedbackTweens(); Bind(null); BindHero(null); if (Panel != null) Destroy(Panel); if (OverlayPanel != null) Destroy(OverlayPanel); if (overlayHost != null) Destroy(overlayHost); }
 }
 
 /// One power-bar slot and the values it is currently drawing (verification reads these).
