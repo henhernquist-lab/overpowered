@@ -5976,7 +5976,7 @@ signature (from run level 4) and hero cards, always includes an equipped primary
 
 **UI.** `Hud/GameHudRun.cs` adds the level row (`RUN <level>`, XP bar, pending-pick count) and one recycled three-card modal. A
 level-up pauses the fight through `GameModeSession.SetPaused` (timeScale 0, enemies frozen) until the player clicks or presses
-1/2/3; `WorldSession` gates Esc while a pick is open, and the legacy IMGUI pause box is suppressed so only one menu is visible. XP
+1/2/3 (the card text is click-through, so the whole card is the button); `WorldSession` gates Esc while a pick is open, and the legacy IMGUI pause box is suppressed so only one menu is visible. XP
 popups reuse the existing fixed 16-label pool (no per-kill object); persistent-account "+XP" is suppressed during a run so one kill
 reads as one number. Picking a max-health card grants the difference immediately; a charge card refills only its own power. A boss
 kill pays its XP plus one **Epic-only** milestone pick (no Common padding; two cards when that is all the loadout has).
@@ -5986,14 +5986,15 @@ existing boss bar (`Hud/GameHudBoss.cs`) which reads `Npc.CurrentHealth/MaxHealt
 through the normal `CityNpc.Damage` funnel, so the bar disappears and the boss counts once.
 
 **VERIFIED** (Unity 6000.6.0f1, batch Play Mode, fresh isolated save, exit code checked):
-`RunProgressionVerification.Run` (new, `Verification/RunProgression/results.txt`) **693 PASS / 0 FAIL, exit 0**. Measured, not
+`RunProgressionVerification.Run` (new, `Verification/RunProgression/results.txt`) **695 PASS / 0 FAIL, exit 0**. Measured, not
 claimed: 52 cards over 8 primaries + 5 secondaries; curve 120/144/173/207/249/299/358/430/516/619 for levels 1-10; shipping-data
 model reaches level 5 at round 5 (154 regular + 300 boss XP), 10 at round 10, 16 at round 20 and 20 at round 30. A saved level-11
 account with Fire tier 2 gets 10.00 base damage in a run vs 14.00 in Free Play (tier ignored only in the run). Rusher 10 and Brute
 34 XP through real `CityNpc.Damage`; civilian/sourceless/duplicate deaths pay 0. Level-up pauses (timeScale 0, `MenuOpen`) and
 offers 3 eligible cards; picking SHATTERING COLD raised the real Ice stat 10.00 -> 11.40; 6000 XP raised 12 levels and queued
 12 picks, all resolved. A real Pulsebreaker body gave the bar 1.000 -> 0.281 authoritative fraction, paid exactly 300 XP, one
-Epic-only milestone pick, then cleaned up and hid the bar. Finish closes the run; a second run is level 1 with no stacks; Free Play
+Epic-only milestone pick, then cleaned up and hid the bar; activating the modal's real UI Toolkit button applied the clicked
+card (ice-freeze 1 -> 2), proving the mouse path, not just `RunProgress.Choose`. Finish closes the run; a second run is level 1 with no stacks; Free Play
 has no run/director and still pays persistent XP. All three heroes start at level 1 (VECTOR 100 / TITAN 140 / NOVA 75 max health,
 one multiplier) and Normal/Hard/Extreme read 1.00/0.95/0.93 exactly once. HUD update 0.039 ms, 16 popup elements total.
 `PulsebreakerVerification.Run` re-ran **exit 0** (all three attacks, phase shift, round-5 spawn, bar, death cleanup and regressions).
@@ -6004,7 +6005,7 @@ that this suite's exact-health check ignores (the same stale check STATUS alread
 health; run `tools/verify-sequential.py --combat-roll 0.5` when that suite is needed.
 
 **UNVERIFIED:** human feel/pacing (is a pause on every level-up right for this game? are 2 cards enough for a boss milestone?),
-the ten mechanical cards as *felt* gameplay (the suite proves the data reaches `RunEffects` and picks 2 of them live; each hook was
+the ten mechanical cards as *felt* gameplay (the suite proves the data reaches `RunMechanics` and picks 2 of them live; each hook was
 read in code, but no per-card damage/chain/spread test exists), a real long Endless playthrough, TV readability of the modal, and a
 separate-process Reload (no save schema changed; the suite proves no run field is written and Free Play still reads the account).
 No merge/push was performed.

@@ -84,11 +84,14 @@ public sealed partial class GameHud
         var desc = Text("", 13, C(CityColor.UiMuted), false); desc.style.marginTop = 12; desc.style.whiteSpace = WhiteSpace.Normal;
         desc.style.flexGrow = 1; card.Add(desc);
         var stacks = Text("", 11, C(CityColor.UiMuted)); stacks.style.marginTop = 12; card.Add(stacks);
+        // The button under the text owns the click: labels are added on top, so without this a click on a title/description
+        // would hit the label and never reach the card's Button.
+        rarity.pickingMode = name.pickingMode = target.pickingMode = desc.pickingMode = stacks.pickingMode = PickingMode.Ignore;
         var key = Text(RunKeyLabels[index], 12, C(CityColor.UiInk)); key.style.marginTop = 8;
         key.style.backgroundColor = Alpha(C(CityColor.UiNavy), .95f); key.style.borderTopLeftRadius = key.style.borderTopRightRadius =
             key.style.borderBottomLeftRadius = key.style.borderBottomRightRadius = 6;
         key.style.paddingTop = 1; key.style.paddingBottom = 1; key.style.paddingLeft = 8; key.style.paddingRight = 8;
-        key.style.alignSelf = Align.FlexStart;
+        key.style.alignSelf = Align.FlexStart; key.pickingMode = PickingMode.Ignore;
         card.Add(key);
 
         runCards.Add(card); runCardRarity.Add(rarity); runCardName.Add(name); runCardTarget.Add(target);

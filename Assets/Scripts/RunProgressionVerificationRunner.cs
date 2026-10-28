@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /// See Assets/Editor/RunProgressionVerification.cs. Proves the run layer against the SHIPPING catalog and a real Endless
 /// session: every run starts at level 1 even on a levelled account (and ignores persistent tiers), credited kills pay their
@@ -328,12 +329,20 @@ public sealed class RunProgressionVerificationRunner : SessionVerificationRunner
         Check(run.Level == levelBefore + reached, "The level matches the XP curve after the burst.");
         Check(run.Offer.Count == 0, "No stale offer remains after the last pick.");
 
-        Log("---- ESC CANNOT RESUME BEHIND THE MODAL");
+        Log("---- UI PATH AND ESC GUARD");
         run.GrantXp(run.RequiredXp - run.Xp, W.Hero.transform.position);
         yield return null;
         Check(run.UpgradeOpen && W.Mode.Paused, "A level-up is open and the fight is paused.");
         Check(WorldSession.Instance.Run != null && WorldSession.Instance.Run.UpgradeOpen, "WorldSession sees the open pick (its Esc handler is gated on it).");
-        Check(run.Choose(0) && !W.Mode.Paused, "The card, not Esc, is what resumes the fight.");
+        var offered = run.Offer.ToList();
+        int stackBefore = run.StacksOf(offered[1].Id);
+        // The modal lives in the overlay UIDocument (the same layer as the boss bar and damage numbers), not the main one.
+        var button = hud.OverlayDocument.rootVisualElement.Q<Button>("run-card-button-1");
+        Check(button != null && button.enabledSelf, "The second card exposes a real enabled UI Toolkit button.");
+        using (var submit = NavigationSubmitEvent.GetPooled()) { submit.target = button; button.SendEvent(submit); }
+        yield return null;
+        Check(!run.UpgradeOpen && !W.Mode.Paused, "Activating the card button (the mouse path) resolves the choice and resumes the fight.");
+        Check(run.StacksOf(offered[1].Id) == stackBefore + 1, $"The clicked card '{offered[1].Id}' was the one applied ({stackBefore} -> {run.StacksOf(offered[1].Id)}).");
     }
 
     // ------------------------------------------------------------------ boss

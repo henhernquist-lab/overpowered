@@ -615,16 +615,18 @@ PASS Every queued pick was resolved and the fight resumed.
 PASS Picks 13 = 1 + 12 levels.
 PASS The level matches the XP curve after the burst.
 PASS No stale offer remains after the last pick.
----- ESC CANNOT RESUME BEHIND THE MODAL
+---- UI PATH AND ESC GUARD
 PASS A level-up is open and the fight is paused.
 PASS WorldSession sees the open pick (its Esc handler is gated on it).
-PASS The card, not Esc, is what resumes the fight.
+PASS The second card exposes a real enabled UI Toolkit button.
+PASS Activating the card button (the mouse path) resolves the choice and resumes the fight.
+PASS The clicked card 'ice-freeze' was the one applied (1 -> 2).
 ---- PULSEBREAKER (authoritative bar, boss XP, Epic milestone pick)
 PASS A real Pulsebreaker body is attached through the verification entry point.
 PASS The boss bar is visible and named 'PULSEBREAKER'.
 PASS The bar reads authoritative health: 1.000 vs 1.000.
 PASS Phase 1 is shown ('PHASE 1').
-PASS The bar followed damage to the real current HP (0.367 vs 0.367).
+PASS The bar followed damage to the real current HP (0.364 vs 0.364).
 PASS The bar stays up while the boss is alive (its Overdrive label is asserted by PulsebreakerVerification.Run, which drives a live NavMesh boss).
 PASS Boss kill paid exactly 300 run XP (table 300) and counted 1 boss kill.
 PASS The boss queued 1 pick(s): levelling plus the Epic milestone.
@@ -644,7 +646,7 @@ PASS After the boss picks the run resumes.
 PASS The boss body cleaned up and its bar is gone (no stuck UI).
 PASS The run survived the boss encounter.
 ---- RESET AND SAVE
-PASS The verification save exists at /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Verification/RunProgression/saves/save-e152bd1c421243a6bc9a3dc958d4ce32.json.
+PASS The verification save exists at /Users/melaniehernquist/Documents/ChatGPT/op-overnight-recovery/Verification/RunProgression/saves/save-4bf9e2a8a8a04b64b6934f8d015a4219.json.
 PASS The live save file contains no run state.
 PASS Persistent level still exists alongside the run (11).
 PASS The finished run is at level 15 with 15 picks (temporary).
@@ -691,22 +693,22 @@ PASS Saved VECTOR + fire + ice + force-field through the loadout API.
 PASS Session is endless-fight.
 PASS extreme: run level 1 and no run health multiplier.
 PASS extreme: max health 92.5 = baseline x hero x difficulty 0.93 exactly once.
-PASS extreme: run seed 1500112831 exists.
+PASS extreme: run seed 259038873 exists.
 PASS VECTOR: an allowed secondary exists (force-field).
 PASS Saved VECTOR + fire + ice + force-field through the loadout API.
 PASS Session is endless-fight.
 PASS hard: run level 1 and no run health multiplier.
 PASS hard: max health 95.0 = baseline x hero x difficulty 0.95 exactly once.
-PASS hard: run seed 326254681 exists.
+PASS hard: run seed -1217254392 exists.
 PASS VECTOR: an allowed secondary exists (force-field).
 PASS Saved VECTOR + fire + ice + force-field through the loadout API.
 PASS Session is endless-fight.
 PASS normal: run level 1 and no run health multiplier.
 PASS normal: max health 100.0 = baseline x hero x difficulty 1.00 exactly once.
-PASS normal: run seed -1969588226 exists.
+PASS normal: run seed -1525821645 exists.
 MEASURED difficulty PlayerHealthMultiplier: normal 1.00, hard 0.95, extreme 0.93.
 ---- PERFORMANCE
-PASS HUD update is 0.083 ms (budget 4 ms; run row + modal are change-guarded).
+PASS HUD update is 0.056 ms (budget 4 ms; run row + modal are change-guarded).
 PASS XP popups reuse the fixed pool (16 elements) — no per-kill object.
 PASS Run state is bounded by the catalog size (0 stacks <= 52 cards).
 PASS No stray run pause is left behind.
