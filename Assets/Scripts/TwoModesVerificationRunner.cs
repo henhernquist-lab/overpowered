@@ -151,7 +151,7 @@ public sealed class TwoModesVerificationRunner : SessionVerificationRunner
     {
         Log("---- LIVE BOSS ROUNDS (in-memory clone: 1 + 1 per round, 0.2 s intermission, miniboss every 5th)");
         yield return Home();
-        Check(Profile.SetLoadout(F.Heroes[0], Power("ice"), Power("strength"), F.Heroes[0].Primary, F.Heroes[0].Secondary), "Loadout saved for the boss-round fixture.");
+        Check(Profile.SetLoadout(F.Heroes[0], Power("ice"), Power("fire"), F.Heroes[0].Primary, F.Heroes[0].Secondary), "Loadout saved for the boss-round fixture.");
         var shipping = Resources.Load<GameModeDefinition>("Modes/endless-fight");
         var mode = Instantiate(shipping);
         var director = Instantiate((EndlessWaveDirector)shipping.Director);

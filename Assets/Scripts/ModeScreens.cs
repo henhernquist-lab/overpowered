@@ -96,8 +96,8 @@ public sealed partial class ModeScreens : MonoBehaviour
         }
         var strip=Row();Place(strip,6,81,88,14);PanelBox(strip);strip.style.alignItems=Align.Center;strip.style.paddingLeft=26;strip.style.paddingRight=20;Root.Add(strip);
         var levelBlock=new VisualElement();levelBlock.style.width=130;levelBlock.Add(Text("LEVEL",11,C(CityColor.UiMuted),true));levelBlock.Add(Text(Profile.Data.Level.ToString("00"),36,C(CityColor.UiInk),true));strip.Add(levelBlock);
-        var powerBlock=new VisualElement();powerBlock.style.flexGrow=1;powerBlock.Add(Text("YOUR POWERS",11,C(CityColor.UiMuted),true));var icons=Row();icons.style.marginTop=8;powerBlock.Add(icons);strip.Add(powerBlock);
-        foreach(var power in powers.Where(Profile.Owns)){var icon=new MenuIcon(power.MenuIcon,C(power.PaletteColor));icon.style.width=37;icon.style.height=37;icon.style.marginRight=13;icon.tooltip=power.DisplayName+" · tier "+Profile.Tier(power);icons.Add(icon);}
+        var powerBlock=new VisualElement();powerBlock.style.flexGrow=1;powerBlock.Add(Text("YOUR POWERS",11,C(CityColor.UiMuted),true));var icons=Row();icons.style.flexWrap=Wrap.Wrap;icons.style.marginTop=8;powerBlock.Add(icons);strip.Add(powerBlock);
+        foreach(var power in powers.Where(p=>p.Selectable&&Profile.Owns(p))){var icon=new MenuIcon(power.MenuIcon,C(power.PaletteColor));icon.name="owned-"+power.Id;icon.style.width=32;icon.style.height=32;icon.style.marginRight=8;icon.tooltip=power.DisplayName+" · tier "+Profile.Tier(power);icons.Add(icon);}
         foreach(var mode in modes.Where(m=>!m.Playable&&!m.MenuHidden))
         {
             var button=new Button(()=>Launch(mode)){name="mode-"+mode.Id};ResetButton(button);button.style.width=172;button.style.height=64;button.style.marginLeft=12;button.style.backgroundColor=Alpha(C(CityColor.UiPurple),.55f);Round(button,9);
@@ -159,7 +159,7 @@ public sealed partial class ModeScreens : MonoBehaviour
         if(!RewardVisible){rewardLabel.text=result.EndLevel>result.StartLevel?"POWER UPGRADED. MAKE IT COUNT.":"YOUR PROGRESS IS SAVED.";return;}
         rewardLabel.text="LEVEL UP / CHOOSE YOUR NEXT EDGE     "+Profile.Data.Points+" POINT(S)";
         // Points buy upgrade TIERS of owned powers only; ownership itself is free data (PowerDefinition.InitiallyUnlocked). The equipped loadout is offered first.
-        var candidates=powers.Where(p=>Profile.Owns(p)&&Profile.Tier(p)<p.Upgrades.Length).OrderByDescending(p=>p==Profile.EquippedA||p==Profile.EquippedB).ThenBy(p=>p.Id).Take(3).ToArray();
+        var candidates=powers.Where(p=>p.Selectable&&Profile.Owns(p)&&Profile.Tier(p)<p.Upgrades.Length).OrderByDescending(p=>p==Profile.EquippedA||p==Profile.EquippedB).ThenBy(p=>p.Id).Take(3).ToArray();
         if(candidates.Length==0){rewardLabel.text="ALL POWERS MAXED / POINTS SAVED";return;}
         var accent=ColorFor(result.Side);
         foreach(var power in candidates)
@@ -179,7 +179,7 @@ public sealed partial class ModeScreens : MonoBehaviour
     }
     public bool ChooseUpgrade(PowerDefinition power)
     {
-        if(result==null||result.EndLevel<=result.StartLevel||!RewardVisible||GameFlow.Instance.Loading)return false;
+        if(power==null||!power.Selectable||result==null||result.EndLevel<=result.StartLevel||!RewardVisible||GameFlow.Instance.Loading)return false;
         bool bought=Profile.Buy(power);if(bought)ShowRewards();return bought;
     }
     int RequiredXp(int atLevel)=>Mathf.Max(1,Mathf.RoundToInt(game.Progression.BaseLevelXp*Mathf.Pow(game.Progression.LevelXpGrowth,atLevel-1)));

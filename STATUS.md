@@ -6009,3 +6009,32 @@ the ten mechanical cards as *felt* gameplay (the suite proves the data reaches `
 read in code, but no per-card damage/chain/spread test exists), a real long Endless playthrough, TV readability of the modal, and a
 separate-process Reload (no save schema changed; the suite proves no run field is written and Free Play still reads the account).
 No merge/push was performed.
+
+### Power expansion x run progression integration - 2026-10-27
+
+The playable branch `feature/run-powers` merges `feature/power-expansion-2` into `feature/run-progression`. It keeps the
+newer two-mode Home cards, guaranteed every-fifth-round Pulsebreaker, current boss bar and the run HUD/level-up flow, while
+adding the ten-primary / six-secondary expansion roster. `strength`, `laser-eyes` and `flight` remain as `Selectable = 0`
+legacy assets so old saves and retired-power records still load; the Home owned-power strip and the results upgrade list now
+filter on `PowerDefinition.Selectable`, and the six current expansion primaries/secondaries are named in the strip as
+`owned-<id>`.
+
+`Run/RunUpgradeDefinition.cs` now ships **74 cards**: the original 52 plus four for each new primary (Aerokinesis, Sonic
+Manipulation, Combat Morphing, Plasma Blades) and three for each new secondary (Grapple Line, Mirage Decoy). The new cards use
+the existing `PowerUser.Stats` path (damage, range, cooldown, duration, extra charge); no new ScriptableObject is written. This
+means every equipped expansion loadout has legal level-up offers instead of an empty or soft-locked picker.
+
+**VERIFIED** (Unity 6000.6.0f1, batch Play Mode, fresh isolated saves, exit status checked):
+- `RunProgressionVerification.Run`: **855 PASS / 0 FAIL**, exit 0 (`Verification/Merged/run/`). It now sees 12 combat powers,
+  7 secondaries and 74 cards, and still covers level-1 resets, kill XP, the three-card modal, a real boss bar/kill and Free Play.
+- `PowerExpansionVerification.Run`: **189 PASS / 0 FAIL**, exit 0; `PowerExpansionVerification.Reload` in a separate process:
+  **9 PASS / 0 FAIL**, exit 0 (`Verification/Merged/final/`).
+- `PowerExpansionVerification.Gameplay`: **577 PASS / 0 FAIL**, exit 0 (`Verification/Merged/gameplay/`), including all three
+  difficulties, the six enemy archetypes, melee shield mitigation, grapple/motion ownership, mirage and the fixed VFX budget.
+- `TwoModesVerification.Run`: **124 PASS / 0 FAIL**, exit 0 (`Verification/Merged/twomodes2/`), including live rounds 5/10/15,
+  the boss bar, round completion and saved-mode identity.
+
+**UNVERIFIED / LIMITS:** the six expansion powers receive stat upgrades from the run catalog, not new star mechanics; their
+run-specific feel and late-run scaling need a human playthrough. The old power-expansion `TwoModeVerification` suite was removed
+because it targets the superseded director API and its coverage now lives in `TwoModesVerification`; no new permanent save fields
+were added. No merge into `latest-game` or push was performed.
