@@ -1,0 +1,53 @@
+[
+  {
+    "entry": "PowerExpansionVerification.Run",
+    "commit": "36f9a210134b65ca8855d5ea719227a5e330c4fa",
+    "status_before": "M Assets/Resources/Forge/Heroes/nova.asset\n M Assets/Resources/Forge/Heroes/titan.asset\n M Assets/Resources/Forge/Heroes/vector.asset\n M Assets/Scripts/ModeScreens.cs\n M Verification/RunProgression/results.txt\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/Merged/\n?? Verification/RunProgression/saves/",
+    "started_utc": "2026-10-28T03:47:00.948472+00:00",
+    "save_before": "cf391d53e31bac6e8d9cd8645a3895f7f15e7ad3f35ac29a880741b355f49fe4",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Merged/final/PowerExpansionVerification.Run.log",
+    "pid": 20722,
+    "exit": 0,
+    "seconds": 49.48,
+    "pass": 189,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Resources/Forge/Heroes/nova.asset\n M Assets/Resources/Forge/Heroes/titan.asset\n M Assets/Resources/Forge/Heroes/vector.asset\n M Assets/Scripts/ModeScreens.cs\n M Verification/RunProgression/results.txt\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/Merged/\n?? Verification/RunProgression/saves/"
+  },
+  {
+    "entry": "PowerExpansionVerification.Reload",
+    "commit": "36f9a210134b65ca8855d5ea719227a5e330c4fa",
+    "status_before": "M Assets/Resources/Forge/Heroes/nova.asset\n M Assets/Resources/Forge/Heroes/titan.asset\n M Assets/Resources/Forge/Heroes/vector.asset\n M Assets/Scripts/ModeScreens.cs\n M Verification/RunProgression/results.txt\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/Merged/\n?? Verification/RunProgression/saves/",
+    "started_utc": "2026-10-28T03:47:50.797000+00:00",
+    "save_before": "cf391d53e31bac6e8d9cd8645a3895f7f15e7ad3f35ac29a880741b355f49fe4",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Merged/final/PowerExpansionVerification.Reload.log",
+    "pid": 20784,
+    "exit": 0,
+    "seconds": 50.75,
+    "pass": 9,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Resources/Forge/Heroes/nova.asset\n M Assets/Resources/Forge/Heroes/titan.asset\n M Assets/Resources/Forge/Heroes/vector.asset\n M Assets/Scripts/ModeScreens.cs\n M Verification/RunProgression/results.txt\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/Merged/\n?? Verification/RunProgression/saves/"
+  },
+  {
+    "entry": "TwoModesVerification.Run",
+    "commit": "36f9a210134b65ca8855d5ea719227a5e330c4fa",
+    "status_before": "M Assets/Resources/Forge/Heroes/nova.asset\n M Assets/Resources/Forge/Heroes/titan.asset\n M Assets/Resources/Forge/Heroes/vector.asset\n M Assets/Scripts/ModeScreens.cs\n M Verification/RunProgression/results.txt\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/Merged/\n?? Verification/RunProgression/saves/",
+    "started_utc": "2026-10-28T03:48:41.928391+00:00",
+    "save_before": "cf391d53e31bac6e8d9cd8645a3895f7f15e7ad3f35ac29a880741b355f49fe4",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Merged/final/TwoModesVerification.Run.log",
+    "pid": 20880,
+    "exit": 1,
+    "seconds": 68.43,
+    "pass": 83,
+    "fail": 1,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Resources/Forge/Heroes/nova.asset\n M Assets/Resources/Forge/Heroes/titan.asset\n M Assets/Resources/Forge/Heroes/vector.asset\n M Assets/Scripts/ModeScreens.cs\n M Verification/RunProgression/results.txt\n M Verification/TwoModes/results.txt\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/Merged/\n?? Verification/RunProgression/saves/\n?? Verification/TwoModes/save-af5028d666644f00a48222eec88c94d3.json\n?? Verification/TwoModes/save-af5028d666644f00a48222eec88c94d3.json.bak"
+  }
+]

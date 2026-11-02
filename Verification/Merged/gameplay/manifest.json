@@ -1,0 +1,19 @@
+[
+  {
+    "entry": "PowerExpansionVerification.Gameplay",
+    "commit": "36f9a210134b65ca8855d5ea719227a5e330c4fa",
+    "status_before": "M Assets/Resources/Forge/Heroes/nova.asset\n M Assets/Resources/Forge/Heroes/titan.asset\n M Assets/Resources/Forge/Heroes/vector.asset\n M Assets/Scripts/ModeScreens.cs\n M Assets/Scripts/TwoModesVerificationRunner.cs\n M Verification/RunProgression/results.txt\n M Verification/TwoModes/results.txt\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/Merged/\n?? Verification/RunProgression/saves/\n?? Verification/TwoModes/save-9a8102b5eca8439b8ad7a8e9bf46b09f.json\n?? Verification/TwoModes/save-9a8102b5eca8439b8ad7a8e9bf46b09f.json.bak\n?? Verification/TwoModes/save-af5028d666644f00a48222eec88c94d3.json\n?? Verification/TwoModes/save-af5028d666644f00a48222eec88c94d3.json.bak",
+    "started_utc": "2026-10-28T04:09:45.367642+00:00",
+    "save_before": "cf391d53e31bac6e8d9cd8645a3895f7f15e7ad3f35ac29a880741b355f49fe4",
+    "database_before": "21f8687dd60dcee4fdc871e5c351d8267f160fcd4e6bd6a8ceabf236df15866b",
+    "log": "Verification/Merged/gameplay/PowerExpansionVerification.Gameplay.log",
+    "pid": 21117,
+    "exit": 0,
+    "seconds": 163.97,
+    "pass": 577,
+    "fail": 0,
+    "save_unchanged": true,
+    "database_unchanged": true,
+    "status_after": "M Assets/Resources/Forge/Heroes/nova.asset\n M Assets/Resources/Forge/Heroes/titan.asset\n M Assets/Resources/Forge/Heroes/vector.asset\n M Assets/Scripts/ModeScreens.cs\n M Assets/Scripts/TwoModesVerificationRunner.cs\n M Verification/PowerExpansion2/images/aerokinesis-first.png\n M Verification/PowerExpansion2/images/aerokinesis-third.png\n M Verification/PowerExpansion2/images/combat-morphing-first.png\n M Verification/PowerExpansion2/images/combat-morphing-third.png\n M Verification/PowerExpansion2/images/grapple-first.png\n M Verification/PowerExpansion2/images/mirage-first.png\n M Verification/PowerExpansion2/images/mirage-third.png\n M Verification/PowerExpansion2/images/plasma-blades-first.png\n M Verification/PowerExpansion2/images/plasma-blades-third.png\n M Verification/PowerExpansion2/images/sonic-manipulation-first.png\n M Verification/PowerExpansion2/images/sonic-manipulation-third.png\n M Verification/PowerExpansion2/phase-gameplay.txt\n M Verification/RunProgression/results.txt\n M Verification/TwoModes/results.txt\n?? ProjectSettings/SidekickToolDownloaderAutoShown.txt\n?? Verification/Merged/\n?? Verification/RunProgression/saves/\n?? Verification/TwoModes/save-9a8102b5eca8439b8ad7a8e9bf46b09f.json\n?? Verification/TwoModes/save-9a8102b5eca8439b8ad7a8e9bf46b09f.json.bak\n?? Verification/TwoModes/save-af5028d666644f00a48222eec88c94d3.json\n?? Verification/TwoModes/save-af5028d666644f00a48222eec88c94d3.json.bak"
+  }
+]

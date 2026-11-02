@@ -1,0 +1,855 @@
+PASS 12 combat powers ship: aerokinesis, combat-morphing, darkness, fire, ice, laser-eyes, lightning, plasma-blades, poison, sonic-manipulation, strength, telekinesis.
+PASS 7 secondary powers ship: flight, force-field, grapple-line, mirage-decoy, phase-shift, speed, teleport.
+PASS Aerokinesis has 4 run cards (>= 3: damage, economy/area and a mechanical evolution).
+PASS Combat Morphing has 4 run cards (>= 3: damage, economy/area and a mechanical evolution).
+PASS Darkness has 4 run cards (>= 3: damage, economy/area and a mechanical evolution).
+PASS Fire Blast has 4 run cards (>= 3: damage, economy/area and a mechanical evolution).
+PASS Ice has 4 run cards (>= 3: damage, economy/area and a mechanical evolution).
+PASS Laser Eyes has 4 run cards (>= 3: damage, economy/area and a mechanical evolution).
+PASS Lightning has 4 run cards (>= 3: damage, economy/area and a mechanical evolution).
+PASS Plasma Blades has 4 run cards (>= 3: damage, economy/area and a mechanical evolution).
+PASS Poison has 4 run cards (>= 3: damage, economy/area and a mechanical evolution).
+PASS Sonic Manipulation has 4 run cards (>= 3: damage, economy/area and a mechanical evolution).
+PASS Super Strength has 4 run cards (>= 3: damage, economy/area and a mechanical evolution).
+PASS Telekinesis has 4 run cards (>= 3: damage, economy/area and a mechanical evolution).
+PASS Flight (secondary) has 2 run card(s).
+PASS Force Field (secondary) has 2 run card(s).
+PASS Grapple Line (secondary) has 3 run card(s).
+PASS Mirage Decoy (secondary) has 3 run card(s).
+PASS Phase Shift (secondary) has 2 run card(s).
+PASS Speed (secondary) has 2 run card(s).
+PASS Teleport (secondary) has 2 run card(s).
+PASS Card id 'fire-core' is unique.
+PASS Card 'fire-core' has a name and a description.
+PASS Card 'fire-core' has sane stack (4) and unlock (1) bounds.
+PASS Card 'fire-core' targets a real power ('fire').
+PASS Stat card 'fire-core' has a per-stack value.
+PASS Non-mechanic card 'fire-core' carries no mechanic stacks.
+PASS 'fire-core' raises damage (1.14x).
+PASS Card id 'fire-radius' is unique.
+PASS Card 'fire-radius' has a name and a description.
+PASS Card 'fire-radius' has sane stack (4) and unlock (1) bounds.
+PASS Card 'fire-radius' targets a real power ('fire').
+PASS Stat card 'fire-radius' has a per-stack value.
+PASS Non-mechanic card 'fire-radius' carries no mechanic stacks.
+PASS 'fire-radius' raises radius (1.18x).
+PASS Card id 'fire-burn' is unique.
+PASS Card 'fire-burn' has a name and a description.
+PASS Card 'fire-burn' has sane stack (3) and unlock (1) bounds.
+PASS Card 'fire-burn' targets a real power ('fire').
+PASS Stat card 'fire-burn' has a per-stack value.
+PASS Non-mechanic card 'fire-burn' carries no mechanic stacks.
+PASS 'fire-burn' raises duration (1.25x).
+PASS Card id 'fire-twin' is unique.
+PASS Card 'fire-twin' has a name and a description.
+PASS Card 'fire-twin' has sane stack (1) and unlock (4) bounds.
+PASS Card 'fire-twin' targets a real power ('fire').
+PASS Mechanic card 'fire-twin' carries mechanic stacks.
+PASS Card 'fire-twin' requires a real card ('fire-core').
+PASS 'fire-twin' grants 1 FireDoubleBlast stack(s).
+PASS Card id 'ice-core' is unique.
+PASS Card 'ice-core' has a name and a description.
+PASS Card 'ice-core' has sane stack (4) and unlock (1) bounds.
+PASS Card 'ice-core' targets a real power ('ice').
+PASS Stat card 'ice-core' has a per-stack value.
+PASS Non-mechanic card 'ice-core' carries no mechanic stacks.
+PASS 'ice-core' raises damage (1.14x).
+PASS Card id 'ice-freeze' is unique.
+PASS Card 'ice-freeze' has a name and a description.
+PASS Card 'ice-freeze' has sane stack (4) and unlock (1) bounds.
+PASS Card 'ice-freeze' targets a real power ('ice').
+PASS Stat card 'ice-freeze' has a per-stack value.
+PASS Non-mechanic card 'ice-freeze' carries no mechanic stacks.
+PASS 'ice-freeze' raises duration (1.12x).
+PASS Card id 'ice-shatter' is unique.
+PASS Card 'ice-shatter' has a name and a description.
+PASS Card 'ice-shatter' has sane stack (3) and unlock (1) bounds.
+PASS Card 'ice-shatter' targets a real power ('ice').
+PASS Mechanic card 'ice-shatter' carries mechanic stacks.
+PASS 'ice-shatter' grants 30 IceShatter stack(s).
+PASS Card id 'ice-anchor' is unique.
+PASS Card 'ice-anchor' has a name and a description.
+PASS Card 'ice-anchor' has sane stack (1) and unlock (5) bounds.
+PASS Card 'ice-anchor' targets a real power ('ice').
+PASS Mechanic card 'ice-anchor' carries mechanic stacks.
+PASS Card 'ice-anchor' requires a real card ('ice-shatter').
+PASS 'ice-anchor' grants 100 IceShatter stack(s).
+PASS Card id 'dark-core' is unique.
+PASS Card 'dark-core' has a name and a description.
+PASS Card 'dark-core' has sane stack (4) and unlock (1) bounds.
+PASS Card 'dark-core' targets a real power ('darkness').
+PASS Stat card 'dark-core' has a per-stack value.
+PASS Non-mechanic card 'dark-core' carries no mechanic stacks.
+PASS 'dark-core' raises damage (1.15x).
+PASS Card id 'dark-radius' is unique.
+PASS Card 'dark-radius' has a name and a description.
+PASS Card 'dark-radius' has sane stack (3) and unlock (1) bounds.
+PASS Card 'dark-radius' targets a real power ('darkness').
+PASS Stat card 'dark-radius' has a per-stack value.
+PASS Non-mechanic card 'dark-radius' carries no mechanic stacks.
+PASS 'dark-radius' raises radius (1.12x).
+PASS Card id 'dark-grip' is unique.
+PASS Card 'dark-grip' has a name and a description.
+PASS Card 'dark-grip' has sane stack (2) and unlock (2) bounds.
+PASS Card 'dark-grip' targets a real power ('darkness').
+PASS Mechanic card 'dark-grip' carries mechanic stacks.
+PASS 'dark-grip' grants 1 DarknessRoot stack(s).
+PASS Card id 'dark-eclipse' is unique.
+PASS Card 'dark-eclipse' has a name and a description.
+PASS Card 'dark-eclipse' has sane stack (1) and unlock (1) bounds.
+PASS Card 'dark-eclipse' targets a real power ('darkness').
+PASS Stat card 'dark-eclipse' has a per-stack value.
+PASS Non-mechanic card 'dark-eclipse' carries no mechanic stacks.
+PASS 'dark-eclipse' raises duration (1.35x).
+PASS Card id 'bolt-core' is unique.
+PASS Card 'bolt-core' has a name and a description.
+PASS Card 'bolt-core' has sane stack (4) and unlock (1) bounds.
+PASS Card 'bolt-core' targets a real power ('lightning').
+PASS Stat card 'bolt-core' has a per-stack value.
+PASS Non-mechanic card 'bolt-core' carries no mechanic stacks.
+PASS 'bolt-core' raises damage (1.14x).
+PASS Card id 'bolt-radius' is unique.
+PASS Card 'bolt-radius' has a name and a description.
+PASS Card 'bolt-radius' has sane stack (3) and unlock (1) bounds.
+PASS Card 'bolt-radius' targets a real power ('lightning').
+PASS Stat card 'bolt-radius' has a per-stack value.
+PASS Non-mechanic card 'bolt-radius' carries no mechanic stacks.
+PASS 'bolt-radius' raises radius (1.10x).
+PASS Card id 'bolt-arc' is unique.
+PASS Card 'bolt-arc' has a name and a description.
+PASS Card 'bolt-arc' has sane stack (2) and unlock (2) bounds.
+PASS Card 'bolt-arc' targets a real power ('lightning').
+PASS Mechanic card 'bolt-arc' carries mechanic stacks.
+PASS 'bolt-arc' grants 1 LightningArc stack(s).
+PASS Card id 'bolt-storm' is unique.
+PASS Card 'bolt-storm' has a name and a description.
+PASS Card 'bolt-storm' has sane stack (1) and unlock (6) bounds.
+PASS Card 'bolt-storm' targets a real power ('lightning').
+PASS Mechanic card 'bolt-storm' carries mechanic stacks.
+PASS Card 'bolt-storm' requires a real card ('bolt-arc').
+PASS 'bolt-storm' grants 2 LightningArc stack(s).
+PASS Card id 'venom-core' is unique.
+PASS Card 'venom-core' has a name and a description.
+PASS Card 'venom-core' has sane stack (4) and unlock (1) bounds.
+PASS Card 'venom-core' targets a real power ('poison').
+PASS Stat card 'venom-core' has a per-stack value.
+PASS Non-mechanic card 'venom-core' carries no mechanic stacks.
+PASS 'venom-core' raises damage (1.15x).
+PASS Card id 'venom-duration' is unique.
+PASS Card 'venom-duration' has a name and a description.
+PASS Card 'venom-duration' has sane stack (3) and unlock (1) bounds.
+PASS Card 'venom-duration' targets a real power ('poison').
+PASS Stat card 'venom-duration' has a per-stack value.
+PASS Non-mechanic card 'venom-duration' carries no mechanic stacks.
+PASS 'venom-duration' raises duration (1.20x).
+PASS Card id 'venom-spread' is unique.
+PASS Card 'venom-spread' has a name and a description.
+PASS Card 'venom-spread' has sane stack (2) and unlock (1) bounds.
+PASS Card 'venom-spread' targets a real power ('poison').
+PASS Mechanic card 'venom-spread' carries mechanic stacks.
+PASS 'venom-spread' grants 1 PoisonSpread stack(s).
+PASS Card id 'venom-plague' is unique.
+PASS Card 'venom-plague' has a name and a description.
+PASS Card 'venom-plague' has sane stack (1) and unlock (6) bounds.
+PASS Card 'venom-plague' targets a real power ('poison').
+PASS Mechanic card 'venom-plague' carries mechanic stacks.
+PASS Card 'venom-plague' requires a real card ('venom-spread').
+PASS 'venom-plague' grants 2 PoisonSpread stack(s).
+PASS Card id 'tk-core' is unique.
+PASS Card 'tk-core' has a name and a description.
+PASS Card 'tk-core' has sane stack (4) and unlock (1) bounds.
+PASS Card 'tk-core' targets a real power ('telekinesis').
+PASS Stat card 'tk-core' has a per-stack value.
+PASS Non-mechanic card 'tk-core' carries no mechanic stacks.
+PASS 'tk-core' raises damage (1.15x).
+PASS Card id 'tk-duration' is unique.
+PASS Card 'tk-duration' has a name and a description.
+PASS Card 'tk-duration' has sane stack (3) and unlock (1) bounds.
+PASS Card 'tk-duration' targets a real power ('telekinesis').
+PASS Stat card 'tk-duration' has a per-stack value.
+PASS Non-mechanic card 'tk-duration' carries no mechanic stacks.
+PASS 'tk-duration' raises duration (1.15x).
+PASS Card id 'tk-mass' is unique.
+PASS Card 'tk-mass' has a name and a description.
+PASS Card 'tk-mass' has sane stack (2) and unlock (2) bounds.
+PASS Card 'tk-mass' targets a real power ('telekinesis').
+PASS Mechanic card 'tk-mass' carries mechanic stacks.
+PASS 'tk-mass' grants 1 TelekinesisMass stack(s).
+PASS Card id 'tk-wave' is unique.
+PASS Card 'tk-wave' has a name and a description.
+PASS Card 'tk-wave' has sane stack (1) and unlock (5) bounds.
+PASS Card 'tk-wave' targets a real power ('telekinesis').
+PASS Mechanic card 'tk-wave' carries mechanic stacks.
+PASS Card 'tk-wave' requires a real card ('tk-mass').
+PASS 'tk-wave' grants 1 TelekinesisBlast stack(s).
+PASS Card id 'str-core' is unique.
+PASS Card 'str-core' has a name and a description.
+PASS Card 'str-core' has sane stack (4) and unlock (1) bounds.
+PASS Card 'str-core' targets a real power ('strength').
+PASS Stat card 'str-core' has a per-stack value.
+PASS Non-mechanic card 'str-core' carries no mechanic stacks.
+PASS 'str-core' raises melee (1.12x).
+PASS Card id 'str-cooldown' is unique.
+PASS Card 'str-cooldown' has a name and a description.
+PASS Card 'str-cooldown' has sane stack (3) and unlock (1) bounds.
+PASS Card 'str-cooldown' targets a real power ('strength').
+PASS Stat card 'str-cooldown' has a per-stack value.
+PASS Non-mechanic card 'str-cooldown' carries no mechanic stacks.
+PASS 'str-cooldown' SHORTENS cooldown (0.893x, never longer).
+PASS Card id 'str-quake' is unique.
+PASS Card 'str-quake' has a name and a description.
+PASS Card 'str-quake' has sane stack (2) and unlock (3) bounds.
+PASS Card 'str-quake' targets a real power ('strength').
+PASS Mechanic card 'str-quake' carries mechanic stacks.
+PASS 'str-quake' grants 1 StrengthShockwave stack(s).
+PASS Card id 'str-heavy' is unique.
+PASS Card 'str-heavy' has a name and a description.
+PASS Card 'str-heavy' has sane stack (1) and unlock (1) bounds.
+PASS Card 'str-heavy' targets a real power ('strength').
+PASS Stat card 'str-heavy' has a per-stack value.
+PASS Non-mechanic card 'str-heavy' carries no mechanic stacks.
+PASS 'str-heavy' raises melee (1.30x).
+PASS Card id 'eye-core' is unique.
+PASS Card 'eye-core' has a name and a description.
+PASS Card 'eye-core' has sane stack (4) and unlock (1) bounds.
+PASS Card 'eye-core' targets a real power ('laser-eyes').
+PASS Stat card 'eye-core' has a per-stack value.
+PASS Non-mechanic card 'eye-core' carries no mechanic stacks.
+PASS 'eye-core' raises damage (1.14x).
+PASS Card id 'eye-drain' is unique.
+PASS Card 'eye-drain' has a name and a description.
+PASS Card 'eye-drain' has sane stack (3) and unlock (1) bounds.
+PASS Card 'eye-drain' targets a real power ('laser-eyes').
+PASS Stat card 'eye-drain' has a per-stack value.
+PASS Non-mechanic card 'eye-drain' carries no mechanic stacks.
+PASS 'eye-drain' LOWERS energy cost (0.870x).
+PASS Card id 'eye-pierce' is unique.
+PASS Card 'eye-pierce' has a name and a description.
+PASS Card 'eye-pierce' has sane stack (1) and unlock (3) bounds.
+PASS Card 'eye-pierce' targets a real power ('laser-eyes').
+PASS Mechanic card 'eye-pierce' carries mechanic stacks.
+PASS 'eye-pierce' grants 1 LaserPierce stack(s).
+PASS Card id 'eye-overload' is unique.
+PASS Card 'eye-overload' has a name and a description.
+PASS Card 'eye-overload' has sane stack (1) and unlock (5) bounds.
+PASS Card 'eye-overload' targets a real power ('laser-eyes').
+PASS Mechanic card 'eye-overload' carries mechanic stacks.
+PASS 'eye-overload' grants 1 LaserOverload stack(s).
+PASS Card id 'aero-core' is unique.
+PASS Card 'aero-core' has a name and a description.
+PASS Card 'aero-core' has sane stack (4) and unlock (1) bounds.
+PASS Card 'aero-core' targets a real power ('aerokinesis').
+PASS Stat card 'aero-core' has a per-stack value.
+PASS Non-mechanic card 'aero-core' carries no mechanic stacks.
+PASS 'aero-core' raises damage (1.15x).
+PASS Card id 'aero-range' is unique.
+PASS Card 'aero-range' has a name and a description.
+PASS Card 'aero-range' has sane stack (3) and unlock (1) bounds.
+PASS Card 'aero-range' targets a real power ('aerokinesis').
+PASS Stat card 'aero-range' has a per-stack value.
+PASS Non-mechanic card 'aero-range' carries no mechanic stacks.
+PASS 'aero-range' raises range (1.15x).
+PASS Card id 'aero-cooldown' is unique.
+PASS Card 'aero-cooldown' has a name and a description.
+PASS Card 'aero-cooldown' has sane stack (3) and unlock (1) bounds.
+PASS Card 'aero-cooldown' targets a real power ('aerokinesis').
+PASS Stat card 'aero-cooldown' has a per-stack value.
+PASS Non-mechanic card 'aero-cooldown' carries no mechanic stacks.
+PASS 'aero-cooldown' SHORTENS cooldown (0.893x, never longer).
+PASS Card id 'aero-charge' is unique.
+PASS Card 'aero-charge' has a name and a description.
+PASS Card 'aero-charge' has sane stack (1) and unlock (5) bounds.
+PASS Card 'aero-charge' targets a real power ('aerokinesis').
+PASS Stat card 'aero-charge' has a per-stack value.
+PASS Non-mechanic card 'aero-charge' carries no mechanic stacks.
+PASS 'aero-charge' adds exactly +1 charge.
+PASS Card id 'sonic-core' is unique.
+PASS Card 'sonic-core' has a name and a description.
+PASS Card 'sonic-core' has sane stack (4) and unlock (1) bounds.
+PASS Card 'sonic-core' targets a real power ('sonic-manipulation').
+PASS Stat card 'sonic-core' has a per-stack value.
+PASS Non-mechanic card 'sonic-core' carries no mechanic stacks.
+PASS 'sonic-core' raises damage (1.14x).
+PASS Card id 'sonic-range' is unique.
+PASS Card 'sonic-range' has a name and a description.
+PASS Card 'sonic-range' has sane stack (3) and unlock (1) bounds.
+PASS Card 'sonic-range' targets a real power ('sonic-manipulation').
+PASS Stat card 'sonic-range' has a per-stack value.
+PASS Non-mechanic card 'sonic-range' carries no mechanic stacks.
+PASS 'sonic-range' raises range (1.15x).
+PASS Card id 'sonic-cooldown' is unique.
+PASS Card 'sonic-cooldown' has a name and a description.
+PASS Card 'sonic-cooldown' has sane stack (3) and unlock (1) bounds.
+PASS Card 'sonic-cooldown' targets a real power ('sonic-manipulation').
+PASS Stat card 'sonic-cooldown' has a per-stack value.
+PASS Non-mechanic card 'sonic-cooldown' carries no mechanic stacks.
+PASS 'sonic-cooldown' SHORTENS cooldown (0.893x, never longer).
+PASS Card id 'sonic-charge' is unique.
+PASS Card 'sonic-charge' has a name and a description.
+PASS Card 'sonic-charge' has sane stack (1) and unlock (5) bounds.
+PASS Card 'sonic-charge' targets a real power ('sonic-manipulation').
+PASS Stat card 'sonic-charge' has a per-stack value.
+PASS Non-mechanic card 'sonic-charge' carries no mechanic stacks.
+PASS 'sonic-charge' adds exactly +1 charge.
+PASS Card id 'morph-core' is unique.
+PASS Card 'morph-core' has a name and a description.
+PASS Card 'morph-core' has sane stack (4) and unlock (1) bounds.
+PASS Card 'morph-core' targets a real power ('combat-morphing').
+PASS Stat card 'morph-core' has a per-stack value.
+PASS Non-mechanic card 'morph-core' carries no mechanic stacks.
+PASS 'morph-core' raises damage (1.14x).
+PASS Card id 'morph-range' is unique.
+PASS Card 'morph-range' has a name and a description.
+PASS Card 'morph-range' has sane stack (3) and unlock (1) bounds.
+PASS Card 'morph-range' targets a real power ('combat-morphing').
+PASS Stat card 'morph-range' has a per-stack value.
+PASS Non-mechanic card 'morph-range' carries no mechanic stacks.
+PASS 'morph-range' raises range (1.12x).
+PASS Card id 'morph-cooldown' is unique.
+PASS Card 'morph-cooldown' has a name and a description.
+PASS Card 'morph-cooldown' has sane stack (3) and unlock (1) bounds.
+PASS Card 'morph-cooldown' targets a real power ('combat-morphing').
+PASS Stat card 'morph-cooldown' has a per-stack value.
+PASS Non-mechanic card 'morph-cooldown' carries no mechanic stacks.
+PASS 'morph-cooldown' SHORTENS cooldown (0.909x, never longer).
+PASS Card id 'morph-charge' is unique.
+PASS Card 'morph-charge' has a name and a description.
+PASS Card 'morph-charge' has sane stack (1) and unlock (5) bounds.
+PASS Card 'morph-charge' targets a real power ('combat-morphing').
+PASS Stat card 'morph-charge' has a per-stack value.
+PASS Non-mechanic card 'morph-charge' carries no mechanic stacks.
+PASS 'morph-charge' adds exactly +1 charge.
+PASS Card id 'blade-core' is unique.
+PASS Card 'blade-core' has a name and a description.
+PASS Card 'blade-core' has sane stack (4) and unlock (1) bounds.
+PASS Card 'blade-core' targets a real power ('plasma-blades').
+PASS Stat card 'blade-core' has a per-stack value.
+PASS Non-mechanic card 'blade-core' carries no mechanic stacks.
+PASS 'blade-core' raises damage (1.14x).
+PASS Card id 'blade-range' is unique.
+PASS Card 'blade-range' has a name and a description.
+PASS Card 'blade-range' has sane stack (3) and unlock (1) bounds.
+PASS Card 'blade-range' targets a real power ('plasma-blades').
+PASS Stat card 'blade-range' has a per-stack value.
+PASS Non-mechanic card 'blade-range' carries no mechanic stacks.
+PASS 'blade-range' raises range (1.12x).
+PASS Card id 'blade-cooldown' is unique.
+PASS Card 'blade-cooldown' has a name and a description.
+PASS Card 'blade-cooldown' has sane stack (3) and unlock (1) bounds.
+PASS Card 'blade-cooldown' targets a real power ('plasma-blades').
+PASS Stat card 'blade-cooldown' has a per-stack value.
+PASS Non-mechanic card 'blade-cooldown' carries no mechanic stacks.
+PASS 'blade-cooldown' SHORTENS cooldown (0.909x, never longer).
+PASS Card id 'blade-charge' is unique.
+PASS Card 'blade-charge' has a name and a description.
+PASS Card 'blade-charge' has sane stack (1) and unlock (5) bounds.
+PASS Card 'blade-charge' targets a real power ('plasma-blades').
+PASS Stat card 'blade-charge' has a per-stack value.
+PASS Non-mechanic card 'blade-charge' carries no mechanic stacks.
+PASS 'blade-charge' adds exactly +1 charge.
+PASS Card id 'grapple-range' is unique.
+PASS Card 'grapple-range' has a name and a description.
+PASS Card 'grapple-range' has sane stack (3) and unlock (1) bounds.
+PASS Card 'grapple-range' targets a real power ('grapple-line').
+PASS Stat card 'grapple-range' has a per-stack value.
+PASS Non-mechanic card 'grapple-range' carries no mechanic stacks.
+PASS 'grapple-range' raises range (1.15x).
+PASS Card id 'grapple-cooldown' is unique.
+PASS Card 'grapple-cooldown' has a name and a description.
+PASS Card 'grapple-cooldown' has sane stack (3) and unlock (1) bounds.
+PASS Card 'grapple-cooldown' targets a real power ('grapple-line').
+PASS Stat card 'grapple-cooldown' has a per-stack value.
+PASS Non-mechanic card 'grapple-cooldown' carries no mechanic stacks.
+PASS 'grapple-cooldown' SHORTENS cooldown (0.870x, never longer).
+PASS Card id 'grapple-charge' is unique.
+PASS Card 'grapple-charge' has a name and a description.
+PASS Card 'grapple-charge' has sane stack (1) and unlock (4) bounds.
+PASS Card 'grapple-charge' targets a real power ('grapple-line').
+PASS Stat card 'grapple-charge' has a per-stack value.
+PASS Non-mechanic card 'grapple-charge' carries no mechanic stacks.
+PASS 'grapple-charge' adds exactly +1 charge.
+PASS Card id 'mirage-duration' is unique.
+PASS Card 'mirage-duration' has a name and a description.
+PASS Card 'mirage-duration' has sane stack (3) and unlock (1) bounds.
+PASS Card 'mirage-duration' targets a real power ('mirage-decoy').
+PASS Stat card 'mirage-duration' has a per-stack value.
+PASS Non-mechanic card 'mirage-duration' carries no mechanic stacks.
+PASS 'mirage-duration' raises duration (1.15x).
+PASS Card id 'mirage-cooldown' is unique.
+PASS Card 'mirage-cooldown' has a name and a description.
+PASS Card 'mirage-cooldown' has sane stack (3) and unlock (1) bounds.
+PASS Card 'mirage-cooldown' targets a real power ('mirage-decoy').
+PASS Stat card 'mirage-cooldown' has a per-stack value.
+PASS Non-mechanic card 'mirage-cooldown' carries no mechanic stacks.
+PASS 'mirage-cooldown' SHORTENS cooldown (0.893x, never longer).
+PASS Card id 'mirage-charge' is unique.
+PASS Card 'mirage-charge' has a name and a description.
+PASS Card 'mirage-charge' has sane stack (1) and unlock (4) bounds.
+PASS Card 'mirage-charge' targets a real power ('mirage-decoy').
+PASS Stat card 'mirage-charge' has a per-stack value.
+PASS Non-mechanic card 'mirage-charge' carries no mechanic stacks.
+PASS 'mirage-charge' adds exactly +1 charge.
+PASS Card id 'spd-core' is unique.
+PASS Card 'spd-core' has a name and a description.
+PASS Card 'spd-core' has sane stack (3) and unlock (1) bounds.
+PASS Card 'spd-core' targets a real power ('speed').
+PASS Stat card 'spd-core' has a per-stack value.
+PASS Non-mechanic card 'spd-core' carries no mechanic stacks.
+PASS 'spd-core' raises damage (1.20x).
+PASS Card id 'spd-charge' is unique.
+PASS Card 'spd-charge' has a name and a description.
+PASS Card 'spd-charge' has sane stack (1) and unlock (4) bounds.
+PASS Card 'spd-charge' targets a real power ('speed').
+PASS Stat card 'spd-charge' has a per-stack value.
+PASS Non-mechanic card 'spd-charge' carries no mechanic stacks.
+PASS 'spd-charge' adds exactly +1 charge.
+PASS Card id 'tp-range' is unique.
+PASS Card 'tp-range' has a name and a description.
+PASS Card 'tp-range' has sane stack (3) and unlock (1) bounds.
+PASS Card 'tp-range' targets a real power ('teleport').
+PASS Stat card 'tp-range' has a per-stack value.
+PASS Non-mechanic card 'tp-range' carries no mechanic stacks.
+PASS 'tp-range' raises range (1.15x).
+PASS Card id 'tp-cooldown' is unique.
+PASS Card 'tp-cooldown' has a name and a description.
+PASS Card 'tp-cooldown' has sane stack (2) and unlock (1) bounds.
+PASS Card 'tp-cooldown' targets a real power ('teleport').
+PASS Stat card 'tp-cooldown' has a per-stack value.
+PASS Non-mechanic card 'tp-cooldown' carries no mechanic stacks.
+PASS 'tp-cooldown' SHORTENS cooldown (0.870x, never longer).
+PASS Card id 'ff-duration' is unique.
+PASS Card 'ff-duration' has a name and a description.
+PASS Card 'ff-duration' has sane stack (3) and unlock (1) bounds.
+PASS Card 'ff-duration' targets a real power ('force-field').
+PASS Stat card 'ff-duration' has a per-stack value.
+PASS Non-mechanic card 'ff-duration' carries no mechanic stacks.
+PASS 'ff-duration' raises duration (1.15x).
+PASS Card id 'ff-cost' is unique.
+PASS Card 'ff-cost' has a name and a description.
+PASS Card 'ff-cost' has sane stack (2) and unlock (1) bounds.
+PASS Card 'ff-cost' targets a real power ('force-field').
+PASS Stat card 'ff-cost' has a per-stack value.
+PASS Non-mechanic card 'ff-cost' carries no mechanic stacks.
+PASS 'ff-cost' LOWERS energy cost (0.870x).
+PASS Card id 'ps-duration' is unique.
+PASS Card 'ps-duration' has a name and a description.
+PASS Card 'ps-duration' has sane stack (3) and unlock (1) bounds.
+PASS Card 'ps-duration' targets a real power ('phase-shift').
+PASS Stat card 'ps-duration' has a per-stack value.
+PASS Non-mechanic card 'ps-duration' carries no mechanic stacks.
+PASS 'ps-duration' raises duration (1.12x).
+PASS Card id 'ps-cooldown' is unique.
+PASS Card 'ps-cooldown' has a name and a description.
+PASS Card 'ps-cooldown' has sane stack (2) and unlock (1) bounds.
+PASS Card 'ps-cooldown' targets a real power ('phase-shift').
+PASS Stat card 'ps-cooldown' has a per-stack value.
+PASS Non-mechanic card 'ps-cooldown' carries no mechanic stacks.
+PASS 'ps-cooldown' SHORTENS cooldown (0.893x, never longer).
+PASS Card id 'fly-fuel' is unique.
+PASS Card 'fly-fuel' has a name and a description.
+PASS Card 'fly-fuel' has sane stack (3) and unlock (1) bounds.
+PASS Card 'fly-fuel' targets a real power ('flight').
+PASS Stat card 'fly-fuel' has a per-stack value.
+PASS Non-mechanic card 'fly-fuel' carries no mechanic stacks.
+PASS 'fly-fuel' raises duration (1.15x).
+PASS Card id 'fly-cost' is unique.
+PASS Card 'fly-cost' has a name and a description.
+PASS Card 'fly-cost' has sane stack (2) and unlock (1) bounds.
+PASS Card 'fly-cost' targets a real power ('flight').
+PASS Stat card 'fly-cost' has a per-stack value.
+PASS Non-mechanic card 'fly-cost' carries no mechanic stacks.
+PASS 'fly-cost' LOWERS energy cost (0.893x).
+PASS Card id 'sig-damage' is unique.
+PASS Card 'sig-damage' has a name and a description.
+PASS Card 'sig-damage' has sane stack (3) and unlock (1) bounds.
+PASS Signature card 'sig-damage' uses a signature stat.
+PASS Stat card 'sig-damage' has a per-stack value.
+PASS Non-mechanic card 'sig-damage' carries no mechanic stacks.
+PASS 'sig-damage' raises signature damage (1.12x).
+PASS Card id 'sig-cooldown' is unique.
+PASS Card 'sig-cooldown' has a name and a description.
+PASS Card 'sig-cooldown' has sane stack (3) and unlock (1) bounds.
+PASS Signature card 'sig-cooldown' uses a signature stat.
+PASS Stat card 'sig-cooldown' has a per-stack value.
+PASS Non-mechanic card 'sig-cooldown' carries no mechanic stacks.
+PASS 'sig-cooldown' shortens the signature cooldown (0.893x).
+PASS Card id 'sig-energy' is unique.
+PASS Card 'sig-energy' has a name and a description.
+PASS Card 'sig-energy' has sane stack (3) and unlock (1) bounds.
+PASS Signature card 'sig-energy' uses a signature stat.
+PASS Stat card 'sig-energy' has a per-stack value.
+PASS Non-mechanic card 'sig-energy' carries no mechanic stacks.
+PASS 'sig-energy' lowers the signature cost (0.893x).
+PASS Card id 'sig-radius' is unique.
+PASS Card 'sig-radius' has a name and a description.
+PASS Card 'sig-radius' has sane stack (2) and unlock (1) bounds.
+PASS Signature card 'sig-radius' uses a signature stat.
+PASS Stat card 'sig-radius' has a per-stack value.
+PASS Non-mechanic card 'sig-radius' carries no mechanic stacks.
+PASS 'sig-radius' widens the signature (1.12x).
+PASS Card id 'sig-second' is unique.
+PASS Card 'sig-second' has a name and a description.
+PASS Card 'sig-second' has sane stack (1) and unlock (8) bounds.
+PASS Signature card 'sig-second' uses a signature stat.
+PASS Stat card 'sig-second' has a per-stack value.
+PASS Non-mechanic card 'sig-second' carries no mechanic stacks.
+PASS Card 'sig-second' requires a real card ('sig-cooldown').
+PASS 'sig-second' shortens the signature cooldown (0.800x).
+PASS Card id 'hero-hp' is unique.
+PASS Card 'hero-hp' has a name and a description.
+PASS Card 'hero-hp' has sane stack (3) and unlock (1) bounds.
+PASS Card 'hero-hp' is a hero card.
+PASS Stat card 'hero-hp' has a per-stack value.
+PASS Non-mechanic card 'hero-hp' carries no mechanic stacks.
+PASS 'hero-hp' raises max health (1.10x).
+PASS Card id 'hero-heal' is unique.
+PASS Card 'hero-heal' has a name and a description.
+PASS Card 'hero-heal' has sane stack (3) and unlock (1) bounds.
+PASS Card 'hero-heal' is a hero card.
+PASS Stat card 'hero-heal' has a per-stack value.
+PASS Non-mechanic card 'hero-heal' carries no mechanic stacks.
+PASS 'hero-heal' raises health on kill (1.20x).
+PASS Card id 'hero-energy' is unique.
+PASS Card 'hero-energy' has a name and a description.
+PASS Card 'hero-energy' has sane stack (3) and unlock (1) bounds.
+PASS Card 'hero-energy' is a hero card.
+PASS Stat card 'hero-energy' has a per-stack value.
+PASS Non-mechanic card 'hero-energy' carries no mechanic stacks.
+PASS 'hero-energy' raises max energy (1.12x).
+PASS Card id 'hero-regen' is unique.
+PASS Card 'hero-regen' has a name and a description.
+PASS Card 'hero-regen' has sane stack (3) and unlock (1) bounds.
+PASS Card 'hero-regen' is a hero card.
+PASS Stat card 'hero-regen' has a per-stack value.
+PASS Non-mechanic card 'hero-regen' carries no mechanic stacks.
+PASS 'hero-regen' raises energy regen (1.12x).
+PASS Card id 'hero-fury' is unique.
+PASS Card 'hero-fury' has a name and a description.
+PASS Card 'hero-fury' has sane stack (999) and unlock (1) bounds.
+PASS Card 'hero-fury' is a hero card.
+PASS Stat card 'hero-fury' has a per-stack value.
+PASS Non-mechanic card 'hero-fury' carries no mechanic stacks.
+PASS 'hero-fury' raises every power (1.020x).
+PASS Rarity weights at level 1 are finite, non-negative and sum to 1 (0.62/0.30/0.08).
+PASS Rarity weights at level 7 are finite, non-negative and sum to 1 (0.62/0.30/0.08).
+PASS Rarity weights at level 8 are finite, non-negative and sum to 1 (0.50/0.35/0.15).
+PASS Rarity weights at level 13 are finite, non-negative and sum to 1 (0.50/0.35/0.15).
+PASS Rarity weights at level 14 are finite, non-negative and sum to 1 (0.40/0.38/0.22).
+PASS Rarity weights at level 30 are finite, non-negative and sum to 1 (0.40/0.38/0.22).
+PASS Rarity weights at level 99 are finite, non-negative and sum to 1 (0.40/0.38/0.22).
+PASS Safety floors: power cooldown >= 0.15s, signature >= 12s, chain <= 7, poison spread <= 5.
+PASS ProgressSave has no run field: temporary progression cannot be persisted.
+PASS Shipping kill XP: 10 / 14 / 18 / 34 / 40, boss 300; heavier archetypes pay more.
+PASS Unknown/new archetypes still pay a fallback instead of nothing.
+PASS Level 1 needs 120 XP (= 12 Rusher kills).
+PASS Requirement is positive and monotonic at level 1.
+PASS Requirement is positive and monotonic at level 2.
+PASS Requirement is positive and monotonic at level 3.
+PASS Requirement is positive and monotonic at level 4.
+PASS Requirement is positive and monotonic at level 5.
+PASS Requirement is positive and monotonic at level 6.
+PASS Requirement is positive and monotonic at level 7.
+PASS Requirement is positive and monotonic at level 8.
+PASS Requirement is positive and monotonic at level 9.
+PASS Requirement is positive and monotonic at level 10.
+PASS Requirement is positive and monotonic at level 11.
+PASS Requirement is positive and monotonic at level 12.
+PASS Requirement is positive and monotonic at level 13.
+PASS Requirement is positive and monotonic at level 14.
+PASS Requirement is positive and monotonic at level 15.
+PASS Requirement is positive and monotonic at level 16.
+PASS Requirement is positive and monotonic at level 17.
+PASS Requirement is positive and monotonic at level 18.
+PASS Requirement is positive and monotonic at level 19.
+PASS Requirement is positive and monotonic at level 20.
+PASS Requirement is positive and monotonic at level 21.
+PASS Requirement is positive and monotonic at level 22.
+PASS Requirement is positive and monotonic at level 23.
+PASS Requirement is positive and monotonic at level 24.
+PASS Requirement is positive and monotonic at level 25.
+PASS Requirement is positive and monotonic at level 26.
+PASS Requirement is positive and monotonic at level 27.
+PASS Requirement is positive and monotonic at level 28.
+PASS Requirement is positive and monotonic at level 29.
+PASS Requirement is positive and monotonic at level 30.
+PASS Requirement is positive and monotonic at level 31.
+PASS Requirement is positive and monotonic at level 32.
+PASS Requirement is positive and monotonic at level 33.
+PASS Requirement is positive and monotonic at level 34.
+PASS Requirement is positive and monotonic at level 35.
+PASS Requirement is positive and monotonic at level 36.
+PASS Requirement is positive and monotonic at level 37.
+PASS Requirement is positive and monotonic at level 38.
+PASS Requirement is positive and monotonic at level 39.
+PASS The curve saturates (no overflow, no negative requirement).
+PASS LevelFor matches the curve at the exact boundaries.
+PASS TotalXpTo sums the same requirements.
+PASS Shipping Endless director and its milestone asset load.
+PASS Pulsebreaker is the miniboss every 5 rounds (rounds 5, 10, 15, ...), not a regular-pool weight.
+PASS Round 5 lands at level 5 (band 4-8: the first boss pays off without skipping the early curve).
+PASS Round 10 lands at level 10 (band 7-12).
+PASS Round 20 lands at level 16 (band 12-19: ~14 picks by then).
+PASS Progression is still moving at round 30 (level 20 > 16); the repeatable hero card carries deep runs.
+PASS Only every-5th round carries boss XP.
+PASS Saved account: level 11, Fire Blast tier 2 (2 purchases).
+PASS VECTOR: an allowed secondary exists (force-field).
+PASS Saved VECTOR + fire + ice + force-field through the loadout API.
+PASS Session is free-play.
+PASS CONTROL Free Play uses the saved tier: 52.92 damage = tier 2 (52.9) x hero 1.00.
+PASS VECTOR: an allowed secondary exists (force-field).
+PASS Saved VECTOR + fire + ice + force-field through the loadout API.
+PASS Session is endless-fight.
+PASS Entering Endless Fight creates the temporary run state.
+PASS The run used the injected deterministic seed (424242).
+PASS Fresh run: level 1, XP 0, kills 0, stacks 0 — the saved level 11 gave no head start.
+PASS No run modifiers before the first pick.
+PASS CONTROL the run uses tier-0 base damage: 27.00 = 27.00 (Free Play was 52.92); a maxed account has no advantage.
+PASS Run max health is the same authoritative pool (100.0) with no run multiplier yet.
+PASS HUD row shows RUN / 1 (caption 'RUN', value '1').
+PASS HUD XP reads '0 / 120 XP'.
+PASS No level-up modal before the first level.
+PASS Rusher kill: kills 1, run XP 10 (+10).
+PASS The HUD started one floating run-XP number (0 -> 1).
+PASS The same kill also passed the health-on-kill gate (shared kill credit).
+PASS Further damage to a dead enemy pays no second XP.
+PASS Brute pays 34 (total 44 = 10 + 34).
+PASS Civilian death pays no run XP and no run kill.
+PASS A death with no player source (NPC-on-NPC) pays no run XP.
+PASS Enough XP raises level 2 and opens one pick (pending 1).
+PASS The fight is paused for the choice: Paused True, timeScale 0, menu True.
+PASS The modal is visible with 3 cards at level 2.
+PASS Opening a run level-up does not touch the saved level.
+PASS first offer: three cards (3).
+PASS first offer: 'ice-shatter' unlocks at 1 <= level 2.
+PASS first offer: 'ice-shatter' is below its cap (0/3).
+PASS first offer: 'ice-shatter' targets an equipped power ('ice').
+PASS first offer: 'ice-core' unlocks at 1 <= level 2.
+PASS first offer: 'ice-core' is below its cap (0/4).
+PASS first offer: 'ice-core' targets an equipped power ('ice').
+PASS first offer: 'hero-regen' unlocks at 1 <= level 2.
+PASS first offer: 'hero-regen' is below its cap (0/3).
+PASS first offer: at least one card touches an equipped primary.
+PASS The three cards are distinct.
+PASS Chose 'SHATTERING COLD' (ice-core) at index 1.
+PASS Picking the only card closes the modal and resumes the fight (timeScale 1).
+PASS The stack was recorded once (1 of 4).
+PASS The pick does not write to persistent progression.
+PASS 'SHATTERING COLD' raised its real stat 10.00 -> 11.40.
+PASS The HUD row updates to RUN level 2 immediately.
+PASS 6000 XP raised 12 levels and queued exactly 12 picks.
+PASS queued offer 2: three cards (3).
+PASS queued offer 2: 'fire-core' unlocks at 1 <= level 14.
+PASS queued offer 2: 'fire-core' is below its cap (0/4).
+PASS queued offer 2: 'fire-core' targets an equipped power ('fire').
+PASS queued offer 2: 'ff-duration' unlocks at 1 <= level 14.
+PASS queued offer 2: 'ff-duration' is below its cap (0/3).
+PASS queued offer 2: 'ff-duration' targets an equipped power ('force-field').
+PASS queued offer 2: 'hero-hp' unlocks at 1 <= level 14.
+PASS queued offer 2: 'hero-hp' is below its cap (0/3).
+PASS queued offer 2: at least one card touches an equipped primary.
+PASS queued offer 3: three cards (3).
+PASS queued offer 3: 'ice-freeze' unlocks at 1 <= level 14.
+PASS queued offer 3: 'ice-freeze' is below its cap (0/4).
+PASS queued offer 3: 'ice-freeze' targets an equipped power ('ice').
+PASS queued offer 3: 'fire-core' unlocks at 1 <= level 14.
+PASS queued offer 3: 'fire-core' is below its cap (1/4).
+PASS queued offer 3: 'fire-core' targets an equipped power ('fire').
+PASS queued offer 3: 'hero-heal' unlocks at 1 <= level 14.
+PASS queued offer 3: 'hero-heal' is below its cap (0/3).
+PASS queued offer 3: at least one card touches an equipped primary.
+PASS queued offer 4: three cards (3).
+PASS queued offer 4: 'hero-fury' unlocks at 1 <= level 14.
+PASS queued offer 4: 'hero-fury' is below its cap (0/999).
+PASS queued offer 4: 'ice-core' unlocks at 1 <= level 14.
+PASS queued offer 4: 'ice-core' is below its cap (1/4).
+PASS queued offer 4: 'ice-core' targets an equipped power ('ice').
+PASS queued offer 4: 'ice-freeze' unlocks at 1 <= level 14.
+PASS queued offer 4: 'ice-freeze' is below its cap (1/4).
+PASS queued offer 4: 'ice-freeze' targets an equipped power ('ice').
+PASS queued offer 4: at least one card touches an equipped primary.
+PASS queued offer 5: three cards (3).
+PASS queued offer 5: 'fire-twin' unlocks at 4 <= level 14.
+PASS queued offer 5: 'fire-twin' is below its cap (0/1).
+PASS queued offer 5: prerequisite 'fire-core' for 'fire-twin' is owned.
+PASS queued offer 5: 'fire-twin' targets an equipped power ('fire').
+PASS queued offer 5: 'sig-cooldown' unlocks at 1 <= level 14.
+PASS queued offer 5: 'sig-cooldown' is below its cap (0/3).
+PASS queued offer 5: 'sig-cooldown' is offered only when a signature is equipped.
+PASS queued offer 5: 'ice-shatter' unlocks at 1 <= level 14.
+PASS queued offer 5: 'ice-shatter' is below its cap (0/3).
+PASS queued offer 5: 'ice-shatter' targets an equipped power ('ice').
+PASS queued offer 5: at least one card touches an equipped primary.
+PASS Mechanical card 'fire-twin' reached the live effect bridge (FireDoubleBlast = 1).
+PASS queued offer 6: three cards (3).
+PASS queued offer 6: 'fire-core' unlocks at 1 <= level 14.
+PASS queued offer 6: 'fire-core' is below its cap (1/4).
+PASS queued offer 6: 'fire-core' targets an equipped power ('fire').
+PASS queued offer 6: 'hero-energy' unlocks at 1 <= level 14.
+PASS queued offer 6: 'hero-energy' is below its cap (0/3).
+PASS queued offer 6: 'hero-hp' unlocks at 1 <= level 14.
+PASS queued offer 6: 'hero-hp' is below its cap (0/3).
+PASS queued offer 6: at least one card touches an equipped primary.
+PASS queued offer 7: three cards (3).
+PASS queued offer 7: 'fire-core' unlocks at 1 <= level 14.
+PASS queued offer 7: 'fire-core' is below its cap (2/4).
+PASS queued offer 7: 'fire-core' targets an equipped power ('fire').
+PASS queued offer 7: 'hero-regen' unlocks at 1 <= level 14.
+PASS queued offer 7: 'hero-regen' is below its cap (0/3).
+PASS queued offer 7: 'fire-radius' unlocks at 1 <= level 14.
+PASS queued offer 7: 'fire-radius' is below its cap (0/4).
+PASS queued offer 7: 'fire-radius' targets an equipped power ('fire').
+PASS queued offer 7: at least one card touches an equipped primary.
+PASS queued offer 8: three cards (3).
+PASS queued offer 8: 'hero-fury' unlocks at 1 <= level 14.
+PASS queued offer 8: 'hero-fury' is below its cap (1/999).
+PASS queued offer 8: 'fire-core' unlocks at 1 <= level 14.
+PASS queued offer 8: 'fire-core' is below its cap (3/4).
+PASS queued offer 8: 'fire-core' targets an equipped power ('fire').
+PASS queued offer 8: 'ice-core' unlocks at 1 <= level 14.
+PASS queued offer 8: 'ice-core' is below its cap (1/4).
+PASS queued offer 8: 'ice-core' targets an equipped power ('ice').
+PASS queued offer 8: at least one card touches an equipped primary.
+PASS queued offer 9: three cards (3).
+PASS queued offer 9: 'hero-energy' unlocks at 1 <= level 14.
+PASS queued offer 9: 'hero-energy' is below its cap (0/3).
+PASS queued offer 9: 'hero-hp' unlocks at 1 <= level 14.
+PASS queued offer 9: 'hero-hp' is below its cap (0/3).
+PASS queued offer 9: 'ice-freeze' unlocks at 1 <= level 14.
+PASS queued offer 9: 'ice-freeze' is below its cap (1/4).
+PASS queued offer 9: 'ice-freeze' targets an equipped power ('ice').
+PASS queued offer 9: at least one card touches an equipped primary.
+PASS queued offer 10: three cards (3).
+PASS queued offer 10: 'ice-shatter' unlocks at 1 <= level 14.
+PASS queued offer 10: 'ice-shatter' is below its cap (0/3).
+PASS queued offer 10: 'ice-shatter' targets an equipped power ('ice').
+PASS queued offer 10: 'hero-hp' unlocks at 1 <= level 14.
+PASS queued offer 10: 'hero-hp' is below its cap (0/3).
+PASS queued offer 10: 'ff-duration' unlocks at 1 <= level 14.
+PASS queued offer 10: 'ff-duration' is below its cap (0/3).
+PASS queued offer 10: 'ff-duration' targets an equipped power ('force-field').
+PASS queued offer 10: at least one card touches an equipped primary.
+PASS Mechanical card 'ice-shatter' reached the live effect bridge (IceShatter = 30).
+PASS queued offer 11: three cards (3).
+PASS queued offer 11: 'hero-regen' unlocks at 1 <= level 14.
+PASS queued offer 11: 'hero-regen' is below its cap (0/3).
+PASS queued offer 11: 'sig-energy' unlocks at 1 <= level 14.
+PASS queued offer 11: 'sig-energy' is below its cap (0/3).
+PASS queued offer 11: 'sig-energy' is offered only when a signature is equipped.
+PASS queued offer 11: 'fire-burn' unlocks at 1 <= level 14.
+PASS queued offer 11: 'fire-burn' is below its cap (0/3).
+PASS queued offer 11: 'fire-burn' targets an equipped power ('fire').
+PASS queued offer 11: at least one card touches an equipped primary.
+PASS queued offer 12: three cards (3).
+PASS queued offer 12: 'fire-core' unlocks at 1 <= level 14.
+PASS queued offer 12: 'fire-core' is below its cap (3/4).
+PASS queued offer 12: 'fire-core' targets an equipped power ('fire').
+PASS queued offer 12: 'hero-energy' unlocks at 1 <= level 14.
+PASS queued offer 12: 'hero-energy' is below its cap (1/3).
+PASS queued offer 12: 'sig-damage' unlocks at 1 <= level 14.
+PASS queued offer 12: 'sig-damage' is below its cap (0/3).
+PASS queued offer 12: 'sig-damage' is offered only when a signature is equipped.
+PASS queued offer 12: at least one card touches an equipped primary.
+PASS queued offer 13: three cards (3).
+PASS queued offer 13: 'sig-cooldown' unlocks at 1 <= level 14.
+PASS queued offer 13: 'sig-cooldown' is below its cap (0/3).
+PASS queued offer 13: 'sig-cooldown' is offered only when a signature is equipped.
+PASS queued offer 13: 'hero-heal' unlocks at 1 <= level 14.
+PASS queued offer 13: 'hero-heal' is below its cap (0/3).
+PASS queued offer 13: 'ice-anchor' unlocks at 5 <= level 14.
+PASS queued offer 13: 'ice-anchor' is below its cap (0/1).
+PASS queued offer 13: prerequisite 'ice-shatter' for 'ice-anchor' is owned.
+PASS queued offer 13: 'ice-anchor' targets an equipped power ('ice').
+PASS queued offer 13: at least one card touches an equipped primary.
+PASS Every queued pick was resolved and the fight resumed.
+PASS Picks 13 = 1 + 12 levels.
+PASS The level matches the XP curve after the burst.
+PASS No stale offer remains after the last pick.
+PASS A level-up is open and the fight is paused.
+PASS WorldSession sees the open pick (its Esc handler is gated on it).
+PASS The second card exposes a real enabled UI Toolkit button.
+PASS Activating the card button (the mouse path) resolves the choice and resumes the fight.
+PASS The clicked card 'ice-freeze' was the one applied (1 -> 2).
+PASS A real Pulsebreaker body is attached through the verification entry point.
+PASS The boss bar is visible and named 'PULSEBREAKER'.
+PASS The bar reads authoritative health: 1.000 vs 1.000.
+PASS Phase 1 is shown ('PHASE 1').
+PASS The bar followed damage to the real current HP (0.306 vs 0.306).
+PASS The bar stays up while the boss is alive (its Overdrive label is asserted by PulsebreakerVerification.Run, which drives a live NavMesh boss).
+PASS Boss kill paid exactly 300 run XP (table 300) and counted 1 boss kill.
+PASS The boss queued 1 pick(s): levelling plus the Epic milestone.
+PASS boss offer: 2 card(s) (1-3).
+PASS boss offer: 'ice-anchor' unlocks at 5 <= level 15.
+PASS boss offer: 'ice-anchor' is below its cap (0/1).
+PASS boss offer: prerequisite 'ice-shatter' for 'ice-anchor' is owned.
+PASS boss offer: 'ice-anchor' targets an equipped power ('ice').
+PASS boss offer: 'sig-second' unlocks at 8 <= level 15.
+PASS boss offer: 'sig-second' is below its cap (0/1).
+PASS boss offer: prerequisite 'sig-cooldown' for 'sig-second' is owned.
+PASS boss offer: 'sig-second' is offered only when a signature is equipped.
+PASS boss offer: at least one card touches an equipped primary.
+PASS The boss milestone pick offers 2 Epic card(s) only (never padded with a common).
+PASS The Epic milestone pick was reached and resolved.
+PASS After the boss picks the run resumes.
+PASS The boss body cleaned up and its bar is gone (no stuck UI).
+PASS The run survived the boss encounter.
+PASS The verification save exists at /Users/melaniehernquist/Documents/ChatGPT/op-run-powers/Verification/RunProgression/saves/save-e069e7c1ba7d44b2a024a091b0d17479.json.
+PASS The live save file contains no run state.
+PASS Persistent level still exists alongside the run (11).
+PASS The finished run is at level 15 with 15 picks (temporary).
+PASS The session is still live before the run ends.
+PASS Ending the run closes its rewards and any open choice (no XP after the run).
+PASS No run survives the trip home.
+PASS VECTOR: an allowed secondary exists (force-field).
+PASS Saved VECTOR + fire + ice + force-field through the loadout API.
+PASS Session is free-play.
+PASS Free Play has no run progression.
+PASS Free Play has no wave director, so no automatic boss/round spawning.
+PASS The HUD row is back to the saved level caption ('LV').
+PASS Killing in Free Play creates no run state and awards no run XP.
+PASS CONTROL: the kill still paid persistent account XP in Free Play (existing progression intact).
+PASS VECTOR: an allowed primary pair exists (aerokinesis + combat-morphing).
+PASS VECTOR: an allowed secondary exists (force-field).
+PASS Saved VECTOR + aerokinesis + combat-morphing + force-field through the loadout API.
+PASS Session is endless-fight.
+PASS VECTOR: run starts at level 1.
+PASS VECTOR: max health 100.0 = baseline 100.0 x hero 1.00 x difficulty 1.00, applied once.
+PASS VECTOR: Aerokinesis runs at its base damage 20.00 (hero x1.00).
+PASS VECTOR: a Rusher kill paid exactly 10 run XP.
+PASS TITAN: an allowed primary pair exists (aerokinesis + combat-morphing).
+PASS TITAN: an allowed secondary exists (force-field).
+PASS Saved TITAN + aerokinesis + combat-morphing + force-field through the loadout API.
+PASS Session is endless-fight.
+PASS TITAN: run starts at level 1.
+PASS TITAN: max health 140.0 = baseline 100.0 x hero 1.40 x difficulty 1.00, applied once.
+PASS TITAN: Aerokinesis runs at its base damage 20.00 (hero x1.00).
+PASS TITAN: a Rusher kill paid exactly 10 run XP.
+PASS NOVA: an allowed primary pair exists (aerokinesis + combat-morphing).
+PASS NOVA: an allowed secondary exists (force-field).
+PASS Saved NOVA + aerokinesis + combat-morphing + force-field through the loadout API.
+PASS Session is endless-fight.
+PASS NOVA: run starts at level 1.
+PASS NOVA: max health 75.0 = baseline 100.0 x hero 0.75 x difficulty 1.00, applied once.
+PASS NOVA: Aerokinesis runs at its base damage 20.00 (hero x1.00).
+PASS NOVA: a Rusher kill paid exactly 10 run XP.
+PASS VECTOR: an allowed secondary exists (force-field).
+PASS Saved VECTOR + fire + ice + force-field through the loadout API.
+PASS Session is endless-fight.
+PASS extreme: run level 1 and no run health multiplier.
+PASS extreme: max health 92.5 = baseline x hero x difficulty 0.93 exactly once.
+PASS extreme: run seed 1242688990 exists.
+PASS VECTOR: an allowed secondary exists (force-field).
+PASS Saved VECTOR + fire + ice + force-field through the loadout API.
+PASS Session is endless-fight.
+PASS hard: run level 1 and no run health multiplier.
+PASS hard: max health 95.0 = baseline x hero x difficulty 0.95 exactly once.
+PASS hard: run seed 242294296 exists.
+PASS VECTOR: an allowed secondary exists (force-field).
+PASS Saved VECTOR + fire + ice + force-field through the loadout API.
+PASS Session is endless-fight.
+PASS normal: run level 1 and no run health multiplier.
+PASS normal: max health 100.0 = baseline x hero x difficulty 1.00 exactly once.
+PASS normal: run seed -1390933286 exists.
+PASS HUD update is 0.080 ms (budget 4 ms; run row + modal are change-guarded).
+PASS XP popups reuse the fixed pool (16 elements) — no per-kill object.
+PASS Run state is bounded by the catalog size (0 stacks <= 74 cards).
+PASS No stray run pause is left behind.
